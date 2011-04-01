@@ -1,0 +1,51 @@
+name: AdminCmd
+main: com.Balor.bukkit.AdminCmd.AdminCmd
+version: 4.2.1
+author: Plague modded by Balor
+description: >
+             This plugin implements the basic commands for running a server.
+commands:
+  plg_timeset:
+    description: Set world time to a given timestamp/alias.
+    aliases: time
+    usage: /<command> day|night|dusk|dawn|<raw>
+  plg_timeday:
+    description: Short for /time day.
+    aliases: day
+    usage: /<command>
+  plg_playerlist:
+    description: Lists all online players.
+    aliases: [playerlist,plist]
+    usage: /<command>
+  plg_playerloc:
+    description: Display choosen player location or if no name set, player location.
+    aliases: [loc,location]
+    usage: /<command> (|name)
+  plg_itemmore:
+    description: Sets the amount of items in hand to 64.
+    aliases: more
+    usage: /<command>
+  plg_item:
+    description: Gives the player item of choice. You can specify someone else as the player.
+    aliases: [i,item]
+    usage: /<command> (name|id) [amount] [player] [damage]
+  plg_itemcolor:
+    description: Changes the color of a colorable item in hand.
+    aliases: [c,color]
+    usage: /<command> (colorname|colorid|help)
+  plg_tpto:
+    description: Teleports the player to another player.
+    aliases: [tp,tpto]
+    usage: /<command> (playername)
+  plg_tp2p:
+    description: Teleports chosen player to another chosen player
+    aliases: [tp2p,t2p]
+    usage: /<command> (playername from) (palyername to)
+  plg_tphere:
+    description: Teleports another player to the player.
+    aliases: [s,tphere]
+    usage: /<command> (playername)
+  plg_playermsg:
+    description: Sends a private message to another player.
+    aliases: [msg,message]
+    usage: /<command> (playername) (message text)
