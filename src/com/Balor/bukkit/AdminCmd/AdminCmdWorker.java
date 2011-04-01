@@ -206,7 +206,19 @@ public class AdminCmdWorker {
     }
 
     public boolean gift(String[] args) {
+        Player recever = player.getServer().getPlayer(args[0]);
+        Material mat = checkMaterial(args[1]);
+        if (mat == null)
+            return true;
+        int amount = 1;
+        try {
+            amount = Integer.parseInt(args[2]);
 
+        } catch (Exception ex) {
+            return false;
+        }
+
+        return true;
     }
     // gives the player item of his choice
 
