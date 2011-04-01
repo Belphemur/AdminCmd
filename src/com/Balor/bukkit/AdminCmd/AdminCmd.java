@@ -43,7 +43,7 @@ public class AdminCmd extends JavaPlugin {
                 //Permissions found, enable it now
                 this.getServer().getPluginManager().enablePlugin(perm_plugin);
                 Permissions = ((Permissions) perm_plugin).getHandler();
-                 log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") Enabled.");
+                log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") Enabled.");
             } else {
                 //Permissions not found. Disable plugin
                 log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") not enabled. Permissions not detected");
@@ -90,36 +90,99 @@ public class AdminCmd extends JavaPlugin {
             worker.setPlayer(player);
 
             // 0 arguments:
-            if (cmd.equalsIgnoreCase("plg_timeday") && Permissions.has(player, "admincmd.time.day"))
-                return worker.timeDay();
-            if (cmd.equalsIgnoreCase("plg_itemmore") && Permissions.has(player, "admincmd.item.more"))
-                return worker.itemMore();
-            if (cmd.equalsIgnoreCase("plg_playerlist") && Permissions.has(player, "admincmd.player.list"))
-                return worker.playerList();
-            if (cmd.equalsIgnoreCase("plg_playerloc") && Permissions.has(player, "admincmd.player.loc"))
-                return worker.playerLocation(args);
+            if (cmd.equalsIgnoreCase("plg_timeday"))
+                if (Permissions.has(player, "admincmd.time.day"))
+                    return worker.timeDay();
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+            if (cmd.equalsIgnoreCase("plg_itemmore"))
+                if (Permissions.has(player, "admincmd.item.more"))
+                    return worker.itemMore();
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+            if (cmd.equalsIgnoreCase("plg_playerlist"))
+                if (Permissions.has(player, "admincmd.player.list"))
+                    return worker.playerList();
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
+            if (cmd.equalsIgnoreCase("plg_playerloc"))
+                if (Permissions.has(player, "admincmd.player.loc"))
+                    return worker.playerLocation(args);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
 
             // 1 argument:
             if (args.length < 1)
                 return false;
-            if (cmd.equalsIgnoreCase("plg_timeset") && Permissions.has(player, "admincmd.time.all"))
-                return worker.timeSet(args[0]);
-            if (cmd.equalsIgnoreCase("plg_item") && Permissions.has(player, "admincmd.item.add"))
-                return worker.itemGive(args);
-            if (cmd.equalsIgnoreCase("plg_tpto")&& Permissions.has(player, "admincmd.tp.to"))
-                return worker.playerTpTo(args[0]);
-            if (cmd.equalsIgnoreCase("plg_tphere")&& Permissions.has(player, "admincmd.tp.here"))
-                return worker.playerTpHere(args[0]);
-            if (cmd.equalsIgnoreCase("plg_itemcolor") && Permissions.has(player, "admincmd.item.color"))
-                return worker.itemColor(args[0]);
+            if (cmd.equalsIgnoreCase("plg_timeset"))
+                if (Permissions.has(player, "admincmd.time.set"))
+                    return worker.timeSet(args[0]);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
+            if (cmd.equalsIgnoreCase("plg_item"))
+                if (Permissions.has(player, "admincmd.item.add"))
+                    return worker.itemGive(args);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
+            if (cmd.equalsIgnoreCase("plg_tpto"))
+                if (Permissions.has(player, "admincmd.tp.to"))
+                    return worker.playerTpTo(args[0]);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
+            if (cmd.equalsIgnoreCase("plg_tphere"))
+                if (Permissions.has(player, "admincmd.tp.here"))
+                    return worker.playerTpHere(args[0]);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
+            if (cmd.equalsIgnoreCase("plg_itemcolor"))
+                if (Permissions.has(player, "admincmd.item.color"))
+                    return worker.itemColor(args[0]);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
 
             // 2 arguments:
             if (args.length < 2)
                 return false;
-            if (cmd.equalsIgnoreCase("plg_playermsg")&& Permissions.has(player, "admincmd.player.msg"))
-                return worker.playerMessage(args);
-            if (cmd.equalsIgnoreCase("plg_tp2p") && Permissions.has(player, "admincmd.tp.players"))
-                return worker.playerTpPlayer(args);
+            if (cmd.equalsIgnoreCase("plg_playermsg"))
+                if (Permissions.has(player, "admincmd.player.msg"))
+                    return worker.playerMessage(args);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
+            if (cmd.equalsIgnoreCase("plg_tp2p"))
+                if (Permissions.has(player, "admincmd.tp.players"))
+                    return worker.playerTpPlayer(args);
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+
 
             // unknown command, should not really get here
             return false;
