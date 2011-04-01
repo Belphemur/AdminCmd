@@ -16,7 +16,7 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
- * AdminCmd for Bukkit
+ * AdminCmd for Bukkit (fork of PlgEssentials)
  *
  * @author Plague && Balor
  */
@@ -28,7 +28,7 @@ public class AdminCmd extends JavaPlugin {
     /**
      * Permission plugin
      */
-    public static PermissionHandler Permissions = null;
+    private static PermissionHandler Permissions = null;
 
     /**
      * Checks that Permissions is installed.
@@ -43,6 +43,7 @@ public class AdminCmd extends JavaPlugin {
                 //Permissions found, enable it now
                 this.getServer().getPluginManager().enablePlugin(perm_plugin);
                 Permissions = ((Permissions) perm_plugin).getHandler();
+                 log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") Enabled.");
             } else {
                 //Permissions not found. Disable plugin
                 log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") not enabled. Permissions not detected");
@@ -78,50 +79,50 @@ public class AdminCmd extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        // OP version
-        //if (!sender.isOp()) return true;
-        // a player is always needed (except for playerlist, but meh)
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You have to be a player!");
             return true;
+        } else {
+            Player player = (Player) sender;
+
+            String cmd = command.getName();
+
+            worker.setPlayer(player);
+
+            // 0 arguments:
+            if (cmd.equalsIgnoreCase("plg_timeday") && Permissions.has(player, "admincmd.time.day"))
+                return worker.timeDay();
+            if (cmd.equalsIgnoreCase("plg_itemmore") && Permissions.has(player, "admincmd.item.more"))
+                return worker.itemMore();
+            if (cmd.equalsIgnoreCase("plg_playerlist") && Permissions.has(player, "admincmd.player.list"))
+                return worker.playerList();
+            if (cmd.equalsIgnoreCase("plg_playerloc") && Permissions.has(player, "admincmd.player.loc"))
+                return worker.playerLocation(args);
+
+            // 1 argument:
+            if (args.length < 1)
+                return false;
+            if (cmd.equalsIgnoreCase("plg_timeset") && Permissions.has(player, "admincmd.time.all"))
+                return worker.timeSet(args[0]);
+            if (cmd.equalsIgnoreCase("plg_item") && Permissions.has(player, "admincmd.item.add"))
+                return worker.itemGive(args);
+            if (cmd.equalsIgnoreCase("plg_tpto")&& Permissions.has(player, "admincmd.tp.to"))
+                return worker.playerTpTo(args[0]);
+            if (cmd.equalsIgnoreCase("plg_tphere")&& Permissions.has(player, "admincmd.tp.here"))
+                return worker.playerTpHere(args[0]);
+            if (cmd.equalsIgnoreCase("plg_itemcolor") && Permissions.has(player, "admincmd.item.color"))
+                return worker.itemColor(args[0]);
+
+            // 2 arguments:
+            if (args.length < 2)
+                return false;
+            if (cmd.equalsIgnoreCase("plg_playermsg")&& Permissions.has(player, "admincmd.player.msg"))
+                return worker.playerMessage(args);
+            if (cmd.equalsIgnoreCase("plg_tp2p") && Permissions.has(player, "admincmd.tp.players"))
+                return worker.playerTpPlayer(args);
+
+            // unknown command, should not really get here
+            return false;
         }
-        String cmd = command.getName();
-
-        worker.setPlayer((Player) sender);
-
-        // 0 arguments:
-        if (cmd.equalsIgnoreCase("plg_timeday"))
-            return worker.timeDay();
-        if (cmd.equalsIgnoreCase("plg_itemmore"))
-            return worker.itemMore();
-        if (cmd.equalsIgnoreCase("plg_playerlist"))
-            return worker.playerList();
-        if (cmd.equalsIgnoreCase("plg_playerloc"))
-            return worker.playerLocation(args);
-
-        // 1 argument:
-        if (args.length < 1)
-            return false;
-        if (cmd.equalsIgnoreCase("plg_timeset"))
-            return worker.timeSet(args[0]);
-        if (cmd.equalsIgnoreCase("plg_item"))
-            return worker.itemGive(args);
-        if (cmd.equalsIgnoreCase("plg_tpto"))
-            return worker.playerTpTo(args[0]);
-        if (cmd.equalsIgnoreCase("plg_tphere"))
-            return worker.playerTpHere(args[0]);
-        if (cmd.equalsIgnoreCase("plg_itemcolor"))
-            return worker.itemColor(args[0]);
-
-        // 2 arguments:
-        if (args.length < 2)
-            return false;
-        if (cmd.equalsIgnoreCase("plg_playermsg"))
-            return worker.playerMessage(args);
-        if (cmd.equalsIgnoreCase("plg_tp2p"))
-            return worker.playerTpPlayer(args);
-
-        // unknown command, should not really get here
-        return false;
     }
 }

@@ -1,5 +1,5 @@
-name: PlgEssentials
-main: cz.Plague.bukkit.PlgEssentials.PlgEssentials
+name: AdminCmd
+main: com.Balor.bukkit.AdminCmd.AdminCmd
 version: 4.2.1
 author: Plague modded by Balor
 description: >
