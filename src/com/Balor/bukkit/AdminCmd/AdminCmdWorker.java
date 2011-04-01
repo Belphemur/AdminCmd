@@ -187,7 +187,7 @@ public class AdminCmdWorker {
             player.sendMessage(ChatColor.RED + "You have to be holding something!");
             return true;
         }
-        if (amount.length==0)
+        if (amount.length == 0)
             hand.setAmount(64);
         else {
             int toAdd;
@@ -201,7 +201,7 @@ public class AdminCmdWorker {
                 int inInventory = (hand.getAmount() + toAdd) - 64;
                 ItemStack iss = new ItemStack(hand.getType(), inInventory);
                 player.getInventory().addItem(iss);
-                player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ") have been stored in your inventory");
+                player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ChatColor.WHITE + ") have been stored in your inventory");
 
             } else
                 hand.setAmount(hand.getAmount() + toAdd);
