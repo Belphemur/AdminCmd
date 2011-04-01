@@ -181,18 +181,18 @@ public class AdminCmdWorker {
      * @param amount
      * @return
      */
-    public boolean itemMore(String amount) {
+    public boolean itemMore(String[] amount) {
         ItemStack hand = player.getItemInHand();
         if (hand == null || hand.getType() == Material.AIR) {
             player.sendMessage(ChatColor.RED + "You have to be holding something!");
             return true;
         }
-        if (amount.isEmpty())
+        if (amount.length==0)
             hand.setAmount(64);
         else {
             int toAdd;
             try {
-                toAdd = Integer.parseInt(amount);
+                toAdd = Integer.parseInt(amount[0]);
             } catch (Exception e) {
                 return false;
             }
@@ -201,7 +201,7 @@ public class AdminCmdWorker {
                 int inInventory = (hand.getAmount() + toAdd) - 64;
                 ItemStack iss = new ItemStack(hand.getType(), inInventory);
                 player.getInventory().addItem(iss);
-                player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ")have been stored in your inventory");
+                player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ") have been stored in your inventory");
 
             } else
                 hand.setAmount(hand.getAmount() + toAdd);

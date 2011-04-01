@@ -115,7 +115,7 @@ public class AdminCmd extends JavaPlugin {
                 }
             if (cmd.equalsIgnoreCase("plg_itemmore"))
                 if (hasPerm(player, "admincmd.item.more"))
-                    return worker.itemMore(args[0]);
+                    return worker.itemMore(args);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
                     return true;
