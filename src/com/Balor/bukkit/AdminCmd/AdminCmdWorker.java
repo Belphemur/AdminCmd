@@ -132,9 +132,9 @@ public class AdminCmdWorker {
         return this.tpP2P(args[0], args[1]);
 
     }
-
     // sends a private message to another player
     // ! at least player argument has to be tested for existence beforehand!
+
     public boolean playerMessage(String args[]) {
         Player buddy = player.getServer().getPlayer(args[0]);
         if (buddy != null) {
@@ -203,22 +203,6 @@ public class AdminCmdWorker {
             player.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
         return m;
 
-    }
-
-    public boolean gift(String[] args) {
-        Player recever = player.getServer().getPlayer(args[0]);
-        Material mat = checkMaterial(args[1]);
-        if (mat == null)
-            return true;
-        int amount = 1;
-        try {
-            amount = Integer.parseInt(args[2]);
-
-        } catch (Exception ex) {
-            return false;
-        }
-
-        return true;
     }
     // gives the player item of his choice
 
