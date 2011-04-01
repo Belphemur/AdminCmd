@@ -10,6 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
+//Permissions imports
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
  * AdminCmd for Bukkit
@@ -21,20 +25,42 @@ public class AdminCmd extends JavaPlugin {
     private AdminCmdWorker worker;
     private int serverVersion;
     public static final Logger log = Logger.getLogger("Minecraft");
+    /**
+     * Permission plugin
+     */
+    public static PermissionHandler Permissions = null;
+
+    /**
+     * Checks that Permissions is installed.
+     */
+    public void setupPermissions() {
+
+        Plugin perm_plugin = this.getServer().getPluginManager().getPlugin("Permissions");
+        PluginDescriptionFile pdfFile = this.getDescription();
+
+        if (Permissions == null)
+            if (perm_plugin != null) {
+                //Permissions found, enable it now
+                this.getServer().getPluginManager().enablePlugin(perm_plugin);
+                Permissions = ((Permissions) perm_plugin).getHandler();
+            } else {
+                //Permissions not found. Disable plugin
+                log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") not enabled. Permissions not detected");
+                this.getServer().getPluginManager().disablePlugin(this);
+            }
+    }
 
     @Override
     public void onEnable() {
-
-        PluginDescriptionFile pdfFile = this.getDescription();      
+        setupPermissions();
         serverVersion = serverVersion();
-        log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version" + pdfFile.getVersion() + ") ServerVersion "+serverVersion);
         worker = new AdminCmdWorker(serverVersion);
     }
 
     @Override
     public void onDisable() {
         PluginDescriptionFile pdfFile = this.getDescription();
-       log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version" + pdfFile.getVersion() + ")");
+        log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version" + pdfFile.getVersion() + ")");
     }
 
     private int serverVersion() {
@@ -61,7 +87,7 @@ public class AdminCmd extends JavaPlugin {
         }
         String cmd = command.getName();
 
-        worker.setPlayer((Player)sender);
+        worker.setPlayer((Player) sender);
 
         // 0 arguments:
         if (cmd.equalsIgnoreCase("plg_timeday"))
