@@ -43,10 +43,10 @@ public class AdminCmd extends JavaPlugin {
                 //Permissions found, enable it now
                 this.getServer().getPluginManager().enablePlugin(perm_plugin);
                 Permissions = ((Permissions) perm_plugin).getHandler();
-                log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") Enabled.");
+                log.info("[" + pdfFile.getName() + "]" + " (version " + pdfFile.getVersion() + ") Enabled.");
             } else {
                 //Permissions not found. Disable plugin
-                log.info(pdfFile.getName() + " (version " + pdfFile.getVersion() + ") not enabled. Permissions not detected");
+                log.info("[" + pdfFile.getName() + "]" + " (version " + pdfFile.getVersion() + ") not enabled. Permissions not detected");
                 this.getServer().getPluginManager().disablePlugin(this);
             }
     }
