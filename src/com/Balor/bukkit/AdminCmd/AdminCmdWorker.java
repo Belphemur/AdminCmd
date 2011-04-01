@@ -175,14 +175,40 @@ public class AdminCmdWorker {
         return true;
     }
 
-    // sets the amount of items in hand to 64
-    public boolean itemMore() {
+    /**
+     * Set the item in hand to the chosen number
+     * 64 if no number set. And add the overflow item to inventory if it's exceeds 64.
+     * @param amount
+     * @return
+     */
+    public boolean itemMore(String amount) {
         ItemStack hand = player.getItemInHand();
         if (hand == null || hand.getType() == Material.AIR) {
             player.sendMessage(ChatColor.RED + "You have to be holding something!");
             return true;
         }
-        hand.setAmount(64);
+        if (amount.isEmpty())
+            hand.setAmount(64);
+        else {
+            int toAdd;
+            try {
+                toAdd = Integer.parseInt(amount);
+            } catch (Exception e) {
+                return false;
+            }
+            if ((hand.getAmount() + toAdd) > 64) {
+                hand.setAmount(64);
+                int inInventory = (hand.getAmount() + toAdd) - 64;
+                ItemStack iss = new ItemStack(hand.getType(), inInventory);
+                player.getInventory().addItem(iss);
+                player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ")have been stored in your inventory");
+
+            } else
+                hand.setAmount(hand.getAmount() + toAdd);
+        }
+
+
+
         return true;
     }
 
