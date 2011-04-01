@@ -1,2 +1,5 @@
 *.class
 *.jar
+nbproject*
+build*
+manifest.mf
