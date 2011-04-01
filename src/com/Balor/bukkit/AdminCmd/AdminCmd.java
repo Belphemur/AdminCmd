@@ -18,7 +18,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
  *
- * @author Plague && Balor
+ * @authors Plague, Balor
  */
 public class AdminCmd extends JavaPlugin {
 
@@ -33,7 +33,7 @@ public class AdminCmd extends JavaPlugin {
     /**
      * Checks that Permissions is installed.
      */
-    public void setupPermissions() {
+    private void setupPermissions() {
 
         Plugin perm_plugin = this.getServer().getPluginManager().getPlugin("Permissions");
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -43,12 +43,24 @@ public class AdminCmd extends JavaPlugin {
                 //Permissions found, enable it now
                 this.getServer().getPluginManager().enablePlugin(perm_plugin);
                 Permissions = ((Permissions) perm_plugin).getHandler();
-                log.info("[" + pdfFile.getName() + "]" + " (version " + pdfFile.getVersion() + ") Enabled.");
+                log.info("[" + pdfFile.getName() + "]" + " (version " + pdfFile.getVersion() + ") Enabled with Permissions.");
             } else {
-                //Permissions not found. Disable plugin
-                log.info("[" + pdfFile.getName() + "]" + " (version " + pdfFile.getVersion() + ") not enabled. Permissions not detected");
-                this.getServer().getPluginManager().disablePlugin(this);
+                log.info("[" + pdfFile.getName() + "]" + " (version " + pdfFile.getVersion() + ") Enables without Permissions.");
+                log.info("[" + pdfFile.getName() + "]" + " Instead of Permissions, check if the user is OP.");
             }
+    }
+
+    /**
+     * Check the permissions
+     * @param player
+     * @param perm
+     * @return boolean
+     */
+    private boolean hasPerm(Player player, String perm) {
+        if (Permissions == null)
+            return player.isOp();
+        else
+            return Permissions.has(player, perm);
     }
 
     @Override
@@ -64,6 +76,10 @@ public class AdminCmd extends JavaPlugin {
         log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version" + pdfFile.getVersion() + ")");
     }
 
+    /**
+     * Check the server version
+     * @return server version
+     */
     private int serverVersion() {
         String ResultString = null;
         try {
@@ -91,21 +107,21 @@ public class AdminCmd extends JavaPlugin {
 
             // 0 arguments:
             if (cmd.equalsIgnoreCase("plg_timeday"))
-                if (Permissions.has(player, "admincmd.time.day"))
+                if (hasPerm(player, "admincmd.time.day"))
                     return worker.timeDay();
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
                     return true;
                 }
             if (cmd.equalsIgnoreCase("plg_itemmore"))
-                if (Permissions.has(player, "admincmd.item.more"))
+                if (hasPerm(player, "admincmd.item.more"))
                     return worker.itemMore();
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
                     return true;
                 }
             if (cmd.equalsIgnoreCase("plg_playerlist"))
-                if (Permissions.has(player, "admincmd.player.list"))
+                if (hasPerm(player, "admincmd.player.list"))
                     return worker.playerList();
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -113,7 +129,7 @@ public class AdminCmd extends JavaPlugin {
                 }
 
             if (cmd.equalsIgnoreCase("plg_playerloc"))
-                if (Permissions.has(player, "admincmd.player.loc"))
+                if (hasPerm(player, "admincmd.player.loc"))
                     return worker.playerLocation(args);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -124,7 +140,7 @@ public class AdminCmd extends JavaPlugin {
             if (args.length < 1)
                 return false;
             if (cmd.equalsIgnoreCase("plg_timeset"))
-                if (Permissions.has(player, "admincmd.time.set"))
+                if (hasPerm(player, "admincmd.time.set"))
                     return worker.timeSet(args[0]);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -132,7 +148,7 @@ public class AdminCmd extends JavaPlugin {
                 }
 
             if (cmd.equalsIgnoreCase("plg_item"))
-                if (Permissions.has(player, "admincmd.item.add"))
+                if (hasPerm(player, "admincmd.item.add"))
                     return worker.itemGive(args);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -140,7 +156,7 @@ public class AdminCmd extends JavaPlugin {
                 }
 
             if (cmd.equalsIgnoreCase("plg_tpto"))
-                if (Permissions.has(player, "admincmd.tp.to"))
+                if (hasPerm(player, "admincmd.tp.to"))
                     return worker.playerTpTo(args[0]);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -148,7 +164,7 @@ public class AdminCmd extends JavaPlugin {
                 }
 
             if (cmd.equalsIgnoreCase("plg_tphere"))
-                if (Permissions.has(player, "admincmd.tp.here"))
+                if (hasPerm(player, "admincmd.tp.here"))
                     return worker.playerTpHere(args[0]);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -156,7 +172,7 @@ public class AdminCmd extends JavaPlugin {
                 }
 
             if (cmd.equalsIgnoreCase("plg_itemcolor"))
-                if (Permissions.has(player, "admincmd.item.color"))
+                if (hasPerm(player, "admincmd.item.color"))
                     return worker.itemColor(args[0]);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -168,7 +184,7 @@ public class AdminCmd extends JavaPlugin {
             if (args.length < 2)
                 return false;
             if (cmd.equalsIgnoreCase("plg_playermsg"))
-                if (Permissions.has(player, "admincmd.player.msg"))
+                if (hasPerm(player, "admincmd.player.msg"))
                     return worker.playerMessage(args);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
@@ -176,7 +192,7 @@ public class AdminCmd extends JavaPlugin {
                 }
 
             if (cmd.equalsIgnoreCase("plg_tp2p"))
-                if (Permissions.has(player, "admincmd.tp.players"))
+                if (hasPerm(player, "admincmd.tp.players"))
                     return worker.playerTpPlayer(args);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");

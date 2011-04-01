@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Handle commands
- * @author Plague modded by Balor
+ * @authors Plague, Balor
  */
 public class AdminCmdWorker {
 
@@ -41,9 +41,9 @@ public class AdminCmdWorker {
 
 
     }
-    public void setPlayer(Player player)
-    {
-        this.player=player;
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     // all functions return if they handled the command
@@ -108,8 +108,8 @@ public class AdminCmdWorker {
 
     private boolean tpP2P(String nFrom, String nTo) {
         boolean found = true;
-        Player pFrom=player.getServer().getPlayer(nFrom);
-        Player pTo=player.getServer().getPlayer(nTo);
+        Player pFrom = player.getServer().getPlayer(nFrom);
+        Player pTo = player.getServer().getPlayer(nTo);
         if (pFrom == null) {
             player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + nFrom + ChatColor.RED + " not found!");
             found = false;
@@ -186,20 +186,35 @@ public class AdminCmdWorker {
         return true;
     }
 
-    // gives the player item of his choice
-    public boolean itemGive(String[] args) {
-        // which material?
+    /**
+     * Translate the id or name to a material
+     * @param mat
+     * @return Material
+     */
+    private Material checkMaterial(String mat) {
         Material m = null;
         try {
-            int id = Integer.parseInt(args[0]);
+            int id = Integer.parseInt(mat);
             m = Material.getMaterial(id);
         } catch (NumberFormatException e) {
-            m = Material.matchMaterial(args[0]);
+            m = Material.matchMaterial(mat);
         }
-        if (m == null) {
-            player.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + args[0]);
+        if (m == null)
+            player.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
+        return m;
+
+    }
+
+    public boolean gift(String[] args) {
+
+    }
+    // gives the player item of his choice
+
+    public boolean itemGive(String[] args) {
+        // which material?
+        Material m = checkMaterial(args[0]);
+        if (m == null)
             return true;
-        }
         // amount, damage and target player
         int cnt = 1;
         byte dam = 0;
