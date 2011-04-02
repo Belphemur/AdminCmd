@@ -19,7 +19,7 @@ commands:
     usage: /<command>
   bal_repair:
     description: Repair if possible the item in hand.
-    aliases: [repair]
+    aliases: [repair,rep]
     usage: /<command>
   bal_playerloc:
     description: Display choosen player location or if no name set, player location.

@@ -244,7 +244,7 @@ public class AdminCmdWorker {
         ItemStack item = player.getItemInHand();
         int i = 1;
         for (int[] array : listOfPossibleRepair) {
-            if (item.getTypeId() >= array[0] || item.getTypeId() <= array[1]) {
+            if (item.getTypeId() >= array[0] && item.getTypeId() <= array[1]) {
                 item.setDurability((short) 0);
                 break;
             }
