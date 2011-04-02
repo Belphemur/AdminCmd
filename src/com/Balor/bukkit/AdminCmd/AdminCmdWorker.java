@@ -242,13 +242,14 @@ public class AdminCmdWorker {
     public boolean repair() {
 
         ItemStack item = player.getItemInHand();
-        int i = 1;
+        int i = 0;
         for (int[] array : listOfPossibleRepair) {
             if (item.getTypeId() >= array[0] && item.getTypeId() <= array[1]) {
                 item.setDurability((short) 0);
                 break;
             }
             i++;
+
         }
         if (i == listOfPossibleRepair.size())
             player.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
