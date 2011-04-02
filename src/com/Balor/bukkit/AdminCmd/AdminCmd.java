@@ -106,21 +106,28 @@ public class AdminCmd extends JavaPlugin {
             worker.setPlayer(player);
 
             // 0 arguments:
-            if (cmd.equalsIgnoreCase("plg_timeday"))
+            if (cmd.equalsIgnoreCase("bal_timeday"))
                 if (hasPerm(player, "admincmd.time.day"))
                     return worker.timeDay();
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
                     return true;
                 }
-            if (cmd.equalsIgnoreCase("plg_itemmore"))
+            if (cmd.equalsIgnoreCase("bal_repair"))
+                if (hasPerm(player, "admincmd.item.repair"))
+                    return worker.repair();
+                else {
+                    player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
+                    return true;
+                }
+            if (cmd.equalsIgnoreCase("bal_itemmore"))
                 if (hasPerm(player, "admincmd.item.more"))
                     return worker.itemMore(args);
                 else {
                     player.sendMessage(ChatColor.RED + "You don't have the permission to do that !");
                     return true;
                 }
-            if (cmd.equalsIgnoreCase("plg_playerlist"))
+            if (cmd.equalsIgnoreCase("bal_playerlist"))
                 if (hasPerm(player, "admincmd.player.list"))
                     return worker.playerList();
                 else {
@@ -128,7 +135,7 @@ public class AdminCmd extends JavaPlugin {
                     return true;
                 }
 
-            if (cmd.equalsIgnoreCase("plg_playerloc"))
+            if (cmd.equalsIgnoreCase("bal_playerloc"))
                 if (hasPerm(player, "admincmd.player.loc"))
                     return worker.playerLocation(args);
                 else {
@@ -139,7 +146,7 @@ public class AdminCmd extends JavaPlugin {
             // 1 argument:
             if (args.length < 1)
                 return false;
-            if (cmd.equalsIgnoreCase("plg_timeset"))
+            if (cmd.equalsIgnoreCase("bal_timeset"))
                 if (hasPerm(player, "admincmd.time.set"))
                     return worker.timeSet(args[0]);
                 else {
@@ -147,7 +154,7 @@ public class AdminCmd extends JavaPlugin {
                     return true;
                 }
 
-            if (cmd.equalsIgnoreCase("plg_item"))
+            if (cmd.equalsIgnoreCase("bal_item"))
                 if (hasPerm(player, "admincmd.item.add"))
                     return worker.itemGive(args);
                 else {
@@ -155,7 +162,7 @@ public class AdminCmd extends JavaPlugin {
                     return true;
                 }
 
-            if (cmd.equalsIgnoreCase("plg_tpto"))
+            if (cmd.equalsIgnoreCase("bal_tpto"))
                 if (hasPerm(player, "admincmd.tp.to"))
                     return worker.playerTpTo(args[0]);
                 else {
@@ -163,7 +170,7 @@ public class AdminCmd extends JavaPlugin {
                     return true;
                 }
 
-            if (cmd.equalsIgnoreCase("plg_tphere"))
+            if (cmd.equalsIgnoreCase("bal_tphere"))
                 if (hasPerm(player, "admincmd.tp.here"))
                     return worker.playerTpHere(args[0]);
                 else {
@@ -171,7 +178,7 @@ public class AdminCmd extends JavaPlugin {
                     return true;
                 }
 
-            if (cmd.equalsIgnoreCase("plg_itemcolor"))
+            if (cmd.equalsIgnoreCase("bal_itemcolor"))
                 if (hasPerm(player, "admincmd.item.color"))
                     return worker.itemColor(args[0]);
                 else {
@@ -183,7 +190,7 @@ public class AdminCmd extends JavaPlugin {
             // 2 arguments:
             if (args.length < 2)
                 return false;
-            if (cmd.equalsIgnoreCase("plg_playermsg"))
+            if (cmd.equalsIgnoreCase("bal_playermsg"))
                 if (hasPerm(player, "admincmd.player.msg"))
                     return worker.playerMessage(args);
                 else {
@@ -191,7 +198,7 @@ public class AdminCmd extends JavaPlugin {
                     return true;
                 }
 
-            if (cmd.equalsIgnoreCase("plg_tp2p"))
+            if (cmd.equalsIgnoreCase("bal_tp2p"))
                 if (hasPerm(player, "admincmd.tp.players"))
                     return worker.playerTpPlayer(args);
                 else {

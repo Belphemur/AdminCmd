@@ -5,47 +5,51 @@ author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
 commands:
-  plg_timeset:
+  bal_timeset:
     description: Set world time to a given timestamp/alias.
     aliases: time
     usage: /<command> day|night|dusk|dawn|<raw>
-  plg_timeday:
+  bal_timeday:
     description: Short for /time day.
     aliases: day
     usage: /<command>
-  plg_playerlist:
+  bal_playerlist:
     description: Lists all online players.
     aliases: [playerlist,plist]
     usage: /<command>
-  plg_playerloc:
+  bal_repair:
+    description: Repair if possible the item in hand.
+    aliases: [repair]
+    usage: /<command>
+  bal_playerloc:
     description: Display choosen player location or if no name set, player location.
     aliases: [loc,location]
     usage: /<command> (|name)
-  plg_itemmore:
+  bal_itemmore:
     description: Sets the amount of items in hand to given amount or 64 if nothing given.
     aliases: more
     usage: /<command> (|amount)
-  plg_item:
+  bal_item:
     description: Gives the player item of choice. You can specify someone else as the player.
     aliases: [i,item]
     usage: /<command> (name|id) [amount] [player] [damage]
-  plg_itemcolor:
+  bal_itemcolor:
     description: Changes the color of a colorable item in hand.
     aliases: [c,color]
     usage: /<command> (colorname|colorid|help)
-  plg_tpto:
+  bal_tpto:
     description: Teleports the player to another player.
     aliases: [tp,tpto]
     usage: /<command> (playername)
-  plg_tp2p:
+  bal_tp2p:
     description: Teleports chosen player to another chosen player
     aliases: [tp2p,t2p]
     usage: /<command> (playername from) (palyername to)
-  plg_tphere:
+  bal_tphere:
     description: Teleports another player to the player.
     aliases: [s,tphere]
     usage: /<command> (playername)
-  plg_playermsg:
+  bal_playermsg:
     description: Sends a private message to another player.
     aliases: [msg,message]
     usage: /<command> (playername) (message text)
