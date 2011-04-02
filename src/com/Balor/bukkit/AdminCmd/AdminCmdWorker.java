@@ -1,9 +1,12 @@
 package com.Balor.bukkit.AdminCmd;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +19,7 @@ public class AdminCmdWorker {
     private Player player;
     private int serverVersion;
     private HashMap<Material, String[]> materialsColors;
+    private List<int[]> listOfPossibleRepair;
 
     public AdminCmdWorker(int sVersion) {
         this.serverVersion = sVersion;
@@ -38,8 +42,12 @@ public class AdminCmdWorker {
                     "Stone", "Sandstone", "Wooden", "Cobblestone"
                 });
         materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
-
-
+        listOfPossibleRepair = new ArrayList<int[]>();
+        listOfPossibleRepair.add(new int[]{256, 258});
+        listOfPossibleRepair.add(new int[]{267, 279});
+        listOfPossibleRepair.add(new int[]{283, 286});
+        listOfPossibleRepair.add(new int[]{290, 294});
+        listOfPossibleRepair.add(new int[]{298, 317});
     }
 
     public void setPlayer(Player player) {
@@ -229,6 +237,25 @@ public class AdminCmdWorker {
             player.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
         return m;
 
+    }
+
+    public boolean repair() {
+
+        ItemStack item = player.getItemInHand();
+        int i = 1;
+        for (int[] array : listOfPossibleRepair) {
+            if (item.getTypeId() >= array[0] || item.getTypeId() <= array[1]) {
+                item.setDurability((short) 0);
+                break;
+            }
+            i++;
+        }
+        if (i == listOfPossibleRepair.size())
+            player.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
+        else if (item.getDurability() == (short) 0)
+            player.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE + " have been succefully repaired.");
+
+        return true;
     }
     // gives the player item of his choice
 
