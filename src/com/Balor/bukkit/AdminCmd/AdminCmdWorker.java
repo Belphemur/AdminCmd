@@ -184,6 +184,26 @@ public class AdminCmdWorker {
 				+ facing[(int) (yaw / 45)]);
 		return true;
 	}
+	/**
+	 * Heal the selected player.
+	 * @param name
+	 * @return
+	 */
+	public boolean playerHeal(String[] name)
+	{
+		Player target=player;
+		if(name.length!=0)
+			target=player.getServer().getPlayer(name[0]);
+		if(target==null)
+		{
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE
+					+ name[0] + ChatColor.RED + " not found!");
+			return true;
+		}
+		target.setHealth(20);
+		
+		return true;
+	}
 
 	/**
 	 * Set the item in hand to the chosen number 64 if no number set. And add

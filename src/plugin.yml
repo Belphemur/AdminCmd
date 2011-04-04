@@ -17,6 +17,10 @@ commands:
     description: Lists all online players.
     aliases: [playerlist,plist]
     usage: /<command>
+  bal_playerheal:
+    description: Heal the player.
+    aliases: [pheal,heal]
+    usage: /<command> (|playername)
   bal_repair:
     description: Repair if possible the item in hand.
     aliases: [repair,rep]
