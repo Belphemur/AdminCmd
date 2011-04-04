@@ -1,9 +1,6 @@
 package com.Balor.bukkit.AdminCmd;
 
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.regex.PatternSyntaxException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,7 +20,6 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 public class AdminCmd extends JavaPlugin {
 
     private AdminCmdWorker worker;
-    private int serverVersion;
     public static final Logger log = Logger.getLogger("Minecraft");
     /**
      * Permission plugin
@@ -66,31 +62,13 @@ public class AdminCmd extends JavaPlugin {
     @Override
     public void onEnable() {
         setupPermissions();
-        serverVersion = serverVersion();
-        worker = new AdminCmdWorker(serverVersion);
+        worker = new AdminCmdWorker();
     }
 
     @Override
     public void onDisable() {
         PluginDescriptionFile pdfFile = this.getDescription();
         log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version" + pdfFile.getVersion() + ")");
-    }
-
-    /**
-     * Check the server version
-     * @return server version
-     */
-    private int serverVersion() {
-        String ResultString = null;
-        try {
-            Pattern regex = Pattern.compile("-([\\d]{3,5})-");
-            Matcher regexMatcher = regex.matcher(getServer().getVersion());
-            if (regexMatcher.find())
-                ResultString = regexMatcher.group(1);
-        } catch (PatternSyntaxException ex) {
-            return 0;
-        }
-        return Integer.parseInt(ResultString);
     }
 
     @Override
