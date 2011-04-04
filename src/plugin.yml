@@ -21,6 +21,10 @@ commands:
     description: Heal the player.
     aliases: [pheal,heal]
     usage: /<command> (|playername)
+  bal_playerkill:
+    description: kill the player.
+    aliases: [pkill,kill]
+    usage: /<command> (|playername)
   bal_repair:
     description: Repair if possible the item in hand.
     aliases: [repair,rep]

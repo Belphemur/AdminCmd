@@ -189,7 +189,7 @@ public class AdminCmdWorker {
 	 * @param name
 	 * @return
 	 */
-	public boolean playerHeal(String[] name)
+	public boolean playerSetHealth(String[] name, int health)
 	{
 		Player target=player;
 		if(name.length!=0)
@@ -200,10 +200,11 @@ public class AdminCmdWorker {
 					+ name[0] + ChatColor.RED + " not found!");
 			return true;
 		}
-		target.setHealth(20);
+		target.setHealth(health);
 		
 		return true;
 	}
+	
 
 	/**
 	 * Set the item in hand to the chosen number 64 if no number set. And add

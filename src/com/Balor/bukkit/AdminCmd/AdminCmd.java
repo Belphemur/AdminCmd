@@ -135,7 +135,15 @@ public class AdminCmd extends JavaPlugin {
 				}
 			if (cmd.equalsIgnoreCase("bal_playerheal"))
 				if (hasPerm(player, "admincmd.player.heal"))
-					return worker.playerHeal(args);
+					return worker.playerSetHealth(args,20);
+				else {
+					player.sendMessage(ChatColor.RED
+							+ "You don't have the permission to do that !");
+					return true;
+				}
+			if (cmd.equalsIgnoreCase("bal_playerkill"))
+				if (hasPerm(player, "admincmd.player.kill"))
+					return worker.playerSetHealth(args,0);
 				else {
 					player.sendMessage(ChatColor.RED
 							+ "You don't have the permission to do that !");
