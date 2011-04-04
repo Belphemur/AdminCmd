@@ -148,7 +148,7 @@ public class AdminCmdWorker {
 			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE
 					+ "] " + player.getDisplayName() + " - ";
 			for (int i = 1; i < args.length; ++i)
-				msg += args[i]+" ";
+				msg += args[i] + " ";
 			msg.trim();
 			buddy.sendMessage(msg);
 			player.sendMessage(msg);
