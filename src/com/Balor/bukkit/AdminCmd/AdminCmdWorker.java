@@ -274,8 +274,8 @@ public class AdminCmdWorker {
 
 	public boolean repairAll() {
 		for (ItemStack item : player.getInventory().getContents())
-			if (listOfPossibleRepair.contains(item.getTypeId()))
-				item.setDurability((short) 0);
+				if (item != null && listOfPossibleRepair.contains(item.getTypeId()))
+					item.setDurability((short) 0);
 
 		player.sendMessage("All your items have been repaired.");
 		return true;
