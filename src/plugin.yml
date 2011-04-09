@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 4.3
+version: 4.4
 author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
@@ -28,6 +28,10 @@ commands:
   bal_repair:
     description: Repair if possible the item in hand.
     aliases: [repair,rep]
+    usage: /<command>
+  bal_repairall:
+    description: Repair if possible the item in hand.
+    aliases: [repairall,repa]
     usage: /<command>
   bal_playerloc:
     description: Display choosen player location or if no name set, player location.
