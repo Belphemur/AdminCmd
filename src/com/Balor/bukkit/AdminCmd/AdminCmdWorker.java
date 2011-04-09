@@ -18,30 +18,30 @@ public class AdminCmdWorker {
 
 	private Player player;
 	private HashMap<Material, String[]> materialsColors;
-	private List<int[]> listOfPossibleRepair;
+	private List<Integer> listOfPossibleRepair;
 
 	public AdminCmdWorker() {
 		materialsColors = new HashMap<Material, String[]>();
-		materialsColors.put(Material.WOOL, new String[] { "White", "Orange",
-				"Magenta", "LightBlue", "Yellow", "LimeGreen", "Pink", "Gray",
-				"LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red",
-				"Black" });
-		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red",
-				"Green", "Brown", "Blue", "Purple", "Cyan", "LightGray",
-				"Gray", "Pink", "LimeGreen", "Yellow", "LightBlue", "Magenta",
+		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta", "LightBlue",
+				"Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown",
+				"Green", "Red", "Black" });
+		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red", "Green", "Brown", "Blue",
+				"Purple", "Cyan", "LightGray", "Gray", "Pink", "LimeGreen", "Yellow", "LightBlue", "Magenta",
 				"Orange", "White" });
-		materialsColors.put(Material.LOG,
-				new String[] { "Oak", "Pine", "Birch" });
-		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone",
-				"Wooden", "Cobblestone" });
-		materialsColors.put(Material.DOUBLE_STEP,
-				materialsColors.get(Material.STEP));
-		listOfPossibleRepair = new ArrayList<int[]>();
-		listOfPossibleRepair.add(new int[] { 256, 258 });
-		listOfPossibleRepair.add(new int[] { 267, 279 });
-		listOfPossibleRepair.add(new int[] { 283, 286 });
-		listOfPossibleRepair.add(new int[] { 290, 294 });
-		listOfPossibleRepair.add(new int[] { 298, 317 });
+		materialsColors.put(Material.LOG, new String[] { "Oak", "Pine", "Birch" });
+		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden", "Cobblestone" });
+		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
+		listOfPossibleRepair = new ArrayList<Integer>();
+		for (int i = 256; i <= 259; i++)
+			listOfPossibleRepair.add(i);
+		for (int i = 267; i <= 279; i++)
+			listOfPossibleRepair.add(i);
+		for (int i = 283; i <= 286; i++)
+			listOfPossibleRepair.add(i);
+		for (int i = 290; i <= 294; i++)
+			listOfPossibleRepair.add(i);
+		for (int i = 298; i <= 317; i++)
+			listOfPossibleRepair.add(i);
 	}
 
 	public void setPlayer(Player player) {
@@ -83,8 +83,7 @@ public class AdminCmdWorker {
 	// lists all online players
 	public boolean playerList() {
 		Player[] online = player.getServer().getOnlinePlayers();
-		player.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE
-				+ online.length);
+		player.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE + online.length);
 		String buffer = "";
 		for (int i = 0; i < online.length; ++i) {
 			Player p = online[i];
@@ -116,20 +115,19 @@ public class AdminCmdWorker {
 		Player pFrom = player.getServer().getPlayer(nFrom);
 		Player pTo = player.getServer().getPlayer(nTo);
 		if (pFrom == null) {
-			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE
-					+ nFrom + ChatColor.RED + " not found!");
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + nFrom + ChatColor.RED
+					+ " not found!");
 			found = false;
 		}
 		if (pTo == null) {
-			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE
-					+ nTo + ChatColor.RED + " not found!");
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + nTo + ChatColor.RED
+					+ " not found!");
 			found = false;
 		}
 		if (found) {
 			pFrom.teleport(pTo);
-			player.sendMessage("Succefully teleported " + ChatColor.BLUE
-					+ pFrom.getName() + ChatColor.WHITE + " to "
-					+ ChatColor.GREEN + pTo.getName());
+			player.sendMessage("Succefully teleported " + ChatColor.BLUE + pFrom.getName() + ChatColor.WHITE
+					+ " to " + ChatColor.GREEN + pTo.getName());
 		}
 		return true;
 	}
@@ -145,16 +143,16 @@ public class AdminCmdWorker {
 	public boolean playerMessage(String args[]) {
 		Player buddy = player.getServer().getPlayer(args[0]);
 		if (buddy != null) {
-			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE
-					+ "] " + player.getDisplayName() + " - ";
+			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] " + player.getDisplayName()
+					+ " - ";
 			for (int i = 1; i < args.length; ++i)
 				msg += args[i] + " ";
 			msg.trim();
 			buddy.sendMessage(msg);
 			player.sendMessage(msg);
 		} else
-			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE
-					+ args[0] + ChatColor.RED + " not found!");
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0] + ChatColor.RED
+					+ " not found!");
 		return true;
 	}
 
@@ -170,41 +168,38 @@ public class AdminCmdWorker {
 				loc = player.getServer().getPlayer(name[0]).getLocation();
 				msg = player.getServer().getPlayer(name[0]).getName() + " is";
 			} catch (Exception ex) {
-				player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE
-						+ name[0] + ChatColor.RED + " not found!");
+				player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0] + ChatColor.RED
+						+ " not found!");
 				return true;
 			}
-		player.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, "
-				+ loc.getBlockY() + " H");
+		player.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY() + " H");
 		String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
 		double yaw = ((loc.getYaw() + 22.5) % 360);
 		if (yaw < 0)
 			yaw += 360;
-		player.sendMessage(msg + " facing " + ChatColor.RED
-				+ facing[(int) (yaw / 45)]);
+		player.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]);
 		return true;
 	}
+
 	/**
 	 * Heal the selected player.
+	 * 
 	 * @param name
 	 * @return
 	 */
-	public boolean playerSetHealth(String[] name, int health)
-	{
-		Player target=player;
-		if(name.length!=0)
-			target=player.getServer().getPlayer(name[0]);
-		if(target==null)
-		{
-			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE
-					+ name[0] + ChatColor.RED + " not found!");
+	public boolean playerSetHealth(String[] name, int health) {
+		Player target = player;
+		if (name.length != 0)
+			target = player.getServer().getPlayer(name[0]);
+		if (target == null) {
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0] + ChatColor.RED
+					+ " not found!");
 			return true;
 		}
 		target.setHealth(health);
-		
+
 		return true;
 	}
-	
 
 	/**
 	 * Set the item in hand to the chosen number 64 if no number set. And add
@@ -216,8 +211,7 @@ public class AdminCmdWorker {
 	public boolean itemMore(String[] amount) {
 		ItemStack hand = player.getItemInHand();
 		if (hand == null || hand.getType() == Material.AIR) {
-			player.sendMessage(ChatColor.RED
-					+ "You have to be holding something!");
+			player.sendMessage(ChatColor.RED + "You have to be holding something!");
 			return true;
 		}
 		if (amount.length == 0)
@@ -234,8 +228,7 @@ public class AdminCmdWorker {
 				int inInventory = (hand.getAmount() + toAdd) - 64;
 				ItemStack iss = new ItemStack(hand.getType(), inInventory);
 				player.getInventory().addItem(iss);
-				player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE
-						+ inInventory + ChatColor.WHITE
+				player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ChatColor.WHITE
 						+ ") have been stored in your inventory");
 
 			} else
@@ -260,8 +253,7 @@ public class AdminCmdWorker {
 			m = Material.matchMaterial(mat);
 		}
 		if (m == null)
-			player.sendMessage(ChatColor.RED + "Unknown material: "
-					+ ChatColor.WHITE + mat);
+			player.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
 		return m;
 
 	}
@@ -269,22 +261,23 @@ public class AdminCmdWorker {
 	public boolean repair() {
 
 		ItemStack item = player.getItemInHand();
-		int i = 0;
-		for (int[] array : listOfPossibleRepair) {
-			if (item.getTypeId() >= array[0] && item.getTypeId() <= array[1]) {
-				item.setDurability((short) 0);
-				break;
-			}
-			i++;
-
+		if (!listOfPossibleRepair.contains(item.getTypeId()))
+			player.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
+		else {
+			item.setDurability((short) 0);
+			player.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE
+					+ " have been succefully repaired.");
 		}
-		if (i == listOfPossibleRepair.size())
-			player.sendMessage("You can't repair this item : " + ChatColor.RED
-					+ item.getType());
-		else if (item.getDurability() == (short) 0)
-			player.sendMessage("Your item " + ChatColor.RED + item.getType()
-					+ ChatColor.WHITE + " have been succefully repaired.");
 
+		return true;
+	}
+
+	public boolean repairAll() {
+		for (ItemStack item : player.getInventory().getContents())
+			if (listOfPossibleRepair.contains(item.getTypeId()))
+				item.setDurability((short) 0);
+
+		player.sendMessage("All your items have been repaired.");
 		return true;
 	}
 
@@ -308,8 +301,7 @@ public class AdminCmdWorker {
 			if (args.length >= 3) {
 				target = player.getServer().getPlayer(args[2]);
 				if (target == null) {
-					player.sendMessage(ChatColor.RED + "No such player: "
-							+ ChatColor.WHITE + args[2]);
+					player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[2]);
 					return true;
 				}
 				if (args.length >= 4)
@@ -323,16 +315,13 @@ public class AdminCmdWorker {
 
 		ItemStack stack = new ItemStack(m, cnt, dam);
 		if (!target.getName().equals(player.getName())) {
-			target.sendMessage(ChatColor.RED + "[" + player.getName() + "]"
-					+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt
-					+ " " + m.name());
-			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt
-					+ " " + m.name() + " to " + ChatColor.WHITE
-					+ target.getName() + "'s inventory");
+			target.sendMessage(ChatColor.RED + "[" + player.getName() + "]" + ChatColor.WHITE + " send you "
+					+ ChatColor.GOLD + cnt + " " + m.name());
+			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name() + " to "
+					+ ChatColor.WHITE + target.getName() + "'s inventory");
 		} else
-			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt
-					+ " " + m.name() + " to " + ChatColor.WHITE
-					+ "your inventory");
+			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name() + " to "
+					+ ChatColor.WHITE + "your inventory");
 		target.getInventory().addItem(stack);
 		return true;
 	}
@@ -372,14 +361,10 @@ public class AdminCmdWorker {
 	public boolean itemColor(String color) {
 		// help?
 		if (color.equalsIgnoreCase("help")) {
-			player.sendMessage(ChatColor.RED + "Wool: " + ChatColor.WHITE
-					+ printColors(Material.WOOL));
-			player.sendMessage(ChatColor.RED + "Dyes: " + ChatColor.WHITE
-					+ printColors(Material.INK_SACK));
-			player.sendMessage(ChatColor.RED + "Logs: " + ChatColor.WHITE
-					+ printColors(Material.LOG));
-			player.sendMessage(ChatColor.RED + "Slab: " + ChatColor.WHITE
-					+ printColors(Material.STEP));
+			player.sendMessage(ChatColor.RED + "Wool: " + ChatColor.WHITE + printColors(Material.WOOL));
+			player.sendMessage(ChatColor.RED + "Dyes: " + ChatColor.WHITE + printColors(Material.INK_SACK));
+			player.sendMessage(ChatColor.RED + "Logs: " + ChatColor.WHITE + printColors(Material.LOG));
+			player.sendMessage(ChatColor.RED + "Slab: " + ChatColor.WHITE + printColors(Material.STEP));
 			return true;
 		}
 		// determine the value based on what you're holding
@@ -389,14 +374,12 @@ public class AdminCmdWorker {
 		if (materialsColors.containsKey(m))
 			value = getColor(color, m);
 		else {
-			player.sendMessage(ChatColor.RED
-					+ "You must hold a colorable material!");
+			player.sendMessage(ChatColor.RED + "You must hold a colorable material!");
 			return true;
 		}
 		// error?
 		if (value < 0) {
-			player.sendMessage(ChatColor.RED + "Color " + ChatColor.WHITE
-					+ color + ChatColor.RED
+			player.sendMessage(ChatColor.RED + "Color " + ChatColor.WHITE + color + ChatColor.RED
 					+ " is not usable for what you're holding!");
 			return true;
 		}
