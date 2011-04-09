@@ -261,21 +261,20 @@ public class AdminCmdWorker {
 	public boolean repair() {
 
 		ItemStack item = player.getItemInHand();
-		if (!listOfPossibleRepair.contains(item.getTypeId()))
-			player.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
-		else {
+		if (item != null  && listOfPossibleRepair.contains(item.getTypeId())) {
 			item.setDurability((short) 0);
 			player.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE
 					+ " have been succefully repaired.");
-		}
+		} else
+			player.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
 
 		return true;
 	}
 
 	public boolean repairAll() {
 		for (ItemStack item : player.getInventory().getContents())
-				if (item != null && listOfPossibleRepair.contains(item.getTypeId()))
-					item.setDurability((short) 0);
+			if (item != null && listOfPossibleRepair.contains(item.getTypeId()))
+				item.setDurability((short) 0);
 
 		player.sendMessage("All your items have been repaired.");
 		return true;
