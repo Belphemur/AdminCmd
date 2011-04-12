@@ -127,7 +127,7 @@ public class AdminCmdWorker {
 		}
 		if (found) {
 			pFrom.teleport(pTo);
-			player.sendMessage("Succefully teleported " + ChatColor.BLUE
+			player.sendMessage("Successfully teleported " + ChatColor.BLUE
 					+ pFrom.getName() + ChatColor.WHITE + " to "
 					+ ChatColor.GREEN + pTo.getName());
 		}
@@ -283,7 +283,7 @@ public class AdminCmdWorker {
 					+ item.getType());
 		else if (item.getDurability() == (short) 0)
 			player.sendMessage("Your item " + ChatColor.RED + item.getType()
-					+ ChatColor.WHITE + " have been succefully repaired.");
+					+ ChatColor.WHITE + " have been successfully repaired.");
 
 		return true;
 	}
