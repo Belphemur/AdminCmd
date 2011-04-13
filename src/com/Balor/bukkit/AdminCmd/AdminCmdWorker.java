@@ -25,7 +25,7 @@ public class AdminCmdWorker {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 
-	public AdminCmdWorker() {
+	public AdminCmdWorker(String path) {
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta", "LightBlue",
 				"Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown",
@@ -47,8 +47,7 @@ public class AdminCmdWorker {
 			listOfPossibleRepair.add(i);
 		for (int i = 298; i <= 317; i++)
 			listOfPossibleRepair.add(i);
-		fManager = new FilesManager(player.getServer().getPluginManager().getPlugin("AdminCmd")
-				.getDataFolder().getPath());
+		fManager = new FilesManager(path);
 		blacklist = getBlackListedItems();
 	}
 
