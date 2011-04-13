@@ -225,6 +225,7 @@ public class AdminCmdWorker {
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
 			blacklist.add(m.getId());
+			player.sendMessage(ChatColor.GREEN+"Item ("+ChatColor.WHITE+m.name()+ChatColor.GREEN+") added to the Black List.");
 			return true;
 		}
 		return false;
@@ -244,12 +245,13 @@ public class AdminCmdWorker {
 			if (list == null)
 				list = new ArrayList<Integer>();
 			if (!list.isEmpty() && list.contains(m.getId())) {
-				list.remove(m.getId());
+				list.remove((Integer)m.getId());
 				config.setProperty("BlackListed", list);
 				config.save();
 			}
 			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.getId()))
-				blacklist.remove(m.getId());
+				blacklist.remove((Integer)m.getId());
+			player.sendMessage(ChatColor.GREEN+"Item ("+ChatColor.WHITE+m.name()+ChatColor.GREEN+") removed from the Black List.");
 			return true;
 		}
 		return false;
