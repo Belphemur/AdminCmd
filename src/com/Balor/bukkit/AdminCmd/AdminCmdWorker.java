@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
-import com.Balor.utils.FilesManager;
+import com.Balor.files.utils.FilesManager;
 
 /**
  * Handle commands
