@@ -169,7 +169,16 @@ public class AdminCmd extends JavaPlugin {
 							+ "You don't have the permission to do that !");
 					return true;
 				}
-
+			
+			if (cmd.equalsIgnoreCase("bal_pclear"))
+				if (hasPerm(player, "admincmd.player.clear"))
+					return worker.clearInventory(args[0]);
+				else {
+					player.sendMessage(ChatColor.RED
+							+ "You don't have the permission to do that !");
+					return true;
+				}
+			
 			if (cmd.equalsIgnoreCase("bal_item"))
 				if (hasPerm(player, "admincmd.item.add"))
 					return worker.itemGive(args);

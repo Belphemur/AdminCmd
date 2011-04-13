@@ -65,3 +65,7 @@ commands:
     description: Sends a private message to another player.
     aliases: [msg,message]
     usage: /<command> (playername) (message text)
+  bal_pclear:
+    description: clear the inventory of the playername.
+    aliases: [pclear,clear]
+    usage: /<command> (playername)

@@ -8,6 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.config.Configuration;
+
+import com.Balor.utils.FilesManager;
 
 /**
  * Handle commands
@@ -19,6 +22,8 @@ public class AdminCmdWorker {
 	private Player player;
 	private HashMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
+	private FilesManager fManager;
+	private List<Integer> blacklist;
 
 	public AdminCmdWorker() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -42,6 +47,9 @@ public class AdminCmdWorker {
 			listOfPossibleRepair.add(i);
 		for (int i = 298; i <= 317; i++)
 			listOfPossibleRepair.add(i);
+		fManager = new FilesManager(player.getServer().getPluginManager().getPlugin("AdminCmd")
+				.getDataFolder().getPath());
+		blacklist = getBlackListedItems();
 	}
 
 	public void setPlayer(Player player) {
@@ -182,6 +190,82 @@ public class AdminCmdWorker {
 	}
 
 	/**
+	 * Clear the inventory of the user
+	 * 
+	 * @param name
+	 *            the player who will have his inventory cleared
+	 * @return
+	 */
+	public boolean clearInventory(String name) {
+		player.getServer().getPlayer(name).getInventory().clear();
+		player.getServer().getPlayer(name).getInventory().setHelmet(null);
+		player.getServer().getPlayer(name).getInventory().setChestplate(null);
+		player.getServer().getPlayer(name).getInventory().setLeggings(null);
+		player.getServer().getPlayer(name).getInventory().setBoots(null);
+		player.sendMessage(ChatColor.RED + "Inventory of " + ChatColor.WHITE + name + ChatColor.RED
+				+ " cleared");
+		return true;
+	}
+
+	/**
+	 * Add an item to the BlackList
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public boolean setBlackListedItem(String name) {
+		Material m = checkMaterial(name);
+		if (m != null) {
+			Configuration config = fManager.getFile("blacklist.yml");
+			List<Integer> list = config.getIntList("BlackListed", null);
+			if (list == null)
+				list = new ArrayList<Integer>();
+			list.add(m.getId());
+			config.setProperty("BlackListed", list);
+			config.save();
+			if (blacklist == null)
+				blacklist = new ArrayList<Integer>();
+			blacklist.add(m.getId());
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * remove a black listed item
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public boolean removeBlackListedItem(String name) {
+		Material m = checkMaterial(name);
+		if (m != null) {
+			Configuration config = fManager.getFile("blacklist.yml");
+			List<Integer> list = config.getIntList("BlackListed", null);
+			if (list == null)
+				list = new ArrayList<Integer>();
+			if (!list.isEmpty() && list.contains(m.getId())) {
+				list.remove(m.getId());
+				config.setProperty("BlackListed", list);
+				config.save();
+			}
+			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.getId()))
+				blacklist.remove(m.getId());
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the blacklisted items
+	 * 
+	 * @return
+	 */
+	private List<Integer> getBlackListedItems() {
+		return fManager.getFile("blacklist.yml").getIntList("BlackListed", null);
+	}
+
+	/**
 	 * Heal the selected player.
 	 * 
 	 * @param name
@@ -212,6 +296,11 @@ public class AdminCmdWorker {
 		ItemStack hand = player.getItemInHand();
 		if (hand == null || hand.getType() == Material.AIR) {
 			player.sendMessage(ChatColor.RED + "You have to be holding something!");
+			return true;
+		}
+		if(blacklist.contains(hand.getTypeId()))
+		{
+			player.sendMessage(ChatColor.DARK_RED+"This item ("+ChatColor.WHITE+hand.getType().name()+ChatColor.DARK_RED+") is black listed.");
 			return true;
 		}
 		if (amount.length == 0)
@@ -287,6 +376,11 @@ public class AdminCmdWorker {
 		Material m = checkMaterial(args[0]);
 		if (m == null)
 			return true;
+		if(blacklist.contains(m.getId()))
+		{
+			player.sendMessage(ChatColor.DARK_RED+"This item ("+ChatColor.WHITE+m.name()+ChatColor.DARK_RED+") is black listed.");
+			return true;
+		}
 		// amount, damage and target player
 		int cnt = 1;
 		byte dam = 0;
