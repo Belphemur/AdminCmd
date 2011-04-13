@@ -126,9 +126,8 @@ public class AdminCmdWorker {
 		}
 		if (found) {
 			pFrom.teleport(pTo);
-			player.sendMessage("Successfully teleported " + ChatColor.BLUE
-					+ pFrom.getName() + ChatColor.WHITE + " to "
-					+ ChatColor.GREEN + pTo.getName());
+			player.sendMessage("Successfully teleported " + ChatColor.BLUE + pFrom.getName()
+					+ ChatColor.WHITE + " to " + ChatColor.GREEN + pTo.getName());
 		}
 		return true;
 	}
@@ -262,7 +261,7 @@ public class AdminCmdWorker {
 	public boolean repair() {
 
 		ItemStack item = player.getItemInHand();
-		if (item != null  && listOfPossibleRepair.contains(item.getTypeId())) {
+		if (item != null && listOfPossibleRepair.contains(item.getTypeId())) {
 			item.setDurability((short) 0);
 			player.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE
 					+ " have been successfully repaired.");
@@ -270,9 +269,7 @@ public class AdminCmdWorker {
 			player.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
 
 		return true;
-		}
 	}
-
 
 	public boolean repairAll() {
 		for (ItemStack item : player.getInventory().getContents())
