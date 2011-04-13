@@ -45,6 +45,14 @@ commands:
     description: Gives the player item of choice. You can specify someone else as the player.
     aliases: [i,item]
     usage: /<command> (name|id) [amount] [player] [damage]
+  bal_addbl:
+    description: BlackList an item
+    aliases: [addblacklist,abl]
+    usage: /<command> (name|id)
+  bal_rmbl:
+    description: remove the item from the blackList
+    aliases: [rmblacklist,rbl]
+    usage: /<command> (name|id)
   bal_itemcolor:
     description: Changes the color of a colorable item in hand.
     aliases: [c,color]
