@@ -19,7 +19,7 @@ import com.Balor.files.utils.FilesManager;
  * 
  * @authors Plague, Balor
  */
-public class AdminCmdWorker extends Worker{
+public class AdminCmdWorker extends Worker {
 
 	private Player player;
 	private HashMap<Material, String[]> materialsColors;
@@ -472,6 +472,32 @@ public class AdminCmdWorker extends Worker{
 		for (int i = 0; i < materialsColors.get(mat).length; ++i)
 			output += materialsColors.get(mat)[i] + ", ";
 		return output;
+	}
+
+	public boolean weather(String type, String[] duration) {
+		if (type == "clear") {
+			player.getWorld().setThundering(false);
+			player.getWorld().setStorm(false);
+		} else {
+			if (duration == null || duration.length < 1) {
+				player.getWorld().setStorm(true);
+				player.getWorld().setWeatherDuration(12000);
+				player.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
+			}
+			try {
+				player.getWorld().setStorm(true);
+				int time = Integer.parseInt(duration[0]);
+				player.getWorld().setWeatherDuration(time);
+				player.sendMessage(ChatColor.GOLD + "Storm set for " + time / 1200 + " mins");
+			} catch (NumberFormatException e) {
+				player.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration
+						+ ") isn't a number!");
+				player.getWorld().setStorm(true);
+				player.getWorld().setWeatherDuration(12000);
+				player.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
+			}
+		}
+		return true;
 	}
 
 	// changes the color of a colorable item in hand

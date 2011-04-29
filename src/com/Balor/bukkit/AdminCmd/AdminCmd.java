@@ -35,10 +35,10 @@ public class AdminCmd extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		server=getServer();
+		server = getServer();
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
-		PluginManager pm = getServer().getPluginManager();		
+		PluginManager pm = getServer().getPluginManager();
 		PluginListener pL = new PluginListener();
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 	}
@@ -95,6 +95,14 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_playerkill"))
 				if (hasPerm(player, "admincmd.player.kill"))
 					return worker.playerSetHealth(args, 0);
+			
+			if (cmd.equalsIgnoreCase("bal_wclear"))
+				if (hasPerm(player, "admincmd.weather.clear"))
+					return worker.weather("clear", null);
+			
+			if (cmd.equalsIgnoreCase("bal_wstorm"))
+				if (hasPerm(player, "admincmd.weather.storm"))
+					return worker.weather("storm", args);
 
 			// 1 argument:
 			if (args.length < 1)
