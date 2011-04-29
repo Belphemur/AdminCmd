@@ -38,7 +38,8 @@ public class AdminCmd extends JavaPlugin {
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
 		PluginManager pm = getServer().getPluginManager();		
-		pm.registerEvent(Event.Type.PLUGIN_ENABLE, new PluginListener(), Priority.Monitor, this);
+		PluginListener pL = new PluginListener();
+		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 	}
 
 	@Override
