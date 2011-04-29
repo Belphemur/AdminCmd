@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
+import belgium.Balor.Workers.Worker;
+
 import com.Balor.files.utils.FilesManager;
 
 /**
@@ -17,24 +19,26 @@ import com.Balor.files.utils.FilesManager;
  * 
  * @authors Plague, Balor
  */
-public class AdminCmdWorker {
+public class AdminCmdWorker extends Worker{
 
 	private Player player;
 	private HashMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
 	private FilesManager fManager;
 	private List<Integer> blacklist;
+	private AdminCmd pluginInstance;
 
 	public AdminCmdWorker(String path) {
 		materialsColors = new HashMap<Material, String[]>();
-		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta", "LightBlue",
-				"Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown",
-				"Green", "Red", "Black" });
-		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red", "Green", "Brown", "Blue",
-				"Purple", "Cyan", "LightGray", "Gray", "Pink", "LimeGreen", "Yellow", "LightBlue", "Magenta",
-				"Orange", "White" });
+		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
+				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
+				"Blue", "Brown", "Green", "Red", "Black" });
+		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red", "Green", "Brown",
+				"Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "LimeGreen", "Yellow",
+				"LightBlue", "Magenta", "Orange", "White" });
 		materialsColors.put(Material.LOG, new String[] { "Oak", "Pine", "Birch" });
-		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden", "Cobblestone" });
+		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden",
+				"Cobblestone" });
 		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
 		listOfPossibleRepair = new ArrayList<Integer>();
 		for (int i = 256; i <= 259; i++)
@@ -49,6 +53,21 @@ public class AdminCmdWorker {
 			listOfPossibleRepair.add(i);
 		fManager = new FilesManager(path);
 		blacklist = getBlackListedItems();
+	}
+
+	/**
+	 * @param pluginInstance
+	 *            the pluginInstance to set
+	 */
+	public void setPluginInstance(AdminCmd pluginInstance) {
+		this.pluginInstance = pluginInstance;
+	}
+
+	/**
+	 * @return the pluginInstance
+	 */
+	public AdminCmd getPluginInstance() {
+		return pluginInstance;
 	}
 
 	public void setPlayer(Player player) {
@@ -150,16 +169,16 @@ public class AdminCmdWorker {
 	public boolean playerMessage(String args[]) {
 		Player buddy = player.getServer().getPlayer(args[0]);
 		if (buddy != null) {
-			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] " + player.getDisplayName()
-					+ " - ";
+			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] "
+					+ player.getDisplayName() + " - ";
 			for (int i = 1; i < args.length; ++i)
 				msg += args[i] + " ";
 			msg.trim();
 			buddy.sendMessage(msg);
 			player.sendMessage(msg);
 		} else
-			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0] + ChatColor.RED
-					+ " not found!");
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
+					+ ChatColor.RED + " not found!");
 		return true;
 	}
 
@@ -175,11 +194,12 @@ public class AdminCmdWorker {
 				loc = player.getServer().getPlayer(name[0]).getLocation();
 				msg = player.getServer().getPlayer(name[0]).getName() + " is";
 			} catch (Exception ex) {
-				player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0] + ChatColor.RED
-						+ " not found!");
+				player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0]
+						+ ChatColor.RED + " not found!");
 				return true;
 			}
-		player.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY() + " H");
+		player.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
+				+ " H");
 		String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
 		double yaw = ((loc.getYaw() + 22.5) % 360);
 		if (yaw < 0)
@@ -225,7 +245,8 @@ public class AdminCmdWorker {
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
 			blacklist.add(m.getId());
-			player.sendMessage(ChatColor.GREEN+"Item ("+ChatColor.WHITE+m.name()+ChatColor.GREEN+") added to the Black List.");
+			player.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.name()
+					+ ChatColor.GREEN + ") added to the Black List.");
 			return true;
 		}
 		return false;
@@ -245,13 +266,14 @@ public class AdminCmdWorker {
 			if (list == null)
 				list = new ArrayList<Integer>();
 			if (!list.isEmpty() && list.contains(m.getId())) {
-				list.remove((Integer)m.getId());
+				list.remove((Integer) m.getId());
 				config.setProperty("BlackListed", list);
 				config.save();
 			}
 			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.getId()))
-				blacklist.remove((Integer)m.getId());
-			player.sendMessage(ChatColor.GREEN+"Item ("+ChatColor.WHITE+m.name()+ChatColor.GREEN+") removed from the Black List.");
+				blacklist.remove((Integer) m.getId());
+			player.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.name()
+					+ ChatColor.GREEN + ") removed from the Black List.");
 			return true;
 		}
 		return false;
@@ -277,8 +299,8 @@ public class AdminCmdWorker {
 		if (name.length != 0)
 			target = player.getServer().getPlayer(name[0]);
 		if (target == null) {
-			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0] + ChatColor.RED
-					+ " not found!");
+			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0]
+					+ ChatColor.RED + " not found!");
 			return true;
 		}
 		target.setHealth(health);
@@ -299,9 +321,9 @@ public class AdminCmdWorker {
 			player.sendMessage(ChatColor.RED + "You have to be holding something!");
 			return true;
 		}
-		if(blacklist.contains(hand.getTypeId()))
-		{
-			player.sendMessage(ChatColor.DARK_RED+"This item ("+ChatColor.WHITE+hand.getType().name()+ChatColor.DARK_RED+") is black listed.");
+		if (blacklist.contains(hand.getTypeId())) {
+			player.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
+					+ hand.getType().name() + ChatColor.DARK_RED + ") is black listed.");
 			return true;
 		}
 		if (amount.length == 0)
@@ -318,8 +340,8 @@ public class AdminCmdWorker {
 				int inInventory = (hand.getAmount() + toAdd) - 64;
 				ItemStack iss = new ItemStack(hand.getType(), inInventory);
 				player.getInventory().addItem(iss);
-				player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory + ChatColor.WHITE
-						+ ") have been stored in your inventory");
+				player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory
+						+ ChatColor.WHITE + ") have been stored in your inventory");
 
 			} else
 				hand.setAmount(hand.getAmount() + toAdd);
@@ -377,9 +399,9 @@ public class AdminCmdWorker {
 		Material m = checkMaterial(args[0]);
 		if (m == null)
 			return true;
-		if(blacklist.contains(m.getId()))
-		{
-			player.sendMessage(ChatColor.DARK_RED+"This item ("+ChatColor.WHITE+m.name()+ChatColor.DARK_RED+") is black listed.");
+		if (!hasPerm(player, "admincmd.item.noblacklist") && blacklist.contains(m.getId())) {
+			player.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + m.name()
+					+ ChatColor.DARK_RED + ") is black listed.");
 			return true;
 		}
 		// amount, damage and target player
@@ -395,7 +417,8 @@ public class AdminCmdWorker {
 			if (args.length >= 3) {
 				target = player.getServer().getPlayer(args[2]);
 				if (target == null) {
-					player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[2]);
+					player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE
+							+ args[2]);
 					return true;
 				}
 				if (args.length >= 4)
@@ -409,13 +432,13 @@ public class AdminCmdWorker {
 
 		ItemStack stack = new ItemStack(m, cnt, dam);
 		if (!target.getName().equals(player.getName())) {
-			target.sendMessage(ChatColor.RED + "[" + player.getName() + "]" + ChatColor.WHITE + " send you "
-					+ ChatColor.GOLD + cnt + " " + m.name());
-			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name() + " to "
-					+ ChatColor.WHITE + target.getName() + "'s inventory");
+			target.sendMessage(ChatColor.RED + "[" + player.getName() + "]" + ChatColor.WHITE
+					+ " send you " + ChatColor.GOLD + cnt + " " + m.name());
+			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name()
+					+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
 		} else
-			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name() + " to "
-					+ ChatColor.WHITE + "your inventory");
+			player.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name()
+					+ " to " + ChatColor.WHITE + "your inventory");
 		target.getInventory().addItem(stack);
 		return true;
 	}
@@ -455,10 +478,14 @@ public class AdminCmdWorker {
 	public boolean itemColor(String color) {
 		// help?
 		if (color.equalsIgnoreCase("help")) {
-			player.sendMessage(ChatColor.RED + "Wool: " + ChatColor.WHITE + printColors(Material.WOOL));
-			player.sendMessage(ChatColor.RED + "Dyes: " + ChatColor.WHITE + printColors(Material.INK_SACK));
-			player.sendMessage(ChatColor.RED + "Logs: " + ChatColor.WHITE + printColors(Material.LOG));
-			player.sendMessage(ChatColor.RED + "Slab: " + ChatColor.WHITE + printColors(Material.STEP));
+			player.sendMessage(ChatColor.RED + "Wool: " + ChatColor.WHITE
+					+ printColors(Material.WOOL));
+			player.sendMessage(ChatColor.RED + "Dyes: " + ChatColor.WHITE
+					+ printColors(Material.INK_SACK));
+			player.sendMessage(ChatColor.RED + "Logs: " + ChatColor.WHITE
+					+ printColors(Material.LOG));
+			player.sendMessage(ChatColor.RED + "Slab: " + ChatColor.WHITE
+					+ printColors(Material.STEP));
 			return true;
 		}
 		// determine the value based on what you're holding

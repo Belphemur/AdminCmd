@@ -15,7 +15,7 @@ commands:
     usage: /<command>
   bal_playerlist:
     description: Lists all online players.
-    aliases: [playerlist,plist]
+    aliases: [playerlist,plist,who]
     usage: /<command>
   bal_playerheal:
     description: Heal the player.
