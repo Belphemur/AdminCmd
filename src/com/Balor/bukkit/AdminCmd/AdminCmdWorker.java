@@ -503,14 +503,15 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public boolean strikePlayer(String playerName) {
-		if (this.pluginInstance.getServer().getPlayer(playerName) != null)
+		if (this.pluginInstance.getServer().getPlayer(playerName) != null) {
 			this.pluginInstance
 					.getServer()
 					.getPlayer(playerName)
 					.getWorld()
 					.strikeLightning(
 							this.pluginInstance.getServer().getPlayer(playerName).getLocation());
-		else
+			player.sendMessage(playerName + " was striked by Thor");
+		} else
 			player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + playerName);
 		return true;
 	}
