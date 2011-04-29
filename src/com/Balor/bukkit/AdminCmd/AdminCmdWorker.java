@@ -478,23 +478,25 @@ public class AdminCmdWorker extends Worker {
 		if (type == "clear") {
 			player.getWorld().setThundering(false);
 			player.getWorld().setStorm(false);
+			player.sendMessage(ChatColor.GOLD + "Sky cleared");
 		} else {
 			if (duration == null || duration.length < 1) {
 				player.getWorld().setStorm(true);
 				player.getWorld().setWeatherDuration(12000);
 				player.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
-			}
-			try {
-				player.getWorld().setStorm(true);
-				int time = Integer.parseInt(duration[0]);
-				player.getWorld().setWeatherDuration(time);
-				player.sendMessage(ChatColor.GOLD + "Storm set for " + time / 1200 + " mins");
-			} catch (NumberFormatException e) {
-				player.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration
-						+ ") isn't a number!");
-				player.getWorld().setStorm(true);
-				player.getWorld().setWeatherDuration(12000);
-				player.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
+			} else {
+				try {
+					player.getWorld().setStorm(true);
+					int time = Integer.parseInt(duration[0]);
+					player.getWorld().setWeatherDuration(time);
+					player.sendMessage(ChatColor.GOLD + "Storm set for " + time / 1200 + " mins");
+				} catch (NumberFormatException e) {
+					player.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration
+							+ ") isn't a number!");
+					player.getWorld().setStorm(true);
+					player.getWorld().setWeatherDuration(12000);
+					player.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
+				}
 			}
 		}
 		return true;
