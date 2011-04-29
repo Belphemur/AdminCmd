@@ -510,7 +510,7 @@ public class AdminCmdWorker extends Worker {
 					.getWorld()
 					.strikeLightning(
 							this.pluginInstance.getServer().getPlayer(playerName).getLocation());
-			player.sendMessage(playerName + " was striked by Thor");
+			player.sendMessage(ChatColor.GOLD + playerName + " was striked by Thor");
 		} else
 			player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + playerName);
 		return true;
