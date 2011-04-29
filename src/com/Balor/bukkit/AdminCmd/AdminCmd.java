@@ -35,6 +35,7 @@ public class AdminCmd extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		server=getServer();
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
 		PluginManager pm = getServer().getPluginManager();		
