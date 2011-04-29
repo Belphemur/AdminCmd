@@ -488,8 +488,8 @@ public class AdminCmdWorker extends Worker {
 				try {
 					player.getWorld().setStorm(true);
 					int time = Integer.parseInt(duration[0]);
-					player.getWorld().setWeatherDuration(time);
-					player.sendMessage(ChatColor.GOLD + "Storm set for " + time / 1200 + " mins");
+					player.getWorld().setWeatherDuration(time * 1200);
+					player.sendMessage(ChatColor.GOLD + "Storm set for " + time + " mins");
 				} catch (NumberFormatException e) {
 					player.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration
 							+ ") isn't a number!");
@@ -499,6 +499,19 @@ public class AdminCmdWorker extends Worker {
 				}
 			}
 		}
+		return true;
+	}
+
+	public boolean strikePlayer(String playerName) {
+		if (this.pluginInstance.getServer().getPlayer(playerName) != null)
+			this.pluginInstance
+					.getServer()
+					.getPlayer(playerName)
+					.getWorld()
+					.strikeLightning(
+							this.pluginInstance.getServer().getPlayer(playerName).getLocation());
+		else
+			player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + playerName);
 		return true;
 	}
 

@@ -138,6 +138,10 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_itemcolor"))
 				if (hasPerm(player, "admincmd.item.color"))
 					return worker.itemColor(args[0]);
+			
+			if (cmd.equalsIgnoreCase("bal_wstrike"))
+				if (hasPerm(player, "admincmd.weather.strike"))
+					return worker.strikePlayer(args[0]);
 
 			// 2 arguments:
 			if (args.length < 2)

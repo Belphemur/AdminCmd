@@ -78,10 +78,14 @@ commands:
     aliases: [pclear,clear]
     usage: /<command> (playername)
   bal_wclear:
-    description: clear the inventory of the playername.
+    description: clear the weather.
     aliases: [wclear,clearw]
-    usage: /<command> duration
+    usage: /<command>
   bal_wstorm:
-    description: clear the inventory of the playername.
-    aliases: [wstorm]
-    usage: /<command> duration
+    description: make the weather stormy.
+    aliases: [wstorm,storm]
+    usage: /<command> (duration in minutes)
+  bal_wstrike:
+    description: strike the player with a lighting.
+    aliases: [strike,light]
+    usage: /<command> playername
