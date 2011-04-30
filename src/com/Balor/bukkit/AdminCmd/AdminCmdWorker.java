@@ -321,7 +321,7 @@ public class AdminCmdWorker extends Worker {
 			player.sendMessage(ChatColor.RED + "You have to be holding something!");
 			return true;
 		}
-		if (blacklist.contains(hand.getTypeId())) {
+		if (!hasPerm(player, "admincmd.item.noblacklist") && blacklist.contains(hand.getTypeId())) {
 			player.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
 					+ hand.getType().name() + ChatColor.DARK_RED + ") is black listed.");
 			return true;
