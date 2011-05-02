@@ -27,7 +27,7 @@ import com.nijiko.permissions.PermissionHandler;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class Worker {
 	protected static PermissionHandler permission = null;
@@ -63,7 +63,13 @@ public abstract class Worker {
 		String playerName = player.getName();
 		if (permissions.containsKey(playerName)) {
 			if (permissions.get(playerName).containsKey(perm))
-				return permissions.get(playerName).get(perm);
+				if (permissions.get(playerName).get(perm))
+					return true;
+				else {
+					player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+							+ ChatColor.BLUE + "(" + perm + ")");
+					return false;
+				}
 
 			if (permission.has(player, perm)) {
 				permissions.get(playerName).put(perm, true);
