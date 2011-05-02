@@ -38,6 +38,9 @@ public class AdminCmd extends JavaPlugin {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		PluginListener pL = new PluginListener();
+		PluginDescriptionFile pdfFile = this.getDescription();
+		log.info("[" + pdfFile.getName() + "]" + " Plugin Enbaled. (version"
+				+ pdfFile.getVersion() + ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);		
