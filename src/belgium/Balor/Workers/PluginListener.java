@@ -38,7 +38,7 @@ public class PluginListener extends ServerListener {
             if (Permissions != null) {
                 if(Permissions.isEnabled()) {
                 	AdminCmdWorker.setPermission(((Permissions) Permissions).getHandler());
-                    System.out.println("[Tomb] Successfully linked with Permissions.");
+                    System.out.println("[AdminCmd] Successfully linked with Permissions.");
                 }
             }
         }
@@ -48,7 +48,7 @@ public class PluginListener extends ServerListener {
             if (iConomy != null) {
                 if(iConomy.isEnabled()) {
                 	AdminCmdWorker.setiConomy((iConomy)iConomy);
-                    System.out.println("[Tomb] Successfully linked with iConomy.");
+                    System.out.println("[AdminCmd] Successfully linked with iConomy.");
                 }
             }
         }
