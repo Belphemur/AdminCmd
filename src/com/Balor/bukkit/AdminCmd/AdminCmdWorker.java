@@ -370,6 +370,22 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
+	public boolean tpTo(String[] args) {
+		double x;
+		double y;
+		double z;
+		try {
+			x = Double.parseDouble(args[0]);
+			y = Double.parseDouble(args[1]);
+			z = Double.parseDouble(args[2]);
+		} catch (Exception e) {
+			player.sendMessage(ChatColor.RED + "Location has to be formed by numbers");
+			return true;
+		}
+		player.teleport(new Location(player.getWorld(), x, y, z));
+		return true;
+	}
+
 	public boolean repair() {
 
 		ItemStack item = player.getItemInHand();

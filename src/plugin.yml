@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 4.6.1
+version: 4.6.2
 author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
@@ -69,6 +69,10 @@ commands:
     description: Teleports another player to the player.
     aliases: [s,tphere]
     usage: /<command> (playername)
+  bal_tpthere:
+    description: Teleport to.
+    aliases: [tl,tploc]
+    usage: /<command> [x][y][z]
   bal_playermsg:
     description: Sends a private message to another player.
     aliases: [msg,message]

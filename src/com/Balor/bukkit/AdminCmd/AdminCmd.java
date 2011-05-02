@@ -152,8 +152,14 @@ public class AdminCmd extends JavaPlugin {
 
 			if (cmd.equalsIgnoreCase("bal_tp2p"))
 				if (hasPerm(player, "admincmd.tp.players"))
-					return worker.playerTpPlayer(args);
-
+					return worker.playerTpPlayer(args);		
+			
+			// 3 arguments:
+			if (args.length < 3)
+				return false;
+			if (cmd.equalsIgnoreCase("bal_tpthere"))
+				if (hasPerm(player, "admincmd.tp.location"))
+					return worker.tpTo(args);	
 			// unknown command, should not really get here
 			return false;
 		}
