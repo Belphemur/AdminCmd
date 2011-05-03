@@ -22,7 +22,6 @@ import org.bukkit.plugin.Plugin;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
-import com.nijiko.coelho.iConomy.iConomy;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
@@ -41,16 +40,6 @@ public class PluginListener extends ServerListener {
                     System.out.println("[AdminCmd] Successfully linked with Permissions.");
                 }
             }
-        }
-        if(AdminCmdWorker.getiConomy() == null) {
-            Plugin iConomy = AdminCmd.getBukkitServer().getPluginManager().getPlugin("iConomy");
-
-            if (iConomy != null) {
-                if(iConomy.isEnabled()) {
-                	AdminCmdWorker.setiConomy((iConomy)iConomy);
-                    System.out.println("[AdminCmd] Successfully linked with iConomy.");
-                }
-            }
-        }
+        }        
     }
 }
