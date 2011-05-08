@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import belgium.Balor.Workers.PlayerOnQuitListener;
 import belgium.Balor.Workers.PluginListener;
 
 /**
@@ -38,12 +39,14 @@ public class AdminCmd extends JavaPlugin {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		PluginListener pL = new PluginListener();
+		PlayerOnQuitListener pOqL = new PlayerOnQuitListener(worker);
 		PluginDescriptionFile pdfFile = this.getDescription();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version"
-				+ pdfFile.getVersion() + ")");
+		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version" + pdfFile.getVersion()
+				+ ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
 		worker = new AdminCmdWorker(getDataFolder().getPath());
-		worker.setPluginInstance(this);		
+		worker.setPluginInstance(this);
 	}
 
 	@Override
@@ -98,11 +101,11 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_playerkill"))
 				if (hasPerm(player, "admincmd.player.kill"))
 					return worker.playerSetHealth(args, 0);
-			
+
 			if (cmd.equalsIgnoreCase("bal_wclear"))
 				if (hasPerm(player, "admincmd.weather.clear"))
 					return worker.weather("clear", null);
-			
+
 			if (cmd.equalsIgnoreCase("bal_wstorm"))
 				if (hasPerm(player, "admincmd.weather.storm"))
 					return worker.weather("storm", args);
@@ -141,7 +144,7 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_itemcolor"))
 				if (hasPerm(player, "admincmd.item.color"))
 					return worker.itemColor(args[0]);
-			
+
 			if (cmd.equalsIgnoreCase("bal_wstrike"))
 				if (hasPerm(player, "admincmd.weather.strike"))
 					return worker.strikePlayer(args[0]);
@@ -155,14 +158,14 @@ public class AdminCmd extends JavaPlugin {
 
 			if (cmd.equalsIgnoreCase("bal_tp2p"))
 				if (hasPerm(player, "admincmd.tp.players"))
-					return worker.playerTpPlayer(args);		
-			
+					return worker.playerTpPlayer(args);
+
 			// 3 arguments:
 			if (args.length < 3)
 				return false;
 			if (cmd.equalsIgnoreCase("bal_tpthere"))
 				if (hasPerm(player, "admincmd.tp.location"))
-					return worker.tpTo(args);	
+					return worker.tpTo(args);
 			// unknown command, should not really get here
 			return false;
 		}
