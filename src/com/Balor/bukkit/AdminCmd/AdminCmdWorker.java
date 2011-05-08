@@ -61,6 +61,15 @@ public class AdminCmdWorker extends Worker {
 	 */
 	public void setPluginInstance(AdminCmd pluginInstance) {
 		this.pluginInstance = pluginInstance;
+		this.pluginInstance.getServer().getScheduler().scheduleAsyncRepeatingTask(this.pluginInstance, new Runnable() {
+			
+			@Override
+			public void run() {
+				permissions.clear();
+				log.info("[AdminCmd] Reset Permissions Cache");
+			}
+			
+		}, 5*1200, 10*1200);
 	}
 
 	/**
