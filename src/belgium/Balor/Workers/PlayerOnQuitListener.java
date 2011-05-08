@@ -19,6 +19,8 @@ package belgium.Balor.Workers;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  *
@@ -33,7 +35,9 @@ public class PlayerOnQuitListener extends PlayerListener {
 	}
 	@Override
     public void onPlayerQuit(PlayerQuitEvent event) {
-		worker.removePermissionNode(event.getPlayer().getName());
+		String player = event.getPlayer().getName();
+		worker.removePermissionNode(player);
+		AdminCmdWorker.log.info("[AdminCmd] Flushed the Permissions node cache of "+player);
     }
 
 }
