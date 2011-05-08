@@ -39,14 +39,16 @@ public class AdminCmd extends JavaPlugin {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		PluginListener pL = new PluginListener();
-		PlayerOnQuitListener pOqL = new PlayerOnQuitListener(worker);
+		
 		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version" + pdfFile.getVersion()
 				+ ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
+	
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
+		PlayerOnQuitListener pOqL = new PlayerOnQuitListener(worker);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
 	}
 
 	@Override
