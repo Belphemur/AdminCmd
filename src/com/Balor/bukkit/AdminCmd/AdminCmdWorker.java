@@ -285,7 +285,7 @@ public class AdminCmdWorker extends Worker {
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
-		return fManager.getFile("blacklist.yml").getIntList("BlackListed", null);
+		return fManager.getFile("blacklist.yml").getIntList("BlackListed", new ArrayList<Integer>());
 	}
 
 	/**
