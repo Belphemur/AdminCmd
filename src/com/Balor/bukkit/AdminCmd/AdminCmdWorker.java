@@ -27,6 +27,7 @@ public class AdminCmdWorker extends Worker {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
+	private ArrayList<String> thunderGods = new ArrayList<String>();
 
 	public AdminCmdWorker(String path) {
 		materialsColors = new HashMap<Material, String[]>();
@@ -285,7 +286,8 @@ public class AdminCmdWorker extends Worker {
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
-		return fManager.getFile("blacklist.yml").getIntList("BlackListed", new ArrayList<Integer>());
+		return fManager.getFile("blacklist.yml")
+				.getIntList("BlackListed", new ArrayList<Integer>());
 	}
 
 	/**
@@ -507,7 +509,7 @@ public class AdminCmdWorker extends Worker {
 					player.getWorld().setWeatherDuration(time * 1200);
 					player.sendMessage(ChatColor.GOLD + "Storm set for " + time + " mins");
 				} catch (NumberFormatException e) {
-					player.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration
+					player.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
 							+ ") isn't a number!");
 					player.getWorld().setStorm(true);
 					player.getWorld().setWeatherDuration(12000);
@@ -526,6 +528,24 @@ public class AdminCmdWorker extends Worker {
 		} else
 			player.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + playerName);
 		return true;
+	}
+
+	public boolean thor(String player) {
+		if (thunderGods.contains(player))
+		{
+			thunderGods.remove(player);
+			this.player.sendMessage(ChatColor.DARK_PURPLE+"You have lost the power of Thor");
+		}
+		else
+		{
+			thunderGods.add(player);
+			this.player.sendMessage(ChatColor.DARK_PURPLE+"You have now the power of Thor");
+		}
+		return true;
+	}
+	public boolean hasThorPowers(String player)
+	{
+		return thunderGods.contains(player);
 	}
 
 	// changes the color of a colorable item in hand

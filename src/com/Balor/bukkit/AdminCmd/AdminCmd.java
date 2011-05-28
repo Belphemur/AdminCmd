@@ -12,7 +12,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import belgium.Balor.Workers.PlayerOnQuitListener;
+import belgium.Balor.Workers.ACPlayerListener;
 import belgium.Balor.Workers.PluginListener;
 
 /**
@@ -47,8 +47,9 @@ public class AdminCmd extends JavaPlugin {
 	
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
-		PlayerOnQuitListener pOqL = new PlayerOnQuitListener(worker);
+		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 	}
 
 	@Override
@@ -150,6 +151,9 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_wstrike"))
 				if (hasPerm(player, "admincmd.weather.strike"))
 					return worker.strikePlayer(args[0]);
+			if (cmd.equalsIgnoreCase("bal_thor"))
+				if (hasPerm(player, "admincmd.weather.thor"))
+					return worker.thor(args[0]);
 
 			// 2 arguments:
 			if (args.length < 2)

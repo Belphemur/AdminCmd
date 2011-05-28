@@ -16,6 +16,8 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -23,21 +25,30 @@ import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class PlayerOnQuitListener extends PlayerListener {
-	Worker worker;
+public class ACPlayerListener extends PlayerListener {
+	AdminCmdWorker worker;
+
 	/**
 	 * 
 	 */
-	public PlayerOnQuitListener(Worker worker) {
-		this.worker=worker;
+	public ACPlayerListener(AdminCmdWorker worker) {
+		this.worker = worker;
 	}
+
 	@Override
-    public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(PlayerQuitEvent event) {
 		String player = event.getPlayer().getName();
 		worker.removePermissionNode(player);
-		AdminCmdWorker.log.info("[AdminCmd] Flushed the Permissions node cache of "+player);
-    }
+	}
+
+	@Override
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))
+				&& (worker.hasThorPowers(event.getPlayer().getName())))
+			event.getPlayer().getWorld()
+					.strikeLightning(event.getPlayer().getTargetBlock(null, 600).getLocation());
+	}
 
 }
