@@ -93,7 +93,7 @@ commands:
     description: strike the player with a lighting.
     aliases: [strike,light]
     usage: /<command> playername
-  bal_thor
+  bal_thor:
     description: the player control the thunder.
     aliases: [thor,t]
     usage: /<command>

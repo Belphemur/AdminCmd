@@ -112,7 +112,10 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_wstorm"))
 				if (hasPerm(player, "admincmd.weather.storm"))
 					return worker.weather("storm", args);
-
+			
+			if (cmd.equalsIgnoreCase("bal_thor"))
+				if (hasPerm(player, "admincmd.weather.thor"))
+					return worker.thor(args[0]);
 			// 1 argument:
 			if (args.length < 1)
 				return false;
@@ -151,9 +154,6 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_wstrike"))
 				if (hasPerm(player, "admincmd.weather.strike"))
 					return worker.strikePlayer(args[0]);
-			if (cmd.equalsIgnoreCase("bal_thor"))
-				if (hasPerm(player, "admincmd.weather.thor"))
-					return worker.thor(args[0]);
 
 			// 2 arguments:
 			if (args.length < 2)
