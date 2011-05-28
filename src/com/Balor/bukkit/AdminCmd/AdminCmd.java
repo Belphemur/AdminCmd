@@ -115,7 +115,7 @@ public class AdminCmd extends JavaPlugin {
 			
 			if (cmd.equalsIgnoreCase("bal_thor"))
 				if (hasPerm(player, "admincmd.weather.thor"))
-					return worker.thor(args[0]);
+					return worker.thor();
 			// 1 argument:
 			if (args.length < 1)
 				return false;

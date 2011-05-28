@@ -530,7 +530,8 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean thor(String player) {
+	public boolean thor() {
+		String player = this.player.getName();
 		if (thunderGods.contains(player))
 		{
 			thunderGods.remove(player);
