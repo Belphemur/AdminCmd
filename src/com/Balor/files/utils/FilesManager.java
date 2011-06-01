@@ -68,14 +68,16 @@ public class FilesManager {
 				new ArrayList<String>());
 		ArrayList<Integer> idList = (ArrayList<Integer>) conf.getIntList("ids",
 				new ArrayList<Integer>());
+		if(aliasList.contains(alias))
+			removeAlias(alias);
 		aliasList.add(alias);
 		idList.add(id);
 		conf.setProperty("alias", aliasList);
 		conf.setProperty("ids", idList);
 		conf.save();		
 	}
-	public void removeAlias(String alias)
-	{
+
+	public void removeAlias(String alias) {
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
@@ -86,20 +88,19 @@ public class FilesManager {
 		idList.remove(index);
 		conf.setProperty("alias", aliasList);
 		conf.setProperty("ids", idList);
-		conf.save();	
+		conf.save();
 	}
-	public HashMap<String, Material> getAlias()
-	{
+
+	public HashMap<String, Material> getAlias() {
 		HashMap<String, Material> result = new HashMap<String, Material>();
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<Integer> idList = (ArrayList<Integer>) conf.getIntList("ids",
 				new ArrayList<Integer>());
-		int i=0;
-		for(String alias : aliasList)
-		{
-			result.put(alias, Material.getMaterial(idList.get(i)));			
+		int i = 0;
+		for (String alias : aliasList) {
+			result.put(alias, Material.getMaterial(idList.get(i)));
 			i++;
 		}
 		return result;
