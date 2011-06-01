@@ -69,7 +69,11 @@ public class FilesManager {
 		ArrayList<Integer> idList = (ArrayList<Integer>) conf.getIntList("ids",
 				new ArrayList<Integer>());
 		if(aliasList.contains(alias))
-			removeAlias(alias);
+		{
+			int index = aliasList.indexOf(alias);
+			aliasList.remove(index);
+			idList.remove(index);
+		}
 		aliasList.add(alias);
 		idList.add(id);
 		conf.setProperty("alias", aliasList);
