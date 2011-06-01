@@ -39,12 +39,12 @@ public class AdminCmd extends JavaPlugin {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		PluginListener pL = new PluginListener();
-		
+
 		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version" + pdfFile.getVersion()
 				+ ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
-	
+
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
@@ -55,6 +55,7 @@ public class AdminCmd extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
+		worker = null;
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version"
 				+ pdfFile.getVersion() + ")");
 	}
@@ -112,7 +113,7 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_wstorm"))
 				if (hasPerm(player, "admincmd.weather.storm"))
 					return worker.weather("storm", args);
-			
+
 			if (cmd.equalsIgnoreCase("bal_thor"))
 				if (hasPerm(player, "admincmd.weather.thor"))
 					return worker.thor();
@@ -154,6 +155,10 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_wstrike"))
 				if (hasPerm(player, "admincmd.weather.strike"))
 					return worker.strikePlayer(args[0]);
+			
+			if (cmd.equalsIgnoreCase("bal_rmalias"))
+				if (hasPerm(player, "admincmd.item.alias"))
+					return worker.rmAlias(args[0]);
 
 			// 2 arguments:
 			if (args.length < 2)
@@ -165,6 +170,9 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_tp2p"))
 				if (hasPerm(player, "admincmd.tp.players"))
 					return worker.playerTpPlayer(args);
+			if (cmd.equalsIgnoreCase("bal_addalias"))
+				if (hasPerm(player, "admincmd.item.alias"))
+					return worker.alias(args);
 
 			// 3 arguments:
 			if (args.length < 3)

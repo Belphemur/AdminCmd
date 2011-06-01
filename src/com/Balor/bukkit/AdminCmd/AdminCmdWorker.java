@@ -13,6 +13,7 @@ import org.bukkit.util.config.Configuration;
 import belgium.Balor.Workers.Worker;
 
 import com.Balor.files.utils.FilesManager;
+import com.Balor.files.utils.Utils;
 
 /**
  * Handle commands
@@ -28,6 +29,7 @@ public class AdminCmdWorker extends Worker {
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
 	private ArrayList<String> thunderGods = new ArrayList<String>();
+	private HashMap<String, Material> alias = new HashMap<String, Material>();
 
 	public AdminCmdWorker(String path) {
 		materialsColors = new HashMap<Material, String[]>();
@@ -54,6 +56,7 @@ public class AdminCmdWorker extends Worker {
 			listOfPossibleRepair.add(i);
 		fManager = new FilesManager(path);
 		blacklist = getBlackListedItems();
+		alias = fManager.getAlias();
 	}
 
 	/**
@@ -359,13 +362,7 @@ public class AdminCmdWorker extends Worker {
 	 * @return Material
 	 */
 	private Material checkMaterial(String mat) {
-		Material m = null;
-		try {
-			int id = Integer.parseInt(mat);
-			m = Material.getMaterial(id);
-		} catch (NumberFormatException e) {
-			m = Material.matchMaterial(mat);
-		}
+		Material m = Utils.checkMaterial(mat);
 		if (m == null)
 			player.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
 		return m;
@@ -414,7 +411,10 @@ public class AdminCmdWorker extends Worker {
 
 	public boolean itemGive(String[] args) {
 		// which material?
-		Material m = checkMaterial(args[0]);
+		Material m = null;
+		m = alias.get(args[0]);
+		if (m == null)
+			m = checkMaterial(args[0]);
 		if (m == null)
 			return true;
 		if (!hasPerm(player, "admincmd.item.noblacklist") && blacklist.contains(m.getId())) {
@@ -532,20 +532,36 @@ public class AdminCmdWorker extends Worker {
 
 	public boolean thor() {
 		String player = this.player.getName();
-		if (thunderGods.contains(player))
-		{
+		if (thunderGods.contains(player)) {
 			thunderGods.remove(player);
-			this.player.sendMessage(ChatColor.DARK_PURPLE+"You have lost the power of Thor");
-		}
-		else
-		{
+			this.player.sendMessage(ChatColor.DARK_PURPLE + "You have lost the power of Thor");
+		} else {
 			thunderGods.add(player);
-			this.player.sendMessage(ChatColor.DARK_PURPLE+"You have now the power of Thor");
+			this.player.sendMessage(ChatColor.DARK_PURPLE + "You have now the power of Thor");
 		}
 		return true;
 	}
-	public boolean hasThorPowers(String player)
-	{
+
+	public boolean alias(String[] args) {
+		Material m = checkMaterial(args[1]);
+		if (m == null)
+			return true;
+		String alias = args[0];
+		this.alias.put(alias, m);
+		this.fManager.addAlias(alias, m.getId());
+		player.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
+				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m.name());
+		return true;
+	}
+
+	public boolean rmAlias(String alias) {
+		this.fManager.removeAlias(alias);
+		this.alias.remove(alias);
+		player.sendMessage(ChatColor.GOLD + alias + ChatColor.RED + " removed");
+		return true;
+	}
+
+	public boolean hasThorPowers(String player) {
 		return thunderGods.contains(player);
 	}
 

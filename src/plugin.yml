@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 4.8
+version: 4.9
 author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
@@ -97,3 +97,11 @@ commands:
     description: the player control the thunder.
     aliases: [thor,t]
     usage: /<command>
+  bal_addalias:
+    description: add a new alias.
+    aliases: [alias,adda,aa]
+    usage: /<command> alias (id|name)
+  bal_rmalias:
+    description: remove the alias.
+    aliases: [rmalias,rma,ra]
+    usage: /<command> alias
