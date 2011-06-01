@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 4.9
+version: 4.9.5
 author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
@@ -105,3 +105,7 @@ commands:
     description: remove the alias.
     aliases: [rmalias,rma,ra]
     usage: /<command> alias
+  bal_mob:
+    description: spawn the desired mob.
+    aliases: [mob]
+    usage: /<command> mobName (Case Sensitive)

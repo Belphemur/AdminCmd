@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
@@ -558,6 +559,16 @@ public class AdminCmdWorker extends Worker {
 		this.fManager.removeAlias(alias);
 		this.alias.remove(alias);
 		player.sendMessage(ChatColor.GOLD + alias + ChatColor.RED + " removed");
+		return true;
+	}
+
+	public boolean spawnMob(String name) {
+		CreatureType ct = CreatureType.fromName(name);
+		if (ct == null) {
+			player.sendMessage(ChatColor.RED + "No such creature: " + ChatColor.WHITE + name);
+			return true;
+		}
+		player.getWorld().spawnCreature(player.getLocation(), ct);
 		return true;
 	}
 
