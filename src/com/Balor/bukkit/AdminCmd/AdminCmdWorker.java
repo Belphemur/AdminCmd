@@ -341,11 +341,10 @@ public class AdminCmdWorker extends Worker {
 			} catch (Exception e) {
 				return false;
 			}
-			if ((hand.getAmount() + toAdd) > 64) {
-				hand.setAmount(64);
-				int inInventory = (hand.getAmount() + toAdd) - 64;
-				ItemStack iss = new ItemStack(hand.getType(), inInventory);
-				player.getInventory().addItem(iss);
+			if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {				
+				int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
+				hand.setAmount(hand.getMaxStackSize());
+				player.getInventory().addItem(new ItemStack(hand.getType(), inInventory));
 				player.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory
 						+ ChatColor.WHITE + ") have been stored in your inventory");
 
