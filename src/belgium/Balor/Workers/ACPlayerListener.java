@@ -19,7 +19,6 @@ package belgium.Balor.Workers;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -35,12 +34,6 @@ public class ACPlayerListener extends PlayerListener {
 	 */
 	public ACPlayerListener(AdminCmdWorker worker) {
 		this.worker = worker;
-	}
-
-	@Override
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		String player = event.getPlayer().getName();
-		worker.removePermissionNode(player);
 	}
 
 	@Override

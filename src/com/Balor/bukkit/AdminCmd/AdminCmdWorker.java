@@ -341,7 +341,7 @@ public class AdminCmdWorker extends Worker {
 			} catch (Exception e) {
 				return false;
 			}
-			if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {				
+			if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {
 				int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
 				hand.setAmount(hand.getMaxStackSize());
 				player.getInventory().addItem(new ItemStack(hand.getType(), inInventory));
@@ -561,13 +561,36 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean spawnMob(String name) {
-		CreatureType ct = CreatureType.fromName(name);
+	public boolean spawnMob(String args[]) {
+		final String name = args[0];
+		int nbTaped;
+		try {
+			nbTaped = Integer.parseInt(args[1]);
+		} catch (Exception e) {
+			nbTaped = 1;
+		}
+		final int nb = nbTaped;
+		final CreatureType ct = CreatureType.fromName(name);
 		if (ct == null) {
 			player.sendMessage(ChatColor.RED + "No such creature: " + ChatColor.WHITE + name);
 			return true;
 		}
-		player.getWorld().spawnCreature(player.getLocation(), ct);
+		AdminCmd.getBukkitServer().getScheduler().scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
+			
+			@Override
+			public void run() {
+				for(int i = 0; i < nb; i++)
+				{
+					player.getWorld().spawnCreature(player.getLocation(), ct);
+					try {
+						Thread.sleep(110);
+					} catch (InterruptedException e) {
+						//e.printStackTrace();
+					}
+				}
+				player.sendMessage(ChatColor.BLUE + "Spawned " + ChatColor.WHITE + nb + " "+ name);
+			}
+		});		
 		return true;
 	}
 

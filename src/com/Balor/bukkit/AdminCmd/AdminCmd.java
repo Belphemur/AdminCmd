@@ -48,7 +48,6 @@ public class AdminCmd extends JavaPlugin {
 		worker = new AdminCmdWorker(getDataFolder().getPath());
 		worker.setPluginInstance(this);
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 	}
 
@@ -158,11 +157,11 @@ public class AdminCmd extends JavaPlugin {
 			
 			if (cmd.equalsIgnoreCase("bal_rmalias"))
 				if (hasPerm(player, "admincmd.item.alias"))
-					return worker.rmAlias(args[0]);
+					return worker.rmAlias(args[0]);		
 			
 			if (cmd.equalsIgnoreCase("bal_mob"))
 				if (hasPerm(player, "admincmd.mob.spawn"))
-					return worker.spawnMob(args[0]);
+					return worker.spawnMob(args);
 
 			// 2 arguments:
 			if (args.length < 2)
@@ -177,6 +176,7 @@ public class AdminCmd extends JavaPlugin {
 			if (cmd.equalsIgnoreCase("bal_addalias"))
 				if (hasPerm(player, "admincmd.item.alias"))
 					return worker.alias(args);
+
 
 			// 3 arguments:
 			if (args.length < 3)

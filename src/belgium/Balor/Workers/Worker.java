@@ -16,12 +16,10 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 
 /**
@@ -31,8 +29,6 @@ import com.nijiko.permissions.PermissionHandler;
 public abstract class Worker {
 	protected static PermissionHandler permission = null;
 	public static final Logger log = Logger.getLogger("Minecraft");
-	protected static iConomy iConomy = null;
-	protected HashMap<String, HashMap<String, Boolean>> permissions = new HashMap<String, HashMap<String, Boolean>>();
 
 	/**
 	 * Check the permissions
@@ -58,69 +54,15 @@ public abstract class Worker {
 			if (perm.contains("admin") || perm.contains("free"))
 				return player.isOp();
 			return true;
-		}
-		String playerName = player.getName();
-		if (permissions.containsKey(playerName)) {
-			if (permissions.get(playerName).containsKey(perm))
-				if (permissions.get(playerName).get(perm))
-					return true;
-				else {
-					if (errorMsg)
-						player.sendMessage(ChatColor.RED
-								+ "You don't have the Permissions to do that " + ChatColor.BLUE
-								+ "(" + perm + ")");
-					return false;
-				}
-
-			if (permission.has(player, perm)) {
-				permissions.get(playerName).put(perm, true);
-				return true;
-			} else {
-				permissions.get(playerName).put(perm, false);
-				if (errorMsg)
-					player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-							+ ChatColor.BLUE + "(" + perm + ")");
-			}
+		} else if (permission.has(player, perm)) {
+			return true;
 		} else {
-			permissions.put(playerName, new HashMap<String, Boolean>());
-			if (permission.has(player, perm)) {
-				permissions.get(playerName).put(perm, true);
-				return true;
-			} else {
-				permissions.get(playerName).put(perm, false);
-				if (errorMsg)
-					player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-							+ ChatColor.BLUE + "(" + perm + ")");
-			}
-
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * iConomy plugin
-	 * 
-	 * @return
-	 */
-	public static iConomy getiConomy() {
-		return iConomy;
-	}
-
-	/**
-	 * Set iConomy Plugin
-	 * 
-	 * @param plugin
-	 * @return
-	 */
-	public static boolean setiConomy(iConomy plugin) {
-		if (iConomy == null) {
-			iConomy = plugin;
-		} else {
+			if (errorMsg)
+				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(" + perm + ")");
 			return false;
 		}
-		return true;
+
 	}
 
 	/**
@@ -145,13 +87,5 @@ public abstract class Worker {
 			return false;
 		}
 		return true;
-	}
-	/**
-	 * Remove all permissions node for the player from the cache.
-	 * @param player
-	 */
-	public void removePermissionNode(String player)
-	{
-		permissions.remove(player);
 	}
 }
