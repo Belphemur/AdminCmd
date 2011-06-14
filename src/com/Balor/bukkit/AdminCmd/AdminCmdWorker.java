@@ -137,13 +137,13 @@ public class AdminCmdWorker extends Worker {
 				String world = player.getWorld().getName();
 				try {
 					prefixstring = AdminCmdWorker.getPermission()
-							.safeGetUser(world, player.getName()).getPrefix();
+							.safeGetUser(world, name).getPrefix();
 				} catch (Exception e) {
-					String group = AdminCmdWorker.getPermission().getGroup(world, player.getName());
+					String group = AdminCmdWorker.getPermission().getGroup(world, name);
 					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
 				}
 				catch (NoSuchMethodError e) {
-					String group = AdminCmdWorker.getPermission().getGroup(world, player.getName());
+					String group = AdminCmdWorker.getPermission().getGroup(world, name);
 					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
 				}
 
