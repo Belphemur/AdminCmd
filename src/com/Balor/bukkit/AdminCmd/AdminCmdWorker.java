@@ -142,6 +142,10 @@ public class AdminCmdWorker extends Worker {
 					String group = AdminCmdWorker.getPermission().getGroup(world, player.getName());
 					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
 				}
+				catch (NoSuchMethodError e) {
+					String group = AdminCmdWorker.getPermission().getGroup(world, player.getName());
+					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+				}
 
 				if (prefixstring.length() > 1) {
 					String result = Utils.colorParser(prefixstring);
