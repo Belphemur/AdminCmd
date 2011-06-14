@@ -131,8 +131,7 @@ public class AdminCmdWorker extends Worker {
 		} else {
 			// changed the playerlist, now support prefixes from groups!!! @foxy
 			for (int i = 0; i < online.length; ++i) {
-				Player p = online[i];
-				String name = p.getName();
+				String name = online[i].getName();
 				String prefixstring;
 				String world = player.getWorld().getName();
 				try {
