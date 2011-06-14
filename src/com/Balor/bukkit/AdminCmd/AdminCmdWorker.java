@@ -3,6 +3,7 @@ package com.Balor.bukkit.AdminCmd;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -112,18 +113,50 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	// lists all online players
+	@SuppressWarnings("deprecation")
 	public boolean playerList() {
 		Player[] online = player.getServer().getOnlinePlayers();
 		player.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE + online.length);
 		String buffer = "";
-		for (int i = 0; i < online.length; ++i) {
-			Player p = online[i];
-			String name = p.getDisplayName();
-			if (buffer.length() + name.length() + 2 >= 256) {
-				player.sendMessage(buffer);
-				buffer = "";
+		if (AdminCmdWorker.getPermission() == null) {
+			for (int i = 0; i < online.length; ++i) {
+				Player p = online[i];
+				String name = p.getDisplayName();
+				if (buffer.length() + name.length() + 2 >= 256) {
+					player.sendMessage(buffer);
+					buffer = "";
+				}
+				buffer += name + ", ";
 			}
-			buffer += name + ", ";
+		} else {
+			// changed the playerlist, now support prefixes from groups!!! @foxy
+			for (int i = 0; i < online.length; ++i) {
+				Player p = online[i];
+				String name = p.getName();
+				String prefixstring;
+				String world = player.getWorld().getName();
+				try {
+					String group = AdminCmdWorker.getPermission().getPrimaryGroup(world,
+							player.getName());
+					prefixstring = AdminCmdWorker.getPermission().getGroupObject(world, group)
+							.getPrefix();
+				} catch (Exception e) {
+					String group = AdminCmdWorker.getPermission().getGroup(world, player.getName());
+					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+				}
+
+				if (prefixstring.length() > 1) {
+					String result = Utils.colorParser(prefixstring);
+					if (result == null)
+						buffer += prefixstring + name + ChatColor.WHITE + ", ";
+					else
+						buffer += result + name + ChatColor.WHITE + ", ";
+
+				} else {
+					buffer += name + ", ";
+				}
+			}
+
 		}
 		player.sendMessage(buffer);
 		return true;
@@ -179,8 +212,11 @@ public class AdminCmdWorker extends Worker {
 			for (int i = 1; i < args.length; ++i)
 				msg += args[i] + " ";
 			msg.trim();
-			buddy.sendMessage(msg);
-			player.sendMessage(msg);
+			String parsed = Utils.colorParser(msg);
+			if (parsed == null)
+				parsed = msg;
+			buddy.sendMessage(parsed);
+			player.sendMessage(parsed);
 		} else
 			player.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
 					+ ChatColor.RED + " not found!");
@@ -575,22 +611,23 @@ public class AdminCmdWorker extends Worker {
 			player.sendMessage(ChatColor.RED + "No such creature: " + ChatColor.WHITE + name);
 			return true;
 		}
-		AdminCmd.getBukkitServer().getScheduler().scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
-			
-			@Override
-			public void run() {
-				for(int i = 0; i < nb; i++)
-				{
-					player.getWorld().spawnCreature(player.getLocation(), ct);
-					try {
-						Thread.sleep(110);
-					} catch (InterruptedException e) {
-						//e.printStackTrace();
+		AdminCmd.getBukkitServer().getScheduler()
+				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
+
+					@Override
+					public void run() {
+						for (int i = 0; i < nb; i++) {
+							player.getWorld().spawnCreature(player.getLocation(), ct);
+							try {
+								Thread.sleep(110);
+							} catch (InterruptedException e) {
+								// e.printStackTrace();
+							}
+						}
+						player.sendMessage(ChatColor.BLUE + "Spawned " + ChatColor.WHITE + nb + " "
+								+ name);
 					}
-				}
-				player.sendMessage(ChatColor.BLUE + "Spawned " + ChatColor.WHITE + nb + " "+ name);
-			}
-		});		
+				});
 		return true;
 	}
 

@@ -16,11 +16,15 @@
  ************************************************************************/
 package com.Balor.files.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	/**
@@ -36,8 +40,37 @@ public class Utils {
 			m = Material.getMaterial(id);
 		} catch (NumberFormatException e) {
 			m = Material.matchMaterial(mat);
-		}	
+		}
 		return m;
 
+	}
+
+	/**
+	 * Parse a string and replace the color in it
+	 * 
+	 * @param toParse
+	 * @return
+	 */
+	public static String colorParser(String toParse, String delimiter) {
+		String ResultString = null;
+		try {
+			Pattern regex = Pattern.compile(delimiter + "[0-9]+");
+			Matcher regexMatcher = regex.matcher(toParse);
+			String result = null;
+			while (regexMatcher.find()) {
+				ResultString = regexMatcher.group();
+				result = regexMatcher.replaceFirst(ChatColor.getByCode(
+						Integer.parseInt(ResultString.substring(1))).toString());
+				regexMatcher = regex.matcher(result);
+			}
+			return result;
+		} catch (Exception ex) {
+			return null;
+		}
+
+	}
+
+	public static String colorParser(String toParse) {
+		return colorParser(toParse, "&");
 	}
 }
