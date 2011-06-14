@@ -136,10 +136,8 @@ public class AdminCmdWorker extends Worker {
 				String prefixstring;
 				String world = player.getWorld().getName();
 				try {
-					String group = AdminCmdWorker.getPermission().getPrimaryGroup(world,
-							player.getName());
-					prefixstring = AdminCmdWorker.getPermission().getGroupObject(world, group)
-							.getPrefix();
+					prefixstring = AdminCmdWorker.getPermission()
+							.safeGetUser(world, player.getName()).getPrefix();
 				} catch (Exception e) {
 					String group = AdminCmdWorker.getPermission().getGroup(world, player.getName());
 					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
