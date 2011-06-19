@@ -19,6 +19,7 @@ package belgium.Balor.Workers;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.nijiko.permissions.PermissionHandler;
 
@@ -37,7 +38,7 @@ public abstract class Worker {
 	 * @param perm
 	 * @return boolean
 	 */
-	public boolean hasPerm(Player player, String perm) {
+	public boolean hasPerm(CommandSender player, String perm) {
 		return hasPerm(player, perm, true);
 	}
 
@@ -49,12 +50,14 @@ public abstract class Worker {
 	 * @param errorMsg
 	 * @return
 	 */
-	public boolean hasPerm(Player player, String perm, boolean errorMsg) {
+	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+		if(!(player instanceof Player))
+			return true;
 		if (permission == null) {
 			if (perm.contains("admin") || perm.contains("free"))
 				return player.isOp();
 			return true;
-		} else if (permission.has(player, perm)) {
+		} else if (permission.has((Player)player, perm)) {
 			return true;
 		} else {
 			if (errorMsg)
