@@ -124,10 +124,8 @@ public class AdminCmdWorker extends Worker {
 		if (isPlayer(false)) {
 			Player p = (Player) sender;
 			setTime(p.getWorld(), arg);
-		}
-		else
-		{
-			for(World w : sender.getServer().getWorlds())
+		} else {
+			for (World w : sender.getServer().getWorlds())
 				setTime(w, arg);
 		}
 		return true;
@@ -594,34 +592,43 @@ public class AdminCmdWorker extends Worker {
 		return output;
 	}
 
-	public boolean weather(String type, String[] duration) {
-		if (isPlayer()) {
-			Player p = ((Player) sender);
-			if (type == "clear") {
-				p.getWorld().setThundering(false);
-				p.getWorld().setStorm(false);
-				p.sendMessage(ChatColor.GOLD + "Sky cleared");
+	private void weatherChange(World w, String type, String[] duration) {
+		if (type == "clear") {
+			w.setThundering(false);
+			w.setStorm(false);
+			sender.sendMessage(ChatColor.GOLD + "Sky cleared in world : " + w.getName());
+		} else {
+			if (duration == null || duration.length < 1) {
+				w.setStorm(true);
+				w.setWeatherDuration(12000);
+				sender.sendMessage(ChatColor.GOLD + "Storm set for 10 mins in world : "
+						+ w.getName());
 			} else {
-				if (duration == null || duration.length < 1) {
-					p.getWorld().setStorm(true);
-					p.getWorld().setWeatherDuration(12000);
-					p.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
-				} else {
-					try {
-						p.getWorld().setStorm(true);
-						int time = Integer.parseInt(duration[0]);
-						p.getWorld().setWeatherDuration(time * 1200);
-						p.sendMessage(ChatColor.GOLD + "Storm set for " + time + " mins");
-					} catch (NumberFormatException e) {
-						p.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
-								+ ") isn't a number!");
-						p.getWorld().setStorm(true);
-						p.getWorld().setWeatherDuration(12000);
-						p.sendMessage(ChatColor.GOLD + "Storm set for 10 mins");
-					}
+				try {
+					w.setStorm(true);
+					int time = Integer.parseInt(duration[0]);
+					w.setWeatherDuration(time * 1200);
+					sender.sendMessage(ChatColor.GOLD + "Storm set for " + time
+							+ " mins in world : " + w.getName());
+				} catch (NumberFormatException e) {
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
+							+ ") isn't a number!");
+					w.setStorm(true);
+					w.setWeatherDuration(12000);
+					sender.sendMessage(ChatColor.GOLD + "Storm set for 10 mins in world : "
+							+ w.getName());
 				}
 			}
 		}
+	}
+
+	public boolean weather(String type, String[] duration) {
+		if (isPlayer()) {
+			weatherChange(((Player) sender).getWorld(), type, duration);
+		} else
+			for (World w : sender.getServer().getWorlds())
+				weatherChange(w, type, duration);
+
 		return true;
 	}
 
