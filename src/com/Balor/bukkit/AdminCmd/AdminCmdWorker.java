@@ -483,17 +483,28 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean repairAll() {
+	public boolean repairAll(String[] args) {
+		Player player = null;
 		if (isPlayer()) {
-			for (ItemStack item : ((Player) sender).getInventory().getContents())
+			player = ((Player) sender);
+			if (args != null && args.length >= 1)
+				player = sender.getServer().getPlayer(args[0]);
+		} else if (args != null && args.length >= 1)
+			player = sender.getServer().getPlayer(args[0]);
+		else
+			sender.sendMessage("You must set the player name !");
+		if (player != null) {
+			for (ItemStack item : player.getInventory().getContents())
 				if (item != null && listOfPossibleRepair.contains(item.getTypeId()))
 					item.setDurability((short) 0);
-			for (ItemStack item : ((Player) sender).getInventory().getArmorContents())
+			for (ItemStack item : player.getInventory().getArmorContents())
 				if (item != null)
 					item.setDurability((short) 0);
 
-			sender.sendMessage("All your items have been repaired.");
-		}
+			sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
+		} else
+			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
+
 		return true;
 	}
 
@@ -639,7 +650,7 @@ public class AdminCmdWorker extends Worker {
 		Player p = null;
 		if ((p = sender.getServer().getPlayer(playerName)) != null) {
 			p.getWorld().strikeLightning(p.getLocation());
-			sender.sendMessage(ChatColor.GOLD + playerName + " was striked by Thor");
+			sender.sendMessage(ChatColor.GOLD + p.getName() + " was striked by Thor");
 		} else
 			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + playerName);
 		return true;

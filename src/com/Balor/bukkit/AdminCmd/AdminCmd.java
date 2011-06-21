@@ -76,7 +76,7 @@ public class AdminCmd extends JavaPlugin {
 
 		if (cmd.equalsIgnoreCase("bal_repairall"))
 			if (hasPerm(sender, "admincmd.item.repair"))
-				return worker.repairAll();
+				return worker.repairAll(args);
 
 		if (cmd.equalsIgnoreCase("bal_itemmore"))
 			if (hasPerm(sender, "admincmd.item.more"))
