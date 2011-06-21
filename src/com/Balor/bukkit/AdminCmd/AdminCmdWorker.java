@@ -487,7 +487,7 @@ public class AdminCmdWorker extends Worker {
 
 	public boolean repairAll(String[] args) {
 		Player player = null;
-		if (isPlayer()) {
+		if (isPlayer(false)) {
 			player = ((Player) sender);
 			if (args != null && args.length >= 1)
 				player = sender.getServer().getPlayer(args[0]);
