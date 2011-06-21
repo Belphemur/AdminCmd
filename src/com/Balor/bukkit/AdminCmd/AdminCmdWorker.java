@@ -488,6 +488,9 @@ public class AdminCmdWorker extends Worker {
 			for (ItemStack item : ((Player) sender).getInventory().getContents())
 				if (item != null && listOfPossibleRepair.contains(item.getTypeId()))
 					item.setDurability((short) 0);
+			for (ItemStack item : ((Player) sender).getInventory().getArmorContents())
+				if (item != null)
+					item.setDurability((short) 0);
 
 			sender.sendMessage("All your items have been repaired.");
 		}
