@@ -3,6 +3,7 @@ package com.Balor.bukkit.AdminCmd;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,7 +33,8 @@ public class AdminCmdWorker extends Worker {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	private ArrayList<String> thunderGods = new ArrayList<String>();
+	private TreeSet<String> thunderGods = new TreeSet<String>();
+	private TreeSet<String> gods = new TreeSet<String>();
 	private HashMap<String, Material> alias = new HashMap<String, Material>();
 
 	public AdminCmdWorker(String path) {
@@ -669,6 +671,19 @@ public class AdminCmdWorker extends Worker {
 		}
 		return true;
 	}
+	public boolean god() {
+		if (isPlayer()) {
+			String player = ((Player) sender).getName();
+			if (gods.contains(player)) {
+				gods.remove(player);
+				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have lost the power of Thor");
+			} else {
+				gods.add(player);
+				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have now the power of Thor");
+			}
+		}
+		return true;
+	}
 
 	public boolean alias(String[] args) {
 		Material m = checkMaterial(args[1]);
@@ -729,6 +744,10 @@ public class AdminCmdWorker extends Worker {
 
 	public boolean hasThorPowers(String player) {
 		return thunderGods.contains(player);
+	}
+	
+	public boolean hasGodPowers(String player) {
+		return gods.contains(player);
 	}
 
 	// changes the color of a colorable item in hand

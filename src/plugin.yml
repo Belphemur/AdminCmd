@@ -97,6 +97,10 @@ commands:
     description: the player control the thunder.
     aliases: [thor,t]
     usage: /<command>
+  bal_god:
+    description: no more dmg for the player.
+    aliases: [god,g]
+    usage: /<command>
   bal_addalias:
     description: add a new alias.
     aliases: [alias,adda,aa]

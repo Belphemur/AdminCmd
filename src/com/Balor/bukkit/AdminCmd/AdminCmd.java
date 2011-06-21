@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
 import belgium.Balor.Workers.PluginListener;
 
@@ -47,6 +48,7 @@ public class AdminCmd extends JavaPlugin {
 		worker.setPluginInstance(this);
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);
 	}
 
 	@Override
@@ -89,6 +91,10 @@ public class AdminCmd extends JavaPlugin {
 		if (cmd.equalsIgnoreCase("bal_playerloc"))
 			if (hasPerm(sender, "admincmd.player.loc"))
 				return worker.playerLocation(args);
+		
+		if (cmd.equalsIgnoreCase("bal_god"))
+			if (hasPerm(sender, "admincmd.player.god"))
+				return worker.god();
 
 		if (cmd.equalsIgnoreCase("bal_playerheal"))
 			if (hasPerm(sender, "admincmd.player.heal"))
