@@ -676,10 +676,10 @@ public class AdminCmdWorker extends Worker {
 			String player = ((Player) sender).getName();
 			if (gods.contains(player)) {
 				gods.remove(player);
-				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have lost the power of Thor");
+				this.sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled.");
 			} else {
 				gods.add(player);
-				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have now the power of Thor");
+				this.sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
 			}
 		}
 		return true;
