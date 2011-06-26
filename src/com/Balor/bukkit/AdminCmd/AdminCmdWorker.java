@@ -628,6 +628,22 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
+	public boolean setSpawn() {
+		if (isPlayer()) {
+			Location loc = ((Player) sender).getLocation();
+			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
+					loc.getBlockZ());
+			sender.sendMessage("Spawn location set : " + loc);
+		}
+		return true;
+	}
+
+	public boolean spawn() {
+		if (isPlayer())
+			((Player) sender).teleport(((Player) sender).getWorld().getSpawnLocation());
+		return true;
+	}
+
 	private void weatherChange(World w, String type, String[] duration) {
 		if (type == "clear") {
 			w.setThundering(false);

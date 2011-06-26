@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 4.14
+version: 4.15
 author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
@@ -117,3 +117,11 @@ commands:
     description: kick the player.
     aliases: [kick,kp]
     usage: /<command> playerName (|kickMessage)
+   bal_setspawn:
+    description: set the spawn location of the current world.
+    aliases: [setspawn,sspawn,ss]
+    usage: /<command>
+   bal_spawn:
+    description: TP to the spawn location.
+    aliases: [spawn,ts]
+    usage: /<command>

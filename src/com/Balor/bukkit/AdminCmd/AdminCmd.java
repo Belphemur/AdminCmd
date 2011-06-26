@@ -115,6 +115,14 @@ public class AdminCmd extends JavaPlugin {
 		if (cmd.equalsIgnoreCase("bal_thor"))
 			if (hasPerm(sender, "admincmd.weather.thor"))
 				return worker.thor();
+		
+		if (cmd.equalsIgnoreCase("bal_setspawn"))
+			if (hasPerm(sender, "admincmd.spawn.set"))
+				return worker.setSpawn();
+		
+		if (cmd.equalsIgnoreCase("bal_spawn"))
+			if (hasPerm(sender, "admincmd.spawn.tp"))
+				return worker.spawn();
 		// 1 argument:
 		if (args.length < 1)
 			return false;
