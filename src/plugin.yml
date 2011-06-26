@@ -125,3 +125,7 @@ commands:
     description: TP to the spawn location.
     aliases: [spawn,ts]
     usage: /<command>
+  bal_memory:
+    description: used memory.
+    aliases: [memory,mem]
+    usage: /<command>

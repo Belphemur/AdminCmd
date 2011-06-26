@@ -123,6 +123,10 @@ public class AdminCmd extends JavaPlugin {
 		if (cmd.equalsIgnoreCase("bal_spawn"))
 			if (hasPerm(sender, "admincmd.spawn.tp"))
 				return worker.spawn();
+		
+		if (cmd.equalsIgnoreCase("bal_memory"))
+			if (hasPerm(sender, "admincmd.server.memory"))
+				return worker.memory();
 		// 1 argument:
 		if (args.length < 1)
 			return false;

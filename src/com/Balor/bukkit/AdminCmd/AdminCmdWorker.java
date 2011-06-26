@@ -791,6 +791,12 @@ public class AdminCmdWorker extends Worker {
 		return gods.contains(player);
 	}
 
+	public boolean memory() {
+		double usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+		sender.sendMessage(ChatColor.DARK_RED+"Used Memory : "+ChatColor.WHITE+usedMB);
+		return true;
+	}
+
 	// changes the color of a colorable item in hand
 	public boolean itemColor(String color) {
 		if (isPlayer()) {
