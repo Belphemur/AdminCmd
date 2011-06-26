@@ -633,16 +633,15 @@ public class AdminCmdWorker extends Worker {
 			Location loc = ((Player) sender).getLocation();
 			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
 					loc.getBlockZ());
-			sender.sendMessage(ChatColor.DARK_GREEN+"SpawnPoint"+ChatColor.WHITE+" set");
+			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
 		}
 		return true;
 	}
 
 	public boolean spawn() {
-		if (isPlayer())
-		{
+		if (isPlayer()) {
 			((Player) sender).teleport(((Player) sender).getWorld().getSpawnLocation());
-			sender.sendMessage("Teleported to "+ChatColor.DARK_GREEN+"SpawnPoint");
+			sender.sendMessage("Teleported to " + ChatColor.DARK_GREEN + "SpawnPoint");
 		}
 		return true;
 	}
@@ -702,10 +701,12 @@ public class AdminCmdWorker extends Worker {
 			String player = ((Player) sender).getName();
 			if (thunderGods.contains(player)) {
 				thunderGods.remove(player);
-				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have lost the power of Thor");
+				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have " + ChatColor.DARK_RED
+						+ "lost" + ChatColor.WHITE + " the power of Thor");
 			} else {
 				thunderGods.add(player);
-				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have now the power of Thor");
+				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have " + ChatColor.DARK_RED
+						+ "gain" + ChatColor.WHITE + " the power of Thor");
 			}
 		}
 		return true;
