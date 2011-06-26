@@ -570,8 +570,8 @@ public class AdminCmdWorker extends Worker {
 		} else {
 			target.sendMessage(ChatColor.RED + "[Server Admin]" + ChatColor.WHITE + " send you "
 					+ ChatColor.GOLD + cnt + " " + m);
-			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m
-					+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
+			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m + " to "
+					+ ChatColor.WHITE + target.getName() + "'s inventory");
 		}
 		target.getInventory().addItem(stack);
 		return true;
@@ -606,6 +606,25 @@ public class AdminCmdWorker extends Worker {
 		for (int i = 0; i < materialsColors.get(mat).length; ++i)
 			output += materialsColors.get(mat)[i] + ", ";
 		return output;
+	}
+
+	public boolean kickPlayer(String[] args) {
+		Player toKick = sender.getServer().getPlayer(args[0]);
+		String message = "";
+		if (args.length >= 2)
+			message = args[1];
+		else
+			message = "You have been kick by ";
+		if (!isPlayer(false))
+			message += "Server Admin";
+		else
+			message += ((Player) sender).getName();
+		if (toKick != null)
+			toKick.kickPlayer(message);
+		else
+			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
+		return true;
+
 	}
 
 	private void weatherChange(World w, String type, String[] duration) {

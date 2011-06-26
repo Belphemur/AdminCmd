@@ -161,6 +161,10 @@ public class AdminCmd extends JavaPlugin {
 		if (cmd.equalsIgnoreCase("bal_mob"))
 			if (hasPerm(sender, "admincmd.mob.spawn"))
 				return worker.spawnMob(args);
+		
+		if (cmd.equalsIgnoreCase("bal_kick"))
+			if (hasPerm(sender, "admincmd.player.kick"))
+				return worker.kickPlayer(args);
 
 		// 2 arguments:
 		if (args.length < 2)
