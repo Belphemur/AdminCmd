@@ -792,8 +792,16 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public boolean memory() {
-		double usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-		sender.sendMessage(ChatColor.DARK_RED+"Used Memory : "+ChatColor.WHITE+usedMB);
+		long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
+		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
+				+ Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
+		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
+		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE
+				+ Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
+		for (World w : sender.getServer().getWorlds()) {
+			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
+					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size() + " entities");
+		}
 		return true;
 	}
 
