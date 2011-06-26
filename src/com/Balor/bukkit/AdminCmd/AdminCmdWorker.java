@@ -324,8 +324,8 @@ public class AdminCmdWorker extends Worker {
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
 			blacklist.add(m.getId());
-			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.name()
-					+ ChatColor.GREEN + ") added to the Black List.");
+			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m + ChatColor.GREEN
+					+ ") added to the Black List.");
 			return true;
 		}
 		return false;
@@ -351,8 +351,8 @@ public class AdminCmdWorker extends Worker {
 			}
 			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.getId()))
 				blacklist.remove((Integer) m.getId());
-			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.name()
-					+ ChatColor.GREEN + ") removed from the Black List.");
+			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m + ChatColor.GREEN
+					+ ") removed from the Black List.");
 			return true;
 		}
 		return false;
@@ -411,7 +411,7 @@ public class AdminCmdWorker extends Worker {
 			if (!hasPerm(((Player) sender), "admincmd.item.noblacklist")
 					&& blacklist.contains(hand.getTypeId())) {
 				sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
-						+ hand.getType().name() + ChatColor.DARK_RED + ") is black listed.");
+						+ hand.getType() + ChatColor.DARK_RED + ") is black listed.");
 				return true;
 			}
 			if (amount.length == 0)
@@ -521,7 +521,7 @@ public class AdminCmdWorker extends Worker {
 		if (m == null)
 			return true;
 		if (!hasPerm(sender, "admincmd.item.noblacklist") && blacklist.contains(m.getId())) {
-			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + m.name()
+			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + m
 					+ ChatColor.DARK_RED + ") is black listed.");
 			return true;
 		}
@@ -560,17 +560,17 @@ public class AdminCmdWorker extends Worker {
 		if (isPlayer(false)) {
 			if (!target.getName().equals(((Player) sender).getName())) {
 				target.sendMessage(ChatColor.RED + "[" + ((Player) sender).getName() + "]"
-						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " " + m.name());
+						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " " + m);
 
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name()
+				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m
 						+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
 			} else
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name()
+				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m
 						+ " to " + ChatColor.WHITE + "your inventory");
 		} else {
 			target.sendMessage(ChatColor.RED + "[Server Admin]" + ChatColor.WHITE + " send you "
-					+ ChatColor.GOLD + cnt + " " + m.name());
-			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m.name()
+					+ ChatColor.GOLD + cnt + " " + m);
+			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m
 					+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
 		}
 		target.getInventory().addItem(stack);
@@ -671,6 +671,7 @@ public class AdminCmdWorker extends Worker {
 		}
 		return true;
 	}
+
 	public boolean god() {
 		if (isPlayer()) {
 			String player = ((Player) sender).getName();
@@ -693,7 +694,7 @@ public class AdminCmdWorker extends Worker {
 		this.alias.put(alias, m);
 		this.fManager.addAlias(alias, m.getId());
 		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
-				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m.name());
+				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m);
 		return true;
 	}
 
@@ -745,7 +746,7 @@ public class AdminCmdWorker extends Worker {
 	public boolean hasThorPowers(String player) {
 		return thunderGods.contains(player);
 	}
-	
+
 	public boolean hasGodPowers(String player) {
 		return gods.contains(player);
 	}
