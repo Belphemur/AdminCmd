@@ -613,12 +613,13 @@ public class AdminCmdWorker extends Worker {
 		String message = "";
 		if (args.length >= 2)
 			message = args[1];
-		else
+		else {
 			message = "You have been kick by ";
-		if (!isPlayer(false))
-			message += "Server Admin";
-		else
-			message += ((Player) sender).getName();
+			if (!isPlayer(false))
+				message += "Server Admin";
+			else
+				message += ((Player) sender).getName();
+		}
 		if (toKick != null)
 			toKick.kickPlayer(message);
 		else
