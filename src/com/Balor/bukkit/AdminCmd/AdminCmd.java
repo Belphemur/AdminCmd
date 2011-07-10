@@ -86,14 +86,6 @@ public class AdminCmd extends JavaPlugin {
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
 		// 0 arguments:
-		
-		if (cmd.equalsIgnoreCase("bal_playerheal"))
-			if (hasPerm(sender, "admincmd.player.heal"))
-				return worker.playerSetHealth(args, 20);
-
-		if (cmd.equalsIgnoreCase("bal_playerkill"))
-			if (hasPerm(sender, "admincmd.player.kill"))
-				return worker.playerSetHealth(args, 0);
 
 		if (cmd.equalsIgnoreCase("bal_wclear"))
 			if (hasPerm(sender, "admincmd.weather.clear"))

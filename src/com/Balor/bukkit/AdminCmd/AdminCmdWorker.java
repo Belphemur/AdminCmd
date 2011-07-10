@@ -62,9 +62,9 @@ public class AdminCmdWorker extends Worker {
 		for (int i = 298; i <= 317; i++)
 			listOfPossibleRepair.add(i);
 	}
-	public static AdminCmdWorker getInstance()
-	{
-		if(instance == null)
+
+	public static AdminCmdWorker getInstance() {
+		if (instance == null)
 			instance = new AdminCmdWorker();
 		return instance;
 	}
@@ -141,7 +141,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-
 	// teleports the player to another player
 	public boolean playerTpTo(String name) {
 		return isPlayer() ? this.tpP2P(((Player) sender).getName(), name) : true;
@@ -207,7 +206,6 @@ public class AdminCmdWorker extends Worker {
 					+ ChatColor.RED + " not found!");
 		return true;
 	}
-
 
 	/**
 	 * Clear the inventory of the user
@@ -296,11 +294,14 @@ public class AdminCmdWorker extends Worker {
 	 * @param name
 	 * @return
 	 */
-	public boolean playerSetHealth(String[] name, int health) {
+	public boolean setPlayerHealth(String[] name, String toDo) {
 		Player target = null;
-		if (name.length != 0)
-			target = sender.getServer().getPlayer(name[0]);
-		else if (isPlayer(false))
+		if (name.length != 0) {
+			if (hasPerm(sender, "admincmd.player." + toDo + ".other"))
+				target = sender.getServer().getPlayer(name[0]);
+			else
+				return false;
+		} else if (isPlayer(false))
 			target = ((Player) sender);
 		else {
 			sender.sendMessage("You must type the player name");
@@ -311,15 +312,18 @@ public class AdminCmdWorker extends Worker {
 					+ ChatColor.RED + " not found!");
 			return true;
 		}
-		target.setHealth(health);
+		if (toDo.equals("heal"))
+			target.setHealth(20);
+		else
+			target.setHealth(0);
 
 		return true;
 	}
 
-	public boolean inBlackList(int id)
-	{
+	public boolean inBlackList(int id) {
 		return blacklist.contains(id);
 	}
+
 	/**
 	 * Translate the id or name to a material
 	 * 
@@ -352,7 +356,6 @@ public class AdminCmdWorker extends Worker {
 		return true;
 
 	}
-
 
 	// gives the player item of his choice
 
@@ -540,22 +543,22 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public void addGod(String playerName)
-	{
+	public void addGod(String playerName) {
 		gods.add(playerName);
 	}
-	public void removeGod(String playerName)
-	{
+
+	public void removeGod(String playerName) {
 		gods.remove(playerName);
 	}
-	public void addThor(String playerName)
-	{
+
+	public void addThor(String playerName) {
 		thunderGods.add(playerName);
 	}
-	public void removeThor(String playerName)
-	{
+
+	public void removeThor(String playerName) {
 		thunderGods.remove(playerName);
 	}
+
 	public boolean alias(String[] args) {
 		Material m = checkMaterial(args[1]);
 		if (m == null)
@@ -630,13 +633,14 @@ public class AdminCmdWorker extends Worker {
 				+ Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
 		for (World w : sender.getServer().getWorlds()) {
 			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
-					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size() + " entities");
+					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
+					+ " entities");
 		}
 		return true;
 	}
-	public boolean reparable(int id)
-	{
-		return  listOfPossibleRepair.contains(id);
+
+	public boolean reparable(int id) {
+		return listOfPossibleRepair.contains(id);
 	}
 
 	// changes the color of a colorable item in hand
