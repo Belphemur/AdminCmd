@@ -12,6 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.*;
+import be.Balor.Manager.Commands.Items.Repair;
+import be.Balor.Manager.Commands.Items.RepairAll;
+import be.Balor.Manager.Commands.Time.Day;
 import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
 import belgium.Balor.Workers.PluginListener;
