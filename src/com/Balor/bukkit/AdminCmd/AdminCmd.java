@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.Items.*;
 import be.Balor.Manager.Commands.Player.*;
+import be.Balor.Manager.Commands.Spawn.*;
 import be.Balor.Manager.Commands.Time.*;
 import be.Balor.Manager.Commands.Weather.*;
 import belgium.Balor.Workers.ACEntityListener;
@@ -48,6 +49,12 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(PlayerLocation.class);
 		CommandManager.getInstance().registerCommand(God.class);
 		CommandManager.getInstance().registerCommand(Thor.class);
+		CommandManager.getInstance().registerCommand(Kill.class);
+		CommandManager.getInstance().registerCommand(Heal.class);
+		CommandManager.getInstance().registerCommand(Clear.class);
+		CommandManager.getInstance().registerCommand(Storm.class);
+		CommandManager.getInstance().registerCommand(Set.class);
+		CommandManager.getInstance().registerCommand(Spawn.class);
 	}
 	@Override
 	public void onEnable() {
@@ -86,23 +93,7 @@ public class AdminCmd extends JavaPlugin {
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
 		// 0 arguments:
-
-		if (cmd.equalsIgnoreCase("bal_wclear"))
-			if (hasPerm(sender, "admincmd.weather.clear"))
-				return worker.weather("clear", null);
-
-		if (cmd.equalsIgnoreCase("bal_wstorm"))
-			if (hasPerm(sender, "admincmd.weather.storm"))
-				return worker.weather("storm", args);
-		
-		if (cmd.equalsIgnoreCase("bal_setspawn"))
-			if (hasPerm(sender, "admincmd.spawn.set"))
-				return worker.setSpawn();
-		
-		if (cmd.equalsIgnoreCase("bal_spawn"))
-			if (hasPerm(sender, "admincmd.spawn.tp"))
-				return worker.spawn();
-		
+					
 		if (cmd.equalsIgnoreCase("bal_memory"))
 			if (hasPerm(sender, "admincmd.server.memory"))
 				return worker.memory();

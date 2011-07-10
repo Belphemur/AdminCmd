@@ -475,24 +475,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-	public boolean setSpawn() {
-		if (isPlayer()) {
-			Location loc = ((Player) sender).getLocation();
-			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-					loc.getBlockZ());
-			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
-		}
-		return true;
-	}
-
-	public boolean spawn() {
-		if (isPlayer()) {
-			((Player) sender).teleport(((Player) sender).getWorld().getSpawnLocation());
-			sender.sendMessage("Teleported to " + ChatColor.DARK_GREEN + "SpawnPoint");
-		}
-		return true;
-	}
-
 	private void weatherChange(World w, String type, String[] duration) {
 		if (type == "clear") {
 			w.setThundering(false);
