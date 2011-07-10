@@ -36,8 +36,9 @@ public class AdminCmdWorker extends Worker {
 	private TreeSet<String> thunderGods = new TreeSet<String>();
 	private TreeSet<String> gods = new TreeSet<String>();
 	private HashMap<String, Material> alias = new HashMap<String, Material>();
+	private static AdminCmdWorker instance = null;
 
-	public AdminCmdWorker(String path) {
+	private AdminCmdWorker() {
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
 				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
@@ -60,9 +61,14 @@ public class AdminCmdWorker extends Worker {
 			listOfPossibleRepair.add(i);
 		for (int i = 298; i <= 317; i++)
 			listOfPossibleRepair.add(i);
-		fManager = new FilesManager(path);
 		blacklist = getBlackListedItems();
 		alias = fManager.getAlias();
+	}
+	public static AdminCmdWorker getInstance()
+	{
+		if(instance == null)
+			instance = new AdminCmdWorker();
+		return instance;
 	}
 
 	/**
@@ -71,6 +77,7 @@ public class AdminCmdWorker extends Worker {
 	 */
 	public void setPluginInstance(AdminCmd pluginInstance) {
 		this.pluginInstance = pluginInstance;
+		fManager = new FilesManager(pluginInstance.getDataFolder().getPath());
 	}
 
 	/**
@@ -132,12 +139,6 @@ public class AdminCmdWorker extends Worker {
 		}
 		return true;
 
-	}
-
-	// just an alias to /time day
-	public boolean timeDay() {
-		timeSet("day");
-		return true;
 	}
 
 	// lists all online players

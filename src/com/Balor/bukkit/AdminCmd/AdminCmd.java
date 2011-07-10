@@ -10,6 +10,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.Commands.*;
 import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
 import belgium.Balor.Workers.PluginListener;
@@ -33,6 +35,10 @@ public class AdminCmd extends JavaPlugin {
 		return worker.hasPerm(p, perm);
 	}
 
+	private void registerCmds()
+	{
+		CommandManager.getInstance().registerCommand("bal_timeday", Day.class);
+	}
 	@Override
 	public void onEnable() {
 		server = getServer();
@@ -44,8 +50,9 @@ public class AdminCmd extends JavaPlugin {
 				+ pdfFile.getVersion() + ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 
-		worker = new AdminCmdWorker(getDataFolder().getPath());
+		worker = AdminCmdWorker.getInstance();
 		worker.setPluginInstance(this);
+		registerCmds();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);
@@ -66,11 +73,9 @@ public class AdminCmd extends JavaPlugin {
 		String cmd = command.getName();
 
 		worker.setSender(sender);
-
+		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
+			return false;
 		// 0 arguments:
-		if (cmd.equalsIgnoreCase("bal_timeday"))
-			if (hasPerm(sender, "admincmd.time.day"))
-				return worker.timeDay();
 
 		if (cmd.equalsIgnoreCase("bal_repair"))
 			if (hasPerm(sender, "admincmd.item.repair"))
