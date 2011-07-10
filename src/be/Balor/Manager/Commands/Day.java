@@ -26,7 +26,15 @@ import be.Balor.Manager.ACCommands;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Day implements ACCommands {
+public class Day extends ACCommands {
+	
+	/**
+	 * 
+	 */
+	public Day() {
+		permNode = "admincmd.time.day";
+		cmdName = "bal_timeday";
+	}
 
 	/* (non-Javadoc)
 	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
@@ -42,14 +50,6 @@ public class Day implements ACCommands {
 	@Override
 	public boolean argsCheck(String... args) {
 		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#permissionCheck(org.bukkit.command.CommandSender)
-	 */
-	@Override
-	public boolean permissionCheck(CommandSender sender) {
-		return AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.time.day");
 	}
 
 }

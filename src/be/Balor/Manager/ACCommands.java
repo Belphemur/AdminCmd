@@ -18,17 +18,29 @@ package be.Balor.Manager;
 
 import org.bukkit.command.CommandSender;
 
+import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public interface ACCommands {
+public abstract class ACCommands {
+	protected String permNode = null;
+	protected String cmdName = null;
+
+	/**
+	 * 
+	 */
+	public ACCommands() {
+		permNode = "";
+		cmdName = "";
+	}
 	/**
 	 * Execute the command
 	 * 
 	 * @param args
 	 */
-	public void execute(CommandSender sender, String... args);
+	public abstract void execute(CommandSender sender, String... args);
 
 	/**
 	 * Check if the command can be executed
@@ -36,11 +48,21 @@ public interface ACCommands {
 	 * @param args
 	 * @return
 	 */
-	public boolean argsCheck(String... args);
+	public abstract boolean argsCheck(String... args);
+
 	/**
 	 * Check if the sender have the permission for the command.
+	 * 
 	 * @param sender
 	 * @return
 	 */
-	public boolean permissionCheck(CommandSender sender);
+	public boolean permissionCheck(CommandSender sender) {
+		return AdminCmdWorker.getInstance().hasPerm(sender, permNode);
+	}
+	/**
+	 * @return the cmdName
+	 */
+	public String getCmdName() {
+		return cmdName;
+	}
 }

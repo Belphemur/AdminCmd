@@ -37,10 +37,10 @@ public class CommandManager {
 		return instance;
 	}
 
-	public void registerCommand(String cmd, Class<?> clazz) {
+	public void registerCommand(Class<?> clazz) {
 		try {
 			ACCommands command = (ACCommands) clazz.newInstance();
-			commands.put(cmd, command);
+			commands.put(command.getCmdName(), command);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

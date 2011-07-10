@@ -91,11 +91,11 @@ public class AdminCmdWorker extends Worker {
 		this.sender = player;
 	}
 
-	private boolean isPlayer() {
+	public boolean isPlayer() {
 		return isPlayer(true);
 	}
 
-	private boolean isPlayer(boolean msg) {
+	public boolean isPlayer(boolean msg) {
 		if (sender instanceof Player)
 			return true;
 		else {
@@ -473,43 +473,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-	public boolean repair() {
-		if (isPlayer()) {
-			ItemStack item = ((Player) sender).getItemInHand();
-			if (item != null && listOfPossibleRepair.contains(item.getTypeId())) {
-				item.setDurability((short) 0);
-				sender.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE
-						+ " have been successfully repaired.");
-			} else
-				sender.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
-		}
-		return true;
-	}
-
-	public boolean repairAll(String[] args) {
-		Player player = null;
-		if (isPlayer(false)) {
-			player = ((Player) sender);
-			if (args != null && args.length >= 1)
-				player = sender.getServer().getPlayer(args[0]);
-		} else if (args != null && args.length >= 1)
-			player = sender.getServer().getPlayer(args[0]);
-		else
-			sender.sendMessage("You must set the player name !");
-		if (player != null) {
-			for (ItemStack item : player.getInventory().getContents())
-				if (item != null && listOfPossibleRepair.contains(item.getTypeId()))
-					item.setDurability((short) 0);
-			for (ItemStack item : player.getInventory().getArmorContents())
-				if (item != null)
-					item.setDurability((short) 0);
-
-			sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
-		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
-
-		return true;
-	}
 
 	// gives the player item of his choice
 
@@ -804,6 +767,10 @@ public class AdminCmdWorker extends Worker {
 					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size() + " entities");
 		}
 		return true;
+	}
+	public boolean reparable(int id)
+	{
+		return  listOfPossibleRepair.contains(id);
 	}
 
 	// changes the color of a colorable item in hand

@@ -37,7 +37,9 @@ public class AdminCmd extends JavaPlugin {
 
 	private void registerCmds()
 	{
-		CommandManager.getInstance().registerCommand("bal_timeday", Day.class);
+		CommandManager.getInstance().registerCommand(Day.class);
+		CommandManager.getInstance().registerCommand(Repair.class);
+		CommandManager.getInstance().registerCommand(RepairAll.class);
 	}
 	@Override
 	public void onEnable() {
@@ -76,14 +78,6 @@ public class AdminCmd extends JavaPlugin {
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
 		// 0 arguments:
-
-		if (cmd.equalsIgnoreCase("bal_repair"))
-			if (hasPerm(sender, "admincmd.item.repair"))
-				return worker.repair();
-
-		if (cmd.equalsIgnoreCase("bal_repairall"))
-			if (hasPerm(sender, "admincmd.item.repair"))
-				return worker.repairAll(args);
 
 		if (cmd.equalsIgnoreCase("bal_itemmore"))
 			if (hasPerm(sender, "admincmd.item.more"))
