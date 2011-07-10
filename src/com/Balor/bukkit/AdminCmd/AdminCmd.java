@@ -16,6 +16,7 @@ import be.Balor.Manager.Commands.Player.*;
 import be.Balor.Manager.Commands.Server.*;
 import be.Balor.Manager.Commands.Spawn.*;
 import be.Balor.Manager.Commands.Time.*;
+import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Weather.*;
 import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
@@ -62,6 +63,10 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Give.class);
 		CommandManager.getInstance().registerCommand(AddBlackList.class);
 		CommandManager.getInstance().registerCommand(RemoveBlackList.class);
+		CommandManager.getInstance().registerCommand(TpHere.class);
+		CommandManager.getInstance().registerCommand(TpTo.class);
+		CommandManager.getInstance().registerCommand(Coloring.class);
+		CommandManager.getInstance().registerCommand(Strike.class);
 	}
 	@Override
 	public void onEnable() {
@@ -99,22 +104,6 @@ public class AdminCmd extends JavaPlugin {
 		worker.setSender(sender);
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
-
-		if (cmd.equalsIgnoreCase("bal_tpto"))
-			if (hasPerm(sender, "admincmd.tp.to"))
-				return worker.playerTpTo(args[0]);
-
-		if (cmd.equalsIgnoreCase("bal_tphere"))
-			if (hasPerm(sender, "admincmd.tp.here"))
-				return worker.playerTpHere(args[0]);
-
-		if (cmd.equalsIgnoreCase("bal_itemcolor"))
-			if (hasPerm(sender, "admincmd.item.color"))
-				return worker.itemColor(args[0]);
-
-		if (cmd.equalsIgnoreCase("bal_wstrike"))
-			if (hasPerm(sender, "admincmd.weather.strike"))
-				return worker.strikePlayer(args[0]);
 
 		if (cmd.equalsIgnoreCase("bal_rmalias"))
 			if (hasPerm(sender, "admincmd.item.alias"))

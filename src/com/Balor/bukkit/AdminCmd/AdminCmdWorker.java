@@ -141,15 +141,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-	// teleports the player to another player
-	public boolean playerTpTo(String name) {
-		return isPlayer() ? this.tpP2P(((Player) sender).getName(), name) : true;
-	}
-
-	// teleports another player to the player
-	public boolean playerTpHere(String name) {
-		return isPlayer() ? this.tpP2P(name, ((Player) sender).getName()) : true;
-	}
 
 	// teleports chosen player to another player
 
@@ -455,15 +446,6 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean strikePlayer(String playerName) {
-		Player p = null;
-		if ((p = sender.getServer().getPlayer(playerName)) != null) {
-			p.getWorld().strikeLightning(p.getLocation());
-			sender.sendMessage(ChatColor.GOLD + p.getName() + " was striked by Thor");
-		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + playerName);
-		return true;
-	}
 
 	public void addGod(String playerName) {
 		gods.add(playerName);
