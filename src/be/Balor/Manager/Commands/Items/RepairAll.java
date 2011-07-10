@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,27 +47,17 @@ public class RepairAll extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = null;
-		if (AdminCmdWorker.getInstance().isPlayer(false)) {
-			player = ((Player) sender);
-			if (args.length >= 1
-					&& AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.item.repair.other"))
-				player = sender.getServer().getPlayer(args[0]);
-		} else if (args.length >= 1)
-			player = sender.getServer().getPlayer(args[0]);
-		else
-			sender.sendMessage("You must set the player name !");
-		if (player != null) {
-			for (ItemStack item : player.getInventory().getContents())
-				if (item != null && AdminCmdWorker.getInstance().reparable(item.getTypeId()))
-					item.setDurability((short) 0);
-			for (ItemStack item : player.getInventory().getArmorContents())
-				if (item != null)
-					item.setDurability((short) 0);
+		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
+		if (player == null)
+			return;
+		for (ItemStack item : player.getInventory().getContents())
+			if (item != null && AdminCmdWorker.getInstance().reparable(item.getTypeId()))
+				item.setDurability((short) 0);
+		for (ItemStack item : player.getInventory().getArmorContents())
+			if (item != null)
+				item.setDurability((short) 0);
 
-			sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
-		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
+		sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
 
 	}
 

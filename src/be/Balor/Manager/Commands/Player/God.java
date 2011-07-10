@@ -47,16 +47,7 @@ public class God extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = null;
-		if (AdminCmdWorker.getInstance().isPlayer(false)) {
-			player = ((Player) sender);
-			if (args.length >= 1
-					&& AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.item.god.other"))
-				player = sender.getServer().getPlayer(args[0]);
-		} else if (args.length >= 1)
-			player = sender.getServer().getPlayer(args[0]);
-		else
-			sender.sendMessage("You must set the player name !");
+		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
 		if (player != null) {
 			if (AdminCmdWorker.getInstance().hasGodPowers(player.getName())) {
 				AdminCmdWorker.getInstance().removeGod(player.getName());
@@ -65,10 +56,7 @@ public class God extends ACCommands {
 				AdminCmdWorker.getInstance().addGod(player.getName());
 				sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
 			}
-
-		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
-
+		}
 	}
 
 	/*

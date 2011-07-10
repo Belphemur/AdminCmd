@@ -47,16 +47,7 @@ public class Thor extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = null;
-		if (AdminCmdWorker.getInstance().isPlayer(false)) {
-			player = ((Player) sender);
-			if (args.length >= 1
-					&& AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.weather.thor"))
-				player = sender.getServer().getPlayer(args[0]);
-		} else if (args.length >= 1)
-			player = sender.getServer().getPlayer(args[0]);
-		else
-			sender.sendMessage("You must set the player name !");
+		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
 		if (player != null) {
 			if (AdminCmdWorker.getInstance().hasThorPowers(player.getName())) {
 				AdminCmdWorker.getInstance().removeThor(player.getName());
@@ -65,10 +56,7 @@ public class Thor extends ACCommands {
 				AdminCmdWorker.getInstance().addThor(player.getName());
 				sender.sendMessage(ChatColor.DARK_AQUA + "THOR mode enabled.");
 			}
-
-		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
-
+		} 
 	}
 
 	/*

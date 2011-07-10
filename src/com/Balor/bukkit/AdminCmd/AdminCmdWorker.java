@@ -208,24 +208,6 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	/**
-	 * Clear the inventory of the user
-	 * 
-	 * @param name
-	 *            the player who will have his inventory cleared
-	 * @return
-	 */
-	public boolean clearInventory(String name) {
-		sender.getServer().getPlayer(name).getInventory().clear();
-		sender.getServer().getPlayer(name).getInventory().setHelmet(null);
-		sender.getServer().getPlayer(name).getInventory().setChestplate(null);
-		sender.getServer().getPlayer(name).getInventory().setLeggings(null);
-		sender.getServer().getPlayer(name).getInventory().setBoots(null);
-		sender.sendMessage(ChatColor.RED + "Inventory of " + ChatColor.WHITE + name + ChatColor.RED
-				+ " cleared");
-		return true;
-	}
-
-	/**
 	 * Add an item to the BlackList
 	 * 
 	 * @param name
@@ -289,29 +271,49 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	/**
+	 * Get the user that need to be processed by the command
+	 * 
+	 * @param args
+	 * @param permNode
+	 * @param index
+	 * @return
+	 */
+	public Player getUser(String[] args, String permNode, int index) {
+		Player target = null;
+		if (args.length != 0) {
+			if (AdminCmdWorker.getInstance().hasPerm(sender, permNode + ".other"))
+				target = sender.getServer().getPlayer(args[index]);
+			else
+				return target;
+		} else if (AdminCmdWorker.getInstance().isPlayer(false))
+			target = ((Player) sender);
+		else {
+			sender.sendMessage("You must type the player name");
+			return target;
+		}
+		if (target == null) {
+			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[index]
+					+ ChatColor.RED + " not found!");
+			return target;
+		}
+		return target;
+
+	}
+
+	public Player getUser(String[] args, String permNode) {
+		return getUser(args, permNode, 0);
+	}
+
+	/**
 	 * Heal the selected player.
 	 * 
 	 * @param name
 	 * @return
 	 */
 	public boolean setPlayerHealth(String[] name, String toDo) {
-		Player target = null;
-		if (name.length != 0) {
-			if (hasPerm(sender, "admincmd.player." + toDo + ".other"))
-				target = sender.getServer().getPlayer(name[0]);
-			else
-				return false;
-		} else if (isPlayer(false))
-			target = ((Player) sender);
-		else {
-			sender.sendMessage("You must type the player name");
-			return true;
-		}
-		if (target == null) {
-			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0]
-					+ ChatColor.RED + " not found!");
-			return true;
-		}
+		Player target = getUser(name, "admincmd.player." + toDo + ".other");
+		if (target == null)
+			return false;
 		if (toDo.equals("heal"))
 			target.setHealth(20);
 		else
@@ -604,21 +606,6 @@ public class AdminCmdWorker extends Worker {
 
 	public boolean hasGodPowers(String player) {
 		return gods.contains(player);
-	}
-
-	public boolean memory() {
-		long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
-		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
-				+ Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
-		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
-		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE
-				+ Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
-		for (World w : sender.getServer().getWorlds()) {
-			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
-					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
-					+ " entities");
-		}
-		return true;
 	}
 
 	public boolean reparable(int id) {

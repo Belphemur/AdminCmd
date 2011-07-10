@@ -14,12 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Spawn;
+package be.Balor.Manager.Commands.Weather;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -29,14 +26,14 @@ import be.Balor.Manager.ACCommands;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Set extends ACCommands {
+public class ClearSky extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public Set() {
-		permNode = "admincmd.spawn.set";
-		cmdName = "bal_setspawn";
+	public ClearSky() {
+		permNode = "admincmd.weather.clear";
+		cmdName = "bal_wclear";
 	}
 
 	/*
@@ -48,12 +45,7 @@ public class Set extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer()) {
-			Location loc = ((Player) sender).getLocation();
-			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-					loc.getBlockZ());
-			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
-		}
+		AdminCmdWorker.getInstance().weather("clear", null);
 	}
 
 	/*
