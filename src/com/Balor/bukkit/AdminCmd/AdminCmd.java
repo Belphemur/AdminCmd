@@ -11,10 +11,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
-import be.Balor.Manager.Commands.*;
-import be.Balor.Manager.Commands.Items.Repair;
-import be.Balor.Manager.Commands.Items.RepairAll;
-import be.Balor.Manager.Commands.Time.Day;
+import be.Balor.Manager.Commands.Items.*;
+import be.Balor.Manager.Commands.Player.PlayerList;
+import be.Balor.Manager.Commands.Time.*;
 import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
 import belgium.Balor.Workers.PluginListener;
@@ -43,6 +42,8 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
+		CommandManager.getInstance().registerCommand(More.class);
+		CommandManager.getInstance().registerCommand(PlayerList.class);
 	}
 	@Override
 	public void onEnable() {
@@ -81,18 +82,6 @@ public class AdminCmd extends JavaPlugin {
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
 		// 0 arguments:
-
-		if (cmd.equalsIgnoreCase("bal_itemmore"))
-			if (hasPerm(sender, "admincmd.item.more"))
-				return worker.itemMore(args);
-
-		if (cmd.equalsIgnoreCase("bal_playerlist"))
-			if (hasPerm(sender, "admincmd.player.list"))
-				return worker.playerList();
-
-		if (cmd.equalsIgnoreCase("bal_playerloc"))
-			if (hasPerm(sender, "admincmd.player.loc"))
-				return worker.playerLocation(args);
 		
 		if (cmd.equalsIgnoreCase("bal_god"))
 			if (hasPerm(sender, "admincmd.player.god"))

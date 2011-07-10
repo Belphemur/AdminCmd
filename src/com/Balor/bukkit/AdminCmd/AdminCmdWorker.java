@@ -141,57 +141,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-	// lists all online players
-	@SuppressWarnings("deprecation")
-	public boolean playerList() {
-		Player[] online = sender.getServer().getOnlinePlayers();
-		sender.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE + online.length);
-		String buffer = "";
-		if (AdminCmdWorker.getPermission() == null) {
-			for (int i = 0; i < online.length; ++i) {
-				Player p = online[i];
-				String name = p.getDisplayName();
-				if (buffer.length() + name.length() + 2 >= 256) {
-					sender.sendMessage(buffer);
-					buffer = "";
-				}
-				buffer += name + ", ";
-			}
-		} else {
-			// changed the playerlist, now support prefixes from groups!!! @foxy
-			for (int i = 0; i < online.length; ++i) {
-				String name = online[i].getName();
-				String prefixstring;
-				String world = "";
-				world = online[i].getWorld().getName();
-
-				try {
-					prefixstring = AdminCmdWorker.getPermission().safeGetUser(world, name)
-							.getPrefix();
-				} catch (Exception e) {
-					String group = AdminCmdWorker.getPermission().getGroup(world, name);
-					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
-				} catch (NoSuchMethodError e) {
-					String group = AdminCmdWorker.getPermission().getGroup(world, name);
-					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
-				}
-
-				if (prefixstring != null && prefixstring.length() > 1) {
-					String result = Utils.colorParser(prefixstring);
-					if (result == null)
-						buffer += prefixstring + name + ChatColor.WHITE + ", ";
-					else
-						buffer += result + name + ChatColor.WHITE + ", ";
-
-				} else {
-					buffer += name + ", ";
-				}
-			}
-
-		}
-		sender.sendMessage(buffer);
-		return true;
-	}
 
 	// teleports the player to another player
 	public boolean playerTpTo(String name) {
@@ -259,34 +208,6 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	// displays player's current location
-	public boolean playerLocation(String[] name) {
-		Location loc;
-		String msg;
-		if (name.length == 0) {
-			if (isPlayer()) {
-				loc = ((Player) sender).getLocation();
-				msg = "You are";
-			} else
-				return true;
-		} else
-			try {
-				loc = sender.getServer().getPlayer(name[0]).getLocation();
-				msg = sender.getServer().getPlayer(name[0]).getName() + " is";
-			} catch (Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + name[0]
-						+ ChatColor.RED + " not found!");
-				return true;
-			}
-		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
-				+ " H");
-		String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
-		double yaw = ((loc.getYaw() + 22.5) % 360);
-		if (yaw < 0)
-			yaw += 360;
-		sender.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]);
-		return true;
-	}
 
 	/**
 	 * Clear the inventory of the user
@@ -395,51 +316,10 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	/**
-	 * Set the item in hand to the chosen number 64 if no number set. And add
-	 * the overflow item to inventory if it's exceeds 64.
-	 * 
-	 * @param amount
-	 * @return
-	 */
-	public boolean itemMore(String[] amount) {
-		if (isPlayer()) {
-			ItemStack hand = ((Player) sender).getItemInHand();
-			if (hand == null || hand.getType() == Material.AIR) {
-				sender.sendMessage(ChatColor.RED + "You have to be holding something!");
-				return true;
-			}
-			if (!hasPerm(((Player) sender), "admincmd.item.noblacklist")
-					&& blacklist.contains(hand.getTypeId())) {
-				sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
-						+ hand.getType() + ChatColor.DARK_RED + ") is black listed.");
-				return true;
-			}
-			if (amount.length == 0)
-				hand.setAmount(64);
-			else {
-				int toAdd;
-				try {
-					toAdd = Integer.parseInt(amount[0]);
-				} catch (Exception e) {
-					return false;
-				}
-				if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {
-					int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
-					hand.setAmount(hand.getMaxStackSize());
-					((Player) sender).getInventory().addItem(
-							new ItemStack(hand.getType(), inInventory));
-					sender.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory
-							+ ChatColor.WHITE + ") have been stored in your inventory");
-
-				} else
-					hand.setAmount(hand.getAmount() + toAdd);
-			}
-		}
-		return true;
-
+	public boolean inBlackList(int id)
+	{
+		return blacklist.contains(id);
 	}
-
 	/**
 	 * Translate the id or name to a material
 	 * 

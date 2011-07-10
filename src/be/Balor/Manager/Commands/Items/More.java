@@ -17,6 +17,7 @@
 package be.Balor.Manager.Commands.Items;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -29,14 +30,14 @@ import be.Balor.Manager.ACCommands;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class RepairAll extends ACCommands {
+public class More extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public RepairAll() {
-		permNode = "admincmd.item.repair";
-		cmdName = "bal_repairall";
+	public More() {
+		permNode = "admincmd.item.more";
+		cmdName = "bal_itemmore";
 	}
 
 	/*
@@ -48,28 +49,39 @@ public class RepairAll extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = null;
-		if (AdminCmdWorker.getInstance().isPlayer(false)) {
-			player = ((Player) sender);
-			if (args.length >= 1
-					&& AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.item.repair.other"))
-				player = sender.getServer().getPlayer(args[0]);
-		} else if (args.length >= 1)
-			player = sender.getServer().getPlayer(args[0]);
-		else
-			sender.sendMessage("You must set the player name !");
-		if (player != null) {
-			for (ItemStack item : player.getInventory().getContents())
-				if (item != null && AdminCmdWorker.getInstance().reparable(item.getTypeId()))
-					item.setDurability((short) 0);
-			for (ItemStack item : player.getInventory().getArmorContents())
-				if (item != null)
-					item.setDurability((short) 0);
+		if (AdminCmdWorker.getInstance().isPlayer()) {
+			ItemStack hand = ((Player) sender).getItemInHand();
+			if (hand == null || hand.getType() == Material.AIR) {
+				sender.sendMessage(ChatColor.RED + "You have to be holding something!");
+				return;
+			}
+			if (!AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
+					&& AdminCmdWorker.getInstance().inBlackList(hand.getTypeId())) {
+				sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
+						+ hand.getType() + ChatColor.DARK_RED + ") is black listed.");
+				return;
+			}
+			if (args.length == 0)
+				hand.setAmount(64);
+			else {
+				int toAdd;
+				try {
+					toAdd = Integer.parseInt(args[0]);
+				} catch (Exception e) {
+					return;
+				}
+				if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {
+					int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
+					hand.setAmount(hand.getMaxStackSize());
+					((Player) sender).getInventory().addItem(
+							new ItemStack(hand.getType(), inInventory));
+					sender.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory
+							+ ChatColor.WHITE + ") have been stored in your inventory");
 
-			sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
-		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
-
+				} else
+					hand.setAmount(hand.getAmount() + toAdd);
+			}
+		}
 	}
 
 	/*

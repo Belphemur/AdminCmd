@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Items;
+package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -29,14 +29,14 @@ import be.Balor.Manager.ACCommands;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class RepairAll extends ACCommands {
+public class PlayerLocation extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public RepairAll() {
-		permNode = "admincmd.item.repair";
-		cmdName = "bal_repairall";
+	public PlayerLocation() {
+		permNode = "admincmd.player.loc";
+		cmdName = "bal_playerloc";
 	}
 
 	/*
@@ -48,27 +48,30 @@ public class RepairAll extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = null;
-		if (AdminCmdWorker.getInstance().isPlayer(false)) {
-			player = ((Player) sender);
-			if (args.length >= 1
-					&& AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.item.repair.other"))
-				player = sender.getServer().getPlayer(args[0]);
-		} else if (args.length >= 1)
-			player = sender.getServer().getPlayer(args[0]);
-		else
-			sender.sendMessage("You must set the player name !");
-		if (player != null) {
-			for (ItemStack item : player.getInventory().getContents())
-				if (item != null && AdminCmdWorker.getInstance().reparable(item.getTypeId()))
-					item.setDurability((short) 0);
-			for (ItemStack item : player.getInventory().getArmorContents())
-				if (item != null)
-					item.setDurability((short) 0);
-
-			sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
+		Location loc;
+		String msg;
+		if (args.length == 0) {
+			if (AdminCmdWorker.getInstance().isPlayer()) {
+				loc = ((Player) sender).getLocation();
+				msg = "You are";
+			} else
+				return ;
 		} else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
+			try {
+				loc = sender.getServer().getPlayer(args[0]).getLocation();
+				msg = sender.getServer().getPlayer(args[0]).getName() + " is";
+			} catch (Exception ex) {
+				sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
+						+ ChatColor.RED + " not found!");
+				return ;
+			}
+		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
+				+ " H");
+		String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
+		double yaw = ((loc.getYaw() + 22.5) % 360);
+		if (yaw < 0)
+			yaw += 360;
+		sender.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]);
 
 	}
 
