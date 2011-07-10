@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.Items.*;
 import be.Balor.Manager.Commands.Player.PlayerList;
+import be.Balor.Manager.Commands.Player.PlayerLocation;
 import be.Balor.Manager.Commands.Time.*;
 import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
@@ -44,6 +45,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(RepairAll.class);
 		CommandManager.getInstance().registerCommand(More.class);
 		CommandManager.getInstance().registerCommand(PlayerList.class);
+		CommandManager.getInstance().registerCommand(PlayerLocation.class);
 	}
 	@Override
 	public void onEnable() {
@@ -83,10 +85,6 @@ public class AdminCmd extends JavaPlugin {
 			return false;
 		// 0 arguments:
 		
-		if (cmd.equalsIgnoreCase("bal_god"))
-			if (hasPerm(sender, "admincmd.player.god"))
-				return worker.god();
-
 		if (cmd.equalsIgnoreCase("bal_playerheal"))
 			if (hasPerm(sender, "admincmd.player.heal"))
 				return worker.playerSetHealth(args, 20);

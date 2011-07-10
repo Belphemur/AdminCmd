@@ -61,8 +61,6 @@ public class AdminCmdWorker extends Worker {
 			listOfPossibleRepair.add(i);
 		for (int i = 298; i <= 317; i++)
 			listOfPossibleRepair.add(i);
-		blacklist = getBlackListedItems();
-		alias = fManager.getAlias();
 	}
 	public static AdminCmdWorker getInstance()
 	{
@@ -78,6 +76,8 @@ public class AdminCmdWorker extends Worker {
 	public void setPluginInstance(AdminCmd pluginInstance) {
 		this.pluginInstance = pluginInstance;
 		fManager = new FilesManager(pluginInstance.getDataFolder().getPath());
+		blacklist = getBlackListedItems();
+		alias = fManager.getAlias();
 	}
 
 	/**
@@ -556,18 +556,13 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean god() {
-		if (isPlayer()) {
-			String player = ((Player) sender).getName();
-			if (gods.contains(player)) {
-				gods.remove(player);
-				this.sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled.");
-			} else {
-				gods.add(player);
-				this.sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
-			}
-		}
-		return true;
+	public void addGod(String playerName)
+	{
+		gods.add(playerName);
+	}
+	public void removeGod(String playerName)
+	{
+		gods.remove(playerName);
 	}
 
 	public boolean alias(String[] args) {
