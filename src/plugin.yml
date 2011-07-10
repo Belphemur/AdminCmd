@@ -44,7 +44,7 @@ commands:
   bal_item:
     description: Gives the player item of choice. You can specify someone else as the player.
     aliases: [i,item]
-    usage: /<command> (name|id) [amount] [player] [damage]
+    usage: /<command> (name|id):[damage] [amount] [player]
   bal_addbl:
     description: BlackList an item
     aliases: [addblacklist,abl]

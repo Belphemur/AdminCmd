@@ -12,7 +12,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
 import belgium.Balor.Workers.Worker;
@@ -154,7 +153,7 @@ public class AdminCmdWorker extends Worker {
 
 	// teleports chosen player to another player
 
-	private boolean tpP2P(String nFrom, String nTo) {
+	public boolean tpP2P(String nFrom, String nTo) {
 		boolean found = true;
 		Player pFrom = sender.getServer().getPlayer(nFrom);
 		Player pTo = sender.getServer().getPlayer(nTo);

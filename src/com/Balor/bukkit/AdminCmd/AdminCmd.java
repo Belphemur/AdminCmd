@@ -60,6 +60,8 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(SetTime.class);
 		CommandManager.getInstance().registerCommand(ClearInventory.class);
 		CommandManager.getInstance().registerCommand(Give.class);
+		CommandManager.getInstance().registerCommand(AddBlackList.class);
+		CommandManager.getInstance().registerCommand(RemoveBlackList.class);
 	}
 	@Override
 	public void onEnable() {
@@ -97,14 +99,6 @@ public class AdminCmd extends JavaPlugin {
 		worker.setSender(sender);
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
-
-		if (cmd.equalsIgnoreCase("bal_addbl"))
-			if (hasPerm(sender, "admincmd.item.blacklist"))
-				return worker.setBlackListedItem(args[0]);
-
-		if (cmd.equalsIgnoreCase("bal_rmbl"))
-			if (hasPerm(sender, "admincmd.item.blacklist"))
-				return worker.removeBlackListedItem(args[0]);
 
 		if (cmd.equalsIgnoreCase("bal_tpto"))
 			if (hasPerm(sender, "admincmd.tp.to"))
