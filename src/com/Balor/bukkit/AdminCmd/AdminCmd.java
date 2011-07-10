@@ -12,9 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.Items.*;
-import be.Balor.Manager.Commands.Player.PlayerList;
-import be.Balor.Manager.Commands.Player.PlayerLocation;
+import be.Balor.Manager.Commands.Player.*;
 import be.Balor.Manager.Commands.Time.*;
+import be.Balor.Manager.Commands.Weather.*;
 import belgium.Balor.Workers.ACEntityListener;
 import belgium.Balor.Workers.ACPlayerListener;
 import belgium.Balor.Workers.PluginListener;
@@ -46,6 +46,8 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(More.class);
 		CommandManager.getInstance().registerCommand(PlayerList.class);
 		CommandManager.getInstance().registerCommand(PlayerLocation.class);
+		CommandManager.getInstance().registerCommand(God.class);
+		CommandManager.getInstance().registerCommand(Thor.class);
 	}
 	@Override
 	public void onEnable() {
@@ -100,10 +102,6 @@ public class AdminCmd extends JavaPlugin {
 		if (cmd.equalsIgnoreCase("bal_wstorm"))
 			if (hasPerm(sender, "admincmd.weather.storm"))
 				return worker.weather("storm", args);
-
-		if (cmd.equalsIgnoreCase("bal_thor"))
-			if (hasPerm(sender, "admincmd.weather.thor"))
-				return worker.thor();
 		
 		if (cmd.equalsIgnoreCase("bal_setspawn"))
 			if (hasPerm(sender, "admincmd.spawn.set"))

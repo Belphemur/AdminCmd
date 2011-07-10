@@ -540,22 +540,6 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean thor() {
-		if (isPlayer()) {
-			String player = ((Player) sender).getName();
-			if (thunderGods.contains(player)) {
-				thunderGods.remove(player);
-				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have " + ChatColor.DARK_RED
-						+ "lost" + ChatColor.WHITE + " the power of Thor");
-			} else {
-				thunderGods.add(player);
-				this.sender.sendMessage(ChatColor.DARK_PURPLE + "You have " + ChatColor.DARK_RED
-						+ "gain" + ChatColor.WHITE + " the power of Thor");
-			}
-		}
-		return true;
-	}
-
 	public void addGod(String playerName)
 	{
 		gods.add(playerName);
@@ -564,7 +548,14 @@ public class AdminCmdWorker extends Worker {
 	{
 		gods.remove(playerName);
 	}
-
+	public void addThor(String playerName)
+	{
+		thunderGods.add(playerName);
+	}
+	public void removeThor(String playerName)
+	{
+		thunderGods.remove(playerName);
+	}
 	public boolean alias(String[] args) {
 		Material m = checkMaterial(args[1]);
 		if (m == null)
