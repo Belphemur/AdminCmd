@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -33,15 +35,25 @@ public class Utils {
 	 * @param mat
 	 * @return Material
 	 */
-	public static Material checkMaterial(String mat) {
+	public static MaterialContainer checkMaterial(String mat) {
 		Material m = null;
-		try {
-			int id = Integer.parseInt(mat);
-			m = Material.getMaterial(id);
-		} catch (NumberFormatException e) {
-			m = Material.matchMaterial(mat);
+		String[] info = new String[2];
+		if (mat.contains(":"))
+			info = mat.split(":");
+		else {
+			info[0] = mat;
+			info[1] = "0";
 		}
-		return m;
+		if ((m = AdminCmdWorker.getInstance().getAlias(info[0])) == null) {
+			try {
+				int id = Integer.parseInt(info[0]);
+				m = Material.getMaterial(id);
+			} catch (NumberFormatException e) {
+				m = Material.matchMaterial(info[0]);
+			}
+		}
+		MaterialContainer mc = new MaterialContainer(m, info[1]);
+		return mc;
 
 	}
 

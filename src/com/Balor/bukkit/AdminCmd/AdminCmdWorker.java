@@ -18,6 +18,7 @@ import org.bukkit.util.config.Configuration;
 import belgium.Balor.Workers.Worker;
 
 import com.Balor.files.utils.FilesManager;
+import com.Balor.files.utils.MaterialContainer;
 import com.Balor.files.utils.Utils;
 
 /**
@@ -214,18 +215,18 @@ public class AdminCmdWorker extends Worker {
 	 * @return
 	 */
 	public boolean setBlackListedItem(String name) {
-		Material m = checkMaterial(name);
-		if (m != null) {
+		MaterialContainer m = checkMaterial(name);
+		if (m.material != null) {
 			Configuration config = fManager.getFile("blacklist.yml");
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
-			list.add(m.getId());
+			list.add(m.material.getId());
 			config.setProperty("BlackListed", list);
 			config.save();
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
-			blacklist.add(m.getId());
+			blacklist.add(m.material.getId());
 			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m + ChatColor.GREEN
 					+ ") added to the Black List.");
 			return true;
@@ -240,19 +241,19 @@ public class AdminCmdWorker extends Worker {
 	 * @return
 	 */
 	public boolean removeBlackListedItem(String name) {
-		Material m = checkMaterial(name);
-		if (m != null) {
+		MaterialContainer m = checkMaterial(name);
+		if (m.material != null) {
 			Configuration config = fManager.getFile("blacklist.yml");
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
-			if (!list.isEmpty() && list.contains(m.getId())) {
-				list.remove((Integer) m.getId());
+			if (!list.isEmpty() && list.contains(m.material.getId())) {
+				list.remove((Integer) m.material.getId());
 				config.setProperty("BlackListed", list);
 				config.save();
 			}
-			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.getId()))
-				blacklist.remove((Integer) m.getId());
+			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.material.getId()))
+				blacklist.remove((Integer) m.material.getId());
 			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m + ChatColor.GREEN
 					+ ") removed from the Black List.");
 			return true;
@@ -332,12 +333,16 @@ public class AdminCmdWorker extends Worker {
 	 * @param mat
 	 * @return Material
 	 */
-	private Material checkMaterial(String mat) {
-		Material m = Utils.checkMaterial(mat);
-		if (m == null)
+	public MaterialContainer checkMaterial(String mat) {
+		MaterialContainer m = Utils.checkMaterial(mat);
+		if (m.material == null)
 			sender.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
 		return m;
 
+	}
+	public Material getAlias(String name)
+	{
+		return alias.get(name);
 	}
 
 	public boolean tpTo(String[] args) {
@@ -359,72 +364,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-	// gives the player item of his choice
-
-	public boolean itemGive(String[] args) {
-		// which material?
-		Material m = null;
-		m = alias.get(args[0]);
-		if (m == null)
-			m = checkMaterial(args[0]);
-		if (m == null)
-			return true;
-		if (!hasPerm(sender, "admincmd.item.noblacklist") && blacklist.contains(m.getId())) {
-			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + m
-					+ ChatColor.DARK_RED + ") is black listed.");
-			return true;
-		}
-		// amount, damage and target player
-		int cnt = 1;
-		byte dam = 0;
-		Player target = null;
-		if (args.length >= 2) {
-			try {
-				cnt = Integer.parseInt(args[1]);
-			} catch (Exception e) {
-				return false;
-			}
-			if (args.length >= 3) {
-				target = sender.getServer().getPlayer(args[2]);
-				if (target == null) {
-					sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE
-							+ args[2]);
-					return true;
-				}
-				if (args.length >= 4)
-					try {
-						dam = Byte.parseByte(args[3]);
-					} catch (Exception e) {
-						return true;
-					}
-			}
-		}
-		if (target == null) {
-			if (isPlayer())
-				target = ((Player) sender);
-			else
-				return true;
-		}
-		ItemStack stack = new ItemStack(m, cnt, dam);
-		if (isPlayer(false)) {
-			if (!target.getName().equals(((Player) sender).getName())) {
-				target.sendMessage(ChatColor.RED + "[" + ((Player) sender).getName() + "]"
-						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " " + m);
-
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m
-						+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
-			} else
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m
-						+ " to " + ChatColor.WHITE + "your inventory");
-		} else {
-			target.sendMessage(ChatColor.RED + "[Server Admin]" + ChatColor.WHITE + " send you "
-					+ ChatColor.GOLD + cnt + " " + m);
-			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + m + " to "
-					+ ChatColor.WHITE + target.getName() + "'s inventory");
-		}
-		target.getInventory().addItem(stack);
-		return true;
-	}
 
 	// ----- / item coloring section -----
 
@@ -508,7 +447,7 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public boolean weather(String type, String[] duration) {
-		if (isPlayer()) {
+		if (isPlayer(false)) {
 			weatherChange(((Player) sender).getWorld(), type, duration);
 		} else
 			for (World w : sender.getServer().getWorlds())
@@ -544,12 +483,12 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public boolean alias(String[] args) {
-		Material m = checkMaterial(args[1]);
-		if (m == null)
+		MaterialContainer m = checkMaterial(args[1]);
+		if (m.material == null)
 			return true;
 		String alias = args[0];
-		this.alias.put(alias, m);
-		this.fManager.addAlias(alias, m.getId());
+		this.alias.put(alias, m.material);
+		this.fManager.addAlias(alias, m.material.getId());
 		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
 				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m);
 		return true;

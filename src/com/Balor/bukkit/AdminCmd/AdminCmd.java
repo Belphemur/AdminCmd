@@ -59,6 +59,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Memory.class);
 		CommandManager.getInstance().registerCommand(SetTime.class);
 		CommandManager.getInstance().registerCommand(ClearInventory.class);
+		CommandManager.getInstance().registerCommand(Give.class);
 	}
 	@Override
 	public void onEnable() {
@@ -96,10 +97,6 @@ public class AdminCmd extends JavaPlugin {
 		worker.setSender(sender);
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
-		
-		if (cmd.equalsIgnoreCase("bal_item"))
-			if (hasPerm(sender, "admincmd.item.add"))
-				return worker.itemGive(args);
 
 		if (cmd.equalsIgnoreCase("bal_addbl"))
 			if (hasPerm(sender, "admincmd.item.blacklist"))
