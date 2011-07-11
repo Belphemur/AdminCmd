@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.Items.*;
+import be.Balor.Manager.Commands.Mob.*;
 import be.Balor.Manager.Commands.Player.*;
 import be.Balor.Manager.Commands.Server.*;
 import be.Balor.Manager.Commands.Spawn.*;
@@ -67,6 +68,9 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(TpTo.class);
 		CommandManager.getInstance().registerCommand(Coloring.class);
 		CommandManager.getInstance().registerCommand(Strike.class);
+		CommandManager.getInstance().registerCommand(RemoveAlias.class);
+		CommandManager.getInstance().registerCommand(SpawnMob.class);
+		CommandManager.getInstance().registerCommand(KickPlayer.class);
 	}
 	@Override
 	public void onEnable() {
@@ -104,18 +108,6 @@ public class AdminCmd extends JavaPlugin {
 		worker.setSender(sender);
 		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
 			return false;
-
-		if (cmd.equalsIgnoreCase("bal_rmalias"))
-			if (hasPerm(sender, "admincmd.item.alias"))
-				return worker.rmAlias(args[0]);
-
-		if (cmd.equalsIgnoreCase("bal_mob"))
-			if (hasPerm(sender, "admincmd.mob.spawn"))
-				return worker.spawnMob(args);
-		
-		if (cmd.equalsIgnoreCase("bal_kick"))
-			if (hasPerm(sender, "admincmd.player.kick"))
-				return worker.kickPlayer(args);
 
 		// 2 arguments:
 		if (args.length < 2)

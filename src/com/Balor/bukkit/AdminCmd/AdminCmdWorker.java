@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
@@ -385,27 +384,6 @@ public class AdminCmdWorker extends Worker {
 			output += materialsColors.get(mat)[i] + ", ";
 		return output;
 	}
-
-	public boolean kickPlayer(String[] args) {
-		Player toKick = sender.getServer().getPlayer(args[0]);
-		String message = "";
-		if (args.length >= 2)
-			message = args[1];
-		else {
-			message = "You have been kick by ";
-			if (!isPlayer(false))
-				message += "Server Admin";
-			else
-				message += ((Player) sender).getName();
-		}
-		if (toKick != null)
-			toKick.kickPlayer(message);
-		else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
-		return true;
-
-	}
-
 	private void weatherChange(World w, String type, String[] duration) {
 		if (type == "clear") {
 			w.setThundering(false);
@@ -479,44 +457,6 @@ public class AdminCmdWorker extends Worker {
 		this.fManager.removeAlias(alias);
 		this.alias.remove(alias);
 		sender.sendMessage(ChatColor.GOLD + alias + ChatColor.RED + " removed");
-		return true;
-	}
-
-	public boolean spawnMob(String args[]) {
-		if (isPlayer()) {
-
-			final String name = args[0];
-			int nbTaped;
-			try {
-				nbTaped = Integer.parseInt(args[1]);
-			} catch (Exception e) {
-				nbTaped = 1;
-			}
-			final int nb = nbTaped;
-			final CreatureType ct = CreatureType.fromName(name);
-			if (ct == null) {
-				sender.sendMessage(ChatColor.RED + "No such creature: " + ChatColor.WHITE + name);
-				return true;
-			}
-			AdminCmd.getBukkitServer().getScheduler()
-					.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
-
-						@Override
-						public void run() {
-							for (int i = 0; i < nb; i++) {
-								((Player) sender).getWorld().spawnCreature(
-										((Player) sender).getLocation(), ct);
-								try {
-									Thread.sleep(110);
-								} catch (InterruptedException e) {
-									// e.printStackTrace();
-								}
-							}
-							sender.sendMessage(ChatColor.BLUE + "Spawned " + ChatColor.WHITE + nb
-									+ " " + name);
-						}
-					});
-		}
 		return true;
 	}
 
