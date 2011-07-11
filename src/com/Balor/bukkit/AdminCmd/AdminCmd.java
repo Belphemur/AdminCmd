@@ -38,10 +38,6 @@ public class AdminCmd extends JavaPlugin {
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
-	private boolean hasPerm(CommandSender p, String perm) {
-		return worker.hasPerm(p, perm);
-	}
-
 	private void registerCmds()
 	{
 		CommandManager.getInstance().registerCommand(Day.class);
@@ -71,6 +67,10 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(RemoveAlias.class);
 		CommandManager.getInstance().registerCommand(SpawnMob.class);
 		CommandManager.getInstance().registerCommand(KickPlayer.class);
+		CommandManager.getInstance().registerCommand(PrivateMessage.class);
+		CommandManager.getInstance().registerCommand(AddAlias.class);
+		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
+		CommandManager.getInstance().registerCommand(TpLoc.class);
 	}
 	@Override
 	public void onEnable() {
@@ -106,30 +106,6 @@ public class AdminCmd extends JavaPlugin {
 		String cmd = command.getName();
 
 		worker.setSender(sender);
-		if(!CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args))
-			return false;
-
-		// 2 arguments:
-		if (args.length < 2)
-			return false;
-		if (cmd.equalsIgnoreCase("bal_playermsg"))
-			if (hasPerm(sender, "admincmd.player.msg"))
-				return worker.playerMessage(args);
-
-		if (cmd.equalsIgnoreCase("bal_tp2p"))
-			if (hasPerm(sender, "admincmd.tp.players"))
-				return worker.playerTpPlayer(args);
-		if (cmd.equalsIgnoreCase("bal_addalias"))
-			if (hasPerm(sender, "admincmd.item.alias"))
-				return worker.alias(args);
-
-		// 3 arguments:
-		if (args.length < 3)
-			return false;
-		if (cmd.equalsIgnoreCase("bal_tpthere"))
-			if (hasPerm(sender, "admincmd.tp.location"))
-				return worker.tpTo(args);
-		// unknown command, should not really get here
-		return false;
+		return CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args);
 	}
 }

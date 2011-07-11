@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -165,38 +164,6 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	public boolean playerTpPlayer(String args[]) {
-		return this.tpP2P(args[0], args[1]);
-
-	}
-
-	// sends a private message to another player
-	// ! at least player argument has to be tested for existence beforehand!
-
-	public boolean playerMessage(String args[]) {
-		Player buddy = sender.getServer().getPlayer(args[0]);
-		if (buddy != null) {
-
-			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
-			if (isPlayer(false))
-				msg += ((Player) sender).getDisplayName() + " - ";
-			else
-				msg += "Server Admin" + " - ";
-
-			for (int i = 1; i < args.length; ++i)
-				msg += args[i] + " ";
-			msg.trim();
-			String parsed = Utils.colorParser(msg);
-			if (parsed == null)
-				parsed = msg;
-			buddy.sendMessage(parsed);
-			sender.sendMessage(parsed);
-		} else
-			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
-					+ ChatColor.RED + " not found!");
-		return true;
-	}
-
 	/**
 	 * Add an item to the BlackList
 	 * 
@@ -333,26 +300,6 @@ public class AdminCmdWorker extends Worker {
 	{
 		return alias.get(name);
 	}
-
-	public boolean tpTo(String[] args) {
-		if (isPlayer()) {
-			double x;
-			double y;
-			double z;
-			try {
-				x = Double.parseDouble(args[0]);
-				y = Double.parseDouble(args[1]);
-				z = Double.parseDouble(args[2]);
-			} catch (Exception e) {
-				sender.sendMessage(ChatColor.RED + "Location has to be formed by numbers");
-				return true;
-			}
-			((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z));
-		}
-		return true;
-
-	}
-
 
 	// ----- / item coloring section -----
 
