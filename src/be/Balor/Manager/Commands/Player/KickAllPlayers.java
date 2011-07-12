@@ -50,7 +50,8 @@ public class KickAllPlayers extends ACCommands {
 		String message = "";
 		String playerName = "";
 		if (args.length >= 1)
-			message = args[0];
+			for (int i = 0; i < args.length; i++)
+				message += args[i]+" ";
 		else {
 			message = "You have been kick by ";
 			if (!AdminCmdWorker.getInstance().isPlayer(false))
@@ -59,6 +60,7 @@ public class KickAllPlayers extends ACCommands {
 				playerName = ((Player) sender).getName();
 			message += playerName;
 		}
+		message = message.trim();
 		for (Player toKick : AdminCmd.getBukkitServer().getOnlinePlayers()) 
 			if (!toKick.getName().equals(playerName))
 				toKick.kickPlayer(message);

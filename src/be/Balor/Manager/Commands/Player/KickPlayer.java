@@ -50,7 +50,8 @@ public class KickPlayer extends ACCommands {
 		Player toKick = sender.getServer().getPlayer(args[0]);
 		String message = "";
 		if (args.length >= 2)
-			message = args[1];
+			for (int i = 1; i < args.length; i++)
+				message += args[i]+" ";
 		else {
 			message = "You have been kick by ";
 			if (!AdminCmdWorker.getInstance().isPlayer(false))
@@ -58,6 +59,7 @@ public class KickPlayer extends ACCommands {
 			else
 				message += ((Player) sender).getName();
 		}
+		message = message.trim();
 		if (toKick != null)
 			toKick.kickPlayer(message);
 		else
