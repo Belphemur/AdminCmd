@@ -49,8 +49,8 @@ public class KickAllPlayers extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		String message = "";
 		String playerName = "";
-		if (args.length >= 2)
-			message = args[1];
+		if (args.length >= 1)
+			message = args[0];
 		else {
 			message = "You have been kick by ";
 			if (!AdminCmdWorker.getInstance().isPlayer(false))
