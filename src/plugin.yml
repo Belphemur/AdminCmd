@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.0
+version: 5.1
 author: Plague modded by Balor
 description: >
              This plugin implements the basic commands for running a server.
@@ -129,3 +129,7 @@ commands:
     description: used memory.
     aliases: [memory,mem]
     usage: /<command>
+  bal_kickall:
+    description: used memory.
+    aliases: [kickall,kall]
+    usage: /<command> message

@@ -71,6 +71,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(AddAlias.class);
 		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
 		CommandManager.getInstance().registerCommand(TpLoc.class);
+		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
 	}
 	@Override
 	public void onEnable() {
