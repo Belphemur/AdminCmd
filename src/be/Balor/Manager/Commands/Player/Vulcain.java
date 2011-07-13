@@ -14,59 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Server;
+package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommands;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class Memory extends ACCommands {
+public class Vulcain extends ACCommands {
 
-	/**
-	 * 
-	 */
-	public Memory() {
-		permNode = "admincmd.server.memory";
-		cmdName = "bal_memory";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		System.gc();
-		long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
-		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
-				+ Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
-		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
-		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE
-				+ Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
-		for (World w : sender.getServer().getWorlds()) {
-			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
-					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
-					+ " entities");
-		}
+		// TODO Auto-generated method stub
+
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

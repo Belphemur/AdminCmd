@@ -36,6 +36,7 @@ public class AdminCmdWorker extends Worker {
 	private TreeSet<String> gods = new TreeSet<String>();
 	private HashMap<String, MaterialContainer> alias = new HashMap<String, MaterialContainer>();
 	private HashMap<String, Location> spawnLocations = new HashMap<String, Location>();
+	private HashMap<String, Float> vulcains = new HashMap<String, Float>();
 	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
