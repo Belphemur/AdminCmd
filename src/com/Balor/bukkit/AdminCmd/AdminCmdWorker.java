@@ -272,7 +272,7 @@ public class AdminCmdWorker extends Worker {
 	 */
 	public Player getUser(String[] args, String permNode, int index) {
 		Player target = null;
-		if (args.length != 0) {
+		if (args.length >=index + 1) {
 			if (AdminCmdWorker.getInstance().hasPerm(sender, permNode + ".other"))
 				target = sender.getServer().getPlayer(args[index]);
 			else
@@ -410,6 +410,7 @@ public class AdminCmdWorker extends Worker {
 	public void addVulcain(String playerName, float power) {
 		vulcans.put(playerName, power);
 	}
+
 	public void removeVulcan(String playerName) {
 		vulcans.remove(playerName);
 	}
@@ -456,10 +457,11 @@ public class AdminCmdWorker extends Worker {
 	public boolean hasGodPowers(String player) {
 		return gods.contains(player);
 	}
-	public Float getVulcainExplosionPower(String player)
-	{
+
+	public Float getVulcainExplosionPower(String player) {
 		return vulcans.get(player);
 	}
+
 	public boolean reparable(int id) {
 		return listOfPossibleRepair.contains(id);
 	}

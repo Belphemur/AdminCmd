@@ -46,13 +46,24 @@ public class Vulcan extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
+		Player player = null;
+		float power = 4.0F;
+		if (args.length >= 1) {
+			try {
+				power = Float.parseFloat(args[0]);
+			} catch (NumberFormatException e) {
+				player = AdminCmdWorker.getInstance().getUser(args, permNode);
+				power = 4.0F;
+			}
+			if (args.length >= 2)
+				player = AdminCmdWorker.getInstance().getUser(args, permNode, 1);
+		}
 		if (player != null) {
 			if (AdminCmdWorker.getInstance().getVulcainExplosionPower(player.getName()) != null) {
 				AdminCmdWorker.getInstance().removeVulcan(player.getName());
 				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
 			} else {
-				AdminCmdWorker.getInstance().addVulcain((player.getName()), 4.0F);
+				AdminCmdWorker.getInstance().addVulcain((player.getName()), power);
 				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode enabled.");
 			}
 		}
