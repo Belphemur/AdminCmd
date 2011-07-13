@@ -136,7 +136,7 @@ public class FilesManager {
 			}
 		for (int i = 3; i < infos.length; i++)
 			try {
-				direction[i] = Float.parseFloat(infos[i]);
+				direction[i-3] = Float.parseFloat(infos[i]);
 			} catch (NumberFormatException e) {
 				return null;
 			}
