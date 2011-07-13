@@ -16,9 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Spawn;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -47,10 +45,7 @@ public class Spawn extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer()) {
-			((Player) sender).teleport(((Player) sender).getWorld().getSpawnLocation());
-			sender.sendMessage("Teleported to " + ChatColor.DARK_GREEN + "SpawnPoint");
-		}
+		AdminCmdWorker.getInstance().spawn();
 	}
 
 	/*

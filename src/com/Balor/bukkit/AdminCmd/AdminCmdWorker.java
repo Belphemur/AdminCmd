@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -34,6 +35,7 @@ public class AdminCmdWorker extends Worker {
 	private TreeSet<String> thunderGods = new TreeSet<String>();
 	private TreeSet<String> gods = new TreeSet<String>();
 	private HashMap<String, MaterialContainer> alias = new HashMap<String, MaterialContainer>();
+	private HashMap<String, Location> spawnLocations = new HashMap<String, Location>();
 	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
@@ -139,7 +141,6 @@ public class AdminCmdWorker extends Worker {
 
 	}
 
-
 	// teleports chosen player to another player
 
 	public boolean tpP2P(String nFrom, String nTo) {
@@ -183,11 +184,44 @@ public class AdminCmdWorker extends Worker {
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
 			blacklist.add(m.material.getId());
-			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.material + ChatColor.GREEN
-					+ ") added to the Black List.");
+			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.material
+					+ ChatColor.GREEN + ") added to the Black List.");
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Set the spawn point.
+	 */
+	public void setSpawn() {
+		if (isPlayer()) {
+			Location loc = ((Player) sender).getLocation();
+			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
+					loc.getBlockZ());
+			spawnLocations.put(loc.getWorld().getName(), loc);
+			fManager.setSpawnLoc(loc);
+			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
+		}
+	}
+
+	public void spawn() {
+		if (isPlayer()) {
+			Player player = ((Player) sender);
+			Location loc = null;
+			String worldName = player.getWorld().getName();
+			if (spawnLocations.containsKey(worldName))
+				loc = spawnLocations.get(worldName);
+			if (loc == null) {
+				loc = fManager.getSpawnLoc(worldName);
+				if (loc != null)
+					spawnLocations.put(worldName, loc);
+			}
+			if (loc == null)
+				loc = player.getWorld().getSpawnLocation();
+			player.teleport(loc);
+			sender.sendMessage("Teleported to " + ChatColor.DARK_GREEN + "SpawnPoint");
+		}
 	}
 
 	/**
@@ -296,8 +330,8 @@ public class AdminCmdWorker extends Worker {
 		return m;
 
 	}
-	public MaterialContainer getAlias(String name)
-	{
+
+	public MaterialContainer getAlias(String name) {
 		return alias.get(name);
 	}
 
@@ -331,6 +365,7 @@ public class AdminCmdWorker extends Worker {
 			output += materialsColors.get(mat)[i] + ", ";
 		return output;
 	}
+
 	private void weatherChange(World w, String type, String[] duration) {
 		if (type == "clear") {
 			w.setThundering(false);
@@ -370,7 +405,6 @@ public class AdminCmdWorker extends Worker {
 
 		return true;
 	}
-
 
 	public void addGod(String playerName) {
 		gods.add(playerName);

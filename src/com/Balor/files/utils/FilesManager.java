@@ -21,7 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
+
+import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -67,8 +70,7 @@ public class FilesManager {
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
 				new ArrayList<String>());
-		if(aliasList.contains(alias))
-		{
+		if (aliasList.contains(alias)) {
 			int index = aliasList.indexOf(alias);
 			aliasList.remove(index);
 			idList.remove(index);
@@ -77,7 +79,7 @@ public class FilesManager {
 		idList.add(mc.toString());
 		conf.setProperty("alias", aliasList);
 		conf.setProperty("ids", idList);
-		conf.save();		
+		conf.save();
 	}
 
 	public void removeAlias(String alias) {
@@ -107,5 +109,37 @@ public class FilesManager {
 			i++;
 		}
 		return result;
+	}
+
+	public void setSpawnLoc(Location loc) {
+		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
+				+ ";" + loc.getPitch();
+		Configuration conf = getFile("spawnLocations.yml");
+		conf.setProperty(loc.getWorld().getName(), location);
+		conf.save();
+	}
+
+	public Location getSpawnLoc(String world) {
+		Configuration conf = getFile("spawnLocations.yml");
+		String toParse = conf.getString(world, null);
+		if (toParse == null)
+			return null;
+		String infos[] = new String[5];
+		Double coords[] = new Double[3];
+		Float direction[] = new Float[2];
+		infos = toParse.split(";");
+		for (int i = 0; i < coords.length; i++)
+			try {
+				coords[i] = Double.parseDouble(infos[i]);
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		for (int i = 3; i < infos.length; i++)
+			try {
+				direction[i] = Float.parseFloat(infos[i]);
+			} catch (NumberFormatException e) {
+				return null;
+			}
+			return new Location(AdminCmd.getBukkitServer().getWorld(world), coords[0], coords[1], coords[2], direction[0], direction[1]);
 	}
 }

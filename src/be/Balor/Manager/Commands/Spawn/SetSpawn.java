@@ -16,10 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Spawn;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -48,12 +46,7 @@ public class SetSpawn extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer()) {
-			Location loc = ((Player) sender).getLocation();
-			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-					loc.getBlockZ());
-			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
-		}
+		AdminCmdWorker.getInstance().setSpawn();
 	}
 
 	/*
