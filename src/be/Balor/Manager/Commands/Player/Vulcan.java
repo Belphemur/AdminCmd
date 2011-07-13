@@ -50,10 +50,10 @@ public class Vulcan extends ACCommands {
 		if (player != null) {
 			if (AdminCmdWorker.getInstance().getVulcainExplosionPower(player.getName()) != null) {
 				AdminCmdWorker.getInstance().removeVulcan(player.getName());
-				sender.sendMessage(ChatColor.DARK_AQUA + "Vulcan mode disabled.");
+				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
 			} else {
 				AdminCmdWorker.getInstance().addVulcain((player.getName()), 4.0F);
-				sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
+				sender.sendMessage(ChatColor.DARK_RED + "GOD mode enabled.");
 			}
 		}
 	}
