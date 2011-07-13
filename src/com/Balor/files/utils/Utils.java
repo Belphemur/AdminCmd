@@ -20,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -36,7 +35,6 @@ public class Utils {
 	 * @return Material
 	 */
 	public static MaterialContainer checkMaterial(String mat) {
-		Material m = null;
 		MaterialContainer mc = new MaterialContainer();
 		String[] info = new String[2];
 		if (mat.contains(":"))
@@ -46,15 +44,7 @@ public class Utils {
 			info[1] = "0";
 		}
 		if ((mc = AdminCmdWorker.getInstance().getAlias(info[0])) == null) {
-
-			try {
-				int id = Integer.parseInt(info[0]);
-				m = Material.getMaterial(id);
-			} catch (NumberFormatException e) {
-				m = Material.matchMaterial(info[0]);
-			}
-
-			mc = new MaterialContainer(m, info[1]);
+			mc = new MaterialContainer(info[0], info[1]);
 		}
 		return mc;
 

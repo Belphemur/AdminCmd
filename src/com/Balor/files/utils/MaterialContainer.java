@@ -26,11 +26,6 @@ public class MaterialContainer {
 	public Material material = null;
 	public int dmg = 0;
 
-	MaterialContainer(Material mat, String damage) {
-		this.material = mat;
-		parseDmg(damage);
-	}
-
 	public MaterialContainer(String mat) {
 		String[] info = new String[2];
 		if (mat.contains(":"))
