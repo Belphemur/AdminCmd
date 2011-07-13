@@ -57,7 +57,7 @@ public class Give extends ACCommands {
 			return;
 		if (!worker.hasPerm(sender, "admincmd.item.noblacklist")
 				&& worker.inBlackList(mat.material.getId())) {
-			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat
+			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.display()
 					+ ChatColor.DARK_RED + ") is black listed.");
 			return;
 		}
@@ -83,7 +83,7 @@ public class Give extends ACCommands {
 			else
 				return;
 		}
-		ItemStack stack = new ItemStack(mat.material, cnt, (short) mat.dmg);
+		ItemStack stack = new ItemStack(mat.material, cnt, mat.dmg);
 		if (AdminCmdWorker.getInstance().isPlayer(false)) {
 			if (!target.getName().equals(((Player) sender).getName())) {
 				target.sendMessage(ChatColor.RED + "[" + ((Player) sender).getName() + "]"

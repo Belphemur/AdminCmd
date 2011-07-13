@@ -24,7 +24,7 @@ import org.bukkit.Material;
  */
 public class MaterialContainer {
 	public Material material = null;
-	public int dmg = 0;
+	public short dmg = 0;
 
 	public MaterialContainer(String mat) {
 		String[] info = new String[2];
@@ -59,9 +59,9 @@ public class MaterialContainer {
 	}
 
 	private void parseDmg(String damage) {
-		int d = 0;
+		short d = 0;
 		try {
-			d = Integer.parseInt(damage);
+			d = Short.parseShort(damage);
 		} catch (NumberFormatException e) {
 		}
 		this.dmg = d;
@@ -75,6 +75,13 @@ public class MaterialContainer {
 	public String toString() {
 		if (material != null)
 			return material.getId() + ":" + dmg;
+		else
+			return "";
+	}
+	public String display()
+	{
+		if (material != null)
+			return material.toString();
 		else
 			return "";
 	}
