@@ -24,7 +24,7 @@ import be.Balor.Manager.ACCommands;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Vulcain extends ACCommands {
+public class Vulcan extends ACCommands {
 
 	/* (non-Javadoc)
 	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])

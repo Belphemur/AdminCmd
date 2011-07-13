@@ -36,7 +36,7 @@ public class AdminCmdWorker extends Worker {
 	private TreeSet<String> gods = new TreeSet<String>();
 	private HashMap<String, MaterialContainer> alias = new HashMap<String, MaterialContainer>();
 	private HashMap<String, Location> spawnLocations = new HashMap<String, Location>();
-	private HashMap<String, Float> vulcains = new HashMap<String, Float>();
+	private HashMap<String, Float> vulcans = new HashMap<String, Float>();
 	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
@@ -407,6 +407,14 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
+	public void addVulcain(String playerName, float power) {
+		vulcans.put(playerName, power);
+	}
+
+	public void removeVulcain(String playerName) {
+		vulcans.remove(playerName);
+	}
+
 	public void addGod(String playerName) {
 		gods.add(playerName);
 	}
@@ -449,7 +457,10 @@ public class AdminCmdWorker extends Worker {
 	public boolean hasGodPowers(String player) {
 		return gods.contains(player);
 	}
-
+	public float getVulcainExplosionPower(String player)
+	{
+		return vulcans.get(player);
+	}
 	public boolean reparable(int id) {
 		return listOfPossibleRepair.contains(id);
 	}
