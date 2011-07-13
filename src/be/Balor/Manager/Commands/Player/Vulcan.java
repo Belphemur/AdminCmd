@@ -50,15 +50,15 @@ public class Vulcan extends ACCommands {
 		float power = 4.0F;
 		if (args.length >= 1) {
 			try {
-				player = AdminCmdWorker.getInstance().getUser(args, permNode);
+				player = AdminCmdWorker.getInstance().getUser(args, permNode, 1);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
 				power = 4.0F;
+				player = AdminCmdWorker.getInstance().getUser(args, permNode);
 			}
 			if (args.length >= 2)
 				player = AdminCmdWorker.getInstance().getUser(args, permNode, 1);
-		}
-		else
+		} else
 			player = AdminCmdWorker.getInstance().getUser(args, permNode);
 		if (player != null) {
 			if (AdminCmdWorker.getInstance().getVulcainExplosionPower(player.getName()) != null) {
