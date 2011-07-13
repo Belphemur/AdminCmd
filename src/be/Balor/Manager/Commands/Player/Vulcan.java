@@ -58,6 +58,8 @@ public class Vulcan extends ACCommands {
 			if (args.length >= 2)
 				player = AdminCmdWorker.getInstance().getUser(args, permNode, 1);
 		}
+		else
+			player = AdminCmdWorker.getInstance().getUser(args, permNode);
 		if (player != null) {
 			if (AdminCmdWorker.getInstance().getVulcainExplosionPower(player.getName()) != null) {
 				AdminCmdWorker.getInstance().removeVulcan(player.getName());
