@@ -53,7 +53,7 @@ public class Vulcan extends ACCommands {
 				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
 			} else {
 				AdminCmdWorker.getInstance().addVulcain((player.getName()), 4.0F);
-				sender.sendMessage(ChatColor.DARK_RED + "GOD mode enabled.");
+				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode enabled.");
 			}
 		}
 	}
