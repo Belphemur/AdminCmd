@@ -50,9 +50,9 @@ public class Vulcan extends ACCommands {
 		float power = 4.0F;
 		if (args.length >= 1) {
 			try {
+				player = AdminCmdWorker.getInstance().getUser(args, permNode);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
-				player = AdminCmdWorker.getInstance().getUser(args, permNode);
 				power = 4.0F;
 			}
 			if (args.length >= 2)
