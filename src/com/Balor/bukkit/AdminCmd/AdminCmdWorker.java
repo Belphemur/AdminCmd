@@ -410,8 +410,7 @@ public class AdminCmdWorker extends Worker {
 	public void addVulcain(String playerName, float power) {
 		vulcans.put(playerName, power);
 	}
-
-	public void removeVulcain(String playerName) {
+	public void removeVulcan(String playerName) {
 		vulcans.remove(playerName);
 	}
 
@@ -457,7 +456,7 @@ public class AdminCmdWorker extends Worker {
 	public boolean hasGodPowers(String player) {
 		return gods.contains(player);
 	}
-	public float getVulcainExplosionPower(String player)
+	public Float getVulcainExplosionPower(String player)
 	{
 		return vulcans.get(player);
 	}

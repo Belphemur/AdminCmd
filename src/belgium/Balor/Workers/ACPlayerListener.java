@@ -38,10 +38,17 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))
-				&& (worker.hasThorPowers(event.getPlayer().getName())))
-			event.getPlayer().getWorld()
-					.strikeLightning(event.getPlayer().getTargetBlock(null, 600).getLocation());
+		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
+			if ((worker.hasThorPowers(event.getPlayer().getName())))
+				event.getPlayer().getWorld()
+						.strikeLightning(event.getPlayer().getTargetBlock(null, 600).getLocation());
+			Float power = null;
+			if ((power = worker.getVulcainExplosionPower(event.getPlayer().getName())) != null)
+				event.getPlayer()
+						.getWorld()
+						.createExplosion(event.getPlayer().getTargetBlock(null, 600).getLocation(),
+								power, true);
+		}
 	}
 
 }

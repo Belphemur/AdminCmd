@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.1.1
+version: 5.2
 author: Plague modded by Balor
 softdepend: [MultiVerse,Permissions]
 description: >
@@ -131,6 +131,10 @@ commands:
     aliases: [memory,mem]
     usage: /<command>
   bal_kickall:
-    description: used memory.
+    description: kick all online player.
     aliases: [kickall,kall]
     usage: /<command> message
+  bal_vulcan:
+    description: Give the power of Vulcan (explosion at click).
+    aliases: [vulcan,v,fire]
+    usage: /<command> playerName
