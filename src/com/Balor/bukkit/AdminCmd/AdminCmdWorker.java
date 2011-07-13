@@ -183,7 +183,7 @@ public class AdminCmdWorker extends Worker {
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
 			blacklist.add(m.material.getId());
-			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m + ChatColor.GREEN
+			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.material + ChatColor.GREEN
 					+ ") added to the Black List.");
 			return true;
 		}
@@ -396,7 +396,7 @@ public class AdminCmdWorker extends Worker {
 		this.alias.put(alias, m);
 		this.fManager.addAlias(alias, m);
 		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
-				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m);
+				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m.display());
 		return true;
 	}
 

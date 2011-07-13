@@ -81,7 +81,7 @@ public class MaterialContainer {
 	public String display()
 	{
 		if (material != null)
-			return material.toString();
+			return material+":"+dmg;
 		else
 			return "";
 	}
