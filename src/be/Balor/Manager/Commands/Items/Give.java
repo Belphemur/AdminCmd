@@ -53,6 +53,8 @@ public class Give extends ACCommands {
 		MaterialContainer mat = null;
 		AdminCmdWorker worker = AdminCmdWorker.getInstance();
 		mat = worker.checkMaterial(args[0]);
+		if(mat.isNull())
+			return;
 		if (!worker.hasPerm(sender, "admincmd.item.noblacklist")
 				&& worker.inBlackList(mat.material.getId())) {
 			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat

@@ -37,6 +37,7 @@ public class Utils {
 	 */
 	public static MaterialContainer checkMaterial(String mat) {
 		Material m = null;
+		MaterialContainer mc = new MaterialContainer();
 		String[] info = new String[2];
 		if (mat.contains(":"))
 			info = mat.split(":");
@@ -44,15 +45,17 @@ public class Utils {
 			info[0] = mat;
 			info[1] = "0";
 		}
-		if ((m = AdminCmdWorker.getInstance().getAlias(info[0])) == null) {
+		if ((mc = AdminCmdWorker.getInstance().getAlias(info[0])) == null) {
+
 			try {
 				int id = Integer.parseInt(info[0]);
 				m = Material.getMaterial(id);
 			} catch (NumberFormatException e) {
 				m = Material.matchMaterial(info[0]);
 			}
+
+			mc = new MaterialContainer(m, info[1]);
 		}
-		MaterialContainer mc = new MaterialContainer(m, info[1]);
 		return mc;
 
 	}

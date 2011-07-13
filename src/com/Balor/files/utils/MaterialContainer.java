@@ -28,11 +28,59 @@ public class MaterialContainer {
 
 	MaterialContainer(Material mat, String damage) {
 		this.material = mat;
+		parseDmg(damage);
+	}
+
+	public MaterialContainer(String mat) {
+		String[] info = new String[2];
+		if (mat.contains(":"))
+			info = mat.split(":");
+		else {
+			info[0] = mat;
+			info[1] = "0";
+		}
+		parseMat(info[0]);
+		parseDmg(info[1]);
+	}
+
+	public MaterialContainer(String mat, String damage) {
+		parseMat(mat);
+		parseDmg(damage);
+	}
+	public MaterialContainer()
+	{
+		
+	}
+
+	private void parseMat(String material) {
+		Material m = null;
+		try {
+			int id = Integer.parseInt(material);
+			m = Material.getMaterial(id);
+		} catch (NumberFormatException e) {
+			m = Material.matchMaterial(material);
+		}
+		this.material = m;
+	}
+
+	private void parseDmg(String damage) {
 		int d = 0;
 		try {
 			d = Integer.parseInt(damage);
 		} catch (NumberFormatException e) {
 		}
 		this.dmg = d;
+	}
+
+	public boolean isNull() {
+		return material == null;
+	}
+
+	@Override
+	public String toString() {
+		if (material != null)
+			return material.getId() + ":" + dmg;
+		else
+			return "";
 	}
 }

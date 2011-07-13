@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.bukkit.Material;
 import org.bukkit.util.config.Configuration;
 
 /**
@@ -62,12 +61,12 @@ public class FilesManager {
 		return config;
 	}
 
-	public void addAlias(String alias, int id) {
+	public void addAlias(String alias, MaterialContainer mc) {
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
-		ArrayList<Integer> idList = (ArrayList<Integer>) conf.getIntList("ids",
-				new ArrayList<Integer>());
+		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
+				new ArrayList<String>());
 		if(aliasList.contains(alias))
 		{
 			int index = aliasList.indexOf(alias);
@@ -75,7 +74,7 @@ public class FilesManager {
 			idList.remove(index);
 		}
 		aliasList.add(alias);
-		idList.add(id);
+		idList.add(mc.toString());
 		conf.setProperty("alias", aliasList);
 		conf.setProperty("ids", idList);
 		conf.save();		
@@ -85,8 +84,8 @@ public class FilesManager {
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
-		ArrayList<Integer> idList = (ArrayList<Integer>) conf.getIntList("ids",
-				new ArrayList<Integer>());
+		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
+				new ArrayList<String>());
 		int index = aliasList.indexOf(alias);
 		aliasList.remove(index);
 		idList.remove(index);
@@ -95,16 +94,16 @@ public class FilesManager {
 		conf.save();
 	}
 
-	public HashMap<String, Material> getAlias() {
-		HashMap<String, Material> result = new HashMap<String, Material>();
+	public HashMap<String, MaterialContainer> getAlias() {
+		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
-		ArrayList<Integer> idList = (ArrayList<Integer>) conf.getIntList("ids",
-				new ArrayList<Integer>());
+		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
+				new ArrayList<String>());
 		int i = 0;
 		for (String alias : aliasList) {
-			result.put(alias, Material.getMaterial(idList.get(i)));
+			result.put(alias, new MaterialContainer(idList.get(i)));
 			i++;
 		}
 		return result;

@@ -33,7 +33,7 @@ public class AdminCmdWorker extends Worker {
 	private AdminCmd pluginInstance;
 	private TreeSet<String> thunderGods = new TreeSet<String>();
 	private TreeSet<String> gods = new TreeSet<String>();
-	private HashMap<String, Material> alias = new HashMap<String, Material>();
+	private HashMap<String, MaterialContainer> alias = new HashMap<String, MaterialContainer>();
 	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
@@ -172,7 +172,7 @@ public class AdminCmdWorker extends Worker {
 	 */
 	public boolean setBlackListedItem(String name) {
 		MaterialContainer m = checkMaterial(name);
-		if (m.material != null) {
+		if (!m.isNull()) {
 			Configuration config = fManager.getFile("blacklist.yml");
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
@@ -291,12 +291,12 @@ public class AdminCmdWorker extends Worker {
 	 */
 	public MaterialContainer checkMaterial(String mat) {
 		MaterialContainer m = Utils.checkMaterial(mat);
-		if (m.material == null)
+		if (m.isNull())
 			sender.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
 		return m;
 
 	}
-	public Material getAlias(String name)
+	public MaterialContainer getAlias(String name)
 	{
 		return alias.get(name);
 	}
@@ -390,11 +390,11 @@ public class AdminCmdWorker extends Worker {
 
 	public boolean alias(String[] args) {
 		MaterialContainer m = checkMaterial(args[1]);
-		if (m.material == null)
+		if (m.isNull())
 			return true;
 		String alias = args[0];
-		this.alias.put(alias, m.material);
-		this.fManager.addAlias(alias, m.material.getId());
+		this.alias.put(alias, m);
+		this.fManager.addAlias(alias, m);
 		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
 				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m);
 		return true;
