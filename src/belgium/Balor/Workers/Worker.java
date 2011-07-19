@@ -43,9 +43,11 @@ public abstract class Worker {
 	public boolean hasPerm(CommandSender player, String perm) {
 		return hasPerm(player, perm, true);
 	}
+
 	public boolean hasPerm(CommandSender player, Permission perm) {
 		return hasPerm(player, perm, true);
 	}
+
 	/**
 	 * Check the permission with the possibility to disable the error msg
 	 * 
@@ -55,13 +57,13 @@ public abstract class Worker {
 	 * @return
 	 */
 	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
-		if(!(player instanceof Player))
+		if (!(player instanceof Player))
 			return true;
 		if (permission == null) {
 			if (perm.contains("admin") || perm.contains("free"))
 				return player.isOp();
 			return true;
-		} else if (permission.has((Player)player, perm)) {
+		} else if (permission.has((Player) player, perm)) {
 			return true;
 		} else {
 			if (errorMsg)
@@ -71,14 +73,17 @@ public abstract class Worker {
 		}
 
 	}
+
 	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
-		if(!(player instanceof Player))
+		if (!(player instanceof Player))
 			return true;
 		if (permission == null) {
-			if (perm.getName().contains("admin") || perm.getName().contains("free"))
-				return player.hasPermission(perm);
-			return true;
-		} else if (permission.has((Player)player, perm.getName())) {
+			boolean havePerm = player.hasPermission(perm);
+			if (!havePerm && errorMsg)
+				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(" + perm + ")");
+			return havePerm;
+		} else if (permission.has((Player) player, perm.getName())) {
 			return true;
 		} else {
 			if (errorMsg)
@@ -88,7 +93,6 @@ public abstract class Worker {
 		}
 
 	}
-
 
 	/**
 	 * Permission plugin
