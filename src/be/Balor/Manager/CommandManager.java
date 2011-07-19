@@ -55,6 +55,8 @@ public class CommandManager {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+		}catch (IllegalArgumentException e) {
+			// TODO: handle exception
 		}
 	}
 	public void registerAllPermParent()
