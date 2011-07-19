@@ -20,7 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
 /**
@@ -80,24 +79,17 @@ public abstract class ACCommands {
 	public String getPermNode() {
 		return permNode;
 	}
+
 	/**
 	 * Register the bukkit Permission
 	 */
 	public void registerBukkitPerm() {
-		if ((bukkitPerm = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			bukkitPerm = new Permission(permNode, bukkitDefault);
-			AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
-		}
-		if (other) {
-			Permission permOther;
-			if ((permOther = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode+".other")) == null) {
-				permOther = new Permission(permNode+".other", bukkitDefault);
-				AdminCmd.getBukkitServer().getPluginManager().addPermission(permOther);
-			}
-		}
+		bukkitPerm = PermissionManager.getInstance().addPermChild(permNode, bukkitDefault);
+		if (other)
+			PermissionManager.getInstance().addPermChild(permNode + ".other", bukkitDefault);
 	}
-	public boolean toOther()
-	{
+
+	public boolean toOther() {
 		return other;
 	}
 }

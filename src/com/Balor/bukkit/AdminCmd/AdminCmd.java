@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.PermParent;
+import be.Balor.Manager.PermissionManager;
 import be.Balor.Manager.Commands.Items.*;
 import be.Balor.Manager.Commands.Mob.*;
 import be.Balor.Manager.Commands.Player.*;
@@ -41,15 +42,15 @@ public class AdminCmd extends JavaPlugin {
 
 	private void registerPermParents()
 	{		
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.item.*", "admincmd.item."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.player.*", "admincmd.player."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.mob.*", "admincmd.mob."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.server.*", "admincmd.server."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.spawn.*", "admincmd.spawn."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.time.*", "admincmd.time."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.tp.*", "admincmd.tp."));
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.weather.*", "admincmd.weather."));
-		CommandManager.getInstance().setMajorPerm(new PermParent("admincmd.*", "admincmd."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.item.*", "admincmd.item."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.player.*", "admincmd.player."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.mob.*", "admincmd.mob."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.server.*", "admincmd.server."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.spawn.*", "admincmd.spawn."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.time.*", "admincmd.time."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.tp.*", "admincmd.tp."));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.weather.*", "admincmd.weather."));
+		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*", "admincmd."));
 	}
 	private void registerCmds()
 	{
@@ -103,7 +104,8 @@ public class AdminCmd extends JavaPlugin {
 		worker.setPluginInstance(this);
 		registerPermParents();
 		registerCmds();
-		CommandManager.getInstance().registerAllPermParent();
+		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
+		PermissionManager.getInstance().registerAllPermParent();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);

@@ -17,7 +17,6 @@
 package be.Balor.Manager;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.bukkit.command.CommandSender;
 
@@ -28,8 +27,6 @@ import org.bukkit.command.CommandSender;
 public class CommandManager {
 	private HashMap<String, ACCommands> commands = new HashMap<String, ACCommands>();
 	private static CommandManager instance = null;
-	private LinkedList<PermParent> permissions = new LinkedList<PermParent>();
-	private PermParent majorPerm;
 
 	/**
 	 * @return the instance
@@ -40,28 +37,12 @@ public class CommandManager {
 		return instance;
 	}
 
-	public void addPermParent(PermParent toAdd) {
-		permissions.add(toAdd);
-	}
-	public void setMajorPerm(PermParent major)
-	{
-		majorPerm = major;
-		for (PermParent pp : permissions)
-			majorPerm.addChild(pp.getPermName());
-	}
 
 	public void registerCommand(Class<?> clazz) {
 		try {
 			ACCommands command = (ACCommands) clazz.newInstance();
 			command.registerBukkitPerm();
-			commands.put(command.getCmdName(), command);
-			for (PermParent pp : permissions)
-				if (command.getPermNode().contains(pp.getCompareName()))
-				{
-					pp.addChild(command.getPermNode());
-					if(command.toOther())
-						pp.addChild(command.getPermNode()+".other");
-				}
+			commands.put(command.getCmdName(), command);			
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -70,13 +51,6 @@ public class CommandManager {
 			// TODO: handle exception
 		}
 	}
-	public void registerAllPermParent()
-	{
-		for (PermParent pp : permissions)
-			pp.registerBukkitPerm();
-		majorPerm.registerBukkitPerm();
-	}
-
 	public boolean execCmd(String name, CommandSender sender, String... args) {
 		ACCommands cmd = null;
 		if (commands.containsKey(name) && (cmd = commands.get(name)).permissionCheck(sender)
