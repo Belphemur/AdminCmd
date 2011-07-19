@@ -34,6 +34,7 @@ public class Heal extends ACCommands {
 	public Heal() {
 		permNode = "admincmd.player.heal";
 		cmdName = "bal_playerheal";
+		other = true;
 	}
 
 	/*

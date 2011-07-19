@@ -32,6 +32,7 @@ public abstract class ACCommands {
 	protected String cmdName = null;
 	protected Permission bukkitPerm = null;
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
+	protected boolean other = false;
 
 	/**
 	 * 
@@ -79,11 +80,24 @@ public abstract class ACCommands {
 	public String getPermNode() {
 		return permNode;
 	}
-
+	/**
+	 * Register the bukkit Permission
+	 */
 	public void registerBukkitPerm() {
 		if ((bukkitPerm = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
 			bukkitPerm = new Permission(permNode, bukkitDefault);
 			AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
 		}
+		if (other) {
+			Permission permOther;
+			if ((permOther = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode+".other")) == null) {
+				permOther = new Permission(permNode+".other", bukkitDefault);
+				AdminCmd.getBukkitServer().getPluginManager().addPermission(permOther);
+			}
+		}
+	}
+	public boolean toOther()
+	{
+		return other;
 	}
 }

@@ -37,6 +37,7 @@ public class PlayerLocation extends ACCommands {
 	public PlayerLocation() {
 		permNode = "admincmd.player.loc";
 		cmdName = "bal_playerloc";
+		other = true;
 	}
 
 	/*

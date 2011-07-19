@@ -36,6 +36,7 @@ public class RepairAll extends ACCommands {
 	public RepairAll() {
 		permNode = "admincmd.item.repair";
 		cmdName = "bal_repairall";
+		other = true;
 	}
 
 	/*

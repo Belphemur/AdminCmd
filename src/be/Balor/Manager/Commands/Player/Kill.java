@@ -34,6 +34,7 @@ public class Kill extends ACCommands {
 	public Kill() {
 		permNode = "admincmd.player.kill";
 		cmdName = "bal_playerkill";
+		other = true;
 	}
 
 	/*

@@ -57,7 +57,11 @@ public class CommandManager {
 			commands.put(command.getCmdName(), command);
 			for (PermParent pp : permissions)
 				if (command.getPermNode().contains(pp.getCompareName()))
+				{
 					pp.addChild(command.getPermNode());
+					if(command.toOther())
+						pp.addChild(command.getPermNode()+".other");
+				}
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

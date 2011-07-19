@@ -36,6 +36,7 @@ public class Strike extends ACCommands {
 	public Strike() {
 		permNode = "admincmd.weather.strike";
 		cmdName = "bal_wstrike";
+		other = true;
 	}
 
 	/*

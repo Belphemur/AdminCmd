@@ -37,6 +37,7 @@ public class Drop extends ACCommands {
 	public Drop() {
 		permNode = "admincmd.item.add";
 		cmdName = "bal_drop";
+		other = true;
 	}
 
 	/*

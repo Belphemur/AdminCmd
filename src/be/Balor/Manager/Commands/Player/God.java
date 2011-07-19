@@ -36,6 +36,7 @@ public class God extends ACCommands {
 	public God() {
 		permNode = "admincmd.player.god";
 		cmdName = "bal_god";
+		other = true;
 	}
 
 	/*

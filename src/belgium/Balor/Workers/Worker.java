@@ -61,7 +61,7 @@ public abstract class Worker {
 			return true;
 		if (permission == null) {
 			if (perm.contains("admin") || perm.contains("free"))
-				return player.isOp();
+				return player.hasPermission(perm);
 			return true;
 		} else if (permission.has((Player) player, perm)) {
 			return true;

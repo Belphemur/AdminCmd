@@ -38,6 +38,7 @@ public class Give extends ACCommands {
 	public Give() {
 		permNode = "admincmd.item.add";
 		cmdName = "bal_item";
+		other = true;
 	}
 
 	/*
@@ -53,7 +54,7 @@ public class Give extends ACCommands {
 		MaterialContainer mat = null;
 		AdminCmdWorker worker = AdminCmdWorker.getInstance();
 		mat = worker.checkMaterial(args[0]);
-		if(mat.isNull())
+		if (mat.isNull())
 			return;
 		if (!worker.hasPerm(sender, "admincmd.item.noblacklist")
 				&& worker.inBlackList(mat.material.getId())) {
@@ -87,18 +88,20 @@ public class Give extends ACCommands {
 		if (AdminCmdWorker.getInstance().isPlayer(false)) {
 			if (!target.getName().equals(((Player) sender).getName())) {
 				target.sendMessage(ChatColor.RED + "[" + ((Player) sender).getName() + "]"
-						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " " + mat.material);
+						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " "
+						+ mat.material);
 
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + mat.material
-						+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
+				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " "
+						+ mat.material + " to " + ChatColor.WHITE + target.getName()
+						+ "'s inventory");
 			} else
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + mat.material
-						+ " to " + ChatColor.WHITE + "your inventory");
+				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " "
+						+ mat.material + " to " + ChatColor.WHITE + "your inventory");
 		} else {
 			target.sendMessage(ChatColor.RED + "[Server Admin]" + ChatColor.WHITE + " send you "
 					+ ChatColor.GOLD + cnt + " " + mat.material);
-			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + mat.material + " to "
-					+ ChatColor.WHITE + target.getName() + "'s inventory");
+			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + mat.material
+					+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
 		}
 		target.getInventory().addItem(stack);
 

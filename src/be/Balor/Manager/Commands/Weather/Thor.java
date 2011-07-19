@@ -36,6 +36,7 @@ public class Thor extends ACCommands {
 	public Thor() {
 		permNode = "admincmd.weather.thor";
 		cmdName = "bal_thor";
+		other = true;
 	}
 
 	/*

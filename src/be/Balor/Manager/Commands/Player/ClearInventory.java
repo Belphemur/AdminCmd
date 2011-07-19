@@ -36,6 +36,7 @@ public class ClearInventory extends ACCommands {
 	public ClearInventory() {
 		permNode = "admincmd.player.clear";
 		cmdName = "bal_pclear";
+		other = true;
 	}
 
 	/*

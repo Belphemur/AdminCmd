@@ -35,6 +35,7 @@ public class Vulcan extends ACCommands {
 	public Vulcan() {
 		permNode = "admincmd.player.vulcan";
 		cmdName = "bal_vulcan";
+		other = true;
 	}
 
 	/*
