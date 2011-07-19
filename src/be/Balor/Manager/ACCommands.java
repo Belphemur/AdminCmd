@@ -17,7 +17,10 @@
 package be.Balor.Manager;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
+import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
 /**
@@ -27,6 +30,8 @@ import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 public abstract class ACCommands {
 	protected String permNode = null;
 	protected String cmdName = null;
+	protected Permission bukkitPerm = null;
+	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 
 	/**
 	 * 
@@ -57,12 +62,23 @@ public abstract class ACCommands {
 	 * @return
 	 */
 	public boolean permissionCheck(CommandSender sender) {
-		return AdminCmdWorker.getInstance().hasPerm(sender, permNode);
+		return AdminCmdWorker.getInstance().hasPerm(sender, bukkitPerm);
 	}
 	/**
 	 * @return the cmdName
 	 */
 	public String getCmdName() {
 		return cmdName;
+	}
+	/**
+	 * @return the permNode
+	 */
+	public String getPermNode() {
+		return permNode;
+	}
+	public void registerBukkitPerm()
+	{
+		bukkitPerm = new Permission(permNode, bukkitDefault);
+		AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
 	}
 }

@@ -11,6 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.PermParent;
 import be.Balor.Manager.Commands.Items.*;
 import be.Balor.Manager.Commands.Mob.*;
 import be.Balor.Manager.Commands.Player.*;
@@ -38,6 +39,18 @@ public class AdminCmd extends JavaPlugin {
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
+	private void registerPermParents()
+	{
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.*", "admincmd"));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.item.*", "admincmd.item."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.player.*", "admincmd.player."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.mob.*", "admincmd.mob."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.server.*", "admincmd.server."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.spawn.*", "admincmd.spawn."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.time.*", "admincmd.time."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.tp.*", "admincmd.tp."));
+		CommandManager.getInstance().addPermParent(new PermParent("admincmd.weather.*", "admincmd.weather."));
+	}
 	private void registerCmds()
 	{
 		CommandManager.getInstance().registerCommand(Day.class);
@@ -88,7 +101,9 @@ public class AdminCmd extends JavaPlugin {
 
 		worker = AdminCmdWorker.getInstance();
 		worker.setPluginInstance(this);
+		registerPermParents();
 		registerCmds();
+		CommandManager.getInstance().registerAllPermParent();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);

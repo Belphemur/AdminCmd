@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+
 import com.nijiko.permissions.PermissionHandler;
 
 /**
@@ -41,7 +43,9 @@ public abstract class Worker {
 	public boolean hasPerm(CommandSender player, String perm) {
 		return hasPerm(player, perm, true);
 	}
-
+	public boolean hasPerm(CommandSender player, Permission perm) {
+		return hasPerm(player, perm, true);
+	}
 	/**
 	 * Check the permission with the possibility to disable the error msg
 	 * 
@@ -67,6 +71,24 @@ public abstract class Worker {
 		}
 
 	}
+	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+		if(!(player instanceof Player))
+			return true;
+		if (permission == null) {
+			if (perm.getName().contains("admin") || perm.getName().contains("free"))
+				return player.hasPermission(perm);
+			return true;
+		} else if (permission.has((Player)player, perm.getName())) {
+			return true;
+		} else {
+			if (errorMsg)
+				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(" + perm + ")");
+			return false;
+		}
+
+	}
+
 
 	/**
 	 * Permission plugin
