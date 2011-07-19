@@ -81,7 +81,7 @@ public abstract class Worker {
 			boolean havePerm = player.hasPermission(perm);
 			if (!havePerm && errorMsg)
 				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-						+ ChatColor.BLUE + "(" + perm + ")");
+						+ ChatColor.BLUE + "(" + perm.getName() + ")");
 			return havePerm;
 		} else if (permission.has((Player) player, perm.getName())) {
 			return true;

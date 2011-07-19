@@ -56,6 +56,12 @@ public class PermParent {
 	public String getCompareName() {
 		return compareName;
 	}
+	/**
+	 * @return the permName
+	 */
+	public String getPermName() {
+		return permName;
+	}
 	public void registerBukkitPerm()
 	{
 		AdminCmd.getBukkitServer().getPluginManager().addPermission(new Permission(permName, children));

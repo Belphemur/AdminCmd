@@ -29,6 +29,7 @@ public class CommandManager {
 	private HashMap<String, ACCommands> commands = new HashMap<String, ACCommands>();
 	private static CommandManager instance = null;
 	private LinkedList<PermParent> permissions = new LinkedList<PermParent>();
+	private PermParent majorPerm;
 
 	/**
 	 * @return the instance
@@ -41,6 +42,12 @@ public class CommandManager {
 
 	public void addPermParent(PermParent toAdd) {
 		permissions.add(toAdd);
+	}
+	public void setMajorPerm(PermParent major)
+	{
+		majorPerm = major;
+		for (PermParent pp : permissions)
+			majorPerm.addChild(pp.getPermName());
 	}
 
 	public void registerCommand(Class<?> clazz) {
@@ -63,6 +70,7 @@ public class CommandManager {
 	{
 		for (PermParent pp : permissions)
 			pp.registerBukkitPerm();
+		majorPerm.registerBukkitPerm();
 	}
 
 	public boolean execCmd(String name, CommandSender sender, String... args) {

@@ -40,8 +40,7 @@ public class AdminCmd extends JavaPlugin {
 	public static final Logger log = Logger.getLogger("Minecraft");
 
 	private void registerPermParents()
-	{
-		CommandManager.getInstance().addPermParent(new PermParent("admincmd.*", "admincmd"));
+	{		
 		CommandManager.getInstance().addPermParent(new PermParent("admincmd.item.*", "admincmd.item."));
 		CommandManager.getInstance().addPermParent(new PermParent("admincmd.player.*", "admincmd.player."));
 		CommandManager.getInstance().addPermParent(new PermParent("admincmd.mob.*", "admincmd.mob."));
@@ -50,6 +49,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().addPermParent(new PermParent("admincmd.time.*", "admincmd.time."));
 		CommandManager.getInstance().addPermParent(new PermParent("admincmd.tp.*", "admincmd.tp."));
 		CommandManager.getInstance().addPermParent(new PermParent("admincmd.weather.*", "admincmd.weather."));
+		CommandManager.getInstance().setMajorPerm(new PermParent("admincmd.*", "admincmd."));
 	}
 	private void registerCmds()
 	{
