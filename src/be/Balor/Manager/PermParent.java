@@ -48,7 +48,7 @@ public class PermParent {
 	}
 	public void addChild(String name)
 	{
-		children.put(name, true);
+		addChild(name,true);
 	}
 	/**
 	 * @return the compareName
