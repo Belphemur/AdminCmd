@@ -31,7 +31,7 @@ public abstract class ACCommands {
 	protected String permNode = null;
 	protected String cmdName = null;
 	protected Permission bukkitPerm = null;
-	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
+	protected PermissionDefault bukkitDefault = PermissionDefault.FALSE;
 
 	/**
 	 * 
