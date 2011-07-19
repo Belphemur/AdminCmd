@@ -307,7 +307,10 @@ public class AdminCmdWorker extends Worker {
 		if (target == null)
 			return false;
 		if (toDo.equals("heal"))
+		{
 			target.setHealth(20);
+			target.setFireTicks(0);
+		}
 		else
 			target.setHealth(0);
 
