@@ -73,6 +73,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(TpLoc.class);
 		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
 		CommandManager.getInstance().registerCommand(Vulcan.class);
+		CommandManager.getInstance().registerCommand(Drop.class);
 	}
 	@Override
 	public void onEnable() {

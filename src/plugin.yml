@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.2
+version: 5.3
 author: Plague modded by Balor
 softdepend: [MultiVerse,Permissions]
 description: >
@@ -138,3 +138,7 @@ commands:
     description: Give the power of Vulcan (explosion at click).
     aliases: [vulcan,v,fire]
     usage: /<command> playerName
+  bal_drop:
+    description: Drop an item at the player feet.
+    aliases: [drop,d]
+    usage: /<command> (name|id):[damage] [amount] [player]
