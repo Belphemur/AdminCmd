@@ -40,6 +40,7 @@ public abstract class ACCommands {
 		permNode = "";
 		cmdName = "";
 	}
+
 	/**
 	 * Execute the command
 	 * 
@@ -64,21 +65,25 @@ public abstract class ACCommands {
 	public boolean permissionCheck(CommandSender sender) {
 		return AdminCmdWorker.getInstance().hasPerm(sender, bukkitPerm);
 	}
+
 	/**
 	 * @return the cmdName
 	 */
 	public String getCmdName() {
 		return cmdName;
 	}
+
 	/**
 	 * @return the permNode
 	 */
 	public String getPermNode() {
 		return permNode;
 	}
-	public void registerBukkitPerm()
-	{
-		bukkitPerm = new Permission(permNode, bukkitDefault);
-		AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
+
+	public void registerBukkitPerm() {
+		if ((bukkitPerm = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
+			bukkitPerm = new Permission(permNode, bukkitDefault);
+			AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
+		}
 	}
 }
