@@ -43,8 +43,8 @@ public class CommandManager {
 	public void addPermParent(PermParent toAdd) {
 		permissions.add(toAdd);
 	}
-	public void setMajorPerm(PermParent major)
-	{
+
+	public void setMajorPerm(PermParent major) {
 		majorPerm = major;
 		for (PermParent pp : permissions)
 			majorPerm.addChild(pp.getPermName());
@@ -62,12 +62,24 @@ public class CommandManager {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		}catch (IllegalArgumentException e) {
-			// TODO: handle exception
+		} catch (IllegalArgumentException e) {
+			ACCommands command;
+			try {
+				command = (ACCommands) clazz.newInstance();
+				commands.put(command.getCmdName(), command);
+				for (PermParent pp : permissions)
+					if (command.getPermNode().contains(pp.getCompareName()))
+						pp.addChild(command.getPermNode());
+			} catch (InstantiationException e1) {
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			}
+
 		}
 	}
-	public void registerAllPermParent()
-	{
+
+	public void registerAllPermParent() {
 		for (PermParent pp : permissions)
 			pp.registerBukkitPerm();
 		majorPerm.registerBukkitPerm();
