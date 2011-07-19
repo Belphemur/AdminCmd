@@ -88,7 +88,7 @@ public abstract class Worker {
 		} else {
 			if (errorMsg)
 				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-						+ ChatColor.BLUE + "(" + perm + ")");
+						+ ChatColor.BLUE + "(" + perm.getName() + ")");
 			return false;
 		}
 
