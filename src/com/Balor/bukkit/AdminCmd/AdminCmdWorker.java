@@ -1,9 +1,9 @@
 package com.Balor.bukkit.AdminCmd;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.ChatColor;
@@ -34,8 +34,8 @@ public class AdminCmdWorker extends Worker {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	private TreeSet<String> thunderGods = new TreeSet<String>();
-	private TreeSet<String> gods = new TreeSet<String>();
+	private HashSet<String> thunderGods = new HashSet<String>();
+	private HashSet<String> gods = new HashSet<String>();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().softValues().concurrencyLevel(5).makeMap();
 	private ConcurrentMap<String, Location> spawnLocations = new  MapMaker().softValues().concurrencyLevel(5).makeMap();
 	private ConcurrentMap<String, Float> vulcans = new  MapMaker().softValues().concurrencyLevel(5).makeMap();
