@@ -1,9 +1,10 @@
 package com.Balor.bukkit.AdminCmd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,6 +19,7 @@ import belgium.Balor.Workers.Worker;
 import com.Balor.files.utils.FilesManager;
 import com.Balor.files.utils.MaterialContainer;
 import com.Balor.files.utils.Utils;
+import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
@@ -27,20 +29,20 @@ import com.Balor.files.utils.Utils;
 public class AdminCmdWorker extends Worker {
 
 	private CommandSender sender;
-	private HashMap<Material, String[]> materialsColors;
+	private ConcurrentMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
 	private TreeSet<String> thunderGods = new TreeSet<String>();
 	private TreeSet<String> gods = new TreeSet<String>();
-	private HashMap<String, MaterialContainer> alias = new HashMap<String, MaterialContainer>();
-	private HashMap<String, Location> spawnLocations = new HashMap<String, Location>();
-	private HashMap<String, Float> vulcans = new HashMap<String, Float>();
+	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().softValues().concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, Location> spawnLocations = new  MapMaker().softValues().concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, Float> vulcans = new  MapMaker().softValues().concurrencyLevel(5).makeMap();
 	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
-		materialsColors = new HashMap<Material, String[]>();
+		materialsColors = new MapMaker().softKeys().makeMap();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
 				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
 				"Blue", "Brown", "Green", "Red", "Black" });
@@ -51,7 +53,7 @@ public class AdminCmdWorker extends Worker {
 		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden",
 				"Cobblestone" });
 		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
-		listOfPossibleRepair = new ArrayList<Integer>();
+		listOfPossibleRepair = new LinkedList<Integer>();
 		for (int i = 256; i <= 259; i++)
 			listOfPossibleRepair.add(i);
 		for (int i = 267; i <= 279; i++)

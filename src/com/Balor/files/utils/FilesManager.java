@@ -19,12 +19,13 @@ package com.Balor.files.utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
+import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -96,8 +97,8 @@ public class FilesManager {
 		conf.save();
 	}
 
-	public HashMap<String, MaterialContainer> getAlias() {
-		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
+	public ConcurrentMap<String, MaterialContainer> getAlias() {
+		ConcurrentMap<String, MaterialContainer> result = new MapMaker().softValues().makeMap();
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
