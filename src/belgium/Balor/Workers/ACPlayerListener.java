@@ -43,12 +43,21 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		playerRespawnOrJoin(event.getPlayer());
+		if (playerRespawnOrJoin(event.getPlayer()))
+			event.setJoinMessage(null);
 	}
 
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		playerRespawnOrJoin(event.getPlayer());
+		final Player player = event.getPlayer();
+		AdminCmd.getBukkitServer().getScheduler()
+				.scheduleAsyncDelayedTask(worker.getPluginInstance(), new Runnable() {
+
+					@Override
+					public void run() {
+						playerRespawnOrJoin(player);
+					}
+				}, 40);
 	}
 
 	@Override
@@ -66,16 +75,19 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
-	private void playerRespawnOrJoin(Player newPlayer) {
+	private boolean playerRespawnOrJoin(Player newPlayer) {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
 				.scheduleAsyncDelayedTask(worker.getPluginInstance(),
 						new UpdateInvisibleOnJoin(newPlayer));
-		if (worker.hasInvisiblePowers(newPlayer.getName()))
+		if (worker.hasInvisiblePowers(newPlayer.getName())) {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
 							new UpdateInvisible(newPlayer));
+			return true;
+		}
+		return false;
 	}
 
 	protected class UpdateInvisibleOnJoin implements Runnable {
