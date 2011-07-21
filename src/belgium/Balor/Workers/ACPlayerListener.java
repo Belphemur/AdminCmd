@@ -57,7 +57,7 @@ public class ACPlayerListener extends PlayerListener {
 					public void run() {
 						playerRespawnOrJoin(player);
 					}
-				}, 40);
+				}, 20);
 	}
 
 	@Override
