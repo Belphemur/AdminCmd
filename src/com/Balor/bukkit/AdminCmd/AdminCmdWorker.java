@@ -41,7 +41,6 @@ public class AdminCmdWorker extends Worker {
 	private AdminCmd pluginInstance;
 	private HashSet<String> thunderGods = new HashSet<String>();
 	private HashSet<String> gods = new HashSet<String>();
-	private HashSet<String> invisibles = new HashSet<String>();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().weakValues()
 			.concurrencyLevel(5).makeMap();
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
@@ -49,7 +48,8 @@ public class AdminCmdWorker extends Worker {
 	private ConcurrentMap<String, Float> vulcans = new MapMaker().concurrencyLevel(5).makeMap();
 	private static AdminCmdWorker instance = null;
 	private final long maxRange = 16384;
-	private int repeatInvTaskId = -1;
+	private ConcurrentMap<String, Integer> repeatInvTaskId = new MapMaker().concurrencyLevel(8)
+			.makeMap();
 
 	private AdminCmdWorker() {
 		materialsColors = new MapMaker().softKeys().makeMap();
@@ -445,34 +445,29 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public void vanish(final Player toVanish) {
-		invisibles.add(toVanish.getName());
+		String name = toVanish.getName();
 		pluginInstance.getServer().getScheduler()
-				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
-
-					@Override
-					public void run() {
-						for (Player p : pluginInstance.getServer().getOnlinePlayers())
-							invisible(toVanish, p);
-					}
-				});
-		if (repeatInvTaskId == -1)
-			repeatInvTaskId = pluginInstance
-					.getServer()
-					.getScheduler()
-					.scheduleAsyncRepeatingTask(pluginInstance, new UpdateInvisible(toVanish), 0,
-							400);
+				.scheduleAsyncDelayedTask(pluginInstance, new UpdateInvisible(toVanish));
+		if (!repeatInvTaskId.containsKey(name))
+			repeatInvTaskId.put(
+					name,
+					(Integer) pluginInstance
+							.getServer()
+							.getScheduler()
+							.scheduleAsyncRepeatingTask(pluginInstance,
+									new UpdateInvisible(toVanish), 200, 400));
 
 	}
 
 	public LinkedList<Player> getAllInvisiblePlayers() {
 		LinkedList<Player> result = new LinkedList<Player>();
-		for (String p : invisibles)
+		for (String p : repeatInvTaskId.keySet())
 			result.add(pluginInstance.getServer().getPlayer(p));
 		return result;
 	}
 
-	public void reappear(final Player toReappear) {
-		invisibles.remove(toReappear.getName());
+	public void reappear(final Player toReappear) {		
+		String name = toReappear.getName();
 		pluginInstance.getServer().getScheduler()
 				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
 
@@ -482,9 +477,10 @@ public class AdminCmdWorker extends Worker {
 							uninvisible(toReappear, p);
 					}
 				});
-		if (invisibles.size() == 0 && repeatInvTaskId != -1) {
-			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId);
-			repeatInvTaskId = -1;
+		
+		if (repeatInvTaskId.containsKey(name)) {
+			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId.get(name));
+			repeatInvTaskId.remove(name);
 		}
 	}
 
@@ -495,7 +491,7 @@ public class AdminCmdWorker extends Worker {
 		if (hideFrom == null) {
 			return;
 		}
-		if (hide.equals(hideFrom))
+		if (hide.getName().equals(hideFrom.getName()))
 			return;
 
 		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
@@ -519,7 +515,7 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public boolean hasInvisiblePowers(String player) {
-		return invisibles.contains(player);
+		return repeatInvTaskId.containsKey(player);
 	}
 
 	public boolean alias(String[] args) {
@@ -593,7 +589,6 @@ public class AdminCmdWorker extends Worker {
 		}
 		return true;
 	}
-
 
 	// ----- / item coloring section -----
 }

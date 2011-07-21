@@ -16,6 +16,7 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -44,7 +45,10 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (playerRespawnOrJoin(event.getPlayer()))
+		{
 			event.setJoinMessage(null);
+			event.getPlayer().sendMessage(ChatColor.RED+"You are still Invisible");
+		}
 	}
 
 	@Override
