@@ -36,9 +36,9 @@ public class AdminCmdWorker extends Worker {
 	private AdminCmd pluginInstance;
 	private HashSet<String> thunderGods = new HashSet<String>();
 	private HashSet<String> gods = new HashSet<String>();
-	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().softValues().concurrencyLevel(5).makeMap();
-	private ConcurrentMap<String, Location> spawnLocations = new  MapMaker().softValues().concurrencyLevel(5).makeMap();
-	private ConcurrentMap<String, Float> vulcans = new  MapMaker().softValues().concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().weakValues().concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, Location> spawnLocations = new  MapMaker().weakValues().concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, Float> vulcans = new  MapMaker().concurrencyLevel(5).makeMap();
 	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
