@@ -468,6 +468,10 @@ public class AdminCmdWorker extends Worker {
 
 	public void reappear(final Player toReappear) {		
 		String name = toReappear.getName();
+		if (repeatInvTaskId.containsKey(name)) {
+			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId.get(name));
+			repeatInvTaskId.remove(name);
+		}
 		pluginInstance.getServer().getScheduler()
 				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
 
@@ -478,10 +482,6 @@ public class AdminCmdWorker extends Worker {
 					}
 				});
 		
-		if (repeatInvTaskId.containsKey(name)) {
-			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId.get(name));
-			repeatInvTaskId.remove(name);
-		}
 	}
 
 	public void invisible(Player hide, Player hideFrom) {
