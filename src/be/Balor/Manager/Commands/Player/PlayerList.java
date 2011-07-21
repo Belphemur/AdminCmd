@@ -56,12 +56,14 @@ public class PlayerList extends ACCommands {
 		if (AdminCmdWorker.getPermission() == null) {
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
-				String name = p.getDisplayName();
-				if (buffer.length() + name.length() + 2 >= 256) {
-					sender.sendMessage(buffer);
-					buffer = "";
+				if (!AdminCmdWorker.getInstance().hasInvisiblePowers(p.getName())) {
+					String name = p.getDisplayName();
+					if (buffer.length() + name.length() + 2 >= 256) {
+						sender.sendMessage(buffer);
+						buffer = "";
+					}
+					buffer += name + ", ";
 				}
-				buffer += name + ", ";
 			}
 		} else {
 			// changed the playerlist, now support prefixes from groups!!! @foxy
@@ -70,31 +72,32 @@ public class PlayerList extends ACCommands {
 				String prefixstring;
 				String world = "";
 				world = online[i].getWorld().getName();
+				if (!AdminCmdWorker.getInstance().hasInvisiblePowers(name)) {
+					try {
+						prefixstring = AdminCmdWorker.getPermission().safeGetUser(world, name)
+								.getPrefix();
+					} catch (Exception e) {
+						String group = AdminCmdWorker.getPermission().getGroup(world, name);
+						prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+					} catch (NoSuchMethodError e) {
+						String group = AdminCmdWorker.getPermission().getGroup(world, name);
+						prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+					}
 
-				try {
-					prefixstring = AdminCmdWorker.getPermission().safeGetUser(world, name)
-							.getPrefix();
-				} catch (Exception e) {
-					String group = AdminCmdWorker.getPermission().getGroup(world, name);
-					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
-				} catch (NoSuchMethodError e) {
-					String group = AdminCmdWorker.getPermission().getGroup(world, name);
-					prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
-				}
+					if (prefixstring != null && prefixstring.length() > 1) {
+						String result = Utils.colorParser(prefixstring);
+						if (result == null)
+							buffer += prefixstring + name + ChatColor.WHITE + ", ";
+						else
+							buffer += result + name + ChatColor.WHITE + ", ";
 
-				if (prefixstring != null && prefixstring.length() > 1) {
-					String result = Utils.colorParser(prefixstring);
-					if (result == null)
-						buffer += prefixstring + name + ChatColor.WHITE + ", ";
-					else
-						buffer += result + name + ChatColor.WHITE + ", ";
-
-				} else {
-					buffer += name + ", ";
-				}
-				if (buffer.length() >= 256) {
-					sender.sendMessage(buffer);
-					buffer = "";
+					} else {
+						buffer += name + ", ";
+					}
+					if (buffer.length() >= 256) {
+						sender.sendMessage(buffer);
+						buffer = "";
+					}
 				}
 			}
 
