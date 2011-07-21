@@ -82,8 +82,6 @@ public class Utils {
 	}
 
 	public static long getDistanceSquared(Player player1, Player player2) {
-		if (player1.getWorld() != player2.getWorld())
-			return Long.MAX_VALUE;
 		Location loc1 = player1.getLocation();
 		Location loc2 = player2.getLocation();
 		return getDistanceSquared(loc1, loc2);
@@ -94,6 +92,6 @@ public class Utils {
 			return Long.MAX_VALUE;
 		long xDiff = loc1.getBlockX() - loc2.getBlockX();
 		long zDiff = loc1.getBlockZ() - loc2.getBlockZ();
-		return xDiff * xDiff + zDiff * zDiff;
+		return xDiff ^ 2 + zDiff ^ 2;
 	}
 }

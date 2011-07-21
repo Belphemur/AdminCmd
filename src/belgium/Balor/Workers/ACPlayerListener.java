@@ -16,11 +16,16 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
+import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.files.utils.UpdateInvisible;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -37,6 +42,16 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	@Override
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		playerRespawnOrJoin(event.getPlayer());
+	}
+
+	@Override
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		playerRespawnOrJoin(event.getPlayer());
+	}
+
+	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
 			if ((worker.hasThorPowers(event.getPlayer().getName())))
@@ -48,6 +63,35 @@ public class ACPlayerListener extends PlayerListener {
 						.getWorld()
 						.createExplosion(event.getPlayer().getTargetBlock(null, 600).getLocation(),
 								power, true);
+		}
+	}
+
+	private void playerRespawnOrJoin(Player newPlayer) {
+		AdminCmd.getBukkitServer()
+				.getScheduler()
+				.scheduleAsyncDelayedTask(worker.getPluginInstance(),
+						new UpdateInvisibleOnJoin(newPlayer));
+		if (worker.hasInvisiblePowers(newPlayer.getName()))
+			AdminCmd.getBukkitServer()
+					.getScheduler()
+					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
+							new UpdateInvisible(newPlayer));
+	}
+
+	protected class UpdateInvisibleOnJoin implements Runnable {
+		Player newPlayer;
+
+		/**
+		 * 
+		 */
+		public UpdateInvisibleOnJoin(Player p) {
+			newPlayer = p;
+		}
+
+		@Override
+		public void run() {
+			for (Player toVanish : AdminCmdWorker.getInstance().getAllInvisiblePlayers())
+				AdminCmdWorker.getInstance().invisible(toVanish, newPlayer);
 		}
 	}
 

@@ -22,6 +22,7 @@ import belgium.Balor.Workers.Worker;
 
 import com.Balor.files.utils.FilesManager;
 import com.Balor.files.utils.MaterialContainer;
+import com.Balor.files.utils.UpdateInvisible;
 import com.Balor.files.utils.Utils;
 import com.google.common.collect.MapMaker;
 
@@ -47,7 +48,7 @@ public class AdminCmdWorker extends Worker {
 			.concurrencyLevel(5).makeMap();
 	private ConcurrentMap<String, Float> vulcans = new MapMaker().concurrencyLevel(5).makeMap();
 	private static AdminCmdWorker instance = null;
-	private final long RANGE_SQUARED = 262144;
+	private final long maxRange = 16384;
 	private int repeatInvTaskId = -1;
 
 	private AdminCmdWorker() {
@@ -454,10 +455,20 @@ public class AdminCmdWorker extends Worker {
 							invisible(toVanish, p);
 					}
 				});
-		if(repeatInvTaskId == -1)
-			repeatInvTaskId = pluginInstance.getServer().getScheduler()
-			.scheduleAsyncRepeatingTask(pluginInstance, new UpdateInv(toVanish), 0, 400);
+		if (repeatInvTaskId == -1)
+			repeatInvTaskId = pluginInstance
+					.getServer()
+					.getScheduler()
+					.scheduleAsyncRepeatingTask(pluginInstance, new UpdateInvisible(toVanish), 0,
+							400);
 
+	}
+
+	public LinkedList<Player> getAllInvisiblePlayers() {
+		LinkedList<Player> result = new LinkedList<Player>();
+		for (String p : invisibles)
+			result.add(pluginInstance.getServer().getPlayer(p));
+		return result;
 	}
 
 	public void reappear(final Player toReappear) {
@@ -471,14 +482,13 @@ public class AdminCmdWorker extends Worker {
 							uninvisible(toReappear, p);
 					}
 				});
-		if(invisibles.size() == 0 && repeatInvTaskId != -1)
-		{
+		if (invisibles.size() == 0 && repeatInvTaskId != -1) {
 			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId);
 			repeatInvTaskId = -1;
 		}
 	}
 
-	private void invisible(Player hide, Player hideFrom) {
+	public void invisible(Player hide, Player hideFrom) {
 		if (hide == null) {
 			return;
 		}
@@ -488,7 +498,7 @@ public class AdminCmdWorker extends Worker {
 		if (hide.equals(hideFrom))
 			return;
 
-		if (Utils.getDistanceSquared(hide, hideFrom) > RANGE_SQUARED)
+		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
 			return;
 
 		((CraftPlayer) hideFrom).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(
@@ -499,7 +509,7 @@ public class AdminCmdWorker extends Worker {
 		if (unHide.equals(unHideFrom))
 			return;
 
-		if (Utils.getDistanceSquared(unHide, unHideFrom) > RANGE_SQUARED)
+		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange)
 			return;
 
 		((CraftPlayer) unHideFrom).getHandle().netServerHandler
@@ -584,21 +594,6 @@ public class AdminCmdWorker extends Worker {
 		return true;
 	}
 
-	protected class UpdateInv implements Runnable {
-		Player toVanish;
 
-		/**
-		 * 
-		 */
-		public UpdateInv(Player p) {
-			toVanish = p;
-		}
-
-		@Override
-		public void run() {
-			for (Player p : pluginInstance.getServer().getOnlinePlayers())
-				invisible(toVanish, p);
-		}
-	}
 	// ----- / item coloring section -----
 }

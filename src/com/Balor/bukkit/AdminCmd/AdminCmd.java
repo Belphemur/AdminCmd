@@ -109,6 +109,8 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().registerAllPermParent();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_RESPAWN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);
 	}
 
