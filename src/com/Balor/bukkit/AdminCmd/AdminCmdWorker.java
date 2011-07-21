@@ -6,11 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
+import net.minecraft.server.Packet20NamedEntitySpawn;
+import net.minecraft.server.Packet29DestroyEntity;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
@@ -36,10 +40,15 @@ public class AdminCmdWorker extends Worker {
 	private AdminCmd pluginInstance;
 	private HashSet<String> thunderGods = new HashSet<String>();
 	private HashSet<String> gods = new HashSet<String>();
-	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().weakValues().concurrencyLevel(5).makeMap();
-	private ConcurrentMap<String, Location> spawnLocations = new  MapMaker().weakValues().concurrencyLevel(5).makeMap();
-	private ConcurrentMap<String, Float> vulcans = new  MapMaker().concurrencyLevel(5).makeMap();
+	private HashSet<String> invisibles = new HashSet<String>();
+	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().weakValues()
+			.concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
+			.concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, Float> vulcans = new MapMaker().concurrencyLevel(5).makeMap();
 	private static AdminCmdWorker instance = null;
+	private final long RANGE_SQUARED = 262144;
+	private int repeatInvTaskId = -1;
 
 	private AdminCmdWorker() {
 		materialsColors = new MapMaker().softKeys().makeMap();
@@ -274,7 +283,7 @@ public class AdminCmdWorker extends Worker {
 	 */
 	public Player getUser(String[] args, String permNode, int index) {
 		Player target = null;
-		if (args.length >=index + 1) {
+		if (args.length >= index + 1) {
 			if (AdminCmdWorker.getInstance().hasPerm(sender, permNode + ".other"))
 				target = sender.getServer().getPlayer(args[index]);
 			else
@@ -308,12 +317,10 @@ public class AdminCmdWorker extends Worker {
 		Player target = getUser(name, "admincmd.player." + toDo + ".other");
 		if (target == null)
 			return false;
-		if (toDo.equals("heal"))
-		{
+		if (toDo.equals("heal")) {
 			target.setHealth(20);
 			target.setFireTicks(0);
-		}
-		else
+		} else
 			target.setHealth(0);
 
 		return true;
@@ -436,6 +443,75 @@ public class AdminCmdWorker extends Worker {
 		thunderGods.remove(playerName);
 	}
 
+	public void vanish(final Player toVanish) {
+		invisibles.add(toVanish.getName());
+		pluginInstance.getServer().getScheduler()
+				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
+
+					@Override
+					public void run() {
+						for (Player p : pluginInstance.getServer().getOnlinePlayers())
+							invisible(toVanish, p);
+					}
+				});
+		if(repeatInvTaskId == -1)
+			repeatInvTaskId = pluginInstance.getServer().getScheduler()
+			.scheduleAsyncRepeatingTask(pluginInstance, new UpdateInv(toVanish), 0, 400);
+
+	}
+
+	public void reappear(final Player toReappear) {
+		invisibles.remove(toReappear.getName());
+		pluginInstance.getServer().getScheduler()
+				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
+
+					@Override
+					public void run() {
+						for (Player p : pluginInstance.getServer().getOnlinePlayers())
+							uninvisible(toReappear, p);
+					}
+				});
+		if(invisibles.size() == 0 && repeatInvTaskId != -1)
+		{
+			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId);
+			repeatInvTaskId = -1;
+		}
+	}
+
+	private void invisible(Player hide, Player hideFrom) {
+		if (hide == null) {
+			return;
+		}
+		if (hideFrom == null) {
+			return;
+		}
+		if (hide.equals(hideFrom))
+			return;
+
+		if (Utils.getDistanceSquared(hide, hideFrom) > RANGE_SQUARED)
+			return;
+
+		((CraftPlayer) hideFrom).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(
+				hide.getEntityId()));
+	}
+
+	private void uninvisible(Player unHide, Player unHideFrom) {
+		if (unHide.equals(unHideFrom))
+			return;
+
+		if (Utils.getDistanceSquared(unHide, unHideFrom) > RANGE_SQUARED)
+			return;
+
+		((CraftPlayer) unHideFrom).getHandle().netServerHandler
+				.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
+		((CraftPlayer) unHideFrom).getHandle().netServerHandler
+				.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) unHide).getHandle()));
+	}
+
+	public boolean hasInvisiblePowers(String player) {
+		return thunderGods.contains(player);
+	}
+
 	public boolean alias(String[] args) {
 		MaterialContainer m = checkMaterial(args[1]);
 		if (m.isNull())
@@ -506,6 +582,23 @@ public class AdminCmdWorker extends Worker {
 			((Player) sender).getItemInHand().setDurability(value);
 		}
 		return true;
+	}
+
+	protected class UpdateInv implements Runnable {
+		Player toVanish;
+
+		/**
+		 * 
+		 */
+		public UpdateInv(Player p) {
+			toVanish = p;
+		}
+
+		@Override
+		public void run() {
+			for (Player p : pluginInstance.getServer().getOnlinePlayers())
+				invisible(toVanish, p);
+		}
 	}
 	// ----- / item coloring section -----
 }

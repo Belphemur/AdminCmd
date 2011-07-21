@@ -20,6 +20,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
@@ -77,5 +79,21 @@ public class Utils {
 
 	public static String colorParser(String toParse) {
 		return colorParser(toParse, "&");
+	}
+
+	public static long getDistanceSquared(Player player1, Player player2) {
+		if (player1.getWorld() != player2.getWorld())
+			return Long.MAX_VALUE;
+		Location loc1 = player1.getLocation();
+		Location loc2 = player2.getLocation();
+		return getDistanceSquared(loc1, loc2);
+	}
+
+	public static long getDistanceSquared(Location loc1, Location loc2) {
+		if (loc1.getWorld() != loc2.getWorld())
+			return Long.MAX_VALUE;
+		long xDiff = loc1.getBlockX() - loc2.getBlockX();
+		long zDiff = loc1.getBlockZ() - loc2.getBlockZ();
+		return xDiff * xDiff + zDiff * zDiff;
 	}
 }
