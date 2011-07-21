@@ -509,7 +509,7 @@ public class AdminCmdWorker extends Worker {
 	}
 
 	public boolean hasInvisiblePowers(String player) {
-		return thunderGods.contains(player);
+		return invisibles.contains(player);
 	}
 
 	public boolean alias(String[] args) {
