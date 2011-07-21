@@ -118,6 +118,7 @@ public class AdminCmd extends JavaPlugin {
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		worker = null;
+		getServer().getScheduler().cancelTasks(this);
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version"
 				+ pdfFile.getVersion() + ")");
 	}
