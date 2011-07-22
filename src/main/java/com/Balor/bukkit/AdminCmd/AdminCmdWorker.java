@@ -41,8 +41,8 @@ public class AdminCmdWorker extends Worker {
 	private AdminCmd pluginInstance;
 	private HashSet<String> thunderGods = new HashSet<String>();
 	private HashSet<String> gods = new HashSet<String>();
-	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().weakValues()
-			.concurrencyLevel(5).makeMap();
+	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().concurrencyLevel(5)
+			.makeMap();
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
 			.concurrencyLevel(5).makeMap();
 	private ConcurrentMap<String, Float> vulcans = new MapMaker().concurrencyLevel(5).makeMap();
@@ -90,7 +90,7 @@ public class AdminCmdWorker extends Worker {
 		this.pluginInstance = pluginInstance;
 		fManager = new FilesManager(pluginInstance.getDataFolder().getPath());
 		blacklist = getBlackListedItems();
-		alias = fManager.getAlias();
+		alias.putAll(fManager.getAlias());
 	}
 
 	/**
@@ -466,7 +466,7 @@ public class AdminCmdWorker extends Worker {
 		return result;
 	}
 
-	public void reappear(final Player toReappear) {		
+	public void reappear(final Player toReappear) {
 		String name = toReappear.getName();
 		if (repeatInvTaskId.containsKey(name)) {
 			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId.get(name));
@@ -479,7 +479,7 @@ public class AdminCmdWorker extends Worker {
 							uninvisible(toReappear, p);
 					}
 				});
-		
+
 	}
 
 	public void invisible(Player hide, Player hideFrom) {

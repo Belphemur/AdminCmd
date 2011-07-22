@@ -142,7 +142,7 @@ public class FilesManager {
 	}
 
 	public ConcurrentMap<String, MaterialContainer> getAlias() {
-		ConcurrentMap<String, MaterialContainer> result = new MapMaker().softValues().makeMap();
+		ConcurrentMap<String, MaterialContainer> result = new MapMaker().makeMap();
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
