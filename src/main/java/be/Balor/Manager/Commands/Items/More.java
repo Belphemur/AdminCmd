@@ -55,12 +55,8 @@ public class More extends ACCommands {
 				sender.sendMessage(ChatColor.RED + "You have to be holding something!");
 				return;
 			}
-			if (!AdminCmdWorker.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
-					&& AdminCmdWorker.getInstance().inBlackList(hand.getTypeId())) {
-				sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
-						+ hand.getType() + ChatColor.DARK_RED + ") is black listed.");
+			if (AdminCmdWorker.getInstance().inBlackList(hand))
 				return;
-			}
 			if (args.length == 0)
 				hand.setAmount(64);
 			else {

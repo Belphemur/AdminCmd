@@ -52,16 +52,11 @@ public class Give extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		// which material?
 		MaterialContainer mat = null;
-		AdminCmdWorker worker = AdminCmdWorker.getInstance();
-		mat = worker.checkMaterial(args[0]);
+		mat = AdminCmdWorker.getInstance().checkMaterial(args[0]);
 		if (mat.isNull())
 			return;
-		if (!worker.hasPerm(sender, "admincmd.item.noblacklist")
-				&& worker.inBlackList(mat.material.getId())) {
-			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.display()
-					+ ChatColor.DARK_RED + ") is black listed.");
+		if (AdminCmdWorker.getInstance().inBlackList(mat))
 			return;
-		}
 		// amount, damage and target player
 		int cnt = 1;
 		Player target = null;

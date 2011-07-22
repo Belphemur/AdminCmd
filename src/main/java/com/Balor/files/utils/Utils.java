@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
@@ -86,6 +87,26 @@ public class Utils {
 			return Long.MAX_VALUE;
 		Location loc1 = player1.getLocation();
 		Location loc2 = player2.getLocation();
-		return (loc1.getBlockX() - loc2.getBlockX()) ^ 2 + (loc1.getBlockZ() - loc2.getBlockZ()) ^ 2;
+		return (loc1.getBlockX() - loc2.getBlockX()) ^ 2 + (loc1.getBlockZ() - loc2.getBlockZ())
+				^ 2;
+	}
+
+	/**
+	 * Check if the command sender is a Player
+	 * 
+	 * @return
+	 */
+	public static boolean isPlayer(CommandSender sender) {
+		return isPlayer(sender, true);
+	}
+
+	public static boolean isPlayer(CommandSender sender, boolean msg) {
+		if (sender instanceof Player)
+			return true;
+		else {
+			if (msg)
+				sender.sendMessage("You must be a player to use this command.");
+			return false;
+		}
 	}
 }

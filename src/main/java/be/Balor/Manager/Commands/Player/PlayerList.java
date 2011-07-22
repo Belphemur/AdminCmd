@@ -20,10 +20,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.PermissionManager;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -55,7 +55,7 @@ public class PlayerList extends ACCommands {
 		sender.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE
 				+ (online.length - InvisibleWorker.getInstance().nbInvisibles()));
 		String buffer = "";
-		if (AdminCmdWorker.getPermission() == null) {
+		if (PermissionManager.getPermission() == null) {
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
 				if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
@@ -76,14 +76,14 @@ public class PlayerList extends ACCommands {
 				world = online[i].getWorld().getName();
 				if (!InvisibleWorker.getInstance().hasInvisiblePowers(name)) {
 					try {
-						prefixstring = AdminCmdWorker.getPermission().safeGetUser(world, name)
+						prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
 								.getPrefix();
 					} catch (Exception e) {
-						String group = AdminCmdWorker.getPermission().getGroup(world, name);
-						prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+						String group = PermissionManager.getPermission().getGroup(world, name);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
 					} catch (NoSuchMethodError e) {
-						String group = AdminCmdWorker.getPermission().getGroup(world, name);
-						prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+						String group = PermissionManager.getPermission().getGroup(world, name);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
 					}
 
 					if (prefixstring != null && prefixstring.length() > 1) {

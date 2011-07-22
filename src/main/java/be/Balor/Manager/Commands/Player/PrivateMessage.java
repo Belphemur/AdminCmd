@@ -24,6 +24,7 @@ import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.PermissionManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,7 +55,7 @@ public class PrivateMessage extends ACCommands {
 
 			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
 			if (AdminCmdWorker.getInstance().isPlayer(false)) {
-				if (AdminCmdWorker.getPermission() != null) {
+				if (PermissionManager.getPermission() != null) {
 					Player pSender = (Player) sender;
 					String name = pSender.getName();
 					String prefixstring;
@@ -62,14 +63,14 @@ public class PrivateMessage extends ACCommands {
 					world = pSender.getWorld().getName();
 
 					try {
-						prefixstring = AdminCmdWorker.getPermission().safeGetUser(world, name)
+						prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
 								.getPrefix();
 					} catch (Exception e) {
-						String group = AdminCmdWorker.getPermission().getGroup(world, name);
-						prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+						String group = PermissionManager.getPermission().getGroup(world, name);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
 					} catch (NoSuchMethodError e) {
-						String group = AdminCmdWorker.getPermission().getGroup(world, name);
-						prefixstring = AdminCmdWorker.getPermission().getGroupPrefix(world, group);
+						String group = PermissionManager.getPermission().getGroup(world, name);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
 					}
 
 					if (prefixstring != null && prefixstring.length() > 1) {

@@ -20,8 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -63,7 +61,7 @@ public abstract class ACCommands {
 	 * @return
 	 */
 	public boolean permissionCheck(CommandSender sender) {
-		return AdminCmdWorker.getInstance().hasPerm(sender, bukkitPerm);
+		return PermissionManager.getInstance().hasPerm(sender, bukkitPerm);
 	}
 
 	/**

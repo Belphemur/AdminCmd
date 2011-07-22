@@ -17,11 +17,16 @@
 package be.Balor.Manager;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
+import com.nijiko.permissions.PermissionHandler;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -31,6 +36,8 @@ public class PermissionManager {
 	private LinkedList<PermParent> permissions = new LinkedList<PermParent>();
 	private PermParent majorPerm;
 	private static PermissionManager instance = null;
+	protected static PermissionHandler permission = null;
+	public static final Logger log = Logger.getLogger("Minecraft");
 
 	/**
 	 * @return the instance
@@ -97,6 +104,91 @@ public class PermissionManager {
 		for (PermParent pp : permissions)
 			pp.registerBukkitPerm();
 		majorPerm.registerBukkitPerm();
+	}
+
+	/**
+	 * Check the permissions
+	 * 
+	 * @param player
+	 * @param perm
+	 * @return boolean
+	 */
+	public boolean hasPerm(CommandSender player, String perm) {
+		return hasPerm(player, perm, true);
+	}
+
+	public boolean hasPerm(CommandSender player, Permission perm) {
+		return hasPerm(player, perm, true);
+	}
+
+	/**
+	 * Check the permission with the possibility to disable the error msg
+	 * 
+	 * @param player
+	 * @param perm
+	 * @param errorMsg
+	 * @return
+	 */
+	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+		if (!(player instanceof Player))
+			return true;
+		if (permission == null) {
+			if (perm.contains("admin") || perm.contains("free"))
+				return player.hasPermission(perm);
+			return true;
+		} else if (permission.has((Player) player, perm)) {
+			return true;
+		} else {
+			if (errorMsg)
+				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(" + perm + ")");
+			return false;
+		}
+
+	}
+
+	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+		if (!(player instanceof Player))
+			return true;
+		if (permission == null) {
+			boolean havePerm = player.hasPermission(perm);
+			if (!havePerm && errorMsg)
+				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(" + perm.getName() + ")");
+			return havePerm;
+		} else if (permission.has((Player) player, perm.getName())) {
+			return true;
+		} else {
+			if (errorMsg)
+				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(" + perm.getName() + ")");
+			return false;
+		}
+
+	}
+
+	/**
+	 * Permission plugin
+	 * 
+	 * @return
+	 */
+	public static PermissionHandler getPermission() {
+		return permission;
+	}
+
+	/**
+	 * Set Permission Plugin
+	 * 
+	 * @param plugin
+	 * @return
+	 */
+	public static boolean setPermission(PermissionHandler plugin) {
+		if (permission == null) {
+			permission = plugin;
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 }

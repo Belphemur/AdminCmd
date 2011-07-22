@@ -14,10 +14,10 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
-import belgium.Balor.Workers.Worker;
-
+import be.Balor.Manager.PermissionManager;
 import com.Balor.files.utils.FilesManager;
 import com.Balor.files.utils.MaterialContainer;
 import com.Balor.files.utils.Utils;
@@ -28,7 +28,7 @@ import com.google.common.collect.MapMaker;
  * 
  * @authors Plague, Balor
  */
-public class AdminCmdWorker extends Worker {
+public class AdminCmdWorker {
 
 	private CommandSender sender;
 	private HashMap<Material, String[]> materialsColors;
@@ -42,7 +42,7 @@ public class AdminCmdWorker extends Worker {
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
 			.expiration(10, TimeUnit.MINUTES).makeMap();
 	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
-	private static AdminCmdWorker instance = null;	
+	private static AdminCmdWorker instance = null;
 
 	private AdminCmdWorker() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -97,20 +97,6 @@ public class AdminCmdWorker extends Worker {
 		this.sender = player;
 	}
 
-	public boolean isPlayer() {
-		return isPlayer(true);
-	}
-
-	public boolean isPlayer(boolean msg) {
-		if (sender instanceof Player)
-			return true;
-		else {
-			if (msg)
-				sender.sendMessage("You must be a player to use this command.");
-			return false;
-		}
-	}
-
 	private void setTime(World w, String arg) {
 		long curtime = w.getTime();
 		long newtime = curtime - (curtime % 24000);
@@ -145,6 +131,14 @@ public class AdminCmdWorker extends Worker {
 		}
 		return true;
 
+	}
+
+	public boolean isPlayer() {
+		return Utils.isPlayer(sender);
+	}
+
+	public boolean isPlayer(boolean msg) {
+		return Utils.isPlayer(sender, msg);
 	}
 
 	// teleports chosen player to another player
@@ -278,7 +272,7 @@ public class AdminCmdWorker extends Worker {
 	public Player getUser(String[] args, String permNode, int index) {
 		Player target = null;
 		if (args.length >= index + 1) {
-			if (AdminCmdWorker.getInstance().hasPerm(sender, permNode + ".other"))
+			if (PermissionManager.getInstance().hasPerm(sender, permNode + ".other"))
 				target = sender.getServer().getPlayer(args[index]);
 			else
 				return target;
@@ -318,10 +312,6 @@ public class AdminCmdWorker extends Worker {
 			target.setHealth(0);
 
 		return true;
-	}
-
-	public boolean inBlackList(int id) {
-		return blacklist.contains(id);
 	}
 
 	/**
@@ -507,6 +497,27 @@ public class AdminCmdWorker extends Worker {
 			((Player) sender).getItemInHand().setDurability(value);
 		}
 		return true;
+	}
+	
+	public boolean inBlackList(MaterialContainer mat)
+	{
+		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
+				&& blacklist.contains(mat.material.getId())) {
+			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.display()
+					+ ChatColor.DARK_RED + ") is black listed.");
+			return true;
+		}
+		return false;
+	}
+	public boolean inBlackList(ItemStack mat)
+	{
+		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
+				&& blacklist.contains(mat.getTypeId())) {
+			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.getType()
+					+ ChatColor.DARK_RED + ") is black listed.");
+			return true;
+		}
+		return false;
 	}
 
 	// ----- / item coloring section -----
