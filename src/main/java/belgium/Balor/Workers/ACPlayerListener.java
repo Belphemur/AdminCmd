@@ -83,7 +83,7 @@ public class ACPlayerListener extends PlayerListener {
 				.getScheduler()
 				.scheduleAsyncDelayedTask(worker.getPluginInstance(),
 						new UpdateInvisibleOnJoin(newPlayer));
-		if (worker.hasInvisiblePowers(newPlayer.getName())) {
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
@@ -104,8 +104,8 @@ public class ACPlayerListener extends PlayerListener {
 		}
 
 		public void run() {
-			for (Player toVanish : AdminCmdWorker.getInstance().getAllInvisiblePlayers())
-				AdminCmdWorker.getInstance().invisible(toVanish, newPlayer);
+			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers())
+				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
 		}
 	}
 

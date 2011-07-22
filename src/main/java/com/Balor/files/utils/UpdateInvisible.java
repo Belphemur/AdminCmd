@@ -18,8 +18,9 @@ package com.Balor.files.utils;
 
 import org.bukkit.entity.Player;
 
+import belgium.Balor.Workers.InvisibleWorker;
+
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -36,6 +37,6 @@ public class UpdateInvisible implements Runnable {
 	}
 	public void run() {
 		for (Player p : AdminCmd.getBukkitServer().getOnlinePlayers())
-			AdminCmdWorker.getInstance().invisible(toVanish, p);
+			InvisibleWorker.getInstance().invisible(toVanish, p);
 	}
 }

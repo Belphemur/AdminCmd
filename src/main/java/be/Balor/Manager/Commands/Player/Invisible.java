@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 
 import be.Balor.Manager.ACCommands;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,14 +50,14 @@ public class Invisible extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player target = AdminCmdWorker.getInstance().getUser(args, permNode);
-		if (!AdminCmdWorker.getInstance().hasInvisiblePowers(target.getName()))
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName()))
 		{
-			AdminCmdWorker.getInstance().vanish(target);
+			InvisibleWorker.getInstance().vanish(target);
 			target.sendMessage(ChatColor.RED+"You are now Invisible");
 		}
 		else
 		{
-			AdminCmdWorker.getInstance().reappear(target);
+			InvisibleWorker.getInstance().reappear(target);
 			target.sendMessage(ChatColor.GREEN+"You are now Visible");
 		}
 	}

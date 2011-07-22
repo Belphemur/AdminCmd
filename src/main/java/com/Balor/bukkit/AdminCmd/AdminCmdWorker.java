@@ -8,15 +8,11 @@ import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-import net.minecraft.server.Packet20NamedEntitySpawn;
-import net.minecraft.server.Packet29DestroyEntity;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
@@ -24,7 +20,6 @@ import belgium.Balor.Workers.Worker;
 
 import com.Balor.files.utils.FilesManager;
 import com.Balor.files.utils.MaterialContainer;
-import com.Balor.files.utils.UpdateInvisible;
 import com.Balor.files.utils.Utils;
 import com.google.common.collect.MapMaker;
 
@@ -47,9 +42,7 @@ public class AdminCmdWorker extends Worker {
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
 			.expiration(10, TimeUnit.MINUTES).makeMap();
 	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
-	private static AdminCmdWorker instance = null;
-	private final long maxRange = 16384;
-	private ConcurrentMap<String, Integer> repeatInvTaskId = new MapMaker().makeMap();
+	private static AdminCmdWorker instance = null;	
 
 	private AdminCmdWorker() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -442,78 +435,6 @@ public class AdminCmdWorker extends Worker {
 
 	public void removeThor(String playerName) {
 		thunderGods.remove(playerName);
-	}
-
-	public void vanish(final Player toVanish) {
-		String name = toVanish.getName();
-		pluginInstance.getServer().getScheduler()
-				.scheduleAsyncDelayedTask(pluginInstance, new UpdateInvisible(toVanish));
-		if (!repeatInvTaskId.containsKey(name))
-			repeatInvTaskId.put(
-					name,
-					(Integer) pluginInstance
-							.getServer()
-							.getScheduler()
-							.scheduleAsyncRepeatingTask(pluginInstance,
-									new UpdateInvisible(toVanish), 200, 400));
-
-	}
-
-	public LinkedList<Player> getAllInvisiblePlayers() {
-		LinkedList<Player> result = new LinkedList<Player>();
-		for (String p : repeatInvTaskId.keySet())
-			result.add(pluginInstance.getServer().getPlayer(p));
-		return result;
-	}
-
-	public void reappear(final Player toReappear) {
-		String name = toReappear.getName();
-		if (repeatInvTaskId.containsKey(name)) {
-			pluginInstance.getServer().getScheduler().cancelTask(repeatInvTaskId.get(name));
-			repeatInvTaskId.remove(name);
-		}
-		pluginInstance.getServer().getScheduler()
-				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
-					public void run() {
-						for (Player p : pluginInstance.getServer().getOnlinePlayers())
-							uninvisible(toReappear, p);
-					}
-				});
-
-	}
-
-	public void invisible(Player hide, Player hideFrom) {
-		if (hide == null) {
-			return;
-		}
-		if (hideFrom == null) {
-			return;
-		}
-		if (hide.getName().equals(hideFrom.getName()))
-			return;
-
-		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
-			return;
-
-		((CraftPlayer) hideFrom).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(
-				hide.getEntityId()));
-	}
-
-	private void uninvisible(Player unHide, Player unHideFrom) {
-		if (unHide.equals(unHideFrom))
-			return;
-
-		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange)
-			return;
-
-		((CraftPlayer) unHideFrom).getHandle().netServerHandler
-				.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
-		((CraftPlayer) unHideFrom).getHandle().netServerHandler
-				.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) unHide).getHandle()));
-	}
-
-	public boolean hasInvisiblePowers(String player) {
-		return repeatInvTaskId.containsKey(player);
 	}
 
 	public boolean alias(String[] args) {

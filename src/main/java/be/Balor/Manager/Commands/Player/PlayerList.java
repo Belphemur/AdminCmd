@@ -24,6 +24,7 @@ import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,12 +52,13 @@ public class PlayerList extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player[] online = sender.getServer().getOnlinePlayers();
-		sender.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE + online.length);
+		sender.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE
+				+ (online.length - InvisibleWorker.getInstance().nbInvisibles()));
 		String buffer = "";
 		if (AdminCmdWorker.getPermission() == null) {
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
-				if (!AdminCmdWorker.getInstance().hasInvisiblePowers(p.getName())) {
+				if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 					String name = p.getDisplayName();
 					if (buffer.length() + name.length() + 2 >= 256) {
 						sender.sendMessage(buffer);
@@ -72,7 +74,7 @@ public class PlayerList extends ACCommands {
 				String prefixstring;
 				String world = "";
 				world = online[i].getWorld().getName();
-				if (!AdminCmdWorker.getInstance().hasInvisiblePowers(name)) {
+				if (!InvisibleWorker.getInstance().hasInvisiblePowers(name)) {
 					try {
 						prefixstring = AdminCmdWorker.getPermission().safeGetUser(world, name)
 								.getPrefix();
@@ -102,7 +104,8 @@ public class PlayerList extends ACCommands {
 			}
 
 		}
-		sender.sendMessage(buffer);
+		if (buffer != "")
+			sender.sendMessage(buffer);
 	}
 
 	/*
