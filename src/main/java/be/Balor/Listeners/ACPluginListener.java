@@ -28,7 +28,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class PluginListener extends ServerListener {
+public class ACPluginListener extends ServerListener {
 	   
     @Override
     public void onPluginEnable(PluginEnableEvent event) {

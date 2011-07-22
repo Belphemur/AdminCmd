@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
-import be.Balor.Listeners.PluginListener;
+import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.PermParent;
 import be.Balor.Manager.PermissionManager;
@@ -93,7 +93,7 @@ public class AdminCmd extends JavaPlugin {
 	public void onEnable() {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
-		PluginListener pL = new PluginListener();
+		ACPluginListener pL = new ACPluginListener();
 
 		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
