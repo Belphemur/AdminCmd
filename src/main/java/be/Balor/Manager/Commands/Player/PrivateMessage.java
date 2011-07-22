@@ -52,11 +52,14 @@ public class PrivateMessage extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		Player buddy = sender.getServer().getPlayer(args[0]);
 		if (buddy != null) {
-
-			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
+			String senderPm = "";
+			String msgPrefix = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
+			String msg = "";
+			String senderName = "Server Admin";
 			if (ACHelper.getInstance().isPlayer(false)) {
+				Player pSender = (Player) sender;
+				senderName = pSender.getName();
 				if (PermissionManager.getPermission() != null) {
-					Player pSender = (Player) sender;
 					String name = pSender.getName();
 					String prefixstring;
 					String world = "";
@@ -67,34 +70,39 @@ public class PrivateMessage extends ACCommands {
 								.getPrefix();
 					} catch (Exception e) {
 						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
+								group);
 					} catch (NoSuchMethodError e) {
 						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
+								group);
 					}
 
 					if (prefixstring != null && prefixstring.length() > 1) {
 						String result = Utils.colorParser(prefixstring);
 						if (result == null)
-							msg += prefixstring + name + ChatColor.WHITE + " - ";
+							senderPm = prefixstring + name + ChatColor.WHITE + " - ";
 						else
-							msg += result + name + ChatColor.WHITE + " - ";
+							senderPm = result + name + ChatColor.WHITE + " - ";
 
 					} else
-						msg += ((Player) sender).getDisplayName() + " - ";
+						senderPm = pSender.getDisplayName() + " - ";
 				} else
-					msg += ((Player) sender).getDisplayName() + " - ";
+					senderPm = pSender.getDisplayName() + " - ";
 			} else
-				msg += "Server Admin" + " - ";
+				senderPm = "Server Admin" + " - ";
 
 			for (int i = 1; i < args.length; ++i)
 				msg += args[i] + " ";
-			msg.trim();
+			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);
 			if (parsed == null)
 				parsed = msg;
-			buddy.sendMessage(parsed);
-			sender.sendMessage(parsed);
+			buddy.sendMessage(msgPrefix + senderPm + parsed);
+			sender.sendMessage(msgPrefix + senderPm + parsed);
+			for(Player p : ACHelper.getInstance().getAllPowerUser("spymsg"))
+				if(!p.getName().equals(senderName) && !p.getName().equals(buddy.getName()))
+					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "+senderName+"-"+buddy.getName()+": "+parsed);
 		} else
 			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
 					+ ChatColor.RED + " not found!");

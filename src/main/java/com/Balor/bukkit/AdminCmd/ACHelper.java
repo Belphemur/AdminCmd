@@ -409,41 +409,50 @@ public class ACHelper {
 	public void removeVulcan(String playerName) {
 		vulcans.remove(playerName);
 	}
-	public void addPowerUser(String power, String user)
-	{
-		if(usersWithPowers.containsKey(power))
+
+	public void addPowerUser(String power, String user) {
+		if (usersWithPowers.containsKey(power))
 			usersWithPowers.get(power).add(user);
-		else
-		{
+		else {
 			HashSet<String> tmp = new HashSet<String>();
 			tmp.add(user);
-			usersWithPowers.put(power,tmp);
+			usersWithPowers.put(power, tmp);
 		}
-			
+
 	}
-	public void addPowerUser(String power, Player user)
-	{
+
+	public void addPowerUser(String power, Player user) {
 		addPowerUser(power, user.getName());
 	}
-	public void removePowerUser(String power, String user)
-	{
-		if(usersWithPowers.containsKey(power))
+
+	public void removePowerUser(String power, String user) {
+		if (usersWithPowers.containsKey(power))
 			usersWithPowers.get(power).remove(user);
-		if(usersWithPowers.get(power).isEmpty())
+		if (usersWithPowers.get(power).isEmpty())
 			usersWithPowers.remove(power);
 	}
-	public void removePowerUser(String power, Player user)
-	{
+
+	public void removePowerUser(String power, Player user) {
 		removePowerUser(power, user.getName());
 	}
-	public boolean isAPowerUser(String power, String user)
-	{
+
+	public boolean isAPowerUser(String power, String user) {
 		return usersWithPowers.containsKey(power) && usersWithPowers.get(power).contains(user);
 	}
-	public boolean isAPowerUser(String power, Player user)
-	{
-		return usersWithPowers.containsKey(power) && usersWithPowers.get(power).contains(user.getName());
+
+	public List<Player> getAllPowerUser(String power) {
+		List<Player> players = new ArrayList<Player>();
+		if (usersWithPowers.containsKey(power))
+			for (String player : usersWithPowers.get(power))
+				players.add(pluginInstance.getServer().getPlayer(player));
+		return players;
 	}
+
+	public boolean isAPowerUser(String power, Player user) {
+		return usersWithPowers.containsKey(power)
+				&& usersWithPowers.get(power).contains(user.getName());
+	}
+
 	public void addGod(String playerName) {
 		addPowerUser("god", playerName);
 	}
@@ -459,6 +468,7 @@ public class ACHelper {
 	public void removeThor(String playerName) {
 		removePowerUser("thor", playerName);
 	}
+
 	public boolean hasThorPowers(String player) {
 		return isAPowerUser("thor", player);
 	}
@@ -470,6 +480,7 @@ public class ACHelper {
 	public Float getVulcainExplosionPower(String player) {
 		return vulcans.get(player);
 	}
+
 	public boolean alias(String[] args) {
 		MaterialContainer m = checkMaterial(args[1]);
 		if (m.isNull())

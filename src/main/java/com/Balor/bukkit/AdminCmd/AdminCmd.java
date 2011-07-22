@@ -89,6 +89,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Vulcan.class);
 		CommandManager.getInstance().registerCommand(Drop.class);
 		CommandManager.getInstance().registerCommand(Invisible.class);
+		CommandManager.getInstance().registerCommand(SpyMsg.class);
 	}
 	public void onEnable() {
 		server = getServer();

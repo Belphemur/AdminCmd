@@ -146,3 +146,7 @@ commands:
     description: Give the invisible power.
     aliases: [inv,invisible]
     usage: /<command> playerName
+  bal_spymsg:
+    description: You can see every private message.
+    aliases: [spy,smsg]
+    usage: /<command> 
