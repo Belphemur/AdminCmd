@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.4
+version: 5.4.1
 author: Plague modded by Balor
 softdepend: [MultiVerse,Permissions]
 description: >

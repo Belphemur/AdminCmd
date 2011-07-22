@@ -17,12 +17,17 @@
 package com.Balor.files.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.google.common.collect.MapMaker;
@@ -105,6 +110,16 @@ public class FilesManager {
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
 				new ArrayList<String>());
 		int i = 0;
+		try {
+			CSVReader csv = new CSVReader(new FileReader(path + File.separator + "items.csv"));
+			List<String[]> essentialsAlias = csv.readAll();
+			for (String[] alias : essentialsAlias)
+				result.put(alias[0], new MaterialContainer(alias[1], alias[2]));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		for (String alias : aliasList) {
 			result.put(alias, new MaterialContainer(idList.get(i)));
 			i++;
@@ -137,10 +152,11 @@ public class FilesManager {
 			}
 		for (int i = 3; i < infos.length; i++)
 			try {
-				direction[i-3] = Float.parseFloat(infos[i]);
+				direction[i - 3] = Float.parseFloat(infos[i]);
 			} catch (NumberFormatException e) {
 				return null;
 			}
-			return new Location(AdminCmd.getBukkitServer().getWorld(world), coords[0], coords[1], coords[2], direction[0], direction[1]);
+		return new Location(AdminCmd.getBukkitServer().getWorld(world), coords[0], coords[1],
+				coords[2], direction[0], direction[1]);
 	}
 }
