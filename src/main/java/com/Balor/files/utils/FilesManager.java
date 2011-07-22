@@ -23,7 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
@@ -31,7 +31,6 @@ import org.bukkit.util.config.Configuration;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -141,8 +140,8 @@ public class FilesManager {
 		return file;
 	}
 
-	public ConcurrentMap<String, MaterialContainer> getAlias() {
-		ConcurrentMap<String, MaterialContainer> result = new MapMaker().makeMap();
+	public HashMap<String, MaterialContainer> getAlias() {
+		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		Configuration conf = getFile("Alias.yml");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
