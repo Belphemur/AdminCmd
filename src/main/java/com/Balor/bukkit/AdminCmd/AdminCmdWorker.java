@@ -1,10 +1,12 @@
 package com.Balor.bukkit.AdminCmd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
@@ -34,25 +36,23 @@ import com.google.common.collect.MapMaker;
 public class AdminCmdWorker extends Worker {
 
 	private CommandSender sender;
-	private ConcurrentMap<Material, String[]> materialsColors;
+	private HashMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
 	private HashSet<String> thunderGods = new HashSet<String>();
 	private HashSet<String> gods = new HashSet<String>();
-	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().concurrencyLevel(5)
-			.makeMap();
+	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
-			.concurrencyLevel(5).makeMap();
-	private ConcurrentMap<String, Float> vulcans = new MapMaker().concurrencyLevel(5).makeMap();
+			.expiration(10, TimeUnit.MINUTES).makeMap();
+	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
 	private static AdminCmdWorker instance = null;
 	private final long maxRange = 16384;
-	private ConcurrentMap<String, Integer> repeatInvTaskId = new MapMaker().concurrencyLevel(8)
-			.makeMap();
+	private ConcurrentMap<String, Integer> repeatInvTaskId = new MapMaker().makeMap();
 
 	private AdminCmdWorker() {
-		materialsColors = new MapMaker().softKeys().makeMap();
+		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
 				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
 				"Blue", "Brown", "Green", "Red", "Black" });
