@@ -69,7 +69,6 @@ public class SpawnMob extends ACCommands {
 					.scheduleAsyncDelayedTask(AdminCmdWorker.getInstance().getPluginInstance(),
 							new Runnable() {
 
-								@Override
 								public void run() {
 									for (int i = 0; i < nb; i++) {
 										player.getWorld().spawnCreature(player.getLocation(), ct);

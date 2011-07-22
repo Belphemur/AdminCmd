@@ -57,7 +57,6 @@ public class ACPlayerListener extends PlayerListener {
 		AdminCmd.getBukkitServer().getScheduler()
 				.scheduleAsyncDelayedTask(worker.getPluginInstance(), new Runnable() {
 
-					@Override
 					public void run() {
 						playerRespawnOrJoin(player);
 					}
@@ -104,7 +103,6 @@ public class ACPlayerListener extends PlayerListener {
 			newPlayer = p;
 		}
 
-		@Override
 		public void run() {
 			for (Player toVanish : AdminCmdWorker.getInstance().getAllInvisiblePlayers())
 				AdminCmdWorker.getInstance().invisible(toVanish, newPlayer);

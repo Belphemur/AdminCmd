@@ -474,8 +474,6 @@ public class AdminCmdWorker extends Worker {
 		}
 		pluginInstance.getServer().getScheduler()
 				.scheduleAsyncDelayedTask(pluginInstance, new Runnable() {
-
-					@Override
 					public void run() {
 						for (Player p : pluginInstance.getServer().getOnlinePlayers())
 							uninvisible(toReappear, p);

@@ -34,8 +34,6 @@ public class UpdateInvisible implements Runnable {
 	public UpdateInvisible(Player p) {
 		toVanish = p;
 	}
-
-	@Override
 	public void run() {
 		for (Player p : AdminCmd.getBukkitServer().getOnlinePlayers())
 			AdminCmdWorker.getInstance().invisible(toVanish, p);

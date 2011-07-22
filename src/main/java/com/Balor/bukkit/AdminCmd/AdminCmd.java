@@ -90,7 +90,6 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Drop.class);
 		CommandManager.getInstance().registerCommand(Invisible.class);
 	}
-	@Override
 	public void onEnable() {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
@@ -114,7 +113,6 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);
 	}
 
-	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		worker = null;
