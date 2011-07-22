@@ -19,9 +19,10 @@ package com.Balor.files.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Location;
@@ -102,6 +103,44 @@ public class FilesManager {
 		conf.save();
 	}
 
+	/**
+	 * Get a file in the jar, copy it in the plugin folder, open it and return
+	 * it
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	protected File getInnerFile(String fileName) {
+		final File file = new File(path, fileName);
+
+		if (!file.exists()) {
+			final InputStream res = this.getClass().getResourceAsStream("/" + fileName);
+			FileWriter tx = null;
+			try {
+				tx = new FileWriter(file);
+				for (int i = 0; (i = res.read()) > 0;) {
+					tx.write(i);
+				}
+				tx.flush();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+				return file;
+			} finally {
+				try {
+					res.close();
+				} catch (Exception ex) {
+				}
+				try {
+					if (tx != null) {
+						tx.close();
+					}
+				} catch (Exception ex) {
+				}
+			}
+		}
+		return file;
+	}
+
 	public ConcurrentMap<String, MaterialContainer> getAlias() {
 		ConcurrentMap<String, MaterialContainer> result = new MapMaker().softValues().makeMap();
 		Configuration conf = getFile("Alias.yml");
@@ -111,10 +150,17 @@ public class FilesManager {
 				new ArrayList<String>());
 		int i = 0;
 		try {
-			CSVReader csv = new CSVReader(new FileReader(path + File.separator + "items.csv"));
-			List<String[]> essentialsAlias = csv.readAll();
-			for (String[] alias : essentialsAlias)
-				result.put(alias[0], new MaterialContainer(alias[1], alias[2]));
+			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv")));
+			String[] alias;
+			while ((alias = csv.readNext()) != null) {
+				try {
+					result.put(alias[0], new MaterialContainer(alias[1], alias[2]));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					result.put(alias[0], new MaterialContainer(alias[1]));
+				}
+				
+			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

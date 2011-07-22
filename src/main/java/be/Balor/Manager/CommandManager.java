@@ -16,18 +16,16 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
-
-import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class CommandManager {
-	private ConcurrentMap<String, ACCommands> commands = new MapMaker().makeMap();
+	private HashMap<String, ACCommands> commands = new HashMap<String, ACCommands>();
 	private static CommandManager instance = null;
 
 	/**
