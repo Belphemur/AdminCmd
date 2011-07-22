@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package belgium.Balor.Workers;
+package be.Balor.Listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,6 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+
+import belgium.Balor.Workers.InvisibleWorker;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.AdminCmdWorker;

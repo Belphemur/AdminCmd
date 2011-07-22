@@ -10,6 +10,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Listeners.ACEntityListener;
+import be.Balor.Listeners.ACPlayerListener;
+import be.Balor.Listeners.PluginListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.PermParent;
 import be.Balor.Manager.PermissionManager;
@@ -21,9 +24,6 @@ import be.Balor.Manager.Commands.Spawn.*;
 import be.Balor.Manager.Commands.Time.*;
 import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Weather.*;
-import belgium.Balor.Workers.ACEntityListener;
-import belgium.Balor.Workers.ACPlayerListener;
-import belgium.Balor.Workers.PluginListener;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
