@@ -478,7 +478,7 @@ public class ACHelper {
 	}
 
 	public Float getVulcainExplosionPower(String player) {
-			return vulcans.get(player);
+		return vulcans.get(player);
 	}
 
 	public boolean alias(String[] args) {
@@ -542,7 +542,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackList(MaterialContainer mat) {
-		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
+		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.material.getId())) {
 			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.display()
 					+ ChatColor.DARK_RED + ") is black listed.");
@@ -552,7 +552,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackList(ItemStack mat) {
-		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
+		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.getTypeId())) {
 			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.getType()
 					+ ChatColor.DARK_RED + ") is black listed.");
