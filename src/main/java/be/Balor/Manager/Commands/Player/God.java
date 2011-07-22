@@ -52,10 +52,10 @@ public class God extends ACCommands {
 		if (player != null) {
 			if (ACHelper.getInstance().hasGodPowers(player.getName())) {
 				ACHelper.getInstance().removeGod(player.getName());
-				sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled.");
+				player.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled.");
 			} else {
 				ACHelper.getInstance().addGod(player.getName());
-				sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
+				player.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
 			}
 		}
 	}

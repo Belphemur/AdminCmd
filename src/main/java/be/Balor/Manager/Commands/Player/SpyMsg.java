@@ -28,14 +28,14 @@ import be.Balor.Manager.ACCommands;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Vulcan extends ACCommands {
+public class SpyMsg extends ACCommands {
+
 	/**
 	 * 
 	 */
-	public Vulcan() {
-		permNode = "admincmd.player.vulcan";
-		cmdName = "bal_vulcan";
-		other = true;
+	public SpyMsg() {
+		permNode = "admincmd.player.spymsg";
+		cmdName = "bal_spymsg";
 	}
 
 	/*
@@ -47,29 +47,15 @@ public class Vulcan extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = null;
-		float power = 4.0F;
-		if (args.length >= 1) {
-			try {
-				player = ACHelper.getInstance().getUser(args, permNode, 1);
-				power = Float.parseFloat(args[0]);
-			} catch (NumberFormatException e) {
-				power = 4.0F;
-				player = ACHelper.getInstance().getUser(args, permNode);
-			}
-			if (args.length >= 2)
-				player = ACHelper.getInstance().getUser(args, permNode, 1);
-		} else
-			player = ACHelper.getInstance().getUser(args, permNode);
-		if (player != null) {
-			if (ACHelper.getInstance().getVulcainExplosionPower(player.getName()) != null) {
-				ACHelper.getInstance().removeVulcan(player.getName());
-				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
-			} else {
-				ACHelper.getInstance().addVulcain((player.getName()), power);
-				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode enabled.");
-			}
+		if (ACHelper.getInstance().isPlayer()) {
+			if (ACHelper.getInstance().isAPowerUser("spymsg", (Player) sender))
+				ACHelper.getInstance().removePowerUser("spymsg", (Player) sender);
+			sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode disabled.");
+		} else {
+			ACHelper.getInstance().addPowerUser("spymsg", (Player) sender);
+			sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode enabled.");
 		}
+
 	}
 
 	/*
@@ -79,7 +65,7 @@ public class Vulcan extends ACCommands {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null;
+		return true;
 	}
 
 }

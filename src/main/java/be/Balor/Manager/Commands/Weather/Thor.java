@@ -52,10 +52,10 @@ public class Thor extends ACCommands {
 		if (player != null) {
 			if (ACHelper.getInstance().hasThorPowers(player.getName())) {
 				ACHelper.getInstance().removeThor(player.getName());
-				sender.sendMessage(ChatColor.DARK_AQUA + "THOR mode disabled.");
+				player.sendMessage(ChatColor.DARK_AQUA + "THOR mode disabled.");
 			} else {
 				ACHelper.getInstance().addThor(player.getName());
-				sender.sendMessage(ChatColor.DARK_AQUA + "THOR mode enabled.");
+				player.sendMessage(ChatColor.DARK_AQUA + "THOR mode enabled.");
 			}
 		} 
 	}

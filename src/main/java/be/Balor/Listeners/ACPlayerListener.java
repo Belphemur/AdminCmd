@@ -22,6 +22,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import belgium.Balor.Workers.InvisibleWorker;
@@ -51,6 +52,11 @@ public class ACPlayerListener extends PlayerListener {
 			event.setJoinMessage(null);
 			event.getPlayer().sendMessage(ChatColor.RED+"You are still Invisible");
 		}
+	}
+	@Override
+    public void onPlayerQuit(PlayerQuitEvent event) {
+		if(InvisibleWorker.getInstance().hasInvisiblePowers(event.getPlayer().getName()))
+			event.setQuitMessage(null);
 	}
 
 	@Override

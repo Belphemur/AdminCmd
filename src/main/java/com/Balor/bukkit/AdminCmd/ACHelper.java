@@ -36,12 +36,11 @@ public class ACHelper {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	private HashSet<String> thunderGods = new HashSet<String>();
-	private HashSet<String> gods = new HashSet<String>();
+	ConcurrentMap<String, HashSet<String>> usersWithPowers = new MapMaker().makeMap();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
 			.expiration(10, TimeUnit.MINUTES).makeMap();
-	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
+	private ConcurrentMap<String, Float> vulcans = null;
 	private static ACHelper instance = null;
 
 	private ACHelper() {
@@ -410,23 +409,67 @@ public class ACHelper {
 	public void removeVulcan(String playerName) {
 		vulcans.remove(playerName);
 	}
-
+	public void addPowerUser(String power, String user)
+	{
+		if(usersWithPowers.containsKey(power))
+			usersWithPowers.get(power).add(user);
+		else
+		{
+			HashSet<String> tmp = new HashSet<String>();
+			tmp.add(user);
+			usersWithPowers.put(power,tmp);
+		}
+			
+	}
+	public void addPowerUser(String power, Player user)
+	{
+		addPowerUser(power, user.getName());
+	}
+	public void removePowerUser(String power, String user)
+	{
+		if(usersWithPowers.containsKey(power))
+			usersWithPowers.get(power).remove(user);
+		if(usersWithPowers.get(power).isEmpty())
+			usersWithPowers.remove(power);
+	}
+	public void removePowerUser(String power, Player user)
+	{
+		removePowerUser(power, user.getName());
+	}
+	public boolean isAPowerUser(String power, String user)
+	{
+		return usersWithPowers.containsKey(power) && usersWithPowers.get(power).contains(user);
+	}
+	public boolean isAPowerUser(String power, Player user)
+	{
+		return usersWithPowers.containsKey(power) && usersWithPowers.get(power).contains(user.getName());
+	}
 	public void addGod(String playerName) {
-		gods.add(playerName);
+		addPowerUser("god", playerName);
 	}
 
 	public void removeGod(String playerName) {
-		gods.remove(playerName);
+		removePowerUser("god", playerName);
 	}
 
 	public void addThor(String playerName) {
-		thunderGods.add(playerName);
+		addPowerUser("thor", playerName);
 	}
 
 	public void removeThor(String playerName) {
-		thunderGods.remove(playerName);
+		removePowerUser("thor", playerName);
+	}
+	public boolean hasThorPowers(String player) {
+		return isAPowerUser("thor", player);
 	}
 
+	public boolean hasGodPowers(String player) {
+		return isAPowerUser("god", player);
+	}
+
+	public Float getVulcainExplosionPower(String player) {
+		return vulcans.get(player);
+	}
 	public boolean alias(String[] args) {
 		MaterialContainer m = checkMaterial(args[1]);
 		if (m.isNull())
@@ -444,18 +487,6 @@ public class ACHelper {
 		this.alias.remove(alias);
 		sender.sendMessage(ChatColor.GOLD + alias + ChatColor.RED + " removed");
 		return true;
-	}
-
-	public boolean hasThorPowers(String player) {
-		return thunderGods.contains(player);
-	}
-
-	public boolean hasGodPowers(String player) {
-		return gods.contains(player);
-	}
-
-	public Float getVulcainExplosionPower(String player) {
-		return vulcans.get(player);
 	}
 
 	public boolean reparable(int id) {
@@ -498,9 +529,8 @@ public class ACHelper {
 		}
 		return true;
 	}
-	
-	public boolean inBlackList(MaterialContainer mat)
-	{
+
+	public boolean inBlackList(MaterialContainer mat) {
 		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
 				&& blacklist.contains(mat.material.getId())) {
 			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.display()
@@ -509,8 +539,8 @@ public class ACHelper {
 		}
 		return false;
 	}
-	public boolean inBlackList(ItemStack mat)
-	{
+
+	public boolean inBlackList(ItemStack mat) {
 		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist")
 				&& blacklist.contains(mat.getTypeId())) {
 			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.getType()
