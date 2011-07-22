@@ -27,7 +27,7 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class CommandManager {
-	private ConcurrentMap<String, ACCommands> commands = new MapMaker().softValues().makeMap();
+	private ConcurrentMap<String, ACCommands> commands = new MapMaker().makeMap();
 	private static CommandManager instance = null;
 
 	/**
