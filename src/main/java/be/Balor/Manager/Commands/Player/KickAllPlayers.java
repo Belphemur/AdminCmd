@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -54,7 +54,7 @@ public class KickAllPlayers extends ACCommands {
 				message += args[i]+" ";
 		else {
 			message = "You have been kick by ";
-			if (!AdminCmdWorker.getInstance().isPlayer(false))
+			if (!ACHelper.getInstance().isPlayer(false))
 				playerName = "Server Admin";
 			else
 				playerName = ((Player) sender).getName();

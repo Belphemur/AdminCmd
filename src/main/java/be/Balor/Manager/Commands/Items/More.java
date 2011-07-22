@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -49,13 +49,13 @@ public class More extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer()) {
+		if (ACHelper.getInstance().isPlayer()) {
 			ItemStack hand = ((Player) sender).getItemInHand();
 			if (hand == null || hand.getType() == Material.AIR) {
 				sender.sendMessage(ChatColor.RED + "You have to be holding something!");
 				return;
 			}
-			if (AdminCmdWorker.getInstance().inBlackList(hand))
+			if (ACHelper.getInstance().inBlackList(hand))
 				return;
 			if (args.length == 0)
 				hand.setAmount(64);

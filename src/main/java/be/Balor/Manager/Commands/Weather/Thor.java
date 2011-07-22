@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -48,13 +48,13 @@ public class Thor extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
+		Player player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (AdminCmdWorker.getInstance().hasThorPowers(player.getName())) {
-				AdminCmdWorker.getInstance().removeThor(player.getName());
+			if (ACHelper.getInstance().hasThorPowers(player.getName())) {
+				ACHelper.getInstance().removeThor(player.getName());
 				sender.sendMessage(ChatColor.DARK_AQUA + "THOR mode disabled.");
 			} else {
-				AdminCmdWorker.getInstance().addThor(player.getName());
+				ACHelper.getInstance().addThor(player.getName());
 				sender.sendMessage(ChatColor.DARK_AQUA + "THOR mode enabled.");
 			}
 		} 

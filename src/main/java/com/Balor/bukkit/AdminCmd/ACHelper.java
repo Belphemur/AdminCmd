@@ -28,7 +28,7 @@ import com.google.common.collect.MapMaker;
  * 
  * @authors Plague, Balor
  */
-public class AdminCmdWorker {
+public class ACHelper {
 
 	private CommandSender sender;
 	private HashMap<Material, String[]> materialsColors;
@@ -42,9 +42,9 @@ public class AdminCmdWorker {
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
 			.expiration(10, TimeUnit.MINUTES).makeMap();
 	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
-	private static AdminCmdWorker instance = null;
+	private static ACHelper instance = null;
 
-	private AdminCmdWorker() {
+	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
 				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
@@ -69,9 +69,9 @@ public class AdminCmdWorker {
 			listOfPossibleRepair.add(i);
 	}
 
-	public static AdminCmdWorker getInstance() {
+	public static ACHelper getInstance() {
 		if (instance == null)
-			instance = new AdminCmdWorker();
+			instance = new ACHelper();
 		return instance;
 	}
 
@@ -276,7 +276,7 @@ public class AdminCmdWorker {
 				target = sender.getServer().getPlayer(args[index]);
 			else
 				return target;
-		} else if (AdminCmdWorker.getInstance().isPlayer(false))
+		} else if (ACHelper.getInstance().isPlayer(false))
 			target = ((Player) sender);
 		else {
 			sender.sendMessage("You must type the player name");

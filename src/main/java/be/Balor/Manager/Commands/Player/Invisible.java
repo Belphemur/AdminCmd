@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -49,7 +49,7 @@ public class Invisible extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player target = AdminCmdWorker.getInstance().getUser(args, permNode);
+		Player target = ACHelper.getInstance().getUser(args, permNode);
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName()))
 		{
 			InvisibleWorker.getInstance().vanish(target);

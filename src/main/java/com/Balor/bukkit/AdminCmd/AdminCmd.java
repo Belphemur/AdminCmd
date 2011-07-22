@@ -32,7 +32,7 @@ import be.Balor.Manager.Commands.Weather.*;
  */
 public class AdminCmd extends JavaPlugin {
 	private static Server server = null;
-	private AdminCmdWorker worker;
+	private ACHelper worker;
 
 	public static Server getBukkitServer() {
 		return server;
@@ -100,7 +100,7 @@ public class AdminCmd extends JavaPlugin {
 				+ pdfFile.getVersion() + ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 
-		worker = AdminCmdWorker.getInstance();
+		worker = ACHelper.getInstance();
 		worker.setPluginInstance(this);
 		registerPermParents();
 		registerCmds();

@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Items;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -41,7 +41,7 @@ public class AddAlias extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		AdminCmdWorker.getInstance().alias(args);
+		ACHelper.getInstance().alias(args);
 	}
 
 	/* (non-Javadoc)

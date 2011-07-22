@@ -20,19 +20,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class ACEntityListener extends org.bukkit.event.entity.EntityListener {
-	AdminCmdWorker worker;
+	ACHelper worker;
 
 	/**
 	 * 
 	 */
-	public ACEntityListener(AdminCmdWorker admin) {
+	public ACEntityListener(ACHelper admin) {
 		worker = admin;
 	}
 

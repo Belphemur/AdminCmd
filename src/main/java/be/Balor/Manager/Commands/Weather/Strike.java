@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -48,7 +48,7 @@ public class Strike extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player p = AdminCmdWorker.getInstance().getUser(args, permNode);
+		Player p = ACHelper.getInstance().getUser(args, permNode);
 		p.getWorld().strikeLightning(p.getLocation());
 		sender.sendMessage(ChatColor.GOLD + p.getName() + " was striked by Thor");
 

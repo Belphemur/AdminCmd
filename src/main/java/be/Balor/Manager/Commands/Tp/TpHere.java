@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Tp;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -46,8 +46,8 @@ public class TpHere extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer())
-			AdminCmdWorker.getInstance().tpP2P(args[0], ((Player) sender).getName());
+		if (ACHelper.getInstance().isPlayer())
+			ACHelper.getInstance().tpP2P(args[0], ((Player) sender).getName());
 	}
 
 	/*

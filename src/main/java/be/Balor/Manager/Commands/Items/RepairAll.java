@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -48,11 +48,11 @@ public class RepairAll extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
+		Player player = ACHelper.getInstance().getUser(args, permNode);
 		if (player == null)
 			return;
 		for (ItemStack item : player.getInventory().getContents())
-			if (item != null && AdminCmdWorker.getInstance().reparable(item.getTypeId()))
+			if (item != null && ACHelper.getInstance().reparable(item.getTypeId()))
 				item.setDurability((short) 0);
 		for (ItemStack item : player.getInventory().getArmorContents())
 			if (item != null)

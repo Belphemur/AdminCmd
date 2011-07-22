@@ -26,7 +26,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.UpdateInvisible;
 import com.Balor.files.utils.Utils;
 import com.google.common.collect.MapMaker;
@@ -89,7 +89,7 @@ public class InvisibleWorker {
 		}
 		AdminCmd.getBukkitServer()
 				.getScheduler()
-				.scheduleAsyncDelayedTask(AdminCmdWorker.getInstance().getPluginInstance(),
+				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 						new Runnable() {
 							public void run() {
 								for (Player p : AdminCmd.getBukkitServer().getOnlinePlayers())
@@ -160,7 +160,7 @@ public class InvisibleWorker {
 		String name = toVanish.getName();
 		AdminCmd.getBukkitServer()
 				.getScheduler()
-				.scheduleAsyncDelayedTask(AdminCmdWorker.getInstance().getPluginInstance(),
+				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
@@ -169,7 +169,7 @@ public class InvisibleWorker {
 							.getBukkitServer()
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(
-									AdminCmdWorker.getInstance().getPluginInstance(),
+									ACHelper.getInstance().getPluginInstance(),
 									new UpdateInvisible(toVanish), 200, 400));
 
 	}

@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -46,7 +46,7 @@ public class Kill extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		AdminCmdWorker.getInstance().setPlayerHealth(args, "kill");
+		ACHelper.getInstance().setPlayerHealth(args, "kill");
 	}
 
 	/*

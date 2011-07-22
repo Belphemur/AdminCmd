@@ -27,7 +27,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import belgium.Balor.Workers.InvisibleWorker;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.UpdateInvisible;
 
 /**
@@ -35,12 +35,12 @@ import com.Balor.files.utils.UpdateInvisible;
  * 
  */
 public class ACPlayerListener extends PlayerListener {
-	AdminCmdWorker worker;
+	ACHelper worker;
 
 	/**
 	 * 
 	 */
-	public ACPlayerListener(AdminCmdWorker worker) {
+	public ACPlayerListener(ACHelper worker) {
 		this.worker = worker;
 	}
 

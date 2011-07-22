@@ -21,7 +21,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -47,9 +47,9 @@ public class Repair extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer()) {
+		if (ACHelper.getInstance().isPlayer()) {
 			ItemStack item = ((Player) sender).getItemInHand();
-			if (item != null && AdminCmdWorker.getInstance().reparable(item.getTypeId())) {
+			if (item != null && ACHelper.getInstance().reparable(item.getTypeId())) {
 				item.setDurability((short) 0);
 				sender.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE
 						+ " have been successfully repaired.");

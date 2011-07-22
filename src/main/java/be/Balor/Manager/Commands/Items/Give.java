@@ -21,7 +21,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.MaterialContainer;
 
 import be.Balor.Manager.ACCommands;
@@ -52,10 +52,10 @@ public class Give extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		// which material?
 		MaterialContainer mat = null;
-		mat = AdminCmdWorker.getInstance().checkMaterial(args[0]);
+		mat = ACHelper.getInstance().checkMaterial(args[0]);
 		if (mat.isNull())
 			return;
-		if (AdminCmdWorker.getInstance().inBlackList(mat))
+		if (ACHelper.getInstance().inBlackList(mat))
 			return;
 		// amount, damage and target player
 		int cnt = 1;
@@ -67,20 +67,20 @@ public class Give extends ACCommands {
 				return;
 			}
 			if (args.length >= 3) {
-				target = AdminCmdWorker.getInstance().getUser(args, permNode, 2);
+				target = ACHelper.getInstance().getUser(args, permNode, 2);
 				if (target == null) {
 					return;
 				}
 			}
 		}
 		if (target == null) {
-			if (AdminCmdWorker.getInstance().isPlayer())
+			if (ACHelper.getInstance().isPlayer())
 				target = ((Player) sender);
 			else
 				return;
 		}
 		ItemStack stack = new ItemStack(mat.material, cnt, mat.dmg);
-		if (AdminCmdWorker.getInstance().isPlayer(false)) {
+		if (ACHelper.getInstance().isPlayer(false)) {
 			if (!target.getName().equals(((Player) sender).getName())) {
 				target.sendMessage(ChatColor.RED + "[" + ((Player) sender).getName() + "]"
 						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " "

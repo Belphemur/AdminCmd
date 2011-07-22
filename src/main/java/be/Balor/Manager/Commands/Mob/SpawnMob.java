@@ -22,7 +22,7 @@ import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -49,7 +49,7 @@ public class SpawnMob extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (AdminCmdWorker.getInstance().isPlayer()) {
+		if (ACHelper.getInstance().isPlayer()) {
 			final String name = args[0];
 			int nbTaped;
 			try {
@@ -66,7 +66,7 @@ public class SpawnMob extends ACCommands {
 			final Player player = ((Player) sender);
 			AdminCmd.getBukkitServer()
 					.getScheduler()
-					.scheduleAsyncDelayedTask(AdminCmdWorker.getInstance().getPluginInstance(),
+					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 							new Runnable() {
 
 								public void run() {

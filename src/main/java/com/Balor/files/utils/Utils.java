@@ -24,7 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -46,7 +46,7 @@ public class Utils {
 			info[0] = mat;
 			info[1] = "0";
 		}
-		if ((mc = AdminCmdWorker.getInstance().getAlias(info[0])) == null) {
+		if ((mc = ACHelper.getInstance().getAlias(info[0])) == null) {
 			mc = new MaterialContainer(info[0], info[1]);
 		}
 		return mc;

@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
@@ -54,7 +54,7 @@ public class PrivateMessage extends ACCommands {
 		if (buddy != null) {
 
 			String msg = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
-			if (AdminCmdWorker.getInstance().isPlayer(false)) {
+			if (ACHelper.getInstance().isPlayer(false)) {
 				if (PermissionManager.getPermission() != null) {
 					Player pSender = (Player) sender;
 					String name = pSender.getName();

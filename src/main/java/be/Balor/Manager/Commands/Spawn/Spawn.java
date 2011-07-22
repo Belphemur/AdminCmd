@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Spawn;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -45,7 +45,7 @@ public class Spawn extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		AdminCmdWorker.getInstance().spawn();
+		ACHelper.getInstance().spawn();
 	}
 
 	/*

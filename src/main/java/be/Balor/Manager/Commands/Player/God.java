@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -48,13 +48,13 @@ public class God extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = AdminCmdWorker.getInstance().getUser(args, permNode);
+		Player player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (AdminCmdWorker.getInstance().hasGodPowers(player.getName())) {
-				AdminCmdWorker.getInstance().removeGod(player.getName());
+			if (ACHelper.getInstance().hasGodPowers(player.getName())) {
+				ACHelper.getInstance().removeGod(player.getName());
 				sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled.");
 			} else {
-				AdminCmdWorker.getInstance().addGod(player.getName());
+				ACHelper.getInstance().addGod(player.getName());
 				sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
 			}
 		}

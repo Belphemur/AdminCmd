@@ -21,7 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -52,7 +52,7 @@ public class PlayerLocation extends ACCommands {
 		Location loc;
 		String msg;
 		if (args.length == 0) {
-			if (AdminCmdWorker.getInstance().isPlayer()) {
+			if (ACHelper.getInstance().isPlayer()) {
 				loc = ((Player) sender).getLocation();
 				msg = "You are";
 			} else

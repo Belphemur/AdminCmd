@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmdWorker;
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -51,22 +51,22 @@ public class Vulcan extends ACCommands {
 		float power = 4.0F;
 		if (args.length >= 1) {
 			try {
-				player = AdminCmdWorker.getInstance().getUser(args, permNode, 1);
+				player = ACHelper.getInstance().getUser(args, permNode, 1);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
 				power = 4.0F;
-				player = AdminCmdWorker.getInstance().getUser(args, permNode);
+				player = ACHelper.getInstance().getUser(args, permNode);
 			}
 			if (args.length >= 2)
-				player = AdminCmdWorker.getInstance().getUser(args, permNode, 1);
+				player = ACHelper.getInstance().getUser(args, permNode, 1);
 		} else
-			player = AdminCmdWorker.getInstance().getUser(args, permNode);
+			player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (AdminCmdWorker.getInstance().getVulcainExplosionPower(player.getName()) != null) {
-				AdminCmdWorker.getInstance().removeVulcan(player.getName());
+			if (ACHelper.getInstance().getVulcainExplosionPower(player.getName()) != null) {
+				ACHelper.getInstance().removeVulcan(player.getName());
 				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
 			} else {
-				AdminCmdWorker.getInstance().addVulcain((player.getName()), power);
+				ACHelper.getInstance().addVulcain((player.getName()), power);
 				sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode enabled.");
 			}
 		}
