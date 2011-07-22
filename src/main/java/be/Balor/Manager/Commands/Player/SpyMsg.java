@@ -48,14 +48,15 @@ public class SpyMsg extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (ACHelper.getInstance().isPlayer()) {
-			if (ACHelper.getInstance().isAPowerUser("spymsg", (Player) sender))
+			if (ACHelper.getInstance().isAPowerUser("spymsg", (Player) sender)) {
 				ACHelper.getInstance().removePowerUser("spymsg", (Player) sender);
-			sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode disabled.");
-		} else {
-			ACHelper.getInstance().addPowerUser("spymsg", (Player) sender);
-			sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode enabled.");
-		}
+				sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode disabled.");
+			} else {
+				ACHelper.getInstance().addPowerUser("spymsg", (Player) sender);
+				sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode enabled.");
+			}
 
+		}
 	}
 
 	/*
