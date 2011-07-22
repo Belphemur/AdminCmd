@@ -38,9 +38,9 @@ public class ACHelper {
 	private AdminCmd pluginInstance;
 	ConcurrentMap<String, HashSet<String>> usersWithPowers = new MapMaker().makeMap();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
-	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().weakValues()
-			.expiration(10, TimeUnit.MINUTES).makeMap();
-	private ConcurrentMap<String, Float> vulcans = null;
+	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().softValues()
+			.expiration(20, TimeUnit.MINUTES).makeMap();
+	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
 	private static ACHelper instance = null;
 
 	private ACHelper() {
@@ -478,7 +478,7 @@ public class ACHelper {
 	}
 
 	public Float getVulcainExplosionPower(String player) {
-		return vulcans.get(player);
+			return vulcans.get(player);
 	}
 
 	public boolean alias(String[] args) {
