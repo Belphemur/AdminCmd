@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.4.4
+version: 5.5
 author: Plague modded by Balor
 softdepend: [MultiVerse,Permissions]
 description: >
@@ -154,3 +154,11 @@ commands:
     description: Give the power of Fireball (shoot fireball).
     aliases: [fireball,fb]
     usage: /<command> power playerName
+  bal_home:
+    description: Teleport you to your home.
+    aliases: [home,h]
+    usage: /<command>
+  bal_sethome:
+    description: Set your home.
+    aliases: [sethome,sh]
+    usage: /<command> 

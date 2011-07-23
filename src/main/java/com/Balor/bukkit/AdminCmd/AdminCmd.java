@@ -91,6 +91,8 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Invisible.class);
 		CommandManager.getInstance().registerCommand(SpyMsg.class);
 		CommandManager.getInstance().registerCommand(Fireball.class);
+		CommandManager.getInstance().registerCommand(Home.class);
+		CommandManager.getInstance().registerCommand(SetHome.class);
 	}
 	public void onEnable() {
 		server = getServer();

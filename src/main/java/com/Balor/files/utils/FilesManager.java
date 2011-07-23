@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -45,6 +44,9 @@ public class FilesManager {
 		if (!new File(this.path).exists()) {
 			new File(this.path).mkdir();
 		}
+		File spawn = getFile(null, "spawnLocations.yml",false);
+		if(spawn.exists())
+			spawn.renameTo(new File(path+File.separator+"spawn", "spawnLocations.yml"));
 	}
 
 	/**
@@ -211,53 +213,31 @@ public class FilesManager {
 	}
 
 	/**
-	 * Write the spawn location to the file
+	 * Create a flat file with the location informations
 	 * 
 	 * @param loc
+	 * @param filename
+	 * @param directory
 	 */
-	public void setSpawnLoc(Location loc) {
+	public void createLocationFile(Location loc, String filename, String directory) {
 		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
 				+ ";" + loc.getPitch();
-		Configuration conf = getYml("spawnLocations");
+		Configuration conf = getYml(filename, "Homes");
 		conf.setProperty(loc.getWorld().getName(), location);
 		conf.save();
 	}
 
 	/**
-	 * Read and parse the spawn location
+	 * Return the location after parsing the flat file
 	 * 
-	 * @param world
+	 * @param property
+	 * @param filename
+	 * @param directory
 	 * @return
 	 */
-	public Location getSpawnLoc(String world) {
-		Configuration conf = getYml("spawnLocations");
-		return parseLocation(world, conf);
-	}
-
-	/**
-	 * Set the home of the player
-	 * 
-	 * @param player
-	 */
-	public void setHome(Player player) {
-		Location loc = player.getLocation();
-		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
-				+ ";" + loc.getPitch();
-		Configuration conf = getYml(player.getName(), "Homes");
-		conf.setProperty(player.getWorld().getName(), location);
-		conf.save();
-	}
-
-	/**
-	 * Return the home in the current world
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public Location getHome(Player player) {
-		String world = player.getWorld().getName();
-		Configuration conf = getYml(player.getName(), "Homes");
-		return parseLocation(world, conf);
+	public Location getLocationFile(String property, String filename, String directory) {
+		Configuration conf = getYml(filename, directory);
+		return parseLocation(property, conf);
 	}
 
 	/**

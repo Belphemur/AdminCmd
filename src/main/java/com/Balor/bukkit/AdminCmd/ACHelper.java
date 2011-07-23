@@ -37,8 +37,8 @@ public class ACHelper {
 	private AdminCmd pluginInstance;
 	ConcurrentMap<String, ConcurrentMap<String, Object>> usersWithPowers = new MapMaker().makeMap();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
-	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().softValues()
-			.expiration(20, TimeUnit.MINUTES).makeMap();
+	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
+			.makeMap();
 	private static ACHelper instance = null;
 
 	private ACHelper() {
@@ -189,6 +189,72 @@ public class ACHelper {
 	}
 
 	/**
+	 * Add a location in the location cache
+	 * 
+	 * @param type
+	 * @param name
+	 * @param loc
+	 */
+	private void addLocationInMemory(String type, String name, Location loc) {
+		if (locations.containsKey(type))
+			locations.get(type).put(name, loc);
+		else {
+			ConcurrentMap<String, Location> tmp = new MapMaker().softValues()
+					.expiration(10, TimeUnit.MINUTES).makeMap();
+			tmp.put(name, loc);
+			locations.put(type, tmp);
+		}
+	}
+
+	/**
+	 * Get a location that is cached in memory.
+	 * 
+	 * @param type
+	 * @param name
+	 * @return
+	 */
+	private Location getLocationFromMemory(String type, String name) {
+		Location loc = null;
+		if (locations.containsKey(type))
+			loc = locations.get(type).get(name);
+		return loc;
+	}
+
+	/**
+	 * Add a location in memory and on the disk.
+	 * 
+	 * @param type
+	 * @param name
+	 * @param filename
+	 * @param loc
+	 */
+	public void addLocation(String type, String name, String filename, Location loc) {
+		addLocationInMemory(type, name, loc);
+		fManager.createLocationFile(loc, filename, type);
+	}
+
+	/**
+	 * Get a location, if not in memory check on the disk, if found, add it in
+	 * memory and return it.
+	 * 
+	 * @param type
+	 * @param name
+	 * @param filename
+	 * @return
+	 */
+	public Location getLocation(String type, String name, String filename) {
+		Location loc = null;
+		loc = getLocationFromMemory(type, name);
+		if (loc == null) {
+			loc = fManager.getLocationFile(name, filename, type);
+			if (loc != null)
+				addLocationInMemory(type, name, loc);
+		}
+
+		return loc;
+	}
+
+	/**
 	 * Set the spawn point.
 	 */
 	public void setSpawn() {
@@ -196,8 +262,7 @@ public class ACHelper {
 			Location loc = ((Player) sender).getLocation();
 			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
 					loc.getBlockZ());
-			spawnLocations.put(loc.getWorld().getName(), loc);
-			fManager.setSpawnLoc(loc);
+			addLocation("spawn", loc.getWorld().getName(), "spawnLocations", loc);
 			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
 		}
 	}
@@ -207,13 +272,7 @@ public class ACHelper {
 			Player player = ((Player) sender);
 			Location loc = null;
 			String worldName = player.getWorld().getName();
-			if (spawnLocations.containsKey(worldName))
-				loc = spawnLocations.get(worldName);
-			if (loc == null) {
-				loc = fManager.getSpawnLoc(worldName);
-				if (loc != null)
-					spawnLocations.put(worldName, loc);
-			}
+			loc = getLocation("spawn", worldName, "spawnLocations");
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
 			player.teleport(loc);
@@ -265,7 +324,7 @@ public class ACHelper {
 	 * @param index
 	 * @return
 	 */
-	public Player getUser(String[] args, String permNode, int index) {
+	public Player getUser(String[] args, String permNode, int index, boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
 			if (PermissionManager.getInstance().hasPerm(sender, permNode + ".other"))
@@ -274,11 +333,11 @@ public class ACHelper {
 				return target;
 		} else if (ACHelper.getInstance().isPlayer(false))
 			target = ((Player) sender);
-		else {
+		else if (errorMsg) {
 			sender.sendMessage("You must type the player name");
 			return target;
 		}
-		if (target == null) {
+		if (target == null && errorMsg) {
 			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[index]
 					+ ChatColor.RED + " not found!");
 			return target;
@@ -288,7 +347,7 @@ public class ACHelper {
 	}
 
 	public Player getUser(String[] args, String permNode) {
-		return getUser(args, permNode, 0);
+		return getUser(args, permNode, 0, true);
 	}
 
 	/**
