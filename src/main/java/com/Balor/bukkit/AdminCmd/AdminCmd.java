@@ -24,7 +24,7 @@ import be.Balor.Manager.Commands.Spawn.*;
 import be.Balor.Manager.Commands.Time.*;
 import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Weather.*;
-
+import be.Balor.Manager.Commands.Warp.*;
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
  * 
@@ -93,6 +93,10 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Fireball.class);
 		CommandManager.getInstance().registerCommand(Home.class);
 		CommandManager.getInstance().registerCommand(SetHome.class);
+		CommandManager.getInstance().registerCommand(AddWarp.class);
+		CommandManager.getInstance().registerCommand(RemoveWarp.class);
+		CommandManager.getInstance().registerCommand(TpToWarp.class);
+		CommandManager.getInstance().registerCommand(WarpList.class);
 	}
 
 	public void onEnable() {

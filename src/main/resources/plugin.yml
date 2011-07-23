@@ -162,3 +162,19 @@ commands:
     description: Set your home.
     aliases: [sethome,sh]
     usage: /<command> 
+  bal_createwarp:
+    description: create a warp point.
+    aliases: [wp,cwarp]
+    usage: /<command> warpName
+  bal_rmwarp:
+    description: remove a warp point.
+    aliases: [rwp,rwarp]
+    usage: /<command> warpName
+  bal_tpwarp:
+    description: Tp to a warp point.
+    aliases: [twp,twarp]
+    usage: /<command> warpName
+  bal_warplist:
+    description: List all warp points.
+    aliases: [lwp,lwarp]
+    usage: /<command> 
