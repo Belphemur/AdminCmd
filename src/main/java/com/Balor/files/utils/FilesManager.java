@@ -225,7 +225,7 @@ public class FilesManager {
 	public void createLocationFile(Location loc, String filename, String directory) {
 		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
 				+ ";" + loc.getPitch();
-		Configuration conf = getYml(filename, "Homes");
+		Configuration conf = getYml(filename, directory);
 		conf.setProperty(loc.getWorld().getName(), location);
 		conf.save();
 	}
