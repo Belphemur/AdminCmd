@@ -50,15 +50,15 @@ public class TpToWarp extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player target =  ACHelper.getInstance().getUser(args, permNode, 1, true);
+		Player target = ACHelper.getInstance().getUser(args, permNode, 1, true);
 		if (target != null) {
-			Location loc = ACHelper.getInstance().getLocation("warp", args[0],"warpPoints");
-			if(loc == null)
-				sendMessage(sender, target, ChatColor.RED+"WarpPoint "+args[0]+" not found");
-			else
-			{
+			Location loc = ACHelper.getInstance().getLocation("warp", args[0], "warpPoints");
+			if (loc == null)
+				sendMessage(sender, target, ChatColor.RED + "WarpPoint " + args[0] + " not found");
+			else {
 				target.teleport(loc);
-				sendMessage(sender, target, ChatColor.GREEN+"Teleported to"+ChatColor.WHITE+args[0]);
+				sendMessage(sender, target, ChatColor.GREEN + "Teleported to " + ChatColor.WHITE
+						+ args[0]);
 			}
 		}
 
