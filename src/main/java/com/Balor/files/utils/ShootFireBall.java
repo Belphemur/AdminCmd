@@ -41,15 +41,12 @@ public class ShootFireBall implements Runnable {
 
 	public void run() {
 
-		// Define direction of fireball. Multiplying by 10 gives better
-		// accuracy.
-		Vector lookat = player.getLocation().getDirection().multiply(10);
-
-		// Define location of the player.
-		Location loc = player.getLocation();
-		Location fbLocation = new Location(loc.getWorld(), loc.getX() + (lookat.getX() / 5.0)
-				+ 0.25, loc.getY() + (player.getEyeHeight() / 2.0) + 0.5, loc.getZ()
-				+ (lookat.getZ() / 5.0));
+		Location playerLoc = player.getLocation();
+		Location fbLocation = playerLoc.add(
+				playerLoc.getDirection().normalize().multiply(10)
+						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
+				.add(0, 1D, 0);
+		;
 		Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
 		f.setYield(yield);
 
