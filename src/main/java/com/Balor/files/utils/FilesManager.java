@@ -226,7 +226,7 @@ public class FilesManager {
 		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
 				+ ";" + loc.getPitch();
 		Configuration conf = getYml(filename, directory);
-		conf.setProperty(directory+"."+loc.getWorld().getName(), location);
+		conf.setProperty(directory + "." + loc.getWorld().getName(), location);
 		conf.save();
 	}
 
@@ -240,12 +240,12 @@ public class FilesManager {
 	 */
 	public Location getLocationFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		return parseLocation(property, conf);
+		return parseLocation(directory + "." + property, conf);
 	}
 
 	public void removeLocationFromFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		conf.removeProperty(directory+"."+property);
+		conf.removeProperty(directory + "." + property);
 		conf.save();
 	}
 
@@ -260,7 +260,7 @@ public class FilesManager {
 		String toParse = conf.getString(world, null);
 		if (toParse == null)
 			return null;
-		if(toParse.isEmpty())
+		if (toParse.isEmpty())
 			return null;
 		String infos[] = new String[5];
 		Double coords[] = new Double[3];
