@@ -2,7 +2,6 @@ package com.Balor.bukkit.AdminCmd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -36,11 +35,10 @@ public class ACHelper {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	ConcurrentMap<String, HashSet<String>> usersWithPowers = new MapMaker().makeMap();
+	ConcurrentMap<String, ConcurrentMap<String, Object>> usersWithPowers = new MapMaker().makeMap();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, Location> spawnLocations = new MapMaker().softValues()
 			.expiration(20, TimeUnit.MINUTES).makeMap();
-	private ConcurrentMap<String, Float> vulcans = new MapMaker().makeMap();
 	private static ACHelper instance = null;
 
 	private ACHelper() {
@@ -403,54 +401,74 @@ public class ACHelper {
 	}
 
 	public void addVulcain(String playerName, float power) {
-		vulcans.put(playerName, power);
+		addPowerUser("vulcan", playerName, power);
 	}
 
 	public void removeVulcan(String playerName) {
-		vulcans.remove(playerName);
+		removePowerUser("vulcan", playerName);
 	}
 
-	public void addPowerUser(String power, String user) {
-		if (usersWithPowers.containsKey(power))
-			usersWithPowers.get(power).add(user);
+	public void addPowerUser(String powerName, String user, Object power) {
+		if (usersWithPowers.containsKey(powerName))
+			usersWithPowers.get(powerName).put(user, power);
 		else {
-			HashSet<String> tmp = new HashSet<String>();
-			tmp.add(user);
-			usersWithPowers.put(power, tmp);
+			ConcurrentMap<String, Object> tmp = new MapMaker().makeMap();
+			tmp.put(user, power);
+			usersWithPowers.put(powerName, tmp);
 		}
 
 	}
 
-	public void addPowerUser(String power, Player user) {
-		addPowerUser(power, user.getName());
+	public void addPowerUser(String powerName, Player user, Object power) {
+		addPowerUser(powerName, user.getName(), power);
 	}
 
-	public void removePowerUser(String power, String user) {
-		if (usersWithPowers.containsKey(power))
-			usersWithPowers.get(power).remove(user);
-		if (usersWithPowers.get(power).isEmpty())
-			usersWithPowers.remove(power);
+	public void addPowerUser(String powerName, Player user) {
+		addPowerUser(powerName, user.getName(), 0);
 	}
 
-	public void removePowerUser(String power, Player user) {
-		removePowerUser(power, user.getName());
+	public void addPowerUser(String powerName, String user) {
+		addPowerUser(powerName, user, 0);
 	}
 
-	public boolean isAPowerUser(String power, String user) {
-		return usersWithPowers.containsKey(power) && usersWithPowers.get(power).contains(user);
+	public void removePowerUser(String powerName, String user) {
+		if (usersWithPowers.containsKey(powerName))
+			usersWithPowers.get(powerName).remove(user);
+		if (usersWithPowers.get(powerName).isEmpty())
+			usersWithPowers.remove(powerName);
+	}
+
+	public void removePowerUser(String powerName, Player user) {
+		removePowerUser(powerName, user.getName());
+	}
+
+	public boolean isAPowerUser(String powerName, String user) {
+		return usersWithPowers.containsKey(powerName)
+				&& usersWithPowers.get(powerName).containsKey(user);
+	}
+
+	public Object getPowerOfPowerUser(String powerName, Object user) {
+		String player = null;
+		if (user instanceof String)
+			player = (String) user;
+		else if (user instanceof Player)
+			player = ((Player) user).getName();
+		if (player != null && isAPowerUser(powerName, player))
+			return usersWithPowers.get(powerName).get(user);
+		return null;
+
 	}
 
 	public List<Player> getAllPowerUser(String power) {
 		List<Player> players = new ArrayList<Player>();
 		if (usersWithPowers.containsKey(power))
-			for (String player : usersWithPowers.get(power))
+			for (String player : usersWithPowers.get(power).keySet())
 				players.add(pluginInstance.getServer().getPlayer(player));
 		return players;
 	}
 
-	public boolean isAPowerUser(String power, Player user) {
-		return usersWithPowers.containsKey(power)
-				&& usersWithPowers.get(power).contains(user.getName());
+	public boolean isAPowerUser(String powerName, Player user) {
+		return isAPowerUser(powerName, user.getName());
 	}
 
 	public void addGod(String playerName) {
@@ -478,7 +496,7 @@ public class ACHelper {
 	}
 
 	public Float getVulcainExplosionPower(String player) {
-		return vulcans.get(player);
+		return (Float)getPowerOfPowerUser("vulcan", player);
 	}
 
 	public boolean alias(String[] args) {

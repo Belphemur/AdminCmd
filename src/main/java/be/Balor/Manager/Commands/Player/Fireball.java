@@ -44,15 +44,28 @@ public class Fireball extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
-			if (ACHelper.getInstance().isAPowerUser("fireball", (Player) sender)) {
-				ACHelper.getInstance().removePowerUser("fireball", (Player) sender);
-				sender.sendMessage(ChatColor.DARK_AQUA + "FIREBALL mode disabled.");
-			} else {
-				ACHelper.getInstance().addPowerUser("fireball", (Player) sender);
-				sender.sendMessage(ChatColor.DARK_AQUA + "FIREBALL mode enabled.");
+		Player player = null;
+		float power = 1.0F;
+		if (args.length >= 1) {
+			try {
+				player = ACHelper.getInstance().getUser(args, permNode, 1);
+				power = Float.parseFloat(args[0]);
+			} catch (NumberFormatException e) {
+				power = 1.0F;
+				player = ACHelper.getInstance().getUser(args, permNode);
 			}
-
+			if (args.length >= 2)
+				player = ACHelper.getInstance().getUser(args, permNode, 1);
+		} else
+			player = ACHelper.getInstance().getUser(args, permNode);
+		if (player != null) {
+			if (ACHelper.getInstance().isAPowerUser("fireball", player.getName())) {
+				ACHelper.getInstance().removePowerUser("fireball", player);
+				player.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled.");
+			} else {
+				ACHelper.getInstance().addPowerUser("fireball", player, power);
+				player.sendMessage(ChatColor.DARK_RED + "Fulcan mode enabled.");
+			}
 		}
 
 	}

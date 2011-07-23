@@ -16,12 +16,9 @@
  ************************************************************************/
 package com.Balor.files.utils;
 
-import net.minecraft.server.EntityFireball;
-import net.minecraft.server.WorldServer;
-
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -32,12 +29,14 @@ import org.bukkit.util.Vector;
 public class ShootFireBall implements Runnable {
 
 	CraftPlayer player = null;
+	Float yield;
 
 	/**
 	 * 
 	 */
-	public ShootFireBall(Player p) {
+	public ShootFireBall(Player p, Float power) {
 		player = (CraftPlayer) p;
+		yield = power;
 	}
 
 	public void run() {
@@ -45,20 +44,14 @@ public class ShootFireBall implements Runnable {
 		// Define direction of fireball. Multiplying by 10 gives better
 		// accuracy.
 		Vector lookat = player.getLocation().getDirection().multiply(10);
-		WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
 
 		// Define location of the player.
 		Location loc = player.getLocation();
-
-		EntityFireball fball = new EntityFireball(world, player.getHandle(), lookat.getX(),
-				lookat.getY(), lookat.getZ());
-
-		// Make the fireball spawn slightly out and away from the player.
-		fball.locX = loc.getX() + (lookat.getX() / 5.0) + 0.25;
-		fball.locY = loc.getY() + (player.getEyeHeight() / 2.0) + 0.5;
-		fball.locZ = loc.getZ() + (lookat.getZ() / 5.0);
-
-		world.addEntity(fball);
+		Location fbLocation = new Location(loc.getWorld(), loc.getX() + (lookat.getX() / 5.0)
+				+ 0.25, loc.getY() + (player.getEyeHeight() / 2.0) + 0.5, loc.getZ()
+				+ (lookat.getZ() / 5.0));
+		Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
+		f.setYield(yield);
 
 	}
 

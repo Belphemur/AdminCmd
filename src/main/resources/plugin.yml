@@ -137,7 +137,7 @@ commands:
   bal_vulcan:
     description: Give the power of Vulcan (explosion at click).
     aliases: [vulcan,v,fire]
-    usage: /<command> playerName
+    usage: /<command> power playerName
   bal_drop:
     description: Drop an item at the player feet.
     aliases: [drop,d]
@@ -153,4 +153,4 @@ commands:
   bal_fireball:
     description: Give the power of Fireball (shoot fireball).
     aliases: [fireball,fb]
-    usage: /<command> playerName
+    usage: /<command> power playerName

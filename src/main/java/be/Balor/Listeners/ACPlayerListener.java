@@ -48,15 +48,15 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if (playerRespawnOrJoin(event.getPlayer()))
-		{
+		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
-			event.getPlayer().sendMessage(ChatColor.RED+"You are still Invisible");
+			event.getPlayer().sendMessage(ChatColor.RED + "You are still Invisible");
 		}
 	}
+
 	@Override
-    public void onPlayerQuit(PlayerQuitEvent event) {
-		if(InvisibleWorker.getInstance().hasInvisiblePowers(event.getPlayer().getName()))
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(event.getPlayer().getName()))
 			event.setQuitMessage(null);
 	}
 
@@ -75,7 +75,7 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			String playerName =  event.getPlayer().getName();
+			String playerName = event.getPlayer().getName();
 			if ((worker.hasThorPowers(playerName)))
 				event.getPlayer().getWorld()
 						.strikeLightning(event.getPlayer().getTargetBlock(null, 600).getLocation());
@@ -85,8 +85,13 @@ public class ACPlayerListener extends PlayerListener {
 						.getWorld()
 						.createExplosion(event.getPlayer().getTargetBlock(null, 600).getLocation(),
 								power, true);
-			if(worker.isAPowerUser("fireball", playerName))
-				worker.getPluginInstance().getServer().getScheduler().scheduleAsyncDelayedTask(worker.getPluginInstance(), new ShootFireBall(event.getPlayer()));
+			power = null;
+			if ((power = (Float) worker.getPowerOfPowerUser("fireball", playerName)) != null)
+				worker.getPluginInstance()
+						.getServer()
+						.getScheduler()
+						.scheduleAsyncDelayedTask(worker.getPluginInstance(),
+								new ShootFireBall(event.getPlayer(), power));
 		}
 	}
 
