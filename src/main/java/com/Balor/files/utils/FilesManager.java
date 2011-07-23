@@ -24,9 +24,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -243,6 +246,13 @@ public class FilesManager {
 		return parseLocation(property, conf, directory);
 	}
 
+	/**
+	 * Remove the given location from the file
+	 * 
+	 * @param property
+	 * @param filename
+	 * @param directory
+	 */
 	public void removeLocationFromFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
 		conf.removeProperty(directory + "." + property);
@@ -250,7 +260,21 @@ public class FilesManager {
 	}
 
 	/**
-	 * Parsong String to create a location
+	 * Return a string Set containing all locations names
+	 * 
+	 * @param filename
+	 * @param directory
+	 * @return
+	 */
+	public Set<String> getAllLocationsNameFromFile(String filename, String directory) {
+		Map<String, ConfigurationNode> map = getYml(filename, directory).getNodes(directory);
+		if (map == null)
+			return null;
+		return map.keySet();
+	}
+
+	/**
+	 * Parse String to create a location
 	 * 
 	 * @param world
 	 * @param conf

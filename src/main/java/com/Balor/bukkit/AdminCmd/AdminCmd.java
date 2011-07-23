@@ -40,20 +40,20 @@ public class AdminCmd extends JavaPlugin {
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
-	private void registerPermParents()
-	{		
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.item.*", "admincmd.item."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.player.*", "admincmd.player."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.mob.*", "admincmd.mob."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.server.*", "admincmd.server."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.spawn.*", "admincmd.spawn."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.time.*", "admincmd.time."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.tp.*", "admincmd.tp."));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.weather.*", "admincmd.weather."));
-		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*", "admincmd."));
+	private void registerPermParents() {
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.item.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.player.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.mob.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.server.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.spawn.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.time.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.tp.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.weather.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.warp.*"));
+		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*"));
 	}
-	private void registerCmds()
-	{
+
+	private void registerCmds() {
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
@@ -94,6 +94,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Home.class);
 		CommandManager.getInstance().registerCommand(SetHome.class);
 	}
+
 	public void onEnable() {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
@@ -115,7 +116,8 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, pOqL, Priority.Normal, this);
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);
+		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High,
+				this);
 	}
 
 	public void onDisable() {

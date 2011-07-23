@@ -2,8 +2,10 @@ package com.Balor.bukkit.AdminCmd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +41,7 @@ public class ACHelper {
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
+	private Set<String> warpList = new HashSet<String>();
 	private static ACHelper instance = null;
 
 	private ACHelper() {
@@ -81,6 +84,10 @@ public class ACHelper {
 		fManager = new FilesManager(pluginInstance.getDataFolder().getPath());
 		blacklist = getBlackListedItems();
 		alias.putAll(fManager.getAlias());
+		Set<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
+		if (tmp != null)
+			warpList.addAll(tmp);
+
 	}
 
 	/**
@@ -189,6 +196,13 @@ public class ACHelper {
 	}
 
 	/**
+	 * @return the warpList
+	 */
+	public Set<String> getWarpList() {
+		return warpList;
+	}
+
+	/**
 	 * Add a location in the location cache
 	 * 
 	 * @param type
@@ -219,26 +233,28 @@ public class ACHelper {
 			loc = locations.get(type).get(name);
 		return loc;
 	}
+
 	/**
 	 * Remove the location from the memory
+	 * 
 	 * @param type
 	 * @param name
 	 */
-	private void removeLocationFromMemory(String type, String name)
-	{
+	private void removeLocationFromMemory(String type, String name) {
 		if (locations.containsKey(type))
 			locations.get(type).remove(name);
 		if (locations.get(type).isEmpty())
 			locations.remove(type);
 	}
+
 	/**
 	 * Remove the location from memory and from disk
+	 * 
 	 * @param type
 	 * @param name
 	 * @param filename
 	 */
-	public void removeLocation(String type, String name, String filename)
-	{
+	public void removeLocation(String type, String name, String filename) {
 		removeLocationFromMemory(type, name);
 		fManager.removeLocationFromFile(name, filename, type);
 	}

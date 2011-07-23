@@ -24,47 +24,56 @@ import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PermParent {
 	protected LinkedHashMap<String, Boolean> children;
 	protected String permName = "";
-	protected String compareName="";
-	
-	public PermParent(String perm, String compare)
-	{
-		this.permName=perm;
+	protected String compareName = "";
+
+	public PermParent(String perm, String compare) {
+		this.permName = perm;
 		this.compareName = compare;
 		children = new LinkedHashMap<String, Boolean>();
 	}
+
+	public PermParent(String perm) {
+		this.permName = perm;
+		this.compareName = perm.substring(0, perm.length() - 1);
+		children = new LinkedHashMap<String, Boolean>();
+	}
+
 	/**
 	 * Add a Permission Child.
+	 * 
 	 * @param name
 	 * @param bool
 	 */
-	public void addChild(String name, boolean bool)
-	{
+	public void addChild(String name, boolean bool) {
 		children.put(name, bool);
 	}
-	public void addChild(String name)
-	{
-		addChild(name,true);
+
+	public void addChild(String name) {
+		addChild(name, true);
 	}
+
 	/**
 	 * @return the compareName
 	 */
 	public String getCompareName() {
 		return compareName;
 	}
+
 	/**
 	 * @return the permName
 	 */
 	public String getPermName() {
 		return permName;
 	}
-	public void registerBukkitPerm()
-	{
-		AdminCmd.getBukkitServer().getPluginManager().addPermission(new Permission(permName, children));
+
+	public void registerBukkitPerm() {
+		AdminCmd.getBukkitServer().getPluginManager()
+				.addPermission(new Permission(permName, children));
 	}
-	
+
 }
