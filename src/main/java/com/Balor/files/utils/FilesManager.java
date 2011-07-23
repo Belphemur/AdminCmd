@@ -24,12 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -266,11 +264,9 @@ public class FilesManager {
 	 * @param directory
 	 * @return
 	 */
-	public Set<String> getAllLocationsNameFromFile(String filename, String directory) {
-		Map<String, ConfigurationNode> map = getYml(filename, directory).getNodes(directory);
-		if (map == null)
-			return null;
-		return map.keySet();
+	public List<String> getAllLocationsNameFromFile(String filename, String directory) {
+		List<String> list = getYml(filename, directory).getKeys(directory);
+		return list;
 	}
 
 	/**

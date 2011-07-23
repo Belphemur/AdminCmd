@@ -84,7 +84,7 @@ public class ACHelper {
 		fManager = new FilesManager(pluginInstance.getDataFolder().getPath());
 		blacklist = getBlackListedItems();
 		alias.putAll(fManager.getAlias());
-		Set<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
+		List<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
 		if (tmp != null)
 			warpList.addAll(tmp);
 
