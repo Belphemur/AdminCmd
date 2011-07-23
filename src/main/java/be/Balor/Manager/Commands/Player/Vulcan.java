@@ -62,7 +62,7 @@ public class Vulcan extends ACCommands {
 		} else
 			player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (ACHelper.getInstance().isAPowerUser("vulcan", player.getName())) {
+			if (ACHelper.getInstance().isPowerUser("vulcan", player.getName())) {
 				ACHelper.getInstance().removeVulcan(player.getName());
 				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
 				if (!player.equals(sender))

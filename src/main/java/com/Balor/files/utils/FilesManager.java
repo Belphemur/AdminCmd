@@ -48,7 +48,7 @@ public class FilesManager {
 		if (spawn.exists()) {
 			File dir = new File(this.path + File.separator + "spawn");
 			dir.mkdir();
-			spawn.renameTo(new File(dir, "spawnLocations.yml"));
+			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
 	}
 
@@ -222,11 +222,11 @@ public class FilesManager {
 	 * @param filename
 	 * @param directory
 	 */
-	public void createLocationFile(Location loc, String filename, String directory) {
+	public void writeLocationFile(Location loc, String filename, String directory) {
 		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
 				+ ";" + loc.getPitch();
 		Configuration conf = getYml(filename, directory);
-		conf.setProperty(loc.getWorld().getName(), location);
+		conf.setProperty(directory+"."+loc.getWorld().getName(), location);
 		conf.save();
 	}
 
@@ -243,6 +243,12 @@ public class FilesManager {
 		return parseLocation(property, conf);
 	}
 
+	public void removeLocationFromFile(String property, String filename, String directory) {
+		Configuration conf = getYml(filename, directory);
+		conf.removeProperty(directory+"."+property);
+		conf.save();
+	}
+
 	/**
 	 * Parsong String to create a location
 	 * 
@@ -253,6 +259,8 @@ public class FilesManager {
 	private Location parseLocation(String world, Configuration conf) {
 		String toParse = conf.getString(world, null);
 		if (toParse == null)
+			return null;
+		if(toParse.isEmpty())
 			return null;
 		String infos[] = new String[5];
 		Double coords[] = new Double[3];

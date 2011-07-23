@@ -219,6 +219,29 @@ public class ACHelper {
 			loc = locations.get(type).get(name);
 		return loc;
 	}
+	/**
+	 * Remove the location from the memory
+	 * @param type
+	 * @param name
+	 */
+	private void removeLocationFromMemory(String type, String name)
+	{
+		if (locations.containsKey(type))
+			locations.get(type).remove(name);
+		if (locations.get(type).isEmpty())
+			locations.remove(type);
+	}
+	/**
+	 * Remove the location from memory and from disk
+	 * @param type
+	 * @param name
+	 * @param filename
+	 */
+	public void removeLocation(String type, String name, String filename)
+	{
+		removeLocationFromMemory(type, name);
+		fManager.removeLocationFromFile(name, filename, type);
+	}
 
 	/**
 	 * Add a location in memory and on the disk.
@@ -230,7 +253,7 @@ public class ACHelper {
 	 */
 	public void addLocation(String type, String name, String filename, Location loc) {
 		addLocationInMemory(type, name, loc);
-		fManager.createLocationFile(loc, filename, type);
+		fManager.writeLocationFile(loc, filename, type);
 	}
 
 	/**
@@ -500,7 +523,7 @@ public class ACHelper {
 		removePowerUser(powerName, user.getName());
 	}
 
-	public boolean isAPowerUser(String powerName, String user) {
+	public boolean isPowerUser(String powerName, String user) {
 		return usersWithPowers.containsKey(powerName)
 				&& usersWithPowers.get(powerName).containsKey(user);
 	}
@@ -511,7 +534,7 @@ public class ACHelper {
 			player = (String) user;
 		else if (user instanceof Player)
 			player = ((Player) user).getName();
-		if (player != null && isAPowerUser(powerName, player))
+		if (player != null && isPowerUser(powerName, player))
 			return usersWithPowers.get(powerName).get(user);
 		return null;
 
@@ -525,8 +548,8 @@ public class ACHelper {
 		return players;
 	}
 
-	public boolean isAPowerUser(String powerName, Player user) {
-		return isAPowerUser(powerName, user.getName());
+	public boolean isPowerUser(String powerName, Player user) {
+		return isPowerUser(powerName, user.getName());
 	}
 
 	public void addGod(String playerName) {
@@ -546,11 +569,11 @@ public class ACHelper {
 	}
 
 	public boolean hasThorPowers(String player) {
-		return isAPowerUser("thor", player);
+		return isPowerUser("thor", player);
 	}
 
 	public boolean hasGodPowers(String player) {
-		return isAPowerUser("god", player);
+		return isPowerUser("god", player);
 	}
 
 	public Float getVulcainExplosionPower(String player) {

@@ -59,7 +59,7 @@ public class Fireball extends ACCommands {
 		} else
 			player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (ACHelper.getInstance().isAPowerUser("fireball", player.getName())) {
+			if (ACHelper.getInstance().isPowerUser("fireball", player.getName())) {
 				ACHelper.getInstance().removePowerUser("fireball", player);
 				player.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled.");
 				if (!player.equals(sender))
