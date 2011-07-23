@@ -109,4 +109,11 @@ public class Utils {
 			return false;
 		}
 	}
+
+	public static void sendMessage(CommandSender sender, Player player, String msg) {
+		if (!sender.equals(player))
+			player.sendMessage(msg);
+		sender.sendMessage(msg);
+
+	}
 }
