@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -53,11 +54,39 @@ public class FilesManager {
 	 * @param fileName
 	 * @return the configuration file
 	 */
-	public Configuration getFile(String fileName) {
+	public Configuration getYml(String fileName, String directory) {
+		Configuration config = new Configuration(getFile(directory, fileName + ".yml"));
+		config.load();
+		return config;
+	}
 
-		File file = new File(path + File.separator + fileName);
+	public Configuration getYml(String fileName) {
+		return getYml(fileName, null);
+	}
 
-		if (!file.exists()) {
+	/**
+	 * Open the file and return the File object
+	 * 
+	 * @param directory
+	 * @param fileName
+	 * @return the configuration file
+	 */
+	private File getFile(String directory, String fileName) {
+		return getFile(directory, fileName, true);
+	}
+
+	private File getFile(String directory, String fileName, boolean create) {
+		File file = null;
+
+		if (directory != null) {
+			if (!new File(this.path + File.separator + directory).exists()) {
+				new File(this.path + File.separator + directory).mkdir();
+			}
+			file = new File(path + File.separator + directory + File.separator + fileName);
+		} else
+			file = new File(path + File.separator + fileName);
+
+		if (!file.exists() && create) {
 
 			try {
 				file.createNewFile();
@@ -65,13 +94,17 @@ public class FilesManager {
 				System.out.println("cannot create file " + file.getPath());
 			}
 		}
-		Configuration config = new Configuration(file);
-		config.load();
-		return config;
+		return file;
 	}
 
+	/**
+	 * Write the alias in the yml file
+	 * 
+	 * @param alias
+	 * @param mc
+	 */
 	public void addAlias(String alias, MaterialContainer mc) {
-		Configuration conf = getFile("Alias.yml");
+		Configuration conf = getYml("Alias");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
@@ -88,8 +121,13 @@ public class FilesManager {
 		conf.save();
 	}
 
+	/**
+	 * Remove the alias from the yml fileF
+	 * 
+	 * @param alias
+	 */
 	public void removeAlias(String alias) {
-		Configuration conf = getFile("Alias.yml");
+		Configuration conf = getYml("Alias");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
@@ -142,7 +180,7 @@ public class FilesManager {
 
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
-		Configuration conf = getFile("Alias.yml");
+		Configuration conf = getYml("Alias");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
@@ -157,7 +195,7 @@ public class FilesManager {
 				} catch (ArrayIndexOutOfBoundsException e) {
 					result.put(alias[0], new MaterialContainer(alias[1]));
 				}
-				
+
 			}
 
 		} catch (FileNotFoundException e) {
@@ -172,16 +210,64 @@ public class FilesManager {
 		return result;
 	}
 
+	/**
+	 * Write the spawn location to the file
+	 * 
+	 * @param loc
+	 */
 	public void setSpawnLoc(Location loc) {
 		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
 				+ ";" + loc.getPitch();
-		Configuration conf = getFile("spawnLocations.yml");
+		Configuration conf = getYml("spawnLocations");
 		conf.setProperty(loc.getWorld().getName(), location);
 		conf.save();
 	}
 
+	/**
+	 * Read and parse the spawn location
+	 * 
+	 * @param world
+	 * @return
+	 */
 	public Location getSpawnLoc(String world) {
-		Configuration conf = getFile("spawnLocations.yml");
+		Configuration conf = getYml("spawnLocations");
+		return parseLocation(world, conf);
+	}
+
+	/**
+	 * Set the home of the player
+	 * 
+	 * @param player
+	 */
+	public void setHome(Player player) {
+		Location loc = player.getLocation();
+		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
+				+ ";" + loc.getPitch();
+		Configuration conf = getYml(player.getName(), "Homes");
+		conf.setProperty(player.getWorld().getName(), location);
+		conf.save();
+	}
+
+	/**
+	 * Return the home in the current world
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public Location getHome(Player player) {
+		String world = player.getWorld().getName();
+		Configuration conf = getYml(player.getName(), "Homes");
+		return parseLocation(world, conf);
+	}
+
+	/**
+	 * Parsong String to create a location
+	 * 
+	 * @param world
+	 * @param conf
+	 * @return
+	 */
+	private Location parseLocation(String world, Configuration conf) {
 		String toParse = conf.getString(world, null);
 		if (toParse == null)
 			return null;

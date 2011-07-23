@@ -171,7 +171,7 @@ public class ACHelper {
 	public boolean setBlackListedItem(String name) {
 		MaterialContainer m = checkMaterial(name);
 		if (!m.isNull()) {
-			Configuration config = fManager.getFile("blacklist.yml");
+			Configuration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
@@ -230,7 +230,7 @@ public class ACHelper {
 	public boolean removeBlackListedItem(String name) {
 		MaterialContainer m = checkMaterial(name);
 		if (m.material != null) {
-			Configuration config = fManager.getFile("blacklist.yml");
+			Configuration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
@@ -254,8 +254,7 @@ public class ACHelper {
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
-		return fManager.getFile("blacklist.yml")
-				.getIntList("BlackListed", new ArrayList<Integer>());
+		return fManager.getYml("blacklist").getIntList("BlackListed", new ArrayList<Integer>());
 	}
 
 	/**
@@ -273,11 +272,13 @@ public class ACHelper {
 				target = sender.getServer().getPlayer(args[index]);
 			else
 				return target;
-		} else if (ACHelper.getInstance().isPlayer(false))
-			target = ((Player) sender);
-		else {
-			sender.sendMessage("You must type the player name");
-			return target;
+		} else {
+			if (ACHelper.getInstance().isPlayer(false))
+				target = ((Player) sender);
+			else {
+				sender.sendMessage("You must type the player name");
+				return target;
+			}
 		}
 		if (target == null) {
 			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[index]
@@ -496,7 +497,7 @@ public class ACHelper {
 	}
 
 	public Float getVulcainExplosionPower(String player) {
-		return (Float)getPowerOfPowerUser("vulcan", player);
+		return (Float) getPowerOfPowerUser("vulcan", player);
 	}
 
 	public boolean alias(String[] args) {
