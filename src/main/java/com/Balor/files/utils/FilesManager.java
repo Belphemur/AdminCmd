@@ -265,8 +265,7 @@ public class FilesManager {
 	 * @return
 	 */
 	public List<String> getAllLocationsNameFromFile(String filename, String directory) {
-		List<String> list = getYml(filename, directory).getKeys(directory);
-		return list;
+		return getYml(filename, directory).getKeys(directory);
 	}
 
 	/**
