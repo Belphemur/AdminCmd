@@ -48,6 +48,7 @@ public class ShootFireBall implements Runnable {
 		;
 		Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
 		f.setYield(yield);
+		f.setShooter(player);
 
 	}
 
