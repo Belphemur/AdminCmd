@@ -113,6 +113,7 @@ public class AdminCmd extends JavaPlugin {
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High, this);
 	}
@@ -121,7 +122,7 @@ public class AdminCmd extends JavaPlugin {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version"
+		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");
 	}
 

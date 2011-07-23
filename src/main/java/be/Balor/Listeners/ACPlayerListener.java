@@ -93,12 +93,12 @@ public class ACPlayerListener extends PlayerListener {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
 				.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-						new UpdateInvisibleOnJoin(newPlayer), 50);
+						new UpdateInvisibleOnJoin(newPlayer), 25);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-							new UpdateInvisible(newPlayer), 50);
+							new UpdateInvisible(newPlayer), 25);
 			return true;
 		}
 		return false;
