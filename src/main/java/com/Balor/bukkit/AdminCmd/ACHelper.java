@@ -241,10 +241,11 @@ public class ACHelper {
 	 * @param name
 	 */
 	private void removeLocationFromMemory(String type, String name) {
-		if (locations.containsKey(type))
+		if (locations.containsKey(type)) {
 			locations.get(type).remove(name);
-		if (locations.get(type).isEmpty())
-			locations.remove(type);
+			if (locations.get(type).isEmpty())
+				locations.remove(type);
+		}
 	}
 
 	/**
@@ -529,10 +530,11 @@ public class ACHelper {
 	}
 
 	public void removePowerUser(String powerName, String user) {
-		if (usersWithPowers.containsKey(powerName))
+		if (usersWithPowers.containsKey(powerName)) {
 			usersWithPowers.get(powerName).remove(user);
-		if (usersWithPowers.get(powerName).isEmpty())
-			usersWithPowers.remove(powerName);
+			if (usersWithPowers.get(powerName).isEmpty())
+				usersWithPowers.remove(powerName);
+		}
 	}
 
 	public void removePowerUser(String powerName, Player user) {
