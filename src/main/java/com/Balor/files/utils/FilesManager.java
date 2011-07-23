@@ -225,11 +225,11 @@ public class FilesManager {
 	 * @param filename
 	 * @param directory
 	 */
-	public void writeLocationFile(Location loc, String filename, String directory) {
+	public void writeLocationFile(Location loc, String name, String filename, String directory) {
 		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
-				+ ";" + loc.getPitch();
+				+ ";" + loc.getPitch() + ";" + loc.getWorld().getName();
 		Configuration conf = getYml(filename, directory);
-		conf.setProperty(directory + "." + loc.getWorld().getName(), location);
+		conf.setProperty(directory + "." + name, location);
 		conf.save();
 	}
 
@@ -276,12 +276,12 @@ public class FilesManager {
 	/**
 	 * Parse String to create a location
 	 * 
-	 * @param world
+	 * @param property
 	 * @param conf
 	 * @return
 	 */
-	private Location parseLocation(String world, Configuration conf, String parentProperty) {
-		String toParse = conf.getString(parentProperty + "." + world, null);
+	private Location parseLocation(String property, Configuration conf, String parentProperty) {
+		String toParse = conf.getString(parentProperty + "." + property, null);
 		if (toParse == null)
 			return null;
 		if (toParse.isEmpty())
@@ -296,13 +296,13 @@ public class FilesManager {
 			} catch (NumberFormatException e) {
 				return null;
 			}
-		for (int i = 3; i < infos.length; i++)
+		for (int i = 3; i < infos.length-1; i++)
 			try {
 				direction[i - 3] = Float.parseFloat(infos[i]);
 			} catch (NumberFormatException e) {
 				return null;
 			}
-		return new Location(AdminCmd.getBukkitServer().getWorld(world), coords[0], coords[1],
+		return new Location(AdminCmd.getBukkitServer().getWorld(infos[5]), coords[0], coords[1],
 				coords[2], direction[0], direction[1]);
 	}
 }

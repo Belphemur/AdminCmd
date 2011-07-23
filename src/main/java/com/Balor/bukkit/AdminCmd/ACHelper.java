@@ -269,7 +269,7 @@ public class ACHelper {
 	 */
 	public void addLocation(String type, String name, String filename, Location loc) {
 		addLocationInMemory(type, name, loc);
-		fManager.writeLocationFile(loc, filename, type);
+		fManager.writeLocationFile(loc, name, filename, type);
 	}
 
 	/**
