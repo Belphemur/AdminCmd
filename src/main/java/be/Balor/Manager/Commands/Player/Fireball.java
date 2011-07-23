@@ -62,13 +62,15 @@ public class Fireball extends ACCommands {
 			if (ACHelper.getInstance().isAPowerUser("fireball", player.getName())) {
 				ACHelper.getInstance().removePowerUser("fireball", player);
 				player.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled.");
-				if(!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled.");
+				if (!player.equals(sender))
+					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled for "
+							+ player.getName());
 			} else {
 				ACHelper.getInstance().addPowerUser("fireball", player, power);
 				player.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled.");
-				if(!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled.");
+				if (!player.equals(sender))
+					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled for "
+							+ player.getName());
 			}
 		}
 

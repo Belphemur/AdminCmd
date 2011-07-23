@@ -65,9 +65,15 @@ public class Vulcan extends ACCommands {
 			if (ACHelper.getInstance().isAPowerUser("vulcan", player.getName())) {
 				ACHelper.getInstance().removeVulcan(player.getName());
 				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
+				if (!player.equals(sender))
+					sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled for "
+							+ player.getName());
 			} else {
 				ACHelper.getInstance().addVulcain((player.getName()), power);
 				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode enabled.");
+				if (!player.equals(sender))
+					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled for "
+							+ player.getName());
 			}
 		}
 	}

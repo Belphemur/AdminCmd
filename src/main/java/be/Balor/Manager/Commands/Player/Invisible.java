@@ -54,11 +54,17 @@ public class Invisible extends ACCommands {
 		{
 			InvisibleWorker.getInstance().vanish(target);
 			target.sendMessage(ChatColor.RED+"You are now Invisible");
+			if (!target.equals(sender))
+				sender.sendMessage(ChatColor.DARK_AQUA + "INVISIBLE mode enabled for "
+						+ target.getName());
 		}
 		else
 		{
 			InvisibleWorker.getInstance().reappear(target);
 			target.sendMessage(ChatColor.GREEN+"You are now Visible");
+			if (!target.equals(sender))
+				sender.sendMessage(ChatColor.DARK_AQUA + "INVISIBLE mode disabled for "
+						+ target.getName());
 		}
 	}
 
