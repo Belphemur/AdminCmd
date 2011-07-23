@@ -240,7 +240,7 @@ public class FilesManager {
 	 */
 	public Location getLocationFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		return parseLocation(directory + "." + property, conf);
+		return parseLocation(property, conf, directory);
 	}
 
 	public void removeLocationFromFile(String property, String filename, String directory) {
@@ -256,12 +256,13 @@ public class FilesManager {
 	 * @param conf
 	 * @return
 	 */
-	private Location parseLocation(String world, Configuration conf) {
-		String toParse = conf.getString(world, null);
+	private Location parseLocation(String world, Configuration conf, String parentProperty) {
+		String toParse = conf.getString(parentProperty + "." + world, null);
 		if (toParse == null)
 			return null;
 		if (toParse.isEmpty())
 			return null;
+		System.out.print(toParse);
 		String infos[] = new String[5];
 		Double coords[] = new Double[3];
 		Float direction[] = new Float[2];
