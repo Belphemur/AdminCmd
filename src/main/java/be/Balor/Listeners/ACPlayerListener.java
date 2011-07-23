@@ -29,6 +29,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.ShootFireBall;
 import com.Balor.files.utils.UpdateInvisible;
 
 /**
@@ -74,15 +75,18 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			if ((worker.hasThorPowers(event.getPlayer().getName())))
+			String playerName =  event.getPlayer().getName();
+			if ((worker.hasThorPowers(playerName)))
 				event.getPlayer().getWorld()
 						.strikeLightning(event.getPlayer().getTargetBlock(null, 600).getLocation());
 			Float power = null;
-			if ((power = worker.getVulcainExplosionPower(event.getPlayer().getName())) != null)
+			if ((power = worker.getVulcainExplosionPower(playerName)) != null)
 				event.getPlayer()
 						.getWorld()
 						.createExplosion(event.getPlayer().getTargetBlock(null, 600).getLocation(),
 								power, true);
+			if(worker.isAPowerUser("fireball", playerName))
+				worker.getPluginInstance().getServer().getScheduler().scheduleAsyncDelayedTask(worker.getPluginInstance(), new ShootFireBall(event.getPlayer()));
 		}
 	}
 

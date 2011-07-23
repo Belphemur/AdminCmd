@@ -1,6 +1,6 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.4.3
+version: 5.4.4
 author: Plague modded by Balor
 softdepend: [MultiVerse,Permissions]
 description: >
@@ -150,3 +150,7 @@ commands:
     description: You can see every private message.
     aliases: [spy,smsg]
     usage: /<command> 
+  bal_fireball:
+    description: Give the power of Fireball (shoot fireball).
+    aliases: [fireball,fb]
+    usage: /<command> playerName
