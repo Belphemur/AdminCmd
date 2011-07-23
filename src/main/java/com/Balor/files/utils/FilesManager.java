@@ -44,9 +44,12 @@ public class FilesManager {
 		if (!new File(this.path).exists()) {
 			new File(this.path).mkdir();
 		}
-		File spawn = getFile(null, "spawnLocations.yml",false);
-		if(spawn.exists())
-			spawn.renameTo(new File(path+File.separator+"spawn", "spawnLocations.yml"));
+		File spawn = getFile(null, "spawnLocations.yml", false);
+		if (spawn.exists()) {
+			File dir = new File(this.path + File.separator + "spawn");
+			dir.mkdir();
+			spawn.renameTo(new File(dir, "spawnLocations.yml"));
+		}
 	}
 
 	/**
