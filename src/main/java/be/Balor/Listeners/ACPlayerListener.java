@@ -62,14 +62,8 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		final Player player = event.getPlayer();
-		AdminCmd.getBukkitServer().getScheduler()
-				.scheduleAsyncDelayedTask(worker.getPluginInstance(), new Runnable() {
+		playerRespawnOrJoin(event.getPlayer());
 
-					public void run() {
-						playerRespawnOrJoin(player);
-					}
-				}, 20);
 	}
 
 	@Override
@@ -99,12 +93,12 @@ public class ACPlayerListener extends PlayerListener {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
 				.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-						new UpdateInvisibleOnJoin(newPlayer));
+						new UpdateInvisibleOnJoin(newPlayer), 50);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-							new UpdateInvisible(newPlayer));
+							new UpdateInvisible(newPlayer), 50);
 			return true;
 		}
 		return false;
