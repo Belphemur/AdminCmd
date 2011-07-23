@@ -262,7 +262,6 @@ public class FilesManager {
 			return null;
 		if (toParse.isEmpty())
 			return null;
-		System.out.print(toParse);
 		String infos[] = new String[5];
 		Double coords[] = new Double[3];
 		Float direction[] = new Float[2];
