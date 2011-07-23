@@ -20,7 +20,6 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 /**
  * @author Balor (aka Antoine Aflalo)
