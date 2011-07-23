@@ -64,7 +64,7 @@ public class Fireball extends ACCommands {
 				player.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled.");
 			} else {
 				ACHelper.getInstance().addPowerUser("fireball", player, power);
-				player.sendMessage(ChatColor.DARK_RED + "Fulcan mode enabled.");
+				player.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled.");
 			}
 		}
 

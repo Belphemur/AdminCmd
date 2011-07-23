@@ -42,7 +42,7 @@ public class ShootFireBall implements Runnable {
 
 		Location playerLoc = player.getLocation();
 		Location fbLocation = playerLoc.add(
-				playerLoc.getDirection().normalize().multiply(10)
+				playerLoc.getDirection().normalize().multiply(2)
 						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
 				.add(0, 1D, 0);
 		;
