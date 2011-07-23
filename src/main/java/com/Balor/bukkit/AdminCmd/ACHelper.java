@@ -272,13 +272,11 @@ public class ACHelper {
 				target = sender.getServer().getPlayer(args[index]);
 			else
 				return target;
-		} else {
-			if (ACHelper.getInstance().isPlayer(false))
-				target = ((Player) sender);
-			else {
-				sender.sendMessage("You must type the player name");
-				return target;
-			}
+		} else if (ACHelper.getInstance().isPlayer(false))
+			target = ((Player) sender);
+		else {
+			sender.sendMessage("You must type the player name");
+			return target;
 		}
 		if (target == null) {
 			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[index]
