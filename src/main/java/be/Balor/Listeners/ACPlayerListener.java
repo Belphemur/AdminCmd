@@ -17,6 +17,7 @@
 package be.Balor.Listeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -31,6 +33,7 @@ import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.ShootFireBall;
 import com.Balor.files.utils.UpdateInvisible;
+import com.Balor.files.utils.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -64,6 +67,17 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		playerRespawnOrJoin(event.getPlayer());
 
+	}
+
+	@Override
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		Location from = event.getFrom();
+		Location to = event.getTo();
+		if (ACHelper.getInstance().getConf().getBoolean("resetPowerWhenTpAnotherWorld", true)
+				&& !from.getWorld().equals(to.getWorld())) {
+			if(ACHelper.getInstance().removePlayerFromAllPowerUser(event.getPlayer().getName()))
+				event.getPlayer().sendMessage(Utils.I18n("changedWorld"));
+		}
 	}
 
 	@Override

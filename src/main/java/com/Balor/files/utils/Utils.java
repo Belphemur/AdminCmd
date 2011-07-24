@@ -16,6 +16,7 @@
  ************************************************************************/
 package com.Balor.files.utils;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import be.Balor.Manager.LocaleManager;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -115,5 +118,13 @@ public class Utils {
 			player.sendMessage(msg);
 		sender.sendMessage(msg);
 
+	}
+
+	public static String I18n(String key) {
+		return LocaleManager.getInstance().get(key);
+	}
+
+	public static String I18n(String key, Map<String, String> replace) {
+		return LocaleManager.getInstance().get(key, replace);
 	}
 }

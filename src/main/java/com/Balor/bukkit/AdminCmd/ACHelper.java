@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
+import be.Balor.Manager.ConfigurationManager;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
 import com.Balor.files.utils.FilesManager;
 import com.Balor.files.utils.MaterialContainer;
@@ -43,6 +45,7 @@ public class ACHelper {
 			.makeMap();
 	private Set<String> warpList = new HashSet<String>();
 	private static ACHelper instance = null;
+	private ConfigurationManager pluginConfig;
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -75,19 +78,42 @@ public class ACHelper {
 		return instance;
 	}
 
+	public static void killInstance() {
+		instance = null;
+	}
+
 	/**
 	 * @param pluginInstance
 	 *            the pluginInstance to set
 	 */
 	public void setPluginInstance(AdminCmd pluginInstance) {
 		this.pluginInstance = pluginInstance;
-		fManager = new FilesManager(pluginInstance.getDataFolder().getPath());
+		fManager = FilesManager.getInstance();
+		fManager.setPath(pluginInstance.getDataFolder().getPath());
+		pluginConfig = new ConfigurationManager(pluginInstance.getConfiguration());
+		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
+		pluginConfig.addProperty("noMessage", false);
+		pluginConfig.addProperty("locale", "en_US");
+		pluginConfig.save();
+		LocaleManager.getInstance().setLocaleFile(pluginConfig.getConf().getString("locale", "en_US"));
+		LocaleManager.getInstance().setNoMsg(pluginConfig.getConf().getBoolean("noMessage", false));
+		LocaleManager.getInstance().load();
 		blacklist = getBlackListedItems();
 		alias.putAll(fManager.getAlias());
 		List<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
 		if (tmp != null)
 			warpList.addAll(tmp);
+	}
 
+	/**
+	 * @return the pluginConfig
+	 */
+	public ConfigurationManager getPluginConfig() {
+		return pluginConfig;
+	}
+
+	public final Configuration getConf() {
+		return pluginConfig.getConf();
 	}
 
 	/**
@@ -214,7 +240,7 @@ public class ACHelper {
 			locations.get(type).put(name, loc);
 		else {
 			ConcurrentMap<String, Location> tmp = new MapMaker().softValues()
-					.expiration(10, TimeUnit.MINUTES).makeMap();
+					.expiration(15, TimeUnit.MINUTES).makeMap();
 			tmp.put(name, loc);
 			locations.put(type, tmp);
 		}
@@ -558,12 +584,31 @@ public class ACHelper {
 
 	}
 
-	public List<Player> getAllPowerUser(String power) {
+	public List<Player> getAllPowerUserOf(String power) {
 		List<Player> players = new ArrayList<Player>();
 		if (usersWithPowers.containsKey(power))
 			for (String player : usersWithPowers.get(power).keySet())
 				players.add(pluginInstance.getServer().getPlayer(player));
 		return players;
+	}
+
+	/**
+	 * Remove all user Power.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean removePlayerFromAllPowerUser(String player) {
+		boolean found = false;
+		for (String type : usersWithPowers.keySet()) {
+			for (String playerName : usersWithPowers.get(type).keySet())
+				if (playerName.equals(player)) {
+					found = true;
+					usersWithPowers.get(type).remove(playerName);
+					break;
+				}
+		}
+		return found;
 	}
 
 	public boolean isPowerUser(String powerName, Player user) {

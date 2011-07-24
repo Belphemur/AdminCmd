@@ -100,7 +100,7 @@ public class PrivateMessage extends ACCommands {
 				parsed = msg;
 			buddy.sendMessage(msgPrefix + senderPm + parsed);
 			sender.sendMessage(msgPrefix + senderPm + parsed);
-			for(Player p : ACHelper.getInstance().getAllPowerUser("spymsg"))
+			for(Player p : ACHelper.getInstance().getAllPowerUserOf("spymsg"))
 				if(!p.getName().equals(senderName) && !p.getName().equals(buddy.getName()))
 					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "+senderName+"-"+buddy.getName()+": "+parsed);
 		} else

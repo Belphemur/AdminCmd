@@ -1,6 +1,8 @@
 package com.Balor.bukkit.AdminCmd;
 
 import java.util.logging.Logger;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,6 +16,7 @@ import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermParent;
 import be.Balor.Manager.PermissionManager;
 import be.Balor.Manager.Commands.Items.*;
@@ -25,6 +28,7 @@ import be.Balor.Manager.Commands.Time.*;
 import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Weather.*;
 import be.Balor.Manager.Commands.Warp.*;
+
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
  * 
@@ -111,6 +115,12 @@ public class AdminCmd extends JavaPlugin {
 
 		worker = ACHelper.getInstance();
 		worker.setPluginInstance(this);
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"changeWorld",
+						ChatColor.DARK_RED
+								+ "All your powers have been deactivated because you teleported to an another world");
 		registerPermParents();
 		registerCmds();
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
@@ -119,6 +129,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_TELEPORT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High,
 				this);
@@ -128,6 +139,7 @@ public class AdminCmd extends JavaPlugin {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
+		ACHelper.killInstance();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");
 	}

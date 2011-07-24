@@ -39,8 +39,19 @@ import com.Balor.bukkit.AdminCmd.AdminCmd;
  */
 public class FilesManager {
 	protected String path;
-
-	public FilesManager(String path) {
+	private static FilesManager instance = null;
+	/**
+	 * @return the instance
+	 */
+	public static FilesManager getInstance() {
+		if(instance == null)
+			instance = new FilesManager();
+		return instance;
+	}
+	/**
+	 * @param path the path to set
+	 */
+	public void setPath(String path) {
 		this.path = path;
 		if (!new File(this.path).exists()) {
 			new File(this.path).mkdir();
@@ -52,6 +63,7 @@ public class FilesManager {
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
 	}
+	
 
 	/**
 	 * Open the file and return the Configuration object
