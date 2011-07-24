@@ -76,9 +76,9 @@ public class LocaleManager {
 	 * @param key
 	 * @param value
 	 */
-	public void addLocale(String key, String value) {
-		locales.put(key, value);
-		localeFile.addProperty(key, value);
+	public void addLocale(String key, String value) {		
+		if(localeFile.addProperty(key, value))
+			locales.put(key, value);
 	}
 
 	public String get(String key) {

@@ -143,7 +143,7 @@ public class PermissionManager {
 			if (errorMsg) {
 				HashMap<String, String> tmp = new HashMap<String, String>();
 				tmp.put("p", perm);
-				Utils.sI18n(player, "notPerm", tmp);
+				Utils.sI18n(player, "errorNotPerm", tmp);
 			}
 			return false;
 		}
@@ -158,7 +158,7 @@ public class PermissionManager {
 			if (!havePerm && errorMsg) {
 				HashMap<String, String> tmp = new HashMap<String, String>();
 				tmp.put("p", perm.getName());
-				Utils.sI18n(player, "notPerm", tmp);
+				Utils.sI18n(player, "errorNotPerm", tmp);
 			}
 			return havePerm;
 		} else if (permission.has((Player) player, perm.getName())) {
@@ -167,7 +167,7 @@ public class PermissionManager {
 			if (errorMsg) {
 				HashMap<String, String> tmp = new HashMap<String, String>();
 				tmp.put("p", perm.getName());
-				Utils.sI18n(player, "notPerm", tmp);
+				Utils.sI18n(player, "errorNotPerm", tmp);
 			}
 			return false;
 		}

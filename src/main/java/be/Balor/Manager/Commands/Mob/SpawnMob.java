@@ -16,13 +16,15 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Mob;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -50,7 +52,9 @@ public class SpawnMob extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (ACHelper.getInstance().isPlayer()) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			final String name = args[0];
+			replace.put("mob", name);
 			int nbTaped;
 			try {
 				nbTaped = Integer.parseInt(args[1]);
@@ -60,7 +64,7 @@ public class SpawnMob extends ACCommands {
 			final int nb = nbTaped;
 			final CreatureType ct = CreatureType.fromName(name);
 			if (ct == null) {
-				sender.sendMessage(ChatColor.RED + "No such creature: " + ChatColor.WHITE + name);
+				Utils.sI18n(sender, "errorMob");
 				return;
 			}
 			final Player player = ((Player) sender);
@@ -73,13 +77,13 @@ public class SpawnMob extends ACCommands {
 									for (int i = 0; i < nb; i++) {
 										player.getWorld().spawnCreature(player.getLocation(), ct);
 										try {
-											Thread.sleep(110);
+											Thread.sleep(5);
 										} catch (InterruptedException e) {
 											// e.printStackTrace();
 										}
 									}
-									player.sendMessage(ChatColor.BLUE + "Spawned "
-											+ ChatColor.WHITE + nb + " " + name);
+									replace.put("nb", String.valueOf(nb));
+									Utils.sI18n(player, "spawnMob", replace);
 								}
 							});
 		}

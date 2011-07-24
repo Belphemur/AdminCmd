@@ -104,17 +104,41 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(TpToWarp.class);
 		CommandManager.getInstance().registerCommand(WarpList.class);
 	}
-	private void setEnglishLocale()
-	{
+
+	private void setEnglishLocale() {
 		Utils.addLocale(
 				"changedWorld",
 				ChatColor.DARK_RED
 						+ "All your powers have been deactivated because you teleported to an another world");
 		Utils.addLocale("stillInv", ChatColor.RED + "You are still Invisible");
-		Utils.addLocale("notPerm", ChatColor.RED + "You don't have the Permissions to do that "
-						+ ChatColor.BLUE + "(%p)");
+		Utils.addLocale("errorNotPerm", ChatColor.RED
+				+ "You don't have the Permissions to do that " + ChatColor.BLUE + "(%p)");
+		Utils.addLocale("dropItemOtherPlayer", ChatColor.RED + "[%sender]" + ChatColor.WHITE
+				+ " dropped at your feet " + ChatColor.GOLD + "%amount %material");
+		Utils.addLocale("dropItemCommandSender", ChatColor.RED + "Dropped " + ChatColor.GOLD
+				+ "%amount %material to " + ChatColor.WHITE + "%target");
+		Utils.addLocale("dropItemYourself", ChatColor.RED + "Dropped " + ChatColor.GOLD
+				+ "%amount %material");
+		Utils.addLocale("giveItemOtherPlayer", ChatColor.RED + "[%sender]" + ChatColor.WHITE
+				+ " send you " + ChatColor.GOLD + "%amount %material");
+		Utils.addLocale("giveItemCommandSender", ChatColor.RED + "Added " + ChatColor.GOLD
+				+ "%amount %material to " + ChatColor.WHITE + "%target's inventory");
+		Utils.addLocale("giveItemYourself", ChatColor.RED + "Added " + ChatColor.GOLD
+				+ "%amount %material" + ChatColor.WHITE + " to your inventory");
+		Utils.addLocale("errorHolding", ChatColor.RED + "You have to be holding something!");
+		Utils.addLocale("moreTooMuch", "Excedent(s) item(s) (" + ChatColor.BLUE + "%amount"
+				+ ChatColor.WHITE + ") have been stored in your inventory");
+		Utils.addLocale("repair", "Your item " + ChatColor.RED + "%type" + ChatColor.WHITE
+				+ " have been successfully repaired.");
+		Utils.addLocale("errorRepair", "You can't repair this item : " + ChatColor.RED + "%type");
+		Utils.addLocale("repairAll", "All %player's items have been repaired.");
+		Utils.addLocale("repairAllTarget", "All your items have been repaired.");
+		Utils.addLocale("errorMob", ChatColor.RED + "No such creature: " + ChatColor.WHITE + "%mob");
+		Utils.addLocale("spawnMob", ChatColor.BLUE + "Spawned " + ChatColor.WHITE + "%nb %mob");
 		LocaleManager.getInstance().save();
+		LocaleManager.getInstance().load();
 	}
+
 	public void onEnable() {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();

@@ -16,13 +16,15 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.MaterialContainer;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -80,23 +82,24 @@ public class Give extends ACCommands {
 				return;
 		}
 		ItemStack stack = new ItemStack(mat.material, cnt, mat.dmg);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("amount", String.valueOf(cnt));
+		replace.put("material", mat.material.toString());
 		if (ACHelper.getInstance().isPlayer(false)) {
-			if (!target.getName().equals(((Player) sender).getName())) {
-				target.sendMessage(ChatColor.RED + "[" + ((Player) sender).getName() + "]"
-						+ ChatColor.WHITE + " send you " + ChatColor.GOLD + cnt + " "
-						+ mat.material);
-
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " "
-						+ mat.material + " to " + ChatColor.WHITE + target.getName()
-						+ "'s inventory");
+			if (!target.equals(sender)) {
+				replace.put("sender", ((Player) sender).getName());
+				Utils.sI18n(target, "giveItemOtherPlayer", replace);
+				replace.remove("sender");
+				replace.put("target", target.getName());
+				Utils.sI18n(sender, "giveItemCommandSender", replace);
 			} else
-				sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " "
-						+ mat.material + " to " + ChatColor.WHITE + "your inventory");
+				Utils.sI18n(sender, "giveItemYourself", replace);
 		} else {
-			target.sendMessage(ChatColor.RED + "[Server Admin]" + ChatColor.WHITE + " send you "
-					+ ChatColor.GOLD + cnt + " " + mat.material);
-			sender.sendMessage(ChatColor.RED + "Added " + ChatColor.GOLD + cnt + " " + mat.material
-					+ " to " + ChatColor.WHITE + target.getName() + "'s inventory");
+			replace.put("sender", "[Server Admin]");
+			Utils.sI18n(target, "giveItemOtherPlayer", replace);
+			replace.remove("sender");
+			replace.put("target", target.getName());
+			Utils.sI18n(sender, "giveItemCommandSender", replace);
 		}
 		target.getInventory().addItem(stack);
 

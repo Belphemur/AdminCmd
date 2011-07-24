@@ -16,13 +16,15 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -52,7 +54,7 @@ public class More extends ACCommands {
 		if (ACHelper.getInstance().isPlayer()) {
 			ItemStack hand = ((Player) sender).getItemInHand();
 			if (hand == null || hand.getType() == Material.AIR) {
-				sender.sendMessage(ChatColor.RED + "You have to be holding something!");
+				Utils.sI18n(sender, "errorHolding");
 				return;
 			}
 			if (ACHelper.getInstance().inBlackList(hand))
@@ -71,8 +73,9 @@ public class More extends ACCommands {
 					hand.setAmount(hand.getMaxStackSize());
 					((Player) sender).getInventory().addItem(
 							new ItemStack(hand.getType(), inInventory));
-					sender.sendMessage("Excedent(s) item(s) (" + ChatColor.BLUE + inInventory
-							+ ChatColor.WHITE + ") have been stored in your inventory");
+					HashMap<String, String> replace = new HashMap<String, String>();
+					replace.put("amount", String.valueOf(inInventory));
+					Utils.sI18n(sender, "moreTooMuch", replace);
 
 				} else
 					hand.setAmount(hand.getAmount() + toAdd);

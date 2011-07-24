@@ -16,12 +16,14 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -49,12 +51,13 @@ public class Repair extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		if (ACHelper.getInstance().isPlayer()) {
 			ItemStack item = ((Player) sender).getItemInHand();
+			HashMap<String, String>replace = new HashMap<String, String>();
+			replace.put("type", item.getType().toString());
 			if (item != null && ACHelper.getInstance().reparable(item.getTypeId())) {
-				item.setDurability((short) 0);
-				sender.sendMessage("Your item " + ChatColor.RED + item.getType() + ChatColor.WHITE
-						+ " have been successfully repaired.");
+				item.setDurability((short) 0);				
+				Utils.sI18n(sender, "repair", replace);
 			} else
-				sender.sendMessage("You can't repair this item : " + ChatColor.RED + item.getType());
+				Utils.sI18n(sender, "repairError", replace);
 		}
 	}
 

@@ -16,11 +16,14 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -57,8 +60,11 @@ public class RepairAll extends ACCommands {
 		for (ItemStack item : player.getInventory().getArmorContents())
 			if (item != null)
 				item.setDurability((short) 0);
-
-		sender.sendMessage("All " + player.getName() + "'s items have been repaired.");
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", player.getName());
+		if (!sender.equals(player))
+			Utils.sI18n(sender, "repairAll", replace);
+		Utils.sI18n(player, "repairAllTarget");
 
 	}
 
