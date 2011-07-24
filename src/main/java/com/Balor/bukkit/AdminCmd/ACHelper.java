@@ -178,20 +178,23 @@ public class ACHelper {
 		boolean found = true;
 		Player pFrom = sender.getServer().getPlayer(nFrom);
 		Player pTo = sender.getServer().getPlayer(nTo);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", nFrom);
 		if (pFrom == null) {
-			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + nFrom + ChatColor.RED
-					+ " not found!");
+			replace.put("player", nFrom);
+			Utils.sI18n(sender, "playerNotFound", replace);
 			found = false;
 		}
 		if (pTo == null) {
-			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + nTo + ChatColor.RED
-					+ " not found!");
+			replace.put("player", nTo);
+			Utils.sI18n(sender, "playerNotFound", replace);
 			found = false;
 		}
 		if (found) {
 			pFrom.teleport(pTo);
-			sender.sendMessage("Successfully teleported " + ChatColor.BLUE + pFrom.getName()
-					+ ChatColor.WHITE + " to " + ChatColor.GREEN + pTo.getName());
+			replace.put("fromPlayer", pFrom.getName());
+			replace.put("toPlayer", pTo.getName());
+			Utils.sI18n(sender, "tp", replace);
 		}
 		return true;
 	}
@@ -215,8 +218,9 @@ public class ACHelper {
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
 			blacklist.add(m.material.getId());
-			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m.material
-					+ ChatColor.GREEN + ") added to the Black List.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", m.material.toString());
+			Utils.sI18n(sender, "addBlacklist", replace);
 			return true;
 		}
 		return false;
@@ -330,7 +334,7 @@ public class ACHelper {
 			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
 					loc.getBlockZ());
 			addLocation("spawn", loc.getWorld().getName(), "spawnLocations", loc);
-			sender.sendMessage(ChatColor.DARK_GREEN + "SpawnPoint" + ChatColor.WHITE + " set");
+			Utils.sI18n(sender, "setSpawn");
 		}
 	}
 
@@ -343,7 +347,7 @@ public class ACHelper {
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
 			player.teleport(loc);
-			sender.sendMessage("Teleported to " + ChatColor.DARK_GREEN + "SpawnPoint");
+			Utils.sI18n(sender, "spawn");
 		}
 	}
 
@@ -367,8 +371,9 @@ public class ACHelper {
 			}
 			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.material.getId()))
 				blacklist.remove((Integer) m.material.getId());
-			sender.sendMessage(ChatColor.GREEN + "Item (" + ChatColor.WHITE + m + ChatColor.GREEN
-					+ ") removed from the Black List.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", m.material.toString());
+			Utils.sI18n(sender, "rmBlacklist", replace);
 			return true;
 		}
 		return false;
@@ -405,8 +410,9 @@ public class ACHelper {
 			return target;
 		}
 		if (target == null && errorMsg) {
-			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[index]
-					+ ChatColor.RED + " not found!");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", args[index]);
+			Utils.sI18n(sender, "playerNotFound", replace);
 			return target;
 		}
 		return target;
@@ -444,8 +450,11 @@ public class ACHelper {
 	 */
 	public MaterialContainer checkMaterial(String mat) {
 		MaterialContainer m = Utils.checkMaterial(mat);
-		if (m.isNull())
-			sender.sendMessage(ChatColor.RED + "Unknown material: " + ChatColor.WHITE + mat);
+		if (m.isNull()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", mat);
+			Utils.sI18n(sender, "unknownMat", replace);
+		}
 		return m;
 
 	}
@@ -489,26 +498,30 @@ public class ACHelper {
 		if (type == "clear") {
 			w.setThundering(false);
 			w.setStorm(false);
-			sender.sendMessage(ChatColor.GOLD + "Sky cleared in world : " + w.getName());
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear")+" " + w.getName());
 		} else {
+			HashMap<String, String> replace = new HashMap<String, String>();
 			if (duration == null || duration.length < 1) {
 				w.setStorm(true);
 				w.setWeatherDuration(12000);
-				sender.sendMessage(ChatColor.GOLD + "Storm set for 10 mins in world : "
+				replace.put("duration","10");
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace)
 						+ w.getName());
 			} else {
 				try {
 					w.setStorm(true);
 					int time = Integer.parseInt(duration[0]);
 					w.setWeatherDuration(time * 1200);
-					sender.sendMessage(ChatColor.GOLD + "Storm set for " + time
-							+ " mins in world : " + w.getName());
+					replace.put("duration",duration[0]);
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace)
+							+ w.getName());					
 				} catch (NumberFormatException e) {
 					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
 							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
-					sender.sendMessage(ChatColor.GOLD + "Storm set for 10 mins in world : "
+					replace.put("duration","10");
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace)
 							+ w.getName());
 				}
 			}
@@ -614,14 +627,6 @@ public class ACHelper {
 		return isPowerUser(powerName, user.getName());
 	}
 
-	public void addGod(String playerName) {
-		addPowerUser("god", playerName);
-	}
-
-	public void removeGod(String playerName) {
-		removePowerUser("god", playerName);
-	}
-
 	public void addThor(String playerName) {
 		addPowerUser("thor", playerName);
 	}
@@ -705,8 +710,9 @@ public class ACHelper {
 	public boolean inBlackList(MaterialContainer mat) {
 		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.material.getId())) {
-			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.display()
-					+ ChatColor.DARK_RED + ") is black listed.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", mat.display());
+			Utils.sI18n(sender, "inBlacklist", replace);
 			return true;
 		}
 		return false;
@@ -715,8 +721,9 @@ public class ACHelper {
 	public boolean inBlackList(ItemStack mat) {
 		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.getTypeId())) {
-			sender.sendMessage(ChatColor.DARK_RED + "This item (" + ChatColor.WHITE + mat.getType()
-					+ ChatColor.DARK_RED + ") is black listed.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", mat.getType().toString());
+			Utils.sI18n(sender, "inBlacklist", replace);
 			return true;
 		}
 		return false;

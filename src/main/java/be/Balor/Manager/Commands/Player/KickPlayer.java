@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -48,6 +50,8 @@ public class KickPlayer extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player toKick = sender.getServer().getPlayer(args[0]);
+		HashMap<String, String>replace = new HashMap<String, String>();
+		replace.put("player", args[0]);
 		String message = "";
 		if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
@@ -61,9 +65,9 @@ public class KickPlayer extends ACCommands {
 		}
 		message = message.trim();
 		if (toKick != null)
-			toKick.kickPlayer(message);
+			toKick.kickPlayer(message);		
 		else
-			sender.sendMessage(ChatColor.RED + "No such player: " + ChatColor.WHITE + args[0]);
+			Utils.sI18n(sender, "playerNotFound", replace);
 
 	}
 

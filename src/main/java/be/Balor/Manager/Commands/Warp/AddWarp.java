@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Warp;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -51,8 +53,9 @@ public class AddWarp extends ACCommands {
 			ACHelper.getInstance().addLocation("warp", args[0], "warpPoints",
 					((Player) sender).getLocation());
 			ACHelper.getInstance().getWarpList().add(args[0]);
-			sender.sendMessage(ChatColor.GREEN + "WarpPoint " + args[0] + ChatColor.WHITE
-					+ " added.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", args[0]);
+			Utils.sI18n(sender, "addWarp", replace);
 		}
 
 	}

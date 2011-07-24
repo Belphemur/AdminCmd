@@ -16,11 +16,11 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -50,10 +50,10 @@ public class SpyMsg extends ACCommands {
 		if (ACHelper.getInstance().isPlayer()) {
 			if (ACHelper.getInstance().isPowerUser("spymsg", (Player) sender)) {
 				ACHelper.getInstance().removePowerUser("spymsg", (Player) sender);
-				sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode disabled.");
+				Utils.sI18n(sender, "spymsgDisabled");
 			} else {
 				ACHelper.getInstance().addPowerUser("spymsg", (Player) sender);
-				sender.sendMessage(ChatColor.DARK_AQUA + "SPYMSG mode enabled.");
+				Utils.sI18n(sender, "spymsgEnabled");
 			}
 
 		}

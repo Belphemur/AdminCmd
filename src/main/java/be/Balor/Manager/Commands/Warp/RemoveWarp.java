@@ -16,10 +16,12 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Warp;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -49,8 +51,9 @@ public class RemoveWarp extends ACCommands {
 		if (ACHelper.getInstance().isPlayer()) {
 			ACHelper.getInstance().removeLocation("warp", args[0], "warpPoints");
 			ACHelper.getInstance().getWarpList().remove(args[0]);
-			sender.sendMessage(ChatColor.RED + "WarpPoint " + args[0] + ChatColor.WHITE
-					+ " removed.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", args[0]);
+			Utils.sI18n(sender, "rmWarp", replace);
 		}
 
 	}

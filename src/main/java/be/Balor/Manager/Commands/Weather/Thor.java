@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Weather;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -50,12 +52,18 @@ public class Thor extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		Player player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (ACHelper.getInstance().hasThorPowers(player.getName())) {
-				ACHelper.getInstance().removeThor(player.getName());
-				player.sendMessage(ChatColor.DARK_AQUA + "THOR mode disabled.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", player.getName());
+			if (ACHelper.getInstance().isPowerUser("thor", player.getName())) {
+				ACHelper.getInstance().removePowerUser("thor", player);
+				Utils.sI18n(player, "thorDisabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "thorDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addThor(player.getName());
-				player.sendMessage(ChatColor.DARK_AQUA + "THOR mode enabled.");
+				ACHelper.getInstance().addPowerUser("thor", player);
+				Utils.sI18n(player, "thorEnabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "thorEnabledTarget", replace);
 			}
 		} 
 	}

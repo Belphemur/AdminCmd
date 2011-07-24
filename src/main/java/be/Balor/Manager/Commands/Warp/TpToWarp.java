@@ -16,7 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Warp;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,14 +52,16 @@ public class TpToWarp extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player target = ACHelper.getInstance().getUser(args, permNode, 1, true);
+
 		if (target != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", args[0]);
 			Location loc = ACHelper.getInstance().getLocation("warp", args[0], "warpPoints");
 			if (loc == null)
-				sendMessage(sender, target, ChatColor.RED + "WarpPoint " + args[0] + " not found");
+				sendMessage(sender, target, "errorWarp", replace);
 			else {
 				target.teleport(loc);
-				sendMessage(sender, target, ChatColor.GREEN + "Teleported to " + ChatColor.WHITE
-						+ args[0]);
+				sendMessage(sender, target, "tpWarp", replace);
 			}
 		}
 

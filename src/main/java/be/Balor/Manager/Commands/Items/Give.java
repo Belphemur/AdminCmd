@@ -95,7 +95,7 @@ public class Give extends ACCommands {
 			} else
 				Utils.sI18n(sender, "giveItemYourself", replace);
 		} else {
-			replace.put("sender", "[Server Admin]");
+			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "giveItemOtherPlayer", replace);
 			replace.remove("sender");
 			replace.put("target", target.getName());

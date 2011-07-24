@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -59,18 +61,18 @@ public class Fireball extends ACCommands {
 		} else
 			player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", player.getName());
 			if (ACHelper.getInstance().isPowerUser("fireball", player.getName())) {
 				ACHelper.getInstance().removePowerUser("fireball", player);
-				player.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled.");
+				Utils.sI18n(player, "fireballDisabled");
 				if (!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode disabled for "
-							+ player.getName());
+					Utils.sI18n(sender, "fireballDisabledTarget", replace);
 			} else {
 				ACHelper.getInstance().addPowerUser("fireball", player, power);
-				player.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled.");
+				Utils.sI18n(player, "fireballEnabled");
 				if (!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled for "
-							+ player.getName());
+					Utils.sI18n(sender, "fireballEnabledTarget", replace);
 			}
 		}
 

@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -62,18 +64,18 @@ public class Vulcan extends ACCommands {
 		} else
 			player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", player.getName());
 			if (ACHelper.getInstance().isPowerUser("vulcan", player.getName())) {
-				ACHelper.getInstance().removeVulcan(player.getName());
-				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled.");
+				ACHelper.getInstance().removePowerUser("vulcan", player);
+				Utils.sI18n(player, "vulcanDisabled");
 				if (!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_RED + "Vulcan mode disabled for "
-							+ player.getName());
+					Utils.sI18n(sender, "vulcanDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addVulcain((player.getName()), power);
-				player.sendMessage(ChatColor.DARK_RED + "Vulcan mode enabled.");
+				ACHelper.getInstance().addPowerUser("vulcan", player, power);
+				Utils.sI18n(player, "vulcanEnabled");
 				if (!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_RED + "Fireball mode enabled for "
-							+ player.getName());
+					Utils.sI18n(sender, "vulcanEnabledTarget", replace);
 			}
 		}
 	}

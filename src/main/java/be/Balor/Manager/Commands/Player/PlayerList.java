@@ -52,7 +52,7 @@ public class PlayerList extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player[] online = sender.getServer().getOnlinePlayers();
-		sender.sendMessage(ChatColor.RED + "Online players: " + ChatColor.WHITE
+		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE
 				+ (online.length - InvisibleWorker.getInstance().nbInvisibles()));
 		String buffer = "";
 		if (PermissionManager.getPermission() == null) {
@@ -80,10 +80,12 @@ public class PlayerList extends ACCommands {
 								.getPrefix();
 					} catch (Exception e) {
 						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
+								group);
 					} catch (NoSuchMethodError e) {
 						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
+						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
+								group);
 					}
 
 					if (prefixstring != null && prefixstring.length() > 1) {

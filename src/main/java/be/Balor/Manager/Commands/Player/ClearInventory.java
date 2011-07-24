@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -56,8 +58,13 @@ public class ClearInventory extends ACCommands {
 		target.getInventory().setChestplate(null);
 		target.getInventory().setLeggings(null);
 		target.getInventory().setBoots(null);
-		sender.sendMessage(ChatColor.RED + "Inventory of " + ChatColor.WHITE + target.getName()
-				+ ChatColor.RED + " cleared");
+		if (!sender.equals(target)) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", target.getName());
+			Utils.sI18n(sender, "clearTarget", replace);
+		}
+		Utils.sI18n(target, "clear");
+
 	}
 
 	/*

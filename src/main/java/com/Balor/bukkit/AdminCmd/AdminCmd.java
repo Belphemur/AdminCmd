@@ -106,6 +106,11 @@ public class AdminCmd extends JavaPlugin {
 	}
 
 	private void setEnglishLocale() {
+		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
+				+ "%player");
+		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
+				+ "%material");
+		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players:");
 		Utils.addLocale(
 				"changedWorld",
 				ChatColor.DARK_RED
@@ -135,6 +140,66 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("repairAllTarget", "All your items have been repaired.");
 		Utils.addLocale("errorMob", ChatColor.RED + "No such creature: " + ChatColor.WHITE + "%mob");
 		Utils.addLocale("spawnMob", ChatColor.BLUE + "Spawned " + ChatColor.WHITE + "%nb %mob");
+		Utils.addLocale("clear", ChatColor.RED + "Your inventory has been cleared");
+		Utils.addLocale("clearTarget", ChatColor.RED + "Inventory of " + ChatColor.WHITE
+				+ "%player" + ChatColor.RED + " cleared");
+		Utils.addLocale("fireballDisabled", ChatColor.DARK_RED + "Fireball mode disabled.");
+		Utils.addLocale("fireballDisabledTarget", ChatColor.DARK_RED
+				+ "Fireball mode disabled for %player");
+		Utils.addLocale("fireballEnabled", ChatColor.DARK_RED + "Fireball mode enabled.");
+		Utils.addLocale("fireballEnabledTarget", ChatColor.DARK_RED
+				+ "Fireball mode enabled for %player");
+		Utils.addLocale("godDisabled", ChatColor.DARK_AQUA + "GOD mode disabled.");
+		Utils.addLocale("godDisabledTarget", ChatColor.DARK_AQUA + "GOD mode disabled for %player");
+		Utils.addLocale("godEnabled", ChatColor.DARK_AQUA + "GOD mode enabled.");
+		Utils.addLocale("godEnabledTarget", ChatColor.DARK_AQUA + "GOD mode enabled for %player");
+		Utils.addLocale("thorDisabled", ChatColor.DARK_AQUA + "THOR mode disabled.");
+		Utils.addLocale("thorDisabledTarget", ChatColor.DARK_AQUA
+				+ "THOR mode disabled for %player");
+		Utils.addLocale("thorEnabled", ChatColor.DARK_AQUA + "THOR mode enabled.");
+		Utils.addLocale("thorEnabledTarget", ChatColor.DARK_AQUA + "THOR mode enabled for %player");
+		Utils.addLocale("vulcanDisabled", ChatColor.DARK_RED + "VULCAN mode disabled.");
+		Utils.addLocale("vulcanDisabledTarget", ChatColor.DARK_RED
+				+ "VULCAN mode disabled for %player");
+		Utils.addLocale("vulcanEnabled", ChatColor.DARK_RED + "VULCAN mode enabled.");
+		Utils.addLocale("vulcanEnabledTarget", ChatColor.DARK_RED
+				+ "VULCAN mode enabled for %player");
+		Utils.addLocale("spymsgDisabled", ChatColor.DARK_AQUA + "SPYMSG mode disabled.");
+		Utils.addLocale("spymsgEnabled", ChatColor.DARK_AQUA + "SPYMSG mode enabled.");
+		Utils.addLocale("invisibleEnabled", ChatColor.RED + "You are now Invisible");
+		Utils.addLocale("invisibleEnabledTarget", ChatColor.DARK_AQUA
+				+ "INVISIBLE mode enabled for %player");
+		Utils.addLocale("invisibleDisabled", ChatColor.GREEN + "You are now Visible");
+		Utils.addLocale("invisibleDisabledTarget", ChatColor.DARK_AQUA
+				+ "INVISIBLE mode disabled for %player");
+		Utils.addLocale("errorHome", ChatColor.DARK_GREEN + "Home" + ChatColor.WHITE
+				+ " not set for this world.");
+		Utils.addLocale("home", ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
+				+ " to your home.");
+		Utils.addLocale("setHome", ChatColor.DARK_GREEN + "Home" + ChatColor.WHITE + " set.");
+		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
+		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
+				+ " added.");
+		Utils.addLocale("rmWarp", ChatColor.RED + "WarpPoint %name" + ChatColor.WHITE + " removed.");
+		Utils.addLocale("errorWarp", ChatColor.DARK_RED + "WarpPoint %name not found");
+		Utils.addLocale("tpWarp", ChatColor.GREEN + "Teleported to " + ChatColor.WHITE + "%name");
+		Utils.addLocale("strike", "%player was striked by Thor");
+		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
+				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
+		Utils.addLocale("addBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") added to the Black List.");
+		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") removed from the Black List.");
+		Utils.addLocale("inBlacklist", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
+				+ "%material" + ChatColor.DARK_RED + ") is black listed.");
+		Utils.addLocale("errorSpawn", ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE
+				+ " not set for this world.");
+		Utils.addLocale("spawn", ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
+				+ " to your spawn.");
+		Utils.addLocale("setSpawn", ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE + " set.");
+		Utils.addLocale("sClear", "Sky cleared in world :");
+		Utils.addLocale("sStorm", "Storm set for %duration mins in world : ");
+
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
 	}

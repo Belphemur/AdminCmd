@@ -16,12 +16,12 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Tp;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -47,7 +47,7 @@ public class SetHome extends ACCommands {
 		if (ACHelper.getInstance().isPlayer()) {
 			Location loc = ((Player) sender).getLocation();
 			ACHelper.getInstance().addLocation("home", loc.getWorld().getName(), ((Player)sender).getName(), loc);
-			sender.sendMessage(ChatColor.DARK_GREEN + "Home" + ChatColor.WHITE + " set");
+			Utils.sI18n(sender, "setHome");
 		}
 
 	}

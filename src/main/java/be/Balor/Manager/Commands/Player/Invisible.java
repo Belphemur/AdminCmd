@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -50,21 +52,18 @@ public class Invisible extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player target = ACHelper.getInstance().getUser(args, permNode);
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName()))
-		{
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", target.getName());
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
 			InvisibleWorker.getInstance().vanish(target);
-			target.sendMessage(ChatColor.RED+"You are now Invisible");
+			Utils.sI18n(target, "invisibleEnabled");
 			if (!target.equals(sender))
-				sender.sendMessage(ChatColor.DARK_AQUA + "INVISIBLE mode enabled for "
-						+ target.getName());
-		}
-		else
-		{
+				Utils.sI18n(sender, "invisibleEnabledTarget", replace);
+		} else {
 			InvisibleWorker.getInstance().reappear(target);
-			target.sendMessage(ChatColor.GREEN+"You are now Visible");
+			Utils.sI18n(target, "invisibleDisabled");
 			if (!target.equals(sender))
-				sender.sendMessage(ChatColor.DARK_AQUA + "INVISIBLE mode disabled for "
-						+ target.getName());
+				Utils.sI18n(sender, "invisibleDisabledTarget", replace);
 		}
 	}
 

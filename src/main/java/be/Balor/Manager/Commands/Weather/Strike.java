@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Weather;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -50,7 +52,9 @@ public class Strike extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		Player p = ACHelper.getInstance().getUser(args, permNode);
 		p.getWorld().strikeLightning(p.getLocation());
-		sender.sendMessage(ChatColor.GOLD + p.getName() + " was striked by Thor");
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", p.getName());
+		Utils.sI18n(sender, "strike", replace);
 
 	}
 

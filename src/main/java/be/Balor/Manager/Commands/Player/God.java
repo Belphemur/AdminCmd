@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -50,18 +52,18 @@ public class God extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		Player player = ACHelper.getInstance().getUser(args, permNode);
 		if (player != null) {
-			if (ACHelper.getInstance().hasGodPowers(player.getName())) {
-				ACHelper.getInstance().removeGod(player.getName());
-				player.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled.");
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", player.getName());
+			if (ACHelper.getInstance().isPowerUser("god", player.getName())) {
+				ACHelper.getInstance().removePowerUser("god", player);
+				Utils.sI18n(player, "godDisabled");
 				if (!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode disabled for "
-							+ player.getName());
+					Utils.sI18n(sender, "godDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addGod(player.getName());
-				player.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled.");
+				ACHelper.getInstance().addPowerUser("god", player);
+				Utils.sI18n(player, "godEnabled");
 				if (!player.equals(sender))
-					sender.sendMessage(ChatColor.DARK_AQUA + "GOD mode enabled for "
-							+ player.getName());
+					Utils.sI18n(sender, "godEnabledTarget", replace);
 			}
 		}
 	}

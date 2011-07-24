@@ -16,12 +16,12 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Tp;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -57,7 +57,7 @@ public class TpLoc extends ACCommands {
 				y = Double.parseDouble(args[1]);
 				z = Double.parseDouble(args[2]);
 			} catch (Exception e) {
-				sender.sendMessage(ChatColor.RED + "Location has to be formed by numbers");
+				Utils.sI18n(sender, "errorLocation");
 				return;
 			}
 			((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z));

@@ -120,7 +120,7 @@ public class Utils {
 	public static void sendMessage(CommandSender sender, CommandSender player, String key,
 			Map<String, String> replace) {
 		String msg = I18n(key, replace);
-		if (msg != null) {
+		if (msg != null && !msg.isEmpty()) {
 			if (!sender.equals(player))
 				player.sendMessage(msg);
 			sender.sendMessage(msg);
@@ -130,7 +130,7 @@ public class Utils {
 
 	public static void sI18n(CommandSender sender, String key, Map<String, String> replace) {
 		String locale = I18n(key, replace);
-		if (locale != null)
+		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
 
