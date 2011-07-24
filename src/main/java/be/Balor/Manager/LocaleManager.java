@@ -62,7 +62,14 @@ public class LocaleManager {
 	 */
 	public void load() {
 		for (String key : localeFile.getConf().getKeys())
-			locales.put(key, colorParser(localeFile.getConf().getString(key)));
+			locales.put(key, localeFile.getConf().getString(key));
+	}
+
+	/**
+	 * Save all the change made to the locale.
+	 */
+	public void save() {
+		localeFile.save();
 	}
 
 	/**
@@ -72,7 +79,7 @@ public class LocaleManager {
 	 * @param value
 	 */
 	public void addLocale(String key, String value) {
-		locales.put(key, colorParser(value));
+		locales.put(key, value);
 		localeFile.addProperty(key, value);
 	}
 
