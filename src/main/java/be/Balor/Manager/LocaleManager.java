@@ -89,7 +89,7 @@ public class LocaleManager {
 		if (noMsg)
 			return null;
 		String locale = locales.get(key);
-		if (values != null)
+		if (locale != null && values != null)
 			for (String toReplace : values.keySet())
 				locale = locale.replaceAll("%" + toReplace, values.get(toReplace));
 		return locale;

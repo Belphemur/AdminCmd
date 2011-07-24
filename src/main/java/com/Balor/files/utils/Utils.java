@@ -113,18 +113,40 @@ public class Utils {
 		}
 	}
 
-	public static void sendMessage(CommandSender sender, Player player, String msg) {
-		if (!sender.equals(player))
-			player.sendMessage(msg);
-		sender.sendMessage(msg);
+	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
+		sendMessage(sender, player, key, null);
+	}
+
+	public static void sendMessage(CommandSender sender, CommandSender player, String key,
+			Map<String, String> replace) {
+		String msg = I18n(key, replace);
+		if (msg != null) {
+			if (!sender.equals(player))
+				player.sendMessage(msg);
+			sender.sendMessage(msg);
+		}
 
 	}
 
+	public static void sI18n(CommandSender sender, String key, Map<String, String> replace) {
+		String locale = I18n(key, replace);
+		if (locale != null)
+			sender.sendMessage(locale);
+	}
+
+	public static void sI18n(CommandSender sender, String key) {
+		sI18n(sender, key, null);
+	}
+
 	public static String I18n(String key) {
-		return LocaleManager.getInstance().get(key);
+		return I18n(key, null);
 	}
 
 	public static String I18n(String key, Map<String, String> replace) {
 		return LocaleManager.getInstance().get(key, replace);
+	}
+
+	public static void addLocale(String key, String value) {
+		LocaleManager.getInstance().addLocale(key, value);
 	}
 }

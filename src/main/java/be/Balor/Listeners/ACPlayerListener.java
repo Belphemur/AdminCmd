@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -53,7 +52,7 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
-			event.getPlayer().sendMessage(ChatColor.RED + "You are still Invisible");
+			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
 	}
 
@@ -75,8 +74,9 @@ public class ACPlayerListener extends PlayerListener {
 		Location to = event.getTo();
 		if (ACHelper.getInstance().getConf().getBoolean("resetPowerWhenTpAnotherWorld", true)
 				&& !from.getWorld().equals(to.getWorld())) {
-			if(ACHelper.getInstance().removePlayerFromAllPowerUser(event.getPlayer().getName()))
-				event.getPlayer().sendMessage(Utils.I18n("changedWorld"));
+			if (ACHelper.getInstance().removePlayerFromAllPowerUser(event.getPlayer().getName())) {
+				Utils.sI18n(event.getPlayer(), "changedWorld");
+			}
 		}
 	}
 

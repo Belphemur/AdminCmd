@@ -16,16 +16,17 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
+import com.Balor.files.utils.Utils;
 import com.nijiko.permissions.PermissionHandler;
 
 /**
@@ -139,9 +140,11 @@ public class PermissionManager {
 		} else if (permission.has((Player) player, perm)) {
 			return true;
 		} else {
-			if (errorMsg)
-				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-						+ ChatColor.BLUE + "(" + perm + ")");
+			if (errorMsg) {
+				HashMap<String, String> tmp = new HashMap<String, String>();
+				tmp.put("p", perm);
+				Utils.sI18n(player, "notPerm", tmp);
+			}
 			return false;
 		}
 
@@ -152,16 +155,20 @@ public class PermissionManager {
 			return true;
 		if (permission == null) {
 			boolean havePerm = player.hasPermission(perm);
-			if (!havePerm && errorMsg)
-				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-						+ ChatColor.BLUE + "(" + perm.getName() + ")");
+			if (!havePerm && errorMsg) {
+				HashMap<String, String> tmp = new HashMap<String, String>();
+				tmp.put("p", perm.getName());
+				Utils.sI18n(player, "notPerm", tmp);
+			}
 			return havePerm;
 		} else if (permission.has((Player) player, perm.getName())) {
 			return true;
 		} else {
-			if (errorMsg)
-				player.sendMessage(ChatColor.RED + "You don't have the Permissions to do that "
-						+ ChatColor.BLUE + "(" + perm.getName() + ")");
+			if (errorMsg) {
+				HashMap<String, String> tmp = new HashMap<String, String>();
+				tmp.put("p", perm.getName());
+				Utils.sI18n(player, "notPerm", tmp);
+			}
 			return false;
 		}
 

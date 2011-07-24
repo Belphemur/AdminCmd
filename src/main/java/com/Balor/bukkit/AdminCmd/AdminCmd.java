@@ -12,6 +12,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.Balor.files.utils.Utils;
+
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
@@ -102,7 +104,17 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(TpToWarp.class);
 		CommandManager.getInstance().registerCommand(WarpList.class);
 	}
-
+	private void setEnglishLocale()
+	{
+		Utils.addLocale(
+				"changedWorld",
+				ChatColor.DARK_RED
+						+ "All your powers have been deactivated because you teleported to an another world");
+		Utils.addLocale("stillInv", ChatColor.RED + "You are still Invisible");
+		Utils.addLocale("notPerm", ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(%p)");
+		LocaleManager.getInstance().save();
+	}
 	public void onEnable() {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
@@ -115,13 +127,7 @@ public class AdminCmd extends JavaPlugin {
 
 		worker = ACHelper.getInstance();
 		worker.setPluginInstance(this);
-		LocaleManager
-				.getInstance()
-				.addLocale(
-						"changeWorld",
-						ChatColor.DARK_RED
-								+ "All your powers have been deactivated because you teleported to an another world");
-		LocaleManager.getInstance().save();
+		setEnglishLocale();
 		registerPermParents();
 		registerCmds();
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
