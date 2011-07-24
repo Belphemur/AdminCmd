@@ -50,17 +50,15 @@ public class WarpList extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		String msg = "";
 		Set<String> wp = ACHelper.getInstance().getWarpList();
-		sender.sendMessage(ChatColor.GOLD+"Warp Point(s) : "+ChatColor.WHITE+wp.size());		
-		for(String name : wp)
-		{
-			msg+=name+", ";
+		sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
+		for (String name : wp) {
+			msg += name + ", ";
 			if (msg.length() >= 256) {
 				sender.sendMessage(msg);
 				msg = "";
 			}
-			sender.sendMessage(msg);
 		}
-			
+		sender.sendMessage(msg);
 
 	}
 
