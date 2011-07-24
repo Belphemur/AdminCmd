@@ -121,6 +121,7 @@ public class AdminCmd extends JavaPlugin {
 						"changeWorld",
 						ChatColor.DARK_RED
 								+ "All your powers have been deactivated because you teleported to an another world");
+		LocaleManager.getInstance().save();
 		registerPermParents();
 		registerCmds();
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");

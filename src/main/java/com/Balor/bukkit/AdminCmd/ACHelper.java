@@ -95,7 +95,8 @@ public class ACHelper {
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");
 		pluginConfig.save();
-		LocaleManager.getInstance().setLocaleFile(pluginConfig.getConf().getString("locale", "en_US"));
+		LocaleManager.getInstance().setLocaleFile(
+				pluginConfig.getConf().getString("locale", "en_US"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getConf().getBoolean("noMessage", false));
 		LocaleManager.getInstance().load();
 		blacklist = getBlackListedItems();
@@ -601,12 +602,10 @@ public class ACHelper {
 	public boolean removePlayerFromAllPowerUser(String player) {
 		boolean found = false;
 		for (String type : usersWithPowers.keySet()) {
-			for (String playerName : usersWithPowers.get(type).keySet())
-				if (playerName.equals(player)) {
-					found = true;
-					usersWithPowers.get(type).remove(playerName);
-					break;
-				}
+			if (usersWithPowers.get(type).containsKey(player)) {
+				found = true;
+				usersWithPowers.get(type).remove(player);
+			}
 		}
 		return found;
 	}

@@ -19,8 +19,6 @@ package be.Balor.Manager;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.Balor.files.utils.Utils.colorParser;
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
