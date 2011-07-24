@@ -46,12 +46,11 @@ public class Home extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		if (ACHelper.getInstance().isPlayer()) {
 			Player player = (Player) sender;
-			Location loc = ACHelper.getInstance().getLocation("home",
+			Location loc = ACHelper.getInstance().getLocation("home", ((Player) sender).getName(),
 					player.getWorld().getName(), player.getName());
 			if (loc == null)
 				Utils.sI18n(sender, "errorHome");
-			else
-			{
+			else {
 				player.teleport(loc);
 				Utils.sI18n(sender, "home");
 			}

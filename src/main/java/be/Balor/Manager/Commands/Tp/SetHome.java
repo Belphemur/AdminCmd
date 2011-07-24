@@ -46,7 +46,7 @@ public class SetHome extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		if (ACHelper.getInstance().isPlayer()) {
 			Location loc = ((Player) sender).getLocation();
-			ACHelper.getInstance().addLocation("home", loc.getWorld().getName(), ((Player)sender).getName(), loc);
+			ACHelper.getInstance().addLocation("home", ((Player)sender).getName(),loc.getWorld().getName(), ((Player)sender).getName(), loc);
 			Utils.sI18n(sender, "setHome");
 		}
 

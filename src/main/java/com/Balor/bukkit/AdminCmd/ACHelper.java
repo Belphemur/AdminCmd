@@ -295,13 +295,18 @@ public class ACHelper {
 	 * Add a location in memory and on the disk.
 	 * 
 	 * @param type
-	 * @param name
+	 * @param property
 	 * @param filename
 	 * @param loc
 	 */
+	
+	public void addLocation(String type, String nameMemory,String property, String filename, Location loc) {
+		addLocationInMemory(type, nameMemory, loc);
+		fManager.writeLocationFile(loc, property, filename, type);
+	}
 	public void addLocation(String type, String name, String filename, Location loc) {
-		addLocationInMemory(type, name, loc);
-		fManager.writeLocationFile(loc, name, filename, type);
+		addLocation(type, name, name, filename, loc);
+		
 	}
 
 	/**
@@ -310,19 +315,23 @@ public class ACHelper {
 	 * 
 	 * @param type
 	 * @param name
-	 * @param filename
+	 * @param property
 	 * @return
 	 */
-	public Location getLocation(String type, String name, String filename) {
+	public Location getLocation(String type, String nameMemory, String property, String filename)
+	{
 		Location loc = null;
-		loc = getLocationFromMemory(type, name);
+		loc = getLocationFromMemory(type, nameMemory);
 		if (loc == null) {
-			loc = fManager.getLocationFile(name, filename, type);
+			loc = fManager.getLocationFile(property, filename, type);
 			if (loc != null)
-				addLocationInMemory(type, name, loc);
+				addLocationInMemory(type, nameMemory, loc);
 		}
 
 		return loc;
+	}
+	public Location getLocation(String type, String name, String filename) {
+		return getLocation(type, name, name, filename);
 	}
 
 	/**
