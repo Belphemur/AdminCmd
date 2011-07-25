@@ -1,7 +1,7 @@
 name: AdminCmd
 main: com.Balor.bukkit.AdminCmd.AdminCmd
 version: 5.5.7
-author: Plague modded by Balor
+author: Balor
 softdepend: [MultiVerse,Permissions]
 description: >
              This plugin implements the basic commands for running a server.

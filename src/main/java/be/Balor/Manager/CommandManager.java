@@ -17,9 +17,13 @@
 package be.Balor.Manager;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import com.Balor.files.utils.CommandNotFound;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,14 +58,17 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO: handle exception
+		} catch (CommandNotFound e) {
+			Logger.getLogger("Minecraft").info("[AdminCmd] "+e.getMessage());
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
+	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		ACCommands cmd = null;

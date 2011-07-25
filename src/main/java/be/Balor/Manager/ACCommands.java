@@ -22,6 +22,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.CommandNotFound;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -103,9 +104,11 @@ public abstract class ACCommands {
 	/**
 	 * Initialize the bukkit plugin command
 	 */
-	public void initializeCommand() {
-		pluginCommand = ACHelper.getInstance().getPluginInstance().getCommand(cmdName);
+	public void initializeCommand() throws CommandNotFound {
+		if ((pluginCommand = ACHelper.getInstance().getPluginInstance().getCommand(cmdName)) == null)
+			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
 	}
+
 	/**
 	 * @return the pluginCommand
 	 */

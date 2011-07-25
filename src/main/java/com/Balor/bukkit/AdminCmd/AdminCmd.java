@@ -58,49 +58,51 @@ public class AdminCmd extends JavaPlugin {
 	}
 
 	private void registerCmds() {
-		CommandManager.getInstance().registerCommand(Day.class);
-		CommandManager.getInstance().registerCommand(Repair.class);
-		CommandManager.getInstance().registerCommand(RepairAll.class);
-		CommandManager.getInstance().registerCommand(More.class);
-		CommandManager.getInstance().registerCommand(PlayerList.class);
-		CommandManager.getInstance().registerCommand(PlayerLocation.class);
-		CommandManager.getInstance().registerCommand(God.class);
-		CommandManager.getInstance().registerCommand(Thor.class);
-		CommandManager.getInstance().registerCommand(Kill.class);
-		CommandManager.getInstance().registerCommand(Heal.class);
-		CommandManager.getInstance().registerCommand(ClearSky.class);
-		CommandManager.getInstance().registerCommand(Storm.class);
-		CommandManager.getInstance().registerCommand(SetSpawn.class);
-		CommandManager.getInstance().registerCommand(Spawn.class);
-		CommandManager.getInstance().registerCommand(Memory.class);
-		CommandManager.getInstance().registerCommand(SetTime.class);
-		CommandManager.getInstance().registerCommand(ClearInventory.class);
-		CommandManager.getInstance().registerCommand(Give.class);
-		CommandManager.getInstance().registerCommand(AddBlackList.class);
-		CommandManager.getInstance().registerCommand(RemoveBlackList.class);
-		CommandManager.getInstance().registerCommand(TpHere.class);
-		CommandManager.getInstance().registerCommand(TpTo.class);
-		CommandManager.getInstance().registerCommand(Coloring.class);
-		CommandManager.getInstance().registerCommand(Strike.class);
-		CommandManager.getInstance().registerCommand(RemoveAlias.class);
-		CommandManager.getInstance().registerCommand(SpawnMob.class);
-		CommandManager.getInstance().registerCommand(KickPlayer.class);
-		CommandManager.getInstance().registerCommand(PrivateMessage.class);
-		CommandManager.getInstance().registerCommand(AddAlias.class);
-		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
-		CommandManager.getInstance().registerCommand(TpLoc.class);
-		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
-		CommandManager.getInstance().registerCommand(Vulcan.class);
-		CommandManager.getInstance().registerCommand(Drop.class);
-		CommandManager.getInstance().registerCommand(Invisible.class);
-		CommandManager.getInstance().registerCommand(SpyMsg.class);
-		CommandManager.getInstance().registerCommand(Fireball.class);
-		CommandManager.getInstance().registerCommand(Home.class);
-		CommandManager.getInstance().registerCommand(SetHome.class);
-		CommandManager.getInstance().registerCommand(AddWarp.class);
-		CommandManager.getInstance().registerCommand(RemoveWarp.class);
-		CommandManager.getInstance().registerCommand(TpToWarp.class);
-		CommandManager.getInstance().registerCommand(WarpList.class);
+
+			CommandManager.getInstance().registerCommand(Day.class);
+			CommandManager.getInstance().registerCommand(Repair.class);
+			CommandManager.getInstance().registerCommand(RepairAll.class);
+			CommandManager.getInstance().registerCommand(More.class);
+			CommandManager.getInstance().registerCommand(PlayerList.class);
+			CommandManager.getInstance().registerCommand(PlayerLocation.class);
+			CommandManager.getInstance().registerCommand(God.class);
+			CommandManager.getInstance().registerCommand(Thor.class);
+			CommandManager.getInstance().registerCommand(Kill.class);
+			CommandManager.getInstance().registerCommand(Heal.class);
+			CommandManager.getInstance().registerCommand(ClearSky.class);
+			CommandManager.getInstance().registerCommand(Storm.class);
+			CommandManager.getInstance().registerCommand(SetSpawn.class);
+			CommandManager.getInstance().registerCommand(Spawn.class);
+			CommandManager.getInstance().registerCommand(Memory.class);
+			CommandManager.getInstance().registerCommand(SetTime.class);
+			CommandManager.getInstance().registerCommand(ClearInventory.class);
+			CommandManager.getInstance().registerCommand(Give.class);
+			CommandManager.getInstance().registerCommand(AddBlackList.class);
+			CommandManager.getInstance().registerCommand(RemoveBlackList.class);
+			CommandManager.getInstance().registerCommand(TpHere.class);
+			CommandManager.getInstance().registerCommand(TpTo.class);
+			CommandManager.getInstance().registerCommand(Coloring.class);
+			CommandManager.getInstance().registerCommand(Strike.class);
+			CommandManager.getInstance().registerCommand(RemoveAlias.class);
+			CommandManager.getInstance().registerCommand(SpawnMob.class);
+			CommandManager.getInstance().registerCommand(KickPlayer.class);
+			CommandManager.getInstance().registerCommand(PrivateMessage.class);
+			CommandManager.getInstance().registerCommand(AddAlias.class);
+			CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
+			CommandManager.getInstance().registerCommand(TpLoc.class);
+			CommandManager.getInstance().registerCommand(KickAllPlayers.class);
+			CommandManager.getInstance().registerCommand(Vulcan.class);
+			CommandManager.getInstance().registerCommand(Drop.class);
+			CommandManager.getInstance().registerCommand(Invisible.class);
+			CommandManager.getInstance().registerCommand(SpyMsg.class);
+			CommandManager.getInstance().registerCommand(Fireball.class);
+			CommandManager.getInstance().registerCommand(Home.class);
+			CommandManager.getInstance().registerCommand(SetHome.class);
+			CommandManager.getInstance().registerCommand(AddWarp.class);
+			CommandManager.getInstance().registerCommand(RemoveWarp.class);
+			CommandManager.getInstance().registerCommand(TpToWarp.class);
+			CommandManager.getInstance().registerCommand(WarpList.class);
+
 	}
 
 	private void setEnglishLocale() {
