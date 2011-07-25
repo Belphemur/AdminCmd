@@ -17,15 +17,16 @@
 package be.Balor.Manager;
 
 import java.util.HashMap;
-
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class CommandManager {
-	private HashMap<String, ACCommands> commands = new HashMap<String, ACCommands>();
+public class CommandManager implements CommandExecutor {
+	private HashMap<Command, ACCommands> commands = new HashMap<Command, ACCommands>();
 	private static CommandManager instance = null;
 
 	/**
@@ -37,28 +38,38 @@ public class CommandManager {
 		return instance;
 	}
 
-
+	/**
+	 * Register command
+	 * 
+	 * @param clazz
+	 */
 	public void registerCommand(Class<?> clazz) {
 		try {
 			ACCommands command = (ACCommands) clazz.newInstance();
+			command.initializeCommand();
 			command.registerBukkitPerm();
-			commands.put(command.getCmdName(), command);			
+			command.getPluginCommand().setExecutor(this);
+			commands.put(command.getPluginCommand(), command);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		}catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
 		}
 	}
-	public boolean execCmd(String name, CommandSender sender, String... args) {
+
+
+	/* (non-Javadoc)
+	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		ACCommands cmd = null;
-		if (commands.containsKey(name) && (cmd = commands.get(name)).permissionCheck(sender)
+		if (commands.containsKey(command) && (cmd = commands.get(command)).permissionCheck(sender)
 				&& cmd.argsCheck(args)) {
 			cmd.execute(sender, args);
 			return true;
 		} else
 			return false;
-
 	}
 }

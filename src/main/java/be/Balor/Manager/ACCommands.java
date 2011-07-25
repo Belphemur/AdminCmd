@@ -17,8 +17,11 @@
 package be.Balor.Manager;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import com.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -30,6 +33,7 @@ public abstract class ACCommands {
 	protected Permission bukkitPerm = null;
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
+	protected PluginCommand pluginCommand;
 
 	/**
 	 * 
@@ -87,7 +91,25 @@ public abstract class ACCommands {
 			PermissionManager.getInstance().addPermChild(permNode + ".other", bukkitDefault);
 	}
 
+	/**
+	 * Check if the command is usable on other people than the CommandSender
+	 * 
+	 * @return
+	 */
 	public boolean toOther() {
 		return other;
+	}
+
+	/**
+	 * Initialize the bukkit plugin command
+	 */
+	public void initializeCommand() {
+		pluginCommand = ACHelper.getInstance().getPluginInstance().getCommand(cmdName);
+	}
+	/**
+	 * @return the pluginCommand
+	 */
+	public PluginCommand getPluginCommand() {
+		return pluginCommand;
 	}
 }

@@ -4,8 +4,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -238,15 +236,5 @@ public class AdminCmd extends JavaPlugin {
 		ACHelper.killInstance();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");
-	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel,
-			String[] args) {
-
-		String cmd = command.getName();
-
-		worker.setSender(sender);
-		return CommandManager.getInstance().execCmd(cmd.toLowerCase(), sender, args);
 	}
 }
