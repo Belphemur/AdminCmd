@@ -21,6 +21,8 @@ import org.bukkit.util.config.Configuration;
 import be.Balor.Manager.ConfigurationManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
+import belgium.Balor.Workers.InvisibleWorker;
+
 import com.Balor.files.utils.FilesManager;
 import com.Balor.files.utils.MaterialContainer;
 import com.Balor.files.utils.Utils;
@@ -94,7 +96,11 @@ public class ACHelper {
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");
+		pluginConfig.addProperty("statutCheckInSec", 20);
+		pluginConfig.addProperty("invisibleRangeInBlock", 512);		
 		pluginConfig.save();
+		InvisibleWorker.getInstance().setMaxRange(pluginConfig.getConf().getInt("invisibleRangeInBlock", 512));
+		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getConf().getInt("statutCheckInSec",20));
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getConf().getString("locale", "en_US"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getConf().getBoolean("noMessage", false));

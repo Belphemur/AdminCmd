@@ -31,7 +31,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.ShootFireBall;
-import com.Balor.files.utils.UpdateInvisible;
+import com.Balor.files.utils.UpdateStatus;
 import com.Balor.files.utils.Utils;
 
 /**
@@ -112,7 +112,7 @@ public class ACPlayerListener extends PlayerListener {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-							new UpdateInvisible(newPlayer), 25);
+							new UpdateStatus(newPlayer), 25);
 			return true;
 		}
 		return false;

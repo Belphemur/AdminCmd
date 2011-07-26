@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
-import com.Balor.files.utils.UpdateInvisible;
+import com.Balor.files.utils.UpdateStatus;
 import com.Balor.files.utils.Utils;
 import com.google.common.collect.MapMaker;
 
@@ -39,6 +39,7 @@ public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
 	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
 	private long maxRange = 262144;
+	private int tickCheck = 400;
 
 	/**
 	 * 
@@ -61,7 +62,15 @@ public class InvisibleWorker {
 	 *            the maxRange to set
 	 */
 	public void setMaxRange(long maxRange) {
-		this.maxRange = maxRange;
+		this.maxRange = maxRange ^ 2;
+	}
+
+	/**
+	 * @param tickCheck
+	 *            the tickCheck to set
+	 */
+	public void setTickCheck(int tickCheck) {
+		this.tickCheck = tickCheck * 20;
 	}
 
 	/**
@@ -161,16 +170,15 @@ public class InvisibleWorker {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
 				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-						new UpdateInvisible(toVanish));
+						new UpdateStatus(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
 					name,
 					(Integer) AdminCmd
 							.getBukkitServer()
 							.getScheduler()
-							.scheduleAsyncRepeatingTask(
-									ACHelper.getInstance().getPluginInstance(),
-									new UpdateInvisible(toVanish), 200, 400));
+							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
+									new UpdateStatus(toVanish), tickCheck / 2, tickCheck));
 
 	}
 
