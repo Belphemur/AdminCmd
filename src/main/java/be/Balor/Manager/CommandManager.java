@@ -59,7 +59,7 @@ public class CommandManager implements CommandExecutor {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (CommandNotFound e) {
-			Logger.getLogger("Minecraft").info("[AdminCmd] "+e.getMessage());
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
 	}
 
@@ -71,12 +71,22 @@ public class CommandManager implements CommandExecutor {
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		ACCommands cmd = null;
-		if (commands.containsKey(command) && (cmd = commands.get(command)).permissionCheck(sender)
-				&& cmd.argsCheck(args)) {
-			cmd.execute(sender, args);
-			return true;
-		} else
+		try {
+
+			ACCommands cmd = null;
+			if (commands.containsKey(command)
+					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
+				cmd.execute(sender, args);
+				return true;
+			} else
+				return false;
+		} catch (Throwable t) {
+			Logger.getLogger("Minecraft")
+					.severe("The command "
+							+ command.getName()
+							+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admn-gen-admincmd-5-5-6-time-give-tp-repair-heal-kill-warp-weather-multi-lingual-1000.10770");
+			t.printStackTrace();
 			return false;
+		}
 	}
 }
