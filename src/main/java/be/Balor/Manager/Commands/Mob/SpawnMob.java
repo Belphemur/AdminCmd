@@ -22,9 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
+import com.Balor.Tools.Utils;
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
-import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 

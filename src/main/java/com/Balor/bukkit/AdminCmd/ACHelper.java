@@ -24,9 +24,9 @@ import be.Balor.Manager.PermissionManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.Balor.files.utils.FilesManager;
-import com.Balor.files.utils.MaterialContainer;
-import com.Balor.files.utils.Utils;
+import com.Balor.Tools.FilesManager;
+import com.Balor.Tools.MaterialContainer;
+import com.Balor.Tools.Utils;
 import com.google.common.collect.MapMaker;
 
 /**

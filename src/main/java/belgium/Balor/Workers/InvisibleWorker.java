@@ -25,10 +25,10 @@ import net.minecraft.server.Packet29DestroyEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import com.Balor.Tools.UpdateInvisible;
+import com.Balor.Tools.Utils;
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
-import com.Balor.files.utils.UpdateInvisible;
-import com.Balor.files.utils.Utils;
 import com.google.common.collect.MapMaker;
 
 /**

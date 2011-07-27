@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.files.utils.Utils;
+import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
 
