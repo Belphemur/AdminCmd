@@ -32,7 +32,7 @@ final public class AFKWorker implements Runnable {
 			.softValues().makeMap();
 	private ConcurrentMap<Player, String> playersAfk = new MapMaker().concurrencyLevel(10)
 			.softValues().makeMap();
-	private int afkTime = 60;
+	private int afkTime = 60000;
 	private static AFKWorker instance;
 
 	/**
@@ -57,7 +57,7 @@ final public class AFKWorker implements Runnable {
 	 */
 	public void setAfkTime(int afkTime) {
 		if (afkTime > 0)
-			this.afkTime = afkTime;
+			this.afkTime = afkTime*1000;
 	}
 
 	/**

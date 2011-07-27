@@ -108,8 +108,8 @@ public class ACHelper {
 					.getServer()
 					.getScheduler()
 					.scheduleAsyncRepeatingTask(this.pluginInstance, AFKWorker.getInstance(),
-							getConf().getInt("statutCheckInSec", 20) / 2,
-							getConf().getInt("statutCheckInSec", 20));
+							(getConf().getInt("statutCheckInSec", 20) / 2) * 20,
+							getConf().getInt("statutCheckInSec", 20) * 20);
 		}
 		InvisibleWorker.getInstance().setMaxRange(
 				pluginConfig.getConf().getInt("invisibleRangeInBlock", 512));
