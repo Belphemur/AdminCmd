@@ -45,7 +45,7 @@ public class RemoveBlackList extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().removeBlackListedItem(args[0]);
+		ACHelper.getInstance().removeBlackListedItem(sender, args[0]);
 	}
 
 	/*

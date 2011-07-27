@@ -44,7 +44,7 @@ public class Home extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
+		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
 			Location loc = ACHelper.getInstance().getLocation("home", ((Player) sender).getName(),
 					player.getWorld().getName(), player.getName());

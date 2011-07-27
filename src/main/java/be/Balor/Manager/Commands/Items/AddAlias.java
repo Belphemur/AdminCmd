@@ -24,7 +24,7 @@ import be.Balor.Manager.ACCommands;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class AddAlias extends ACCommands {
 
@@ -32,19 +32,25 @@ public class AddAlias extends ACCommands {
 	 * 
 	 */
 	public AddAlias() {
-		permNode="admincmd.item.alias";
-		cmdName="bal_addalias";
+		permNode = "admincmd.item.alias";
+		cmdName = "bal_addalias";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().alias(args);
+		ACHelper.getInstance().alias(sender, args);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

@@ -45,7 +45,7 @@ public class Spawn extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().spawn();
+		ACHelper.getInstance().spawn(sender);
 	}
 
 	/*

@@ -54,10 +54,10 @@ public class Give extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		// which material?
 		MaterialContainer mat = null;
-		mat = ACHelper.getInstance().checkMaterial(args[0]);
+		mat = ACHelper.getInstance().checkMaterial(sender, args[0]);
 		if (mat.isNull())
 			return;
-		if (ACHelper.getInstance().inBlackList(mat))
+		if (ACHelper.getInstance().inBlackList(sender, mat))
 			return;
 		// amount, damage and target player
 		int cnt = 1;
@@ -76,7 +76,7 @@ public class Give extends ACCommands {
 			}
 		}
 		if (target == null) {
-			if (ACHelper.getInstance().isPlayer())
+			if (Utils.isPlayer(sender))
 				target = ((Player) sender);
 			else
 				return;
@@ -85,7 +85,7 @@ public class Give extends ACCommands {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(cnt));
 		replace.put("material", mat.material.toString());
-		if (ACHelper.getInstance().isPlayer(false)) {
+		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
 				replace.put("sender", ((Player) sender).getName());
 				Utils.sI18n(target, "giveItemOtherPlayer", replace);

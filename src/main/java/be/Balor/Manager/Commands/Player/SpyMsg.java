@@ -47,7 +47,7 @@ public class SpyMsg extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
+		if (Utils.isPlayer(sender)) {
 			if (ACHelper.getInstance().isPowerUser("spymsg", (Player) sender)) {
 				ACHelper.getInstance().removePowerUser("spymsg", (Player) sender);
 				Utils.sI18n(sender, "spymsgDisabled");

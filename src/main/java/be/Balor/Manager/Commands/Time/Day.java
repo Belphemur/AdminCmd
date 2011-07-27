@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Time;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -41,7 +41,7 @@ public class Day extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().timeSet("day");
+		Utils.timeSet(sender, "day");
 	}
 
 	/* (non-Javadoc)

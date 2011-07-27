@@ -49,12 +49,12 @@ public class Repair extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
+		if (Utils.isPlayer(sender)) {
 			ItemStack item = ((Player) sender).getItemInHand();
-			HashMap<String, String>replace = new HashMap<String, String>();
+			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
 			if (item != null && ACHelper.getInstance().reparable(item.getTypeId())) {
-				item.setDurability((short) 0);				
+				item.setDurability((short) 0);
 				Utils.sI18n(sender, "repair", replace);
 			} else
 				Utils.sI18n(sender, "repairError", replace);

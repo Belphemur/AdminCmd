@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,6 +31,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -114,13 +116,14 @@ public class Utils {
 			return false;
 		}
 	}
+
 	/**
 	 * Heal the selected player.
 	 * 
 	 * @param name
 	 * @return
 	 */
-	public static boolean setPlayerHealth(CommandSender sender,String[] name, String toDo) {
+	public static boolean setPlayerHealth(CommandSender sender, String[] name, String toDo) {
 		Player target = getUser(sender, name, "admincmd.player." + toDo + ".other");
 		if (target == null)
 			return false;
@@ -132,8 +135,10 @@ public class Utils {
 
 		return true;
 	}
+
 	/**
 	 * Get the user and check who launched the command.
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -164,10 +169,11 @@ public class Utils {
 		return target;
 
 	}
-	public static Player getUser(CommandSender sender, String[] args, String permNode)
-	{
+
+	public static Player getUser(CommandSender sender, String[] args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
 	}
+
 	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
 		sendMessage(sender, player, key, null);
 	}
@@ -215,5 +221,107 @@ public class Utils {
 
 	public static void addLocale(String key, String value) {
 		LocaleManager.getInstance().addLocale(key, value);
+	}
+
+	private static void setTime(World w, String arg) {
+		long curtime = w.getTime();
+		long newtime = curtime - (curtime % 24000);
+		if (arg.equalsIgnoreCase("day"))
+			newtime += 0;
+		else if (arg.equalsIgnoreCase("night"))
+			newtime += 14000;
+		else if (arg.equalsIgnoreCase("dusk"))
+			newtime += 12500;
+		else if (arg.equalsIgnoreCase("dawn"))
+			newtime += 23000;
+		else
+			// if not a constant, use raw time
+			try {
+				newtime += Integer.parseInt(arg);
+			} catch (Exception e) {
+			}
+		w.setTime(newtime);
+	}
+
+	// all functions return if they handled the command
+	// false then means to show the default handle
+	// ! make sure the player variable IS a player!
+	// set world time to a new value
+	public static boolean timeSet(CommandSender sender, String arg) {
+		if (isPlayer(sender, false)) {
+			Player p = (Player) sender;
+			setTime(p.getWorld(), arg);
+		} else {
+			for (World w : sender.getServer().getWorlds())
+				setTime(w, arg);
+		}
+		return true;
+
+	}
+
+	public static boolean tpP2P(CommandSender sender, String nFrom, String nTo) {
+		boolean found = true;
+		Player pFrom = AdminCmd.getBukkitServer().getPlayer(nFrom);
+		Player pTo = AdminCmd.getBukkitServer().getPlayer(nTo);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", nFrom);
+		if (pFrom == null) {
+			replace.put("player", nFrom);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			found = false;
+		}
+		if (pTo == null) {
+			replace.put("player", nTo);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			found = false;
+		}
+		if (found) {
+			pFrom.teleport(pTo);
+			replace.put("fromPlayer", pFrom.getName());
+			replace.put("toPlayer", pTo.getName());
+			Utils.sI18n(sender, "tp", replace);
+		}
+		return true;
+	}
+
+	private static void weatherChange(CommandSender sender, World w, String type, String[] duration) {
+		if (type == "clear") {
+			w.setThundering(false);
+			w.setStorm(false);
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
+		} else {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			if (duration == null || duration.length < 1) {
+				w.setStorm(true);
+				w.setWeatherDuration(12000);
+				replace.put("duration", "10");
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
+			} else {
+				try {
+					w.setStorm(true);
+					int time = Integer.parseInt(duration[0]);
+					w.setWeatherDuration(time * 1200);
+					replace.put("duration", duration[0]);
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
+				} catch (NumberFormatException e) {
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
+							+ ") isn't a number!");
+					w.setStorm(true);
+					w.setWeatherDuration(12000);
+					replace.put("duration", "10");
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
+				}
+			}
+		}
+	}
+
+	public static boolean weather(CommandSender sender, String type, String[] duration) {
+		if (isPlayer(sender, false)) {
+			weatherChange(sender, ((Player) sender).getWorld(), type, duration);
+		} else
+			for (World w : sender.getServer().getWorlds())
+				weatherChange(sender, w, type, duration);
+
+		return true;
 	}
 }

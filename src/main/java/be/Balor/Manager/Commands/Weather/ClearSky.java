@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Weather;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -45,7 +45,7 @@ public class ClearSky extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().weather("clear", null);
+		Utils.weather(sender, "clear", null);
 	}
 
 	/*

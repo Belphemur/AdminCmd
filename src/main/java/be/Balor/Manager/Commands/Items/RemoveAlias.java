@@ -45,7 +45,7 @@ public class RemoveAlias extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().rmAlias(args[0]);
+		ACHelper.getInstance().rmAlias(sender, args[0]);
 	}
 
 	/*

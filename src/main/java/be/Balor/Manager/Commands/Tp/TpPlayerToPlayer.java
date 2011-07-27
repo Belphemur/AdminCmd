@@ -18,13 +18,13 @@ package be.Balor.Manager.Commands.Tp;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TpPlayerToPlayer extends ACCommands {
 
@@ -32,19 +32,25 @@ public class TpPlayerToPlayer extends ACCommands {
 	 * 
 	 */
 	public TpPlayerToPlayer() {
-		permNode="admincmd.tp.players";
-		cmdName="bal_tp2p";
+		permNode = "admincmd.tp.players";
+		cmdName = "bal_tp2p";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().tpP2P(args[0], args[1]);
+		Utils.tpP2P(sender, args[0], args[1]);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

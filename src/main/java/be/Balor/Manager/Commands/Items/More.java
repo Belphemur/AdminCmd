@@ -51,13 +51,13 @@ public class More extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
+		if (Utils.isPlayer(sender)) {
 			ItemStack hand = ((Player) sender).getItemInHand();
 			if (hand == null || hand.getType() == Material.AIR) {
 				Utils.sI18n(sender, "errorHolding");
 				return;
 			}
-			if (ACHelper.getInstance().inBlackList(hand))
+			if (ACHelper.getInstance().inBlackList(sender, hand))
 				return;
 			if (args.length == 0)
 				hand.setAmount(64);

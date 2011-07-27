@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Weather;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -45,7 +45,7 @@ public class Storm extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().weather("storm", args);
+		Utils.weather(sender,"storm", args);
 
 	}
 

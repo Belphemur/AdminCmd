@@ -22,8 +22,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.Tools.Utils;
-import com.Balor.bukkit.AdminCmd.ACHelper;
-
 import be.Balor.Manager.ACCommands;
 
 /**
@@ -50,22 +48,22 @@ public class KickPlayer extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player toKick = sender.getServer().getPlayer(args[0]);
-		HashMap<String, String>replace = new HashMap<String, String>();
+		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", args[0]);
 		String message = "";
 		if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
-				message += args[i]+" ";
+				message += args[i] + " ";
 		else {
 			message = "You have been kick by ";
-			if (!ACHelper.getInstance().isPlayer(false))
+			if (!Utils.isPlayer(sender, false))
 				message += "Server Admin";
 			else
 				message += ((Player) sender).getName();
 		}
 		message = message.trim();
 		if (toKick != null)
-			toKick.kickPlayer(message);		
+			toKick.kickPlayer(message);
 		else
 			Utils.sI18n(sender, "playerNotFound", replace);
 

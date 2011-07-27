@@ -51,7 +51,7 @@ public class SpawnMob extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
+		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final String name = args[0];
 			replace.put("mob", name);

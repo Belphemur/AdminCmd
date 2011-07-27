@@ -18,6 +18,7 @@ package be.Balor.Manager.Commands.Time;
 
 import org.bukkit.command.CommandSender;
 
+import com.Balor.Tools.Utils;
 import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
@@ -45,7 +46,7 @@ public class SetTime extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().timeSet(args[0]);
+		Utils.timeSet(sender, args[0]);
 	}
 
 	/*

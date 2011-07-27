@@ -21,7 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -52,11 +52,11 @@ public class PlayerLocation extends ACCommands {
 		Location loc;
 		String msg;
 		if (args.length == 0) {
-			if (ACHelper.getInstance().isPlayer()) {
+			if (Utils.isPlayer(sender)) {
 				loc = ((Player) sender).getLocation();
 				msg = "You are";
 			} else
-				return ;
+				return;
 		} else
 			try {
 				loc = sender.getServer().getPlayer(args[0]).getLocation();
@@ -64,7 +64,7 @@ public class PlayerLocation extends ACCommands {
 			} catch (Exception ex) {
 				sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
 						+ ChatColor.RED + " not found!");
-				return ;
+				return;
 			}
 		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
 				+ " H");

@@ -45,7 +45,7 @@ public class Coloring extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().itemColor(args[0]);
+		ACHelper.getInstance().itemColor(sender, args[0]);
 
 	}
 

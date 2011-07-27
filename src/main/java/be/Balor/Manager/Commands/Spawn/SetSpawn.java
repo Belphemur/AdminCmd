@@ -46,7 +46,7 @@ public class SetSpawn extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().setSpawn();
+		ACHelper.getInstance().setSpawn(sender);
 	}
 
 	/*

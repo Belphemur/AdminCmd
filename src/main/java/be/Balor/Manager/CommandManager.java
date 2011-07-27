@@ -24,8 +24,6 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
-
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -78,7 +76,6 @@ public class CommandManager implements CommandExecutor {
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
-				ACHelper.getInstance().setSender(sender);
 				cmd.execute(sender, args);
 				return true;
 			} else

@@ -49,7 +49,7 @@ public class AddWarp extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
+		if (Utils.isPlayer(sender)) {
 			ACHelper.getInstance().addLocation("warp", args[0], "warpPoints",
 					((Player) sender).getLocation());
 			ACHelper.getInstance().getWarpList().add(args[0]);

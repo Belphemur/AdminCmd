@@ -19,8 +19,8 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.Balor.Tools.Utils;
 import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 
@@ -51,17 +51,17 @@ public class KickAllPlayers extends ACCommands {
 		String playerName = "";
 		if (args.length >= 1)
 			for (int i = 0; i < args.length; i++)
-				message += args[i]+" ";
+				message += args[i] + " ";
 		else {
 			message = "You have been kick by ";
-			if (!ACHelper.getInstance().isPlayer(false))
+			if (!Utils.isPlayer(sender, false))
 				playerName = "Server Admin";
 			else
 				playerName = ((Player) sender).getName();
 			message += playerName;
 		}
 		message = message.trim();
-		for (Player toKick : AdminCmd.getBukkitServer().getOnlinePlayers()) 
+		for (Player toKick : AdminCmd.getBukkitServer().getOnlinePlayers())
 			if (!toKick.getName().equals(playerName))
 				toKick.kickPlayer(message);
 	}

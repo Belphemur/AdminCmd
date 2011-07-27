@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,7 +35,6 @@ import com.google.common.collect.MapMaker;
  */
 public class ACHelper {
 
-	private CommandSender sender;
 	private HashMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
 	private FilesManager fManager;
@@ -144,80 +142,7 @@ public class ACHelper {
 		return pluginInstance;
 	}
 
-	public void setSender(CommandSender player) {
-		this.sender = player;
-	}
-
-	private void setTime(World w, String arg) {
-		long curtime = w.getTime();
-		long newtime = curtime - (curtime % 24000);
-		if (arg.equalsIgnoreCase("day"))
-			newtime += 0;
-		else if (arg.equalsIgnoreCase("night"))
-			newtime += 14000;
-		else if (arg.equalsIgnoreCase("dusk"))
-			newtime += 12500;
-		else if (arg.equalsIgnoreCase("dawn"))
-			newtime += 23000;
-		else
-			// if not a constant, use raw time
-			try {
-				newtime += Integer.parseInt(arg);
-			} catch (Exception e) {
-			}
-		w.setTime(newtime);
-	}
-
-	// all functions return if they handled the command
-	// false then means to show the default handle
-	// ! make sure the player variable IS a player!
-	// set world time to a new value
-	public boolean timeSet(String arg) {
-		if (isPlayer(false)) {
-			Player p = (Player) sender;
-			setTime(p.getWorld(), arg);
-		} else {
-			for (World w : sender.getServer().getWorlds())
-				setTime(w, arg);
-		}
-		return true;
-
-	}
-
-	public boolean isPlayer() {
-		return Utils.isPlayer(sender);
-	}
-
-	public boolean isPlayer(boolean msg) {
-		return Utils.isPlayer(sender, msg);
-	}
-
 	// teleports chosen player to another player
-
-	public boolean tpP2P(String nFrom, String nTo) {
-		boolean found = true;
-		Player pFrom = sender.getServer().getPlayer(nFrom);
-		Player pTo = sender.getServer().getPlayer(nTo);
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", nFrom);
-		if (pFrom == null) {
-			replace.put("player", nFrom);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			found = false;
-		}
-		if (pTo == null) {
-			replace.put("player", nTo);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			found = false;
-		}
-		if (found) {
-			pFrom.teleport(pTo);
-			replace.put("fromPlayer", pFrom.getName());
-			replace.put("toPlayer", pTo.getName());
-			Utils.sI18n(sender, "tp", replace);
-		}
-		return true;
-	}
 
 	/**
 	 * Add an item to the BlackList
@@ -225,8 +150,8 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean setBlackListedItem(String name) {
-		MaterialContainer m = checkMaterial(name);
+	public boolean setBlackListedItem(CommandSender sender, String name) {
+		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			Configuration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListed", null);
@@ -359,8 +284,8 @@ public class ACHelper {
 	/**
 	 * Set the spawn point.
 	 */
-	public void setSpawn() {
-		if (isPlayer()) {
+	public void setSpawn(CommandSender sender) {
+		if (Utils.isPlayer(sender)) {
 			Location loc = ((Player) sender).getLocation();
 			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
 					loc.getBlockZ());
@@ -369,8 +294,8 @@ public class ACHelper {
 		}
 	}
 
-	public void spawn() {
-		if (isPlayer()) {
+	public void spawn(CommandSender sender) {
+		if (Utils.isPlayer(sender)) {
 			Player player = ((Player) sender);
 			Location loc = null;
 			String worldName = player.getWorld().getName();
@@ -388,8 +313,8 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean removeBlackListedItem(String name) {
-		MaterialContainer m = checkMaterial(name);
+	public boolean removeBlackListedItem(CommandSender sender, String name) {
+		MaterialContainer m = checkMaterial(sender, name);
 		if (m.material != null) {
 			Configuration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListed", null);
@@ -419,14 +344,13 @@ public class ACHelper {
 		return fManager.getYml("blacklist").getIntList("BlackListed", new ArrayList<Integer>());
 	}
 
-
 	/**
 	 * Translate the id or name to a material
 	 * 
 	 * @param mat
 	 * @return Material
 	 */
-	public MaterialContainer checkMaterial(String mat) {
+	public MaterialContainer checkMaterial(CommandSender sender, String mat) {
 		MaterialContainer m = Utils.checkMaterial(mat);
 		if (m.isNull()) {
 			HashMap<String, String> replace = new HashMap<String, String>();
@@ -472,46 +396,7 @@ public class ACHelper {
 		return output;
 	}
 
-	private void weatherChange(World w, String type, String[] duration) {
-		if (type == "clear") {
-			w.setThundering(false);
-			w.setStorm(false);
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
-		} else {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			if (duration == null || duration.length < 1) {
-				w.setStorm(true);
-				w.setWeatherDuration(12000);
-				replace.put("duration", "10");
-				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
-			} else {
-				try {
-					w.setStorm(true);
-					int time = Integer.parseInt(duration[0]);
-					w.setWeatherDuration(time * 1200);
-					replace.put("duration", duration[0]);
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
-				} catch (NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
-							+ ") isn't a number!");
-					w.setStorm(true);
-					w.setWeatherDuration(12000);
-					replace.put("duration", "10");
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
-				}
-			}
-		}
-	}
 
-	public boolean weather(String type, String[] duration) {
-		if (isPlayer(false)) {
-			weatherChange(((Player) sender).getWorld(), type, duration);
-		} else
-			for (World w : sender.getServer().getWorlds())
-				weatherChange(w, type, duration);
-
-		return true;
-	}
 
 	public void addVulcain(String playerName, float power) {
 		addPowerUser("vulcan", playerName, power);
@@ -622,8 +507,8 @@ public class ACHelper {
 		return (Float) getPowerOfPowerUser("vulcan", player);
 	}
 
-	public boolean alias(String[] args) {
-		MaterialContainer m = checkMaterial(args[1]);
+	public boolean alias(CommandSender sender, String[] args) {
+		MaterialContainer m = checkMaterial(sender, args[1]);
 		if (m.isNull())
 			return true;
 		String alias = args[0];
@@ -634,7 +519,7 @@ public class ACHelper {
 		return true;
 	}
 
-	public boolean rmAlias(String alias) {
+	public boolean rmAlias(CommandSender sender, String alias) {
 		this.fManager.removeAlias(alias);
 		this.alias.remove(alias);
 		sender.sendMessage(ChatColor.GOLD + alias + ChatColor.RED + " removed");
@@ -646,8 +531,8 @@ public class ACHelper {
 	}
 
 	// changes the color of a colorable item in hand
-	public boolean itemColor(String color) {
-		if (isPlayer()) {
+	public boolean itemColor(CommandSender sender, String color) {
+		if (Utils.isPlayer(sender)) {
 			// help?
 			if (color.equalsIgnoreCase("help")) {
 				sender.sendMessage(ChatColor.RED + "Wool: " + ChatColor.WHITE
@@ -682,7 +567,7 @@ public class ACHelper {
 		return true;
 	}
 
-	public boolean inBlackList(MaterialContainer mat) {
+	public boolean inBlackList(CommandSender sender, MaterialContainer mat) {
 		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.material.getId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();
@@ -693,7 +578,7 @@ public class ACHelper {
 		return false;
 	}
 
-	public boolean inBlackList(ItemStack mat) {
+	public boolean inBlackList(CommandSender sender, ItemStack mat) {
 		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.getTypeId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();

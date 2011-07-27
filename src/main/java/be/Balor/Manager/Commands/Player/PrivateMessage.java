@@ -56,7 +56,7 @@ public class PrivateMessage extends ACCommands {
 			String msgPrefix = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
 			String msg = "";
 			String senderName = "Server Admin";
-			if (ACHelper.getInstance().isPlayer(false)) {
+			if (Utils.isPlayer(sender, false)) {
 				Player pSender = (Player) sender;
 				senderName = pSender.getName();
 				if (PermissionManager.getPermission() != null) {
@@ -100,9 +100,10 @@ public class PrivateMessage extends ACCommands {
 				parsed = msg;
 			buddy.sendMessage(msgPrefix + senderPm + parsed);
 			sender.sendMessage(msgPrefix + senderPm + parsed);
-			for(Player p : ACHelper.getInstance().getAllPowerUserOf("spymsg"))
-				if(!p.getName().equals(senderName) && !p.getName().equals(buddy.getName()))
-					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "+senderName+"-"+buddy.getName()+": "+parsed);
+			for (Player p : ACHelper.getInstance().getAllPowerUserOf("spymsg"))
+				if (!p.getName().equals(senderName) && !p.getName().equals(buddy.getName()))
+					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "
+							+ senderName + "-" + buddy.getName() + ": " + parsed);
 		} else
 			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
 					+ ChatColor.RED + " not found!");

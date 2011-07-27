@@ -48,13 +48,11 @@ public class RemoveWarp extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (ACHelper.getInstance().isPlayer()) {
 			ACHelper.getInstance().removeLocation("warp", args[0], "warpPoints");
 			ACHelper.getInstance().getWarpList().remove(args[0]);
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", args[0]);
 			Utils.sI18n(sender, "rmWarp", replace);
-		}
 
 	}
 
