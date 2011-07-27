@@ -102,6 +102,7 @@ public class AdminCmd extends JavaPlugin {
 			CommandManager.getInstance().registerCommand(RemoveWarp.class);
 			CommandManager.getInstance().registerCommand(TpToWarp.class);
 			CommandManager.getInstance().registerCommand(WarpList.class);
+			CommandManager.getInstance().registerCommand(Ip.class);
 
 	}
 
@@ -202,6 +203,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("afk", "%player "+ChatColor.RED+"is AFK");
 		Utils.addLocale("online", "%player "+ChatColor.GREEN+"is Online");
 		Utils.addLocale("afkTitle", ChatColor.BLUE+"[AFK]"+ChatColor.WHITE);
+		Utils.addLocale("ip", ChatColor.YELLOW+"IP adress of "+ ChatColor.WHITE+"%player - %ip");
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();

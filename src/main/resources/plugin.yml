@@ -178,3 +178,7 @@ commands:
     description: List all warp points.
     aliases: [lwp,lwarp]
     usage: /<command> 
+  bal_ip:
+    description: get the ip of the player.
+    aliases: [ip,address]
+    usage: /<command> [playerName]
