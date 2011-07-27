@@ -48,8 +48,7 @@ public class KickPlayer extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player toKick = sender.getServer().getPlayer(args[0]);
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", args[0]);
+		HashMap<String, String> replace = new HashMap<String, String>();	
 		String message = "";
 		if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
@@ -63,7 +62,10 @@ public class KickPlayer extends ACCommands {
 		}
 		message = message.trim();
 		if (toKick != null)
+		{
+			replace.put("player", toKick.getName());
 			toKick.kickPlayer(message);
+		}
 		else
 			Utils.sI18n(sender, "playerNotFound", replace);
 

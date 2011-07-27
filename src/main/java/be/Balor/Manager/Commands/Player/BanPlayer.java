@@ -50,8 +50,7 @@ public class BanPlayer extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player toBan = sender.getServer().getPlayer(args[0]);
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", args[0]);
+		HashMap<String, String> replace = new HashMap<String, String>();		
 		String message = "";
 		if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
@@ -66,6 +65,7 @@ public class BanPlayer extends ACCommands {
 		message = message.trim();
 		if (toBan != null)
 		{
+			replace.put("player", toBan.getName());
 			ACHelper.getInstance().addPowerUser("ban", toBan, message);
 			toBan.kickPlayer(message);
 			toBan.getServer().broadcastMessage(Utils.I18n("ban", replace));
