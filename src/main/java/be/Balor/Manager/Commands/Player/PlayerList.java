@@ -91,12 +91,12 @@ public class PlayerList extends ACCommands {
 					if (prefixstring != null && prefixstring.length() > 1) {
 						String result = Utils.colorParser(prefixstring);
 						if (result == null)
-							buffer += prefixstring + name + ChatColor.WHITE + ", ";
+							buffer += prefixstring + online[i].getDisplayName() + ChatColor.WHITE + ", ";
 						else
-							buffer += result + name + ChatColor.WHITE + ", ";
+							buffer += result + online[i].getDisplayName() + ChatColor.WHITE + ", ";
 
 					} else {
-						buffer += name + ", ";
+						buffer += online[i].getDisplayName() + ", ";
 					}
 					if (buffer.length() >= 256) {
 						sender.sendMessage(buffer);
