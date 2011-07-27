@@ -21,8 +21,10 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Manager.Exceptions.CommandAlreadyExist;
+import be.Balor.Manager.Exceptions.CommandNotFound;
+
 import com.Balor.bukkit.AdminCmd.ACHelper;
-import com.Balor.files.utils.CommandNotFound;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -103,10 +105,23 @@ public abstract class ACCommands {
 
 	/**
 	 * Initialize the bukkit plugin command
+	 * 
+	 * @throws CommandAlreadyExist
+	 *             ,CommandNotFound
 	 */
-	public void initializeCommand() throws CommandNotFound {
+	public void initializeCommand() throws CommandNotFound, CommandAlreadyExist {
 		if ((pluginCommand = ACHelper.getInstance().getPluginInstance().getCommand(cmdName)) == null)
 			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
+		boolean registeredAlias = false;
+		for (String alias : pluginCommand.getAliases())
+			if (ACHelper.getInstance().getPluginInstance().getServer().getPluginCommand(alias)
+					.equals(pluginCommand)) {
+				registeredAlias = true;
+				break;
+			}
+		if (!registeredAlias)
+			throw new CommandAlreadyExist(cmdName
+					+ " has all his alias already registered. Command deactivated");
 	}
 
 	/**

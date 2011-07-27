@@ -14,13 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package com.Balor.files.utils;
+package be.Balor.Manager.Exceptions;
+
+import org.bukkit.command.CommandException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class CommandNotFound extends Exception {
+public class CommandNotFound extends CommandException {
 
 	/**
 	 * 
@@ -39,14 +41,6 @@ public class CommandNotFound extends Exception {
 	 */
 	public CommandNotFound(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param cause
-	 */
-	public CommandNotFound(Throwable cause) {
-		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 

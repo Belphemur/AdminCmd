@@ -20,10 +20,10 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.Balor.files.utils.CommandNotFound;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -58,7 +58,7 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (CommandNotFound e) {
+		} catch (CommandException e) {
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
 	}
