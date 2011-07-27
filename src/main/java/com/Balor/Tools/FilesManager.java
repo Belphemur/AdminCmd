@@ -342,12 +342,13 @@ public class FilesManager {
 	 * @param filename
 	 * @return
 	 */
-	public Map<String, Object> loadMap(String name, String directory,
-			String filename) {
+	public Map<String, Object> loadMap(String name, String directory, String filename) {
 		Map<String, Object> result = new MapMaker().makeMap();
 		Configuration conf = getYml(filename, directory);
-		for (String key : conf.getKeys(name))
-			result.put(key, conf.getProperty(key));
+		if (conf.getKeys(name) != null) {
+			for (String key : conf.getKeys(name))
+				result.put(key, conf.getProperty(key));
+		}
 		return result;
 	}
 }
