@@ -246,7 +246,6 @@ public class AdminCmd extends JavaPlugin {
 
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		worker.saveInfos();
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();

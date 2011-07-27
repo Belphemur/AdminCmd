@@ -118,11 +118,6 @@ public class ACHelper {
 				pluginConfig.getConf().getString("locale", "en_US"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getConf().getBoolean("noMessage", false));
 		LocaleManager.getInstance().load();
-		blacklist = getBlackListedItems();
-		alias.putAll(fManager.getAlias());
-		List<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
-		if (tmp != null)
-			warpList.addAll(tmp);
 	}
 
 	/**
@@ -587,15 +582,30 @@ public class ACHelper {
 		}
 		return false;
 	}
-
-	public synchronized void saveInfos() {
-		fManager.saveMap(usersWithPowers.get("ban"), "banned", null, "banned");
+	public void addPowerUserWithFile(String power ,String user, String reason)
+	{
+		addPowerUser(power, user, reason);
+		Configuration ban = fManager.getYml(power);
+		ban.setProperty(power+"."+user, reason);
+		ban.save();
 	}
-
+	public void removePowerUserWithFile(String power ,String user)
+	{
+		removePowerUser(power, user);
+		Configuration ban = fManager.getYml(power);
+		ban.removeProperty(power+"."+user);
+		ban.save();
+	}
 	public synchronized void loadInfos() {
+		blacklist = getBlackListedItems();
+		alias.putAll(fManager.getAlias());
+		List<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
+		if (tmp != null)
+			warpList.addAll(tmp);
+
 		Map<String, Object> map = fManager.loadMap("banned", null, "banned");
 		for (String key : map.keySet())
-			addPowerUser("ban", key, map.get(key));
+			addPowerUser("banned", key, map.get(key));
 	}
 
 	// ----- / item coloring section -----

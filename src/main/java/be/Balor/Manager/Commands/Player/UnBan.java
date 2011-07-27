@@ -45,7 +45,7 @@ public class UnBan extends ACCommands {
 		String unban = args[0];
 		if(ACHelper.getInstance().isPowerUser("ban", unban))
 		{
-			ACHelper.getInstance().removePowerUser("ban", unban);
+			ACHelper.getInstance().removePowerUserWithFile("banned", unban);
 			sender.getServer().broadcastMessage(Utils.I18n("unban", "player", unban));
 		}
 		else

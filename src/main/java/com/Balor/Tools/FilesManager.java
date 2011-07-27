@@ -316,22 +316,6 @@ public class FilesManager {
 				coords[2], direction[0], direction[1]);
 	}
 
-	/**
-	 * Save the map
-	 * 
-	 * @param toSave
-	 * @param name
-	 * @param directory
-	 * @param filename
-	 */
-	public void saveMap(Map<String, Object> toSave, String name, String directory, String filename) {
-		if (toSave != null) {
-			Configuration conf = getYml(filename, directory);
-			for (String key : toSave.keySet())
-				conf.setProperty(name + "." + key, toSave.get(key));
-			conf.save();
-		}
-	}
 
 	/**
 	 * Load the map
