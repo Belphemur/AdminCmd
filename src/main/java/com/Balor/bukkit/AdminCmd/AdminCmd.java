@@ -207,7 +207,6 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("ip", ChatColor.YELLOW + "IP adress of " + ChatColor.WHITE
 				+ "%player - %ip");
 		Utils.addLocale("ban", ChatColor.YELLOW + "%player has been banned.");
-		Utils.addLocale("banMsg", "You are banned from this server. Contact the server admin if it's a mistake.");
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
