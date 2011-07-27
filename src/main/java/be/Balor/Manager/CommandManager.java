@@ -72,7 +72,6 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		try {
-
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
