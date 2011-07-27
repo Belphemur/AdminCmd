@@ -588,6 +588,16 @@ public class ACHelper {
 		}
 		return false;
 	}
+	public synchronized void saveInfos()
+	{
+		fManager.saveMap(usersWithPowers.get("ban"), "banned", null, "banned");
+	}
+	public synchronized void loadInfos()
+	{
+		for(String key : fManager.loadMap("banned", null, "banned").keySet())
+			addPowerUser("ban", key);
+	}
+	
 
 	// ----- / item coloring section -----
 }

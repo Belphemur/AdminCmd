@@ -182,3 +182,7 @@ commands:
     description: get the ip of the player.
     aliases: [ip,address]
     usage: /<command> [playerName]
+  bal_ban:
+    description: ban the player.
+    aliases: [ban,pban]
+    usage: /<command> playerName [msg] 

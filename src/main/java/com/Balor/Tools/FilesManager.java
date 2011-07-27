@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
@@ -32,6 +33,7 @@ import org.bukkit.util.config.Configuration;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
+import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,16 +42,19 @@ import com.Balor.bukkit.AdminCmd.AdminCmd;
 public class FilesManager {
 	protected String path;
 	private static FilesManager instance = null;
+
 	/**
 	 * @return the instance
 	 */
 	public static FilesManager getInstance() {
-		if(instance == null)
+		if (instance == null)
 			instance = new FilesManager();
 		return instance;
 	}
+
 	/**
-	 * @param path the path to set
+	 * @param path
+	 *            the path to set
 	 */
 	public void setPath(String path) {
 		this.path = path;
@@ -63,46 +68,45 @@ public class FilesManager {
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
 	}
-	
 
 	/**
 	 * Open the file and return the Configuration object
 	 * 
 	 * @param directory
-	 * @param fileName
+	 * @param filename
 	 * @return the configuration file
 	 */
-	public Configuration getYml(String fileName, String directory) {
-		Configuration config = new Configuration(getFile(directory, fileName + ".yml"));
+	public Configuration getYml(String filename, String directory) {
+		Configuration config = new Configuration(getFile(directory, filename + ".yml"));
 		config.load();
 		return config;
 	}
 
-	public Configuration getYml(String fileName) {
-		return getYml(fileName, null);
+	public Configuration getYml(String filename) {
+		return getYml(filename, null);
 	}
 
 	/**
 	 * Open the file and return the File object
 	 * 
 	 * @param directory
-	 * @param fileName
+	 * @param filename
 	 * @return the configuration file
 	 */
-	private File getFile(String directory, String fileName) {
-		return getFile(directory, fileName, true);
+	private File getFile(String directory, String filename) {
+		return getFile(directory, filename, true);
 	}
 
-	private File getFile(String directory, String fileName, boolean create) {
+	private File getFile(String directory, String filename, boolean create) {
 		File file = null;
 
 		if (directory != null) {
 			if (!new File(this.path + File.separator + directory).exists()) {
 				new File(this.path + File.separator + directory).mkdir();
 			}
-			file = new File(path + File.separator + directory + File.separator + fileName);
+			file = new File(path + File.separator + directory + File.separator + filename);
 		} else
-			file = new File(path + File.separator + fileName);
+			file = new File(path + File.separator + filename);
 
 		if (!file.exists() && create) {
 
@@ -303,7 +307,7 @@ public class FilesManager {
 			} catch (NumberFormatException e) {
 				return null;
 			}
-		for (int i = 3; i < infos.length-1; i++)
+		for (int i = 3; i < infos.length - 1; i++)
 			try {
 				direction[i - 3] = Float.parseFloat(infos[i]);
 			} catch (NumberFormatException e) {
@@ -311,5 +315,39 @@ public class FilesManager {
 			}
 		return new Location(AdminCmd.getBukkitServer().getWorld(infos[5]), coords[0], coords[1],
 				coords[2], direction[0], direction[1]);
+	}
+
+	/**
+	 * Save the map
+	 * 
+	 * @param toSave
+	 * @param name
+	 * @param directory
+	 * @param filename
+	 */
+	public void saveMap(Map<String, Object> toSave, String name, String directory, String filename) {
+		if (toSave != null) {
+			Configuration conf = getYml(filename, directory);
+			for (String key : toSave.keySet())
+				conf.setProperty(name + "." + key, toSave.get(key));
+			conf.save();
+		}
+	}
+
+	/**
+	 * Load the map
+	 * 
+	 * @param name
+	 * @param directory
+	 * @param filename
+	 * @return
+	 */
+	public Map<String, Object> loadMap(String name, String directory,
+			String filename) {
+		Map<String, Object> result = new MapMaker().makeMap();
+		Configuration conf = getYml(filename, directory);
+		for (String key : conf.getKeys(name))
+			result.put(key, conf.getProperty(key));
+		return result;
 	}
 }

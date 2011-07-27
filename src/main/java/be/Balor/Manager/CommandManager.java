@@ -80,6 +80,9 @@ public class CommandManager implements CommandExecutor {
 					.severe("The command "
 							+ command.getName()
 							+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admn-gen-admincmd-5-5-6-time-give-tp-repair-heal-kill-warp-weather-multi-lingual-1000.10770");
+			sender.sendMessage("The command "
+					+ command.getName()
+					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admn-gen-admincmd.10770");
 			t.printStackTrace();
 			return false;
 		}

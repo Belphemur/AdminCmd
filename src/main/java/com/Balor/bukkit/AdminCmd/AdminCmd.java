@@ -59,50 +59,51 @@ public class AdminCmd extends JavaPlugin {
 
 	private void registerCmds() {
 
-			CommandManager.getInstance().registerCommand(Day.class);
-			CommandManager.getInstance().registerCommand(Repair.class);
-			CommandManager.getInstance().registerCommand(RepairAll.class);
-			CommandManager.getInstance().registerCommand(More.class);
-			CommandManager.getInstance().registerCommand(PlayerList.class);
-			CommandManager.getInstance().registerCommand(PlayerLocation.class);
-			CommandManager.getInstance().registerCommand(God.class);
-			CommandManager.getInstance().registerCommand(Thor.class);
-			CommandManager.getInstance().registerCommand(Kill.class);
-			CommandManager.getInstance().registerCommand(Heal.class);
-			CommandManager.getInstance().registerCommand(ClearSky.class);
-			CommandManager.getInstance().registerCommand(Storm.class);
-			CommandManager.getInstance().registerCommand(SetSpawn.class);
-			CommandManager.getInstance().registerCommand(Spawn.class);
-			CommandManager.getInstance().registerCommand(Memory.class);
-			CommandManager.getInstance().registerCommand(SetTime.class);
-			CommandManager.getInstance().registerCommand(ClearInventory.class);
-			CommandManager.getInstance().registerCommand(Give.class);
-			CommandManager.getInstance().registerCommand(AddBlackList.class);
-			CommandManager.getInstance().registerCommand(RemoveBlackList.class);
-			CommandManager.getInstance().registerCommand(TpHere.class);
-			CommandManager.getInstance().registerCommand(TpTo.class);
-			CommandManager.getInstance().registerCommand(Coloring.class);
-			CommandManager.getInstance().registerCommand(Strike.class);
-			CommandManager.getInstance().registerCommand(RemoveAlias.class);
-			CommandManager.getInstance().registerCommand(SpawnMob.class);
-			CommandManager.getInstance().registerCommand(KickPlayer.class);
-			CommandManager.getInstance().registerCommand(PrivateMessage.class);
-			CommandManager.getInstance().registerCommand(AddAlias.class);
-			CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
-			CommandManager.getInstance().registerCommand(TpLoc.class);
-			CommandManager.getInstance().registerCommand(KickAllPlayers.class);
-			CommandManager.getInstance().registerCommand(Vulcan.class);
-			CommandManager.getInstance().registerCommand(Drop.class);
-			CommandManager.getInstance().registerCommand(Invisible.class);
-			CommandManager.getInstance().registerCommand(SpyMsg.class);
-			CommandManager.getInstance().registerCommand(Fireball.class);
-			CommandManager.getInstance().registerCommand(Home.class);
-			CommandManager.getInstance().registerCommand(SetHome.class);
-			CommandManager.getInstance().registerCommand(AddWarp.class);
-			CommandManager.getInstance().registerCommand(RemoveWarp.class);
-			CommandManager.getInstance().registerCommand(TpToWarp.class);
-			CommandManager.getInstance().registerCommand(WarpList.class);
-			CommandManager.getInstance().registerCommand(Ip.class);
+		CommandManager.getInstance().registerCommand(Day.class);
+		CommandManager.getInstance().registerCommand(Repair.class);
+		CommandManager.getInstance().registerCommand(RepairAll.class);
+		CommandManager.getInstance().registerCommand(More.class);
+		CommandManager.getInstance().registerCommand(PlayerList.class);
+		CommandManager.getInstance().registerCommand(PlayerLocation.class);
+		CommandManager.getInstance().registerCommand(God.class);
+		CommandManager.getInstance().registerCommand(Thor.class);
+		CommandManager.getInstance().registerCommand(Kill.class);
+		CommandManager.getInstance().registerCommand(Heal.class);
+		CommandManager.getInstance().registerCommand(ClearSky.class);
+		CommandManager.getInstance().registerCommand(Storm.class);
+		CommandManager.getInstance().registerCommand(SetSpawn.class);
+		CommandManager.getInstance().registerCommand(Spawn.class);
+		CommandManager.getInstance().registerCommand(Memory.class);
+		CommandManager.getInstance().registerCommand(SetTime.class);
+		CommandManager.getInstance().registerCommand(ClearInventory.class);
+		CommandManager.getInstance().registerCommand(Give.class);
+		CommandManager.getInstance().registerCommand(AddBlackList.class);
+		CommandManager.getInstance().registerCommand(RemoveBlackList.class);
+		CommandManager.getInstance().registerCommand(TpHere.class);
+		CommandManager.getInstance().registerCommand(TpTo.class);
+		CommandManager.getInstance().registerCommand(Coloring.class);
+		CommandManager.getInstance().registerCommand(Strike.class);
+		CommandManager.getInstance().registerCommand(RemoveAlias.class);
+		CommandManager.getInstance().registerCommand(SpawnMob.class);
+		CommandManager.getInstance().registerCommand(KickPlayer.class);
+		CommandManager.getInstance().registerCommand(PrivateMessage.class);
+		CommandManager.getInstance().registerCommand(AddAlias.class);
+		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
+		CommandManager.getInstance().registerCommand(TpLoc.class);
+		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
+		CommandManager.getInstance().registerCommand(Vulcan.class);
+		CommandManager.getInstance().registerCommand(Drop.class);
+		CommandManager.getInstance().registerCommand(Invisible.class);
+		CommandManager.getInstance().registerCommand(SpyMsg.class);
+		CommandManager.getInstance().registerCommand(Fireball.class);
+		CommandManager.getInstance().registerCommand(Home.class);
+		CommandManager.getInstance().registerCommand(SetHome.class);
+		CommandManager.getInstance().registerCommand(AddWarp.class);
+		CommandManager.getInstance().registerCommand(RemoveWarp.class);
+		CommandManager.getInstance().registerCommand(TpToWarp.class);
+		CommandManager.getInstance().registerCommand(WarpList.class);
+		CommandManager.getInstance().registerCommand(Ip.class);
+		CommandManager.getInstance().registerCommand(BanPlayer.class);
 
 	}
 
@@ -200,10 +201,13 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("setSpawn", ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE + " set.");
 		Utils.addLocale("sClear", "Sky cleared in world :");
 		Utils.addLocale("sStorm", "Storm set for %duration mins in world : ");
-		Utils.addLocale("afk", "%player "+ChatColor.RED+"is AFK");
-		Utils.addLocale("online", "%player "+ChatColor.GREEN+"is Online");
-		Utils.addLocale("afkTitle", ChatColor.BLUE+"[AFK]"+ChatColor.WHITE);
-		Utils.addLocale("ip", ChatColor.YELLOW+"IP adress of "+ ChatColor.WHITE+"%player - %ip");
+		Utils.addLocale("afk", "%player " + ChatColor.RED + "is AFK");
+		Utils.addLocale("online", "%player " + ChatColor.GREEN + "is Online");
+		Utils.addLocale("afkTitle", ChatColor.BLUE + "[AFK]" + ChatColor.WHITE);
+		Utils.addLocale("ip", ChatColor.YELLOW + "IP adress of " + ChatColor.WHITE
+				+ "%player - %ip");
+		Utils.addLocale("ban", ChatColor.YELLOW + "%player has been banned.");
+		Utils.addLocale("banMsg", "You are banned from this server. Contact the server admin if it's a mistake.");
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
@@ -226,6 +230,7 @@ public class AdminCmd extends JavaPlugin {
 		registerCmds();
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
 		PermissionManager.getInstance().registerAllPermParent();
+		worker.loadInfos();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pOqL, Priority.Normal, this);
@@ -239,6 +244,7 @@ public class AdminCmd extends JavaPlugin {
 
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
+		worker.saveInfos();
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
