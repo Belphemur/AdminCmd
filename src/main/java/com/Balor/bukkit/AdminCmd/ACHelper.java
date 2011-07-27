@@ -99,10 +99,10 @@ public class ACHelper {
 		pluginConfig.addProperty("statutCheckInSec", 20);
 		pluginConfig.addProperty("invisibleRangeInBlock", 512);
 		pluginConfig.addProperty("autoAfk", true);
-		pluginConfig.addProperty("aftTimeInSecond", 60);
+		pluginConfig.addProperty("afkTimeInSecond", 60);
 		pluginConfig.save();
 		if (getConf().getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(getConf().getInt("aftTimeInSecond", 60));
+			AFKWorker.getInstance().setAfkTime(getConf().getInt("afkTimeInSecond", 60));
 			this.pluginInstance
 					.getServer()
 					.getScheduler()
