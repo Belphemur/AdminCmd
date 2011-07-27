@@ -63,12 +63,8 @@ public class CommandManager implements CommandExecutor {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
-	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	/**
+	 * {@inheritDoc}
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		try {
