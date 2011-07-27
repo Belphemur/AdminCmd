@@ -26,13 +26,13 @@ import com.Balor.bukkit.AdminCmd.AdminCmd;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class UpdateStatus implements Runnable {
+public class UpdateInvisible implements Runnable {
 	Player toVanish;
 
 	/**
 	 * 
 	 */
-	public UpdateStatus(Player p) {
+	public UpdateInvisible(Player p) {
 		toVanish = p;
 	}
 	public void run() {

@@ -16,6 +16,7 @@
  ************************************************************************/
 package com.Balor.files.utils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -133,13 +134,23 @@ public class Utils {
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
-
+	public static void sI18n(CommandSender sender, String key, String alias, String toReplace) {
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put(alias, toReplace);
+		sI18n(sender, key, replace);
+	}
 	public static void sI18n(CommandSender sender, String key) {
 		sI18n(sender, key, null);
 	}
 
 	public static String I18n(String key) {
 		return I18n(key, null);
+	}
+
+	public static String I18n(String key, String alias, String toReplace) {
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put(alias, toReplace);
+		return I18n(key, replace);
 	}
 
 	public static String I18n(String key, Map<String, String> replace) {

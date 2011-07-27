@@ -22,16 +22,18 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.ShootFireBall;
-import com.Balor.files.utils.UpdateStatus;
+import com.Balor.files.utils.UpdateInvisible;
 import com.Balor.files.utils.Utils;
 
 /**
@@ -49,6 +51,16 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	@Override
+	public void onPlayerMove(PlayerMoveEvent event) {
+		if (ACHelper.getInstance().getConf().getBoolean("autoAfk", true)) {
+			Player p = event.getPlayer();
+			AFKWorker.getInstance().updateTimeStamp(p);
+			if (AFKWorker.getInstance().isAfk(p))
+				AFKWorker.getInstance().setOnline(p);
+		}
+	}
+
+	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
@@ -58,8 +70,12 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(event.getPlayer().getName()))
+		Player p = event.getPlayer();
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
+		if (ACHelper.getInstance().getConf().getBoolean("autoAfk", true)) {
+			AFKWorker.getInstance().removePlayer(p);
+		}
 	}
 
 	@Override
@@ -112,7 +128,7 @@ public class ACPlayerListener extends PlayerListener {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-							new UpdateStatus(newPlayer), 25);
+							new UpdateInvisible(newPlayer), 25);
 			return true;
 		}
 		return false;

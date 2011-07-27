@@ -21,6 +21,7 @@ import org.bukkit.util.config.Configuration;
 import be.Balor.Manager.ConfigurationManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
+import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 import com.Balor.files.utils.FilesManager;
@@ -97,10 +98,23 @@ public class ACHelper {
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");
 		pluginConfig.addProperty("statutCheckInSec", 20);
-		pluginConfig.addProperty("invisibleRangeInBlock", 512);		
+		pluginConfig.addProperty("invisibleRangeInBlock", 512);
+		pluginConfig.addProperty("autoAfk", true);
+		pluginConfig.addProperty("aftTimeInSecond", 60);
 		pluginConfig.save();
-		InvisibleWorker.getInstance().setMaxRange(pluginConfig.getConf().getInt("invisibleRangeInBlock", 512));
-		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getConf().getInt("statutCheckInSec",20));
+		if (getConf().getBoolean("autoAfk", true)) {
+			AFKWorker.getInstance().setAfkTime(getConf().getInt("aftTimeInSecond", 60));
+			this.pluginInstance
+					.getServer()
+					.getScheduler()
+					.scheduleAsyncRepeatingTask(this.pluginInstance, AFKWorker.getInstance(),
+							getConf().getInt("statutCheckInSec", 20) / 2,
+							getConf().getInt("statutCheckInSec", 20));
+		}
+		InvisibleWorker.getInstance().setMaxRange(
+				pluginConfig.getConf().getInt("invisibleRangeInBlock", 512));
+		InvisibleWorker.getInstance().setTickCheck(
+				pluginConfig.getConf().getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getConf().getString("locale", "en_US"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getConf().getBoolean("noMessage", false));
@@ -305,14 +319,16 @@ public class ACHelper {
 	 * @param filename
 	 * @param loc
 	 */
-	
-	public void addLocation(String type, String nameMemory,String property, String filename, Location loc) {
+
+	public void addLocation(String type, String nameMemory, String property, String filename,
+			Location loc) {
 		addLocationInMemory(type, nameMemory, loc);
 		fManager.writeLocationFile(loc, property, filename, type);
 	}
+
 	public void addLocation(String type, String name, String filename, Location loc) {
 		addLocation(type, name, name, filename, loc);
-		
+
 	}
 
 	/**
@@ -324,8 +340,7 @@ public class ACHelper {
 	 * @param property
 	 * @return
 	 */
-	public Location getLocation(String type, String nameMemory, String property, String filename)
-	{
+	public Location getLocation(String type, String nameMemory, String property, String filename) {
 		Location loc = null;
 		loc = getLocationFromMemory(type, nameMemory);
 		if (loc == null) {
@@ -336,6 +351,7 @@ public class ACHelper {
 
 		return loc;
 	}
+
 	public Location getLocation(String type, String name, String filename) {
 		return getLocation(type, name, name, filename);
 	}
@@ -513,31 +529,28 @@ public class ACHelper {
 		if (type == "clear") {
 			w.setThundering(false);
 			w.setStorm(false);
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear")+" " + w.getName());
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
 		} else {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			if (duration == null || duration.length < 1) {
 				w.setStorm(true);
 				w.setWeatherDuration(12000);
-				replace.put("duration","10");
-				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace)
-						+ w.getName());
+				replace.put("duration", "10");
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 			} else {
 				try {
 					w.setStorm(true);
 					int time = Integer.parseInt(duration[0]);
 					w.setWeatherDuration(time * 1200);
-					replace.put("duration",duration[0]);
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace)
-							+ w.getName());					
+					replace.put("duration", duration[0]);
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				} catch (NumberFormatException e) {
 					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
 							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
-					replace.put("duration","10");
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace)
-							+ w.getName());
+					replace.put("duration", "10");
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				}
 			}
 		}

@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
-import com.Balor.files.utils.UpdateStatus;
+import com.Balor.files.utils.UpdateInvisible;
 import com.Balor.files.utils.Utils;
 import com.google.common.collect.MapMaker;
 
@@ -35,7 +35,7 @@ import com.google.common.collect.MapMaker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class InvisibleWorker {
+final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
 	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
 	private long maxRange = 262144;
@@ -170,7 +170,7 @@ public class InvisibleWorker {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
 				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-						new UpdateStatus(toVanish));
+						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
 					name,
@@ -178,7 +178,7 @@ public class InvisibleWorker {
 							.getBukkitServer()
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
-									new UpdateStatus(toVanish), tickCheck / 2, tickCheck));
+									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
 
 	}
 
