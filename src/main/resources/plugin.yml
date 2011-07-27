@@ -185,4 +185,8 @@ commands:
   bal_ban:
     description: ban the player.
     aliases: [ban,pban]
-    usage: /<command> playerName [msg] 
+    usage: /<command> playerName [reason] 
+  bal_unban:
+    description: unban the player.
+    aliases: [unban,ub]
+    usage: /<command> playerName

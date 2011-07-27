@@ -104,6 +104,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(WarpList.class);
 		CommandManager.getInstance().registerCommand(Ip.class);
 		CommandManager.getInstance().registerCommand(BanPlayer.class);
+		CommandManager.getInstance().registerCommand(UnBan.class);
 
 	}
 
@@ -207,7 +208,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("ip", ChatColor.YELLOW + "IP adress of " + ChatColor.WHITE
 				+ "%player - %ip");
 		Utils.addLocale("ban", ChatColor.YELLOW + "%player has been banned.");
-
+		Utils.addLocale("unban", ChatColor.YELLOW + "%player is now unbanned.");
+		
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
 	}
