@@ -88,7 +88,8 @@ final public class AFKWorker implements Runnable {
 	private void setAfk(Player p) {
 		p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
 		playersAfk.put(p, p.getDisplayName());
-		p.setDisplayName("[AFK]" + p.getName());
+		p.setDisplayName(Utils.I18n("afkTitle") + p.getName());
+		playerTimeStamp.remove(p);
 	}
 
 	/**
@@ -117,7 +118,7 @@ final public class AFKWorker implements Runnable {
 	public void run() {
 		long now = System.currentTimeMillis();
 		for (Player p : playerTimeStamp.keySet())
-			if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
+			if ((now - playerTimeStamp.get(p)) >= afkTime)
 				setAfk(p);
 	}
 

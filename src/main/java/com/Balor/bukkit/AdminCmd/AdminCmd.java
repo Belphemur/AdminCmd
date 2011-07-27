@@ -201,6 +201,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("sStorm", "Storm set for %duration mins in world : ");
 		Utils.addLocale("afk", "%player "+ChatColor.RED+"is AFK");
 		Utils.addLocale("online", "%player "+ChatColor.GREEN+"is Online");
+		Utils.addLocale("afkTitle", ChatColor.BLUE+"[AFK]"+ChatColor.WHITE);
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
