@@ -346,7 +346,7 @@ public class FilesManager {
 		Configuration conf = getYml(filename, directory);
 		if (conf.getKeys(name) != null) {
 			for (String key : conf.getKeys(name))
-				result.put(key, conf.getProperty(key));
+				result.put(key, conf.getProperty(name+"."+key));
 		}
 		return result;
 	}
