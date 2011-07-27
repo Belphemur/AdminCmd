@@ -238,7 +238,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_TELEPORT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, pOqL, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_PRELOGIN, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_LOGIN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, new ACEntityListener(worker), Priority.High,
 				this);
 	}

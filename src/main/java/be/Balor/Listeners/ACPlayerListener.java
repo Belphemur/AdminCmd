@@ -22,9 +22,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -53,8 +53,8 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	@Override
-	public void onPlayerPreLogin(PlayerPreLoginEvent event) {
-		if(ACHelper.getInstance().isPowerUser("ban", event.getName()))
+	  public void onPlayerLogin(PlayerLoginEvent event) {
+		if(ACHelper.getInstance().isPowerUser("ban", event.getPlayer().getName()))
 			event.disallow(Result.KICK_BANNED, Utils.I18n("banMsg"));
 	}
 
