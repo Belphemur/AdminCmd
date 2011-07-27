@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -396,8 +397,6 @@ public class ACHelper {
 		return output;
 	}
 
-
-
 	public void addVulcain(String playerName, float power) {
 		addPowerUser("vulcan", playerName, power);
 	}
@@ -588,16 +587,16 @@ public class ACHelper {
 		}
 		return false;
 	}
-	public synchronized void saveInfos()
-	{
+
+	public synchronized void saveInfos() {
 		fManager.saveMap(usersWithPowers.get("ban"), "banned", null, "banned");
 	}
-	public synchronized void loadInfos()
-	{
-		for(String key : fManager.loadMap("banned", null, "banned").keySet())
-			addPowerUser("ban", key);
+
+	public synchronized void loadInfos() {
+		Map<String, Object> map = fManager.loadMap("banned", null, "banned");
+		for (String key : map.keySet())
+			addPowerUser("ban", key, map.get(key));
 	}
-	
 
 	// ----- / item coloring section -----
 }
