@@ -21,7 +21,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
@@ -50,7 +49,7 @@ public class ClearInventory extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player target = ACHelper.getInstance().getUser(args, permNode);
+		Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;
 		target.getInventory().clear();

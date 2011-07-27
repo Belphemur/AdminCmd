@@ -69,7 +69,7 @@ public class Give extends ACCommands {
 				return;
 			}
 			if (args.length >= 3) {
-				target = ACHelper.getInstance().getUser(args, permNode, 2, true);
+				target = Utils.getUser(sender, args, permNode, 2, true);
 				if (target == null) {
 					return;
 				}

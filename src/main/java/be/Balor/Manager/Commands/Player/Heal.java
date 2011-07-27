@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 
@@ -46,7 +46,7 @@ public class Heal extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().setPlayerHealth(args, "heal");
+		Utils.setPlayerHealth(sender, args, "heal");
 	}
 
 	/*

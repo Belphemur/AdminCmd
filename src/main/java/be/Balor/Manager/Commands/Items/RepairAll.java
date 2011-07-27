@@ -51,7 +51,7 @@ public class RepairAll extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = ACHelper.getInstance().getUser(args, permNode);
+		Player player = Utils.getUser(sender, args, permNode);
 		if (player == null)
 			return;
 		for (ItemStack item : player.getInventory().getContents())

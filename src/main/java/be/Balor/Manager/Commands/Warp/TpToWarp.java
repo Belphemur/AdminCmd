@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
+import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
 import static com.Balor.files.utils.Utils.sendMessage;
@@ -51,7 +52,7 @@ public class TpToWarp extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player target = ACHelper.getInstance().getUser(args, permNode, 1, true);
+		Player target = Utils.getUser(sender, args, permNode, 1, true);
 
 		if (target != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();

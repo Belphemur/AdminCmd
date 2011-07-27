@@ -53,16 +53,16 @@ public class Vulcan extends ACCommands {
 		float power = 4.0F;
 		if (args.length >= 1) {
 			try {
-				player = ACHelper.getInstance().getUser(args, permNode, 1, false);
+				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
 				power = 4.0F;
-				player = ACHelper.getInstance().getUser(args, permNode);
+				player = Utils.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2)
-				player = ACHelper.getInstance().getUser(args, permNode, 1, true);
+				player = Utils.getUser(sender, args, permNode, 1, true);
 		} else
-			player = ACHelper.getInstance().getUser(args, permNode);
+			player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());

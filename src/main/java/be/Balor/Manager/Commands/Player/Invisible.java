@@ -21,7 +21,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
@@ -51,7 +50,7 @@ public class Invisible extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player target = ACHelper.getInstance().getUser(args, permNode);
+		Player target = Utils.getUser(sender, args, permNode);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", target.getName());
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {

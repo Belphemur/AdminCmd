@@ -419,59 +419,6 @@ public class ACHelper {
 		return fManager.getYml("blacklist").getIntList("BlackListed", new ArrayList<Integer>());
 	}
 
-	/**
-	 * Get the user that need to be processed by the command
-	 * 
-	 * @param args
-	 * @param permNode
-	 * @param index
-	 * @return
-	 */
-	public Player getUser(String[] args, String permNode, int index, boolean errorMsg) {
-		Player target = null;
-		if (args.length >= index + 1) {
-			if (PermissionManager.getInstance().hasPerm(sender, permNode + ".other"))
-				target = sender.getServer().getPlayer(args[index]);
-			else
-				return target;
-		} else if (ACHelper.getInstance().isPlayer(false))
-			target = ((Player) sender);
-		else if (errorMsg) {
-			sender.sendMessage("You must type the player name");
-			return target;
-		}
-		if (target == null && errorMsg) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", args[index]);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
-		}
-		return target;
-
-	}
-
-	public Player getUser(String[] args, String permNode) {
-		return getUser(args, permNode, 0, true);
-	}
-
-	/**
-	 * Heal the selected player.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public boolean setPlayerHealth(String[] name, String toDo) {
-		Player target = getUser(name, "admincmd.player." + toDo + ".other");
-		if (target == null)
-			return false;
-		if (toDo.equals("heal")) {
-			target.setHealth(20);
-			target.setFireTicks(0);
-		} else
-			target.setHealth(0);
-
-		return true;
-	}
 
 	/**
 	 * Translate the id or name to a material

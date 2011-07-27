@@ -50,7 +50,7 @@ public class Thor extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = ACHelper.getInstance().getUser(args, permNode);
+		Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());

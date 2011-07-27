@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Manager.PermissionManager;
 
 import com.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -113,7 +114,60 @@ public class Utils {
 			return false;
 		}
 	}
+	/**
+	 * Heal the selected player.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static boolean setPlayerHealth(CommandSender sender,String[] name, String toDo) {
+		Player target = getUser(sender, name, "admincmd.player." + toDo + ".other");
+		if (target == null)
+			return false;
+		if (toDo.equals("heal")) {
+			target.setHealth(20);
+			target.setFireTicks(0);
+		} else
+			target.setHealth(0);
 
+		return true;
+	}
+	/**
+	 * Get the user and check who launched the command.
+	 * @param sender
+	 * @param args
+	 * @param permNode
+	 * @param index
+	 * @param errorMsg
+	 * @return
+	 */
+	public static Player getUser(CommandSender sender, String[] args, String permNode, int index,
+			boolean errorMsg) {
+		Player target = null;
+		if (args.length >= index + 1) {
+			if (PermissionManager.getInstance().hasPerm(sender, permNode + ".other"))
+				target = sender.getServer().getPlayer(args[index]);
+			else
+				return target;
+		} else if (isPlayer(sender, false))
+			target = ((Player) sender);
+		else if (errorMsg) {
+			sender.sendMessage("You must type the player name");
+			return target;
+		}
+		if (target == null && errorMsg) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", args[index]);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return target;
+		}
+		return target;
+
+	}
+	public static Player getUser(CommandSender sender, String[] args, String permNode)
+	{
+		return getUser(sender, args, permNode, 0, true);
+	}
 	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
 		sendMessage(sender, player, key, null);
 	}
@@ -134,11 +188,13 @@ public class Utils {
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
+
 	public static void sI18n(CommandSender sender, String key, String alias, String toReplace) {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put(alias, toReplace);
 		sI18n(sender, key, replace);
 	}
+
 	public static void sI18n(CommandSender sender, String key) {
 		sI18n(sender, key, null);
 	}

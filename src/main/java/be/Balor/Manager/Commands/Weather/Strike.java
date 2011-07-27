@@ -21,7 +21,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
 import com.Balor.files.utils.Utils;
 
 import be.Balor.Manager.ACCommands;
@@ -50,7 +49,7 @@ public class Strike extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player p = ACHelper.getInstance().getUser(args, permNode);
+		Player p = Utils.getUser(sender, args, permNode);
 		p.getWorld().strikeLightning(p.getLocation());
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
