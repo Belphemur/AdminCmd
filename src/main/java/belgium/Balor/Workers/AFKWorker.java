@@ -117,7 +117,7 @@ final public class AFKWorker implements Runnable {
 	public void run() {
 		long now = System.currentTimeMillis();
 		for (Player p : playerTimeStamp.keySet())
-			if ((now - playerTimeStamp.get(p)) >= afkTime)
+			if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
 				setAfk(p);
 	}
 
