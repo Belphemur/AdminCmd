@@ -89,6 +89,7 @@ final public class AFKWorker implements Runnable {
 		p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
 		playersAfk.put(p, p.getDisplayName());
 		p.setDisplayName(Utils.I18n("afkTitle") + p.getName());
+		p.setSleepingIgnored(true);
 		playerTimeStamp.remove(p);
 	}
 
@@ -100,6 +101,7 @@ final public class AFKWorker implements Runnable {
 	public void setOnline(Player p) {
 		p.getServer().broadcastMessage(Utils.I18n("online", "player", p.getName()));
 		p.setDisplayName(playersAfk.get(p));
+		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
 	}
 
