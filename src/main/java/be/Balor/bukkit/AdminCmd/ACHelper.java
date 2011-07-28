@@ -607,8 +607,11 @@ public class ACHelper {
 		if (homeList.containsKey(player)) {
 			return homeList.get(player);
 		} else {
-			homeList.put(player,
-					new HashSet<String>(fManager.getAllLocationsNameFromFile(player, "home")));
+			List<String> tmp = fManager.getAllLocationsNameFromFile(player, "home");
+			if (tmp != null)
+				homeList.put(player, new HashSet<String>(tmp));
+			else
+				homeList.put(player, new HashSet<String>());
 			return homeList.get(player);
 		}
 	}
