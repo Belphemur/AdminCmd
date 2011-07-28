@@ -194,3 +194,7 @@ commands:
     description: Kill the mob.
     aliases: [mobkill,mk]
     usage: /<command> <all || animals || monsters || mobname>
+  bal_jumper:
+    description: You can set your jump height.
+    aliases: [jump]
+    usage: /<command> [power] [playerName]

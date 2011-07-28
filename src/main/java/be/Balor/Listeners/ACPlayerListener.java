@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.util.Vector;
 
 import be.Balor.Tools.ShootFireBall;
 import be.Balor.Tools.UpdateInvisible;
@@ -36,7 +37,6 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
-
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -114,23 +114,24 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			String playerName = event.getPlayer().getName();
+			Player p = event.getPlayer();
+			String playerName = p.getName();
 			if ((worker.hasThorPowers(playerName)))
-				event.getPlayer().getWorld()
-						.strikeLightning(event.getPlayer().getTargetBlock(null, 600).getLocation());
+				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
 			Float power = null;
 			if ((power = worker.getVulcainExplosionPower(playerName)) != null)
-				event.getPlayer()
-						.getWorld()
-						.createExplosion(event.getPlayer().getTargetBlock(null, 600).getLocation(),
-								power, true);
+				p.getWorld()
+						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
 			power = null;
 			if ((power = (Float) worker.getPowerOfPowerUser("fireball", playerName)) != null)
 				worker.getPluginInstance()
 						.getServer()
 						.getScheduler()
 						.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-								new ShootFireBall(event.getPlayer(), power));
+								new ShootFireBall(p, power));
+			power = null;
+			if ((power = (Float) worker.getPowerOfPowerUser("jumper", playerName)) != null)
+				p.setVelocity(new Vector(p.getVelocity().getX(), power, p.getVelocity().getZ()));
 		}
 	}
 

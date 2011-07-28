@@ -10,7 +10,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
@@ -106,6 +105,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(BanPlayer.class);
 		CommandManager.getInstance().registerCommand(UnBan.class);
 		CommandManager.getInstance().registerCommand(KillMob.class);
+		CommandManager.getInstance().registerCommand(Jumper.class);
 
 	}
 
@@ -213,6 +213,12 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("killMob", ChatColor.RED + "Killing mobs (" + ChatColor.WHITE + "%type"
 				+ ChatColor.RED + ") of worlds : " + ChatColor.DARK_PURPLE + "%worlds");
 		Utils.addLocale("killedMobs", "%nbKilled" + ChatColor.DARK_RED + " mobs have been killed.");
+		Utils.addLocale("jumperDisabled", ChatColor.GOLD + "Jumper mode disabled.");
+		Utils.addLocale("jumperDisabledTarget", ChatColor.GOLD
+				+ "Jumper mode disabled for %player");
+		Utils.addLocale("jumperEnabled", ChatColor.GOLD + "Jumper mode enabled.");
+		Utils.addLocale("jumperEnabledTarget", ChatColor.GOLD
+				+ "Jumper mode enabled for %player");
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
