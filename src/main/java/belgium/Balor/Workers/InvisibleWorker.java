@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentMap;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
 
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -96,16 +97,17 @@ final public class InvisibleWorker {
 		if (invisblesWithTaskIds.containsKey(name)) {
 			AdminCmd.getBukkitServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
 			invisblesWithTaskIds.remove(name);
-		
-		AdminCmd.getBukkitServer()
-				.getScheduler()
-				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-						new Runnable() {
-							public void run() {
-								for (Player p : AdminCmd.getBukkitServer().getOnlinePlayers())
-									uninvisible(toReappear, p);
-							}
-						});
+
+			AdminCmd.getBukkitServer()
+					.getScheduler()
+					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+							new Runnable() {
+								public void run() {
+									for (Player p : AdminCmd.getBukkitServer().getOnlinePlayers())
+										uninvisible(toReappear, p);
+								}
+							});
+			toReappear.getServer().broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
 		}
 
 	}
@@ -181,6 +183,7 @@ final public class InvisibleWorker {
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
+		toVanish.getServer().broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 
 	}
 
