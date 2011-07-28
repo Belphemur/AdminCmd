@@ -1,6 +1,6 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.5.8
+version: 5.6
 author: Balor
 softdepend: [MultiVerse,Permissions]
 description: >
@@ -157,11 +157,11 @@ commands:
   bal_home:
     description: Teleport you to your home.
     aliases: [home,h]
-    usage: /<command>
+    usage: /<command> [homeName]
   bal_sethome:
     description: Set your home.
     aliases: [sethome,sh]
-    usage: /<command> 
+    usage: /<command> [homeName]
   bal_createwarp:
     description: create a warp point.
     aliases: [wp,cwarp]

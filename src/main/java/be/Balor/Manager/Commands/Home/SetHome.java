@@ -53,9 +53,9 @@ public class SetHome extends ACCommands {
 			if (args.length >= 1)
 				home = args[0];
 			Location loc = p.getLocation();
-			ACHelper.getInstance().addLocation("home", p.getName() + "." + home,
-					home, p.getName(), loc);
 			ACHelper.getInstance().getHomeList(p.getName()).add(home);
+			ACHelper.getInstance().addLocation("home", p.getName() + "." + home,
+					home, p.getName(), loc);			
 			Utils.sI18n(sender, "setMultiHome", "home", home);
 		}
 
