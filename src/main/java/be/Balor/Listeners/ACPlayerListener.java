@@ -53,9 +53,9 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (ACHelper.getInstance().isPowerUser("ban", event.getPlayer().getName()))
+		if (ACHelper.getInstance().isPowerUser("banned", event.getPlayer().getName()))
 			event.disallow(Result.KICK_BANNED,
-					ACHelper.getInstance().getPowerOfPowerUser("ban", event.getPlayer().getName())
+					ACHelper.getInstance().getPowerOfPowerUser("banned", event.getPlayer().getName())
 							.toString());
 	}
 
