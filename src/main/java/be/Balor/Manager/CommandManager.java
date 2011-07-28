@@ -87,13 +87,14 @@ public class CommandManager implements CommandExecutor {
 				return false;
 		} catch (Throwable t) {
 			Logger.getLogger("Minecraft")
-					.severe("The command "
+					.severe("[AdminCmd] The command "
 							+ command.getName()
-							+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admn-gen-admincmd-5-5-6-time-give-tp-repair-heal-kill-warp-weather-multi-lingual-1000.10770");
-			sender.sendMessage(ChatColor.RED
-					+ "The command "
+							+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+			sender.sendMessage("[AdminCmd]"
+					+ ChatColor.RED
+					+ " The command "
 					+ command.getName()
-					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admn-gen-admincmd.10770");
+					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 			t.printStackTrace();
 			return false;
 		}
