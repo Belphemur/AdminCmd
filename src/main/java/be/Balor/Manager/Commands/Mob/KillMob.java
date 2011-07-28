@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -104,6 +105,9 @@ public class KillMob extends ACCommands {
 		int mobKilled = 0;
 		for (Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
 			LivingEntity m = (LivingEntity) iterator.next();
+			if (m instanceof HumanEntity) {
+				continue;				
+			}
 			if (type.equalsIgnoreCase("all") && (MobCheck.isAnimal(m) || MobCheck.isMonster(m))) {
 				m.setHealth(0);
 				mobKilled++;
