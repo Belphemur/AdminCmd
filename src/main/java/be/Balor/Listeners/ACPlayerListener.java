@@ -99,11 +99,14 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		Location from = event.getFrom();
 		Location to = event.getTo();
+		String playername = event.getPlayer().getName();
 		if (ACHelper.getInstance().getConf().getBoolean("resetPowerWhenTpAnotherWorld", true)
 				&& !from.getWorld().equals(to.getWorld())) {
-			if (ACHelper.getInstance().removePlayerFromAllPowerUser(event.getPlayer().getName())) {
+			if (ACHelper.getInstance().removePlayerFromAllPowerUser(playername) || InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
+				InvisibleWorker.getInstance().reappear(event.getPlayer());
 				Utils.sI18n(event.getPlayer(), "changedWorld");
 			}
+				
 		}
 	}
 

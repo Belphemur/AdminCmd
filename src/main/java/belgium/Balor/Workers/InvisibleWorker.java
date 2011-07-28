@@ -95,7 +95,7 @@ final public class InvisibleWorker {
 		if (invisblesWithTaskIds.containsKey(name)) {
 			AdminCmd.getBukkitServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
 			invisblesWithTaskIds.remove(name);
-		}
+		
 		AdminCmd.getBukkitServer()
 				.getScheduler()
 				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
@@ -105,6 +105,7 @@ final public class InvisibleWorker {
 									uninvisible(toReappear, p);
 							}
 						});
+		}
 
 	}
 
