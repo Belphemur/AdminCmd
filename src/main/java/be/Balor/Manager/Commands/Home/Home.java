@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  */
 public class Home extends ACCommands {
 	public Home() {
-		permNode = "admincmd.home.sethome";
+		permNode = "admincmd.tp.home";
 		cmdName = "bal_home";
 	}
 

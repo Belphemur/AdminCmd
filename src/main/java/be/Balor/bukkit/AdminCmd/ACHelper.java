@@ -229,9 +229,13 @@ public class ACHelper {
 	 * @param name
 	 * @param filename
 	 */
+	public void removeLocation(String type, String nameMemory, String property, String filename) {
+		removeLocationFromMemory(type, nameMemory);
+		fManager.removeLocationFromFile(property, filename, type);
+	}
+
 	public void removeLocation(String type, String name, String filename) {
-		removeLocationFromMemory(type, name);
-		fManager.removeLocationFromFile(name, filename, type);
+		removeLocation(type, name, name, filename);
 	}
 
 	/**

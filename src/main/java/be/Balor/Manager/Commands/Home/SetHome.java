@@ -34,7 +34,7 @@ public class SetHome extends ACCommands {
 	 * 
 	 */
 	public SetHome() {
-		permNode = "admincmd.home.sethome";
+		permNode = "admincmd.tp.home";
 		cmdName = "bal_sethome";
 	}
 
