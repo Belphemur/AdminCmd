@@ -58,7 +58,11 @@ public class WarpList extends ACCommands {
 				msg = "";
 			}
 		}
-		sender.sendMessage(msg);
+		if (!msg.equals("")) {
+			if (msg.endsWith(", "))
+				msg = msg.substring(0, msg.lastIndexOf(","));
+			sender.sendMessage(msg);
+		}
 
 	}
 
