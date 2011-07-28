@@ -46,6 +46,8 @@ public class ACHelper {
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
 	private Set<String> warpList = new HashSet<String>();
+	private ConcurrentMap<String, Set<String>> homeList = new MapMaker().softValues()
+			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
 	private ConfigurationManager pluginConfig;
 
@@ -595,6 +597,16 @@ public class ACHelper {
 		Configuration ban = fManager.getYml(power);
 		ban.removeProperty(power + "." + user);
 		ban.save();
+	}
+
+	public Set<String> getHomeList(String player) {
+		if (homeList.containsKey(player)) {
+			return homeList.get(player);
+		} else {
+			homeList.put(player,
+					new HashSet<String>(fManager.getAllLocationsNameFromFile(player, "home")));
+			return homeList.get(player);
+		}
 	}
 
 	public synchronized void loadInfos() {

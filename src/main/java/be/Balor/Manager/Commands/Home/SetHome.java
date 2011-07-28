@@ -48,12 +48,14 @@ public class SetHome extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
-			String home = ((Player) sender).getWorld().getName();
+			Player p = ((Player) sender);
+			String home = p.getWorld().getName();
 			if (args.length >= 1)
 				home = args[0];
-			Location loc = ((Player) sender).getLocation();
-			ACHelper.getInstance().addLocation("home", ((Player) sender).getName() + "." + home,
-					home, ((Player) sender).getName(), loc);
+			Location loc = p.getLocation();
+			ACHelper.getInstance().addLocation("home", p.getName() + "." + home,
+					home, p.getName(), loc);
+			ACHelper.getInstance().getHomeList(p.getName()).add(home);
 			Utils.sI18n(sender, "setMultiHome", "home", home);
 		}
 
