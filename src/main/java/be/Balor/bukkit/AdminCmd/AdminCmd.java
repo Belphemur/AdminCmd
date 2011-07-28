@@ -17,6 +17,7 @@ import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermParent;
 import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Commands.Home.*;
 import be.Balor.Manager.Commands.Items.*;
 import be.Balor.Manager.Commands.Mob.*;
 import be.Balor.Manager.Commands.Player.*;
@@ -53,6 +54,7 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.tp.*"));
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.weather.*"));
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.warp.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.home.*"));
 		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*"));
 	}
 

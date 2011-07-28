@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Tp;
+package be.Balor.Manager.Commands.Home;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  */
 public class Home extends ACCommands {
 	public Home() {
-		permNode = "admincmd.tp.sethome";
+		permNode = "admincmd.home.sethome";
 		cmdName = "bal_home";
 	}
 
