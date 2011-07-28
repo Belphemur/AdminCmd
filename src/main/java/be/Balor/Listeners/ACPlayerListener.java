@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.util.Vector;
 
 import be.Balor.Tools.ShootFireBall;
 import be.Balor.Tools.UpdateInvisible;
@@ -54,9 +55,10 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		if (ACHelper.getInstance().isPowerUser("banned", event.getPlayer().getName()))
-			event.disallow(Result.KICK_BANNED,
-					ACHelper.getInstance().getPowerOfPowerUser("banned", event.getPlayer().getName())
-							.toString());
+			event.disallow(
+					Result.KICK_BANNED,
+					ACHelper.getInstance()
+							.getPowerOfPowerUser("banned", event.getPlayer().getName()).toString());
 	}
 
 	@Override
@@ -68,9 +70,19 @@ public class ACPlayerListener extends PlayerListener {
 				AFKWorker.getInstance().setOnline(p);
 		}
 		Player p = event.getPlayer();
-		Float power = null;
-		if (p.isSneaking() && (power = (Float) worker.getPowerOfPowerUser("fly", p.getName())) != null)
-			p.setVelocity(p.getLocation().getDirection().multiply(power));
+		Float power = (Float) worker.getPowerOfPowerUser("fly", p.getName());
+		if (power != null)
+			if (p.isSneaking())
+				p.setVelocity(p.getLocation().getDirection().multiply(power));
+			else {
+				p.setFallDistance(2.9F);
+				Vector vel = p.getVelocity();
+				vel.add(p.getLocation().getDirection().multiply(0.3).setY(0));
+				if (vel.getY() < -0.3) {
+					vel.setY(-0.3);
+					p.setVelocity(vel);
+				}
+			}
 	}
 
 	@Override
