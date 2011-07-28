@@ -64,7 +64,7 @@ public class SpawnMob extends ACCommands {
 			final int nb = nbTaped;
 			final CreatureType ct = CreatureType.fromName(name);
 			if (ct == null) {
-				Utils.sI18n(sender, "errorMob");
+				Utils.sI18n(sender, "errorMob", replace);
 				return;
 			}
 			final Player player = ((Player) sender);
