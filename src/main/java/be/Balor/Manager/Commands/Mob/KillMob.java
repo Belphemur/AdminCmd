@@ -55,7 +55,7 @@ public class KillMob extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		final List<LivingEntity> mobs = new ArrayList<LivingEntity>();
-		HashMap<String, String> replace = new HashMap<String, String>();		
+		HashMap<String, String> replace = new HashMap<String, String>();
 		String type = "all";
 		if (args.length >= 1)
 			type = args[0];
@@ -79,12 +79,14 @@ public class KillMob extends ACCommands {
 			}
 		}
 		final String finalType = type;
-		pluginCommand.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(pluginCommand.getPlugin(), new Runnable() {
-			
-			public void run() {
-				killMobs(mobs, finalType);				
-			}
-		});
+		final CommandSender finalSender = sender;
+		pluginCommand.getPlugin().getServer().getScheduler()
+				.scheduleAsyncDelayedTask(pluginCommand.getPlugin(), new Runnable() {
+
+					public void run() {
+						killMobs(mobs, finalType,finalSender);
+					}
+				});
 
 	}
 
@@ -97,83 +99,103 @@ public class KillMob extends ACCommands {
 	public boolean argsCheck(String... args) {
 		return args != null;
 	}
-	private void killMobs(List<LivingEntity> mobs, String type)
-	{
+
+	private void killMobs(List<LivingEntity> mobs, String type, CommandSender sender) {
+		int mobKilled = 0;
 		for (Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
 			LivingEntity m = (LivingEntity) iterator.next();
 			if (type.equalsIgnoreCase("all") && (MobCheck.isAnimal(m) || MobCheck.isMonster(m))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isAnimal(m) && (type.equalsIgnoreCase("animals"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isMonster(m) && (type.equalsIgnoreCase("monsters"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isZombie(m) && (type.equalsIgnoreCase("zombie"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isCreeper(m) && (type.equalsIgnoreCase("creeper"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isSkeleton(m) && (type.equalsIgnoreCase("skeleton"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isSpider(m) && (type.equalsIgnoreCase("spider"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isGhast(m) && (type.equalsIgnoreCase("ghast"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isSlime(m) && (type.equalsIgnoreCase("slime"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isGiant(m) && (type.equalsIgnoreCase("giant"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isPigZombie(m) && (type.equalsIgnoreCase("pigzombie"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.Monster(m) && (type.equalsIgnoreCase("pigzombie"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isSheep(m) && (type.equalsIgnoreCase("sheep"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isChicken(m) && (type.equalsIgnoreCase("chicken"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isSquid(m) && (type.equalsIgnoreCase("squid"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isCow(m) && (type.equalsIgnoreCase("cow"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isPig(m) && (type.equalsIgnoreCase("pig"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 			if (MobCheck.isWolf(m) && (type.equalsIgnoreCase("wolf"))) {
 				m.setHealth(0);
+				mobKilled++;
 				continue;
 			}
 		}
+		Utils.sI18n(sender, "killedMobs", "nbkilled", String.valueOf(mobKilled));
 	}
 
 }
