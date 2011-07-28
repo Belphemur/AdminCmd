@@ -28,7 +28,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.util.Vector;
 
 import be.Balor.Tools.ShootFireBall;
 import be.Balor.Tools.UpdateInvisible;
@@ -68,6 +67,10 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
+		Player p = event.getPlayer();
+		Float power = null;
+		if (p.isSneaking() && (power = (Float) worker.getPowerOfPowerUser("fly", p.getName())) != null)
+			p.setVelocity(p.getLocation().getDirection().multiply(power));
 	}
 
 	@Override
@@ -131,7 +134,7 @@ public class ACPlayerListener extends PlayerListener {
 								new ShootFireBall(p, power));
 			power = null;
 			if ((power = (Float) worker.getPowerOfPowerUser("jumper", playerName)) != null)
-				p.setVelocity(new Vector(p.getVelocity().getX(), power, p.getVelocity().getZ()));
+				p.setVelocity(p.getLocation().getDirection().multiply(power));
 		}
 	}
 

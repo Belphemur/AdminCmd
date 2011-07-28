@@ -29,14 +29,14 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Jumper extends ACCommands {
+public class Fly extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public Jumper() {
-		permNode = "admincmd.player.jumper";
-		cmdName = "bal_jumper";
+	public Fly() {
+		permNode = "admincmd.player.fly";
+		cmdName = "bal_fly";
 		other = true;
 	}
 
@@ -50,7 +50,7 @@ public class Jumper extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player player = null;
-		float power = 1.0F;
+		float power = 10.0F;
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
@@ -66,16 +66,16 @@ public class Jumper extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser("jumper", player.getName())) {
-				ACHelper.getInstance().removePowerUser("jumper", player);
-				Utils.sI18n(player, "jumperDisabled");
+			if (ACHelper.getInstance().isPowerUser("fly", player.getName())) {
+				ACHelper.getInstance().removePowerUser("fly", player);
+				Utils.sI18n(player, "flyDisabled");
 				if (!player.equals(sender))
-					Utils.sI18n(sender, "jumperDisabledTarget", replace);
+					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addPowerUser("jumper", player, power);
-				Utils.sI18n(player, "jumperEnabled");
+				ACHelper.getInstance().addPowerUser("fly", player, power);
+				Utils.sI18n(player, "flyEnabled");
 				if (!player.equals(sender))
-					Utils.sI18n(sender, "jumperEnabledTarget", replace);
+					Utils.sI18n(sender, "flyEnabledTarget", replace);
 			}
 		}
 

@@ -105,7 +105,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(BanPlayer.class);
 		CommandManager.getInstance().registerCommand(UnBan.class);
 		CommandManager.getInstance().registerCommand(KillMob.class);
-		CommandManager.getInstance().registerCommand(Jumper.class);
+		CommandManager.getInstance().registerCommand(Fly.class);
 
 	}
 
@@ -219,6 +219,12 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("jumperEnabled", ChatColor.GOLD + "Jumper mode enabled.");
 		Utils.addLocale("jumperEnabledTarget", ChatColor.GOLD
 				+ "Jumper mode enabled for %player");
+		Utils.addLocale("flyDisabled", ChatColor.GOLD + "FLY mode disabled.");
+		Utils.addLocale("flyDisabledTarget", ChatColor.GOLD
+				+ "FLY mode disabled for %player");
+		Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");
+		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD
+				+ "FLY mode enabled for %player");
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
