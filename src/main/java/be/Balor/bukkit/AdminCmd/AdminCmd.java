@@ -107,6 +107,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(UnBan.class);
 		CommandManager.getInstance().registerCommand(KillMob.class);
 		CommandManager.getInstance().registerCommand(Fly.class);
+		CommandManager.getInstance().registerCommand(DeleteHome.class);
 
 	}
 
@@ -182,6 +183,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("multiHome", ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
 				+ " to your home "+ChatColor.DARK_AQUA+"%home.");
 		Utils.addLocale("setMultiHome", ChatColor.DARK_GREEN + "Home "+ChatColor.DARK_AQUA+"%home" + ChatColor.WHITE + " set.");
+		Utils.addLocale("rmHome", ChatColor.RED + "Home %home" + ChatColor.WHITE + " removed.");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");

@@ -162,6 +162,10 @@ commands:
     description: Set your home.
     aliases: [sethome,sh]
     usage: /<command> [homeName]
+  bal_rmhome:
+    description: remove a home.
+    aliases: [rmhome,rh]
+    usage: /<command> homeName
   bal_createwarp:
     description: create a warp point.
     aliases: [wp,cwarp]
