@@ -1,4 +1,4 @@
-package com.Balor.bukkit.AdminCmd;
+package be.Balor.bukkit.AdminCmd;
 
 import java.util.ArrayList;
 import java.util.HashMap;

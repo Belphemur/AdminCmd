@@ -19,10 +19,10 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)

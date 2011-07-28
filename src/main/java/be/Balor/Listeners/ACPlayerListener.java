@@ -32,11 +32,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import be.Balor.Tools.ShootFireBall;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)

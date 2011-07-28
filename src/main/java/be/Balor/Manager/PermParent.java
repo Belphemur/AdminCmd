@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 
 import org.bukkit.permissions.Permission;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)

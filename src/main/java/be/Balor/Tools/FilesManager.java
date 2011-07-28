@@ -31,8 +31,8 @@ import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
 
 import au.com.bytecode.opencsv.CSVReader;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)

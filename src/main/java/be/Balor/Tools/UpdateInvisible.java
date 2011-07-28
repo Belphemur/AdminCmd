@@ -18,9 +18,9 @@ package be.Balor.Tools;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)

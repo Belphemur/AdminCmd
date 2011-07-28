@@ -22,11 +22,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
-import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)

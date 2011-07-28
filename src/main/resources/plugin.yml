@@ -1,5 +1,5 @@
 name: AdminCmd
-main: com.Balor.bukkit.AdminCmd.AdminCmd
+main: be.Balor.bukkit.AdminCmd.AdminCmd
 version: 5.5.8
 author: Balor
 softdepend: [MultiVerse,Permissions]

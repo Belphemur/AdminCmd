@@ -29,9 +29,9 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
-import com.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)

@@ -21,8 +21,8 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.PermissionManager;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
-import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**

@@ -18,9 +18,9 @@ package be.Balor.Manager.Commands.Spawn;
 
 import org.bukkit.command.CommandSender;
 
-import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
