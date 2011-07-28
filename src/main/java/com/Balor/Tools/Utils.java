@@ -63,28 +63,33 @@ public class Utils {
 	/**
 	 * Parse a string and replace the color in it
 	 * 
+	 * @author Speedy64
 	 * @param toParse
 	 * @return
 	 */
 	public static String colorParser(String toParse, String delimiter) {
 		String ResultString = null;
 		try {
-			Pattern regex = Pattern.compile(delimiter + "[0-9]+");
+			Pattern regex = Pattern.compile(delimiter + "[A-Fa-f]|" + delimiter + "1[0-5]|"
+					+ delimiter + "[0-9]");
 			Matcher regexMatcher = regex.matcher(toParse);
 			String result = null;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
-				result = regexMatcher.replaceFirst(ChatColor.getByCode(
-						Integer.parseInt(ResultString.substring(1))).toString());
+				int colorint = Integer.parseInt(ResultString.substring(1, 2), 16);
+				if (ResultString.length() > 1) {
+					if (colorint == 1 && ResultString.substring(2).matches("[012345]")) {
+						colorint = colorint * 10 + Integer.parseInt(ResultString.substring(2));
+					}
+				}
+				result = regexMatcher.replaceFirst(ChatColor.getByCode(colorint).toString());
 				regexMatcher = regex.matcher(result);
 			}
 			return result;
 		} catch (Exception ex) {
 			return null;
 		}
-
 	}
-
 	public static String colorParser(String toParse) {
 		return colorParser(toParse, "&");
 	}

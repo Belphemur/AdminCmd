@@ -91,7 +91,8 @@ public class PlayerList extends ACCommands {
 					if (prefixstring != null && prefixstring.length() > 1) {
 						String result = Utils.colorParser(prefixstring);
 						if (result == null)
-							buffer += prefixstring + online[i].getDisplayName() + ChatColor.WHITE + ", ";
+							buffer += prefixstring + online[i].getDisplayName() + ChatColor.WHITE
+									+ ", ";
 						else
 							buffer += result + online[i].getDisplayName() + ChatColor.WHITE + ", ";
 
@@ -106,8 +107,12 @@ public class PlayerList extends ACCommands {
 			}
 
 		}
-		if (buffer != "")
+		if (!buffer.equals("")) {
+			if (buffer.endsWith(", "))
+				buffer = buffer.substring(0, buffer.lastIndexOf(","));
 			sender.sendMessage(buffer);
+		}
+
 	}
 
 	/*
