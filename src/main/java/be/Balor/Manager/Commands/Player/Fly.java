@@ -50,7 +50,7 @@ public class Fly extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player player = null;
-		float power = 10.0F;
+		float power = 1.75F;
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
