@@ -76,9 +76,9 @@ public class ACPlayerListener extends PlayerListener {
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
 			else if (ACHelper.getInstance().getConf().getBoolean("glideWhenFallingInFlyMode", true)) {
 				Vector vel = p.getVelocity();
-				vel.add(p.getLocation().getDirection().multiply(0.3).setY(0));
-				if (vel.getY() < -0.3) {
-					vel.setY(-0.3);
+				vel.add(p.getLocation().getDirection().multiply(0.3F).setY(0));
+				if (vel.getY() < -0.3F) {
+					vel.setY(-0.5F);
 					p.setVelocity(vel);
 				}
 			}
