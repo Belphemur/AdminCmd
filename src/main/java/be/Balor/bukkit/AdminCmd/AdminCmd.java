@@ -178,12 +178,14 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("invisibleDisabled", ChatColor.GREEN + "You are now Visible");
 		Utils.addLocale("invisibleDisabledTarget", ChatColor.DARK_AQUA
 				+ "INVISIBLE mode disabled for %player");
-		Utils.addLocale("errorMultiHome", ChatColor.DARK_GREEN + "Home "+ChatColor.RED+"%home" + ChatColor.WHITE
-				+ " not set.");
+		Utils.addLocale("errorMultiHome", ChatColor.DARK_GREEN + "Home " + ChatColor.RED + "%home"
+				+ ChatColor.WHITE + " not set.");
 		Utils.addLocale("multiHome", ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
-				+ " to your home "+ChatColor.DARK_AQUA+"%home.");
-		Utils.addLocale("setMultiHome", ChatColor.DARK_GREEN + "Home "+ChatColor.DARK_AQUA+"%home" + ChatColor.WHITE + " set.");
-		Utils.addLocale("rmHome", ChatColor.RED + "Home %home" + ChatColor.WHITE + " removed.");
+				+ " to your home " + ChatColor.DARK_AQUA + "%home.");
+		Utils.addLocale("setMultiHome", ChatColor.DARK_GREEN + "Home " + ChatColor.DARK_AQUA
+				+ "%home" + ChatColor.WHITE + " set.");
+		Utils.addLocale("rmHome", ChatColor.RED + "Home " + ChatColor.DARK_AQUA + "%home"
+				+ ChatColor.WHITE + " removed.");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
