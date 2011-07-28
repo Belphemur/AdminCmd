@@ -162,6 +162,10 @@ commands:
     description: Set your home.
     aliases: [sethome,sh]
     usage: /<command> [homeName]
+  bal_homelist:
+    description: List your homes.
+    aliases: [listhomes,lh]
+    usage: /<command> 
   bal_rmhome:
     description: remove a home.
     aliases: [rmhome,rh]
