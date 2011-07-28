@@ -582,20 +582,21 @@ public class ACHelper {
 		}
 		return false;
 	}
-	public void addPowerUserWithFile(String power ,String user, String reason)
-	{
+
+	public void addPowerUserWithFile(String power, String user, String reason) {
 		addPowerUser(power, user, reason);
 		Configuration ban = fManager.getYml(power);
-		ban.setProperty(power+"."+user, reason);
+		ban.setProperty(power + "." + user, reason);
 		ban.save();
 	}
-	public void removePowerUserWithFile(String power ,String user)
-	{
+
+	public void removePowerUserWithFile(String power, String user) {
 		removePowerUser(power, user);
 		Configuration ban = fManager.getYml(power);
-		ban.removeProperty(power+"."+user);
+		ban.removeProperty(power + "." + user);
 		ban.save();
 	}
+
 	public synchronized void loadInfos() {
 		blacklist = getBlackListedItems();
 		alias.putAll(fManager.getAlias());
