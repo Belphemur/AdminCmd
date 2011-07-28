@@ -20,14 +20,13 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class SetHome extends ACCommands {
 
@@ -39,25 +38,32 @@ public class SetHome extends ACCommands {
 		cmdName = "bal_sethome";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
 			Location loc = ((Player) sender).getLocation();
-			ACHelper.getInstance().addLocation("home", ((Player)sender).getName(),loc.getWorld().getName(), ((Player)sender).getName(), loc);
-			Utils.sI18n(sender, "setHome");
+			ACHelper.getInstance().addLocation("home", ((Player) sender).getName() + "." + args[0],
+					args[0], ((Player) sender).getName(), loc);
+			Utils.sI18n(sender, "setMultiHome", "home", args[0]);
 		}
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		return args != null && args.length >= 1;
 	}
 
 }

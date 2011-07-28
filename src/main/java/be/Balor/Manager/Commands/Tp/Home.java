@@ -20,7 +20,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -46,13 +45,17 @@ public class Home extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
-			Location loc = ACHelper.getInstance().getLocation("home", ((Player) sender).getName(),
-					player.getWorld().getName(), player.getName());
+			String home = player.getWorld().getName();
+			if (args.length >= 1)
+				home = args[0];
+			Location loc = ACHelper.getInstance().getLocation("home",
+					player.getName() + "." + home, home,
+					player.getName());
 			if (loc == null)
-				Utils.sI18n(sender, "errorHome");
+				Utils.sI18n(sender, "errorMultiHome", "home", home);
 			else {
 				player.teleport(loc);
-				Utils.sI18n(sender, "home");
+				Utils.sI18n(sender, "multiHome", "home", home);
 			}
 		}
 	}
@@ -64,7 +67,7 @@ public class Home extends ACCommands {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		return args != null;
 	}
 
 }

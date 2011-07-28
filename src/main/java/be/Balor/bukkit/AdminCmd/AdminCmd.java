@@ -176,11 +176,11 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("invisibleDisabled", ChatColor.GREEN + "You are now Visible");
 		Utils.addLocale("invisibleDisabledTarget", ChatColor.DARK_AQUA
 				+ "INVISIBLE mode disabled for %player");
-		Utils.addLocale("errorHome", ChatColor.DARK_GREEN + "Home" + ChatColor.WHITE
-				+ " not set for this world.");
-		Utils.addLocale("home", ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
-				+ " to your home.");
-		Utils.addLocale("setHome", ChatColor.DARK_GREEN + "Home" + ChatColor.WHITE + " set.");
+		Utils.addLocale("errorMutliHome", ChatColor.DARK_GREEN + "Home %home" + ChatColor.WHITE
+				+ " not set.");
+		Utils.addLocale("mutliHome", ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
+				+ " to your home "+ChatColor.DARK_AQUA+"%home.");
+		Utils.addLocale("setMultiHome", ChatColor.DARK_GREEN + "Home %home" + ChatColor.WHITE + " set.");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
@@ -213,18 +213,18 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("killMob", ChatColor.RED + "Killing mobs (" + ChatColor.WHITE + "%type"
 				+ ChatColor.RED + ") of worlds : " + ChatColor.DARK_PURPLE + "%worlds");
 		Utils.addLocale("killedMobs", "%nbKilled" + ChatColor.DARK_RED + " mobs have been killed.");
-		Utils.addLocale("jumperDisabled", ChatColor.GOLD + "Jumper mode disabled.");
-		Utils.addLocale("jumperDisabledTarget", ChatColor.GOLD
-				+ "Jumper mode disabled for %player");
-		Utils.addLocale("jumperEnabled", ChatColor.GOLD + "Jumper mode enabled.");
-		Utils.addLocale("jumperEnabledTarget", ChatColor.GOLD
-				+ "Jumper mode enabled for %player");
+		/*
+		 * Utils.addLocale("jumperDisabled", ChatColor.GOLD +
+		 * "Jumper mode disabled."); Utils.addLocale("jumperDisabledTarget",
+		 * ChatColor.GOLD + "Jumper mode disabled for %player");
+		 * Utils.addLocale("jumperEnabled", ChatColor.GOLD +
+		 * "Jumper mode enabled."); Utils.addLocale("jumperEnabledTarget",
+		 * ChatColor.GOLD + "Jumper mode enabled for %player");
+		 */
 		Utils.addLocale("flyDisabled", ChatColor.GOLD + "FLY mode disabled.");
-		Utils.addLocale("flyDisabledTarget", ChatColor.GOLD
-				+ "FLY mode disabled for %player");
+		Utils.addLocale("flyDisabledTarget", ChatColor.GOLD + "FLY mode disabled for %player");
 		Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");
-		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD
-				+ "FLY mode enabled for %player");
+		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD + "FLY mode enabled for %player");
 
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
