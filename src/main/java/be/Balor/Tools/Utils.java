@@ -32,7 +32,6 @@ import be.Balor.Manager.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -52,10 +51,11 @@ public class Utils {
 		else {
 			info[0] = mat;
 			info[1] = "0";
+			if ((mc = ACHelper.getInstance().getAlias(info[0])) == null) {
+				mc = new MaterialContainer(info[0], info[1]);
+			}
 		}
-		if ((mc = ACHelper.getInstance().getAlias(info[0])) == null) {
-			mc = new MaterialContainer(info[0], info[1]);
-		}
+
 		return mc;
 
 	}
@@ -90,6 +90,7 @@ public class Utils {
 			return null;
 		}
 	}
+
 	public static String colorParser(String toParse) {
 		return colorParser(toParse, "&");
 	}
