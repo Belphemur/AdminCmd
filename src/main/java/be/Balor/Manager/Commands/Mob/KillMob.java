@@ -42,7 +42,7 @@ public class KillMob extends ACCommands {
 	 */
 	public KillMob() {
 		permNode = "admincmd.mob.kill";
-		cmdName = "bal_mob";
+		cmdName = "bal_killmob";
 	}
 
 	/*

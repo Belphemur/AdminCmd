@@ -190,3 +190,7 @@ commands:
     description: unban the player.
     aliases: [unban,ub]
     usage: /<command> playerName
+  bal_killmob:
+    description: Kill the mob.
+    aliases: [mobkill,mk]
+    usage: /<command> <all || animals || monsters || mobname>

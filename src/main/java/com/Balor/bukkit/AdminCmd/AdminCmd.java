@@ -105,6 +105,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Ip.class);
 		CommandManager.getInstance().registerCommand(BanPlayer.class);
 		CommandManager.getInstance().registerCommand(UnBan.class);
+		CommandManager.getInstance().registerCommand(KillMob.class);
 
 	}
 
