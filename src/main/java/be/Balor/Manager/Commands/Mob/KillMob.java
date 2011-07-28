@@ -195,7 +195,7 @@ public class KillMob extends ACCommands {
 				continue;
 			}
 		}
-		Utils.sI18n(sender, "killedMobs", "nbkilled", String.valueOf(mobKilled));
+		Utils.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
 	}
 
 }
