@@ -21,7 +21,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -50,7 +49,7 @@ public class BanPlayer extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player toBan = sender.getServer().getPlayer(args[0]);
-		HashMap<String, String> replace = new HashMap<String, String>();		
+		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
@@ -63,16 +62,13 @@ public class BanPlayer extends ACCommands {
 				message += ((Player) sender).getName();
 		}
 		message = message.trim();
-		if (toBan != null)
-		{
+		if (toBan != null) {
 			replace.put("player", toBan.getName());
 			ACHelper.getInstance().addPowerUserWithFile("banned", toBan.getName(), message);
 			toBan.kickPlayer(message);
 			toBan.getServer().broadcastMessage(Utils.I18n("ban", replace));
-		}
-		else
-			Utils.sI18n(sender, "playerNotFound", replace);
-		
+		} else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 
 	}
 
