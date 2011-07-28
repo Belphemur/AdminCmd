@@ -107,7 +107,8 @@ public class ACPlayerListener extends PlayerListener {
 				Utils.sI18n(event.getPlayer(), "changedWorld");
 			}
 				
-		}
+		}else
+			playerRespawnOrJoin(event.getPlayer());
 	}
 
 	@Override
