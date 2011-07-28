@@ -74,8 +74,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (power != null)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else {
-				p.setFallDistance(2.9F);
+			else {				
 				Vector vel = p.getVelocity();
 				vel.add(p.getLocation().getDirection().multiply(0.3).setY(0));
 				if (vel.getY() < -0.3) {

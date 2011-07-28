@@ -68,11 +68,13 @@ public class Fly extends ACCommands {
 			replace.put("player", player.getName());
 			if (ACHelper.getInstance().isPowerUser("fly", player.getName())) {
 				ACHelper.getInstance().removePowerUser("fly", player);
+				player.setFallDistance(0.0F);
 				Utils.sI18n(player, "flyDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
 				ACHelper.getInstance().addPowerUser("fly", player, power);
+				player.setFallDistance(2.9F);
 				Utils.sI18n(player, "flyEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyEnabledTarget", replace);

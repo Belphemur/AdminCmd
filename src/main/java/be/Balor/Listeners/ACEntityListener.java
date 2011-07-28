@@ -38,11 +38,17 @@ public class ACEntityListener extends org.bukkit.event.entity.EntityListener {
 
 	@Override
 	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.isCancelled())
+			return;
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-
-		if (worker.hasGodPowers(player.getName())) {
+		if (worker.isPowerUser("fly", player)
+				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+			event.setCancelled(true);
+			event.setDamage(0);
+			return;
+		} else if (worker.hasGodPowers(player.getName())) {
 			if (event.getCause().equals(DamageCause.FIRE)
 					|| event.getCause().equals(DamageCause.FIRE_TICK))
 				player.setFireTicks(0);
