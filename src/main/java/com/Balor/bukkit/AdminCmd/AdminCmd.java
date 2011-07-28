@@ -209,7 +209,9 @@ public class AdminCmd extends JavaPlugin {
 				+ "%player - %ip");
 		Utils.addLocale("ban", ChatColor.YELLOW + "%player has been banned.");
 		Utils.addLocale("unban", ChatColor.YELLOW + "%player is now unbanned.");
-		
+		Utils.addLocale("killMob", ChatColor.RED + "Killing mobs (" + ChatColor.WHITE + "%type"
+				+ ChatColor.RED + ") of worlds : " + ChatColor.DARK_PURPLE + "%worlds");
+
 		LocaleManager.getInstance().save();
 		LocaleManager.getInstance().load();
 	}

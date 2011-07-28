@@ -17,6 +17,7 @@
 package be.Balor.Manager.Commands.Mob;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,30 +54,51 @@ public class KillMob extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-
-		List<LivingEntity> mobs = new ArrayList<LivingEntity>();
-
+		final List<LivingEntity> mobs = new ArrayList<LivingEntity>();
+		HashMap<String, String> replace = new HashMap<String, String>();		
 		String type = "all";
 		if (args.length >= 1)
 			type = args[0];
+		replace.put("type", type);
+
 		if (Utils.isPlayer(sender, false)) {
 			mobs.addAll(((Player) sender).getWorld().getLivingEntities());
-			Utils.sI18n(sender, "killMob", "worlds", ((Player) sender).getWorld().getName());
-		}
-		else
-		{
-			String worlds ="";
-			for(World w : sender.getServer().getWorlds())
-			{
+			replace.put("worlds", ((Player) sender).getWorld().getName());
+			Utils.sI18n(sender, "killMob", replace);
+		} else {
+			String worlds = "";
+			for (World w : sender.getServer().getWorlds()) {
 				mobs.addAll(w.getLivingEntities());
-				worlds+=w.getName()+", ";
+				worlds += w.getName() + ", ";
 			}
 			if (!worlds.equals("")) {
 				if (worlds.endsWith(", "))
 					worlds = worlds.substring(0, worlds.lastIndexOf(","));
-				Utils.sI18n(sender, "killMob", "worlds", worlds);
+				replace.put("worlds", worlds);
+				Utils.sI18n(sender, "killMob", replace);
 			}
 		}
+		final String finalType = type;
+		pluginCommand.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(pluginCommand.getPlugin(), new Runnable() {
+			
+			public void run() {
+				killMobs(mobs, finalType);				
+			}
+		});
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 */
+	@Override
+	public boolean argsCheck(String... args) {
+		return args != null;
+	}
+	private void killMobs(List<LivingEntity> mobs, String type)
+	{
 		for (Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
 			LivingEntity m = (LivingEntity) iterator.next();
 			if (type.equalsIgnoreCase("all") && (MobCheck.isAnimal(m) || MobCheck.isMonster(m))) {
@@ -152,17 +174,6 @@ public class KillMob extends ACCommands {
 				continue;
 			}
 		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null;
 	}
 
 }
