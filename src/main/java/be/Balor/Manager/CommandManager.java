@@ -23,7 +23,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -32,6 +32,7 @@ import org.bukkit.command.CommandSender;
 public class CommandManager implements CommandExecutor {
 	private HashMap<Command, ACCommands> commands = new HashMap<Command, ACCommands>();
 	private static CommandManager instance = null;
+	private JavaPlugin plugin;
 
 	/**
 	 * @return the instance
@@ -40,6 +41,12 @@ public class CommandManager implements CommandExecutor {
 		if (instance == null)
 			instance = new CommandManager();
 		return instance;
+	}
+	/**
+	 * @param plugin the plugin to set
+	 */
+	public void setPlugin(JavaPlugin plugin) {
+		this.plugin = plugin;
 	}
 
 	/**
@@ -50,7 +57,7 @@ public class CommandManager implements CommandExecutor {
 	public void registerCommand(Class<?> clazz) {
 		try {
 			ACCommands command = (ACCommands) clazz.newInstance();
-			command.initializeCommand();
+			command.initializeCommand(plugin);
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
 			commands.put(command.getPluginCommand(), command);

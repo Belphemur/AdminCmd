@@ -228,6 +228,7 @@ public class AdminCmd extends JavaPlugin {
 		worker.setPluginInstance(this);
 		setEnglishLocale();
 		registerPermParents();
+		CommandManager.getInstance().setPlugin(this);
 		registerCmds();
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
 		PermissionManager.getInstance().registerAllPermParent();
