@@ -55,10 +55,9 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		if (ACHelper.getInstance().isPowerUser("ban", event.getPlayer().getName()))
-			event.disallow(
-					Result.KICK_BANNED,
-					ACHelper.getInstance().getPowerOfPowerUser("ban",
-							event.getPlayer().getName()).toString());
+			event.disallow(Result.KICK_BANNED,
+					ACHelper.getInstance().getPowerOfPowerUser("ban", event.getPlayer().getName())
+							.toString());
 	}
 
 	@Override
@@ -102,12 +101,13 @@ public class ACPlayerListener extends PlayerListener {
 		String playername = event.getPlayer().getName();
 		if (ACHelper.getInstance().getConf().getBoolean("resetPowerWhenTpAnotherWorld", true)
 				&& !from.getWorld().equals(to.getWorld())) {
-			if (ACHelper.getInstance().removePlayerFromAllPowerUser(playername) || InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
+			if (ACHelper.getInstance().removePlayerFromAllPowerUser(playername)
+					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());
 				Utils.sI18n(event.getPlayer(), "changedWorld");
 			}
-				
-		}else
+
+		} else
 			playerRespawnOrJoin(event.getPlayer());
 	}
 
