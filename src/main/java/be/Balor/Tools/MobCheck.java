@@ -1,7 +1,7 @@
 /************************************************************************
  * This file is part of SpawnMob.																								
  ************************************************************************/
-package com.Balor.Tools;
+package be.Balor.Tools;
 
 import org.bukkit.entity.*;
 import org.bukkit.entity.LivingEntity;

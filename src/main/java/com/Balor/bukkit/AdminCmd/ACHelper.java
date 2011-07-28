@@ -21,12 +21,12 @@ import org.bukkit.util.config.Configuration;
 import be.Balor.Manager.ConfigurationManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
+import be.Balor.Tools.FilesManager;
+import be.Balor.Tools.MaterialContainer;
+import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.Balor.Tools.FilesManager;
-import com.Balor.Tools.MaterialContainer;
-import com.Balor.Tools.Utils;
 import com.google.common.collect.MapMaker;
 
 /**

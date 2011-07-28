@@ -27,10 +27,10 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.Balor.Tools.MobCheck;
-import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.MobCheck;
+import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)

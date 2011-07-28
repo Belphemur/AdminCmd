@@ -29,12 +29,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import be.Balor.Tools.ShootFireBall;
+import be.Balor.Tools.UpdateInvisible;
+import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.Balor.Tools.ShootFireBall;
-import com.Balor.Tools.UpdateInvisible;
-import com.Balor.Tools.Utils;
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.Balor.bukkit.AdminCmd.ACHelper;
 

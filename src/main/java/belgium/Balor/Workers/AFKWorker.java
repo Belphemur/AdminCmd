@@ -20,7 +20,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
 
-import com.Balor.Tools.Utils;
+import be.Balor.Tools.Utils;
+
 import com.google.common.collect.MapMaker;
 
 /**

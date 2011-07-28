@@ -20,9 +20,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.Tools.Utils;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)

@@ -22,11 +22,11 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.Balor.Tools.Utils;
 import com.Balor.bukkit.AdminCmd.ACHelper;
 
 import be.Balor.Manager.ACCommands;
-import static com.Balor.Tools.Utils.sendMessage;
+import be.Balor.Tools.Utils;
+import static be.Balor.Tools.Utils.sendMessage;
 
 /**
  * @author Balor (aka Antoine Aflalo)

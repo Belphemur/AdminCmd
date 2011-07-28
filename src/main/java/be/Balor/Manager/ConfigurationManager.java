@@ -18,7 +18,7 @@ package be.Balor.Manager;
 
 import org.bukkit.util.config.Configuration;
 
-import com.Balor.Tools.FilesManager;
+import be.Balor.Tools.FilesManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)

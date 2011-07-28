@@ -25,7 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import com.Balor.Tools.Utils;
+import be.Balor.Tools.Utils;
+
 import com.Balor.bukkit.AdminCmd.AdminCmd;
 import com.nijiko.permissions.PermissionHandler;
 
