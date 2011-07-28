@@ -102,6 +102,7 @@ public class ACHelper {
 		pluginConfig.addProperty("invisibleRangeInBlock", 512);
 		pluginConfig.addProperty("autoAfk", true);
 		pluginConfig.addProperty("afkTimeInSecond", 60);
+		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
 		pluginConfig.save();
 		if (getConf().getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(getConf().getInt("afkTimeInSecond", 60));
