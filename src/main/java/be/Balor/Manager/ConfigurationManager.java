@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.io.File;
+
 import org.bukkit.util.config.Configuration;
 
 import be.Balor.Tools.FilesManager;
@@ -24,37 +26,18 @@ import be.Balor.Tools.FilesManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ConfigurationManager {
-	private Configuration conf;
-
+public class ConfigurationManager extends Configuration{
 	/**
 	 * 
 	 */
-	public ConfigurationManager(Configuration conf) {
-		this.conf = conf;
-		conf.load();
-	}
 
-	public ConfigurationManager(String path) {
-		this.conf = FilesManager.getInstance().getYml(path);
-		conf.load();
+	public ConfigurationManager(File file) {
+		super(file);
+		load();
 	}
 	public ConfigurationManager(String fileName, String directory) {
-		this.conf = FilesManager.getInstance().getYml(fileName, directory);
-		conf.load();
-	}
-	/**
-	 * Load the config
-	 */
-	public void load() {
-		conf.load();
-	}
-
-	/**
-	 * Save the config
-	 */
-	public void save() {
-		conf.save();
+		super(FilesManager.getInstance().getFile(fileName, directory));
+		load();
 	}
 
 	/**
@@ -66,9 +49,9 @@ public class ConfigurationManager {
 	 * @return if the property was correctly set.
 	 */
 	public boolean addProperty(String path, Object toAdd, boolean override) {
-		Object property = conf.getProperty(path);
+		Object property = this.getProperty(path);
 		if (property == null || override) {
-			conf.setProperty(path, toAdd);
+			this.setProperty(path, toAdd);
 			return true;
 		}
 		return false;
@@ -77,12 +60,5 @@ public class ConfigurationManager {
 
 	public boolean addProperty(String path, Object toAdd) {
 		return addProperty(path, toAdd, false);
-	}
-
-	/**
-	 * @return the conf
-	 */
-	public final Configuration getConf() {
-		return conf;
 	}
 }

@@ -59,8 +59,8 @@ public class LocaleManager {
 	 * Load the locale from the file
 	 */
 	public void load() {
-		for (String key : localeFile.getConf().getKeys())
-			locales.put(key, localeFile.getConf().getString(key));
+		for (String key : localeFile.getKeys())
+			locales.put(key, localeFile.getString(key));
 	}
 
 	/**

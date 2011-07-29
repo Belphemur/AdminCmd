@@ -1,5 +1,6 @@
 package be.Balor.bukkit.AdminCmd;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +95,8 @@ public class ACHelper {
 		this.pluginInstance = pluginInstance;
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
-		pluginConfig = new ConfigurationManager(pluginInstance.getConfiguration());
+		pluginConfig = new ConfigurationManager(new File(pluginInstance.getDataFolder().getPath(),
+				"config.yml"));
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");
@@ -104,34 +106,31 @@ public class ACHelper {
 		pluginConfig.addProperty("afkTimeInSecond", 60);
 		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
 		pluginConfig.save();
-		if (getConf().getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(getConf().getInt("afkTimeInSecond", 60));
+		if (pluginConfig.getBoolean("autoAfk", true)) {
+			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			this.pluginInstance
 					.getServer()
 					.getScheduler()
 					.scheduleAsyncRepeatingTask(this.pluginInstance, AFKWorker.getInstance(),
-							(getConf().getInt("statutCheckInSec", 20) / 2) * 20,
-							getConf().getInt("statutCheckInSec", 20) * 20);
+							(pluginConfig.getInt("statutCheckInSec", 20) / 2) * 20,
+							pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
-		InvisibleWorker.getInstance().setMaxRange(
-				pluginConfig.getConf().getInt("invisibleRangeInBlock", 512));
-		InvisibleWorker.getInstance().setTickCheck(
-				pluginConfig.getConf().getInt("statutCheckInSec", 20));
-		LocaleManager.getInstance().setLocaleFile(
-				pluginConfig.getConf().getString("locale", "en_US"));
-		LocaleManager.getInstance().setNoMsg(pluginConfig.getConf().getBoolean("noMessage", false));
+		InvisibleWorker.getInstance()
+				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
+		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
+		LocaleManager.getInstance().setLocaleFile(pluginConfig.getString("locale", "en_US"));
+		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		LocaleManager.getInstance().load();
 	}
 
 	/**
-	 * @return the pluginConfig
+	 * get the value of the path in the config
+	 * 
+	 * @param path
+	 * @return
 	 */
-	public ConfigurationManager getPluginConfig() {
-		return pluginConfig;
-	}
-
-	public final Configuration getConf() {
-		return pluginConfig.getConf();
+	public Object getConfValue(String path) {
+		return pluginConfig.getProperty(path);
 	}
 
 	/**

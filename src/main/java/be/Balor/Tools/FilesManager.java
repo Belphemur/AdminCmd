@@ -92,7 +92,7 @@ public class FilesManager {
 	 * @param filename
 	 * @return the configuration file
 	 */
-	private File getFile(String directory, String filename) {
+	public File getFile(String directory, String filename) {
 		return getFile(directory, filename, true);
 	}
 

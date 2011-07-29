@@ -63,7 +63,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (ACHelper.getInstance().getConf().getBoolean("autoAfk", true)) {
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
 			Player p = event.getPlayer();
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
@@ -74,7 +74,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (power != null)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else if (ACHelper.getInstance().getConf().getBoolean("glideWhenFallingInFlyMode", true)) {
+			else if ((Boolean) ACHelper.getInstance().getConfValue("glideWhenFallingInFlyMode")) {
 				Vector vel = p.getVelocity();
 				vel.add(p.getLocation().getDirection().multiply(0.3F).setY(0));
 				if (vel.getY() < -0.3F) {
@@ -97,7 +97,7 @@ public class ACPlayerListener extends PlayerListener {
 		Player p = event.getPlayer();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
-		if (ACHelper.getInstance().getConf().getBoolean("autoAfk", true)) {
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
 		}
 	}
@@ -113,7 +113,7 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
-		if (ACHelper.getInstance().getConf().getBoolean("resetPowerWhenTpAnotherWorld", true)
+		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
 				&& !from.getWorld().equals(to.getWorld())) {
 			if (ACHelper.getInstance().removePlayerFromAllPowerUser(playername)
 					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
