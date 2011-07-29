@@ -446,16 +446,13 @@ public class ACHelper {
 				&& usersWithPowers.get(powerName).containsKey(user);
 	}
 
-	public Object getPowerOfPowerUser(String powerName, Object user) {
-		String player = null;
-		if (user instanceof String)
-			player = (String) user;
-		else if (user instanceof Player)
-			player = ((Player) user).getName();
-		if (player != null && isPowerUser(powerName, player))
+	public Object getPowerOfPowerUser(String powerName, String user) {
+		if (user != null && isPowerUser(powerName, user))
 			return usersWithPowers.get(powerName).get(user);
 		return null;
-
+	}
+	public Object getPowerOfPowerUser(String powerName, Player user) {
+		return getPowerOfPowerUser(powerName, user.getName());
 	}
 
 	public List<Player> getAllPowerUserOf(String power) {
@@ -475,10 +472,8 @@ public class ACHelper {
 	public boolean removePlayerFromAllPowerUser(String player) {
 		boolean found = false;
 		for (String type : usersWithPowers.keySet()) {
-			if (usersWithPowers.get(type).containsKey(player)) {
+			if (usersWithPowers.get(type).remove(player) != null) 
 				found = true;
-				usersWithPowers.get(type).remove(player);
-			}
 		}
 		return found;
 	}
