@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -54,13 +55,13 @@ public class God extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser("god", player.getName())) {
-				ACHelper.getInstance().removePowerUser("god", player);
+			if (ACHelper.getInstance().isPowerUser(Powers.GOD, player.getName())) {
+				ACHelper.getInstance().removePowerUser(Powers.GOD, player);
 				Utils.sI18n(player, "godDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "godDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addPowerUser("god", player);
+				ACHelper.getInstance().addPowerUser(Powers.GOD, player);
 				Utils.sI18n(player, "godEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "godEnabledTarget", replace);

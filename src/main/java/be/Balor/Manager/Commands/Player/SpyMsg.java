@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -48,11 +49,11 @@ public class SpyMsg extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
-			if (ACHelper.getInstance().isPowerUser("spymsg", (Player) sender)) {
-				ACHelper.getInstance().removePowerUser("spymsg", (Player) sender);
+			if (ACHelper.getInstance().isPowerUser(Powers.SPYMSG, (Player) sender)) {
+				ACHelper.getInstance().removePowerUser(Powers.SPYMSG, (Player) sender);
 				Utils.sI18n(sender, "spymsgDisabled");
 			} else {
-				ACHelper.getInstance().addPowerUser("spymsg", (Player) sender);
+				ACHelper.getInstance().addPowerUser(Powers.SPYMSG, (Player) sender);
 				Utils.sI18n(sender, "spymsgEnabled");
 			}
 

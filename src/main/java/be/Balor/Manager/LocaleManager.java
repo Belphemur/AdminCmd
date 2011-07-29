@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -75,6 +74,13 @@ public class LocaleManager {
 		return get(key, null);
 	}
 
+	/**
+	 * Get the locale, replace the keyword by the given strings
+	 * 
+	 * @param key
+	 * @param values
+	 * @return
+	 */
 	public String get(String key, Map<String, String> values) {
 		if (noMsg)
 			return null;
@@ -82,6 +88,15 @@ public class LocaleManager {
 		if (locale != null && values != null)
 			for (String toReplace : values.keySet())
 				locale = locale.replaceAll("%" + toReplace, values.get(toReplace));
+		return locale;
+	}
+
+	public String get(String key, String alias, String replaceBy) {
+		if (noMsg)
+			return null;
+		String locale = localeFile.getString(key);
+		if (locale != null && alias != null)
+			locale = locale.replaceAll("%" + alias, replaceBy);
 		return locale;
 	}
 }

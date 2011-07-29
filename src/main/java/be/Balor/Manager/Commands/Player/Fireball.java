@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -63,13 +64,13 @@ public class Fireball extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser("fireball", player.getName())) {
-				ACHelper.getInstance().removePowerUser("fireball", player);
+			if (ACHelper.getInstance().isPowerUser(Powers.FIREBALL, player.getName())) {
+				ACHelper.getInstance().removePowerUser(Powers.FIREBALL, player);
 				Utils.sI18n(player, "fireballDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fireballDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addPowerUser("fireball", player, power);
+				ACHelper.getInstance().addPowerUser(Powers.FIREBALL, player, power);
 				Utils.sI18n(player, "fireballEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fireballEnabledTarget", replace);

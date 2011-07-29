@@ -24,6 +24,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -42,7 +43,7 @@ public class ACHelper {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	ConcurrentMap<String, ConcurrentMap<String, Object>> usersWithPowers = new MapMaker().makeMap();
+	ConcurrentMap<Powers, ConcurrentMap<String, Object>> usersWithPowers = new MapMaker().makeMap();
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
@@ -398,14 +399,14 @@ public class ACHelper {
 	}
 
 	public void addVulcain(String playerName, float power) {
-		addPowerUser("vulcan", playerName, power);
+		addPowerUser(Powers.VULCAN, playerName, power);
 	}
 
 	public void removeVulcan(String playerName) {
-		removePowerUser("vulcan", playerName);
+		removePowerUser(Powers.VULCAN, playerName);
 	}
 
-	public void addPowerUser(String powerName, String user, Object power) {
+	public void addPowerUser(Powers powerName, String user, Object power) {
 		if (usersWithPowers.containsKey(powerName))
 			usersWithPowers.get(powerName).put(user, power);
 		else {
@@ -416,19 +417,19 @@ public class ACHelper {
 
 	}
 
-	public void addPowerUser(String powerName, Player user, Object power) {
+	public void addPowerUser(Powers powerName, Player user, Object power) {
 		addPowerUser(powerName, user.getName(), power);
 	}
 
-	public void addPowerUser(String powerName, Player user) {
+	public void addPowerUser(Powers powerName, Player user) {
 		addPowerUser(powerName, user.getName(), 0);
 	}
 
-	public void addPowerUser(String powerName, String user) {
+	public void addPowerUser(Powers powerName, String user) {
 		addPowerUser(powerName, user, 0);
 	}
 
-	public void removePowerUser(String powerName, String user) {
+	public void removePowerUser(Powers powerName, String user) {
 		if (usersWithPowers.containsKey(powerName)) {
 			usersWithPowers.get(powerName).remove(user);
 			if (usersWithPowers.get(powerName).isEmpty())
@@ -436,21 +437,21 @@ public class ACHelper {
 		}
 	}
 
-	public void removePowerUser(String powerName, Player user) {
+	public void removePowerUser(Powers powerName, Player user) {
 		removePowerUser(powerName, user.getName());
 	}
 
-	public boolean isPowerUser(String powerName, String user) {
+	public boolean isPowerUser(Powers powerName, String user) {
 		return usersWithPowers.containsKey(powerName)
 				&& usersWithPowers.get(powerName).containsKey(user);
 	}
 
-	public Object getPowerOfPowerUser(String powerName, String user) {
+	public Object getPowerOfPowerUser(Powers powerName, String user) {
 		if (user != null && isPowerUser(powerName, user))
 			return usersWithPowers.get(powerName).get(user);
 		return null;
 	}
-	public Object getPowerOfPowerUser(String powerName, Player user) {
+	public Object getPowerOfPowerUser(Powers powerName, Player user) {
 		return getPowerOfPowerUser(powerName, user.getName());
 	}
 
@@ -470,35 +471,35 @@ public class ACHelper {
 	 */
 	public boolean removePlayerFromAllPowerUser(String player) {
 		boolean found = false;
-		for (String type : usersWithPowers.keySet()) {
+		for (Powers type : usersWithPowers.keySet()) {
 			if (usersWithPowers.get(type).remove(player) != null) 
 				found = true;
 		}
 		return found;
 	}
 
-	public boolean isPowerUser(String powerName, Player user) {
+	public boolean isPowerUser(Powers powerName, Player user) {
 		return isPowerUser(powerName, user.getName());
 	}
 
 	public void addThor(String playerName) {
-		addPowerUser("thor", playerName);
+		addPowerUser(Powers.THOR, playerName);
 	}
 
 	public void removeThor(String playerName) {
-		removePowerUser("thor", playerName);
+		removePowerUser(Powers.THOR, playerName);
 	}
 
 	public boolean hasThorPowers(String player) {
-		return isPowerUser("thor", player);
+		return isPowerUser(Powers.THOR, player);
 	}
 
 	public boolean hasGodPowers(String player) {
-		return isPowerUser("god", player);
+		return isPowerUser(Powers.GOD, player);
 	}
 
 	public Float getVulcainExplosionPower(String player) {
-		return (Float) getPowerOfPowerUser("vulcan", player);
+		return (Float) getPowerOfPowerUser(Powers.VULCAN, player);
 	}
 
 	public boolean alias(CommandSender sender, String[] args) {
@@ -583,16 +584,16 @@ public class ACHelper {
 		return false;
 	}
 
-	public void addPowerUserWithFile(String power, String user, String reason) {
+	public void addPowerUserWithFile(Powers power, String user, String reason) {
 		addPowerUser(power, user, reason);
-		Configuration ban = fManager.getYml(power);
+		Configuration ban = fManager.getYml(power.toString());
 		ban.setProperty(power + "." + user, reason);
 		ban.save();
 	}
 
-	public void removePowerUserWithFile(String power, String user) {
+	public void removePowerUserWithFile(Powers power, String user) {
 		removePowerUser(power, user);
-		Configuration ban = fManager.getYml(power);
+		Configuration ban = fManager.getYml(power.toString());
 		ban.removeProperty(power + "." + user);
 		ban.save();
 	}
@@ -619,7 +620,7 @@ public class ACHelper {
 
 		Map<String, Object> map = fManager.loadMap("banned", null, "banned");
 		for (String key : map.keySet())
-			addPowerUser("banned", key, map.get(key));
+			addPowerUser(Powers.BANNED, key, map.get(key));
 	}
 
 	// ----- / item coloring section -----

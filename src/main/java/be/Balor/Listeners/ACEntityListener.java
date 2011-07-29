@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import be.Balor.Tools.Powers;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -43,7 +44,7 @@ public class ACEntityListener extends org.bukkit.event.entity.EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-		if (worker.isPowerUser("fly", player)
+		if (worker.isPowerUser(Powers.FLY, player)
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);

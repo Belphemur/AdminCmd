@@ -203,9 +203,9 @@ public class Utils {
 	}
 
 	public static void sI18n(CommandSender sender, String key, String alias, String toReplace) {
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put(alias, toReplace);
-		sI18n(sender, key, replace);
+		String locale = I18n(key, alias, toReplace);
+		if (locale != null && !locale.isEmpty())
+			sender.sendMessage(locale);
 	}
 
 	public static void sI18n(CommandSender sender, String key) {
@@ -217,9 +217,7 @@ public class Utils {
 	}
 
 	public static String I18n(String key, String alias, String toReplace) {
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put(alias, toReplace);
-		return I18n(key, replace);
+		return LocaleManager.getInstance().get(key, alias, toReplace);
 	}
 
 	public static String I18n(String key, Map<String, String> replace) {

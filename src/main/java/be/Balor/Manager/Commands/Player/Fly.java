@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -66,14 +67,14 @@ public class Fly extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser("fly", player.getName())) {
-				ACHelper.getInstance().removePowerUser("fly", player);
+			if (ACHelper.getInstance().isPowerUser(Powers.FLY, player.getName())) {
+				ACHelper.getInstance().removePowerUser(Powers.FLY, player);
 				player.setFallDistance(0.0F);
 				Utils.sI18n(player, "flyDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addPowerUser("fly", player, power);
+				ACHelper.getInstance().addPowerUser(Powers.FLY, player, power);
 				player.setFallDistance(2.9F);
 				Utils.sI18n(player, "flyEnabled");
 				if (!player.equals(sender))

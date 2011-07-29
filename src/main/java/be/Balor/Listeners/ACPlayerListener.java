@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.ShootFireBall;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
@@ -54,11 +55,11 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (ACHelper.getInstance().isPowerUser("banned", event.getPlayer().getName()))
+		if (ACHelper.getInstance().isPowerUser(Powers.BANNED, event.getPlayer().getName()))
 			event.disallow(
 					Result.KICK_BANNED,
 					ACHelper.getInstance()
-							.getPowerOfPowerUser("banned", event.getPlayer().getName()).toString());
+							.getPowerOfPowerUser(Powers.BANNED, event.getPlayer().getName()).toString());
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class ACPlayerListener extends PlayerListener {
 				AFKWorker.getInstance().setOnline(p);
 		}
 		Player p = event.getPlayer();
-		Float power = (Float) worker.getPowerOfPowerUser("fly", p.getName());
+		Float power = (Float) worker.getPowerOfPowerUser(Powers.FLY, p.getName());
 		if (power != null)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
@@ -137,15 +138,12 @@ public class ACPlayerListener extends PlayerListener {
 				p.getWorld()
 						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
 			power = null;
-			if ((power = (Float) worker.getPowerOfPowerUser("fireball", playerName)) != null)
+			if ((power = (Float) worker.getPowerOfPowerUser(Powers.FIREBALL, playerName)) != null)
 				worker.getPluginInstance()
 						.getServer()
 						.getScheduler()
 						.scheduleAsyncDelayedTask(worker.getPluginInstance(),
 								new ShootFireBall(p, power));
-			power = null;
-			if ((power = (Float) worker.getPowerOfPowerUser("jumper", playerName)) != null)
-				p.setVelocity(p.getLocation().getDirection().multiply(power));
 		}
 	}
 

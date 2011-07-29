@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Powers;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -43,9 +44,9 @@ public class UnBan extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		String unban = args[0];
-		if(ACHelper.getInstance().isPowerUser("banned", unban))
+		if(ACHelper.getInstance().isPowerUser(Powers.BANNED, unban))
 		{
-			ACHelper.getInstance().removePowerUserWithFile("banned", unban);
+			ACHelper.getInstance().removePowerUserWithFile(Powers.BANNED, unban);
 			sender.getServer().broadcastMessage(Utils.I18n("unban", "player", unban));
 		}
 		else
