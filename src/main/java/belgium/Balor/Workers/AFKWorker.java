@@ -124,7 +124,6 @@ final public class AFKWorker implements Runnable {
 		p.setDisplayName(playersAfk.get(p));
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
-		playerTimeStamp.remove(p);
 	}
 
 	/**
