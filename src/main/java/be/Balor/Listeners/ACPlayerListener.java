@@ -19,6 +19,7 @@ package be.Balor.Listeners;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -64,13 +65,12 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerMove(PlayerMoveEvent event) {
+		Player p = event.getPlayer();
 		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
-			Player p = event.getPlayer();
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		Player p = event.getPlayer();
 		Float power = (Float) worker.getPowerOfPowerUser(Powers.FLY, p.getName());
 		if (power != null)
 			if (p.isSneaking())
@@ -128,8 +128,13 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		Player p = event.getPlayer();
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {			
+			AFKWorker.getInstance().updateTimeStamp(p);
+			if (AFKWorker.getInstance().isAfk(p))
+				AFKWorker.getInstance().setOnline(p);
+		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			Player p = event.getPlayer();
 			String playerName = p.getName();
 			if ((worker.hasThorPowers(playerName)))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
@@ -161,7 +166,15 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		return false;
 	}
-
+	@Override
+    public void onPlayerChat(PlayerChatEvent event) {
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
+			Player p = event.getPlayer();
+			AFKWorker.getInstance().updateTimeStamp(p);
+			if (AFKWorker.getInstance().isAfk(p))
+				AFKWorker.getInstance().setOnline(p);
+		}
+	}
 	protected class UpdateInvisibleOnJoin implements Runnable {
 		Player newPlayer;
 
