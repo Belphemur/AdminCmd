@@ -105,10 +105,14 @@ public class ACHelper {
 		pluginConfig.addProperty("invisibleRangeInBlock", 512);
 		pluginConfig.addProperty("autoAfk", true);
 		pluginConfig.addProperty("afkTimeInSecond", 60);
+		pluginConfig.addProperty("autoKickAfkPlayer", false);
+		pluginConfig.addProperty("afkKickInMinutes", 3);
 		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setAutoKick(pluginConfig.getBoolean("autoKickAfkPlayer", false));
+			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 			this.pluginInstance
 					.getServer()
 					.getScheduler()

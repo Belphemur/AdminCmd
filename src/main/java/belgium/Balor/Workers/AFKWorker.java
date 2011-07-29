@@ -16,7 +16,9 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.entity.Player;
 
@@ -30,10 +32,12 @@ import com.google.common.collect.MapMaker;
  */
 final public class AFKWorker implements Runnable {
 	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().concurrencyLevel(10)
-			.softValues().makeMap();
+			.softValues().expiration(15, TimeUnit.MINUTES).makeMap();
 	private ConcurrentMap<Player, String> playersAfk = new MapMaker().concurrencyLevel(10)
-			.softValues().makeMap();
+			.makeMap();
 	private int afkTime = 60000;
+	private int kickTime = 180000;
+	private boolean autoKick = false;
 	private static AFKWorker instance;
 
 	/**
@@ -58,7 +62,24 @@ final public class AFKWorker implements Runnable {
 	 */
 	public void setAfkTime(int afkTime) {
 		if (afkTime > 0)
-			this.afkTime = afkTime*1000;
+			this.afkTime = afkTime * 1000;
+	}
+
+	/**
+	 * @param kickTime
+	 *            the kickTime to set
+	 */
+	public void setKickTime(int kickTime) {
+		if (afkTime > 0)
+			this.kickTime = kickTime * 1000 * 60;
+	}
+
+	/**
+	 * @param autoKick
+	 *            the autoKick to set
+	 */
+	public void setAutoKick(boolean autoKick) {
+		this.autoKick = autoKick;
 	}
 
 	/**
@@ -89,9 +110,8 @@ final public class AFKWorker implements Runnable {
 	private void setAfk(Player p) {
 		p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
 		playersAfk.put(p, p.getDisplayName());
-		p.setDisplayName(Utils.I18n("afkTitle") + p.getName());
+		p.setDisplayName(Utils.I18n("afkTitle") + p.getDisplayName());
 		p.setSleepingIgnored(true);
-		playerTimeStamp.remove(p);
 	}
 
 	/**
@@ -104,6 +124,7 @@ final public class AFKWorker implements Runnable {
 		p.setDisplayName(playersAfk.get(p));
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
+		playerTimeStamp.remove(p);
 	}
 
 	/**
@@ -120,9 +141,19 @@ final public class AFKWorker implements Runnable {
 	 */
 	public void run() {
 		long now = System.currentTimeMillis();
-		for (Player p : playerTimeStamp.keySet())
+		Set<Player> toIterate = playerTimeStamp.keySet();
+		toIterate.removeAll(playersAfk.keySet());
+		for (Player p : toIterate)
 			if ((now - playerTimeStamp.get(p)) >= afkTime)
 				setAfk(p);
+		if (autoKick)
+			for (Player p : playersAfk.keySet()) {
+				if (now - playerTimeStamp.get(p) >= kickTime) {
+					playersAfk.remove(p);
+					playerTimeStamp.remove(p);
+					p.kickPlayer(Utils.I18n("afkKick"));
+				}
+			}
 	}
 
 }
