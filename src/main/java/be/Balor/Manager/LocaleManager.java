@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class LocaleManager {
 	private static LocaleManager instance = null;
-	private ConfigurationManager localeFile;
+	private ExtendedConfiguration localeFile;
 	private HashMap<String, String> locales = new HashMap<String, String>();
 	private boolean noMsg = false;
 
@@ -52,7 +52,7 @@ public class LocaleManager {
 	 * @param fileName
 	 */
 	public void setLocaleFile(String fileName) {
-		localeFile = new ConfigurationManager(fileName, "locales");
+		localeFile = new ExtendedConfiguration(fileName, "locales");
 	}
 
 	/**

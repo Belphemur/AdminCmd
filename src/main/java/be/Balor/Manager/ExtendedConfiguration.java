@@ -26,16 +26,16 @@ import be.Balor.Tools.FilesManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ConfigurationManager extends Configuration{
+public class ExtendedConfiguration extends Configuration{
 	/**
 	 * 
 	 */
 
-	public ConfigurationManager(File file) {
+	public ExtendedConfiguration(File file) {
 		super(file);
 		load();
 	}
-	public ConfigurationManager(String fileName, String directory) {
+	public ExtendedConfiguration(String fileName, String directory) {
 		super(FilesManager.getInstance().getFile(fileName, directory));
 		load();
 	}

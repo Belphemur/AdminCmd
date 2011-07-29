@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
-import be.Balor.Manager.ConfigurationManager;
+import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.FilesManager;
@@ -50,7 +50,7 @@ public class ACHelper {
 	private ConcurrentMap<String, Set<String>> homeList = new MapMaker().softValues()
 			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
-	private ConfigurationManager pluginConfig;
+	private ExtendedConfiguration pluginConfig;
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -95,7 +95,7 @@ public class ACHelper {
 		this.pluginInstance = pluginInstance;
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
-		pluginConfig = new ConfigurationManager(new File(pluginInstance.getDataFolder().getPath(),
+		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
 				"config.yml"));
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
