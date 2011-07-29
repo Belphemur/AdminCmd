@@ -26,7 +26,6 @@ import java.util.Map;
 public class LocaleManager {
 	private static LocaleManager instance = null;
 	private ExtendedConfiguration localeFile;
-	private HashMap<String, String> locales = new HashMap<String, String>();
 	private boolean noMsg = false;
 
 	/**
@@ -56,14 +55,6 @@ public class LocaleManager {
 	}
 
 	/**
-	 * Load the locale from the file
-	 */
-	public void load() {
-		for (String key : localeFile.getKeys())
-			locales.put(key, localeFile.getString(key));
-	}
-
-	/**
 	 * Save all the change made to the locale.
 	 */
 	public void save() {
@@ -76,9 +67,8 @@ public class LocaleManager {
 	 * @param key
 	 * @param value
 	 */
-	public void addLocale(String key, String value) {		
-		if(localeFile.addProperty(key, value))
-			locales.put(key, value);
+	public void addLocale(String key, String value) {
+		localeFile.addProperty(key, value);
 	}
 
 	public String get(String key) {
@@ -88,7 +78,7 @@ public class LocaleManager {
 	public String get(String key, Map<String, String> values) {
 		if (noMsg)
 			return null;
-		String locale = locales.get(key);
+		String locale = localeFile.getString(key);
 		if (locale != null && values != null)
 			for (String toReplace : values.keySet())
 				locale = locale.replaceAll("%" + toReplace, values.get(toReplace));

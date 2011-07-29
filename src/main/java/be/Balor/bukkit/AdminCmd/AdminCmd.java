@@ -231,9 +231,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("flyDisabledTarget", ChatColor.GOLD + "FLY mode disabled for %player");
 		Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");
 		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD + "FLY mode enabled for %player");
-
 		LocaleManager.getInstance().save();
-		LocaleManager.getInstance().load();
 	}
 
 	public void onEnable() {

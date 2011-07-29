@@ -120,7 +120,6 @@ public class ACHelper {
 		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().setLocaleFile(pluginConfig.getString("locale", "en_US"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		LocaleManager.getInstance().load();
 	}
 
 	/**
