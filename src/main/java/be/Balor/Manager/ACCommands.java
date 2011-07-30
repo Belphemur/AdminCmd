@@ -112,13 +112,9 @@ public abstract class ACCommands {
 	public void initializeCommand(JavaPlugin plugin) throws CommandNotFound, CommandAlreadyExist {
 		if ((pluginCommand = plugin.getCommand(cmdName)) == null)
 			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
-		boolean registeredAlias = false;
-		for (String alias : pluginCommand.getAliases())
-			if (plugin.getServer().getPluginCommand(alias).equals(pluginCommand)) {
-				registeredAlias = true;
-				break;
-			}
-		if (!registeredAlias)
+
+
+		if (pluginCommand.getAliases().isEmpty())
 			throw new CommandAlreadyExist(cmdName
 					+ " has all his alias already registered. Command deactivated");
 	}

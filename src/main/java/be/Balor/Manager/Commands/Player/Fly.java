@@ -75,7 +75,7 @@ public class Fly extends ACCommands {
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
 				ACHelper.getInstance().addPowerUser(Powers.FLY, player, power);
-				player.setFallDistance(2.9F);
+				player.setFallDistance(1F);
 				Utils.sI18n(player, "flyEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyEnabledTarget", replace);

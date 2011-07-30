@@ -24,7 +24,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.java.JavaPlugin;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -69,6 +71,19 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (CommandException e) {
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+		}
+	}
+
+	public void checkAlias() {
+		for (Command cmd : PluginCommandYamlParser.parse(plugin)) {
+			cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
+			String aliases = "";
+			for (String alias : cmd.getAliases())
+				aliases += alias + ", ";
+			if (!aliases.isEmpty())
+				Logger.getLogger("Minecraft").info(
+						"[" + plugin.getDescription().getName() + "] Disabled Alias(es) for "
+								+ cmd.getName() + " : " + aliases);
 		}
 	}
 
