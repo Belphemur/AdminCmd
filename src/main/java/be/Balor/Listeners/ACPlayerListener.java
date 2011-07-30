@@ -178,11 +178,16 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerChat(PlayerChatEvent event) {
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
-			Player p = event.getPlayer();
+		Player p = event.getPlayer();
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {			
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
+		}
+		if(ACHelper.getInstance().isPowerUser(Powers.MUTED, p))
+		{
+			event.setCancelled(true);
+			Utils.sI18n(p, "muteEnabled");
 		}
 	}
 

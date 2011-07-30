@@ -1,8 +1,8 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.6.2
+version: 5.6.3
 author: Balor
-softdepend: [MultiVerse,Permissions]
+softdepend: [MultiVerse,Permissions,BLAH]
 description: >
              This plugin implements the basic commands for running a server.
 commands:
@@ -209,4 +209,12 @@ commands:
   bal_freeze:
     description: Freeze the player.
     aliases: [freeze,fp]
+    usage: /<command> playerName
+  bal_mute:
+    description: mute the player.
+    aliases: [mute]
+    usage: /<command> playerName
+  bal_unmute:
+    description: unmute the player.
+    aliases: [unmute]
     usage: /<command> playerName

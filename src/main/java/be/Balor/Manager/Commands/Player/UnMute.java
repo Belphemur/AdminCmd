@@ -28,16 +28,16 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class Freeze extends ACCommands {
+public class UnMute extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public Freeze() {
-		permNode = "admincmd.player.freeze";
-		cmdName = "bal_freeze";
+	public UnMute() {
+		permNode = "admincmd.player.mute";
+		cmdName = "bal_unmute";
 	}
 
 	/*
@@ -53,17 +53,13 @@ public class Freeze extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, player.getName())) {
-				ACHelper.getInstance().removePowerUser(Powers.FREEZED, player);
-				Utils.sI18n(player, "freezeDisabled");
+			if (ACHelper.getInstance().isPowerUser(Powers.MUTED, player.getName())) {
+				ACHelper.getInstance().removePowerUser(Powers.MUTED, player);
+				Utils.sI18n(player, "muteDisabled");
 				if (!player.equals(sender))
-					Utils.sI18n(sender, "freezeDisabledTarget", replace);
-			} else {
-				ACHelper.getInstance().addPowerUser(Powers.FREEZED, player);
-				Utils.sI18n(player, "freezeEnabled");
-				if (!player.equals(sender))
-					Utils.sI18n(sender, "freezeEnabledTarget", replace);
-			}
+					Utils.sI18n(sender, "muteDisabledTarget", replace);
+			} else
+				Utils.sI18n(sender, "notMuted");
 		} else
 			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 
@@ -78,5 +74,6 @@ public class Freeze extends ACCommands {
 	public boolean argsCheck(String... args) {
 		return args != null && args.length >= 1;
 	}
+
 
 }

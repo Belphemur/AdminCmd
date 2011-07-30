@@ -110,6 +110,8 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(DeleteHome.class);
 		CommandManager.getInstance().registerCommand(ListHomes.class);
 		CommandManager.getInstance().registerCommand(Freeze.class);
+		CommandManager.getInstance().registerCommand(Mute.class);
+		CommandManager.getInstance().registerCommand(UnMute.class);
 
 	}
 
@@ -188,7 +190,8 @@ public class AdminCmd extends JavaPlugin {
 				+ "%home" + ChatColor.WHITE + " set.");
 		Utils.addLocale("rmHome", ChatColor.RED + "Home " + ChatColor.DARK_AQUA + "%home"
 				+ ChatColor.WHITE + " removed.");
-		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "+ChatColor.DARK_GREEN+"home limit");
+		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "
+				+ ChatColor.DARK_GREEN + "home limit");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
@@ -235,9 +238,19 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD + "FLY mode enabled for %player");
 		Utils.addLocale("afkKick", "You have been kick because you were AFK");
 		Utils.addLocale("freezeDisabled", ChatColor.DARK_GREEN + "You can now move again.");
-		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN + "Freeze mode disabled for %player");
-		Utils.addLocale("freezeEnabled", ChatColor.DARK_RED + "You can't move until you are defreezed.");
-		Utils.addLocale("freezeEnabledTarget", ChatColor.DARK_RED + "Freeze mode enabled for %player");
+		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN
+				+ "Freeze mode disabled for %player");
+		Utils.addLocale("freezeEnabled", ChatColor.DARK_RED
+				+ "You can't move until you are defreezed.");
+		Utils.addLocale("freezeEnabledTarget", ChatColor.DARK_RED
+				+ "Freeze mode enabled for %player");
+		Utils.addLocale("muteDisabled", ChatColor.DARK_GREEN + "You can chat again.");
+		Utils.addLocale("muteDisabledTarget", ChatColor.DARK_GREEN + "%player is unmuted.");
+		Utils.addLocale("muteEnabled", ChatColor.DARK_RED + "You can't chat anymore.");
+		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED + "%player is muted.");
+		Utils.addLocale("alreadyMuted", ChatColor.DARK_AQUA
+				+ "This player is already muted. To unmute him it's the unmute command.");
+		Utils.addLocale("notMuted", ChatColor.DARK_AQUA + "This player is not muted.");
 		LocaleManager.getInstance().save();
 	}
 
