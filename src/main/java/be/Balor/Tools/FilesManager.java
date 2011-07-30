@@ -33,7 +33,6 @@ import org.bukkit.util.config.Configuration;
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -239,10 +238,13 @@ public class FilesManager {
 	 * @param directory
 	 */
 	public void writeLocationFile(Location loc, String name, String filename, String directory) {
-		String location = loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw()
-				+ ";" + loc.getPitch() + ";" + loc.getWorld().getName();
 		Configuration conf = getYml(filename, directory);
-		conf.setProperty(directory + "." + name, location);
+		conf.setProperty(directory + "." + name+".world", loc.getWorld().getName());
+		conf.setProperty(directory + "." + name+".x", loc.getX());
+		conf.setProperty(directory + "." + name+".y", loc.getY());
+		conf.setProperty(directory + "." + name+".z", loc.getZ());
+		conf.setProperty(directory + "." + name+".yaw", loc.getYaw());
+		conf.setProperty(directory + "." + name+".pitch", loc.getPitch());
 		conf.save();
 	}
 
@@ -256,7 +258,16 @@ public class FilesManager {
 	 */
 	public Location getLocationFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		return parseLocation(property, conf, directory);
+		if (conf.getProperty(directory + "." + property + ".world") == null)
+			return parseLocation(property, conf, directory);
+		else {
+			return new Location(AdminCmd.getBukkitServer().getWorld(
+					conf.getString(directory + "." + property + ".world")), conf.getDouble(
+					directory + "." + property + ".x", 0), conf.getDouble(directory + "."
+					+ property + ".y", 0), conf.getDouble(directory + "." + property + ".z", 0),
+					Float.parseFloat(conf.getString(directory + "." + property + ".yaw")),
+					Float.parseFloat(conf.getString(directory + "." + property + ".pitch")));
+		}
 	}
 
 	/**
@@ -316,7 +327,6 @@ public class FilesManager {
 				coords[2], direction[0], direction[1]);
 	}
 
-
 	/**
 	 * Load the map
 	 * 
@@ -330,7 +340,7 @@ public class FilesManager {
 		Configuration conf = getYml(filename, directory);
 		if (conf.getKeys(name) != null) {
 			for (String key : conf.getKeys(name))
-				result.put(key, conf.getProperty(name+"."+key));
+				result.put(key, conf.getProperty(name + "." + key));
 		}
 		return result;
 	}

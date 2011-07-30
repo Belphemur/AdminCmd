@@ -44,7 +44,8 @@ public class ACHelper {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	EnumMap<Powers, ConcurrentMap<String, Object>> usersWithPowers = new EnumMap<Powers, ConcurrentMap<String,Object>>(Powers.class);
+	EnumMap<Powers, ConcurrentMap<String, Object>> usersWithPowers = new EnumMap<Powers, ConcurrentMap<String, Object>>(
+			Powers.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
@@ -109,10 +110,12 @@ public class ACHelper {
 		pluginConfig.addProperty("autoKickAfkPlayer", false);
 		pluginConfig.addProperty("afkKickInMinutes", 3);
 		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
+		pluginConfig.addProperty("maxHomeByUser", 0);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
-			AFKWorker.getInstance().setAutoKick(pluginConfig.getBoolean("autoKickAfkPlayer", false));
+			AFKWorker.getInstance()
+					.setAutoKick(pluginConfig.getBoolean("autoKickAfkPlayer", false));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 			this.pluginInstance
 					.getServer()
@@ -456,6 +459,7 @@ public class ACHelper {
 			return usersWithPowers.get(powerName).get(user);
 		return null;
 	}
+
 	public Object getPowerOfPowerUser(Powers powerName, Player user) {
 		return getPowerOfPowerUser(powerName, user.getName());
 	}
@@ -477,7 +481,7 @@ public class ACHelper {
 	public boolean removePlayerFromAllPowerUser(String player) {
 		boolean found = false;
 		for (Powers type : usersWithPowers.keySet()) {
-			if (usersWithPowers.get(type).remove(player) != null) 
+			if (usersWithPowers.get(type).remove(player) != null)
 				found = true;
 		}
 		return found;
@@ -628,5 +632,23 @@ public class ACHelper {
 			addPowerUser(Powers.BANNED, key, map.get(key));
 	}
 
+	@SuppressWarnings("deprecation")
+	public int getLimit(Player player, String type) {
+		Integer limit = null;
+		if (PermissionManager.getPermission() != null) {
+			try {
+				limit = PermissionManager.getPermission().getInfoInteger(
+						player.getWorld().getName(), player.getName(), "admincmd." + type, false);
+			} catch (NoSuchMethodError e) {
+				limit = PermissionManager.getPermission().getPermissionInteger(
+						player.getWorld().getName(), player.getName(), "admincmd." + type);
+			}
+		}
+		if (limit == null || limit == -1)
+			limit = pluginConfig.getInt(type, 0);
+		if(limit == 0)
+			limit=Integer.MAX_VALUE;
+		return limit;
+	}
 	// ----- / item coloring section -----
 }
