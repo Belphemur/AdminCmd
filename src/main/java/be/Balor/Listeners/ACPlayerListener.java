@@ -104,6 +104,8 @@ public class ACPlayerListener extends PlayerListener {
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
 		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
+			if (AFKWorker.getInstance().isAfk(p))
+				AFKWorker.getInstance().setOnline(p);
 			AFKWorker.getInstance().removePlayer(p);
 		}
 	}
@@ -179,13 +181,12 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerChat(PlayerChatEvent event) {
 		Player p = event.getPlayer();
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {			
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if(ACHelper.getInstance().isPowerUser(Powers.MUTED, p))
-		{
+		if (ACHelper.getInstance().isPowerUser(Powers.MUTED, p)) {
 			event.setCancelled(true);
 			Utils.sI18n(p, "muteEnabled");
 		}
