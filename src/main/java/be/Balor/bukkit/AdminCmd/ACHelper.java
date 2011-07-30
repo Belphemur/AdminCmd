@@ -121,7 +121,7 @@ public class ACHelper {
 					.getServer()
 					.getScheduler()
 					.scheduleAsyncRepeatingTask(this.pluginInstance, AFKWorker.getInstance(),
-							(pluginConfig.getInt("statutCheckInSec", 20) / 2) * 20,
+							pluginConfig.getInt("statutCheckInSec", 20) * 10,
 							pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
 		InvisibleWorker.getInstance()
