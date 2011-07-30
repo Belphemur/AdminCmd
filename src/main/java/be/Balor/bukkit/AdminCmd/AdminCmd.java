@@ -109,6 +109,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Fly.class);
 		CommandManager.getInstance().registerCommand(DeleteHome.class);
 		CommandManager.getInstance().registerCommand(ListHomes.class);
+		CommandManager.getInstance().registerCommand(Freeze.class);
 
 	}
 
