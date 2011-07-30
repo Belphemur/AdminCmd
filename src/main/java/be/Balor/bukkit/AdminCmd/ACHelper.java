@@ -120,14 +120,14 @@ public class ACHelper {
 					.getScheduler()
 					.scheduleAsyncRepeatingTask(this.pluginInstance,
 							AFKWorker.getInstance().getAfkChecker(), 0,
-							pluginConfig.getInt("afkTimeInSecond", 20) * 20);
+							pluginConfig.getInt("statutCheckInSec", 20) * 20);
 			if (pluginConfig.getBoolean("autoKickAfkPlayer", false))
 				this.pluginInstance
 						.getServer()
 						.getScheduler()
 						.scheduleAsyncRepeatingTask(this.pluginInstance,
 								AFKWorker.getInstance().getKickChecker(), 0,
-								pluginConfig.getInt("afkKickInMinutes", 3) * 1200);
+								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
 		InvisibleWorker.getInstance()
 				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
