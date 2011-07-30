@@ -52,15 +52,15 @@ public class SetHome extends ACCommands {
 		if (Utils.isPlayer(sender)) {
 			Player p = ((Player) sender);
 			Set<String> tmp = ACHelper.getInstance().getHomeList(p.getName());
-			if (tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {
-				Utils.sI18n(sender, "homeLimit");
-				return;
-			}
 			String home = p.getWorld().getName();
 			if (args.length >= 1)
 				home = args[0];
 			Location loc = p.getLocation();
-
+			if (!tmp.contains(home)
+					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {
+				Utils.sI18n(sender, "homeLimit");
+				return;
+			}
 			tmp.add(home);
 			ACHelper.getInstance().addLocation("home", p.getName() + "." + home, home, p.getName(),
 					loc);
