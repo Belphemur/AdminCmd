@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
 import be.Balor.Tools.Powers;
-import be.Balor.Tools.ShootFireBall;
+import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -60,7 +60,8 @@ public class ACPlayerListener extends PlayerListener {
 			event.disallow(
 					Result.KICK_BANNED,
 					ACHelper.getInstance()
-							.getPowerOfPowerUser(Powers.BANNED, event.getPlayer().getName()).toString());
+							.getPowerOfPowerUser(Powers.BANNED, event.getPlayer().getName())
+							.toString());
 	}
 
 	@Override
@@ -70,6 +71,10 @@ public class ACPlayerListener extends PlayerListener {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
+		}
+		if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, p)) {
+			event.setCancelled(true);
+			return;
 		}
 		Float power = (Float) worker.getPowerOfPowerUser(Powers.FLY, p.getName());
 		if (power != null)
@@ -114,6 +119,10 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
+		if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, playername)) {
+			event.setCancelled(true);
+			return;
+		}
 		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
 				&& !from.getWorld().equals(to.getWorld())) {
 			if (ACHelper.getInstance().removePlayerFromAllPowerUser(playername)
@@ -129,10 +138,14 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {			
+		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
+		}
+		if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, p)) {
+			event.setCancelled(true);
+			return;
 		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
 			String playerName = p.getName();
@@ -144,11 +157,7 @@ public class ACPlayerListener extends PlayerListener {
 						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
 			power = null;
 			if ((power = (Float) worker.getPowerOfPowerUser(Powers.FIREBALL, playerName)) != null)
-				worker.getPluginInstance()
-						.getServer()
-						.getScheduler()
-						.scheduleAsyncDelayedTask(worker.getPluginInstance(),
-								new ShootFireBall(p, power));
+				ShootFireball.shoot(p, power);
 		}
 	}
 
@@ -166,8 +175,9 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		return false;
 	}
+
 	@Override
-    public void onPlayerChat(PlayerChatEvent event) {
+	public void onPlayerChat(PlayerChatEvent event) {
 		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
 			Player p = event.getPlayer();
 			AFKWorker.getInstance().updateTimeStamp(p);
@@ -175,6 +185,7 @@ public class ACPlayerListener extends PlayerListener {
 				AFKWorker.getInstance().setOnline(p);
 		}
 	}
+
 	protected class UpdateInvisibleOnJoin implements Runnable {
 		Player newPlayer;
 

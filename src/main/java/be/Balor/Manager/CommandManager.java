@@ -25,7 +25,6 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 

@@ -17,7 +17,6 @@
 package be.Balor.Tools;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 
@@ -25,31 +24,15 @@ import org.bukkit.entity.Player;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ShootFireBall implements Runnable {
-
-	CraftPlayer player = null;
-	Float yield;
-
-	/**
-	 * 
-	 */
-	public ShootFireBall(Player p, Float power) {
-		player = (CraftPlayer) p;
-		yield = power;
-	}
-
-	public void run() {
-
+public class ShootFireball {
+	public static void shoot(Player player, Float yield) {
 		Location playerLoc = player.getLocation();
 		Location fbLocation = playerLoc.add(
 				playerLoc.getDirection().normalize().multiply(2)
 						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
 				.add(0, 1D, 0);
-		;
 		Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
 		f.setYield(yield);
 		f.setShooter(player);
-
 	}
-
 }

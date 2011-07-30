@@ -2,6 +2,7 @@ package be.Balor.bukkit.AdminCmd;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class ACHelper {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	ConcurrentMap<Powers, ConcurrentMap<String, Object>> usersWithPowers = new MapMaker().makeMap();
+	EnumMap<Powers, ConcurrentMap<String, Object>> usersWithPowers = new EnumMap<Powers, ConcurrentMap<String,Object>>(Powers.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();

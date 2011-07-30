@@ -232,6 +232,10 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");
 		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD + "FLY mode enabled for %player");
 		Utils.addLocale("afkKick", "You have been kick because you were AFK");
+		Utils.addLocale("freezeDisabled", ChatColor.DARK_GREEN + "You can now move again.");
+		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN + "Freeze mode disabled for %player");
+		Utils.addLocale("freezeEnabled", ChatColor.DARK_RED + "You can't move until you are defreezed.");
+		Utils.addLocale("freezeEnabledTarget", ChatColor.DARK_RED + "Freeze mode enabled for %player");
 		LocaleManager.getInstance().save();
 	}
 

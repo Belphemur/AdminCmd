@@ -206,3 +206,7 @@ commands:
     description: You can set your jump/fly power.
     aliases: [fly]
     usage: /<command> [power] [playerName]
+  bal_freeze:
+    description: Freeze the player.
+    aliases: [freeze,fp]
+    usage: /<command> playerName
