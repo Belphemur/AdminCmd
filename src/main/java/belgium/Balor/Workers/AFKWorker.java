@@ -29,21 +29,23 @@ import com.google.common.collect.MapMaker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-final public class AFKWorker implements Runnable {
+final public class AFKWorker {
 	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().concurrencyLevel(10)
 			.softValues().expiration(1, TimeUnit.HOURS).makeMap();
 	private ConcurrentMap<Player, String> playersAfk = new MapMaker().concurrencyLevel(10)
 			.makeMap();
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private boolean autoKick = false;
+	private AfkChecker afkChecker;
+	private KickChecker kickChecker;
 	private static AFKWorker instance;
 
 	/**
 	 * 
 	 */
 	private AFKWorker() {
-
+		afkChecker = new AfkChecker();
+		kickChecker = new KickChecker();
 	}
 
 	/**
@@ -53,6 +55,18 @@ final public class AFKWorker implements Runnable {
 		if (instance == null)
 			instance = new AFKWorker();
 		return instance;
+	}
+	/**
+	 * @return the afkChecker
+	 */
+	public AfkChecker getAfkChecker() {
+		return afkChecker;
+	}
+	/**
+	 * @return the kickChecker
+	 */
+	public KickChecker getKickChecker() {
+		return kickChecker;
 	}
 
 	/**
@@ -71,14 +85,6 @@ final public class AFKWorker implements Runnable {
 	public void setKickTime(int kickTime) {
 		if (afkTime > 0)
 			this.kickTime = kickTime * 1000 * 60;
-	}
-
-	/**
-	 * @param autoKick
-	 *            the autoKick to set
-	 */
-	public void setAutoKick(boolean autoKick) {
-		this.autoKick = autoKick;
 	}
 
 	/**
@@ -134,15 +140,34 @@ final public class AFKWorker implements Runnable {
 		return playersAfk.containsKey(p);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void run() {
-		long now = System.currentTimeMillis();
-		for (Player p : playerTimeStamp.keySet())
-			if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
-				setAfk(p);
-		if (autoKick)
+	private class AfkChecker implements Runnable {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			long now = System.currentTimeMillis();
+			for (Player p : playerTimeStamp.keySet())
+				if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
+					setAfk(p);
+
+		}
+
+	}
+
+	private class KickChecker implements Runnable {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			long now = System.currentTimeMillis();
 			for (Player p : playersAfk.keySet()) {
 				if (now - playerTimeStamp.get(p) >= kickTime) {
 					p.kickPlayer(Utils.I18n("afkKick"));
@@ -150,6 +175,9 @@ final public class AFKWorker implements Runnable {
 					playerTimeStamp.remove(p);
 				}
 			}
+
+		}
+
 	}
 
 }
