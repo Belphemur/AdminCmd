@@ -646,8 +646,8 @@ public class ACHelper {
 		}
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(type, 0);
-		if(limit == 0)
-			limit=Integer.MAX_VALUE;
+		if (limit == 0)
+			limit = Integer.MAX_VALUE;
 		return limit;
 	}
 	// ----- / item coloring section -----

@@ -188,7 +188,7 @@ public class AdminCmd extends JavaPlugin {
 				+ "%home" + ChatColor.WHITE + " set.");
 		Utils.addLocale("rmHome", ChatColor.RED + "Home " + ChatColor.DARK_AQUA + "%home"
 				+ ChatColor.WHITE + " removed.");
-		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "+ChatColor.DARK_GREEN+" home limit");
+		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "+ChatColor.DARK_GREEN+"home limit");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
