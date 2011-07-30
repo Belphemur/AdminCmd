@@ -16,7 +16,6 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
-import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +31,7 @@ import com.google.common.collect.MapMaker;
  */
 final public class AFKWorker implements Runnable {
 	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().concurrencyLevel(10)
-			.softValues().expiration(15, TimeUnit.MINUTES).makeMap();
+			.softValues().expiration(1, TimeUnit.HOURS).makeMap();
 	private ConcurrentMap<Player, String> playersAfk = new MapMaker().concurrencyLevel(10)
 			.makeMap();
 	private int afkTime = 60000;
@@ -140,17 +139,15 @@ final public class AFKWorker implements Runnable {
 	 */
 	public void run() {
 		long now = System.currentTimeMillis();
-		Set<Player> toIterate = playerTimeStamp.keySet();
-		toIterate.removeAll(playersAfk.keySet());
-		for (Player p : toIterate)
-			if ((now - playerTimeStamp.get(p)) >= afkTime)
+		for (Player p : playerTimeStamp.keySet())
+			if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
 				setAfk(p);
 		if (autoKick)
 			for (Player p : playersAfk.keySet()) {
 				if (now - playerTimeStamp.get(p) >= kickTime) {
+					p.kickPlayer(Utils.I18n("afkKick"));
 					playersAfk.remove(p);
 					playerTimeStamp.remove(p);
-					p.kickPlayer(Utils.I18n("afkKick"));
 				}
 			}
 	}
