@@ -20,7 +20,7 @@ package be.Balor.Tools;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public enum Powers {
+public enum Type {
 	FLY, VULCAN, GOD, THOR, BANNED, FIREBALL, SPYMSG, FREEZED, MUTED;
 	@Override
 	public String toString() {

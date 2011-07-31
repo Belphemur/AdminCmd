@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 
 
 import be.Balor.Manager.ACCommands;
-import be.Balor.Tools.Powers;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -55,13 +55,13 @@ public class Thor extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser(Powers.THOR, player.getName())) {
-				ACHelper.getInstance().removePowerUser(Powers.THOR, player);
+			if (ACHelper.getInstance().isValueSet(Type.THOR, player.getName())) {
+				ACHelper.getInstance().removeValue(Type.THOR, player);
 				Utils.sI18n(player, "thorDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "thorDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addPowerUser(Powers.THOR, player);
+				ACHelper.getInstance().addValue(Type.THOR, player);
 				Utils.sI18n(player, "thorEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "thorEnabledTarget", replace);

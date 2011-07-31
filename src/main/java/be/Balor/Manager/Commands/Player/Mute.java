@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
-import be.Balor.Tools.Powers;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -53,8 +53,8 @@ public class Mute extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (!ACHelper.getInstance().isPowerUser(Powers.MUTED, player.getName())) {
-				ACHelper.getInstance().addPowerUser(Powers.MUTED, player);
+			if (!ACHelper.getInstance().isValueSet(Type.MUTED, player.getName())) {
+				ACHelper.getInstance().addValue(Type.MUTED, player);
 				Utils.sI18n(player, "muteEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteEnabledTarget", replace);

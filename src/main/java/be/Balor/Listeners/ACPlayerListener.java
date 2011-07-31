@@ -31,7 +31,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
-import be.Balor.Tools.Powers;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
@@ -56,11 +56,11 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (ACHelper.getInstance().isPowerUser(Powers.BANNED, event.getPlayer().getName()))
+		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName()))
 			event.disallow(
 					Result.KICK_BANNED,
 					ACHelper.getInstance()
-							.getPowerOfPowerUser(Powers.BANNED, event.getPlayer().getName())
+							.getValue(Type.BANNED, event.getPlayer().getName())
 							.toString());
 	}
 
@@ -72,11 +72,11 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, p)) {
+		if (ACHelper.getInstance().isValueSet(Type.FREEZED, p)) {
 			event.setCancelled(true);
 			return;
 		}
-		Float power = (Float) worker.getPowerOfPowerUser(Powers.FLY, p.getName());
+		Float power = (Float) worker.getValue(Type.FLY, p.getName());
 		if (power != null)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
@@ -121,13 +121,13 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
-		if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, playername)) {
+		if (ACHelper.getInstance().isValueSet(Type.FREEZED, playername)) {
 			event.setCancelled(true);
 			return;
 		}
 		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
 				&& !from.getWorld().equals(to.getWorld())) {
-			if (ACHelper.getInstance().removePlayerFromAllPowerUser(playername)
+			if (ACHelper.getInstance().removeKeyFromValues(playername)
 					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());
 				Utils.sI18n(event.getPlayer(), "changedWorld");
@@ -145,7 +145,7 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, p)) {
+		if (ACHelper.getInstance().isValueSet(Type.FREEZED, p)) {
 			event.setCancelled(true);
 			return;
 		}
@@ -158,7 +158,7 @@ public class ACPlayerListener extends PlayerListener {
 				p.getWorld()
 						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
 			power = null;
-			if ((power = (Float) worker.getPowerOfPowerUser(Powers.FIREBALL, playerName)) != null)
+			if ((power = (Float) worker.getValue(Type.FIREBALL, playerName)) != null)
 				ShootFireball.shoot(p, power);
 		}
 	}
@@ -186,7 +186,7 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isPowerUser(Powers.MUTED, p)) {
+		if (ACHelper.getInstance().isValueSet(Type.MUTED, p)) {
 			event.setCancelled(true);
 			Utils.sI18n(p, "muteEnabled");
 		}

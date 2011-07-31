@@ -25,7 +25,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Powers;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -44,8 +44,8 @@ public class ACHelper {
 	private FilesManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd pluginInstance;
-	EnumMap<Powers, ConcurrentMap<String, Object>> usersWithPowers = new EnumMap<Powers, ConcurrentMap<String, Object>>(
-			Powers.class);
+	EnumMap<Type, ConcurrentMap<String, Object>> storedTypeValues = new EnumMap<Type, ConcurrentMap<String, Object>>(
+			Type.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
@@ -54,7 +54,6 @@ public class ACHelper {
 			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
 	private ExtendedConfiguration pluginConfig;
-
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
@@ -413,67 +412,67 @@ public class ACHelper {
 	}
 
 	public void addVulcain(String playerName, float power) {
-		addPowerUser(Powers.VULCAN, playerName, power);
+		addValue(Type.VULCAN, playerName, power);
 	}
 
 	public void removeVulcan(String playerName) {
-		removePowerUser(Powers.VULCAN, playerName);
+		removeValue(Type.VULCAN, playerName);
 	}
 
-	public void addPowerUser(Powers powerName, String user, Object power) {
-		if (usersWithPowers.containsKey(powerName))
-			usersWithPowers.get(powerName).put(user, power);
+	public void addValue(Type powerName, String user, Object power) {
+		if (storedTypeValues.containsKey(powerName))
+			storedTypeValues.get(powerName).put(user, power);
 		else {
 			ConcurrentMap<String, Object> tmp = new MapMaker().makeMap();
 			tmp.put(user, power);
-			usersWithPowers.put(powerName, tmp);
+			storedTypeValues.put(powerName, tmp);
 		}
 
 	}
 
-	public void addPowerUser(Powers powerName, Player user, Object power) {
-		addPowerUser(powerName, user.getName(), power);
+	public void addValue(Type powerName, Player user, Object power) {
+		addValue(powerName, user.getName(), power);
 	}
 
-	public void addPowerUser(Powers powerName, Player user) {
-		addPowerUser(powerName, user.getName(), 0);
+	public void addValue(Type powerName, Player user) {
+		addValue(powerName, user.getName(), 0);
 	}
 
-	public void addPowerUser(Powers powerName, String user) {
-		addPowerUser(powerName, user, 0);
+	public void addValue(Type powerName, String user) {
+		addValue(powerName, user, 0);
 	}
 
-	public void removePowerUser(Powers powerName, String user) {
-		if (usersWithPowers.containsKey(powerName)) {
-			usersWithPowers.get(powerName).remove(user);
-			if (usersWithPowers.get(powerName).isEmpty())
-				usersWithPowers.remove(powerName);
+	public void removeValue(Type powerName, String user) {
+		if (storedTypeValues.containsKey(powerName)) {
+			storedTypeValues.get(powerName).remove(user);
+			if (storedTypeValues.get(powerName).isEmpty())
+				storedTypeValues.remove(powerName);
 		}
 	}
 
-	public void removePowerUser(Powers powerName, Player user) {
-		removePowerUser(powerName, user.getName());
+	public void removeValue(Type powerName, Player user) {
+		removeValue(powerName, user.getName());
 	}
 
-	public boolean isPowerUser(Powers powerName, String user) {
-		return usersWithPowers.containsKey(powerName)
-				&& usersWithPowers.get(powerName).containsKey(user);
+	public boolean isValueSet(Type powerName, String user) {
+		return storedTypeValues.containsKey(powerName)
+				&& storedTypeValues.get(powerName).containsKey(user);
 	}
 
-	public Object getPowerOfPowerUser(Powers powerName, String user) {
-		if (user != null && isPowerUser(powerName, user))
-			return usersWithPowers.get(powerName).get(user);
+	public Object getValue(Type powerName, String user) {
+		if (user != null && isValueSet(powerName, user))
+			return storedTypeValues.get(powerName).get(user);
 		return null;
 	}
 
-	public Object getPowerOfPowerUser(Powers powerName, Player user) {
-		return getPowerOfPowerUser(powerName, user.getName());
+	public Object getValue(Type powerName, Player user) {
+		return getValue(powerName, user.getName());
 	}
 
 	public List<Player> getAllPowerUserOf(String power) {
 		List<Player> players = new ArrayList<Player>();
-		if (usersWithPowers.containsKey(power))
-			for (String player : usersWithPowers.get(power).keySet())
+		if (storedTypeValues.containsKey(power))
+			for (String player : storedTypeValues.get(power).keySet())
 				players.add(pluginInstance.getServer().getPlayer(player));
 		return players;
 	}
@@ -484,37 +483,37 @@ public class ACHelper {
 	 * @param player
 	 * @return
 	 */
-	public boolean removePlayerFromAllPowerUser(String player) {
+	public boolean removeKeyFromValues(String player) {
 		boolean found = false;
-		for (Powers type : usersWithPowers.keySet()) {
-			if (usersWithPowers.get(type).remove(player) != null)
+		for (Type type : storedTypeValues.keySet()) {
+			if (storedTypeValues.get(type).remove(player) != null)
 				found = true;
 		}
 		return found;
 	}
 
-	public boolean isPowerUser(Powers powerName, Player user) {
-		return isPowerUser(powerName, user.getName());
+	public boolean isValueSet(Type powerName, Player user) {
+		return isValueSet(powerName, user.getName());
 	}
 
 	public void addThor(String playerName) {
-		addPowerUser(Powers.THOR, playerName);
+		addValue(Type.THOR, playerName);
 	}
 
 	public void removeThor(String playerName) {
-		removePowerUser(Powers.THOR, playerName);
+		removeValue(Type.THOR, playerName);
 	}
 
 	public boolean hasThorPowers(String player) {
-		return isPowerUser(Powers.THOR, player);
+		return isValueSet(Type.THOR, player);
 	}
 
 	public boolean hasGodPowers(String player) {
-		return isPowerUser(Powers.GOD, player);
+		return isValueSet(Type.GOD, player);
 	}
 
 	public Float getVulcainExplosionPower(String player) {
-		return (Float) getPowerOfPowerUser(Powers.VULCAN, player);
+		return (Float) getValue(Type.VULCAN, player);
 	}
 
 	public boolean alias(CommandSender sender, String[] args) {
@@ -599,15 +598,15 @@ public class ACHelper {
 		return false;
 	}
 
-	public void addPowerUserWithFile(Powers power, String user, String reason) {
-		addPowerUser(power, user, reason);
+	public void addPowerUserWithFile(Type power, String user, String reason) {
+		addValue(power, user, reason);
 		Configuration ban = fManager.getYml(power.toString());
 		ban.setProperty(power + "." + user, reason);
 		ban.save();
 	}
 
-	public void removePowerUserWithFile(Powers power, String user) {
-		removePowerUser(power, user);
+	public void removePowerUserWithFile(Type power, String user) {
+		removeValue(power, user);
 		Configuration ban = fManager.getYml(power.toString());
 		ban.removeProperty(power + "." + user);
 		ban.save();
@@ -635,7 +634,7 @@ public class ACHelper {
 
 		Map<String, Object> map = fManager.loadMap("banned", null, "banned");
 		for (String key : map.keySet())
-			addPowerUser(Powers.BANNED, key, map.get(key));
+			addValue(Type.BANNED, key, map.get(key));
 	}
 
 	@SuppressWarnings("deprecation")

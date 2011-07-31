@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
-import be.Balor.Tools.Powers;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -53,13 +53,13 @@ public class Freeze extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isPowerUser(Powers.FREEZED, player.getName())) {
-				ACHelper.getInstance().removePowerUser(Powers.FREEZED, player);
+			if (ACHelper.getInstance().isValueSet(Type.FREEZED, player.getName())) {
+				ACHelper.getInstance().removeValue(Type.FREEZED, player);
 				Utils.sI18n(player, "freezeDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "freezeDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addPowerUser(Powers.FREEZED, player);
+				ACHelper.getInstance().addValue(Type.FREEZED, player);
 				Utils.sI18n(player, "freezeEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "freezeEnabledTarget", replace);

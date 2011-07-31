@@ -23,7 +23,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityListener;
 
 import be.Balor.Manager.PermissionManager;
-import be.Balor.Tools.Powers;
+import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -48,7 +48,7 @@ public class ACEntityListener extends EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-		if (worker.isPowerUser(Powers.FLY, player)
+		if (worker.isValueSet(Type.FLY, player)
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);
