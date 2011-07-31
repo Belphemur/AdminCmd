@@ -36,7 +36,7 @@ public class ExtendedConfiguration extends Configuration{
 		load();
 	}
 	public ExtendedConfiguration(String fileName, String directory) {
-		super(FilesManager.getInstance().getFile(fileName, directory));
+		super(FilesManager.getInstance().getFile(directory, fileName));
 		load();
 	}
 
