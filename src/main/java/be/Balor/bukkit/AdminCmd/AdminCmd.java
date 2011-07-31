@@ -113,6 +113,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Freeze.class);
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
+		CommandManager.getInstance().registerCommand(MobLimit.class);
 
 	}
 
@@ -252,6 +253,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("alreadyMuted", ChatColor.DARK_AQUA
 				+ "This player is already muted. To unmute him it's the unmute command.");
 		Utils.addLocale("notMuted", ChatColor.DARK_AQUA + "This player is not muted.");
+		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
+		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
 		LocaleManager.getInstance().save();
 	}
 

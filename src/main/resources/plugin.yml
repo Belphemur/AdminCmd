@@ -218,3 +218,7 @@ commands:
     description: unmute the player.
     aliases: [unmute]
     usage: /<command> playerName
+  bal_moblimit:
+    description: Limit the mob spawn on the world.
+    aliases: [moblimit, ml]
+    usage: /<command> world limit

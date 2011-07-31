@@ -16,13 +16,19 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.HashMap;
+
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityListener;
 
 import be.Balor.Manager.PermissionManager;
+import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -32,13 +38,22 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACEntityListener extends EntityListener {
-	ACHelper worker;
+	private ACHelper worker;
+	private HashMap<World, Integer> mobCount = new HashMap<World, Integer>();
 
 	/**
 	 * 
 	 */
 	public ACEntityListener(ACHelper admin) {
 		worker = admin;
+		for (World w : worker.getPluginInstance().getServer().getWorlds()) {
+			Integer count = 0;
+			for (Entity e : w.getEntities())
+				if (MobCheck.isMonster(e))
+					count++;
+			mobCount.put(w, count.intValue());
+		}
+
 	}
 
 	@Override
@@ -65,12 +80,30 @@ public class ACEntityListener extends EntityListener {
 
 	@Override
 	public void onEntityTarget(EntityTargetEvent event) {
-		if(event.isCancelled())
+		if (event.isCancelled())
 			return;
-		if(!(event.getTarget() instanceof Player))
+		if (!(event.getTarget() instanceof Player))
 			return;
-		Player p = (Player)event.getTarget();
-		if(InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) && PermissionManager.hasPerm(p, "admincmd.invisible.notatarget"))
+		Player p = (Player) event.getTarget();
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget"))
 			event.setCancelled(true);
+	}
+	@Override
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
+		Entity e = event.getEntity();
+		if (!MobCheck.isMonster(e))
+			return;
+		Integer count = mobCount.get(e.getWorld());
+		Integer limit = (Integer) ACHelper.getInstance().getValue(Type.MOB_LIMIT,
+				e.getWorld().getName());
+		if (limit != null) {
+			if (count + 1 >= limit) {
+				event.setCancelled(true);
+				System.out.print("Spawn blocked");
+			} else
+				count++;
+		} else
+			count++;
 	}
 }

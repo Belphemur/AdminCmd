@@ -11,7 +11,7 @@ import org.bukkit.entity.LivingEntity;
  * 
  */
 public class MobCheck {
-	public static boolean isMonster(LivingEntity e) {
+	public static boolean isMonster(Entity e) {
 		return (e instanceof Creeper) || (e instanceof Monster) || (e instanceof Skeleton)
 				|| (e instanceof Spider) || (e instanceof Zombie) || (e instanceof PigZombie)
 				|| (e instanceof Ghast) || (e instanceof Giant) || (e instanceof Slime);
