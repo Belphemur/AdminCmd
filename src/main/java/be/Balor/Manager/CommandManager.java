@@ -37,8 +37,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CommandManager implements CommandExecutor {
 	private HashMap<Command, ACCommands> commands = new HashMap<Command, ACCommands>();
 	private final int MAX_THREADS = 5;
-	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(MAX_THREADS);
-	private int cmdCount = 0;	
+	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
+			MAX_THREADS);
+	private int cmdCount = 0;
 	private static CommandManager instance = null;
 	private JavaPlugin plugin;
 
@@ -109,8 +110,10 @@ public class CommandManager implements CommandExecutor {
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
-				threads.get(cmdCount%MAX_THREADS).addCommand(cmd, sender, args);
+				threads.get(cmdCount).addCommand(cmd, sender, args);
 				cmdCount++;
+				if (cmdCount == 5)
+					cmdCount = 0;
 				return true;
 			} else
 				return false;
@@ -187,7 +190,7 @@ public class CommandManager implements CommandExecutor {
 			sendersQueue.put(sender);
 			argsQueue.put(args);
 			sema.release();
-			if(!isAlive())
+			if (!isAlive())
 				this.start();
 		}
 
