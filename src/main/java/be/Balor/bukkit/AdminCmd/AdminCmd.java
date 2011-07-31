@@ -114,6 +114,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
 		CommandManager.getInstance().registerCommand(MobLimit.class);
+		CommandManager.getInstance().registerCommand(NoPickup.class);
 
 	}
 
@@ -228,18 +229,14 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("killMob", ChatColor.RED + "Killing mobs (" + ChatColor.WHITE + "%type"
 				+ ChatColor.RED + ") of worlds : " + ChatColor.DARK_PURPLE + "%worlds");
 		Utils.addLocale("killedMobs", "%nbKilled" + ChatColor.DARK_RED + " mobs have been killed.");
-		/*
-		 * Utils.addLocale("jumperDisabled", ChatColor.GOLD +
-		 * "Jumper mode disabled."); Utils.addLocale("jumperDisabledTarget",
-		 * ChatColor.GOLD + "Jumper mode disabled for %player");
-		 * Utils.addLocale("jumperEnabled", ChatColor.GOLD +
-		 * "Jumper mode enabled."); Utils.addLocale("jumperEnabledTarget",
-		 * ChatColor.GOLD + "Jumper mode enabled for %player");
-		 */
 		Utils.addLocale("flyDisabled", ChatColor.GOLD + "FLY mode disabled.");
 		Utils.addLocale("flyDisabledTarget", ChatColor.GOLD + "FLY mode disabled for %player");
 		Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");
 		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD + "FLY mode enabled for %player");
+		Utils.addLocale("npDisabled", ChatColor.GOLD + "No Pickup mode disabled.");
+		Utils.addLocale("npDisabledTarget", ChatColor.GOLD + "No Pickup mode disabled for %player");
+		Utils.addLocale("npEnabled", ChatColor.GOLD + "No Pickup mode enabled.");
+		Utils.addLocale("npEnabledTarget", ChatColor.GOLD + "No Pickup mode enabled for %player");
 		Utils.addLocale("afkKick", "You have been kick because you were AFK");
 		Utils.addLocale("freezeDisabled", ChatColor.DARK_GREEN + "You can now move again.");
 		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN
@@ -292,6 +289,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_LOGIN, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_CHAT, pOqL, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, eL, Priority.Highest, this);

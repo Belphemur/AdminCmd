@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -190,6 +191,11 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 			Utils.sI18n(p, "muteEnabled");
 		}
+	}
+	@Override
+	 public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+		if(worker.isValueSet(Type.NO_PICKUP, event.getPlayer()))
+			event.setCancelled(true);
 	}
 
 	protected class UpdateInvisibleOnJoin implements Runnable {

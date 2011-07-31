@@ -16,8 +16,10 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.command.CommandSender;
+import java.util.HashMap;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Type;
@@ -28,38 +30,52 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class UnBan extends ACCommands {
+public class NoPickup extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public UnBan() {
-		permNode = "admincmd.player.ban";
-		cmdName = "bal_unban";
+	public NoPickup() {
+		permNode = "admincmd.player.nopickup";
+		cmdName = "bal_np";
+		other = true;
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		String unban = args[0];
-		if(ACHelper.getInstance().isValueSet(Type.BANNED, unban))
-		{
-			ACHelper.getInstance().removeValueWithFile(Type.BANNED, unban);
-			sender.getServer().broadcastMessage(Utils.I18n("unban", "player", unban));
+		Player player = Utils.getUser(sender, args, permNode);
+		if (player != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", player.getName());
+			if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, player.getName())) {
+				ACHelper.getInstance().removeValue(Type.NO_PICKUP, player);
+				Utils.sI18n(player, "npDisabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "npDisabledTarget", replace);
+			} else {
+				ACHelper.getInstance().addValue(Type.NO_PICKUP, player);
+				Utils.sI18n(player, "npEnabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "npEnabledTarget", replace);
+			}
 		}
-		else
-			Utils.sI18n(sender, "playerNotFound", "player", unban);
-
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {		
-		return args!=null && args.length>=1;
+	public boolean argsCheck(String... args) {
+		return args != null;
 	}
 
 }

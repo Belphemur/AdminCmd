@@ -222,3 +222,7 @@ commands:
     description: Limit the mob spawn on the world.
     aliases: [moblimit, ml]
     usage: /<command> worldName [limit || none]
+  bal_np:
+    description: the player don't take any item.
+    aliases: [np,nopickup]
+    usage: /<command>

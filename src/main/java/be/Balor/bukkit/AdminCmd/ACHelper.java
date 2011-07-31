@@ -54,6 +54,7 @@ public class ACHelper {
 			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
 	private ExtendedConfiguration pluginConfig;
+
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
@@ -132,7 +133,8 @@ public class ACHelper {
 		InvisibleWorker.getInstance()
 				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
 		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
-		LocaleManager.getInstance().setLocaleFile(pluginConfig.getString("locale", "en_US")+".yml");
+		LocaleManager.getInstance().setLocaleFile(
+				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 	}
 
@@ -486,6 +488,9 @@ public class ACHelper {
 	public boolean removeKeyFromValues(String player) {
 		boolean found = false;
 		for (Type type : storedTypeValues.keySet()) {
+			if (type.equals(Type.BANNED) || type.equals(Type.MUTED) || type.equals(Type.FREEZED)
+					|| type.equals(Type.MOB_LIMIT))
+				continue;
 			if (storedTypeValues.get(type).remove(player) != null)
 				found = true;
 		}
@@ -605,7 +610,7 @@ public class ACHelper {
 		ban.save();
 	}
 
-	public void removePowerUserWithFile(Type power, String user) {
+	public void removeValueWithFile(Type power, String user) {
 		removeValue(power, user);
 		Configuration ban = fManager.getYml(power.toString());
 		ban.removeProperty(power + "." + user);
