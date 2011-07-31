@@ -290,6 +290,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_CHAT, pOqL, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, eL, Priority.High, this);
+		pm.registerEvent(Event.Type.CREATURE_SPAWN, eL, Priority.Highest, this);
 	}
 
 	public void onDisable() {
