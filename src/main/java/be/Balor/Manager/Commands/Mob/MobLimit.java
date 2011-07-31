@@ -60,9 +60,10 @@ public class MobLimit extends ACCommands {
 				replace.put("world", args[1]);
 				Utils.sI18n(sender, "mobLimit", replace);
 			} catch (NumberFormatException e) {
-				if (args[1].equals("none"))
+				if (args[1].equals("none")) {
 					ACHelper.getInstance().removeValue(Type.MOB_LIMIT, world.getName());
-				else
+					Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
+				} else
 					Utils.sI18n(sender, "NaN", "number", args[1]);
 			}
 

@@ -256,6 +256,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
 		LocaleManager.getInstance().save();
+		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN + "Mob limit is removed for world : %world");
+		LocaleManager.getInstance().save();
 	}
 
 	public void onEnable() {
