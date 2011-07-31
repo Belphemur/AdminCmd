@@ -20,9 +20,11 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -74,6 +76,14 @@ public class Invisible extends ACCommands {
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null;
+	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
+		PermissionManager.getInstance().addPermChild("admincmd.invisible.notatarget", PermissionDefault.FALSE);
 	}
 
 }

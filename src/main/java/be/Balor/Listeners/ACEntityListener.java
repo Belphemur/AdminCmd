@@ -18,16 +18,20 @@ package be.Balor.Listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityListener;
 
+import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.Powers;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACEntityListener extends org.bukkit.event.entity.EntityListener {
+public class ACEntityListener extends EntityListener {
 	ACHelper worker;
 
 	/**
@@ -57,5 +61,16 @@ public class ACEntityListener extends org.bukkit.event.entity.EntityListener {
 			event.setDamage(0);
 		}
 
+	}
+
+	@Override
+	public void onEntityTarget(EntityTargetEvent event) {
+		if(event.isCancelled())
+			return;
+		if(!(event.getTarget() instanceof Player))
+			return;
+		Player p = (Player)event.getTarget();
+		if(InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) && PermissionManager.hasPerm(p, "admincmd.invisible.notatarget"))
+			event.setCancelled(true);
 	}
 }

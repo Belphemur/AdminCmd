@@ -16,10 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
-import java.util.logging.Logger;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
@@ -40,7 +36,6 @@ public abstract class ACCommands {
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
 	protected PluginCommand pluginCommand;
-	protected ExecutorThread executorThread = new ExecutorThread(this);
 
 	/**
 	 * 
@@ -48,32 +43,6 @@ public abstract class ACCommands {
 	public ACCommands() {
 		permNode = "";
 		cmdName = "";
-	}
-
-	/**
-	 * Add the argument to the command, to execute it.
-	 * 
-	 * @param sender
-	 * @param args
-	 * @throws InterruptedException
-	 */
-	public void addArgs(CommandSender sender, String[] args) throws InterruptedException {
-		executorThread.addArgs(sender, args);
-		if(executorThread == null)
-		{
-			executorThread = new ExecutorThread(this);
-			executorThread.start();
-		}
-		else if (!executorThread.isAlive())
-			executorThread.start();
-	}
-
-	/**
-	 * Stop the command executor thread
-	 */
-	public void stopThread() {
-		executorThread.stopThread();
-		executorThread = null;
 	}
 
 	/**
@@ -154,73 +123,6 @@ public abstract class ACCommands {
 	 */
 	public PluginCommand getPluginCommand() {
 		return pluginCommand;
-	}
-
-	/**
-	 * @author Balor (aka Antoine Aflalo)
-	 * 
-	 */
-	private class ExecutorThread extends Thread {
-		protected ACCommands command;
-		protected LinkedBlockingQueue<CommandSender> sendersQueue;
-		protected LinkedBlockingQueue<String[]> argsQueue;
-		boolean stop = false;
-		Semaphore sema;
-		Object threadSync = new Object();
-
-		/**
-		 * 
-		 */
-		public ExecutorThread(ACCommands cmd) {
-			command = cmd;
-			sendersQueue = new LinkedBlockingQueue<CommandSender>(5);
-			argsQueue = new LinkedBlockingQueue<String[]>(5);
-			sema = new Semaphore(0);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Thread#run()
-		 */
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					synchronized (threadSync) {
-						if(this.stop)
-							break;
-					}
-					sema.acquire();
-					synchronized (threadSync) {
-						if(this.stop)
-							break;
-					}
-					command.execute(sendersQueue.poll(), argsQueue.poll());
-				} catch (InterruptedException e) {
-				} catch (Throwable t) {
-					Logger.getLogger("Minecraft")
-							.severe("[AdminCmd] The command "
-									+ command.getCmdName()
-									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-					t.printStackTrace();
-				}
-
-			}
-		}
-
-		public synchronized void stopThread() {
-			stop = true;
-			sema.release();
-		}
-
-		public synchronized void addArgs(CommandSender sender, String[] args)
-				throws InterruptedException {
-			sendersQueue.put(sender);
-			argsQueue.put(args);
-			sema.release();
-		}
-
 	}
 
 }

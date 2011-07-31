@@ -16,7 +16,10 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -33,6 +36,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class CommandManager implements CommandExecutor {
 	private HashMap<Command, ACCommands> commands = new HashMap<Command, ACCommands>();
+	private final int MAX_THREADS = 5;
+	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(MAX_THREADS);
+	private int cmdCount = 0;	
 	private static CommandManager instance = null;
 	private JavaPlugin plugin;
 
@@ -45,13 +51,14 @@ public class CommandManager implements CommandExecutor {
 		return instance;
 	}
 
-	
 	/**
 	 * @param plugin
 	 *            the plugin to set
 	 */
 	public void setPlugin(JavaPlugin plugin) {
 		this.plugin = plugin;
+		for (int i = 0; i < MAX_THREADS; i++)
+			threads.add(new ExecutorThread());
 	}
 
 	/**
@@ -87,11 +94,10 @@ public class CommandManager implements CommandExecutor {
 								+ cmd.getName() + " : " + aliases);
 		}
 	}
-	public void stopAllExecutorThreads()
-	{
-		for(ACCommands cmd : commands.values())
-		{
-			cmd.stopThread();
+
+	public void stopAllExecutorThreads() {
+		for (ExecutorThread t : threads) {
+			t.stopThread();
 		}
 	}
 
@@ -103,7 +109,7 @@ public class CommandManager implements CommandExecutor {
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
-				cmd.addArgs(sender, args);
+				threads.get(cmdCount%MAX_THREADS).addCommand(cmd, sender, args);
 				return true;
 			} else
 				return false;
@@ -120,5 +126,69 @@ public class CommandManager implements CommandExecutor {
 			t.printStackTrace();
 			return false;
 		}
+	}
+
+	/**
+	 * @author Balor (aka Antoine Aflalo)
+	 * 
+	 */
+	private class ExecutorThread extends Thread {
+		protected LinkedBlockingQueue<ACCommands> commands;
+		protected LinkedBlockingQueue<CommandSender> sendersQueue;
+		protected LinkedBlockingQueue<String[]> argsQueue;
+		boolean stop = false;
+		Semaphore sema;
+		Object threadSync = new Object();
+
+		/**
+		 * 
+		 */
+		public ExecutorThread() {
+			commands = new LinkedBlockingQueue<ACCommands>(10);
+			sendersQueue = new LinkedBlockingQueue<CommandSender>(10);
+			argsQueue = new LinkedBlockingQueue<String[]>(10);
+			sema = new Semaphore(0);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Thread#run()
+		 */
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					synchronized (threadSync) {
+						if (this.stop)
+							break;
+					}
+					sema.acquire();
+					synchronized (threadSync) {
+						if (this.stop)
+							break;
+					}
+					commands.poll().execute(sendersQueue.poll(), argsQueue.poll());
+				} catch (InterruptedException e) {
+				}
+
+			}
+		}
+
+		public synchronized void stopThread() {
+			stop = true;
+			sema.release();
+		}
+
+		public synchronized void addCommand(final ACCommands cmd, final CommandSender sender,
+				final String[] args) throws InterruptedException {
+			commands.put(cmd);
+			sendersQueue.put(sender);
+			argsQueue.put(args);
+			sema.release();
+			if(!isAlive())
+				this.start();
+		}
+
 	}
 }
