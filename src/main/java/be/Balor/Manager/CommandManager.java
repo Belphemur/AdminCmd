@@ -45,6 +45,7 @@ public class CommandManager implements CommandExecutor {
 		return instance;
 	}
 
+	
 	/**
 	 * @param plugin
 	 *            the plugin to set

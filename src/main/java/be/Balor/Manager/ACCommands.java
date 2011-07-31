@@ -20,7 +20,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
@@ -60,7 +59,12 @@ public abstract class ACCommands {
 	 */
 	public void addArgs(CommandSender sender, String[] args) throws InterruptedException {
 		executorThread.addArgs(sender, args);
-		if (!executorThread.isAlive())
+		if(executorThread == null)
+		{
+			executorThread = new ExecutorThread(this);
+			executorThread.start();
+		}
+		else if (!executorThread.isAlive())
 			executorThread.start();
 	}
 
@@ -69,6 +73,7 @@ public abstract class ACCommands {
 	 */
 	public void stopThread() {
 		executorThread.stopThread();
+		executorThread = null;
 	}
 
 	/**
@@ -180,26 +185,24 @@ public abstract class ACCommands {
 		 */
 		@Override
 		public void run() {
-			boolean stop = false;
-			while (!stop) {
-				synchronized (threadSync) {
-					stop = this.stop;
-				}
-				CommandSender sender = sendersQueue.poll();
+			while (true) {
 				try {
+					synchronized (threadSync) {
+						if(this.stop)
+							break;
+					}
 					sema.acquire();
-					command.execute(sender, argsQueue.poll());
+					synchronized (threadSync) {
+						if(this.stop)
+							break;
+					}
+					command.execute(sendersQueue.poll(), argsQueue.poll());
 				} catch (InterruptedException e) {
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft")
 							.severe("[AdminCmd] The command "
 									+ command.getCmdName()
 									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-					sender.sendMessage("[AdminCmd]"
-							+ ChatColor.RED
-							+ " The command "
-							+ command.getCmdName()
-							+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 					t.printStackTrace();
 				}
 
@@ -208,6 +211,7 @@ public abstract class ACCommands {
 
 		public synchronized void stopThread() {
 			stop = true;
+			sema.release();
 		}
 
 		public synchronized void addArgs(CommandSender sender, String[] args)
