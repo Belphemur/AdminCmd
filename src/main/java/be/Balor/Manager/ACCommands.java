@@ -16,6 +16,9 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
@@ -36,6 +39,7 @@ public abstract class ACCommands {
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
 	protected PluginCommand pluginCommand;
+	protected ExecutorThread executorThread = new ExecutorThread(this);
 
 	/**
 	 * 
@@ -43,6 +47,26 @@ public abstract class ACCommands {
 	public ACCommands() {
 		permNode = "";
 		cmdName = "";
+	}
+
+	/**
+	 * Add the argument to the command, to execute it.
+	 * 
+	 * @param sender
+	 * @param args
+	 * @throws InterruptedException
+	 */
+	public void addArgs(CommandSender sender, String[] args) throws InterruptedException {
+		executorThread.addArgs(sender, args);
+		if(!executorThread.isAlive())
+			executorThread.start();
+	}
+	/**
+	 * Stop the command executor thread
+	 */
+	public void stopThread()
+	{
+		executorThread.stopThread();
 	}
 
 	/**
@@ -113,7 +137,6 @@ public abstract class ACCommands {
 		if ((pluginCommand = plugin.getCommand(cmdName)) == null)
 			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
 
-
 		if (pluginCommand.getAliases().isEmpty())
 			throw new CommandAlreadyExist(cmdName
 					+ " has all his alias already registered. Command deactivated");
@@ -125,4 +148,61 @@ public abstract class ACCommands {
 	public PluginCommand getPluginCommand() {
 		return pluginCommand;
 	}
+
+	/**
+	 * @author Balor (aka Antoine Aflalo)
+	 * 
+	 */
+	private class ExecutorThread extends Thread {
+		protected ACCommands command;
+		protected LinkedBlockingQueue<CommandSender> sendersQueue;
+		protected LinkedBlockingQueue<String[]> argsQueue;
+		boolean stop = false;
+		Semaphore sema;
+		Object threadSync =  new Object();
+
+		/**
+		 * 
+		 */
+		public ExecutorThread(ACCommands cmd) {
+			command = cmd;
+			sendersQueue = new LinkedBlockingQueue<CommandSender>(5);
+			argsQueue = new LinkedBlockingQueue<String[]>(5);
+			sema = new Semaphore(0);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Thread#run()
+		 */
+		@Override
+		public void run() {
+			boolean stop = false;
+			while(!stop)
+			{
+				synchronized(threadSync)
+				{
+					stop = this.stop;
+				}
+				try {
+					sema.acquire();
+					command.execute(sendersQueue.poll(), argsQueue.poll());
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+
+		public synchronized void stopThread() {
+			stop = true;
+		}
+		public synchronized void addArgs(CommandSender sender, String[] args) throws InterruptedException
+		{
+			sendersQueue.put(sender);
+			argsQueue.put(args);
+			sema.release();
+		}
+
+	}
+
 }

@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -86,6 +87,13 @@ public class CommandManager implements CommandExecutor {
 								+ cmd.getName() + " : " + aliases);
 		}
 	}
+	public void stopAllExecutorThreads()
+	{
+		for(ACCommands cmd : commands.values())
+		{
+			cmd.stopThread();
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -95,7 +103,7 @@ public class CommandManager implements CommandExecutor {
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
-				cmd.execute(sender, args);
+				cmd.addArgs(sender, args);
 				return true;
 			} else
 				return false;
@@ -109,7 +117,7 @@ public class CommandManager implements CommandExecutor {
 					+ " The command "
 					+ command.getName()
 					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-			t.printStackTrace();
+			Logger.getLogger("Minecraft").severe(Arrays.toString(t.getStackTrace()));
 			return false;
 		}
 	}
