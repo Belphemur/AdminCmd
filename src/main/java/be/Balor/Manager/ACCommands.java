@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
@@ -201,7 +200,7 @@ public abstract class ACCommands {
 							+ " The command "
 							+ command.getCmdName()
 							+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-					Logger.getLogger("Minecraft").severe(Arrays.toString(t.getStackTrace()));
+					t.printStackTrace();
 				}
 
 			}

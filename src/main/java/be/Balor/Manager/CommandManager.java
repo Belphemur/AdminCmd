@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -117,7 +116,7 @@ public class CommandManager implements CommandExecutor {
 					+ " The command "
 					+ command.getName()
 					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-			Logger.getLogger("Minecraft").severe(Arrays.toString(t.getStackTrace()));
+			t.printStackTrace();
 			return false;
 		}
 	}
