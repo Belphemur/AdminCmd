@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import java.util.HashMap;
-
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -39,21 +37,12 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public class ACEntityListener extends EntityListener {
 	private ACHelper worker;
-	private HashMap<World, Integer> mobCount = new HashMap<World, Integer>();
 
 	/**
 	 * 
 	 */
 	public ACEntityListener(ACHelper admin) {
 		worker = admin;
-		for (World w : worker.getPluginInstance().getServer().getWorlds()) {
-			Integer count = 0;
-			for (Entity e : w.getEntities())
-				if (MobCheck.isMonster(e))
-					count++;
-			mobCount.put(w, count.intValue());
-		}
-
 	}
 
 	@Override
@@ -89,21 +78,20 @@ public class ACEntityListener extends EntityListener {
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget"))
 			event.setCancelled(true);
 	}
+
 	@Override
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		Entity e = event.getEntity();
 		if (!MobCheck.isMonster(e))
 			return;
-		Integer count = mobCount.get(e.getWorld());
-		Integer limit = (Integer) ACHelper.getInstance().getValue(Type.MOB_LIMIT,
-				e.getWorld().getName());
+		World world = e.getWorld();
+		Integer count = world.getLivingEntities().size() - world.getPlayers().size();
+		Integer limit = (Integer) ACHelper.getInstance().getValue(Type.MOB_LIMIT, world.getName());
 		if (limit != null) {
 			if (count + 1 >= limit) {
 				event.setCancelled(true);
 				System.out.print("Spawn blocked");
-			} else
-				count++;
-		} else
-			count++;
+			}
+		}
 	}
 }
