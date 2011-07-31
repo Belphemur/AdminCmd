@@ -133,7 +133,7 @@ public class ACHelper {
 		InvisibleWorker.getInstance()
 				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
 		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
-		LocaleManager.getInstance().setLocaleFile(pluginConfig.getString("locale", "en_US"));
+		LocaleManager.getInstance().setLocaleFile(pluginConfig.getString("locale", "en_US")+".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 	}
 
