@@ -110,6 +110,7 @@ public class CommandManager implements CommandExecutor {
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
 				threads.get(cmdCount%MAX_THREADS).addCommand(cmd, sender, args);
+				cmdCount++;
 				return true;
 			} else
 				return false;
