@@ -67,7 +67,7 @@ public abstract class ACCommands {
 	 * @return
 	 */
 	public boolean permissionCheck(CommandSender sender) {
-		return PermissionManager.getInstance().hasPerm(sender, bukkitPerm);
+		return PermissionManager.hasPerm(sender, bukkitPerm);
 	}
 
 	/**

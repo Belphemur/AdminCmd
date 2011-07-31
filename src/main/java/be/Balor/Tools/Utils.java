@@ -157,7 +157,7 @@ public class Utils {
 			boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
-			if (PermissionManager.getInstance().hasPerm(sender, permNode + ".other"))
+			if (PermissionManager.hasPerm(sender, permNode + ".other"))
 				target = sender.getServer().getPlayer(args[index]);
 			else
 				return target;

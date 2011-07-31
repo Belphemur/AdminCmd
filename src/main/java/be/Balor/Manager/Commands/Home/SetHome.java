@@ -21,8 +21,10 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -77,6 +79,14 @@ public class SetHome extends ACCommands {
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null;
+	}
+
+	@Override
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
+		for (int i = 0; i < 150; i++)
+			PermissionManager.getInstance().addPermChild("admincmd.maxHomeByUser." + i,
+					PermissionDefault.FALSE);
 	}
 
 }

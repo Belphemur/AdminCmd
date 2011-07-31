@@ -19,10 +19,13 @@ package be.Balor.Manager;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Tools.Utils;
@@ -117,11 +120,11 @@ public class PermissionManager {
 	 * @param perm
 	 * @return boolean
 	 */
-	public boolean hasPerm(CommandSender player, String perm) {
+	public static boolean hasPerm(CommandSender player, String perm) {
 		return hasPerm(player, perm, true);
 	}
 
-	public boolean hasPerm(CommandSender player, Permission perm) {
+	public static boolean hasPerm(CommandSender player, Permission perm) {
 		return hasPerm(player, perm, true);
 	}
 
@@ -133,7 +136,7 @@ public class PermissionManager {
 	 * @param errorMsg
 	 * @return
 	 */
-	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+	public static boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
 		if (permission == null) {
@@ -153,7 +156,7 @@ public class PermissionManager {
 
 	}
 
-	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
 		if (permission == null) {
@@ -175,6 +178,17 @@ public class PermissionManager {
 			return false;
 		}
 
+	}
+
+	public static String getPermissionLimit(Player p, String limit) {
+		Pattern regex = Pattern.compile("admincmd\\."+limit.toLowerCase()+"\\.[0-9]+");
+		for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+			Matcher regexMatcher = regex.matcher(info.getPermission());
+			if (regexMatcher.find())
+				return info.getPermission().split("\\.")[2];
+
+		}
+		return null;
 	}
 
 	/**

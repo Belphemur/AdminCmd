@@ -577,7 +577,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackList(CommandSender sender, MaterialContainer mat) {
-		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.material.getId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
@@ -588,7 +588,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackList(CommandSender sender, ItemStack mat) {
-		if (!PermissionManager.getInstance().hasPerm(sender, "admincmd.item.noblacklist", false)
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
 				&& blacklist.contains(mat.getTypeId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
@@ -648,6 +648,9 @@ public class ACHelper {
 				limit = PermissionManager.getPermission().getPermissionInteger(
 						player.getWorld().getName(), player.getName(), "admincmd." + type);
 			}
+		} else {
+			String toParse = PermissionManager.getPermissionLimit(player, "maxHomeByUser");
+			limit = toParse != null ? Integer.parseInt(toParse) : null;
 		}
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(type, 0);
