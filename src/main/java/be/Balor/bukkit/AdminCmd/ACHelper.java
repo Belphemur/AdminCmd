@@ -111,6 +111,7 @@ public class ACHelper {
 		pluginConfig.addProperty("afkKickInMinutes", 3);
 		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
 		pluginConfig.addProperty("maxHomeByUser", 0);
+		pluginConfig.addProperty("fakeQuitWhenInvisible", true);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));

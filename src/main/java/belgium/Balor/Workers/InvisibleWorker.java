@@ -107,7 +107,9 @@ final public class InvisibleWorker {
 										uninvisible(toReappear, p);
 								}
 							});
-			toReappear.getServer().broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
+			if ((Boolean) ACHelper.getInstance().getConfValue("fakeQuitWhenInvisible"))
+				toReappear.getServer().broadcastMessage(
+						ChatColor.YELLOW + name + " joined the game.");
 		}
 
 	}
@@ -183,7 +185,8 @@ final public class InvisibleWorker {
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
-		toVanish.getServer().broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+		if ((Boolean) ACHelper.getInstance().getConfValue("fakeQuitWhenInvisible"))
+			toVanish.getServer().broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 
 	}
 
