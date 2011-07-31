@@ -120,6 +120,8 @@ public class AdminCmd extends JavaPlugin {
 	private void setEnglishLocale() {
 		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
 				+ "%player");
+		Utils.addLocale("worldNotFound", ChatColor.RED + "No such world: " + ChatColor.WHITE
+				+ "%world");
 		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
 				+ "%material");
 		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players:");

@@ -67,7 +67,8 @@ public class MobLimit extends ACCommands {
 					Utils.sI18n(sender, "NaN", "number", args[1]);
 			}
 
-		}
+		} else
+			Utils.sI18n(sender, "worldNotFound", "world", args[0]);
 	}
 
 	/*
