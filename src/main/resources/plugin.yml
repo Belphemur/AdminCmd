@@ -221,4 +221,4 @@ commands:
   bal_moblimit:
     description: Limit the mob spawn on the world.
     aliases: [moblimit, ml]
-    usage: /<command> world limit
+    usage: /<command> worldName [limit || none]

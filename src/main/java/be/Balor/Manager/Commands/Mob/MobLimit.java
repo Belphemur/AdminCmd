@@ -53,14 +53,17 @@ public class MobLimit extends ACCommands {
 		if (world != null) {
 			int limit;
 			try {
-				HashMap<String, String>replace = new HashMap<String, String>();
+				HashMap<String, String> replace = new HashMap<String, String>();
 				limit = Integer.parseInt(args[1]);
 				ACHelper.getInstance().addValue(Type.MOB_LIMIT, world.getName(), limit);
 				replace.put("number", args[0]);
-				replace.put("world", args[1]);		
+				replace.put("world", args[1]);
 				Utils.sI18n(sender, "mobLimit", replace);
 			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", args[1]);
+				if (args[1].equals("none"))
+					ACHelper.getInstance().removeValue(Type.MOB_LIMIT, world.getName());
+				else
+					Utils.sI18n(sender, "NaN", "number", args[1]);
 			}
 
 		}
