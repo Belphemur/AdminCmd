@@ -82,12 +82,12 @@ public class ACEntityListener extends EntityListener {
 	@Override
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		Entity e = event.getEntity();
-		if (!MobCheck.isMonster(e))
+		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
 			return;
-		World world = e.getWorld();
-		Integer count = world.getLivingEntities().size() - world.getPlayers().size();
+		World world = e.getWorld();		
 		Integer limit = (Integer) ACHelper.getInstance().getValue(Type.MOB_LIMIT, world.getName());
 		if (limit != null) {
+			Integer count = world.getLivingEntities().size() - world.getPlayers().size();
 			if (count + 1 >= limit) {
 				event.setCancelled(true);
 				System.out.print("Spawn blocked");

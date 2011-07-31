@@ -20,11 +20,7 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
@@ -78,11 +74,7 @@ public class SpawnMob extends ACCommands {
 
 								public void run() {
 									for (int i = 0; i < nb; i++) {
-										LivingEntity toSpawn = player.getWorld().spawnCreature(player.getLocation(), ct);
-										CreatureSpawnEvent event = new CreatureSpawnEvent(toSpawn, ct, player.getLocation(), SpawnReason.CUSTOM); 
-										AdminCmd.getBukkitServer().getPluginManager().callEvent(event);
-										if(event.isCancelled())
-											toSpawn.setHealth(0);
+										player.getWorld().spawnCreature(player.getLocation(), ct);
 										try {
 											Thread.sleep(5);
 										} catch (InterruptedException e) {

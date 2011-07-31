@@ -17,7 +17,7 @@ public class MobCheck {
 				|| (e instanceof Ghast) || (e instanceof Giant) || (e instanceof Slime);
 	}
 
-	public static boolean isAnimal(LivingEntity e) {
+	public static boolean isAnimal(Entity e) {
 		return (e instanceof Chicken) || (e instanceof Cow) || (e instanceof Sheep)
 				|| (e instanceof Squid) || (e instanceof Pig)|| (e instanceof Wolf) ;
 	}
