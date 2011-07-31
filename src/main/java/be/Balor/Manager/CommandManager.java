@@ -140,6 +140,7 @@ public class CommandManager implements CommandExecutor {
 		protected LinkedBlockingQueue<ACCommands> commands;
 		protected LinkedBlockingQueue<CommandSender> sendersQueue;
 		protected LinkedBlockingQueue<String[]> argsQueue;
+		protected final int MAX_REQUEST = 5;
 		boolean stop = false;
 		Semaphore sema;
 		Object threadSync = new Object();
@@ -148,9 +149,9 @@ public class CommandManager implements CommandExecutor {
 		 * 
 		 */
 		public ExecutorThread() {
-			commands = new LinkedBlockingQueue<ACCommands>(10);
-			sendersQueue = new LinkedBlockingQueue<CommandSender>(10);
-			argsQueue = new LinkedBlockingQueue<String[]>(10);
+			commands = new LinkedBlockingQueue<ACCommands>(MAX_REQUEST);
+			sendersQueue = new LinkedBlockingQueue<CommandSender>(MAX_REQUEST);
+			argsQueue = new LinkedBlockingQueue<String[]>(MAX_REQUEST);
 			sema = new Semaphore(0);
 		}
 
@@ -163,10 +164,6 @@ public class CommandManager implements CommandExecutor {
 		public void run() {
 			while (true) {
 				try {
-					synchronized (threadSync) {
-						if (this.stop)
-							break;
-					}
 					sema.acquire();
 					synchronized (threadSync) {
 						if (this.stop)
