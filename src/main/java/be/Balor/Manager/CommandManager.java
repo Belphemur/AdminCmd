@@ -59,7 +59,10 @@ public class CommandManager implements CommandExecutor {
 	public void setPlugin(JavaPlugin plugin) {
 		this.plugin = plugin;
 		for (int i = 0; i < MAX_THREADS; i++)
+		{
 			threads.add(new ExecutorThread());
+			threads.get(i).start();
+		}
 	}
 
 	/**
@@ -187,8 +190,6 @@ public class CommandManager implements CommandExecutor {
 			sendersQueue.put(sender);
 			argsQueue.put(args);
 			sema.release();
-			if (!isAlive())
-				this.start();
 		}
 
 	}
