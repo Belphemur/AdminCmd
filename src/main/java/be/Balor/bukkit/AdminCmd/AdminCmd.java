@@ -259,6 +259,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN + "Mob limit is removed for world : %world");
 		Utils.addLocale("wFreezed", "Weather is freezed in world :");
 		Utils.addLocale("wUnFreezed", "Weather can change in world :");
+		Utils.addLocale("invTitle", "[INV]");
 		LocaleManager.getInstance().save();
 	}
 

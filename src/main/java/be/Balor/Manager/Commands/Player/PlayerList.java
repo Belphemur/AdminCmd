@@ -20,7 +20,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.ACCommands;
 import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.Utils;
@@ -52,14 +51,22 @@ public class PlayerList extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player[] online = sender.getServer().getOnlinePlayers();
-		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE
-				+ (online.length - InvisibleWorker.getInstance().nbInvisibles()));
+		int amount = online.length;
+		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee"))
+			amount -= InvisibleWorker.getInstance().nbInvisibles();
+		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
 		String buffer = "";
 		if (PermissionManager.getPermission() == null) {
+			boolean isInv = false;
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
-				if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
-					String name = p.getDisplayName();
+				if (!(isInv = InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee")) {
+					String name = "";
+					if (isInv)
+						name = Utils.I18n("invTitle") + p.getDisplayName();
+					else
+						name = p.getDisplayName();
 					if (buffer.length() + name.length() + 2 >= 256) {
 						sender.sendMessage(buffer);
 						buffer = "";
@@ -69,12 +76,17 @@ public class PlayerList extends ACCommands {
 			}
 		} else {
 			// changed the playerlist, now support prefixes from groups!!! @foxy
+			boolean isInv = false;
 			for (int i = 0; i < online.length; ++i) {
 				String name = online[i].getName();
 				String prefixstring;
 				String world = "";
+				String invPrefix = "";
 				world = online[i].getWorld().getName();
-				if (!InvisibleWorker.getInstance().hasInvisiblePowers(name)) {
+				if (!(isInv = InvisibleWorker.getInstance().hasInvisiblePowers(name))
+						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee")) {
+					if (isInv)
+						invPrefix = Utils.I18n("invTitle");
 					try {
 						prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
 								.getPrefix();
@@ -91,13 +103,14 @@ public class PlayerList extends ACCommands {
 					if (prefixstring != null && prefixstring.length() > 1) {
 						String result = Utils.colorParser(prefixstring);
 						if (result == null)
-							buffer += prefixstring + online[i].getDisplayName() + ChatColor.WHITE
-									+ ", ";
+							buffer += invPrefix + prefixstring + online[i].getDisplayName()
+									+ ChatColor.WHITE + ", ";
 						else
-							buffer += result + online[i].getDisplayName() + ChatColor.WHITE + ", ";
+							buffer += invPrefix + result + online[i].getDisplayName()
+									+ ChatColor.WHITE + ", ";
 
 					} else {
-						buffer += online[i].getDisplayName() + ", ";
+						buffer += invPrefix + online[i].getDisplayName() + ", ";
 					}
 					if (buffer.length() >= 256) {
 						sender.sendMessage(buffer);
