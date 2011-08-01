@@ -112,7 +112,7 @@ public class CommandManager implements CommandExecutor {
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
 				threads.get(cmdCount).addCommand(cmd, sender, args);
 				cmdCount++;
-				if (cmdCount == 5)
+				if (cmdCount == MAX_THREADS)
 					cmdCount = 0;
 				return true;
 			} else
