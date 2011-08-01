@@ -83,7 +83,8 @@ public class Invisible extends ACCommands {
 	@Override
 	public void registerBukkitPerm() {
 		super.registerBukkitPerm();
-		PermissionManager.getInstance().addPermChild("admincmd.invisible.notatarget", PermissionDefault.FALSE);
+		PermissionManager.getInstance().addPermChild("admincmd.invisible.notatarget", PermissionDefault.OP);
+		PermissionManager.getInstance().addPermChild("admincmd.invisible.cansee", PermissionDefault.OP);
 	}
 
 }

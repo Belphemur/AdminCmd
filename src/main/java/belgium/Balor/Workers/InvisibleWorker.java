@@ -26,6 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.PermissionManager;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -127,6 +128,8 @@ final public class InvisibleWorker {
 		if (hideFrom == null) {
 			return;
 		}
+		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee"))
+			return;
 		if (hide.getName().equals(hideFrom.getName()))
 			return;
 
