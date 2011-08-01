@@ -60,19 +60,20 @@ public class PlayerList extends ACCommands {
 			boolean isInv = false;
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
-				if (!(isInv = InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
-						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee")) {
-					String name = "";
-					if (isInv)
-						name = Utils.I18n("invTitle") + p.getDisplayName();
-					else
-						name = p.getDisplayName();
-					if (buffer.length() + name.length() + 2 >= 256) {
-						sender.sendMessage(buffer);
-						buffer = "";
-					}
-					buffer += name + ", ";
+				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee"))
+					continue;
+				String name = "";
+				if (isInv)
+					name = Utils.I18n("invTitle") + p.getDisplayName();
+				else
+					name = p.getDisplayName();
+				if (buffer.length() + name.length() + 2 >= 256) {
+					sender.sendMessage(buffer);
+					buffer = "";
 				}
+				buffer += name + ", ";
+
 			}
 		} else {
 			// changed the playerlist, now support prefixes from groups!!! @foxy
@@ -83,40 +84,39 @@ public class PlayerList extends ACCommands {
 				String world = "";
 				String invPrefix = "";
 				world = online[i].getWorld().getName();
-				if (!(isInv = InvisibleWorker.getInstance().hasInvisiblePowers(name))
-						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee")) {
-					if (isInv)
-						invPrefix = Utils.I18n("invTitle");
-					try {
-						prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
-								.getPrefix();
-					} catch (Exception e) {
-						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
-								group);
-					} catch (NoSuchMethodError e) {
-						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
-								group);
-					}
-
-					if (prefixstring != null && prefixstring.length() > 1) {
-						String result = Utils.colorParser(prefixstring);
-						if (result == null)
-							buffer += invPrefix + prefixstring + online[i].getDisplayName()
-									+ ChatColor.WHITE + ", ";
-						else
-							buffer += invPrefix + result + online[i].getDisplayName()
-									+ ChatColor.WHITE + ", ";
-
-					} else {
-						buffer += invPrefix + online[i].getDisplayName() + ", ";
-					}
-					if (buffer.length() >= 256) {
-						sender.sendMessage(buffer);
-						buffer = "";
-					}
+				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(name))
+						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee"))
+					continue;
+				if (isInv)
+					invPrefix = Utils.I18n("invTitle");
+				try {
+					prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
+							.getPrefix();
+				} catch (Exception e) {
+					String group = PermissionManager.getPermission().getGroup(world, name);
+					prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
+				} catch (NoSuchMethodError e) {
+					String group = PermissionManager.getPermission().getGroup(world, name);
+					prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
 				}
+
+				if (prefixstring != null && prefixstring.length() > 1) {
+					String result = Utils.colorParser(prefixstring);
+					if (result == null)
+						buffer += invPrefix + prefixstring + online[i].getDisplayName()
+								+ ChatColor.WHITE + ", ";
+					else
+						buffer += invPrefix + result + online[i].getDisplayName() + ChatColor.WHITE
+								+ ", ";
+
+				} else {
+					buffer += invPrefix + online[i].getDisplayName() + ", ";
+				}
+				if (buffer.length() >= 256) {
+					sender.sendMessage(buffer);
+					buffer = "";
+				}
+
 			}
 
 		}

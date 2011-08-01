@@ -128,7 +128,7 @@ final public class InvisibleWorker {
 		if (hideFrom == null) {
 			return;
 		}
-		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee"))
+		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false))
 			return;
 		if (hide.getName().equals(hideFrom.getName()))
 			return;
