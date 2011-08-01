@@ -56,12 +56,14 @@ final public class AFKWorker {
 			instance = new AFKWorker();
 		return instance;
 	}
+
 	/**
 	 * @return the afkChecker
 	 */
 	public AfkChecker getAfkChecker() {
 		return afkChecker;
 	}
+
 	/**
 	 * @return the kickChecker
 	 */
@@ -113,7 +115,8 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	private void setAfk(Player p) {
-		p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+			p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
 		playersAfk.put(p, p.getDisplayName());
 		p.setDisplayName(Utils.I18n("afkTitle") + p.getDisplayName());
 		p.setSleepingIgnored(true);
@@ -125,7 +128,8 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	public void setOnline(Player p) {
-		p.getServer().broadcastMessage(Utils.I18n("online", "player", p.getName()));
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+			p.getServer().broadcastMessage(Utils.I18n("online", "player", p.getName()));
 		p.setDisplayName(playersAfk.get(p));
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
