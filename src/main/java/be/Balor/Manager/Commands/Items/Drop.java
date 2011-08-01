@@ -94,7 +94,7 @@ public class Drop extends ACCommands {
 			} else
 				Utils.sI18n(sender, "dropItemYourself", replace);
 		} else {
-			replace.put("sender", ((Player) sender).getName());
+			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "dropItemOtherPlayer", replace);
 			replace.remove("sender");
 			replace.put("target", target.getName());
