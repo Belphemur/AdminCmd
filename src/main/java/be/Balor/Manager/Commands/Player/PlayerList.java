@@ -52,7 +52,7 @@ public class PlayerList extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		Player[] online = sender.getServer().getOnlinePlayers();
 		int amount = online.length;
-		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee"))
+		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 			amount -= InvisibleWorker.getInstance().nbInvisibles();
 		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
 		String buffer = "";
@@ -61,7 +61,7 @@ public class PlayerList extends ACCommands {
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
 				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
-						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee"))
+						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 					continue;
 				String name = "";
 				if (isInv)
@@ -85,7 +85,7 @@ public class PlayerList extends ACCommands {
 				String invPrefix = "";
 				world = online[i].getWorld().getName();
 				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(name))
-						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee"))
+						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 					continue;
 				if (isInv)
 					invPrefix = Utils.I18n("invTitle");
