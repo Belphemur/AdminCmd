@@ -14,17 +14,51 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Manager.Commands.Weather;
+
+import java.util.HashMap;
+
+import org.bukkit.command.CommandSender;
+
+import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Type;
+import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public enum Type {
-	FLY, VULCAN, GOD, THOR, BANNED, FIREBALL, SPYMSG, FREEZED, MUTED, MOB_LIMIT, NO_PICKUP, WEATHER_FREEZED;
-	@Override
-	public String toString() {
-		String s = super.toString();
-		return s.toLowerCase();
+public class FreezeWeather extends ACCommands {
+
+	/**
+	 * 
+	 */
+	public FreezeWeather() {
+		permNode = "admincmd.weather.freeze";
+		cmdName = "bal_wfreeze";
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
+	 */
+	@Override
+	public void execute(CommandSender sender, String... args) {
+		Utils.weather(sender, "freeze", args);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 */
+	@Override
+	public boolean argsCheck(String... args) {
+		return args != null;
+	}
+
 }

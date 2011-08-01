@@ -226,3 +226,7 @@ commands:
     description: the player don't take any item.
     aliases: [np,nopickup]
     usage: /<command>
+  bal_wfreeze:
+    description: freeze the weather.
+    aliases: [wfreeze,wf]
+    usage: /<command>

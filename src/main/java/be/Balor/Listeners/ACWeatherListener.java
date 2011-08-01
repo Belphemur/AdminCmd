@@ -14,17 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Listeners;
+
+import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.weather.WeatherListener;
+
+import be.Balor.Tools.Type;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public enum Type {
-	FLY, VULCAN, GOD, THOR, BANNED, FIREBALL, SPYMSG, FREEZED, MUTED, MOB_LIMIT, NO_PICKUP, WEATHER_FREEZED;
+public class ACWeatherListener extends WeatherListener {
 	@Override
-	public String toString() {
-		String s = super.toString();
-		return s.toLowerCase();
+	  public void onWeatherChange(WeatherChangeEvent event) {
+		if(ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, event.getWorld().getName()))
+			event.setCancelled(true);
 	}
+
 }

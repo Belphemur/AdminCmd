@@ -445,11 +445,8 @@ public class ACHelper {
 	}
 
 	public void removeValue(Type powerName, String user) {
-		if (storedTypeValues.containsKey(powerName)) {
+		if (storedTypeValues.containsKey(powerName))
 			storedTypeValues.get(powerName).remove(user);
-			if (storedTypeValues.get(powerName).isEmpty())
-				storedTypeValues.remove(powerName);
-		}
 	}
 
 	public void removeValue(Type powerName, Player user) {

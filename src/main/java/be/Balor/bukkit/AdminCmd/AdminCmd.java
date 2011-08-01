@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
+import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.PermParent;
@@ -115,7 +116,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(UnMute.class);
 		CommandManager.getInstance().registerCommand(MobLimit.class);
 		CommandManager.getInstance().registerCommand(NoPickup.class);
-
+		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 	}
 
 	private void setEnglishLocale() {
@@ -256,6 +257,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
 		LocaleManager.getInstance().save();
 		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN + "Mob limit is removed for world : %world");
+		Utils.addLocale("wFreezed", "Weather is freezed in world :");
+		Utils.addLocale("wUnFreezed", "Weather can change in world :");
 		LocaleManager.getInstance().save();
 	}
 
@@ -293,6 +296,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, eL, Priority.Highest, this);
+		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 
 	public void onDisable() {

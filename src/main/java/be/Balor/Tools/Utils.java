@@ -290,11 +290,16 @@ public class Utils {
 	}
 
 	private static void weatherChange(CommandSender sender, World w, String type, String[] duration) {
-		if (type == "clear") {
+		if ((type.equals("clear") || type.equals("storm"))
+				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFreezed") + " " + w.getName());
+			return;
+		}
+		if (type.equals("clear")) {
 			w.setThundering(false);
 			w.setStorm(false);
 			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
-		} else {
+		} else if (type.equals("storm")) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			if (duration == null || duration.length < 1) {
 				w.setStorm(true);
@@ -316,6 +321,16 @@ public class Utils {
 					replace.put("duration", "10");
 					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				}
+			}
+		} else {
+			if (ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
+				ACHelper.getInstance().removeValue(Type.WEATHER_FREEZED, w.getName());
+				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFreezed") + " "
+						+ ChatColor.WHITE + w.getName());
+			} else {
+				ACHelper.getInstance().addValue(Type.WEATHER_FREEZED, w.getName());
+				sender.sendMessage(ChatColor.RED + Utils.I18n("wFreezed") + " " + ChatColor.WHITE
+						+ w.getName());
 			}
 		}
 	}
