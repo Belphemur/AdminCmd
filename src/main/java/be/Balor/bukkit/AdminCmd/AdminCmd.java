@@ -28,6 +28,7 @@ import be.Balor.Manager.Commands.Weather.*;
 import be.Balor.Manager.Commands.Warp.*;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Tools.Utils;
 
 /**
@@ -286,6 +287,7 @@ public class AdminCmd extends JavaPlugin {
 		setEnglishLocale();
 		registerPermParents();
 		CommandManager.getInstance().setPlugin(this);
+		TerminalCommandManager.getInstance();
 		registerCmds();
 		CommandManager.getInstance().checkAlias();
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
