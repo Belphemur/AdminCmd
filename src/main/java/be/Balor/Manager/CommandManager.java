@@ -30,6 +30,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.bukkit.AdminCmd.AdminCmd;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -58,8 +60,7 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setPlugin(JavaPlugin plugin) {
 		this.plugin = plugin;
-		for (int i = 0; i < MAX_THREADS; i++)
-		{
+		for (int i = 0; i < MAX_THREADS; i++) {
 			threads.add(new ExecutorThread());
 			threads.get(i).start();
 		}
@@ -131,6 +132,10 @@ public class CommandManager implements CommandExecutor {
 					+ command.getName()
 					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 			t.printStackTrace();
+			if(cmdCount ==0)
+				threads.get(4).start();
+			else
+				threads.get(cmdCount-1).start();
 			return false;
 		}
 	}
@@ -165,6 +170,7 @@ public class CommandManager implements CommandExecutor {
 		 */
 		@Override
 		public void run() {
+			ACCommands command = null;
 			while (true) {
 				try {
 					sema.acquire();
@@ -172,8 +178,18 @@ public class CommandManager implements CommandExecutor {
 						if (this.stop)
 							break;
 					}
+					command = commands.peek();
 					commands.poll().execute(sendersQueue.poll(), argsQueue.poll());
 				} catch (InterruptedException e) {
+				} catch (Throwable t) {
+					Logger.getLogger("Minecraft")
+							.severe("[AdminCmd] The command "
+									+ command.getCmdName()
+									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+					AdminCmd.getBukkitServer().broadcastMessage("[AdminCmd] The command "
+									+ command.getCmdName()
+									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+					t.printStackTrace();
 				}
 
 			}
