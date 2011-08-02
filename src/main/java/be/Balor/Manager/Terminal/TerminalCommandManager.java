@@ -101,6 +101,7 @@ public class TerminalCommandManager {
 			File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
 			File workingDir = scripts.getParentFile();
 			Configuration conf = new Configuration(scripts);
+			conf.load();
 			if (conf.getProperty(cmdName) == null)
 				throw new CommandNotFound(cmdName + " is not registered");
 			if (System.getProperty("os.name").contains("Windows")) {
