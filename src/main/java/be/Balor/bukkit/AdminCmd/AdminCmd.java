@@ -256,10 +256,14 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
 		LocaleManager.getInstance().save();
-		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN + "Mob limit is removed for world : %world");
+		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN
+				+ "Mob limit is removed for world : %world");
 		Utils.addLocale("wFreezed", "Weather is freezed in world :");
 		Utils.addLocale("wUnFreezed", "Weather can change in world :");
 		Utils.addLocale("invTitle", "[INV]");
+		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome to " + ChatColor.WHITE + "%server"
+				+ ChatColor.GOLD + " there is currently " + ChatColor.DARK_RED
+				+ "%nb players connected");
 		LocaleManager.getInstance().save();
 	}
 

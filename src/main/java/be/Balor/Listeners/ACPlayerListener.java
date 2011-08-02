@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -58,10 +60,8 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName()))
-			event.disallow(
-					Result.KICK_BANNED,
-					ACHelper.getInstance()
-							.getValue(Type.BANNED, event.getPlayer().getName())
+			event.disallow(Result.KICK_BANNED,
+					ACHelper.getInstance().getValue(Type.BANNED, event.getPlayer().getName())
 							.toString());
 	}
 
@@ -93,6 +93,15 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		if ((Boolean) ACHelper.getInstance().getConfValue("MessageOfTheDay")) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", event.getPlayer().getName());
+			replace.put(
+					"nb",
+					String.valueOf(event.getPlayer().getServer().getOnlinePlayers().length
+							- InvisibleWorker.getInstance().nbInvisibles()));
+			Utils.sI18n(event.getPlayer(), "MOTD", replace);
+		}
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
@@ -192,9 +201,10 @@ public class ACPlayerListener extends PlayerListener {
 			Utils.sI18n(p, "muteEnabled");
 		}
 	}
+
 	@Override
-	 public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if(worker.isValueSet(Type.NO_PICKUP, event.getPlayer()))
+	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+		if (worker.isValueSet(Type.NO_PICKUP, event.getPlayer()))
 			event.setCancelled(true);
 	}
 

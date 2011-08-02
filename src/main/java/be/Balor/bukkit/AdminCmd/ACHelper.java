@@ -113,6 +113,7 @@ public class ACHelper {
 		pluginConfig.addProperty("maxHomeByUser", 0);
 		pluginConfig.addProperty("fakeQuitWhenInvisible", true);
 		pluginConfig.addProperty("forceOfficialBukkitPerm", false);
+		pluginConfig.addProperty("MessageOfTheDay", false);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
