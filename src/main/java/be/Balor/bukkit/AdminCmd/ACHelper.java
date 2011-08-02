@@ -22,7 +22,7 @@ import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
-import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;

@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 
 
 import be.Balor.Manager.ACCommands;
-import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 

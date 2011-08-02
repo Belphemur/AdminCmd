@@ -28,7 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
-import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 

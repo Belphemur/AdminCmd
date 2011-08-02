@@ -24,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
+import be.Balor.Manager.Permissions.PermissionManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)

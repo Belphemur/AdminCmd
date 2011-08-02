@@ -20,7 +20,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
-import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijikokun.bukkit.Permissions.Permissions;

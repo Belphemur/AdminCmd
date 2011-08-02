@@ -26,7 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;

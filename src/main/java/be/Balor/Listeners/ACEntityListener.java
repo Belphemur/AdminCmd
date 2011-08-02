@@ -25,7 +25,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityListener;
 
-import be.Balor.Manager.PermissionManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;

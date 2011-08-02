@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager;
+package be.Balor.Manager.Permissions;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,6 +28,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Manager.PermParent;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
