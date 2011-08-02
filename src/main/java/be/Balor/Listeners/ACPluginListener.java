@@ -36,10 +36,8 @@ public class ACPluginListener extends ServerListener {
         if(PermissionManager.getPermission() == null) {
             Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager().getPlugin("Permissions");
             if (Permissions != null) {
-                if(Permissions.isEnabled()) {
+                if(Permissions.isEnabled())
                 	PermissionManager.setPermission(((Permissions) Permissions).getHandler());
-                    System.out.println("[AdminCmd] Successfully linked with Permissions.");
-                }
             }
         }        
     }

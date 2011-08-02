@@ -50,6 +50,7 @@ public class PermissionManager {
 	private PermissionManager() {
 		permissionHandler = new BukkitPermissions();
 	}
+
 	/**
 	 * @return the instance
 	 */
@@ -174,8 +175,12 @@ public class PermissionManager {
 	public static boolean setPermission(PermissionHandler plugin) {
 		if (permission == null) {
 			permission = plugin;
-			if(!(Boolean)ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm"))
+			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
 				permissionHandler = new YetiPermissions(plugin);
+				System.out.println("[AdminCmd] Successfully linked with Yeti's Permissions.");
+			} else
+				System.out
+						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System instead of Yeti's Permissions.");
 		} else {
 			return false;
 		}
