@@ -63,9 +63,9 @@ public class WindowsTerminalCommand extends TerminalCommand {
 		try {
 			ProcessBuilder pb;
 			if (args != null)
-				pb = new ProcessBuilder("cmd /C " + execution, args);
+				pb = new ProcessBuilder("cmd.exe", "/C", execution, args);
 			else
-				pb = new ProcessBuilder("cmd /C " + execution);
+				pb = new ProcessBuilder("cmd.exe", "/C", execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			Process p = pb.start();
