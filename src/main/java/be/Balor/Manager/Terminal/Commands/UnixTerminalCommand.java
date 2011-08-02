@@ -26,7 +26,7 @@ import be.Balor.Manager.Terminal.TerminalCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class UnixTerminalCommand extends TerminalCommand {
 
@@ -50,17 +50,21 @@ public class UnixTerminalCommand extends TerminalCommand {
 		super(commandName, execution, args, workingDir);
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Terminal.TerminalCommand#execute(org.bukkit.command.CommandSender)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Terminal.TerminalCommand#execute(org.bukkit.command.
+	 * CommandSender)
 	 */
 	@Override
 	public void execute(CommandSender sender) {
 		try {
 			ProcessBuilder pb;
 			if (args != null)
-				pb = new ProcessBuilder("cmd.exe /c " + execution, args);
+				pb = new ProcessBuilder(execution, args);
 			else
-				pb = new ProcessBuilder("cmd.exe /c " + execution);
+				pb = new ProcessBuilder(execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			Process p = pb.start();
@@ -70,7 +74,7 @@ public class UnixTerminalCommand extends TerminalCommand {
 				sender.sendMessage(line);
 			}
 		} catch (Throwable e) {
-			sender.sendMessage("CMD ERROR : "+e.getMessage());
+			sender.sendMessage("CMD ERROR : " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
