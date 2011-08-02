@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 
 /**
@@ -44,7 +45,12 @@ public class Execution extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		TerminalCommandManager.getInstance().execute(sender, args[0]);
+		try {
+			TerminalCommandManager.getInstance().execute(sender, args[0]);
+		} catch (CommandNotFound e) {
+			sender.sendMessage(e.getMessage());
+		}
+		
 	}
 
 	/*
