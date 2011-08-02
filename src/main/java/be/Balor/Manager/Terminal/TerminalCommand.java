@@ -41,13 +41,17 @@ public abstract class TerminalCommand {
 		this.commandName = commandName;
 		this.execution = execution;
 		this.args = args;
-		bukkitPerm = PermissionManager.getInstance().addPermChild(
-				"admincmd.server.exec." + commandName);
 		this.workingDir = workingDir;
 	}
 
 	public TerminalCommand(String commandName, String execution, String args, String workingDir) {
 		this(commandName, execution, args, new File(workingDir));
+	}
+	/**
+	 * @param bukkitPerm the bukkitPerm to set
+	 */
+	public void setBukkitPerm(Permission bukkitPerm) {
+		this.bukkitPerm = bukkitPerm;
 	}
 
 	/**

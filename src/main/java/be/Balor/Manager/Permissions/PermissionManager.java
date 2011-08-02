@@ -99,6 +99,22 @@ public class PermissionManager {
 	}
 
 	/**
+	 * Add a perm on the fly
+	 * 
+	 * @param permNode
+	 * @param parentNode
+	 * @return
+	 */
+	public Permission addOnTheFly(String permNode, String parentNode) {
+		Permission parent = AdminCmd.getBukkitServer().getPluginManager().getPermission(parentNode);
+		Permission child = new Permission(permNode, PermissionDefault.OP);
+		AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
+		parent.getChildren().put(permNode, true);
+		return child;
+
+	}
+
+	/**
 	 * Add permission child (like myplugin.item.add)
 	 * 
 	 * @param permNode

@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Fly extends ACCommands {
 

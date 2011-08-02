@@ -54,7 +54,10 @@ public class Execution extends ACCommands {
 			return;
 		}
 		try {
-			TerminalCommandManager.getInstance().execute(sender, args[0]);
+			if (args.length >= 2)
+				TerminalCommandManager.getInstance().execute(sender, args[0], true);
+			else
+				TerminalCommandManager.getInstance().execute(sender, args[0], false);
 		} catch (CommandNotFound e) {
 			sender.sendMessage(e.getMessage());
 			String cmds = "";

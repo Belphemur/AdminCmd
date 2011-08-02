@@ -24,6 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.Exceptions.CommandNotFound;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
 import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
 import be.Balor.Tools.FilesManager;
@@ -45,18 +46,27 @@ public class TerminalCommandManager {
 		Configuration conf = new Configuration(scripts);
 		conf.load();
 		if (System.getProperty("os.name").contains("Windows"))
-			for (String cmdName : conf.getKeys())
+			for (String cmdName : conf.getKeys()) {
 				commands.put(
 						cmdName,
 						new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
 								.getString(cmdName + ".args"), workingDir));
+				commands.get(cmdName).setBukkitPerm(
+						PermissionManager.getInstance().addPermChild(
+								"admincmd.server.exec." + cmdName));
+			}
 
 		else
-			for (String cmdName : conf.getKeys())
+
+			for (String cmdName : conf.getKeys()) {
 				commands.put(
 						cmdName,
 						new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
 								.getString(cmdName + ".args"), workingDir));
+				commands.get(cmdName).setBukkitPerm(
+						PermissionManager.getInstance().addPermChild(
+								"admincmd.server.exec." + cmdName));
+			}
 
 	}
 
@@ -85,10 +95,32 @@ public class TerminalCommandManager {
 	 * @return
 	 * @throws CommandNotFound
 	 */
-	public boolean execute(CommandSender sender, String cmdName) throws CommandNotFound {
+	public boolean execute(CommandSender sender, String cmdName, boolean reload) throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
-		if (cmd == null)
-			throw new CommandNotFound(cmdName + " is not registered");
+		if (cmd == null || reload) {
+			File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
+			File workingDir = scripts.getParentFile();
+			Configuration conf = new Configuration(scripts);
+			if (conf.getProperty(cmdName) == null)
+				throw new CommandNotFound(cmdName + " is not registered");
+			if (System.getProperty("os.name").contains("Windows")) {
+				commands.put(
+						cmdName,
+						new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
+								.getString(cmdName + ".args"), workingDir));
+				cmd = commands.get(cmdName);
+				cmd.setBukkitPerm(PermissionManager.getInstance().addOnTheFly(
+						"admincmd.server.exec." + cmdName, "admincmd.server.*"));
+			} else {
+				commands.put(
+						cmdName,
+						new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
+								.getString(cmdName + ".args"), workingDir));
+				cmd = commands.get(cmdName);
+				cmd.setBukkitPerm(PermissionManager.getInstance().addOnTheFly(
+						"admincmd.server.exec." + cmdName, "admincmd.server.*"));
+			}
+		}
 		if (!cmd.permCheck(sender))
 			return false;
 		cmd.execute(sender);

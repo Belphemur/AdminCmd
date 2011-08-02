@@ -22,7 +22,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
-
 import be.Balor.Manager.ACCommands;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
@@ -53,18 +52,20 @@ public class Invisible extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player target = Utils.getUser(sender, args, permNode);
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", target.getName());
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
-			InvisibleWorker.getInstance().vanish(target);
-			Utils.sI18n(target, "invisibleEnabled");
-			if (!target.equals(sender))
-				Utils.sI18n(sender, "invisibleEnabledTarget", replace);
-		} else {
-			InvisibleWorker.getInstance().reappear(target);
-			Utils.sI18n(target, "invisibleDisabled");
-			if (!target.equals(sender))
-				Utils.sI18n(sender, "invisibleDisabledTarget", replace);
+		if (target != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", target.getName());
+			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
+				InvisibleWorker.getInstance().vanish(target);
+				Utils.sI18n(target, "invisibleEnabled");
+				if (!target.equals(sender))
+					Utils.sI18n(sender, "invisibleEnabledTarget", replace);
+			} else {
+				InvisibleWorker.getInstance().reappear(target);
+				Utils.sI18n(target, "invisibleDisabled");
+				if (!target.equals(sender))
+					Utils.sI18n(sender, "invisibleDisabledTarget", replace);
+			}
 		}
 	}
 
@@ -77,14 +78,19 @@ public class Invisible extends ACCommands {
 	public boolean argsCheck(String... args) {
 		return args != null;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
 	 */
 	@Override
 	public void registerBukkitPerm() {
 		super.registerBukkitPerm();
-		PermissionManager.getInstance().addPermChild("admincmd.invisible.notatarget", PermissionDefault.OP);
-		PermissionManager.getInstance().addPermChild("admincmd.invisible.cansee", PermissionDefault.OP);
+		PermissionManager.getInstance().addPermChild("admincmd.invisible.notatarget",
+				PermissionDefault.OP);
+		PermissionManager.getInstance().addPermChild("admincmd.invisible.cansee",
+				PermissionDefault.OP);
 	}
 
 }
