@@ -16,20 +16,15 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.PermParent;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -44,6 +39,7 @@ public class PermissionManager {
 	private static PermissionManager instance = null;
 	protected static PermissionHandler permission = null;
 	public static final Logger log = Logger.getLogger("Minecraft");
+	public static AbstractPermission permissionHandler;
 
 	/**
 	 * @return the instance
@@ -122,11 +118,11 @@ public class PermissionManager {
 	 * @return boolean
 	 */
 	public static boolean hasPerm(CommandSender player, String perm) {
-		return hasPerm(player, perm, true);
+		return permissionHandler.hasPerm(player, perm);
 	}
 
 	public static boolean hasPerm(CommandSender player, Permission perm) {
-		return hasPerm(player, perm, true);
+		return permissionHandler.hasPerm(player, perm);
 	}
 
 	/**
@@ -138,58 +134,25 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
-		if (!(player instanceof Player))
-			return true;
-		if (permission == null) {
-			if (perm.contains("admin") || perm.contains("free"))
-				return player.hasPermission(perm);
-			return true;
-		} else if (permission.has((Player) player, perm)) {
-			return true;
-		} else {
-			if (errorMsg) {
-				HashMap<String, String> tmp = new HashMap<String, String>();
-				tmp.put("p", perm);
-				Utils.sI18n(player, "errorNotPerm", tmp);
-			}
-			return false;
-		}
+		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
 
 	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
-		if (!(player instanceof Player))
-			return true;
-		if (permission == null) {
-			boolean havePerm = player.hasPermission(perm);
-			if (!havePerm && errorMsg) {
-				HashMap<String, String> tmp = new HashMap<String, String>();
-				tmp.put("p", perm.getName());
-				Utils.sI18n(player, "errorNotPerm", tmp);
-			}
-			return havePerm;
-		} else if (permission.has((Player) player, perm.getName())) {
-			return true;
-		} else {
-			if (errorMsg) {
-				HashMap<String, String> tmp = new HashMap<String, String>();
-				tmp.put("p", perm.getName());
-				Utils.sI18n(player, "errorNotPerm", tmp);
-			}
-			return false;
-		}
+		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
 
 	public static String getPermissionLimit(Player p, String limit) {
-		Pattern regex = Pattern.compile("admincmd\\."+limit.toLowerCase()+"\\.[0-9]+");
-		for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
-			Matcher regexMatcher = regex.matcher(info.getPermission());
-			if (regexMatcher.find())
-				return info.getPermission().split("\\.")[2];
+		return permissionHandler.getPermissionLimit(p, limit);
+	}
 
-		}
-		return null;
+	/**
+	 * @param permissionHandler
+	 *            the permissionHandler to set
+	 */
+	public static void setPermissionHandler(AbstractPermission permissionHandler) {
+		PermissionManager.permissionHandler = permissionHandler;
 	}
 
 	/**
@@ -209,7 +172,8 @@ public class PermissionManager {
 	 */
 	public static boolean setPermission(PermissionHandler plugin) {
 		if (permission == null) {
-			permission = plugin;
+			if(permissionHandler != null && (permissionHandler instanceof YetiPermissions))
+				((YetiPermissions)permissionHandler).setPermission(plugin);
 		} else {
 			return false;
 		}

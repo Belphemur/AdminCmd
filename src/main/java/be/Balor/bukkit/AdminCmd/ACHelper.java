@@ -22,7 +22,9 @@ import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Manager.Permissions.BukkitPermissions;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Manager.Permissions.YetiPermissions;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -112,6 +114,7 @@ public class ACHelper {
 		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
 		pluginConfig.addProperty("maxHomeByUser", 0);
 		pluginConfig.addProperty("fakeQuitWhenInvisible", true);
+		pluginConfig.addProperty("forceOfficialBukkitPerm", false);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
@@ -136,6 +139,12 @@ public class ACHelper {
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
+		if (pluginConfig.getBoolean("forceOfficialBukkitPerm", false))
+			PermissionManager.setPermissionHandler(new BukkitPermissions());
+		else if (PermissionManager.getPermission() == null)
+			PermissionManager.setPermissionHandler(new BukkitPermissions());
+		else
+			PermissionManager.setPermissionHandler(new YetiPermissions());
 	}
 
 	/**
@@ -639,21 +648,10 @@ public class ACHelper {
 			addValue(Type.BANNED, key, map.get(key));
 	}
 
-	@SuppressWarnings("deprecation")
 	public int getLimit(Player player, String type) {
 		Integer limit = null;
-		if (PermissionManager.getPermission() != null) {
-			try {
-				limit = PermissionManager.getPermission().getInfoInteger(
-						player.getWorld().getName(), player.getName(), "admincmd." + type, false);
-			} catch (NoSuchMethodError e) {
-				limit = PermissionManager.getPermission().getPermissionInteger(
-						player.getWorld().getName(), player.getName(), "admincmd." + type);
-			}
-		} else {
-			String toParse = PermissionManager.getPermissionLimit(player, "maxHomeByUser");
-			limit = toParse != null ? Integer.parseInt(toParse) : null;
-		}
+		String toParse = PermissionManager.getPermissionLimit(player, "maxHomeByUser");
+		limit = toParse != null ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(type, 0);
 		if (limit == 0)
