@@ -16,17 +16,64 @@
  ************************************************************************/
 package be.Balor.Manager.Terminal;
 
+import java.io.File;
+import java.util.HashMap;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.util.config.Configuration;
+
+import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
+import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
+import be.Balor.Tools.FilesManager;
+
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TerminalCommandManager {
+	HashMap<String, TerminalCommand> commands = new HashMap<String, TerminalCommand>();
+	private static TerminalCommandManager instance = null;
 
 	/**
 	 * 
 	 */
-	public TerminalCommandManager() {
-		// TODO Auto-generated constructor stub
+	private TerminalCommandManager() {
+		File workingDir = FilesManager.getInstance().getFile("scripts", "scripts.yml")
+				.getParentFile();
+		Configuration conf = FilesManager.getInstance().getYml("scripts", "scripts");
+		if (System.getProperty("os.name").contains("Windows"))
+			for (String cmdName : conf.getKeys())
+				commands.put(
+						cmdName,
+						new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
+								.getString(cmdName + ".args"), workingDir));
+
+		else
+			for (String cmdName : conf.getKeys())
+				commands.put(
+						cmdName,
+						new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
+								.getString(cmdName + ".args"), workingDir));
+
+	}
+
+	/**
+	 * @return the instance
+	 */
+	public static TerminalCommandManager getInstance() {
+		if (instance == null)
+			instance = new TerminalCommandManager();
+		return instance;
+	}
+
+	public boolean execute(CommandSender sender, String cmdName) {
+		TerminalCommand cmd = commands.get(cmdName);
+		if (cmd == null)
+			return false;
+		if (!cmd.permCheck(sender))
+			return false;
+		cmd.execute(sender);
+		return true;
 	}
 
 }

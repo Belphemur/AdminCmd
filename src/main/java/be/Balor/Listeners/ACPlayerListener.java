@@ -34,6 +34,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
@@ -63,6 +64,8 @@ public class ACPlayerListener extends PlayerListener {
 			event.disallow(Result.KICK_BANNED,
 					ACHelper.getInstance().getValue(Type.BANNED, event.getPlayer().getName())
 							.toString());
+		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
+			event.allow();
 	}
 
 	@Override
@@ -100,7 +103,8 @@ public class ACPlayerListener extends PlayerListener {
 					"nb",
 					String.valueOf(event.getPlayer().getServer().getOnlinePlayers().length
 							- InvisibleWorker.getInstance().nbInvisibles()));
-			Utils.sI18n(event.getPlayer(), "MOTD", replace);
+			for (String toSend : Utils.I18n("MOTD", replace).split("/n"))
+				event.getPlayer().sendMessage(toSend);
 		}
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
