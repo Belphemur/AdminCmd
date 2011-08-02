@@ -54,7 +54,7 @@ public class UnMute extends ACCommands {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
 			if (ACHelper.getInstance().isValueSet(Type.MUTED, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.MUTED, player);
+				ACHelper.getInstance().removeValueWithFile(Type.MUTED, player.getName());
 				Utils.sI18n(player, "muteDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteDisabledTarget", replace);

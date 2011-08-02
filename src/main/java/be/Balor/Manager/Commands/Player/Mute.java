@@ -54,12 +54,15 @@ public class Mute extends ACCommands {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
 			if (!ACHelper.getInstance().isValueSet(Type.MUTED, player.getName())) {
-				ACHelper.getInstance().addValue(Type.MUTED, player);
+				String msg = "Server Admin";
+				if (Utils.isPlayer(sender, false))
+					msg = ((Player) sender).getName();
+				ACHelper.getInstance().addValueWithFile(Type.MUTED, player.getName(),
+						"Muted by " + msg);
 				Utils.sI18n(player, "muteEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteEnabledTarget", replace);
-			}
-			else
+			} else
 				Utils.sI18n(sender, "alreadyMuted");
 
 		} else

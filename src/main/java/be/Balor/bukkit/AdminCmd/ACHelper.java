@@ -602,10 +602,10 @@ public class ACHelper {
 		return false;
 	}
 
-	public void addPowerUserWithFile(Type power, String user, String reason) {
-		addValue(power, user, reason);
+	public void addValueWithFile(Type power, String user, Object value) {
+		addValue(power, user, value);
 		Configuration ban = fManager.getYml(power.toString());
-		ban.setProperty(power + "." + user, reason);
+		ban.setProperty(power + "." + user, value);
 		ban.save();
 	}
 
@@ -636,9 +636,12 @@ public class ACHelper {
 		if (tmp != null)
 			warpList.addAll(tmp);
 
-		Map<String, Object> map = fManager.loadMap("banned", null, "banned");
+		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
 		for (String key : map.keySet())
 			addValue(Type.BANNED, key, map.get(key));
+		Map<String, Object> map2 = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
+		for (String key : map2.keySet())
+			addValue(Type.MUTED, key, map2.get(key));
 	}
 
 	public int getLimit(Player player, String type) {

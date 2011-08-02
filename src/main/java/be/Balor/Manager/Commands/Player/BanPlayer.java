@@ -65,7 +65,7 @@ public class BanPlayer extends ACCommands {
 		message = message.trim();
 		if (toBan != null) {
 			replace.put("player", toBan.getName());
-			ACHelper.getInstance().addPowerUserWithFile(Type.BANNED, toBan.getName(), message);
+			ACHelper.getInstance().addValueWithFile(Type.BANNED, toBan.getName(), message);
 			toBan.kickPlayer(message);
 			toBan.getServer().broadcastMessage(Utils.I18n("ban", replace));
 		} else
