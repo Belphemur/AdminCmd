@@ -271,7 +271,7 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
-		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The News is : %news");
+		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
 		LocaleManager.getInstance().save();
 	}
