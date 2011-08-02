@@ -230,3 +230,7 @@ commands:
     description: freeze the weather.
     aliases: [wfreeze,wf]
     usage: /<command>
+  bal_motd:
+    description: set the message of the day.
+    aliases: [motd]
+    usage: /<command> message

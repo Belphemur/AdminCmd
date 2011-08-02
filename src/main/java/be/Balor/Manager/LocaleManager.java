@@ -70,6 +70,16 @@ public class LocaleManager {
 		localeFile.addProperty(key, value);
 	}
 
+	public void addLocale(String key, String value, boolean override) {
+		localeFile.addProperty(key, value, override);
+	}
+
+	/**
+	 * get the locale txt
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public String get(String key) {
 		return get(key, null);
 	}

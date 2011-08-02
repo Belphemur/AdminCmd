@@ -117,6 +117,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(MobLimit.class);
 		CommandManager.getInstance().registerCommand(NoPickup.class);
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
+		CommandManager.getInstance().registerCommand(MOTD.class);
 	}
 
 	private void setEnglishLocale() {
@@ -264,6 +265,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected");
+		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		LocaleManager.getInstance().save();
 	}
 
