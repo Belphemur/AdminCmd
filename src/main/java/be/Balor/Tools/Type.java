@@ -21,7 +21,7 @@ package be.Balor.Tools;
  * 
  */
 public enum Type {
-	FLY, VULCAN, GOD, THOR, BANNED, FIREBALL, SPYMSG, FREEZED, MUTED, MOB_LIMIT, NO_PICKUP, WEATHER_FREEZED;
+	FLY, VULCAN, GOD, THOR, BANNED, FIREBALL, SPYMSG, FREEZED, MUTED, MOB_LIMIT, NO_PICKUP, WEATHER_FREEZED, AFK;
 	@Override
 	public String toString() {
 		String s = super.toString();

@@ -469,7 +469,7 @@ public class ACHelper {
 		return getValue(powerName, user.getName());
 	}
 
-	public List<Player> getAllPowerUserOf(String power) {
+	public List<Player> getAllPowerUserOf(Type power) {
 		List<Player> players = new ArrayList<Player>();
 		if (storedTypeValues.containsKey(power))
 			for (String player : storedTypeValues.get(power).keySet())

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -100,7 +101,7 @@ public class PrivateMessage extends ACCommands {
 				parsed = msg;
 			buddy.sendMessage(msgPrefix + senderPm + parsed);
 			sender.sendMessage(msgPrefix + senderPm + parsed);
-			for (Player p : ACHelper.getInstance().getAllPowerUserOf("spymsg"))
+			for (Player p : ACHelper.getInstance().getAllPowerUserOf(Type.SPYMSG))
 				if (!p.getName().equals(senderName) && !p.getName().equals(buddy.getName()))
 					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "
 							+ senderName + "-" + buddy.getName() + ": " + parsed);

@@ -17,11 +17,12 @@
 package belgium.Balor.Workers;
 
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 import com.google.common.collect.MapMaker;
 
@@ -30,9 +31,7 @@ import com.google.common.collect.MapMaker;
  * 
  */
 final public class AFKWorker {
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().concurrencyLevel(10)
-			.softValues().expiration(1, TimeUnit.HOURS).makeMap();
-	private ConcurrentMap<Player, String> playersAfk = new MapMaker().concurrencyLevel(10)
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().concurrencyLevel(5)
 			.makeMap();
 	private int afkTime = 60000;
 	private int kickTime = 180000;
@@ -106,7 +105,7 @@ final public class AFKWorker {
 	 */
 	public void removePlayer(Player player) {
 		playerTimeStamp.remove(player);
-		playersAfk.remove(player);
+		ACHelper.getInstance().removeValue(Type.AFK, player);
 	}
 
 	/**
@@ -117,7 +116,7 @@ final public class AFKWorker {
 	private void setAfk(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
-		playersAfk.put(p, p.getDisplayName());
+		ACHelper.getInstance().addValue(Type.AFK, p, p.getDisplayName());
 		p.setDisplayName(Utils.I18n("afkTitle") + p.getDisplayName());
 		p.setSleepingIgnored(true);
 	}
@@ -130,9 +129,9 @@ final public class AFKWorker {
 	public void setOnline(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			p.getServer().broadcastMessage(Utils.I18n("online", "player", p.getName()));
-		p.setDisplayName(playersAfk.get(p));
+		p.setDisplayName((String) ACHelper.getInstance().getValue(Type.AFK, p));
 		p.setSleepingIgnored(false);
-		playersAfk.remove(p);
+		ACHelper.getInstance().removeValue(Type.AFK, p);
 	}
 
 	/**
@@ -141,7 +140,7 @@ final public class AFKWorker {
 	 * @return if the player is afk
 	 */
 	public boolean isAfk(Player p) {
-		return playersAfk.containsKey(p);
+		return ACHelper.getInstance().isValueSet(Type.AFK, p);
 	}
 
 	private class AfkChecker implements Runnable {
@@ -155,7 +154,7 @@ final public class AFKWorker {
 		public void run() {
 			long now = System.currentTimeMillis();
 			for (Player p : playerTimeStamp.keySet())
-				if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
+				if (!isAfk(p) && (now - playerTimeStamp.get(p)) >= afkTime)
 					setAfk(p);
 
 		}
@@ -172,11 +171,10 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			for (Player p : playersAfk.keySet()) {
+			for (Player p : ACHelper.getInstance().getAllPowerUserOf(Type.AFK)) {
 				if (now - playerTimeStamp.get(p) >= kickTime) {
 					p.kickPlayer(Utils.I18n("afkKick"));
-					playersAfk.remove(p);
-					playerTimeStamp.remove(p);
+					removePlayer(p);
 				}
 			}
 
