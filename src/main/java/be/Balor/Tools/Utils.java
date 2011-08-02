@@ -346,7 +346,7 @@ public class Utils {
 		return true;
 	}
 
-	public static void sMotd(Player p) {
+	public static void sParsedLocale(Player p, String locale) {
 		if ((Boolean) ACHelper.getInstance().getConfValue("MessageOfTheDay")) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", p.getName());
@@ -354,7 +354,7 @@ public class Utils {
 					"nb",
 					String.valueOf(p.getServer().getOnlinePlayers().length
 							- InvisibleWorker.getInstance().nbInvisibles()));
-			for (String toSend : I18n("MOTD", replace).split("/n"))
+			for (String toSend : I18n(locale, replace).split("/n"))
 				p.sendMessage(toSend);
 		}
 	}

@@ -238,3 +238,7 @@ commands:
     description: execute a registred script.
     aliases: [exec]
     usage: /<command> scriptName
+  bal_news:
+    description: set the current news.
+    aliases: [news]
+    usage: /<command> message

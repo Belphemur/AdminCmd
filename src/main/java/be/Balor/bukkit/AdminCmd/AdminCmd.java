@@ -122,6 +122,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 		CommandManager.getInstance().registerCommand(MOTD.class);
 		CommandManager.getInstance().registerCommand(Execution.class);
+		CommandManager.getInstance().registerCommand(News.class);
 	}
 
 	private void setEnglishLocale() {
@@ -270,6 +271,8 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
+		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The News is : %news");
+		Utils.addLocale("NEWS", null);
 		LocaleManager.getInstance().save();
 	}
 
@@ -290,7 +293,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().setPlugin(this);
 		TerminalCommandManager.getInstance();
 		registerCmds();
-		CommandManager.getInstance().checkAlias();		
+		CommandManager.getInstance().checkAlias();
 		PermissionManager.getInstance().registerAllPermParent();
 		worker.loadInfos();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);

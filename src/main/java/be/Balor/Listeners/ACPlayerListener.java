@@ -94,7 +94,8 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		Utils.sMotd(event.getPlayer());
+		Utils.sParsedLocale(event.getPlayer(), "MOTD");
+		Utils.sParsedLocale(event.getPlayer(), "NEWS");
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");

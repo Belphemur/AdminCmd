@@ -28,14 +28,14 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MOTD extends ACCommands {
+public class News extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public MOTD() {
-		permNode = "admincmd.server.motd";
-		cmdName = "bal_motd";
+	public News() {
+		permNode = "admincmd.server.news";
+		cmdName = "bal_news";
 	}
 
 	/*
@@ -50,20 +50,20 @@ public class MOTD extends ACCommands {
 		String message = "";
 		if (args.length == 0) {
 			if (Utils.isPlayer(sender, false))
-				Utils.sParsedLocale((Player) sender, "MOTD");
+				Utils.sParsedLocale((Player) sender,"NEWS");
 			else
-				Utils.sI18n(sender, "MOTD");
+				Utils.sI18n(sender, "NEWS");
 			return;
 		}
-		if (PermissionManager.hasPerm(sender, "admincmd.server.motd.edit")) {
+		if (PermissionManager.hasPerm(sender, "admincmd.server.news.edit")) {
 			for (int i = 0; i < args.length; i++)
 				message += args[i] + " ";
 			message = message.trim();
 			String result = Utils.colorParser(message);
 			if (result == null)
 				result = message;
-			LocaleManager.getInstance().addLocale("MOTD", result, true);
-			Utils.sI18n(sender, "MOTDset", "motd", result);
+			LocaleManager.getInstance().addLocale("NEWS", result, true);
+			Utils.sI18n(sender, "NEWSset", "news", result);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class MOTD extends ACCommands {
 	@Override
 	public void registerBukkitPerm() {
 		super.registerBukkitPerm();
-		PermissionManager.getInstance().addPermChild("admincmd.server.motd.edit");
+		PermissionManager.getInstance().addPermChild("admincmd.server.news.edit");
 	}
 
 }
