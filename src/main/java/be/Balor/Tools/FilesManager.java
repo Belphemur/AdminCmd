@@ -38,7 +38,7 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * 
  */
 public class FilesManager {
-	protected String path;
+	protected File pathFile;
 	private static FilesManager instance = null;
 
 	/**
@@ -55,13 +55,13 @@ public class FilesManager {
 	 *            the path to set
 	 */
 	public void setPath(String path) {
-		this.path = path;
-		if (!new File(this.path).exists()) {
-			new File(this.path).mkdir();
+		pathFile = new File(path);
+		if (!pathFile.exists()) {
+			pathFile.mkdir();
 		}
 		File spawn = getFile(null, "spawnLocations.yml", false);
 		if (spawn.exists()) {
-			File dir = new File(this.path + File.separator + "spawn");
+			File dir = new File(this.pathFile, "spawn");
 			dir.mkdir();
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
@@ -97,14 +97,14 @@ public class FilesManager {
 
 	private File getFile(String directory, String filename, boolean create) {
 		File file = null;
-
+		File directoryFile = new File(this.pathFile, directory);
 		if (directory != null) {
-			if (!new File(this.path + File.separator + directory).exists()) {
-				new File(this.path + File.separator + directory).mkdir();
+			if (!directoryFile.exists()) {
+				directoryFile.mkdir();
 			}
-			file = new File(path + File.separator + directory + File.separator + filename);
+			file = new File(directoryFile, filename);
 		} else
-			file = new File(path + File.separator + filename);
+			file = new File(pathFile, filename);
 
 		if (!file.exists() && create) {
 
@@ -168,7 +168,7 @@ public class FilesManager {
 	 * @return
 	 */
 	protected File getInnerFile(String fileName) {
-		final File file = new File(path, fileName);
+		final File file = new File(pathFile, fileName);
 
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + fileName);
@@ -239,12 +239,12 @@ public class FilesManager {
 	 */
 	public void writeLocationFile(Location loc, String name, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		conf.setProperty(directory + "." + name+".world", loc.getWorld().getName());
-		conf.setProperty(directory + "." + name+".x", loc.getX());
-		conf.setProperty(directory + "." + name+".y", loc.getY());
-		conf.setProperty(directory + "." + name+".z", loc.getZ());
-		conf.setProperty(directory + "." + name+".yaw", loc.getYaw());
-		conf.setProperty(directory + "." + name+".pitch", loc.getPitch());
+		conf.setProperty(directory + "." + name + ".world", loc.getWorld().getName());
+		conf.setProperty(directory + "." + name + ".x", loc.getX());
+		conf.setProperty(directory + "." + name + ".y", loc.getY());
+		conf.setProperty(directory + "." + name + ".z", loc.getZ());
+		conf.setProperty(directory + "." + name + ".yaw", loc.getYaw());
+		conf.setProperty(directory + "." + name + ".pitch", loc.getPitch());
 		conf.save();
 	}
 
@@ -290,7 +290,7 @@ public class FilesManager {
 	 * @param directory
 	 * @return
 	 */
-	public List<String> getAllLocationsNameFromFile(String filename, String directory) {
+	public List<String> getYmlKeyFromFile(String filename, String directory) {
 		return getYml(filename, directory).getKeys(directory);
 	}
 

@@ -620,7 +620,7 @@ public class ACHelper {
 		if (homeList.containsKey(player)) {
 			return homeList.get(player);
 		} else {
-			List<String> tmp = fManager.getAllLocationsNameFromFile(player, "home");
+			List<String> tmp = fManager.getYmlKeyFromFile(player, "home");
 			if (tmp != null)
 				homeList.put(player, new HashSet<String>(tmp));
 			else
@@ -632,7 +632,7 @@ public class ACHelper {
 	public synchronized void loadInfos() {
 		blacklist = getBlackListedItems();
 		alias.putAll(fManager.getAlias());
-		List<String> tmp = fManager.getAllLocationsNameFromFile("warpPoints", "warp");
+		List<String> tmp = fManager.getYmlKeyFromFile("warpPoints", "warp");
 		if (tmp != null)
 			warpList.addAll(tmp);
 
