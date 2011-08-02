@@ -105,11 +105,14 @@ public class PermissionManager {
 	 * @param parentNode
 	 * @return
 	 */
-	public Permission addOnTheFly(String permNode, String parentNode) {
-		Permission parent = AdminCmd.getBukkitServer().getPluginManager().getPermission(parentNode);
-		Permission child = new Permission(permNode, PermissionDefault.OP);
-		AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
-		parent.getChildren().put(permNode, true);
+	public Permission addOnTheFly(String permNode, String parentNode) {		
+		Permission child;
+		if ((child = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
+			Permission parent = AdminCmd.getBukkitServer().getPluginManager().getPermission(parentNode);
+			child = new Permission(permNode, PermissionDefault.OP);
+			AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
+			parent.getChildren().put(permNode, true);
+		}
 		return child;
 
 	}
