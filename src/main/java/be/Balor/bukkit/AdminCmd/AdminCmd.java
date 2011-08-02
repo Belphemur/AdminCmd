@@ -59,6 +59,7 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.invisible.*"));
 		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*"));
 		PermissionManager.getInstance().addPermChild("admincmd.player.bypass");
+		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
 	}
 
 	private void registerCmds() {
@@ -289,8 +290,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().setPlugin(this);
 		TerminalCommandManager.getInstance();
 		registerCmds();
-		CommandManager.getInstance().checkAlias();
-		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
+		CommandManager.getInstance().checkAlias();		
 		PermissionManager.getInstance().registerAllPermParent();
 		worker.loadInfos();
 		ACPlayerListener pOqL = new ACPlayerListener(worker);
