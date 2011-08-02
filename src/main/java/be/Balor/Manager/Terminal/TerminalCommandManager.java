@@ -42,6 +42,7 @@ public class TerminalCommandManager {
 		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
+		conf.load();
 		if (System.getProperty("os.name").contains("Windows"))
 			for (String cmdName : conf.getKeys())
 				commands.put(
