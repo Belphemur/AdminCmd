@@ -1,0 +1,67 @@
+/************************************************************************
+ * This file is part of AdminCmd.									
+ *																		
+ * AdminCmd is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by	
+ * the Free Software Foundation, either version 3 of the License, or		
+ * (at your option) any later version.									
+ *																		
+ * AdminCmd is distributed in the hope that it will be useful,	
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of		
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
+ * GNU General Public License for more details.							
+ *																		
+ * You should have received a copy of the GNU General Public License
+ * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
+ ************************************************************************/
+package be.Balor.Manager.Terminal;
+
+import java.io.File;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+
+import be.Balor.Manager.Permissions.PermissionManager;
+
+/**
+ * @author Balor (aka Antoine Aflalo)
+ * 
+ */
+public abstract class TerminalCommand {
+	protected String commandName;
+	protected String execution;
+	protected String args;
+	protected Permission bukkitPerm;
+	protected File workingDir;
+
+	/**
+	 * 
+	 */
+	public TerminalCommand(String commandName, String execution, String args, File workingDir) {
+		this.commandName = commandName;
+		this.execution = execution;
+		this.args = args;
+		bukkitPerm = PermissionManager.getInstance().addPermChild(
+				"admincmd.server.exec." + commandName);
+		this.workingDir = workingDir;
+	}
+
+	public TerminalCommand(String commandName, String execution, String args, String workingDir) {
+		this(commandName, execution, args, new File(workingDir));
+	}
+
+	/**
+	 * Check if the user has the perm to execute the command
+	 * 
+	 * @param sender
+	 * @return
+	 */
+	public boolean permCheck(CommandSender sender) {
+		return PermissionManager.hasPerm(sender, bukkitPerm);
+	}
+
+	/**
+	 * Execute the command
+	 */
+	public abstract void execute(CommandSender sender);
+}
