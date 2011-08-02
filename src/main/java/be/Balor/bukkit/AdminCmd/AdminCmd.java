@@ -16,7 +16,6 @@ import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
-import be.Balor.Manager.PermParent;
 import be.Balor.Manager.Commands.Home.*;
 import be.Balor.Manager.Commands.Items.*;
 import be.Balor.Manager.Commands.Mob.*;
@@ -27,6 +26,7 @@ import be.Balor.Manager.Commands.Time.*;
 import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Weather.*;
 import be.Balor.Manager.Commands.Warp.*;
+import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
