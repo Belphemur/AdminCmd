@@ -26,7 +26,7 @@ import be.Balor.Manager.Terminal.TerminalCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class WindowsTerminalCommand extends TerminalCommand {
 
@@ -51,13 +51,21 @@ public class WindowsTerminalCommand extends TerminalCommand {
 		super(commandName, execution, args, workingDir);
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Terminal.TerminalCommand#execute(org.bukkit.command.CommandSender)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Terminal.TerminalCommand#execute(org.bukkit.command.
+	 * CommandSender)
 	 */
 	@Override
 	public void execute(CommandSender sender) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("cmd /C " + execution, args);
+			ProcessBuilder pb;
+			if (args != null)
+				pb = new ProcessBuilder("cmd.exe /c " + execution, args);
+			else
+				pb = new ProcessBuilder("cmd.exe /c " + execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			Process p = pb.start();
@@ -67,7 +75,7 @@ public class WindowsTerminalCommand extends TerminalCommand {
 				sender.sendMessage(line);
 			}
 		} catch (Throwable e) {
-			sender.sendMessage("CMD ERROR : "+e.getMessage());
+			sender.sendMessage("CMD ERROR : " + e.getMessage());
 			e.printStackTrace();
 		}
 

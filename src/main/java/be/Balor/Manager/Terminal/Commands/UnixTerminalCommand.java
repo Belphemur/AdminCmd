@@ -56,7 +56,11 @@ public class UnixTerminalCommand extends TerminalCommand {
 	@Override
 	public void execute(CommandSender sender) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder(execution, args);
+			ProcessBuilder pb;
+			if (args != null)
+				pb = new ProcessBuilder("cmd.exe /c " + execution, args);
+			else
+				pb = new ProcessBuilder("cmd.exe /c " + execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			Process p = pb.start();
