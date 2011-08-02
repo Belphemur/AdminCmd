@@ -56,6 +56,8 @@ public class YetiPermissions extends AbstractPermission {
 
 	@Override
 	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+		if (!(player instanceof Player))
+			return true;
 		if (permission.has((Player) player, perm)) {
 			return true;
 		} else {
@@ -74,6 +76,8 @@ public class YetiPermissions extends AbstractPermission {
 	 */
 	@Override
 	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+		if (!(player instanceof Player))
+			return true;
 		if (permission.has((Player) player, perm.getName())) {
 			return true;
 		} else {
