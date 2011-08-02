@@ -234,3 +234,7 @@ commands:
     description: set the message of the day.
     aliases: [motd]
     usage: /<command> message
+  bal_exec:
+    description: execute a registred script.
+    aliases: [exec]
+    usage: /<command> scriptName

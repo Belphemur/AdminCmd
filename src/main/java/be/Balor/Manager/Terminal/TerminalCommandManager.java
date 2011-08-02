@@ -22,6 +22,7 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.config.Configuration;
 
+import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
 import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
 import be.Balor.Tools.FilesManager;
@@ -66,10 +67,18 @@ public class TerminalCommandManager {
 		return instance;
 	}
 
-	public boolean execute(CommandSender sender, String cmdName) {
+	/**
+	 * Execute the script
+	 * 
+	 * @param sender
+	 * @param cmdName
+	 * @return
+	 * @throws CommandNotFound
+	 */
+	public boolean execute(CommandSender sender, String cmdName) throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null)
-			return false;
+			throw new CommandNotFound(cmdName + " is not registered");
 		if (!cmd.permCheck(sender))
 			return false;
 		cmd.execute(sender);

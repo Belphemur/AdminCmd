@@ -119,6 +119,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(NoPickup.class);
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 		CommandManager.getInstance().registerCommand(MOTD.class);
+		CommandManager.getInstance().registerCommand(Execution.class);
 	}
 
 	private void setEnglishLocale() {
