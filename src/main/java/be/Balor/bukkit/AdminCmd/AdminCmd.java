@@ -261,8 +261,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("wFreezed", "Weather is freezed in world :");
 		Utils.addLocale("wUnFreezed", "Weather can change in world :");
 		Utils.addLocale("invTitle", "[INV]");
-		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome to " + ChatColor.WHITE + "%server"
-				+ ChatColor.GOLD + " there is currently " + ChatColor.DARK_RED
+		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected");
 		LocaleManager.getInstance().save();
 	}
