@@ -96,7 +96,7 @@ public class FilesManager {
 	}
 
 	private File getFile(String directory, String filename, boolean create) {
-		File file = null;		
+		File file = null;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);
 			if (!directoryFile.exists()) {
@@ -161,17 +161,29 @@ public class FilesManager {
 	}
 
 	/**
-	 * Get a file in the jar, copy it in the plugin folder, open it and return
-	 * it
+	 * Get a file in the jar, copy it in the choose directory inside the plugin
+	 * folder, open it and return it
 	 * 
-	 * @param fileName
+	 * @param filename
 	 * @return
 	 */
-	protected File getInnerFile(String fileName) {
-		final File file = new File(pathFile, fileName);
+	public File getInnerFile(String filename) {
+		return getInnerFile(filename, null);
+	}
+
+	public File getInnerFile(String filename, String directory) {
+		final File file;
+		if (directory != null) {
+			File directoryFile = new File(this.pathFile, directory);
+			if (!directoryFile.exists()) {
+				directoryFile.mkdir();
+			}
+			file = new File(directoryFile, filename);
+		} else
+			file = new File(pathFile, filename);
 
 		if (!file.exists()) {
-			final InputStream res = this.getClass().getResourceAsStream("/" + fileName);
+			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
 			FileWriter tx = null;
 			try {
 				tx = new FileWriter(file);
