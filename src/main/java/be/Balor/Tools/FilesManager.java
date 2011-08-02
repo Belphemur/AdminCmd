@@ -96,9 +96,9 @@ public class FilesManager {
 	}
 
 	private File getFile(String directory, String filename, boolean create) {
-		File file = null;
-		File directoryFile = new File(this.pathFile, directory);
+		File file = null;		
 		if (directory != null) {
+			File directoryFile = new File(this.pathFile, directory);
 			if (!directoryFile.exists()) {
 				directoryFile.mkdir();
 			}
