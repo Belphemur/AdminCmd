@@ -45,14 +45,22 @@ public class Execution extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
+		if (args.length == 0) {
+			String cmds = "";
+			for (String cmd : TerminalCommandManager.getInstance().getCommandList())
+				if (TerminalCommandManager.getInstance().checkCommand(cmd, sender))
+					cmds += cmd + ", ";
+			sender.sendMessage("Possibles Cmd : " + cmds.trim());
+			return;
+		}
 		try {
 			TerminalCommandManager.getInstance().execute(sender, args[0]);
 		} catch (CommandNotFound e) {
 			sender.sendMessage(e.getMessage());
 			String cmds = "";
 			for (String cmd : TerminalCommandManager.getInstance().getCommandList())
-				cmds += cmd + ", ";
-
+				if (TerminalCommandManager.getInstance().checkCommand(cmd, sender))
+					cmds += cmd + ", ";
 			sender.sendMessage("Possibles Cmd : " + cmds.trim());
 		}
 
@@ -65,7 +73,7 @@ public class Execution extends ACCommands {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
+		return args != null;
 	}
 
 }

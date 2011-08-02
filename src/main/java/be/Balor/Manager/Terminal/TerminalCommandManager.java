@@ -69,6 +69,14 @@ public class TerminalCommandManager {
 		return instance;
 	}
 
+	public boolean checkCommand(String cmdName, CommandSender sender) {
+		TerminalCommand cmd = commands.get(cmdName);
+		if (cmd == null)
+			return false;
+
+		return cmd.permCheck(sender);
+	}
+
 	/**
 	 * Execute the script
 	 * 
@@ -86,8 +94,8 @@ public class TerminalCommandManager {
 		cmd.execute(sender);
 		return true;
 	}
-	public final Set<String> getCommandList()
-	{
+
+	public final Set<String> getCommandList() {
 		return commands.keySet();
 	}
 
