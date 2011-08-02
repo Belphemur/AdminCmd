@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.ACCommands;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -68,6 +69,8 @@ public class PlayerList extends ACCommands {
 					name = Utils.I18n("invTitle") + p.getDisplayName();
 				else
 					name = p.getDisplayName();
+				if (AFKWorker.getInstance().isAfk(p))
+					name = Utils.I18n("afkTitle") + name;
 				if (buffer.length() + name.length() + 2 >= 256) {
 					sender.sendMessage(buffer);
 					buffer = "";
@@ -89,6 +92,8 @@ public class PlayerList extends ACCommands {
 					continue;
 				if (isInv)
 					invPrefix = Utils.I18n("invTitle");
+				if (AFKWorker.getInstance().isAfk(online[i]))
+					invPrefix = Utils.I18n("afkTitle") + invPrefix;
 				try {
 					prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
 							.getPrefix();

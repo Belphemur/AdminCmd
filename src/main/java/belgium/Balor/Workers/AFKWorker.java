@@ -30,7 +30,7 @@ import com.google.common.collect.MapMaker;
  */
 final public class AFKWorker {
 	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
-	private ConcurrentMap<Player, String> playersAfk = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private int afkTime = 60000;
 	private int kickTime = 180000;
 	private AfkChecker afkChecker;
@@ -114,8 +114,7 @@ final public class AFKWorker {
 	private void setAfk(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
-		playersAfk.put(p, p.getDisplayName());
-		p.setDisplayName(Utils.I18n("afkTitle") + p.getDisplayName());
+		playersAfk.put(p, new Object());
 		p.setSleepingIgnored(true);
 	}
 
@@ -127,7 +126,6 @@ final public class AFKWorker {
 	public void setOnline(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			p.getServer().broadcastMessage(Utils.I18n("online", "player", p.getName()));
-		p.setDisplayName(playersAfk.get(p));
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
 	}
