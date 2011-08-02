@@ -25,6 +25,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.PermParent;
+import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 

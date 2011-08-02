@@ -14,12 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Permissions;
+package be.Balor.Manager.Permissions.Plugins;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
+import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 import com.nijiko.permissions.PermissionHandler;
