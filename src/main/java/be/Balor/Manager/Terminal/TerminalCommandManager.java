@@ -18,6 +18,7 @@ package be.Balor.Manager.Terminal;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.config.Configuration;
@@ -84,6 +85,10 @@ public class TerminalCommandManager {
 			return false;
 		cmd.execute(sender);
 		return true;
+	}
+	public final Set<String> getCommandList()
+	{
+		return commands.keySet();
 	}
 
 }

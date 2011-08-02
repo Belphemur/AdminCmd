@@ -31,6 +31,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -343,5 +344,18 @@ public class Utils {
 				weatherChange(sender, w, type, duration);
 
 		return true;
+	}
+
+	public static void sMotd(Player p) {
+		if ((Boolean) ACHelper.getInstance().getConfValue("MessageOfTheDay")) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", p.getName());
+			replace.put(
+					"nb",
+					String.valueOf(p.getServer().getOnlinePlayers().length
+							- InvisibleWorker.getInstance().nbInvisibles()));
+			for (String toSend : I18n("MOTD", replace).split("/n"))
+				p.sendMessage(toSend);
+		}
 	}
 }

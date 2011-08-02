@@ -17,9 +17,11 @@
 package be.Balor.Manager.Commands.Server;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 /**
@@ -47,17 +49,22 @@ public class MOTD extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		String message = "";
 		if (args.length == 0) {
-			Utils.sI18n(sender, "MOTD");
+			if (Utils.isPlayer(sender, false))
+				Utils.sMotd((Player) sender);
+			else
+				Utils.sI18n(sender, "MOTD");
 			return;
 		}
-		for (int i = 0; i < args.length; i++)
-			message += args[i] + " ";
-		message = message.trim();
-		String result = Utils.colorParser(message);
-		if (result == null)
-			result = message;
-		LocaleManager.getInstance().addLocale("MOTD", result, true);
-		Utils.sI18n(sender, "MOTDset", "motd", result);
+		if (PermissionManager.hasPerm(sender, "admincmd.server.motd.edit")) {
+			for (int i = 0; i < args.length; i++)
+				message += args[i] + " ";
+			message = message.trim();
+			String result = Utils.colorParser(message);
+			if (result == null)
+				result = message;
+			LocaleManager.getInstance().addLocale("MOTD", result, true);
+			Utils.sI18n(sender, "MOTDset", "motd", result);
+		}
 	}
 
 	/*
@@ -68,6 +75,17 @@ public class MOTD extends ACCommands {
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
+		PermissionManager.getInstance().addPermChild("admincmd.server.motd.edit");
 	}
 
 }

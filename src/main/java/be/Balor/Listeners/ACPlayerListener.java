@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import java.util.HashMap;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -96,16 +94,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if ((Boolean) ACHelper.getInstance().getConfValue("MessageOfTheDay")) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", event.getPlayer().getName());
-			replace.put(
-					"nb",
-					String.valueOf(event.getPlayer().getServer().getOnlinePlayers().length
-							- InvisibleWorker.getInstance().nbInvisibles()));
-			for (String toSend : Utils.I18n("MOTD", replace).split("/n"))
-				event.getPlayer().sendMessage(toSend);
-		}
+		Utils.sMotd(event.getPlayer());
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
