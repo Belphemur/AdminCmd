@@ -22,9 +22,7 @@ import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
-import be.Balor.Manager.Permissions.BukkitPermissions;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Manager.Permissions.YetiPermissions;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -139,12 +137,6 @@ public class ACHelper {
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		if (pluginConfig.getBoolean("forceOfficialBukkitPerm", false))
-			PermissionManager.setPermissionHandler(new BukkitPermissions());
-		else if (PermissionManager.getPermission() == null)
-			PermissionManager.setPermissionHandler(new BukkitPermissions());
-		else
-			PermissionManager.setPermissionHandler(new YetiPermissions());
 	}
 
 	/**

@@ -39,12 +39,12 @@ public class YetiPermissions extends AbstractPermission {
 	 * .CommandSender, java.lang.String, boolean)
 	 */
 	/**
-	 * @param permission
-	 *            the permission to set
+	 * 
 	 */
-	public void setPermission(PermissionHandler permission) {
-		this.permission = permission;
+	public YetiPermissions(PermissionHandler perm) {
+		this.permission = perm;
 	}
+
 	/**
 	 * @return the permission
 	 */

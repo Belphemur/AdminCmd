@@ -25,6 +25,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.PermParent;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -41,6 +42,12 @@ public class PermissionManager {
 	public static final Logger log = Logger.getLogger("Minecraft");
 	public static AbstractPermission permissionHandler;
 
+	/**
+	 * 
+	 */
+	private PermissionManager() {
+		permissionHandler = new BukkitPermissions();
+	}
 	/**
 	 * @return the instance
 	 */
@@ -148,14 +155,6 @@ public class PermissionManager {
 	}
 
 	/**
-	 * @param permissionHandler
-	 *            the permissionHandler to set
-	 */
-	public static void setPermissionHandler(AbstractPermission permissionHandler) {
-		PermissionManager.permissionHandler = permissionHandler;
-	}
-
-	/**
 	 * Permission plugin
 	 * 
 	 * @return
@@ -172,8 +171,9 @@ public class PermissionManager {
 	 */
 	public static boolean setPermission(PermissionHandler plugin) {
 		if (permission == null) {
-			if(permissionHandler != null && (permissionHandler instanceof YetiPermissions))
-				((YetiPermissions)permissionHandler).setPermission(plugin);
+			permission = plugin;
+			if(!(Boolean)ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm"))
+				permissionHandler = new YetiPermissions(plugin);
 		} else {
 			return false;
 		}
