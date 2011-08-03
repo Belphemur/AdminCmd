@@ -31,6 +31,8 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Tools.Utils;
+import belgium.Balor.Workers.AFKWorker;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
@@ -329,6 +331,9 @@ public class AdminCmd extends JavaPlugin {
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
+		InvisibleWorker.killInstance();
+		AFKWorker.killInstance();
+		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");
 	}

@@ -53,6 +53,13 @@ final public class AFKWorker {
 			instance = new AFKWorker();
 		return instance;
 	}
+	/**
+	 * destroy the instance.
+	 */
+	public static void killInstance()
+	{
+		instance = null;		
+	}
 
 	/**
 	 * @return the afkChecker

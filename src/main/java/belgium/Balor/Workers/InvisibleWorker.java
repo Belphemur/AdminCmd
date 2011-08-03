@@ -59,6 +59,14 @@ final public class InvisibleWorker {
 			instance = new InvisibleWorker();
 		return instance;
 	}
+	/**
+	 * Destroy the instance
+	 */
+	public static void killInstance()
+	{
+		instance = null;		
+	}
+
 
 	/**
 	 * @param maxRange
