@@ -72,7 +72,7 @@ public class Extinguish extends ACCommands {
 						}
 
 					}
-			Utils.sI18n(sender, "extinguish", "%nb", String.valueOf(count));
+			Utils.sI18n(sender, "extinguish", "nb", String.valueOf(count));
 		}
 
 	}
