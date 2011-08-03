@@ -63,6 +63,7 @@ public class MOTD extends ACCommands {
 			if (result == null)
 				result = message;
 			LocaleManager.getInstance().addLocale("MOTD", result, true);
+			LocaleManager.getInstance().save();
 			Utils.sI18n(sender, "MOTDset", "motd", result);
 		}
 	}

@@ -63,6 +63,7 @@ public class News extends ACCommands {
 			if (result == null)
 				result = message;
 			LocaleManager.getInstance().addLocale("NEWS", result, true);
+			LocaleManager.getInstance().save();
 			Utils.sI18n(sender, "NEWSset", "news", result);
 		}
 	}
