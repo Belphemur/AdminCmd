@@ -60,17 +60,14 @@ public class UnixTerminalCommand extends TerminalCommand {
 	@Override
 	public void execute(CommandSender sender) {
 		try {
-			/*
-			 * ProcessBuilder pb; if (args != null) pb = new
-			 * ProcessBuilder(execution, args); else pb = new
-			 * ProcessBuilder(execution); pb.redirectErrorStream(true);
-			 * pb.directory(workingDir); Process p = pb.start();
-			 */
-			Process p;
+			ProcessBuilder pb;
 			if (args != null)
-				p = Runtime.getRuntime().exec(new String[] { execution, args });
+				pb = new ProcessBuilder(execution, args);
 			else
-				p = Runtime.getRuntime().exec(new String[] { execution });
+				pb = new ProcessBuilder(execution);
+			pb.redirectErrorStream(true);
+			pb.directory(workingDir);
+			Process p = pb.start();
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null) {
