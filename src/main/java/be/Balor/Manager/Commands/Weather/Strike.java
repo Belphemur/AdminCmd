@@ -49,9 +49,9 @@ public class Strike extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player p = Utils.getUser(sender, args, permNode);
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", p.getName());
 		if (p != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", p.getName());
 			p.getWorld().strikeLightning(p.getLocation());
 			replace.put("player", p.getName());
 			Utils.sI18n(sender, "strike", replace);
