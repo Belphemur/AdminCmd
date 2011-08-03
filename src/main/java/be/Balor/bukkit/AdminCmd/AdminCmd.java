@@ -125,6 +125,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(MOTD.class);
 		CommandManager.getInstance().registerCommand(Execution.class);
 		CommandManager.getInstance().registerCommand(News.class);
+		CommandManager.getInstance().registerCommand(Rain.class);
 	}
 
 	private void setEnglishLocale() {

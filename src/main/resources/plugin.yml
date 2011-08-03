@@ -242,3 +242,7 @@ commands:
     description: set the current news.
     aliases: [news]
     usage: /<command> message
+  bal_wrain:
+    description: make the weather raining.
+    aliases: [rain]
+    usage: /<command> (duration in minutes)
