@@ -250,3 +250,7 @@ commands:
     description: roll a dice.
     aliases: [roll]
     usage: /<command> [nbOfFace]
+  bal_extinguish:
+    description: extinguish fire in the range.
+    aliases: [ex, extinguish]
+    usage: /<command> [range]
