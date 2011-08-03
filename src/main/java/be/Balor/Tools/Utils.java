@@ -354,14 +354,16 @@ public class Utils {
 					int time = Integer.parseInt(duration[0]);
 					w.setWeatherDuration(time * 1200);
 					replaceRain.put("duration", duration[0]);
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
+							+ w.getName());
 				} catch (NumberFormatException e) {
 					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
 							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replaceRain.put("duration", "10");
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
+							+ w.getName());
 				}
 			}
 			break;
@@ -388,6 +390,15 @@ public class Utils {
 					"nb",
 					String.valueOf(p.getServer().getOnlinePlayers().length
 							- InvisibleWorker.getInstance().nbInvisibles()));
+			String connected = "";
+			for (Player player : p.getServer().getOnlinePlayers())
+				if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
+					connected += p.getDisplayName() + ", ";
+			if (!connected.equals("")) {
+				if (connected.endsWith(", "))
+					connected = connected.substring(0, connected.lastIndexOf(","));
+			}
+			replace.put("connected", connected);
 			for (String toSend : I18n(locale, replace).split("/n"))
 				p.sendMessage(toSend);
 		}
