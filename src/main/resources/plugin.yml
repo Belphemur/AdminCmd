@@ -246,3 +246,7 @@ commands:
     description: make the weather raining.
     aliases: [rain]
     usage: /<command> (duration in minutes)
+  bal_roll:
+    description: roll a dice.
+    aliases: [roll]
+    usage: /<command> [nbOfFace]

@@ -126,6 +126,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Execution.class);
 		CommandManager.getInstance().registerCommand(News.class);
 		CommandManager.getInstance().registerCommand(Rain.class);
+		CommandManager.getInstance().registerCommand(Roll.class);
 	}
 
 	private void setEnglishLocale() {
@@ -278,6 +279,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
 		LocaleManager.getInstance().save();
+		Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] " + ChatColor.WHITE + "rolled a "
+				+ ChatColor.GOLD + "%face dice : " + ChatColor.YELLOW + "%result");
 	}
 
 	public void onEnable() {
