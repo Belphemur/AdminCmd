@@ -34,11 +34,16 @@ public class ACBlockListener extends BlockListener {
 		if (!(Boolean) ACHelper.getInstance().getConfValue("ColoredSign"))
 			return;
 		String parsed = null;
-		for (String line : event.getLines())
-			if (line != null && !line.isEmpty()) {
+		String line;
+		for (int i=0; i < 4; i++)
+		{
+			line = event.getLine(i);
+			if (line != null && !line.isEmpty()) {				
 				parsed = Utils.colorParser(line);
 				if (parsed != null)
-					line = parsed;
+					event.setLine(i, parsed);
 			}
+		}
 	}
+		
 }
