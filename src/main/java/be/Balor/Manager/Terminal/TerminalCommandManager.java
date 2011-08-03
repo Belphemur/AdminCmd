@@ -84,8 +84,8 @@ public class TerminalCommandManager {
 
 		return cmd.permCheck(sender, false);
 	}
-	public void reloadScripts()
-	{
+
+	public void reloadScripts() {
 		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
@@ -112,6 +112,7 @@ public class TerminalCommandManager {
 				commands.put(cmdName, toAdd);
 			}
 	}
+
 	/**
 	 * Execute the script
 	 * 
@@ -148,7 +149,7 @@ public class TerminalCommandManager {
 						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 			}
 		}
-		if (!cmd.permCheck(sender))
+		if (!cmd.permCheck(sender, true))
 			return false;
 		cmd.execute(sender);
 		return true;
