@@ -68,8 +68,11 @@ public class BanPlayer extends ACCommands {
 			ACHelper.getInstance().addValueWithFile(Type.BANNED, toBan.getName(), message);
 			toBan.kickPlayer(message);
 			toBan.getServer().broadcastMessage(Utils.I18n("ban", replace));
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		} else {
+			replace.put("player", args[0]);
+			ACHelper.getInstance().addValueWithFile(Type.BANNED, args[0], message);
+			sender.getServer().broadcastMessage(Utils.I18n("ban", replace));
+		}
 
 	}
 

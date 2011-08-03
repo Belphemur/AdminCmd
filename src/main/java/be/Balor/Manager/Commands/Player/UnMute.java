@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class UnMute extends ACCommands {
 
@@ -60,8 +60,15 @@ public class UnMute extends ACCommands {
 					Utils.sI18n(sender, "muteDisabledTarget", replace);
 			} else
 				Utils.sI18n(sender, "notMuted");
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		} else {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", args[0]);
+			if (ACHelper.getInstance().isValueSet(Type.MUTED, args[0])) {
+				ACHelper.getInstance().removeValueWithFile(Type.MUTED, args[0]);
+				Utils.sI18n(sender, "muteDisabledTarget", replace);
+			} else
+				Utils.sI18n(sender, "notMuted");
+		}
 
 	}
 
@@ -74,6 +81,5 @@ public class UnMute extends ACCommands {
 	public boolean argsCheck(String... args) {
 		return args != null && args.length >= 1;
 	}
-
 
 }
