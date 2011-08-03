@@ -50,17 +50,18 @@ public class Execution extends ACCommands {
 			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			return;
 		}
-		if (args.length == 1 && args[0].equals("-reloadAll")) {
-			TerminalCommandManager.getInstance().reloadScripts();
-			sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
-			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
+		if (args.length == 3 && args[0].equals("-reload")) {
+			if (args[1].equals("all")) {
+				TerminalCommandManager.getInstance().reloadScripts();
+				sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
+				sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
+			} else
+				TerminalCommandManager.getInstance().execute(sender, args[1], true);
 			return;
 		}
 		try {
-			if (args.length >= 2)
-				TerminalCommandManager.getInstance().execute(sender, args[0], true);
-			else
-				TerminalCommandManager.getInstance().execute(sender, args[0], false);
+
+			TerminalCommandManager.getInstance().execute(sender, args[0], false);
 		} catch (CommandNotFound e) {
 			sender.sendMessage(e.getMessage());
 
