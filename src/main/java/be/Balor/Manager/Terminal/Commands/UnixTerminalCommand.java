@@ -62,9 +62,9 @@ public class UnixTerminalCommand extends TerminalCommand {
 		try {
 			ProcessBuilder pb;
 			if (args != null)
-				pb = new ProcessBuilder("/bin/sh", "-c", execution, args);
+				pb = new ProcessBuilder(execution, args);
 			else
-				pb = new ProcessBuilder("/bin/sh", "-c", execution);
+				pb = new ProcessBuilder(execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			Process p = pb.start();
