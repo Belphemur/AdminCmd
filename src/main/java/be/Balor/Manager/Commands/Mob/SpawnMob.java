@@ -18,6 +18,7 @@ package be.Balor.Manager.Commands.Mob;
 
 import java.util.HashMap;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
@@ -73,8 +74,9 @@ public class SpawnMob extends ACCommands {
 							new Runnable() {
 
 								public void run() {
+									Location loc = player.getTargetBlock(null, 25).getLocation();
 									for (int i = 0; i < nb; i++) {
-										player.getWorld().spawnCreature(player.getLocation(), ct);
+										player.getWorld().spawnCreature(loc, ct);
 										try {
 											Thread.sleep(5);
 										} catch (InterruptedException e) {
