@@ -19,6 +19,7 @@ package be.Balor.Manager.Permissions;
 import java.util.LinkedHashMap;
 
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
@@ -73,7 +74,7 @@ public class PermParent {
 
 	public void registerBukkitPerm() {
 		AdminCmd.getBukkitServer().getPluginManager()
-				.addPermission(new Permission(permName, children));
+				.addPermission(new Permission(permName, PermissionDefault.OP, children));
 	}
 
 }
