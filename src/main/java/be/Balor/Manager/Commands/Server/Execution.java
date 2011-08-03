@@ -50,7 +50,7 @@ public class Execution extends ACCommands {
 			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			return;
 		}
-		if (args.length == 3 && args[0].equals("-reload")) {
+		if (args.length == 2 && args[0].equals("-reload")) {
 			if (args[1].equals("all")) {
 				TerminalCommandManager.getInstance().reloadScripts();
 				sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
