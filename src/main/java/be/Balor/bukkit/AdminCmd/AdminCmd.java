@@ -228,6 +228,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("setSpawn", ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE + " set.");
 		Utils.addLocale("sClear", "Sky cleared in world :");
 		Utils.addLocale("sStorm", "Storm set for %duration mins in world : ");
+		Utils.addLocale("sRain", "Rain set for %duration mins in world : ");
 		Utils.addLocale("afk", "%player " + ChatColor.RED + "is AFK");
 		Utils.addLocale("online", "%player " + ChatColor.GREEN + "is Online");
 		Utils.addLocale("afkTitle", ChatColor.BLUE + "[AFK]" + ChatColor.WHITE);

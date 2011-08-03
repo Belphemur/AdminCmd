@@ -290,26 +290,30 @@ public class Utils {
 		return true;
 	}
 
-	private static void weatherChange(CommandSender sender, World w, String type, String[] duration) {
-		if ((type.equals("clear") || type.equals("storm"))
+	private static void weatherChange(CommandSender sender, World w, Weather type, String[] duration) {
+		if (!type.equals(Weather.FREEZE)
 				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
 			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFreezed") + " " + w.getName());
 			return;
 		}
-		if (type.equals("clear")) {
+		switch (type) {
+		case CLEAR:
 			w.setThundering(false);
 			w.setStorm(false);
 			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
-		} else if (type.equals("storm")) {
+			break;
+		case STORM:
 			HashMap<String, String> replace = new HashMap<String, String>();
 			if (duration == null || duration.length < 1) {
 				w.setStorm(true);
+				w.setThundering(true);
 				w.setWeatherDuration(12000);
 				replace.put("duration", "10");
 				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 			} else {
 				try {
 					w.setStorm(true);
+					w.setThundering(true);
 					int time = Integer.parseInt(duration[0]);
 					w.setWeatherDuration(time * 1200);
 					replace.put("duration", duration[0]);
@@ -323,7 +327,8 @@ public class Utils {
 					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				}
 			}
-		} else {
+			break;
+		case FREEZE:
 			if (ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
 				ACHelper.getInstance().removeValue(Type.WEATHER_FREEZED, w.getName());
 				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFreezed") + " "
@@ -333,10 +338,39 @@ public class Utils {
 				sender.sendMessage(ChatColor.RED + Utils.I18n("wFreezed") + " " + ChatColor.WHITE
 						+ w.getName());
 			}
+			break;
+		case RAIN:
+			HashMap<String, String> replaceRain = new HashMap<String, String>();
+			if (duration == null || duration.length < 1) {
+				w.setStorm(true);
+				w.setThundering(false);
+				w.setWeatherDuration(12000);
+				replaceRain.put("duration", "10");
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
+			} else {
+				try {
+					w.setStorm(true);
+					w.setThundering(false);
+					int time = Integer.parseInt(duration[0]);
+					w.setWeatherDuration(time * 1200);
+					replaceRain.put("duration", duration[0]);
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
+				} catch (NumberFormatException e) {
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
+							+ ") isn't a number!");
+					w.setStorm(true);
+					w.setWeatherDuration(12000);
+					replaceRain.put("duration", "10");
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
+				}
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
-	public static boolean weather(CommandSender sender, String type, String[] duration) {
+	public static boolean weather(CommandSender sender, Weather type, String[] duration) {
 		if (isPlayer(sender, false)) {
 			weatherChange(sender, ((Player) sender).getWorld(), type, duration);
 		} else

@@ -21,6 +21,7 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Weather;
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -44,7 +45,7 @@ public class FreezeWeather extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Utils.weather(sender, "freeze", args);
+		Utils.weather(sender, Weather.FREEZE, args);
 	}
 
 	/*
