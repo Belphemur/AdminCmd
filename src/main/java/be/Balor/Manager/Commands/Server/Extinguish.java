@@ -56,6 +56,8 @@ public class Extinguish extends ACCommands {
 				}
 
 			}
+			if (range > 150)
+				range = 150;
 			Block block = ((Player) sender).getLocation().getBlock();
 			int count = 0;
 			int limitX = block.getX() + range;
