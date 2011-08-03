@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommands;
@@ -46,11 +47,13 @@ public class Execution extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (args.length == 0) {
-			String cmds = "";
-			for (String cmd : TerminalCommandManager.getInstance().getCommandList())
-				if (TerminalCommandManager.getInstance().checkCommand(cmd, sender))
-					cmds += cmd + ", ";
-			sender.sendMessage("Possibles Cmd : " + cmds.trim());
+			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
+			return;
+		}
+		if (args.length == 1 && args[0].equals("-reloadAll")) {
+			TerminalCommandManager.getInstance().reloadScripts();
+			sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
+			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			return;
 		}
 		try {
@@ -60,11 +63,8 @@ public class Execution extends ACCommands {
 				TerminalCommandManager.getInstance().execute(sender, args[0], false);
 		} catch (CommandNotFound e) {
 			sender.sendMessage(e.getMessage());
-			String cmds = "";
-			for (String cmd : TerminalCommandManager.getInstance().getCommandList())
-				if (TerminalCommandManager.getInstance().checkCommand(cmd, sender))
-					cmds += cmd + ", ";
-			sender.sendMessage("Possibles Cmd : " + cmds.trim());
+
+			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 		}
 
 	}
@@ -77,6 +77,14 @@ public class Execution extends ACCommands {
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null;
+	}
+
+	private String getCmdList(CommandSender sender) {
+		String cmds = "";
+		for (String cmd : TerminalCommandManager.getInstance().getCommandList())
+			if (TerminalCommandManager.getInstance().checkCommand(cmd, sender))
+				cmds += cmd + ", ";
+		return cmds.trim();
 	}
 
 }

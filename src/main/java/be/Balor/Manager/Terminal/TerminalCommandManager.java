@@ -45,27 +45,25 @@ public class TerminalCommandManager {
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
 		conf.load();
+		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
 			for (String cmdName : conf.getKeys()) {
-				commands.put(
-						cmdName,
-						new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
-								.getString(cmdName + ".args"), workingDir));
-				commands.get(cmdName).setBukkitPerm(
-						PermissionManager.getInstance().addPermChild(
-								"admincmd.server.exec." + cmdName));
+				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
+						conf.getString(cmdName + ".args"), workingDir);
+				toAdd.setBukkitPerm(PermissionManager.getInstance().addPermChild(
+						"admincmd.server.exec." + cmdName));
+				commands.put(cmdName, toAdd);
+
 			}
 
 		else
 
 			for (String cmdName : conf.getKeys()) {
-				commands.put(
-						cmdName,
-						new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
-								.getString(cmdName + ".args"), workingDir));
-				commands.get(cmdName).setBukkitPerm(
-						PermissionManager.getInstance().addPermChild(
-								"admincmd.server.exec." + cmdName));
+				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
+						conf.getString(cmdName + ".args"), workingDir);
+				toAdd.setBukkitPerm(PermissionManager.getInstance().addPermChild(
+						"admincmd.server.exec." + cmdName));
+				commands.put(cmdName, toAdd);
 			}
 
 	}
@@ -84,9 +82,35 @@ public class TerminalCommandManager {
 		if (cmd == null)
 			return false;
 
-		return cmd.permCheck(sender);
+		return cmd.permCheck(sender, false);
 	}
+	public void reloadScripts()
+	{
+		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
+		File workingDir = scripts.getParentFile();
+		Configuration conf = new Configuration(scripts);
+		conf.load();
+		TerminalCommand toAdd;
+		if (System.getProperty("os.name").contains("Windows"))
+			for (String cmdName : conf.getKeys()) {
+				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
+						conf.getString(cmdName + ".args"), workingDir);
+				toAdd.setBukkitPerm(PermissionManager.getInstance().addOnTheFly(
+						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
+				commands.put(cmdName, toAdd);
 
+			}
+
+		else
+
+			for (String cmdName : conf.getKeys()) {
+				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
+						conf.getString(cmdName + ".args"), workingDir);
+				toAdd.setBukkitPerm(PermissionManager.getInstance().addOnTheFly(
+						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
+				commands.put(cmdName, toAdd);
+			}
+	}
 	/**
 	 * Execute the script
 	 * 
@@ -95,7 +119,8 @@ public class TerminalCommandManager {
 	 * @return
 	 * @throws CommandNotFound
 	 */
-	public boolean execute(CommandSender sender, String cmdName, boolean reload) throws CommandNotFound {
+	public boolean execute(CommandSender sender, String cmdName, boolean reload)
+			throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null || reload) {
 			File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
@@ -111,7 +136,7 @@ public class TerminalCommandManager {
 								.getString(cmdName + ".args"), workingDir));
 				cmd = commands.get(cmdName);
 				cmd.setBukkitPerm(PermissionManager.getInstance().addOnTheFly(
-						"admincmd.server.exec." + cmdName, "admincmd.server.*"));
+						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 			} else {
 				commands.put(
 						cmdName,
@@ -119,7 +144,7 @@ public class TerminalCommandManager {
 								.getString(cmdName + ".args"), workingDir));
 				cmd = commands.get(cmdName);
 				cmd.setBukkitPerm(PermissionManager.getInstance().addOnTheFly(
-						"admincmd.server.exec." + cmdName, "admincmd.server.*"));
+						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 			}
 		}
 		if (!cmd.permCheck(sender))

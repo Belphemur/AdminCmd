@@ -57,6 +57,7 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.weather.*"));
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.warp.*"));
 		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.invisible.*"));
+		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.server.exec.*"));
 		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*"));
 		PermissionManager.getInstance().addPermChild("admincmd.player.bypass");
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");

@@ -132,7 +132,7 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean setPlayerHealth(CommandSender sender, String[] name, String toDo) {
-		Player target = getUser(sender, name, "admincmd.player." + toDo + ".other");
+		Player target = getUser(sender, name, "admincmd.player." + toDo);
 		if (target == null)
 			return false;
 		if (toDo.equals("heal")) {

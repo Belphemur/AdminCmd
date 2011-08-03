@@ -47,8 +47,10 @@ public abstract class TerminalCommand {
 	public TerminalCommand(String commandName, String execution, String args, String workingDir) {
 		this(commandName, execution, args, new File(workingDir));
 	}
+
 	/**
-	 * @param bukkitPerm the bukkitPerm to set
+	 * @param bukkitPerm
+	 *            the bukkitPerm to set
 	 */
 	public void setBukkitPerm(Permission bukkitPerm) {
 		this.bukkitPerm = bukkitPerm;
@@ -58,10 +60,15 @@ public abstract class TerminalCommand {
 	 * Check if the user has the perm to execute the command
 	 * 
 	 * @param sender
+	 * @param msg
 	 * @return
 	 */
+	public boolean permCheck(CommandSender sender, boolean msg) {
+		return PermissionManager.hasPerm(sender, bukkitPerm, msg);
+	}
+
 	public boolean permCheck(CommandSender sender) {
-		return PermissionManager.hasPerm(sender, bukkitPerm);
+		return PermissionManager.hasPerm(sender, bukkitPerm, false);
 	}
 
 	/**
