@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
@@ -311,6 +312,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, eL, Priority.High, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, eL, Priority.Highest, this);
+		pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 
