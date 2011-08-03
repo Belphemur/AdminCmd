@@ -90,6 +90,7 @@ public class TerminalCommandManager {
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
 		conf.load();
+		commands.clear();
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
 			for (String cmdName : conf.getKeys()) {
