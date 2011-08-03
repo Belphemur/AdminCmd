@@ -74,7 +74,7 @@ public class SpawnMob extends ACCommands {
 							new Runnable() {
 
 								public void run() {
-									Location loc = player.getTargetBlock(null, 25).getLocation();
+									Location loc = player.getTargetBlock(null, 100).getLocation().add(0, 1, 0);
 									for (int i = 0; i < nb; i++) {
 										player.getWorld().spawnCreature(loc, ct);
 										try {
