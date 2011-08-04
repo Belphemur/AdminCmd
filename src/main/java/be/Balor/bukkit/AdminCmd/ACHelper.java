@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.config.Configuration;
 
+import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -88,6 +89,44 @@ public class ACHelper {
 
 	public static void killInstance() {
 		instance = null;
+	}
+
+	public synchronized void reload() {
+		CommandManager.getInstance().stopAllExecutorThreads();		
+		pluginInstance.getServer().getScheduler().cancelTasks(pluginInstance);
+		storedTypeValues.clear();
+		alias.clear();
+		blacklist.clear();
+		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
+				"config.yml"));
+		loadInfos();
+		InvisibleWorker.killInstance();
+		AFKWorker.killInstance();
+		System.gc();
+		CommandManager.getInstance().startThreads();
+		if (pluginConfig.getBoolean("autoAfk", true)) {
+			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
+			this.pluginInstance
+					.getServer()
+					.getScheduler()
+					.scheduleAsyncRepeatingTask(this.pluginInstance,
+							AFKWorker.getInstance().getAfkChecker(), 0,
+							pluginConfig.getInt("statutCheckInSec", 20) * 20);
+			if (pluginConfig.getBoolean("autoKickAfkPlayer", false))
+				this.pluginInstance
+						.getServer()
+						.getScheduler()
+						.scheduleAsyncRepeatingTask(this.pluginInstance,
+								AFKWorker.getInstance().getKickChecker(), 0,
+								pluginConfig.getInt("statutCheckInSec", 20) * 20);
+		}
+		InvisibleWorker.getInstance()
+				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
+		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
+		LocaleManager.getInstance().setLocaleFile(
+				pluginConfig.getString("locale", "en_US") + ".yml");
+		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 	}
 
 	/**

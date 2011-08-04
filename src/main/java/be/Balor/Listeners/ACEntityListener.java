@@ -36,14 +36,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACEntityListener extends EntityListener {
-	private ACHelper worker;
-
-	/**
-	 * 
-	 */
-	public ACEntityListener(ACHelper admin) {
-		worker = admin;
-	}
 
 	@Override
 	public void onEntityDamage(EntityDamageEvent event) {
@@ -52,12 +44,12 @@ public class ACEntityListener extends EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-		if (worker.isValueSet(Type.FLY, player)
+		if (ACHelper.getInstance().isValueSet(Type.FLY, player)
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);
 			return;
-		} else if (worker.hasGodPowers(player.getName())) {
+		} else if (ACHelper.getInstance().hasGodPowers(player.getName())) {
 			if (event.getCause().equals(DamageCause.FIRE)
 					|| event.getCause().equals(DamageCause.FIRE_TICK))
 				player.setFireTicks(0);

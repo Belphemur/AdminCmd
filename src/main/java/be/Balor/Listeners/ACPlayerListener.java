@@ -47,14 +47,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACPlayerListener extends PlayerListener {
-	ACHelper worker;
-
-	/**
-	 * 
-	 */
-	public ACPlayerListener(ACHelper worker) {
-		this.worker = worker;
-	}
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
@@ -81,7 +73,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 			return;
 		}
-		Float power = (Float) worker.getValue(Type.FLY, p.getName());
+		Float power = (Float) ACHelper.getInstance().getValue(Type.FLY, p.getName());
 		if (power != null)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
@@ -158,14 +150,14 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
 			String playerName = p.getName();
-			if ((worker.hasThorPowers(playerName)))
+			if ((ACHelper.getInstance().hasThorPowers(playerName)))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
 			Float power = null;
-			if ((power = worker.getVulcainExplosionPower(playerName)) != null)
+			if ((power = ACHelper.getInstance().getVulcainExplosionPower(playerName)) != null)
 				p.getWorld()
 						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
 			power = null;
-			if ((power = (Float) worker.getValue(Type.FIREBALL, playerName)) != null)
+			if ((power = (Float) ACHelper.getInstance().getValue(Type.FIREBALL, playerName)) != null)
 				ShootFireball.shoot(p, power);
 		}
 	}
@@ -173,12 +165,12 @@ public class ACPlayerListener extends PlayerListener {
 	private boolean playerRespawnOrJoin(Player newPlayer) {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
-				.scheduleAsyncDelayedTask(worker.getPluginInstance(),
+				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 						new UpdateInvisibleOnJoin(newPlayer), 25);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
-					.scheduleAsyncDelayedTask(worker.getPluginInstance(),
+					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 							new UpdateInvisible(newPlayer), 25);
 			return true;
 		}
@@ -201,7 +193,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if (worker.isValueSet(Type.NO_PICKUP, event.getPlayer()))
+		if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, event.getPlayer()))
 			event.setCancelled(true);
 	}
 

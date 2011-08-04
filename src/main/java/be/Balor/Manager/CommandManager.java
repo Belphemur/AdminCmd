@@ -44,6 +44,7 @@ public class CommandManager implements CommandExecutor {
 	private int cmdCount = 0;
 	private static CommandManager instance = null;
 	private JavaPlugin plugin;
+	private boolean threadsStarted = false;
 
 	/**
 	 * @return the instance
@@ -60,10 +61,18 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setPlugin(JavaPlugin plugin) {
 		this.plugin = plugin;
-		for (int i = 0; i < MAX_THREADS; i++) {
-			threads.add(new ExecutorThread());
-			threads.get(i).start();
+		startThreads();
+	}
+
+	public void startThreads() {
+		if (!threadsStarted) {
+			threads.clear();
+			for (int i = 0; i < MAX_THREADS; i++) {
+				threads.add(new ExecutorThread());
+				threads.get(i).start();
+			}
 		}
+		threadsStarted = true;
 	}
 
 	/**
@@ -104,6 +113,7 @@ public class CommandManager implements CommandExecutor {
 		for (ExecutorThread t : threads) {
 			t.stopThread();
 		}
+		threadsStarted = false;
 	}
 
 	/**
@@ -132,10 +142,10 @@ public class CommandManager implements CommandExecutor {
 					+ command.getName()
 					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 			t.printStackTrace();
-			if(cmdCount ==0)
+			if (cmdCount == 0)
 				threads.get(4).start();
 			else
-				threads.get(cmdCount-1).start();
+				threads.get(cmdCount - 1).start();
 			return false;
 		}
 	}
@@ -186,9 +196,11 @@ public class CommandManager implements CommandExecutor {
 							.severe("[AdminCmd] The command "
 									+ command.getCmdName()
 									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-					AdminCmd.getBukkitServer().broadcastMessage("[AdminCmd] The command "
-									+ command.getCmdName()
-									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+					AdminCmd.getBukkitServer()
+							.broadcastMessage(
+									"[AdminCmd] The command "
+											+ command.getCmdName()
+											+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 					t.printStackTrace();
 				}
 
