@@ -23,7 +23,9 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -416,5 +418,44 @@ public class Utils {
 				for (String toSend : motd.split("/n"))
 					p.sendMessage(toSend);
 		}
+	}
+
+	public static Integer replaceBlockByAir(CommandSender sender, String[] args, Material mat) {
+		if (Utils.isPlayer(sender)) {
+			int range = 20;
+			if (args.length >= 1) {
+				try {
+					range = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					if (args.length >= 2)
+						try {
+							range = Integer.parseInt(args[1]);
+						} catch (NumberFormatException e2) {
+
+						}
+				}
+
+			}
+			if (range > 50)
+				range = 50;
+			Block block = ((Player) sender).getLocation().getBlock();
+			int count = 0;
+			int limitX = block.getX() + range;
+			int limitY = block.getY() + range;
+			int limitZ = block.getZ() + range;
+			Block current;
+			for (int x = block.getX() - range; x <= limitX; x++)
+				for (int y = block.getY() - range; y <= limitY; y++)
+					for (int z = block.getZ() - range; z <= limitZ; z++) {
+						current = block.getWorld().getBlockAt(x, y, z);
+						if (current.getType().equals(mat)) {
+							current.setType(Material.AIR);
+							count++;
+						}
+
+					}
+			return count;
+		}
+		return null;
 	}
 }

@@ -16,24 +16,27 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
-import org.bukkit.Material;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Extinguish extends ACCommands {
+public class ReplaceBlock extends ACCommands {
 
 	/**
 	 * 
 	 */
-	public Extinguish() {
-		permNode = "admincmd.server.extinguish";
-		cmdName = "bal_extinguish";
+	public ReplaceBlock() {
+		permNode = "admincmd.server.replace";
+		cmdName = "bal_replace";
 	}
 
 	/*
@@ -45,10 +48,16 @@ public class Extinguish extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Integer count = Utils.replaceBlockByAir(sender, args, Material.FIRE);
-		if (count != null)
-			Utils.sI18n(sender, "extinguish", "nb", String.valueOf(count));
-
+		MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args[0]);
+		if (mc.isNull())
+			return;
+		Integer count = Utils.replaceBlockByAir(sender, args, mc.material);
+		if (count == null)
+			return;
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("nb", String.valueOf(count));
+		replace.put("mat", mc.material.toString());
+		Utils.sI18n(sender, "replaced", replace);
 	}
 
 	/*
@@ -58,7 +67,7 @@ public class Extinguish extends ACCommands {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null;
+		return args != null && args.length >= 1;
 	}
 
 }

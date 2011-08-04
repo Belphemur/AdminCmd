@@ -131,6 +131,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Roll.class);
 		CommandManager.getInstance().registerCommand(Extinguish.class);
 		CommandManager.getInstance().registerCommand(Reload.class);
+		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
 	}
 
 	private void setEnglishLocale() {
@@ -283,12 +284,15 @@ public class AdminCmd extends JavaPlugin {
 				+ "%nb players connected /n" + ChatColor.GOLD + "%connected");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
-		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");		
+		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
 		Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] " + ChatColor.WHITE + "rolled a "
 				+ ChatColor.GOLD + "%face dice : " + ChatColor.YELLOW + "%result");
-		Utils.addLocale("extinguish", ChatColor.AQUA+"%nb blocks"+ChatColor.DARK_AQUA+" have been extinguished.");
-		Utils.addLocale("pluginReloaded", ChatColor.YELLOW + "This plugin has been reloaded : " + ChatColor.WHITE
-				+ "%plugin");
+		Utils.addLocale("extinguish", ChatColor.AQUA + "%nb blocks" + ChatColor.DARK_AQUA
+				+ " have been extinguished.");
+		Utils.addLocale("pluginReloaded", ChatColor.YELLOW + "This plugin has been reloaded : "
+				+ ChatColor.WHITE + "%plugin");
+		Utils.addLocale("replaced", ChatColor.RED + "%nb blocks of " + ChatColor.DARK_PURPLE
+				+ "%mat" + ChatColor.DARK_AQUA + " have been replaced by AIR.");
 		LocaleManager.getInstance().save();
 	}
 
