@@ -281,13 +281,19 @@ public class Utils {
 			Utils.sI18n(sender, "playerNotFound", replace);
 			found = false;
 		}
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getDisplayName())
+				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee")) {
+			replace.put("player", nTo);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return false;
+		}
 		if (found) {
 			pFrom.teleport(pTo);
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
 			Utils.sI18n(sender, "tp", replace);
 		}
-		return true;
+		return found;
 	}
 
 	private static void weatherChange(CommandSender sender, World w, Weather type, String[] duration) {
