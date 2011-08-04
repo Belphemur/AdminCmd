@@ -130,6 +130,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Rain.class);
 		CommandManager.getInstance().registerCommand(Roll.class);
 		CommandManager.getInstance().registerCommand(Extinguish.class);
+		CommandManager.getInstance().registerCommand(Reload.class);
 	}
 
 	private void setEnglishLocale() {
