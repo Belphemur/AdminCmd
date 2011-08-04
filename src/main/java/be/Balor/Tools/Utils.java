@@ -282,7 +282,7 @@ public class Utils {
 			found = false;
 		}
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getDisplayName())
-				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee")) {
+				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 			replace.put("player", nTo);
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return false;

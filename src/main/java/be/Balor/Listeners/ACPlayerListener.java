@@ -59,9 +59,12 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName()))
+		{
 			event.disallow(Result.KICK_BANNED,
 					ACHelper.getInstance().getValue(Type.BANNED, event.getPlayer().getName())
 							.toString());
+			return;
+		}
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
 			event.allow();
 	}
