@@ -50,13 +50,10 @@ public class Undo extends ACCommands {
 			int count = 0;
 			try {
 				count = ACHelper.getInstance().undoLastModification(((Player) sender).getName());
+				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
 			} catch (Exception e) {
 				Utils.sI18n(sender, "nothingToUndo");
-			}
-			if (count == 0)
-				Utils.sI18n(sender, "nothingToUndo");
-			else
-				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
+			}			
 		}
 	}
 
