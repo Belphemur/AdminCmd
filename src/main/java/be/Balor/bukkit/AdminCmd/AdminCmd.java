@@ -132,6 +132,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Extinguish.class);
 		CommandManager.getInstance().registerCommand(Reload.class);
 		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
+		CommandManager.getInstance().registerCommand(Undo.class);
 	}
 
 	private void setEnglishLocale() {
@@ -292,7 +293,10 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("pluginReloaded", ChatColor.YELLOW + "This plugin has been reloaded : "
 				+ ChatColor.WHITE + "%plugin");
 		Utils.addLocale("replaced", ChatColor.RED + "%nb blocks of " + ChatColor.DARK_PURPLE
-				+ "%mat" + ChatColor.DARK_AQUA + " have been replaced by AIR.");
+				+ "%mat" + ChatColor.DARK_AQUA + " are now AIR.");
+		Utils.addLocale("undo", ChatColor.GREEN + "%nb blocks " + ChatColor.DARK_GREEN
+				+ "have been replaced");
+		Utils.addLocale("nothingToUndo", ChatColor.DARK_PURPLE+"Nothing to undo.");
 		LocaleManager.getInstance().save();
 	}
 

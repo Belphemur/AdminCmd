@@ -19,6 +19,7 @@ package be.Balor.Tools;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -421,7 +422,8 @@ public class Utils {
 		}
 	}
 
-	public static Integer replaceBlockByAir(CommandSender sender, String[] args, List<Material> mat, int defaultRange) {
+	public static Integer replaceBlockByAir(CommandSender sender, String[] args,
+			List<Material> mat, int defaultRange) {
 		if (Utils.isPlayer(sender)) {
 			int range = defaultRange;
 			if (args.length >= 1) {
@@ -440,6 +442,7 @@ public class Utils {
 			if (range > 50)
 				range = 50;
 			Block block = ((Player) sender).getLocation().getBlock();
+			Stack<BlockContainer> blocks = new Stack<BlockContainer>();
 			int count = 0;
 			int limitX = block.getX() + range;
 			int limitY = block.getY() + range;
@@ -450,11 +453,13 @@ public class Utils {
 					for (int z = block.getZ() - range; z <= limitZ; z++) {
 						current = block.getWorld().getBlockAt(x, y, z);
 						if (mat.contains(current.getType())) {
+							blocks.push(new BlockContainer(current));
 							current.setType(Material.AIR);
 							count++;
 						}
 
 					}
+			ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
 			return count;
 		}
 		return null;

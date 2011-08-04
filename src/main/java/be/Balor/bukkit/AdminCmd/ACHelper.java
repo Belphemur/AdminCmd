@@ -2,6 +2,7 @@ package be.Balor.bukkit.AdminCmd;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -25,6 +27,7 @@ import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.BlockContainer;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -55,6 +58,8 @@ public class ACHelper {
 	private ConcurrentMap<String, Set<String>> homeList = new MapMaker().softValues()
 			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
+	private ConcurrentMap<String, Stack<Stack<BlockContainer>>> undoQueue = new MapMaker()
+			.makeMap();
 	private ExtendedConfiguration pluginConfig;
 
 	private ACHelper() {
@@ -92,16 +97,56 @@ public class ACHelper {
 		instance = null;
 	}
 
+	/**
+	 * Add modified block in the undoQueue
+	 * 
+	 * @param blocks
+	 */
+	public void addInUndoQueue(String player, Stack<BlockContainer> blocks) {
+		if (undoQueue.containsKey(player))
+			undoQueue.get(player).push(blocks);
+		else {
+			Stack<Stack<BlockContainer>> blockQueue = new Stack<Stack<BlockContainer>>();
+			blockQueue.push(blocks);
+			undoQueue.put(player, blockQueue);
+		}
+
+	}
+
+	public int undoLastModification(String player) throws EmptyStackException {
+		if (!undoQueue.containsKey(player))
+			throw new EmptyStackException();
+		Stack<Stack<BlockContainer>> blockQueue = undoQueue.get(player);
+		if (blockQueue.isEmpty())
+			throw new EmptyStackException();
+		Stack<BlockContainer> undo = blockQueue.pop();
+		int i = 0;
+		try {
+			while (!undo.isEmpty()) {
+				undo.pop().returnToThePast();
+				i++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return i;
+		}
+		return i;
+	}
+
+	/**
+	 * Reload the "plugin"
+	 */
 	public synchronized void reload() {
-		CommandManager.getInstance().stopAllExecutorThreads();		
+		CommandManager.getInstance().stopAllExecutorThreads();
 		pluginInstance.getServer().getScheduler().cancelTasks(pluginInstance);
 		storedTypeValues.clear();
 		alias.clear();
 		blacklist.clear();
+		undoQueue.clear();
 		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
 				"config.yml"));
 		loadInfos();
-		for(Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
+		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
@@ -131,7 +176,7 @@ public class ACHelper {
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		Logger.getLogger("Minecraft").info("[AdminCmd] Plugin Reloaded");
-		for(Player p : pluginInstance.getServer().getOnlinePlayers())
+		for (Player p : pluginInstance.getServer().getOnlinePlayers())
 			AFKWorker.getInstance().updateTimeStamp(p);
 	}
 

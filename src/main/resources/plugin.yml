@@ -260,5 +260,9 @@ commands:
     usage: /<command> [nbOfFace]
   bal_replace:
     description: replace the choosen block in the range by air.
-    aliases: [replace, melt]
+    aliases: [air, melt]
     usage: /<command> Material [range]
+  bal_undo:
+    description: undo the last block modification you have done.
+    aliases: [undo, past]
+    usage: /<command>
