@@ -285,19 +285,20 @@ public class Utils {
 			Utils.sI18n(sender, "playerNotFound", replace);
 			found = false;
 		}
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getDisplayName())
-				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
-			replace.put("player", nTo);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return false;
-		}
-		if ((InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getDisplayName()) && !PermissionManager
-				.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
-			replace.put("player", nTo);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return false;
-		}
+
 		if (found) {
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getDisplayName())
+					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
+				replace.put("player", nTo);
+				Utils.sI18n(sender, "playerNotFound", replace);
+				return false;
+			}
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getDisplayName()) && !PermissionManager
+					.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
+				replace.put("player", nFrom);
+				Utils.sI18n(sender, "playerNotFound", replace);
+				return false;
+			}
 			pFrom.teleport(pTo);
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
