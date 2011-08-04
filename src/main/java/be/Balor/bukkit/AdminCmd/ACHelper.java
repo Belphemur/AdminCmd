@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -100,6 +101,8 @@ public class ACHelper {
 		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
 				"config.yml"));
 		loadInfos();
+		for(Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
+			InvisibleWorker.getInstance().reappear(p);
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
 		System.gc();
@@ -127,6 +130,9 @@ public class ACHelper {
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
+		Logger.getLogger("Minecraft").info("[AdminCmd] Plugin Reloaded");
+		for(Player p : pluginInstance.getServer().getOnlinePlayers())
+			AFKWorker.getInstance().updateTimeStamp(p);
 	}
 
 	/**
