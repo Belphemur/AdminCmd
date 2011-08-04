@@ -53,12 +53,12 @@ final public class AFKWorker {
 			instance = new AFKWorker();
 		return instance;
 	}
+
 	/**
 	 * destroy the instance.
 	 */
-	public static void killInstance()
-	{
-		instance = null;		
+	public static void killInstance() {
+		instance = null;
 	}
 
 	/**
@@ -119,8 +119,11 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	private void setAfk(Player p) {
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
-			p.getServer().broadcastMessage(Utils.I18n("afk", "player", p.getName()));
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
+			String afkString = Utils.I18n("afk", "player", p.getName());
+			if (afkString != null)
+				p.getServer().broadcastMessage(afkString);
+		}
 		playersAfk.put(p, new Object());
 		p.setSleepingIgnored(true);
 	}
@@ -131,8 +134,11 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	public void setOnline(Player p) {
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
-			p.getServer().broadcastMessage(Utils.I18n("online", "player", p.getName()));
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
+			String online = Utils.I18n("online", "player", p.getName());
+			if (online != null)
+				p.getServer().broadcastMessage(online);
+		}
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
 	}

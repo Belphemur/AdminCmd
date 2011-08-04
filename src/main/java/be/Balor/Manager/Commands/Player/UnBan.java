@@ -18,7 +18,6 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 
-
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -26,7 +25,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class UnBan extends ACCommands {
 
@@ -38,28 +37,34 @@ public class UnBan extends ACCommands {
 		cmdName = "bal_unban";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		String unban = args[0];
-		if(ACHelper.getInstance().isValueSet(Type.BANNED, unban))
-		{
+		if (ACHelper.getInstance().isValueSet(Type.BANNED, unban)) {
 			ACHelper.getInstance().removeValueWithFile(Type.BANNED, unban);
-			sender.getServer().broadcastMessage(Utils.I18n("unban", "player", unban));
-		}
-		else
+			String unbanMsg = Utils.I18n("unban", "player", unban);
+			if (unbanMsg != null)
+				sender.getServer().broadcastMessage(unbanMsg);
+		} else
 			Utils.sI18n(sender, "playerNotFound", "player", unban);
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {		
-		return args!=null && args.length>=1;
+	public boolean argsCheck(String... args) {
+		return args != null && args.length >= 1;
 	}
 
 }

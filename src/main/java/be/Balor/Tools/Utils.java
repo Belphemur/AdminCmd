@@ -411,8 +411,10 @@ public class Utils {
 					connected = connected.substring(0, connected.lastIndexOf(","));
 			}
 			replace.put("connected", connected);
-			for (String toSend : I18n(locale, replace).split("/n"))
-				p.sendMessage(toSend);
+			String motd = I18n(locale, replace);
+			if (motd != null)
+				for (String toSend : motd.split("/n"))
+					p.sendMessage(toSend);
 		}
 	}
 }
