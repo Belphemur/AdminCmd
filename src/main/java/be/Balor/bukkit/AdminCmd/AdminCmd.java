@@ -136,6 +136,8 @@ public class AdminCmd extends JavaPlugin {
 	private void setEnglishLocale() {
 		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
 				+ "%player");
+		Utils.addLocale("pluginNotFound", ChatColor.RED + "No such Plugin: " + ChatColor.WHITE
+				+ "%plugin");
 		Utils.addLocale("worldNotFound", ChatColor.RED + "No such world: " + ChatColor.WHITE
 				+ "%world");
 		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
@@ -286,6 +288,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] " + ChatColor.WHITE + "rolled a "
 				+ ChatColor.GOLD + "%face dice : " + ChatColor.YELLOW + "%result");
 		Utils.addLocale("extinguish", ChatColor.AQUA+"%nb blocks"+ChatColor.DARK_AQUA+" have been extinguished.");
+		Utils.addLocale("pluginReloaded", ChatColor.YELLOW + "This plugin has been reloaded : " + ChatColor.WHITE
+				+ "%plugin");
 	}
 
 	public void onEnable() {
