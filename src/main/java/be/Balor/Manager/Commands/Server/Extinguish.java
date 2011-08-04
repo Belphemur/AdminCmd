@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
+import java.util.ArrayList;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
@@ -45,7 +47,9 @@ public class Extinguish extends ACCommands {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Integer count = Utils.replaceBlockByAir(sender, args, Material.FIRE);
+		ArrayList<Material> mats = new ArrayList<Material>();
+		mats.add(Material.FIRE);
+		Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);
 		if (count != null)
 			Utils.sI18n(sender, "extinguish", "nb", String.valueOf(count));
 

@@ -16,8 +16,10 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommands;
@@ -51,7 +53,13 @@ public class ReplaceBlock extends ACCommands {
 		MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args[0]);
 		if (mc.isNull())
 			return;
-		Integer count = Utils.replaceBlockByAir(sender, args, mc.material);
+		ArrayList<Material> mats = new ArrayList<Material>();
+		mats.add(mc.material);
+		if (mc.material.equals(Material.WATER))
+			mats.add(Material.STATIONARY_WATER);
+		else if (mc.material.equals(Material.LAVA))
+			mats.add(Material.STATIONARY_LAVA);
+		Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
 		if (count == null)
 			return;
 		HashMap<String, String> replace = new HashMap<String, String>();

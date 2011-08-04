@@ -17,6 +17,7 @@
 package be.Balor.Tools;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -420,9 +421,9 @@ public class Utils {
 		}
 	}
 
-	public static Integer replaceBlockByAir(CommandSender sender, String[] args, Material mat) {
+	public static Integer replaceBlockByAir(CommandSender sender, String[] args, List<Material> mat, int defaultRange) {
 		if (Utils.isPlayer(sender)) {
-			int range = 20;
+			int range = defaultRange;
 			if (args.length >= 1) {
 				try {
 					range = Integer.parseInt(args[0]);
@@ -448,7 +449,7 @@ public class Utils {
 				for (int y = block.getY() - range; y <= limitY; y++)
 					for (int z = block.getZ() - range; z <= limitZ; z++) {
 						current = block.getWorld().getBlockAt(x, y, z);
-						if (current.getType().equals(mat)) {
+						if (mat.contains(current.getType())) {
 							current.setType(Material.AIR);
 							count++;
 						}
