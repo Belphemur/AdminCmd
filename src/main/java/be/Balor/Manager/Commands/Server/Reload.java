@@ -56,8 +56,8 @@ public class Reload extends ACCommands {
 			sender.getServer().getPluginManager().enablePlugin(plugin);
 			Utils.sI18n(sender, "pluginReloaded", "plugin", args[0]);
 		} else {
+			ACHelper.getInstance().reload();
 			Utils.sI18n(sender, "pluginReloaded", "plugin", "AdminCmd");
-			ACHelper.getInstance().reload();			
 		}
 
 	}
