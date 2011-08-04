@@ -253,7 +253,7 @@ commands:
   bal_extinguish:
     description: extinguish fire in the range.
     aliases: [ex, extinguish]
-    usage: /<command> [range]
+    usage: /<command> [radius]
   bal_reload:
     description: reload the wanted plugin.
     aliases: [areload,ar]
@@ -261,7 +261,7 @@ commands:
   bal_replace:
     description: replace the choosen block in the range by air.
     aliases: [air, melt]
-    usage: /<command> Material [range]
+    usage: /<command> Material [radius]
   bal_undo:
     description: undo the last block modification you have done.
     aliases: [undo, past]
