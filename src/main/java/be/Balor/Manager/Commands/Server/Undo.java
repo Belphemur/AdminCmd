@@ -53,7 +53,10 @@ public class Undo extends ACCommands {
 			} catch (Exception e) {
 				Utils.sI18n(sender, "nothingToUndo");
 			}
-			Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
+			if (count == 0)
+				Utils.sI18n(sender, "nothingToUndo");
+			else
+				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
 		}
 	}
 
