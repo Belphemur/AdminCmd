@@ -48,19 +48,16 @@ public class Reload extends ACCommands {
 	public void execute(CommandSender sender, String... args) {
 		if (args.length >= 1 && args[0] != "AdminCmd") {
 			Plugin plugin = sender.getServer().getPluginManager().getPlugin(args[0]);
-			if(plugin==null)
-			{
-				Utils.sI18n(sender, "pluginNotFound","plugin",args[0]);
+			if (plugin == null) {
+				Utils.sI18n(sender, "pluginNotFound", "plugin", args[0]);
 				return;
 			}
 			sender.getServer().getPluginManager().disablePlugin(plugin);
 			sender.getServer().getPluginManager().enablePlugin(plugin);
-			Utils.sI18n(sender, "pluginReloaded","plugin",args[0]);
-		}
-		else
-		{
+			Utils.sI18n(sender, "pluginReloaded", "plugin", args[0]);
+		} else {
 			ACHelper.getInstance().reload();
-			Utils.sI18n(sender, "pluginReloaded","plugin","AdminCmd");
+			Utils.sI18n(sender, "pluginReloaded", "plugin", "AdminCmd");
 		}
 
 	}
