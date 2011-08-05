@@ -440,10 +440,10 @@ public class Utils {
 				}
 
 			}
-			if (range > 50)
-				range = 50;
+			if (range > 30)
+				range = 30;
 			Block block = ((Player) sender).getLocation().getBlock();
-			Stack<BlockContainer> blocks = new Stack<BlockContainer>();
+			Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 			int count = 0;
 			int limitX = block.getX() + range;
 			int limitY = block.getY() + range;
@@ -454,7 +454,7 @@ public class Utils {
 					for (int z = block.getZ() - range; z <= limitZ; z++) {
 						current = block.getWorld().getBlockAt(x, y, z);
 						if (mat.contains(current.getType())) {
-							blocks.push(new BlockContainer(current));
+							blocks.push(new BlockRemanence(current));
 							current.setType(Material.AIR);
 							count++;
 						}

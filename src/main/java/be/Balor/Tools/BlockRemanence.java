@@ -23,13 +23,13 @@ import org.bukkit.block.Block;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class BlockContainer {
+public class BlockRemanence {
 	private Block block;
 	private Material oldType;
 	/**
 	 * 
 	 */
-	public BlockContainer(Block block) {
+	public BlockRemanence(Block block) {
 		this.block = block;
 		this.oldType = Material.getMaterial(block.getTypeId());
 	}

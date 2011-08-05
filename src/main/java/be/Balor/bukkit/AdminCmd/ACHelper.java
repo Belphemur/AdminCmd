@@ -27,7 +27,7 @@ import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.BlockContainer;
+import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -58,7 +58,7 @@ public class ACHelper {
 	private ConcurrentMap<String, Set<String>> homeList = new MapMaker().softValues()
 			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
-	private ConcurrentMap<String, Stack<Stack<BlockContainer>>> undoQueue = new MapMaker()
+	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private ExtendedConfiguration pluginConfig;
 
@@ -102,11 +102,11 @@ public class ACHelper {
 	 * 
 	 * @param blocks
 	 */
-	public void addInUndoQueue(String player, Stack<BlockContainer> blocks) {
+	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
 		if (undoQueue.containsKey(player))
 			undoQueue.get(player).push(blocks);
 		else {
-			Stack<Stack<BlockContainer>> blockQueue = new Stack<Stack<BlockContainer>>();
+			Stack<Stack<BlockRemanence>> blockQueue = new Stack<Stack<BlockRemanence>>();
 			blockQueue.push(blocks);
 			undoQueue.put(player, blockQueue);
 		}
@@ -116,10 +116,10 @@ public class ACHelper {
 	public int undoLastModification(String player) throws EmptyStackException {
 		if (!undoQueue.containsKey(player))
 			throw new EmptyStackException();
-		Stack<Stack<BlockContainer>> blockQueue = undoQueue.get(player);
+		Stack<Stack<BlockRemanence>> blockQueue = undoQueue.get(player);
 		if (blockQueue.isEmpty())
 			throw new EmptyStackException();
-		Stack<BlockContainer> undo = blockQueue.pop();
+		Stack<BlockRemanence> undo = blockQueue.pop();
 		int i = 0;
 		try {
 			while (!undo.isEmpty()) {
@@ -205,6 +205,9 @@ public class ACHelper {
 		pluginConfig.addProperty("forceOfficialBukkitPerm", false);
 		pluginConfig.addProperty("MessageOfTheDay", false);
 		pluginConfig.addProperty("ColoredSign", true);
+		pluginConfig.addProperty("DefaultFlyPower", 1.75F);
+		pluginConfig.addProperty("DefaultFireBallPower", 1.0F);
+		pluginConfig.addProperty("DefaultVulcanPower", 4.0F);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
