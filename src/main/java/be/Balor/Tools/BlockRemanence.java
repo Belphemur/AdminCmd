@@ -47,7 +47,7 @@ public class BlockRemanence {
 		} catch (NullPointerException e1) {			
 		}
 		catch (Exception e) {
-			Logger.getLogger("Minecraft").severe("While replacing the block, an execption occured");
+			Logger.getLogger("Minecraft").severe("[AdminCmd] While replacing the block, an execption occured");
 			e.printStackTrace();
 		}
 
