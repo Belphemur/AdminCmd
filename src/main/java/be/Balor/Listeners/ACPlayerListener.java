@@ -31,8 +31,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
+import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
@@ -50,8 +52,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName()))
-		{
+		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName())) {
 			event.disallow(Result.KICK_BANNED,
 					ACHelper.getInstance().getValue(Type.BANNED, event.getPlayer().getName())
 							.toString());
@@ -89,11 +90,18 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		Utils.sParsedLocale(event.getPlayer(), "MOTD");
-		Utils.sParsedLocale(event.getPlayer(), "NEWS");
+		Player p = event.getPlayer();
+		Utils.sParsedLocale(p, "MOTD");
+		Utils.sParsedLocale(p, "NEWS");
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
+		}
+		Configuration conf = FilesManager.getInstance().getYml(p.getName(), "home");
+		if (conf.getBoolean("infos.firstTime", true)) {
+			conf.setProperty("infos.firstTime", false);
+			conf.save();
+			ACHelper.getInstance().spawn(p);
 		}
 	}
 
@@ -125,7 +133,8 @@ public class ACPlayerListener extends PlayerListener {
 			return;
 		}
 		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
-				&& !from.getWorld().equals(to.getWorld()) && !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset")) {
+				&& !from.getWorld().equals(to.getWorld())
+				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset")) {
 			if (ACHelper.getInstance().removeKeyFromValues(playername)
 					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());
