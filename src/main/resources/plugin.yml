@@ -266,3 +266,7 @@ commands:
     description: undo the last block modification you have done.
     aliases: [undo, past]
     usage: /<command>
+  bal_reloadall:
+    description: reload the server.
+    aliases: [reloadall, arall]
+    usage: /<command>

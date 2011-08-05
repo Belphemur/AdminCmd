@@ -64,6 +64,7 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*"));
 		PermissionManager.getInstance().addPermChild("admincmd.player.bypass");
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
+		PermissionManager.getInstance().addPermChild("admincmd.player.noreset");
 	}
 
 	private void registerCmds() {
@@ -133,6 +134,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Reload.class);
 		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
 		CommandManager.getInstance().registerCommand(Undo.class);
+		CommandManager.getInstance().registerCommand(ReloadAll.class);
 	}
 
 	private void setEnglishLocale() {
@@ -145,6 +147,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
 				+ "%material");
 		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players:");
+		Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");
 		Utils.addLocale(
 				"changedWorld",
 				ChatColor.DARK_RED

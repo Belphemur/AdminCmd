@@ -125,7 +125,7 @@ public class ACPlayerListener extends PlayerListener {
 			return;
 		}
 		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
-				&& !from.getWorld().equals(to.getWorld())) {
+				&& !from.getWorld().equals(to.getWorld()) && !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset")) {
 			if (ACHelper.getInstance().removeKeyFromValues(playername)
 					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());

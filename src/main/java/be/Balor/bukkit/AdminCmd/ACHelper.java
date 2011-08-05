@@ -586,7 +586,7 @@ public class ACHelper {
 		boolean found = false;
 		for (Type type : storedTypeValues.keySet()) {
 			if (type.equals(Type.BANNED) || type.equals(Type.MUTED) || type.equals(Type.FREEZED)
-					|| type.equals(Type.MOB_LIMIT))
+					|| type.equals(Type.MOB_LIMIT) || type.equals(Type.WEATHER_FREEZED))
 				continue;
 			if (storedTypeValues.get(type).remove(player) != null)
 				found = true;
