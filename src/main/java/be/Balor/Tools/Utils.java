@@ -442,19 +442,15 @@ public class Utils {
 
 			}
 			Stack<BlockRemanence> blocks;
-			Block block = ((Player) sender).getLocation().getBlock();
-
-			if (mat.contains(Material.WATER) || mat.contains(Material.LAVA)) {
-				if (radius > 50)
-					radius = 50;
-			} else if (radius > 30)
+			if (radius > 30)
 				radius = 30;
-			if (!mat.contains(Material.FIRE))
-				blocks = replaceAdjacentBlocks(mat, block, radius);
+			Block block = ((Player) sender).getLocation().getBlock();
+			if (mat.contains(Material.LAVA) || mat.contains(Material.WATER))
+				blocks = drainFluid(block, radius);
 			else
 				blocks = replaceInSphere(mat, block, radius);
-
-			ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
+			if (!blocks.isEmpty())
+				ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
 			return blocks.size();
 		}
 		return null;
@@ -466,29 +462,29 @@ public class Utils {
 		int limitY = block.getY() + radius;
 		int limitZ = block.getZ() + radius;
 		Block current;
+		BlockRemanence br = null;
 		for (int x = block.getX() - radius; x <= limitX; x++)
 			for (int y = block.getY() - radius; y <= limitY; y++)
 				for (int z = block.getZ() - radius; z <= limitZ; z++) {
 					current = block.getWorld().getBlockAt(x, y, z);
 					if (mat.contains(current.getType())) {
-						blocks.push(new BlockRemanence(current));
-						current.setType(Material.AIR);
+						br = new BlockRemanence(current);
+						blocks.push(br);
+						br.setBlockType(Material.AIR);
 					}
 
 				}
 		return blocks;
 	}
 
-	private static Stack<BlockRemanence> replaceAdjacentBlocks(List<Material> mat, Block block,
-			int radius) {
+	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
-		double squaredRadius = Math.pow(radius, 2);
 		World w = block.getWorld();
 		Location start = block.getLocation();
-		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
-			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
-				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
+		for (int x = block.getX() - 1; x <= block.getX() + 1; x++) {
+			for (int z = block.getZ() - 1; z <= block.getZ() + 1; z++) {
+				for (int y = block.getY() - 1; y <= block.getY() + 1; y++) {
 					processQueue.push(new SimplifiedLocation(w, x, y, z));
 				}
 			}
@@ -496,13 +492,13 @@ public class Utils {
 		BlockRemanence current = null;
 		while (!processQueue.isEmpty()) {
 			SimplifiedLocation loc = processQueue.pop();
-			if (!isSameMaterial(mat, loc))
+			if (!isFluid(loc))
 				continue;
 			if (loc.isVisited())
 				continue;
 			loc.setVisited();
 
-			if (start.distanceSquared(loc) > squaredRadius)
+			if (start.distance(loc) > radius)
 				continue;
 
 			for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; ++x) {
@@ -520,14 +516,18 @@ public class Utils {
 			blocks.push(current);
 			current.setBlockType(Material.AIR);
 		}
+		try {
+		} catch (Exception e) {
+		}
 		return blocks;
 	}
 
-	private static boolean isSameMaterial(List<Material> mat, Location loc) {
+	private static boolean isFluid(Location loc) {
 		Block b = loc.getWorld().getBlockAt(loc);
 		if (b == null)
 			return false;
 		currentBlock = b;
-		return mat.contains(b.getType());
+		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
+				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
 	}
 }

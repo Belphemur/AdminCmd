@@ -43,12 +43,13 @@ public class BlockRemanence {
 
 	public void setBlockType(Material mat) {
 		try {
-			block.setType(mat);
-		} catch (NullPointerException e1) {			
-		}
-		catch (Exception e) {
-			Logger.getLogger("Minecraft").severe("[AdminCmd] While replacing the block, an execption occured");
-			e.printStackTrace();
+			if (block != null)
+				block.setType(mat);
+		} catch (NullPointerException e1) {
+		} catch (Exception e) {
+			Logger.getLogger("Minecraft").info(
+					"[AdminCmd] While replacing the block, an execption occured : ");
+			Logger.getLogger("Minecraft").info(e.getLocalizedMessage());
 		}
 
 	}
