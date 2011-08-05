@@ -51,7 +51,7 @@ public class Vulcan extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player player = null;
-		float power = (Float)ACHelper.getInstance().getConfValue("DefaultVulcanPower");
+		double power = (Double)ACHelper.getInstance().getConfValue("DefaultVulcanPower");
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);

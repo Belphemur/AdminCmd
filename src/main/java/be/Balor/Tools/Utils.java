@@ -443,14 +443,17 @@ public class Utils {
 			}
 			Stack<BlockRemanence> blocks;
 			Block block = ((Player) sender).getLocation().getBlock();
+
+			if (mat.contains(Material.WATER) || mat.contains(Material.LAVA)) {
+				if (radius > 50)
+					radius = 50;
+			} else if (radius > 30)
+				radius = 30;
 			if (!mat.contains(Material.FIRE))
 				blocks = replaceAdjacentBlocks(mat, block, radius);
-
-			else {
-				if (radius > 30)
-					radius = 30;
+			else
 				blocks = replaceInSphere(mat, block, radius);
-			}
+
 			ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
 			return blocks.size();
 		}

@@ -51,7 +51,7 @@ public class Fly extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player player = null;
-		float power = (Float)ACHelper.getInstance().getConfValue("DefaultFlyPower");
+		double power = (Double)ACHelper.getInstance().getConfValue("DefaultFlyPower");
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
