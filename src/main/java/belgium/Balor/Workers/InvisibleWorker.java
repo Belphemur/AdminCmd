@@ -41,7 +41,7 @@ import com.google.common.collect.MapMaker;
 final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
 	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
-	private long maxRange = 262144;
+	private double maxRange = 262144;
 	private int tickCheck = 400;
 
 	/**

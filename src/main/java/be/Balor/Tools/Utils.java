@@ -42,6 +42,8 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class Utils {
+	private static Block currentBlock;
+
 	/**
 	 * Translate the id or name to a material
 	 * 
@@ -101,13 +103,12 @@ public class Utils {
 		return colorParser(toParse, "&");
 	}
 
-	public static long getDistanceSquared(Player player1, Player player2) {
+	public static double getDistanceSquared(Player player1, Player player2) {
 		if (!player1.getWorld().getName().equals(player2.getWorld().getName()))
 			return Long.MAX_VALUE;
 		Location loc1 = player1.getLocation();
 		Location loc2 = player2.getLocation();
-		return (loc1.getBlockX() - loc2.getBlockX()) ^ 2 + (loc1.getBlockZ() - loc2.getBlockZ())
-				^ 2;
+		return Math.pow((loc1.getX() - loc2.getX()), 2) + Math.pow((loc1.getZ() - loc2.getZ()), 2);
 	}
 
 	/**
@@ -424,45 +425,106 @@ public class Utils {
 	}
 
 	public static Integer replaceBlockByAir(CommandSender sender, String[] args,
-			List<Material> mat, int defaultRange) {
+			List<Material> mat, int defaultRadius) {
 		if (Utils.isPlayer(sender)) {
-			int range = defaultRange;
+			int radius = defaultRadius;
 			if (args.length >= 1) {
 				try {
-					range = Integer.parseInt(args[0]);
+					radius = Integer.parseInt(args[0]);
 				} catch (NumberFormatException e) {
 					if (args.length >= 2)
 						try {
-							range = Integer.parseInt(args[1]);
+							radius = Integer.parseInt(args[1]);
 						} catch (NumberFormatException e2) {
 
 						}
 				}
 
 			}
-			if (range > 30)
-				range = 30;
+			Stack<BlockRemanence> blocks;
 			Block block = ((Player) sender).getLocation().getBlock();
-			Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
-			int count = 0;
-			int limitX = block.getX() + range;
-			int limitY = block.getY() + range;
-			int limitZ = block.getZ() + range;
-			Block current;
-			for (int x = block.getX() - range; x <= limitX; x++)
-				for (int y = block.getY() - range; y <= limitY; y++)
-					for (int z = block.getZ() - range; z <= limitZ; z++) {
-						current = block.getWorld().getBlockAt(x, y, z);
-						if (mat.contains(current.getType())) {
-							blocks.push(new BlockRemanence(current));
-							current.setType(Material.AIR);
-							count++;
-						}
+			if (mat.contains(Material.WATER) || mat.contains(Material.LAVA))
+				blocks = drainFluid(block, radius);
 
-					}
+			else {
+				if (radius > 30)
+					radius = 30;
+				blocks = replaceInSphere(mat, block, radius);
+			}
 			ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
-			return count;
+			return blocks.size();
 		}
 		return null;
+	}
+
+	private static Stack<BlockRemanence> replaceInSphere(List<Material> mat, Block block, int radius) {
+		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
+		int limitX = block.getX() + radius;
+		int limitY = block.getY() + radius;
+		int limitZ = block.getZ() + radius;
+		Block current;
+		for (int x = block.getX() - radius; x <= limitX; x++)
+			for (int y = block.getY() - radius; y <= limitY; y++)
+				for (int z = block.getZ() - radius; z <= limitZ; z++) {
+					current = block.getWorld().getBlockAt(x, y, z);
+					if (mat.contains(current.getType())) {
+						blocks.push(new BlockRemanence(current));
+						current.setType(Material.AIR);
+					}
+
+				}
+		return blocks;
+	}
+
+	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
+		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
+		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
+		double squaredRadius = Math.pow(radius, 2);
+		World w = block.getWorld();
+		Location start = block.getLocation();
+		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
+			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
+				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
+					processQueue.push(new SimplifiedLocation(w, x, y, z));
+				}
+			}
+		}
+		BlockRemanence current = null;
+		while (!processQueue.isEmpty()) {
+			SimplifiedLocation loc = processQueue.pop();
+			if (!isFluid(loc))
+				continue;
+			if (loc.isVisited())
+				continue;
+			loc.setVisited();
+
+			if (start.distanceSquared(loc) > squaredRadius)
+				continue;
+
+			for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; ++x) {
+				for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; ++z) {
+					for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; ++y) {
+						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+
+						if (!loc.equals(newPos)) {
+							processQueue.push(newPos);
+						}
+					}
+				}
+			}
+			current = new BlockRemanence(currentBlock);
+			blocks.push(current);
+			current.setBlockType(Material.AIR);
+		}
+		return blocks;
+	}
+
+	private static boolean isFluid(Location loc) {
+		Block b = loc.getWorld().getBlockAt(loc);
+		if (b == null)
+			return false;
+		currentBlock = b;
+		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
+				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
 	}
 }

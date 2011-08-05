@@ -16,38 +16,54 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import java.util.logging.Logger;
-
-import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class BlockRemanence {
-	private Block block;
-	private Material oldType;
+public class SimplifiedLocation extends Location {
+	boolean visited = false;
 
 	/**
-	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
 	 */
-	public BlockRemanence(Block block) {
-		this.block = block;
-		this.oldType = Material.getMaterial(block.getTypeId());
+	public SimplifiedLocation(World world, double x, double y, double z) {
+		super(world, x, y, z);
 	}
 
-	public void returnToThePast() {
-		this.setBlockType(oldType);
+	/**
+	 * @param visited
+	 *            the visited to set
+	 */
+	public void setVisited() {
+		this.visited = true;
 	}
 
-	public void setBlockType(Material mat) {
-		try {
-			block.setType(mat);
-		} catch (Exception e) {
-			Logger.getLogger("Minecraft").severe("While replacing the block, an execption occured");
-			e.printStackTrace();
+	/**
+	 * @return the visited
+	 */
+	public boolean isVisited() {
+		return visited;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.bukkit.Location#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof SimplifiedLocation)) {
+			return false;
 		}
-
+		SimplifiedLocation other = (SimplifiedLocation) obj;
+		return other.getX() == this.getX() && other.getY() == this.getY()
+				&& other.getZ() == this.getZ();
 	}
+
 }
