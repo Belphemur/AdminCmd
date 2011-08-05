@@ -443,8 +443,8 @@ public class Utils {
 			}
 			Stack<BlockRemanence> blocks;
 			Block block = ((Player) sender).getLocation().getBlock();
-			if (mat.contains(Material.WATER) || mat.contains(Material.LAVA))
-				blocks = drainFluid(block, radius);
+			if (!mat.contains(Material.FIRE))
+				blocks = replaceAdjacentBlocks(block, radius);
 
 			else {
 				if (radius > 30)
@@ -476,7 +476,7 @@ public class Utils {
 		return blocks;
 	}
 
-	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
+	private static Stack<BlockRemanence> replaceAdjacentBlocks(Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
 		double squaredRadius = Math.pow(radius, 2);
