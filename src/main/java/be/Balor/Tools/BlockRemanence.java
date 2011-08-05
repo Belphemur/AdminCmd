@@ -44,7 +44,9 @@ public class BlockRemanence {
 	public void setBlockType(Material mat) {
 		try {
 			block.setType(mat);
-		} catch (Exception e) {
+		} catch (NullPointerException e1) {			
+		}
+		catch (Exception e) {
 			Logger.getLogger("Minecraft").severe("While replacing the block, an execption occured");
 			e.printStackTrace();
 		}
