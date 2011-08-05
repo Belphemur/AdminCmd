@@ -188,6 +188,7 @@ public class ACHelper {
 		this.pluginInstance = pluginInstance;
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
+		fManager.getInnerFile("de_DE.yml", "locales");
 		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
 				"config.yml"));
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);

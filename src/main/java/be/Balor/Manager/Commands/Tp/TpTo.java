@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Utils.TpType;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -46,7 +47,7 @@ public class TpTo extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender))
-			Utils.tpP2P(sender, ((Player) sender).getName(), args[0]);
+			Utils.tpP2P(sender, ((Player) sender).getName(), args[0], TpType.TP_TO);
 	}
 
 	/*

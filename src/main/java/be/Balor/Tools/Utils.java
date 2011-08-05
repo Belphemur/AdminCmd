@@ -42,6 +42,14 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class Utils {
+	/**
+	 * @author Balor (aka Antoine Aflalo)
+	 * 
+	 */
+	public enum TpType {
+		TP_HERE, TP_TO, TP_PLAYERS;
+	}
+
 	private static Block currentBlock;
 
 	/**
@@ -270,7 +278,7 @@ public class Utils {
 
 	}
 
-	public static boolean tpP2P(CommandSender sender, String nFrom, String nTo) {
+	public static boolean tpP2P(CommandSender sender, String nFrom, String nTo, TpType type) {
 		boolean found = true;
 		Player pFrom = AdminCmd.getBukkitServer().getPlayer(nFrom);
 		Player pTo = AdminCmd.getBukkitServer().getPlayer(nTo);
@@ -288,14 +296,16 @@ public class Utils {
 		}
 
 		if (found) {
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getDisplayName())
+			if ((type.equals(TpType.TP_TO) || type.equals(TpType.TP_PLAYERS))
+					&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
 					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 				replace.put("player", nTo);
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return false;
 			}
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getDisplayName()) && !PermissionManager
-					.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
+			if ((type.equals(TpType.TP_HERE) || type.equals(TpType.TP_PLAYERS))
+					&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
+							.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
 				replace.put("player", nFrom);
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return false;
