@@ -243,6 +243,10 @@ public class ACHelper {
 	public Object getConfValue(String path) {
 		return pluginConfig.getProperty(path);
 	}
+	public Float getFloat(String path)
+	{
+		return Float.parseFloat(pluginConfig.getString(path));
+	}
 
 	/**
 	 * @return the pluginInstance
