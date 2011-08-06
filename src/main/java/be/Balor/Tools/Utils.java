@@ -239,23 +239,48 @@ public class Utils {
 		LocaleManager.getInstance().addLocale(key, value);
 	}
 
-	private static void setTime(World w, String arg) {
+	private static void setTime(CommandSender sender, World w, String arg) {
 		long curtime = w.getTime();
 		long newtime = curtime - (curtime % 24000);
-		if (arg.equalsIgnoreCase("day"))
-			newtime += 0;
-		else if (arg.equalsIgnoreCase("night"))
-			newtime += 14000;
-		else if (arg.equalsIgnoreCase("dusk"))
-			newtime += 12500;
-		else if (arg.equalsIgnoreCase("dawn"))
-			newtime += 23000;
-		else
-			// if not a constant, use raw time
-			try {
-				newtime += Integer.parseInt(arg);
-			} catch (Exception e) {
+		if (!ACHelper.getInstance().isValueSet(Type.TIME_FREEZED, w.getName())) {
+			if (arg.equalsIgnoreCase("day"))
+				newtime += 0;
+			else if (arg.equalsIgnoreCase("night"))
+				newtime += 14000;
+			else if (arg.equalsIgnoreCase("dusk"))
+				newtime += 12500;
+			else if (arg.equalsIgnoreCase("dawn"))
+				newtime += 23000;
+			else if (arg.equalsIgnoreCase("pause")) {
+				int taskId = ACHelper
+						.getInstance()
+						.getPluginInstance()
+						.getServer()
+						.getScheduler()
+						.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
+								new FreezeTime(w), 0, 20);
+				ACHelper.getInstance().addValue(Type.TIME_FREEZED, w.getName(), taskId);
+			} else {
+				// if not a constant, use raw time
+				try {
+					newtime += Integer.parseInt(arg);
+				} catch (Exception e) {
+				}
 			}
+		} else if (arg.equalsIgnoreCase("unpause")) {
+			int removeTask = (Integer)ACHelper.getInstance().getValue(Type.TIME_FREEZED, w.getName());
+			ACHelper
+			.getInstance()
+			.getPluginInstance()
+			.getServer()
+			.getScheduler().cancelTask(removeTask);
+			ACHelper.getInstance().removeValue(Type.TIME_FREEZED, w.getName());
+		} else
+			sI18n(sender, "timePaused", "world", w.getName());
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("type", arg);
+		replace.put("world", w.getName());
+		sI18n(sender, "timeSet", replace);
 		w.setTime(newtime);
 	}
 
@@ -266,10 +291,10 @@ public class Utils {
 	public static boolean timeSet(CommandSender sender, String arg) {
 		if (isPlayer(sender, false)) {
 			Player p = (Player) sender;
-			setTime(p.getWorld(), arg);
+			setTime(sender, p.getWorld(), arg);
 		} else {
 			for (World w : sender.getServer().getWorlds())
-				setTime(w, arg);
+				setTime(sender, w, arg);
 		}
 		return true;
 
@@ -537,5 +562,29 @@ public class Utils {
 		currentBlock = b;
 		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
 				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
+	}
+
+	private static class FreezeTime implements Runnable {
+		private World w;
+		private Long time;
+
+		/**
+		 * 
+		 */
+		public FreezeTime(World w) {
+			this.w = w;
+			this.time = w.getFullTime();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			w.setTime(time);
+		}
+
 	}
 }

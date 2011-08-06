@@ -303,6 +303,10 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("nothingToUndo", ChatColor.DARK_PURPLE + "Nothing to undo.");
 		Utils.addLocale("noRepeat", ChatColor.DARK_RED + "No command to repeat.");
 		Utils.addLocale("reExec", ChatColor.YELLOW + "Repeating the last command.");
+		Utils.addLocale("timeSet", ChatColor.GOLD + "Time set to %type in world : "
+				+ ChatColor.WHITE + "%world");
+		Utils.addLocale("timePaused", ChatColor.DARK_RED + "Time is paused in " + ChatColor.WHITE
+				+ "%world. " + ChatColor.DARK_GREEN + "To unpause : /time unpause .");
 		LocaleManager.getInstance().save();
 	}
 

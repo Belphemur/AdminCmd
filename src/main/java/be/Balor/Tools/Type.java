@@ -48,9 +48,9 @@ public enum Type {
 	}
 
 	/**
-	 * Gets the Category assigned to this event
+	 * Gets the Category assigned to this type
 	 * 
-	 * @return Category of this Event.Type
+	 * @return Category of this Type
 	 */
 	public Category getCategory() {
 		return category;
