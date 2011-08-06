@@ -261,7 +261,7 @@ public class Utils {
 						.getServer()
 						.getScheduler()
 						.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
-								new FreezeTime(w), 0, 19);
+								new FreezeTime(w), 0, 10);
 				ACHelper.getInstance().addValue(Type.TIME_FREEZED, w.getName(), taskId);
 			} else {
 				// if not a constant, use raw time
