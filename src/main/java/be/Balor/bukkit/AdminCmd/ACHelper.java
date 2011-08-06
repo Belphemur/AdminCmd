@@ -210,6 +210,9 @@ public class ACHelper {
 		pluginConfig.addProperty("DefaultFlyPower", 1.75F);
 		pluginConfig.addProperty("DefaultFireBallPower", 1.0F);
 		pluginConfig.addProperty("DefaultVulcanPower", 4.0F);
+		pluginConfig.addProperty("glinding.multiplicator", 0.1F);
+		pluginConfig.addProperty("glinding.YvelocityCheckToGlide", -0.2F);
+		pluginConfig.addProperty("glinding.newYvelocity", -0.5F);
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
