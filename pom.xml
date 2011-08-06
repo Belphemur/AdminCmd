@@ -64,13 +64,21 @@
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
-			<url>http://www.gestdown.info:8888/artifactory/bukkit-repo</url>
+			<url>http://repo.bukkit.org/artifactory/repo</url>
 		</repository>
 		<repository>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>lib</id>
 			<name>libs-release</name>
 			<url>http://gestdown.info:8888/artifactory/libs-release</url>
 		</repository>
