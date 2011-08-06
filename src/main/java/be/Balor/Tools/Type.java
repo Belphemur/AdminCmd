@@ -21,10 +21,32 @@ package be.Balor.Tools;
  * 
  */
 public enum Type {
-	FLY, VULCAN, GOD, THOR, BANNED, FIREBALL, SPYMSG, FREEZED, MUTED, MOB_LIMIT, NO_PICKUP, WEATHER_FREEZED;
+	FLY(Category.PLAYER), VULCAN(Category.PLAYER), GOD(Category.PLAYER), THOR(Category.PLAYER), BANNED(
+			Category.SANCTION), FIREBALL(Category.PLAYER), SPYMSG(Category.OTHER), FREEZED(
+			Category.SANCTION), MUTED(Category.SANCTION), MOB_LIMIT(Category.WORLD), NO_PICKUP(
+			Category.PLAYER), WEATHER_FREEZED(Category.WORLD), REPEAT_CMD(Category.OTHER);
 	@Override
 	public String toString() {
 		String s = super.toString();
 		return s.toLowerCase();
+	}
+
+	private final Category category;
+
+	private Type(Category category) {
+		this.category = category;
+	}
+
+	/**
+	 * Gets the Category assigned to this event
+	 * 
+	 * @return Category of this Event.Type
+	 */
+	public Category getCategory() {
+		return category;
+	}
+
+	public enum Category {
+		PLAYER, WORLD, OTHER, SANCTION;
 	}
 }

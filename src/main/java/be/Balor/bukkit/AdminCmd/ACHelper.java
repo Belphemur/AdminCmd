@@ -31,6 +31,7 @@ import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -244,8 +245,8 @@ public class ACHelper {
 	public Object getConfValue(String path) {
 		return pluginConfig.getProperty(path);
 	}
-	public Float getFloat(String path)
-	{
+
+	public Float getFloat(String path) {
 		return Float.parseFloat(pluginConfig.getString(path));
 	}
 
@@ -586,8 +587,7 @@ public class ACHelper {
 	public boolean removeKeyFromValues(String player) {
 		boolean found = false;
 		for (Type type : storedTypeValues.keySet()) {
-			if (type.equals(Type.BANNED) || type.equals(Type.MUTED) || type.equals(Type.FREEZED)
-					|| type.equals(Type.MOB_LIMIT) || type.equals(Type.WEATHER_FREEZED))
+			if (!type.getCategory().equals(Category.PLAYER))
 				continue;
 			if (storedTypeValues.get(type).remove(player) != null)
 				found = true;
