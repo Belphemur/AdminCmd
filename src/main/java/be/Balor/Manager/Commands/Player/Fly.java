@@ -57,7 +57,7 @@ public class Fly extends ACCommands {
 				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
-				power = (Float)ACHelper.getInstance().getConfValue("DefaultFlyPower");
+				power = ACHelper.getInstance().getFloat("DefaultFlyPower");
 				player = Utils.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2)

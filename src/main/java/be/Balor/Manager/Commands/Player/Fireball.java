@@ -53,7 +53,7 @@ public class Fireball extends ACCommands {
 				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
-				power = (Float)ACHelper.getInstance().getConfValue("DefaultFireBallPower");
+				power = ACHelper.getInstance().getFloat("DefaultFireBallPower");
 				player = Utils.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2)
