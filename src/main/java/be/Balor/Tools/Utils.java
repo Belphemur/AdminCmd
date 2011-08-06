@@ -575,7 +575,7 @@ public class Utils {
 		 */
 		public FreezeTime(World w) {
 			this.w = w;
-			this.time = w.getFullTime();
+			this.time = w.getTime();
 		}
 
 		/*
