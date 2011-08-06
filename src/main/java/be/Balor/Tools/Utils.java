@@ -244,7 +244,7 @@ public class Utils {
 		long newtime = curtime - (curtime % 24000);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("type", arg);
-		replace.put("world", w.getName());	
+		replace.put("world", w.getName());
 		if (!ACHelper.getInstance().isValueSet(Type.TIME_FREEZED, w.getName())) {
 			if (arg.equalsIgnoreCase("day"))
 				newtime += 0;
@@ -272,17 +272,15 @@ public class Utils {
 			}
 			sI18n(sender, "timeSet", replace);
 		} else if (arg.equalsIgnoreCase("unpause")) {
-			int removeTask = (Integer)ACHelper.getInstance().getValue(Type.TIME_FREEZED, w.getName());
-			ACHelper
-			.getInstance()
-			.getPluginInstance()
-			.getServer()
-			.getScheduler().cancelTask(removeTask);
+			int removeTask = (Integer) ACHelper.getInstance().getValue(Type.TIME_FREEZED,
+					w.getName());
+			ACHelper.getInstance().getPluginInstance().getServer().getScheduler()
+					.cancelTask(removeTask);
 			ACHelper.getInstance().removeValue(Type.TIME_FREEZED, w.getName());
 			sI18n(sender, "timeSet", replace);
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
-	
+
 		w.setTime(newtime);
 	}
 
@@ -498,59 +496,77 @@ public class Utils {
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		for (int x = block.getX() - radius; x <= limitX; x++)
-			for (int y = block.getY() - radius; y <= limitY; y++)
+		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
+		for (int y = block.getY() - radius; y <= limitY; y++) {
+			for (int x = block.getX() - radius; x <= limitX; x++)
 				for (int z = block.getZ() - radius; z <= limitZ; z++) {
 					current = block.getWorld().getBlockAt(x, y, z);
 					if (mat.contains(current.getType())) {
 						br = new BlockRemanence(current);
 						blocks.push(br);
-						br.setBlockType(Material.AIR);
+						toReplace.push(br);
 					}
 
 				}
+			while (!toReplace.isEmpty())
+				toReplace.pop().setBlockType(Material.AIR);
+		}
+		while (!toReplace.isEmpty())
+			toReplace.pop().setBlockType(Material.AIR);
 		return blocks;
 	}
 
 	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
+		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
+		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
 		for (int x = block.getX() - 1; x <= block.getX() + 1; x++) {
 			for (int z = block.getZ() - 1; z <= block.getZ() + 1; z++) {
 				for (int y = block.getY() - 1; y <= block.getY() + 1; y++) {
-					processQueue.push(new SimplifiedLocation(w, x, y, z));
+					SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+					if (isFluid(newPos) && !newPos.isVisited()) {
+						newPos.setVisited();
+						processQueue.push(newPos);
+						current = new BlockRemanence(currentBlock);
+						blocks.push(current);
+						toReplace.push(current);
+						current.setBlockType(Material.AIR);
+					}
+
 				}
 			}
 		}
-		BlockRemanence current = null;
+		while (!toReplace.isEmpty()) {
+			toReplace.pop().setBlockType(Material.AIR);
+		}
 		while (!processQueue.isEmpty()) {
 			SimplifiedLocation loc = processQueue.pop();
-			if (!isFluid(loc))
-				continue;
-			if (loc.isVisited())
-				continue;
-			loc.setVisited();
-
-			if (start.distance(loc) > radius)
-				continue;
-
-			for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; ++x) {
-				for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; ++z) {
-					for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; ++y) {
+			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; ++y) {
+				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; ++x) {
+					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; ++z) {
 						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-
-						if (!loc.equals(newPos)) {
+						if (!newPos.isVisited() && isFluid(newPos)
+								&& start.distance(newPos) < radius) {
 							processQueue.push(newPos);
+							current = new BlockRemanence(currentBlock);
+							blocks.push(current);
+							toReplace.push(current);
+							newPos.setVisited();
 						}
 					}
+
 				}
 			}
-			current = new BlockRemanence(currentBlock);
-			blocks.push(current);
-			current.setBlockType(Material.AIR);
+			while (!toReplace.isEmpty())
+				toReplace.pop().setBlockType(Material.AIR);
+
 		}
+		while (!toReplace.isEmpty())
+			toReplace.pop().setBlockType(Material.AIR);
+
 		try {
 		} catch (Exception e) {
 		}
