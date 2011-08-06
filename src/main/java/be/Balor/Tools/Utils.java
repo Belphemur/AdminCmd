@@ -242,6 +242,9 @@ public class Utils {
 	private static void setTime(CommandSender sender, World w, String arg) {
 		long curtime = w.getTime();
 		long newtime = curtime - (curtime % 24000);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("type", arg);
+		replace.put("world", w.getName());	
 		if (!ACHelper.getInstance().isValueSet(Type.TIME_FREEZED, w.getName())) {
 			if (arg.equalsIgnoreCase("day"))
 				newtime += 0;
@@ -258,7 +261,7 @@ public class Utils {
 						.getServer()
 						.getScheduler()
 						.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
-								new FreezeTime(w), 0, 20);
+								new FreezeTime(w), 0, 19);
 				ACHelper.getInstance().addValue(Type.TIME_FREEZED, w.getName(), taskId);
 			} else {
 				// if not a constant, use raw time
@@ -267,6 +270,7 @@ public class Utils {
 				} catch (Exception e) {
 				}
 			}
+			sI18n(sender, "timeSet", replace);
 		} else if (arg.equalsIgnoreCase("unpause")) {
 			int removeTask = (Integer)ACHelper.getInstance().getValue(Type.TIME_FREEZED, w.getName());
 			ACHelper
@@ -275,12 +279,10 @@ public class Utils {
 			.getServer()
 			.getScheduler().cancelTask(removeTask);
 			ACHelper.getInstance().removeValue(Type.TIME_FREEZED, w.getName());
+			sI18n(sender, "timeSet", replace);
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("type", arg);
-		replace.put("world", w.getName());
-		sI18n(sender, "timeSet", replace);
+	
 		w.setTime(newtime);
 	}
 
