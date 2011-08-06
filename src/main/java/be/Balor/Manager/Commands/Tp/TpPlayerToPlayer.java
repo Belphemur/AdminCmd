@@ -20,9 +20,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Utils.TpType;
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -49,11 +48,11 @@ public class TpPlayerToPlayer extends ACCommands {
 		Player from = sender.getServer().getPlayer(args[0]);
 		Player to = sender.getServer().getPlayer(args[1]);
 		if (from != null && from.equals(sender))
-			Utils.tpP2P(sender, args[0], args[1], TpType.TP_TO);
+			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TP_TO);
 		else if (to != null && to.equals(sender))
-			Utils.tpP2P(sender, args[0], args[1], TpType.TP_HERE);
+			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TP_HERE);
 		else
-			Utils.tpP2P(sender, args[0], args[1], TpType.TP_PLAYERS);
+			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TP_PLAYERS);
 	}
 
 	/*

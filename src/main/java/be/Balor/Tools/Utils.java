@@ -46,9 +46,6 @@ public class Utils {
 	 * @author Balor (aka Antoine Aflalo)
 	 * 
 	 */
-	public enum TpType {
-		TP_HERE, TP_TO, TP_PLAYERS;
-	}
 
 	private static Block currentBlock;
 
@@ -278,7 +275,7 @@ public class Utils {
 
 	}
 
-	public static boolean tpP2P(CommandSender sender, String nFrom, String nTo, TpType type) {
+	public static boolean tpP2P(CommandSender sender, String nFrom, String nTo, Type.Tp type) {
 		boolean found = true;
 		Player pFrom = AdminCmd.getBukkitServer().getPlayer(nFrom);
 		Player pTo = AdminCmd.getBukkitServer().getPlayer(nTo);
@@ -296,14 +293,14 @@ public class Utils {
 		}
 
 		if (found) {
-			if ((type.equals(TpType.TP_TO) || type.equals(TpType.TP_PLAYERS))
+			if ((type.equals(Type.Tp.TP_TO) || type.equals(Type.Tp.TP_PLAYERS))
 					&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
 					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 				replace.put("player", nTo);
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return false;
 			}
-			if ((type.equals(TpType.TP_HERE) || type.equals(TpType.TP_PLAYERS))
+			if ((type.equals(Type.Tp.TP_HERE) || type.equals(Type.Tp.TP_PLAYERS))
 					&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
 							.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
 				replace.put("player", nFrom);
@@ -318,8 +315,9 @@ public class Utils {
 		return found;
 	}
 
-	private static void weatherChange(CommandSender sender, World w, Weather type, String[] duration) {
-		if (!type.equals(Weather.FREEZE)
+	private static void weatherChange(CommandSender sender, World w, Type.Weather type,
+			String[] duration) {
+		if (!type.equals(Type.Weather.FREEZE)
 				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
 			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFreezed") + " " + w.getName());
 			return;
@@ -400,7 +398,7 @@ public class Utils {
 		}
 	}
 
-	public static boolean weather(CommandSender sender, Weather type, String[] duration) {
+	public static boolean weather(CommandSender sender, Type.Weather type, String[] duration) {
 		if (isPlayer(sender, false)) {
 			weatherChange(sender, ((Player) sender).getWorld(), type, duration);
 		} else

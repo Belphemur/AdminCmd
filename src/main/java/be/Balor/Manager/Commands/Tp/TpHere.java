@@ -20,8 +20,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommands;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Utils.TpType;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -47,7 +47,7 @@ public class TpHere extends ACCommands {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender))
-			Utils.tpP2P(sender, args[0], ((Player) sender).getName(), TpType.TP_HERE);
+			Utils.tpP2P(sender, args[0], ((Player) sender).getName(), Type.Tp.TP_HERE);
 	}
 
 	/*

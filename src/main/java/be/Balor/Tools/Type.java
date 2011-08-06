@@ -21,10 +21,20 @@ package be.Balor.Tools;
  * 
  */
 public enum Type {
-	FLY(Category.PLAYER), VULCAN(Category.PLAYER), GOD(Category.PLAYER), THOR(Category.PLAYER), BANNED(
-			Category.SANCTION), FIREBALL(Category.PLAYER), SPYMSG(Category.OTHER), FREEZED(
-			Category.SANCTION), MUTED(Category.SANCTION), MOB_LIMIT(Category.WORLD), NO_PICKUP(
-			Category.PLAYER), WEATHER_FREEZED(Category.WORLD), REPEAT_CMD(Category.OTHER);
+	FLY(Category.PLAYER), 
+	VULCAN(Category.PLAYER), 
+	GOD(Category.PLAYER), 
+	THOR(Category.PLAYER), 
+	BANNED(Category.SANCTION), 
+	FIREBALL(Category.PLAYER), 
+	SPYMSG(Category.OTHER), 
+	FREEZED(Category.SANCTION), 
+	MUTED(Category.SANCTION), 
+	MOB_LIMIT(Category.WORLD), 
+	NO_PICKUP(Category.PLAYER), 
+	WEATHER_FREEZED(Category.WORLD), 
+	REPEAT_CMD(Category.OTHER), 
+	TIME_FREEZED(Category.WORLD);
 	@Override
 	public String toString() {
 		String s = super.toString();
@@ -48,5 +58,11 @@ public enum Type {
 
 	public enum Category {
 		PLAYER, WORLD, OTHER, SANCTION;
+	}
+	public enum Weather {
+		STORM, RAIN, CLEAR, FREEZE;
+	}
+	public enum Tp {
+		TP_HERE, TP_TO, TP_PLAYERS;
 	}
 }
