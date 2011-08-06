@@ -130,10 +130,10 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(News.class);
 		CommandManager.getInstance().registerCommand(Rain.class);
 		CommandManager.getInstance().registerCommand(Roll.class);
-		CommandManager.getInstance().registerCommand(Extinguish.class);
+		// CommandManager.getInstance().registerCommand(Extinguish.class);
 		CommandManager.getInstance().registerCommand(Reload.class);
-		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
-		CommandManager.getInstance().registerCommand(Undo.class);
+		// CommandManager.getInstance().registerCommand(ReplaceBlock.class);
+		// CommandManager.getInstance().registerCommand(Undo.class);
 		CommandManager.getInstance().registerCommand(ReloadAll.class);
 		CommandManager.getInstance().registerCommand(RepeatCmd.class);
 	}

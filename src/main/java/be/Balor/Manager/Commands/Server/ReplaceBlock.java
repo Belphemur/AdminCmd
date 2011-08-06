@@ -55,6 +55,10 @@ public class ReplaceBlock extends ACCommands {
 			return;
 		ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(mc.material);
+		if(mc.material.equals(Material.LAVA))
+			mats.add(Material.STATIONARY_LAVA);
+		else if(mc.material.equals(Material.WATER))
+			mats.add(Material.STATIONARY_WATER);
 		Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
 		if (count == null)
 			return;

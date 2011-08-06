@@ -475,8 +475,6 @@ public class Utils {
 
 			}
 			Stack<BlockRemanence> blocks;
-			if (radius > 30)
-				radius = 30;
 			Block block = ((Player) sender).getLocation().getBlock();
 			if (mat.contains(Material.LAVA) || mat.contains(Material.WATER))
 				blocks = drainFluid(block, radius);
@@ -567,9 +565,6 @@ public class Utils {
 		while (!toReplace.isEmpty())
 			toReplace.pop().setBlockType(Material.AIR);
 
-		try {
-		} catch (Exception e) {
-		}
 		return blocks;
 	}
 
