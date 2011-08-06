@@ -28,8 +28,12 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommandYamlParser;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Tools.Type;
+import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
@@ -125,6 +129,14 @@ public class CommandManager implements CommandExecutor {
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
 				threads.get(cmdCount).addCommand(cmd, sender, args);
+				if (!cmd.getCmdName().equals("bal_repeat")) {
+					if (Utils.isPlayer(sender, false))
+						ACHelper.getInstance().addValue(Type.REPEAT_CMD, (Player) sender,
+								new ACCommandContainer(sender, cmd, args));
+					else
+						ACHelper.getInstance().addValue(Type.REPEAT_CMD, "serverConsole",
+								new ACCommandContainer(sender, cmd, args));
+				}
 				cmdCount++;
 				if (cmdCount == MAX_THREADS)
 					cmdCount = 0;

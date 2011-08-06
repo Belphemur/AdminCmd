@@ -270,3 +270,7 @@ commands:
     description: reload the server.
     aliases: [reloadall, arall, reload]
     usage: /<command>
+  bal_repeat:
+    description: repeat the last command.
+    aliases: [repeat, rp]
+    usage: /<command>

@@ -135,6 +135,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
 		CommandManager.getInstance().registerCommand(Undo.class);
 		CommandManager.getInstance().registerCommand(ReloadAll.class);
+		CommandManager.getInstance().registerCommand(RepeatCmd.class);
 	}
 
 	private void setEnglishLocale() {
@@ -299,7 +300,9 @@ public class AdminCmd extends JavaPlugin {
 				+ "%mat" + ChatColor.DARK_AQUA + " are now AIR.");
 		Utils.addLocale("undo", ChatColor.GREEN + "%nb blocks " + ChatColor.DARK_GREEN
 				+ "have been replaced");
-		Utils.addLocale("nothingToUndo", ChatColor.DARK_PURPLE+"Nothing to undo.");
+		Utils.addLocale("nothingToUndo", ChatColor.DARK_PURPLE + "Nothing to undo.");
+		Utils.addLocale("noRepeat", ChatColor.DARK_RED + "No command to repeat.");
+		Utils.addLocale("reExec", ChatColor.YELLOW + "Repeating the last command.");
 		LocaleManager.getInstance().save();
 	}
 
