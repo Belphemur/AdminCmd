@@ -53,13 +53,13 @@ public class Freeze extends ACCommands {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.FREEZED, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.FREEZED, player);
+			if (ACHelper.getInstance().isValueSet(Type.FROZEN, player.getName())) {
+				ACHelper.getInstance().removeValue(Type.FROZEN, player);
 				Utils.sI18n(player, "freezeDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "freezeDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addValue(Type.FREEZED, player);
+				ACHelper.getInstance().addValue(Type.FROZEN, player);
 				Utils.sI18n(player, "freezeEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "freezeEnabledTarget", replace);

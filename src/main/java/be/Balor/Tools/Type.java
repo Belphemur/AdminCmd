@@ -28,11 +28,11 @@ public enum Type {
 	BANNED(Category.SANCTION), 
 	FIREBALL(Category.PLAYER), 
 	SPYMSG(Category.OTHER), 
-	FREEZED(Category.SANCTION), 
+	FROZEN(Category.SANCTION), 
 	MUTED(Category.SANCTION), 
 	MOB_LIMIT(Category.WORLD), 
 	NO_PICKUP(Category.PLAYER), 
-	WEATHER_FREEZED(Category.WORLD), 
+	WEATHER_FROZEN(Category.WORLD), 
 	REPEAT_CMD(Category.OTHER), 
 	TIME_FREEZED(Category.WORLD);
 	@Override

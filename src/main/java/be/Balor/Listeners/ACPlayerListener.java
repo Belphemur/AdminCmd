@@ -70,7 +70,7 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isValueSet(Type.FREEZED, p)) {
+		if (ACHelper.getInstance().isValueSet(Type.FROZEN, p)) {
 			event.setCancelled(true);
 			return;
 		}
@@ -128,7 +128,7 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
-		if (ACHelper.getInstance().isValueSet(Type.FREEZED, playername)) {
+		if (ACHelper.getInstance().isValueSet(Type.FROZEN, playername)) {
 			event.setCancelled(true);
 			return;
 		}
@@ -153,7 +153,7 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isValueSet(Type.FREEZED, p)) {
+		if (ACHelper.getInstance().isValueSet(Type.FROZEN, p)) {
 			event.setCancelled(true);
 			return;
 		}

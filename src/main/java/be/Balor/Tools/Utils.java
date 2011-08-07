@@ -343,8 +343,8 @@ public class Utils {
 	private static void weatherChange(CommandSender sender, World w, Type.Weather type,
 			String[] duration) {
 		if (!type.equals(Type.Weather.FREEZE)
-				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFreezed") + " " + w.getName());
+				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, w.getName())) {
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " " + w.getName());
 			return;
 		}
 		switch (type) {
@@ -380,13 +380,13 @@ public class Utils {
 			}
 			break;
 		case FREEZE:
-			if (ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, w.getName())) {
-				ACHelper.getInstance().removeValue(Type.WEATHER_FREEZED, w.getName());
-				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFreezed") + " "
+			if (ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, w.getName())) {
+				ACHelper.getInstance().removeValue(Type.WEATHER_FROZEN, w.getName());
+				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFrozen") + " "
 						+ ChatColor.WHITE + w.getName());
 			} else {
-				ACHelper.getInstance().addValue(Type.WEATHER_FREEZED, w.getName());
-				sender.sendMessage(ChatColor.RED + Utils.I18n("wFreezed") + " " + ChatColor.WHITE
+				ACHelper.getInstance().addValue(Type.WEATHER_FROZEN, w.getName());
+				sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen") + " " + ChatColor.WHITE
 						+ w.getName());
 			}
 			break;

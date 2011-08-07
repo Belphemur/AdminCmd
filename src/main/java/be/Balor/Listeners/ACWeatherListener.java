@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 public class ACWeatherListener extends WeatherListener {
 	@Override
 	  public void onWeatherChange(WeatherChangeEvent event) {
-		if(ACHelper.getInstance().isValueSet(Type.WEATHER_FREEZED, event.getWorld().getName()))
+		if(ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, event.getWorld().getName()))
 			event.setCancelled(true);
 	}
 

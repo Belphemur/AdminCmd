@@ -130,10 +130,10 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(News.class);
 		CommandManager.getInstance().registerCommand(Rain.class);
 		CommandManager.getInstance().registerCommand(Roll.class);
-		// CommandManager.getInstance().registerCommand(Extinguish.class);
+		CommandManager.getInstance().registerCommand(Extinguish.class);
 		CommandManager.getInstance().registerCommand(Reload.class);
-		// CommandManager.getInstance().registerCommand(ReplaceBlock.class);
-		// CommandManager.getInstance().registerCommand(Undo.class);
+		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
+		CommandManager.getInstance().registerCommand(Undo.class);
 		CommandManager.getInstance().registerCommand(ReloadAll.class);
 		CommandManager.getInstance().registerCommand(RepeatCmd.class);
 	}
@@ -266,7 +266,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN
 				+ "Freeze mode disabled for %player");
 		Utils.addLocale("freezeEnabled", ChatColor.DARK_RED
-				+ "You can't move until you are defreezed.");
+				+ "You can't move until you are defrozen.");
 		Utils.addLocale("freezeEnabledTarget", ChatColor.DARK_RED
 				+ "Freeze mode enabled for %player");
 		Utils.addLocale("muteDisabled", ChatColor.DARK_GREEN + "You can chat again.");
@@ -281,8 +281,8 @@ public class AdminCmd extends JavaPlugin {
 		LocaleManager.getInstance().save();
 		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN
 				+ "Mob limit is removed for world : %world");
-		Utils.addLocale("wFreezed", "Weather is freezed in world :");
-		Utils.addLocale("wUnFreezed", "Weather can change in world :");
+		Utils.addLocale("wFrozen", "Weather is frozen in world :");
+		Utils.addLocale("wUnFrozen", "Weather can change in world :");
 		Utils.addLocale("invTitle", "[INV]");
 		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
