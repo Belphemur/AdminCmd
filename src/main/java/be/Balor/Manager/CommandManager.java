@@ -19,6 +19,7 @@ package be.Balor.Manager;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -51,6 +53,8 @@ public class CommandManager implements CommandExecutor {
 	private static CommandManager instance = null;
 	private JavaPlugin plugin;
 	private boolean threadsStarted = false;
+	private List<String> disabledCommands;
+	private List<String> prioritizedCommands;
 
 	/**
 	 * @return the instance
@@ -61,8 +65,27 @@ public class CommandManager implements CommandExecutor {
 		return instance;
 	}
 
+	/**
+	 * Destroy the instance
+	 */
 	public static void killInstance() {
 		instance = null;
+	}
+
+	/**
+	 * @param disabledCommands
+	 *            the disabledCommands to set
+	 */
+	public void setDisabledCommands(List<String> disabledCommands) {
+		this.disabledCommands = disabledCommands;
+	}
+
+	/**
+	 * @param prioritizedCommands
+	 *            the prioritizedCommands to set
+	 */
+	public void setPrioritizedCommands(List<String> prioritizedCommands) {
+		this.prioritizedCommands = prioritizedCommands;
 	}
 
 	/**
@@ -139,6 +162,10 @@ public class CommandManager implements CommandExecutor {
 		try {
 			command = (ACCommands) clazz.newInstance();
 			command.initializeCommand(plugin);
+			for (String alias : command.getPluginCommand().getAliases())
+				if (disabledCommands.contains(alias))
+					throw new CommandDisabled("Command " + command.getCmdName()
+							+ " selected to be disabled in the configuration file.");
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
 			commands.put(command.getPluginCommand(), command);
@@ -154,7 +181,7 @@ public class CommandManager implements CommandExecutor {
 
 	public void checkAlias() {
 		for (Command cmd : PluginCommandYamlParser.parse(plugin)) {
-			if (cmd != null) {
+			if (plugin.getCommand(cmd.getName()) != null) {
 				cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
 				String aliases = "";
 				for (String alias : cmd.getAliases())
@@ -184,10 +211,8 @@ public class CommandManager implements CommandExecutor {
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
-					AdminCmd.getBukkitServer()
-							.getScheduler()
-							.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-									new SyncTask(cmd, sender, args));
+					plugin.getServer().getScheduler()
+							.scheduleSyncDelayedTask(plugin, new SyncTask(cmd, sender, args));
 				else {
 					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
 					cmdCount++;

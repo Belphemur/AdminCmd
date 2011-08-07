@@ -59,7 +59,7 @@ public class TpToWarp extends ACCommands {
 			replace.put("name", args[0]);
 			Location loc = ACHelper.getInstance().getLocation("warp", args[0], "warpPoints");
 			if (loc == null)
-				sendMessage(sender, target, "errorWarp", replace);
+				Utils.sI18n(sender, "errorWarp", replace);
 			else {
 				target.teleport(loc);
 				sendMessage(sender, target, "tpWarp", replace);

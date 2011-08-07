@@ -152,10 +152,11 @@ public class ACHelper {
 			InvisibleWorker.getInstance().reappear(p);
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
-		CommandManager.killInstance();		
+		CommandManager.killInstance();
 		System.gc();
 		CommandManager.getInstance().setPlugin(pluginInstance);
 		AdminCmd.registerCmds();
+		CommandManager.getInstance().checkAlias();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
@@ -220,8 +221,10 @@ public class ACHelper {
 		pluginConfig.addProperty("prioritizedCommands", new LinkedList<String>());
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
+			AFKWorker.getInstance().setExpiration(pluginConfig.getInt("afkKickInMinutes", 3) + 1);
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
+
 			this.pluginInstance
 					.getServer()
 					.getScheduler()
@@ -244,6 +247,7 @@ public class ACHelper {
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		CommandManager.getInstance().setPlugin(pluginInstance);
 		AdminCmd.registerCmds();
+		CommandManager.getInstance().checkAlias();
 	}
 
 	/**

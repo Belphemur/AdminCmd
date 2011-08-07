@@ -327,8 +327,7 @@ public class AdminCmd extends JavaPlugin {
 		worker.setPluginInstance(this);
 		setDefaultLocale();
 		registerPermParents();
-		TerminalCommandManager.getInstance();
-		CommandManager.getInstance().checkAlias();
+		TerminalCommandManager.getInstance();		
 		PermissionManager.getInstance().registerAllPermParent();
 		worker.loadInfos();
 		ACPlayerListener playerListener = new ACPlayerListener();

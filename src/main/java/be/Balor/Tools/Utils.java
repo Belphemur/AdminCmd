@@ -477,7 +477,7 @@ public class Utils {
 			if (mat.contains(Material.LAVA) || mat.contains(Material.WATER))
 				blocks = drainFluid(block, radius);
 			else
-				blocks = replaceInSphere(mat, block, radius);
+				blocks = replaceInCuboid(mat, block, radius);
 			if (!blocks.isEmpty())
 				ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
 			return blocks.size();
@@ -485,7 +485,16 @@ public class Utils {
 		return null;
 	}
 
-	private static Stack<BlockRemanence> replaceInSphere(List<Material> mat, Block block, int radius) {
+	/**
+	 * Replace all the chosen material in the cuboid region.
+	 * 
+	 * @param mat
+	 * @param block
+	 * @param radius
+	 * @return
+	 */
+	private static Stack<BlockRemanence> replaceInCuboid(List<Material> mat, Block block,
+			int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		int limitX = block.getX() + radius;
 		int limitY = block.getY() + radius;
@@ -506,6 +515,13 @@ public class Utils {
 		return blocks;
 	}
 
+	/**
+	 * Because water and lava are fluid, using another algo to "delete"
+	 * 
+	 * @param block
+	 * @param radius
+	 * @return
+	 */
 	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
@@ -551,12 +567,27 @@ public class Utils {
 		return blocks;
 	}
 
+	/**
+	 * Check if the block is a fluid.
+	 * 
+	 * @param loc
+	 * @return
+	 */
 	private static boolean isFluid(Location loc) {
 		Block b = loc.getWorld().getBlockAt(loc);
 		if (b == null)
 			return false;
 		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
 				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
+	}
+
+	/**
+	 * Shortcut to online players.
+	 * 
+	 * @return
+	 */
+	public static Player[] getOnlinePlayers() {
+		return AdminCmd.getBukkitServer().getOnlinePlayers();
 	}
 
 	private static class FreezeTime implements Runnable {

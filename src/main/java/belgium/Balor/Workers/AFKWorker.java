@@ -17,6 +17,7 @@
 package belgium.Balor.Workers;
 
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ import com.google.common.collect.MapMaker;
  * 
  */
 final public class AFKWorker {
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Long> playerTimeStamp;
 	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private int afkTime = 60000;
 	private int kickTime = 180000;
@@ -91,6 +92,14 @@ final public class AFKWorker {
 	public void setKickTime(int kickTime) {
 		if (afkTime > 0)
 			this.kickTime = kickTime * 1000 * 60;
+	}
+	/**
+	 * Set the expiration for the values in memory.
+	 * @param exp
+	 */
+	public void setExpiration(long exp)
+	{
+		playerTimeStamp= new MapMaker().expiration(exp, TimeUnit.MINUTES).makeMap();
 	}
 
 	/**
@@ -162,8 +171,9 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			for (Player p : playerTimeStamp.keySet())
-				if (!playersAfk.containsKey(p) && (now - playerTimeStamp.get(p)) >= afkTime)
+			for (Player p : Utils.getOnlinePlayers())
+				if (playerTimeStamp.containsKey(p) && !playersAfk.containsKey(p)
+						&& (now - playerTimeStamp.get(p)) >= afkTime)
 					setAfk(p);
 
 		}
