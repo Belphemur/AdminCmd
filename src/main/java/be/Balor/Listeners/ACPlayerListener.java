@@ -211,10 +211,10 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		String[] split = event.getMessage().split(" ");
+		String[] split = event.getMessage().split("\\s+");
 		if (split.length == 0)
 			return;
-		String cmdName = split[0].toLowerCase();
+		String cmdName = split[0].substring(1).toLowerCase();
 		ACCommands cmd = CommandManager.getInstance().getCommand(cmdName);
 		if (cmd != null) {
 			event.setCancelled(true);

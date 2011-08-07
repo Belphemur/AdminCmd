@@ -57,7 +57,7 @@ public class Repair extends ACCommands {
 				item.setDurability((short) 0);
 				Utils.sI18n(sender, "repair", replace);
 			} else
-				Utils.sI18n(sender, "repairError", replace);
+				Utils.sI18n(sender, "errorRepair", replace);
 		}
 	}
 
