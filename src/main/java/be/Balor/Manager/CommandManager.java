@@ -34,6 +34,7 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -55,6 +56,8 @@ public class CommandManager implements CommandExecutor {
 	private boolean threadsStarted = false;
 	private List<String> disabledCommands;
 	private List<String> prioritizedCommands;
+	private HashMap<String, ACCommands> commandReplacer = new HashMap<String, ACCommands>();
+	private HashMap<String, Command> pluginCommands = new HashMap<String, Command>();
 
 	/**
 	 * @return the instance
@@ -109,6 +112,11 @@ public class CommandManager implements CommandExecutor {
 		return result;
 	}
 
+	/**
+	 * Unregister a command from bukkit.
+	 * 
+	 * @param cmdName
+	 */
 	private void unRegisterBukkitCommand(String cmdName) {
 		try {
 			Object result = getPrivateField(plugin.getServer().getPluginManager(), "commandMap");
@@ -118,18 +126,24 @@ public class CommandManager implements CommandExecutor {
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
 			knownCommands.remove(cmdName);
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Get the ACCommand having the given alias.
+	 * 
+	 * @param alias
+	 * @return
+	 */
+	public ACCommands getCommand(String alias) {
+		return commandReplacer.get(alias);
 	}
 
 	/**
@@ -138,6 +152,8 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setPlugin(JavaPlugin plugin) {
 		this.plugin = plugin;
+		for (Command cmd : PluginCommandYamlParser.parse(plugin))
+			pluginCommands.put(cmd.getName(), cmd);
 		startThreads();
 	}
 
@@ -173,16 +189,31 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (CommandException e) {
+		} catch (CommandDisabled e) {
 			unRegisterBukkitCommand(command.getCmdName());
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+		} catch (CommandAlreadyExist e) {
+			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
+				if (prioritizedCommands.contains(alias)) {
+					commandReplacer.put(alias, command);
+					command.registerBukkitPerm();
+					command.getPluginCommand().setExecutor(this);
+					commands.put(command.getPluginCommand(), command);
+					return;
+				}
+			unRegisterBukkitCommand(command.getCmdName());
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+		} catch (CommandException e) {
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
 	}
 
 	public void checkAlias() {
-		for (Command cmd : PluginCommandYamlParser.parse(plugin)) {
+		for (String cmdName : pluginCommands.keySet()) {
+			Command cmd = pluginCommands.get(cmdName);
 			if (plugin.getCommand(cmd.getName()) != null) {
 				cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
+				cmd.getAliases().removeAll(prioritizedCommands);
 				String aliases = "";
 				for (String alias : cmd.getAliases())
 					aliases += alias + ", ";
@@ -202,13 +233,16 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Used to execute ACCommands
+	 * 
+	 * @param sender
+	 * @param cmd
+	 * @param args
+	 * @return
 	 */
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean executeCommand(CommandSender sender, ACCommands cmd, String[] args) {
 		try {
-			ACCommands cmd = null;
-			if (commands.containsKey(command)
-					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
+			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
 					plugin.getServer().getScheduler()
@@ -234,12 +268,12 @@ public class CommandManager implements CommandExecutor {
 		} catch (Throwable t) {
 			Logger.getLogger("Minecraft")
 					.severe("[AdminCmd] The command "
-							+ command.getName()
+							+ cmd.getCmdName()
 							+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 			sender.sendMessage("[AdminCmd]"
 					+ ChatColor.RED
 					+ " The command "
-					+ command.getName()
+					+ cmd.getCmdName()
 					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 			t.printStackTrace();
 			if (cmdCount == 0)
@@ -248,6 +282,17 @@ public class CommandManager implements CommandExecutor {
 				threads.get(cmdCount - 1).start();
 			return false;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		ACCommands cmd = null;
+		if ((cmd = commands.get(command)) != null)
+			return executeCommand(sender, cmd, args);
+		else
+			return false;
 	}
 
 	/**

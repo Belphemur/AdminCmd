@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -33,6 +34,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.bukkit.util.config.Configuration;
 
+import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.Type;
@@ -80,7 +83,9 @@ public class ACPlayerListener extends PlayerListener {
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
 			else if ((Boolean) ACHelper.getInstance().getConfValue("glideWhenFallingInFlyMode")) {
 				Vector vel = p.getVelocity();
-				vel.add(p.getLocation().getDirection().multiply(ACHelper.getInstance().getFloat("glinding.multiplicator")).setY(0));
+				vel.add(p.getLocation().getDirection()
+						.multiply(ACHelper.getInstance().getFloat("glinding.multiplicator"))
+						.setY(0));
 				if (vel.getY() < ACHelper.getInstance().getFloat("glinding.YvelocityCheckToGlide")) {
 					vel.setY(ACHelper.getInstance().getFloat("glinding.newYvelocity"));
 					p.setVelocity(vel);
@@ -202,6 +207,20 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, event.getPlayer()))
 			event.setCancelled(true);
+	}
+
+	@Override
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		String[] split = event.getMessage().split(" ");
+		if (split.length == 0)
+			return;
+		String cmdName = split[0].toLowerCase();
+		ACCommands cmd = CommandManager.getInstance().getCommand(cmdName);
+		if (cmd != null) {
+			event.setCancelled(true);
+			CommandManager.getInstance().executeCommand(event.getPlayer(), cmd,
+					Utils.Arrays_copyOfRange(split, 1, split.length));
+		}
 	}
 
 	protected class UpdateInvisibleOnJoin implements Runnable {
