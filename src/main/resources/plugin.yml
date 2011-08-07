@@ -250,18 +250,18 @@ commands:
     description: roll a dice.
     aliases: [roll]
     usage: /<command> [nbOfFace]
-#  bal_extinguish:
-#    description: extinguish fire in the range.
-#    aliases: [ex, extinguish]
-#    usage: /<command> [radius]
-#  bal_replace:
-#    description: replace the choosen block in the range by air.
-#    aliases: [air, melt]
-#    usage: /<command> Material [radius]
-#  bal_undo:
-#    description: undo the last block modification you have done.
-#    aliases: [undo, past]
-#    usage: /<command>
+  bal_extinguish:
+    description: extinguish fire in the range.
+    aliases: [ex, extinguish]
+    usage: /<command> [radius]
+  bal_replace:
+    description: replace the choosen block in the range by air.
+    aliases: [air, melt]
+    usage: /<command> Material [radius]
+  bal_undo:
+    description: undo the last block modification you have done.
+    aliases: [undo, past]
+    usage: /<command>
   bal_reload:
     description: reload the wanted plugin.
     aliases: [areload,ar]
@@ -273,4 +273,8 @@ commands:
   bal_repeat:
     description: repeat the last command.
     aliases: [repeat, rp]
+    usage: /<command>
+  bal_afk:
+    description: set yourself AFK.
+    aliases: [afk, away]
     usage: /<command>

@@ -118,7 +118,7 @@ final public class AFKWorker {
 	 * 
 	 * @param p
 	 */
-	private void setAfk(Player p) {
+	public void setAfk(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 			String afkString = Utils.I18n("afk", "player", p.getName());
 			if (afkString != null)

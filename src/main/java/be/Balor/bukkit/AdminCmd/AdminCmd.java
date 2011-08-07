@@ -136,6 +136,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Undo.class);
 		CommandManager.getInstance().registerCommand(ReloadAll.class);
 		CommandManager.getInstance().registerCommand(RepeatCmd.class);
+		CommandManager.getInstance().registerCommand(Afk.class);
 	}
 
 	private void setEnglishLocale() {
