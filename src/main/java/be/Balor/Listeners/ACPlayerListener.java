@@ -218,6 +218,7 @@ public class ACPlayerListener extends PlayerListener {
 		ACCommands cmd = CommandManager.getInstance().getCommand(cmdName);
 		if (cmd != null) {
 			event.setCancelled(true);
+			System.out.print("[AdminCmd] Command "+cmdName+" intercepted.");
 			CommandManager.getInstance().executeCommand(event.getPlayer(), cmd,
 					Utils.Arrays_copyOfRange(split, 1, split.length));
 			event.setMessage("/AdminCmd took the control");

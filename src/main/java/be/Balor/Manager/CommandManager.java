@@ -178,10 +178,13 @@ public class CommandManager implements CommandExecutor {
 		try {
 			command = (ACCommands) clazz.newInstance();
 			command.initializeCommand(plugin);
-			for (String alias : command.getPluginCommand().getAliases())
+			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
 				if (disabledCommands.contains(alias))
 					throw new CommandDisabled("Command " + command.getCmdName()
 							+ " selected to be disabled in the configuration file.");
+				else if (prioritizedCommands.contains(alias))
+					commandReplacer.put(alias, command);
+
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
 			commands.put(command.getPluginCommand(), command);
