@@ -43,7 +43,7 @@ public class BlockRemanence {
 
 	public void returnToThePast() {
 		if (useData)
-			loc.getWorld().getBlockAt(loc).setTypeIdAndData(oldType, (byte) data, false);
+			loc.getWorld().getBlockAt(loc).setTypeIdAndData(oldType, (byte) data, true);
 		else
 			this.setBlockType(oldType);
 	}

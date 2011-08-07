@@ -512,9 +512,9 @@ public class Utils {
 		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
-		for (int x = block.getX() - 1; x <= block.getX() + 1; x++) {
-			for (int z = block.getZ() - 1; z <= block.getZ() + 1; z++) {
-				for (int y = block.getY() - 1; y <= block.getY() + 1; y++) {
+		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
+			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
+				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
 					SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
 					if (isFluid(newPos) && !newPos.isVisited()) {
 						newPos.setVisited();
@@ -530,9 +530,9 @@ public class Utils {
 
 		while (!processQueue.isEmpty()) {
 			SimplifiedLocation loc = processQueue.pop();
-			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; ++y) {
-				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; ++x) {
-					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; ++z) {
+			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
+				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
+					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
 						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
 						if (!newPos.isVisited() && isFluid(newPos)
 								&& start.distance(newPos) < radius) {
