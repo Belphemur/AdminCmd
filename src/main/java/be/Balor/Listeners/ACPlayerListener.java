@@ -220,6 +220,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 			CommandManager.getInstance().executeCommand(event.getPlayer(), cmd,
 					Utils.Arrays_copyOfRange(split, 1, split.length));
+			event.setMessage("/AdminCmd took the control");
 		}
 	}
 
