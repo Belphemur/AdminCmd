@@ -12,8 +12,46 @@
 		<url>https://github.com/Belphemur/AdminCmd</url>
 	</scm>
 	<build>
+
 		<defaultGoal>clean install</defaultGoal>
 		<finalName>AdminCmd</finalName>
+		<sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+
+		<!-- Resources -->
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>scripts.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>de_DE.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>items.csv</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -21,7 +59,11 @@
 				<version>2.3.1</version>
 				<configuration>
 					<archive>
+						<addMavenDescriptor>true</addMavenDescriptor>
+						<pomPropertiesFile>true</pomPropertiesFile>
 						<manifest>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>../lib/</classpathPrefix>
 						</manifest>

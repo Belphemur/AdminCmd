@@ -492,35 +492,23 @@ public class Utils {
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
-		for (int x = block.getX() - radius; x <= limitX; x++)
-			for (int z = block.getZ() - radius; z <= limitZ; z++) {
-				for (int y = block.getY() - radius; y <= limitY; y++) {
+		for (int y = block.getY() - radius; y <= limitY; y++) {
+			for (int x = block.getX() - radius; x <= limitX; x++)
+				for (int z = block.getZ() - radius; z <= limitZ; z++) {
 					current = block.getWorld().getBlockAt(x, y, z);
 					if (mat.contains(current.getType())) {
 						br = new BlockRemanence(current.getLocation());
 						blocks.push(br);
-						toReplace.push(br);
+						br.setBlockType(0);
 					}
 				}
-				while (!toReplace.isEmpty())
-					toReplace.pop().setBlockType(0);
-				try {
-					Thread.sleep(0, 100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		while (!toReplace.isEmpty())
-			toReplace.pop().setBlockType(0);
+		}
 		return blocks;
 	}
 
 	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
-		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
 		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
@@ -533,16 +521,13 @@ public class Utils {
 						processQueue.push(newPos);
 						current = new BlockRemanence(newPos);
 						blocks.push(current);
-						toReplace.push(current);
 						current.setBlockType(0);
 					}
 
 				}
 			}
 		}
-		while (!toReplace.isEmpty()) {
-			toReplace.pop().setBlockType(0);
-		}
+
 		while (!processQueue.isEmpty()) {
 			SimplifiedLocation loc = processQueue.pop();
 			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; ++y) {
@@ -554,19 +539,14 @@ public class Utils {
 							processQueue.push(newPos);
 							current = new BlockRemanence(newPos);
 							blocks.push(current);
-							toReplace.push(current);
+							current.setBlockType(0);
 							newPos.setVisited();
 						}
 					}
 
 				}
 			}
-			while (!toReplace.isEmpty())
-				toReplace.pop().setBlockType(0);
-
 		}
-		while (!toReplace.isEmpty())
-			toReplace.pop().setBlockType(0);
 
 		return blocks;
 	}

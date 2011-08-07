@@ -128,7 +128,13 @@ public class CommandManager implements CommandExecutor {
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
-				threads.get(cmdCount).addCommand(cmd, sender, args);
+				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo"))
+					AdminCmd.getBukkitServer()
+							.getScheduler()
+							.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+									new SyncTask(cmd, sender, args));
+				else
+					threads.get(cmdCount).addCommand(cmd, sender, args);
 				if (!cmd.getCmdName().equals("bal_repeat")) {
 					if (Utils.isPlayer(sender, false))
 						ACHelper.getInstance().addValue(Type.REPEAT_CMD, (Player) sender,
@@ -230,6 +236,33 @@ public class CommandManager implements CommandExecutor {
 			sendersQueue.put(sender);
 			argsQueue.put(args);
 			sema.release();
+		}
+
+	}
+
+	private class SyncTask implements Runnable {
+		private ACCommands cmd;
+		private CommandSender sender;
+		private String[] args;
+
+		/**
+		 * 
+		 */
+		public SyncTask(ACCommands cmd, CommandSender sender, String[] args) {
+			this.cmd = cmd;
+			this.sender = sender;
+			this.args = args;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			cmd.execute(sender, args);
+
 		}
 
 	}

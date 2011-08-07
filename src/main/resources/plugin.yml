@@ -1,6 +1,6 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
-version: 5.7
+version: ${project.version}
 author: Balor
 softdepend: [MultiVerse,Permissions,BLAH]
 description: >
