@@ -152,8 +152,10 @@ public class ACHelper {
 			InvisibleWorker.getInstance().reappear(p);
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
+		CommandManager.killInstance();		
 		System.gc();
-		CommandManager.getInstance().startThreads();
+		CommandManager.getInstance().setPlugin(pluginInstance);
+		AdminCmd.registerCmds();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
@@ -214,6 +216,8 @@ public class ACHelper {
 		pluginConfig.addProperty("glinding.multiplicator", 0.1F);
 		pluginConfig.addProperty("glinding.YvelocityCheckToGlide", -0.2F);
 		pluginConfig.addProperty("glinding.newYvelocity", -0.5F);
+		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
+		pluginConfig.addProperty("prioritizedCommands", new LinkedList<String>());
 		pluginConfig.save();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
@@ -238,6 +242,8 @@ public class ACHelper {
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
+		CommandManager.getInstance().setPlugin(pluginInstance);
+		AdminCmd.registerCmds();
 	}
 
 	/**

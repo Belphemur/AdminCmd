@@ -67,7 +67,7 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().addPermChild("admincmd.player.noreset");
 	}
 
-	private void registerCmds() {
+	public static void registerCmds() {
 
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
@@ -327,9 +327,7 @@ public class AdminCmd extends JavaPlugin {
 		worker.setPluginInstance(this);
 		setDefaultLocale();
 		registerPermParents();
-		CommandManager.getInstance().setPlugin(this);
 		TerminalCommandManager.getInstance();
-		registerCmds();
 		CommandManager.getInstance().checkAlias();
 		PermissionManager.getInstance().registerAllPermParent();
 		worker.loadInfos();
@@ -359,6 +357,7 @@ public class AdminCmd extends JavaPlugin {
 		ACHelper.killInstance();
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
+		CommandManager.killInstance();
 		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");

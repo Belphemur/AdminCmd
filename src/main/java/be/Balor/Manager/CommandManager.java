@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,6 +29,7 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommandYamlParser;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +61,54 @@ public class CommandManager implements CommandExecutor {
 		return instance;
 	}
 
+	public static void killInstance() {
+		instance = null;
+	}
+
+	/**
+	 * Getting the private field of a another class;
+	 * 
+	 * @param object
+	 * @param field
+	 * @return
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
+	private Object getPrivateField(Object object, String field) throws SecurityException,
+			NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+		Class<?> clazz = object.getClass();
+		Field objectField = clazz.getDeclaredField(field);
+		objectField.setAccessible(true);
+		Object result = objectField.get(object);
+		objectField.setAccessible(false);
+		return result;
+	}
+
+	private void unRegisterBukkitCommand(String cmdName) {
+		try {
+			Object result = getPrivateField(plugin.getServer().getPluginManager(), "commandMap");
+			SimpleCommandMap commandMap = (SimpleCommandMap) result;
+			Object map = getPrivateField(commandMap, "knownCommands");
+			@SuppressWarnings("unchecked")
+			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
+			knownCommands.remove(cmdName);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * @param plugin
 	 *            the plugin to set
@@ -85,8 +135,9 @@ public class CommandManager implements CommandExecutor {
 	 * @param clazz
 	 */
 	public void registerCommand(Class<?> clazz) {
+		ACCommands command = null;
 		try {
-			ACCommands command = (ACCommands) clazz.newInstance();
+			command = (ACCommands) clazz.newInstance();
 			command.initializeCommand(plugin);
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
@@ -96,20 +147,23 @@ public class CommandManager implements CommandExecutor {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (CommandException e) {
+			unRegisterBukkitCommand(command.getCmdName());
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
 	}
 
 	public void checkAlias() {
 		for (Command cmd : PluginCommandYamlParser.parse(plugin)) {
-			cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
-			String aliases = "";
-			for (String alias : cmd.getAliases())
-				aliases += alias + ", ";
-			if (!aliases.isEmpty())
-				Logger.getLogger("Minecraft").info(
-						"[" + plugin.getDescription().getName() + "] Disabled Alias(es) for "
-								+ cmd.getName() + " : " + aliases);
+			if (cmd != null) {
+				cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
+				String aliases = "";
+				for (String alias : cmd.getAliases())
+					aliases += alias + ", ";
+				if (!aliases.isEmpty())
+					Logger.getLogger("Minecraft").info(
+							"[" + plugin.getDescription().getName() + "] Disabled Alias(es) for "
+									+ cmd.getName() + " : " + aliases);
+			}
 		}
 	}
 
