@@ -227,8 +227,8 @@ public class ACHelper {
 		pluginConfig.addProperty("glinding.multiplicator", 0.1F);
 		pluginConfig.addProperty("glinding.YvelocityCheckToGlide", -0.2F);
 		pluginConfig.addProperty("glinding.newYvelocity", -0.5F);
-		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
-		pluginConfig.addProperty("prioritizedCommands", new LinkedList<String>());
+		pluginConfig.addProperty("prioritizedCommands", new String[] {"reload"});
+		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());		
 		pluginConfig.save();
 		init();
 	}
