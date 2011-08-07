@@ -16,9 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import java.util.logging.Logger;
-
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 
 /**
@@ -26,31 +24,86 @@ import org.bukkit.block.Block;
  * 
  */
 public class BlockRemanence {
-	private Block block;
-	private Material oldType;
+	private Location loc;
+	private int oldType;
+	private int data;
+	private boolean useData;
 
 	/**
 	 * 
 	 */
-	public BlockRemanence(Block block) {
-		this.block = block;
-		this.oldType = Material.getMaterial(block.getTypeId());
+	public BlockRemanence(Location loc) {
+		this.loc = loc;
+		Block b = loc.getWorld().getBlockAt(loc);
+		this.oldType = b.getTypeId();
+		if ((useData = usesData(oldType)))
+			data = b.getData();
+
 	}
 
 	public void returnToThePast() {
-		this.setBlockType(oldType);
+		if (useData)
+			loc.getWorld().getBlockAt(loc).setTypeIdAndData(oldType, (byte) data, true);
+		else
+			this.setBlockType(oldType);
 	}
 
-	public void setBlockType(Material mat) {
-		try {
-			if (block != null)
-				block.setType(mat);
-		} catch (NullPointerException e1) {
-		} catch (Exception e) {
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] While replacing the block, an execption occured : ");
-			Logger.getLogger("Minecraft").info(e.getLocalizedMessage());
-		}
+	public void setBlockType(int type) {
+		loc.getWorld().getBlockAt(loc).setTypeId(type);
+	}
 
+	/**
+	 * Block types. From worldEdit
+	 * 
+	 * @author sk89q
+	 */
+	private static boolean usesData(int id) {
+		return id == 6 // Saplings
+				|| id == 8 // Water
+				|| id == 9 // Water
+				|| id == 10 // Lava
+				|| id == 11 // Lava
+				|| id == 17 // Wood
+				|| id == 18 // Leaves
+				|| id == 23 // Dispenser
+				|| id == 25 // Note Block
+				|| id == 26 // Bed
+				|| id == 27 // Powered rails
+				|| id == 28 // Detector rails
+				|| id == 29 // Sticky piston
+				|| id == 31 // Tall grass
+				|| id == 33 // Piston
+				|| id == 34 // Piston extension
+				|| id == 35 // Wool
+				|| id == 43 // Double slab
+				|| id == 44 // Slab
+				|| id == 50 // Torch
+				|| id == 53 // Wooden stairs
+				|| id == 55 // Redstone wire
+				|| id == 59 // Crops
+				|| id == 60 // Soil
+				|| id == 61 // Furnace
+				|| id == 62 // Furnace
+				|| id == 63 // Sign post
+				|| id == 64 // Wooden door
+				|| id == 65 // Ladder
+				|| id == 66 // Minecart track
+				|| id == 67 // Cobblestone stairs
+				|| id == 68 // Wall sign
+				|| id == 69 // Lever
+				|| id == 70 // Stone pressure plate
+				|| id == 71 // Iron door
+				|| id == 72 // Wooden pressure plate
+				|| id == 75 // Redstone torch (off)
+				|| id == 76 // Redstone torch (on)
+				|| id == 77 // Stone button
+				|| id == 78 // Snow tile
+				|| id == 81 // Cactus
+				|| id == 86 // Pumpkin
+				|| id == 91 // Jack-o-lantern
+				|| id == 92 // Cake
+				|| id == 93 // Redstone repeater (off)
+				|| id == 94 // Redstone repeater (on)
+				|| id == 96; // Trap door
 	}
 }

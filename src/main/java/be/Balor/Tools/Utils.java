@@ -47,8 +47,6 @@ public class Utils {
 	 * 
 	 */
 
-	private static Block currentBlock;
-
 	/**
 	 * Translate the id or name to a material
 	 * 
@@ -495,22 +493,27 @@ public class Utils {
 		Block current;
 		BlockRemanence br = null;
 		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
-		for (int y = block.getY() - radius; y <= limitY; y++) {
-			for (int x = block.getX() - radius; x <= limitX; x++)
-				for (int z = block.getZ() - radius; z <= limitZ; z++) {
+		for (int x = block.getX() - radius; x <= limitX; x++)
+			for (int z = block.getZ() - radius; z <= limitZ; z++) {
+				for (int y = block.getY() - radius; y <= limitY; y++) {
 					current = block.getWorld().getBlockAt(x, y, z);
 					if (mat.contains(current.getType())) {
-						br = new BlockRemanence(current);
+						br = new BlockRemanence(current.getLocation());
 						blocks.push(br);
 						toReplace.push(br);
 					}
-
 				}
-			while (!toReplace.isEmpty())
-				toReplace.pop().setBlockType(Material.AIR);
-		}
+				while (!toReplace.isEmpty())
+					toReplace.pop().setBlockType(0);
+				try {
+					Thread.sleep(0, 100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		while (!toReplace.isEmpty())
-			toReplace.pop().setBlockType(Material.AIR);
+			toReplace.pop().setBlockType(0);
 		return blocks;
 	}
 
@@ -528,17 +531,17 @@ public class Utils {
 					if (isFluid(newPos) && !newPos.isVisited()) {
 						newPos.setVisited();
 						processQueue.push(newPos);
-						current = new BlockRemanence(currentBlock);
+						current = new BlockRemanence(newPos);
 						blocks.push(current);
 						toReplace.push(current);
-						current.setBlockType(Material.AIR);
+						current.setBlockType(0);
 					}
 
 				}
 			}
 		}
 		while (!toReplace.isEmpty()) {
-			toReplace.pop().setBlockType(Material.AIR);
+			toReplace.pop().setBlockType(0);
 		}
 		while (!processQueue.isEmpty()) {
 			SimplifiedLocation loc = processQueue.pop();
@@ -549,7 +552,7 @@ public class Utils {
 						if (!newPos.isVisited() && isFluid(newPos)
 								&& start.distance(newPos) < radius) {
 							processQueue.push(newPos);
-							current = new BlockRemanence(currentBlock);
+							current = new BlockRemanence(newPos);
 							blocks.push(current);
 							toReplace.push(current);
 							newPos.setVisited();
@@ -559,11 +562,11 @@ public class Utils {
 				}
 			}
 			while (!toReplace.isEmpty())
-				toReplace.pop().setBlockType(Material.AIR);
+				toReplace.pop().setBlockType(0);
 
 		}
 		while (!toReplace.isEmpty())
-			toReplace.pop().setBlockType(Material.AIR);
+			toReplace.pop().setBlockType(0);
 
 		return blocks;
 	}
@@ -572,7 +575,6 @@ public class Utils {
 		Block b = loc.getWorld().getBlockAt(loc);
 		if (b == null)
 			return false;
-		currentBlock = b;
 		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
 				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
 	}
