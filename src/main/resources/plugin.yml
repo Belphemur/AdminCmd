@@ -278,3 +278,7 @@ commands:
     description: set yourself AFK.
     aliases: [afk, away]
     usage: /<command>
+  bal_moreall:
+    description: Set the amount of every item in the inventory to the max.
+    aliases: moreall
+    usage: /<command>

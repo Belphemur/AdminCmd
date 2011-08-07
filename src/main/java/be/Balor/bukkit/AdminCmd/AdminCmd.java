@@ -137,9 +137,10 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(ReloadAll.class);
 		CommandManager.getInstance().registerCommand(RepeatCmd.class);
 		CommandManager.getInstance().registerCommand(Afk.class);
+		CommandManager.getInstance().registerCommand(MoreAll.class);
 	}
 
-	private void setEnglishLocale() {
+	private void setDefaultLocale() {
 		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
 				+ "%player");
 		Utils.addLocale("pluginNotFound", ChatColor.RED + "No such Plugin: " + ChatColor.WHITE
@@ -308,6 +309,7 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.WHITE + "%world");
 		Utils.addLocale("timePaused", ChatColor.DARK_RED + "Time is paused in " + ChatColor.WHITE
 				+ "%world. " + ChatColor.DARK_GREEN + "To unpause : /time unpause .");
+		Utils.addLocale("moreAll", ChatColor.AQUA+"All your items are now at their max stack size.");
 		LocaleManager.getInstance().save();
 	}
 
@@ -323,7 +325,7 @@ public class AdminCmd extends JavaPlugin {
 
 		worker = ACHelper.getInstance();
 		worker.setPluginInstance(this);
-		setEnglishLocale();
+		setDefaultLocale();
 		registerPermParents();
 		CommandManager.getInstance().setPlugin(this);
 		TerminalCommandManager.getInstance();
