@@ -86,6 +86,7 @@ public class ACHelper {
 			listOfPossibleRepair.add(i);
 		for (int i = 298; i <= 317; i++)
 			listOfPossibleRepair.add(i);
+		listOfPossibleRepair.add(359);
 	}
 
 	public static ACHelper getInstance() {
