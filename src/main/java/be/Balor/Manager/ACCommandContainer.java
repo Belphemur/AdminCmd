@@ -36,7 +36,18 @@ public class ACCommandContainer {
 		this.args = args;
 	}
 
+	/**
+	 * Execute the command
+	 */
 	public void execute() {
 		cmd.execute(sender, args);
+	}
+
+	/**
+	 * 
+	 * @return the command name.
+	 */
+	public String getCmdName() {
+		return cmd.getCmdName();
 	}
 }

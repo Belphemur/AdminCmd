@@ -128,13 +128,18 @@ public class CommandManager implements CommandExecutor {
 			ACCommands cmd = null;
 			if (commands.containsKey(command)
 					&& (cmd = commands.get(command)).permissionCheck(sender) && cmd.argsCheck(args)) {
-				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo"))
+				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
+						|| cmd.getCmdName().equals("bal_extinguish"))
 					AdminCmd.getBukkitServer()
 							.getScheduler()
 							.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 									new SyncTask(cmd, sender, args));
-				else
-					threads.get(cmdCount).addCommand(cmd, sender, args);
+				else {
+					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
+					cmdCount++;
+					if (cmdCount == MAX_THREADS)
+						cmdCount = 0;
+				}
 				if (!cmd.getCmdName().equals("bal_repeat")) {
 					if (Utils.isPlayer(sender, false))
 						ACHelper.getInstance().addValue(Type.REPEAT_CMD, (Player) sender,
@@ -143,9 +148,7 @@ public class CommandManager implements CommandExecutor {
 						ACHelper.getInstance().addValue(Type.REPEAT_CMD, "serverConsole",
 								new ACCommandContainer(sender, cmd, args));
 				}
-				cmdCount++;
-				if (cmdCount == MAX_THREADS)
-					cmdCount = 0;
+
 				return true;
 			} else
 				return false;
@@ -173,9 +176,7 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 */
 	private class ExecutorThread extends Thread {
-		protected LinkedBlockingQueue<ACCommands> commands;
-		protected LinkedBlockingQueue<CommandSender> sendersQueue;
-		protected LinkedBlockingQueue<String[]> argsQueue;
+		protected LinkedBlockingQueue<ACCommandContainer> commands;
 		protected final int MAX_REQUEST = 5;
 		boolean stop = false;
 		Semaphore sema;
@@ -185,9 +186,7 @@ public class CommandManager implements CommandExecutor {
 		 * 
 		 */
 		public ExecutorThread() {
-			commands = new LinkedBlockingQueue<ACCommands>(MAX_REQUEST);
-			sendersQueue = new LinkedBlockingQueue<CommandSender>(MAX_REQUEST);
-			argsQueue = new LinkedBlockingQueue<String[]>(MAX_REQUEST);
+			commands = new LinkedBlockingQueue<ACCommandContainer>(MAX_REQUEST);
 			sema = new Semaphore(0);
 		}
 
@@ -198,7 +197,7 @@ public class CommandManager implements CommandExecutor {
 		 */
 		@Override
 		public void run() {
-			ACCommands command = null;
+			String cmdname = null;
 			while (true) {
 				try {
 					sema.acquire();
@@ -206,18 +205,18 @@ public class CommandManager implements CommandExecutor {
 						if (this.stop)
 							break;
 					}
-					command = commands.peek();
-					commands.poll().execute(sendersQueue.poll(), argsQueue.poll());
+					cmdname = commands.peek().getCmdName();
+					commands.poll().execute();
 				} catch (InterruptedException e) {
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft")
 							.severe("[AdminCmd] The command "
-									+ command.getCmdName()
+									+ cmdname
 									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 					AdminCmd.getBukkitServer()
 							.broadcastMessage(
 									"[AdminCmd] The command "
-											+ command.getCmdName()
+											+ cmdname
 											+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 					t.printStackTrace();
 				}
@@ -230,11 +229,9 @@ public class CommandManager implements CommandExecutor {
 			sema.release();
 		}
 
-		public synchronized void addCommand(final ACCommands cmd, final CommandSender sender,
-				final String[] args) throws InterruptedException {
+		public synchronized void addCommand(final ACCommandContainer cmd)
+				throws InterruptedException {
 			commands.put(cmd);
-			sendersQueue.put(sender);
-			argsQueue.put(args);
 			sema.release();
 		}
 
