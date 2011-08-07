@@ -22,10 +22,11 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class MoreAll extends ACCommands {
 
@@ -37,23 +38,28 @@ public class MoreAll extends ACCommands {
 		cmdName = "bal_itemmoreall";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if(Utils.isPlayer(sender))
-		{
-			Player p = ((Player)sender);
-			for(ItemStack is : p.getInventory().getContents())
-				if(is!=null)
+		if (Utils.isPlayer(sender)) {
+			Player p = ((Player) sender);
+			for (ItemStack is : p.getInventory().getContents())
+				if (is != null && !ACHelper.getInstance().inBlackList(sender, is))
 					is.setAmount(is.getMaxStackSize());
 			Utils.sI18n(sender, "moreAll");
 		}
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
