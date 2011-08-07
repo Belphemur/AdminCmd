@@ -31,7 +31,7 @@ onlinePlayers: '§cSpieler online:'
 unban: §e%player ist jetzt nicht mehr gebannt.
 strike: '%player wurde von THOR angegriffen'
 flyEnabledTarget: §6Flugmodus aktiviert fuer %player
-wUnFreezed: 'Das Wetter kann geaendert werden in dieser Welt :'
+wUnFrozen: 'Das Wetter kann geaendert werden in dieser Welt :'
 vulcanDisabled: §4Vulkanmodus deaktiviert.
 spymsgDisabled: §3Spionmodus deaktiviert.
 multiHome: §2Du wurdest nach Hause teleportiert.
@@ -42,7 +42,7 @@ errorWarp: §4WarpPoint %name nicht gefunden
 addWarp: §aWarpPoint %name§f hinzugefuegt.
 invisibleEnabled: §cDu bist jetzt unsichtbar
 notMuted: §3Dieser Spieler ist nicht stumm geschaltet.
-wFreezed: 'Das Wetter ist eingefrohren :'
+wFrozen: 'Das Wetter ist eingefrohren :'
 invTitle: '[INV]'
 npEnabled: §6Kein Aufnahmemodus aktiviert.
 thorEnabled: §3THORmodus aktiviert.
