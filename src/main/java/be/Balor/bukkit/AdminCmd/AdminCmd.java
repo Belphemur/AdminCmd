@@ -324,9 +324,9 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 
 		worker = ACHelper.getInstance();
-		worker.setPluginInstance(this);
-		setDefaultLocale();
 		registerPermParents();
+		worker.setPluginInstance(this);		
+		setDefaultLocale();		
 		TerminalCommandManager.getInstance();		
 		PermissionManager.getInstance().registerAllPermParent();
 		worker.loadInfos();
