@@ -193,7 +193,8 @@ public class CommandManager implements CommandExecutor {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (CommandDisabled e) {
-			unRegisterBukkitCommand(command.getCmdName());
+			for (String alias : command.getPluginCommand().getAliases())
+				unRegisterBukkitCommand(alias);
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
 			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())

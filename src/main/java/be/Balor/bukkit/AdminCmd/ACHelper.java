@@ -153,8 +153,10 @@ public class ACHelper {
 		CommandManager.killInstance();
 		System.gc();
 		init();
-		for (Player p : pluginInstance.getServer().getOnlinePlayers())
-			AFKWorker.getInstance().updateTimeStamp(p);
+		if (pluginConfig.getBoolean("autoAfk", true)) {
+			for (Player p : pluginInstance.getServer().getOnlinePlayers())
+				AFKWorker.getInstance().updateTimeStamp(p);
+		}
 	}
 
 	/**
@@ -230,7 +232,7 @@ public class ACHelper {
 		List<String> list = new LinkedList<String>();
 		list.add("reload");
 		pluginConfig.addProperty("prioritizedCommands", list);
-		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());		
+		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
 		pluginConfig.save();
 		init();
 	}
