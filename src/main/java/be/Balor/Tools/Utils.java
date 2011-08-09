@@ -481,7 +481,7 @@ public class Utils {
 			String connected = "";
 			for (Player player : p.getServer().getOnlinePlayers())
 				if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
-					connected += p.getDisplayName() + ", ";
+					connected += player.getDisplayName() + ", ";
 			if (!connected.equals("")) {
 				if (connected.endsWith(", "))
 					connected = connected.substring(0, connected.lastIndexOf(","));
