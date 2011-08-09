@@ -62,8 +62,8 @@ public class Utils {
 	public static MaterialContainer checkMaterial(String mat) {
 		MaterialContainer mc = new MaterialContainer();
 		try {
-			if (Utils.oddItem != null) {
-				ItemStack is = Utils.oddItem.getItemStack(mat);
+			if (oddItem != null) {
+				ItemStack is = oddItem.getItemStack(mat);
 				if (is != null) {
 					return new MaterialContainer(is);
 				}

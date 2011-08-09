@@ -106,7 +106,8 @@ public class ACPlayerListener extends PlayerListener {
 		if (conf.getBoolean("infos.firstTime", true)) {
 			conf.setProperty("infos.firstTime", false);
 			conf.save();
-			ACHelper.getInstance().spawn(p);
+			if ((Boolean) ACHelper.getInstance().getConfValue("firstConnectionToSpawnPoint"))
+				ACHelper.getInstance().spawn(p);
 		}
 	}
 
@@ -218,7 +219,7 @@ public class ACPlayerListener extends PlayerListener {
 		ACCommand cmd = CommandManager.getInstance().getCommand(cmdName);
 		if (cmd != null) {
 			event.setCancelled(true);
-			System.out.print("[AdminCmd] Command "+cmdName+" intercepted.");
+			System.out.print("[AdminCmd] Command " + cmdName + " intercepted.");
 			CommandManager.getInstance().executeCommand(event.getPlayer(), cmd,
 					Utils.Arrays_copyOfRange(split, 1, split.length));
 			event.setMessage("/AdminCmd took the control");

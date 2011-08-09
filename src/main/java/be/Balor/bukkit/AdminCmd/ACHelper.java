@@ -233,6 +233,7 @@ public class ACHelper {
 		list.add("reload");
 		pluginConfig.addProperty("prioritizedCommands", list);
 		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
+		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
 		pluginConfig.save();
 		init();
 	}
