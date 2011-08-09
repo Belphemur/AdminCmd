@@ -77,7 +77,7 @@ public class PermissionsEx extends AbstractPermission {
 	 */
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
-		return PEX.getUser(p).getOption(limit, p.getWorld().getName());
+		return PEX.getUser(p).getOption("admincmd." + limit);
 	}
 
 	/*
