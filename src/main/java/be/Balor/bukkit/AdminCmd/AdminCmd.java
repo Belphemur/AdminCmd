@@ -313,13 +313,13 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("moreAll", ChatColor.AQUA
 				+ "All your items are now at their max stack size.");
 		Utils.addLocale("tpRequestTo", ChatColor.BLUE + "%player " + ChatColor.GOLD
-				+ " want to tp to you." + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN
+				+ "want to tp to you. " + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN
 				+ "to accept.");
 		Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE + "You send a Tp request to "
 				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a " + ChatColor.AQUA
 				+ "%tp_type");
-		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player " + ChatColor.GOLD
-				+ " want to tp you at his/her location. " + ChatColor.GREEN + "/tpt yes "
+		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player " + ChatColor.DARK_AQUA
+				+ "want to tp you at his/her location. " + ChatColor.GREEN + "/tpt yes "
 				+ ChatColor.DARK_GREEN + "to accept.");
 		Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN + "Tp Request system Disabled.");
 		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED + "Tp Request system Enabled.");
