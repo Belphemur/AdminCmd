@@ -345,7 +345,7 @@ public class Utils {
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return;
 			}
-			if (PermissionManager.hasPerm(sender, "admincmd.tp.norequest", false)) {
+			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());

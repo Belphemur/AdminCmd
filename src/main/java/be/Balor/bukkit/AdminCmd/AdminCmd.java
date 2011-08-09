@@ -65,7 +65,7 @@ public class AdminCmd extends JavaPlugin {
 		PermissionManager.getInstance().addPermChild("admincmd.player.bypass");
 		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
 		PermissionManager.getInstance().addPermChild("admincmd.player.noreset");
-		PermissionManager.getInstance().addPermChild("admincmd.tp.norequest");
+		PermissionManager.getInstance().addPermChild("admincmd.spec.notprequest");
 	}
 
 	public static void registerCmds() {
