@@ -214,7 +214,11 @@ public class PermissionManager {
 			PEX = pEX;
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
 				permissionHandler = new PermissionsEx(pEX);
-				System.out.println("[AdminCmd] Successfully linked with PermissionsEX");
+				if (permission == null)
+					System.out.println("[AdminCmd] Successfully linked with PermissionsEX");
+				else
+					System.out
+							.println("[AdminCmd] Use PermissionsEX instead of Yeti's Permissions.");
 			} else
 				System.out
 						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System instead of PermissionsEX.");
