@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import info.somethingodd.bukkit.OddItem.OddItem;
+
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -23,6 +25,7 @@ import org.bukkit.plugin.Plugin;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -35,6 +38,14 @@ public class ACPluginListener extends ServerListener {
 
 	@Override
 	public void onPluginEnable(PluginEnableEvent event) {
+		if (PermissionManager.getPEX() == null) {
+			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
+					.getPlugin("PermissionsEx");
+			if (Permissions != null) {
+				if (Permissions.isEnabled())
+					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+			}
+		}
 		if (PermissionManager.getYetiPermissions() == null) {
 			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
 					.getPlugin("Permissions");
@@ -43,12 +54,11 @@ public class ACPluginListener extends ServerListener {
 					PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
 			}
 		}
-		if (PermissionManager.getPEX() == null) {
-			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
-					.getPlugin("PermissionsEx");
-			if (Permissions != null) {
-				if (Permissions.isEnabled())
-					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+		if (Utils.oddItem == null) {
+			Plugin items = AdminCmd.getBukkitServer().getPluginManager().getPlugin("OddItem");
+			if (items != null && items.isEnabled()) {
+				Utils.oddItem = (OddItem) items;
+				System.out.print("[AdminCmd] Successfully linked to OddItem");
 			}
 		}
 	}

@@ -17,6 +17,7 @@
 package be.Balor.Tools;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -42,13 +43,20 @@ public class MaterialContainer {
 		parseMat(mat);
 		parseDmg(damage);
 	}
-	public MaterialContainer()
-	{
-		
+
+	public MaterialContainer() {
+
 	}
 
 	private void parseMat(String material) {
 		Material m = null;
+		if (Utils.oddItem != null) {
+			ItemStack is = Utils.oddItem.getItemStack(material);
+			if (is != null) {
+				this.material = is.getType();
+				return;
+			}
+		}
 		try {
 			int id = Integer.parseInt(material);
 			m = Material.getMaterial(id);
@@ -78,10 +86,10 @@ public class MaterialContainer {
 		else
 			return "";
 	}
-	public String display()
-	{
+
+	public String display() {
 		if (material != null)
-			return material+":"+dmg;
+			return material + ":" + dmg;
 		else
 			return "";
 	}

@@ -179,6 +179,12 @@
 			<version>1.13</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>info.somethingodd.bukkit</groupId>
+			<artifactId>OddItem</artifactId>
+			<version>0.6.5</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

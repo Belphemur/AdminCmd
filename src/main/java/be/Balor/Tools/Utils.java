@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import info.somethingodd.bukkit.OddItem.OddItem;
+
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +45,8 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class Utils {
+	public static OddItem oddItem = null;
+
 	/**
 	 * @author Balor (aka Antoine Aflalo)
 	 * 
@@ -494,8 +498,7 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> replaceInCuboid(List<Material> mat, Block block,
-			int radius) {
+	private static Stack<BlockRemanence> replaceInCuboid(List<Material> mat, Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		int limitX = block.getX() + radius;
 		int limitY = block.getY() + radius;
@@ -590,20 +593,21 @@ public class Utils {
 	public static Player[] getOnlinePlayers() {
 		return AdminCmd.getBukkitServer().getOnlinePlayers();
 	}
-	 @SuppressWarnings("unchecked")
-	    public static <T> T[] Arrays_copyOfRange(T[] original, int start, int end) {
-	        if (original.length >= start && 0 <= start) {
-	            if (start <= end) {
-	                int length = end - start;
-	                int copyLength = Math.min(length, original.length - start);
-	                T[] copy = (T[]) Array.newInstance(original.getClass().getComponentType(), length);
 
-	                System.arraycopy(original, start, copy, 0, copyLength);
-	                return copy;
-	            }
-	            throw new IllegalArgumentException();
-	        }
-	        throw new ArrayIndexOutOfBoundsException();
+	@SuppressWarnings("unchecked")
+	public static <T> T[] Arrays_copyOfRange(T[] original, int start, int end) {
+		if (original.length >= start && 0 <= start) {
+			if (start <= end) {
+				int length = end - start;
+				int copyLength = Math.min(length, original.length - start);
+				T[] copy = (T[]) Array.newInstance(original.getClass().getComponentType(), length);
+
+				System.arraycopy(original, start, copy, 0, copyLength);
+				return copy;
+			}
+			throw new IllegalArgumentException();
+		}
+		throw new ArrayIndexOutOfBoundsException();
 	}
 
 	private static class FreezeTime implements Runnable {
