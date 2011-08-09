@@ -16,54 +16,35 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import org.bukkit.entity.Player;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public enum Type {
-	FLY(Category.PLAYER), 
-	VULCAN(Category.PLAYER), 
-	GOD(Category.PLAYER), 
-	THOR(Category.PLAYER), 
-	BANNED(Category.SANCTION), 
-	FIREBALL(Category.PLAYER), 
-	SPYMSG(Category.OTHER), 
-	FROZEN(Category.SANCTION), 
-	MUTED(Category.SANCTION), 
-	MOB_LIMIT(Category.WORLD), 
-	NO_PICKUP(Category.PLAYER), 
-	WEATHER_FROZEN(Category.WORLD), 
-	REPEAT_CMD(Category.OTHER), 
-	TIME_FREEZED(Category.WORLD),
-	TP_REQUEST(Category.OTHER);
-	@Override
-	public String toString() {
-		String s = super.toString();
-		return s.toLowerCase();
+public class TpRequest {
+	private Player from, to;
+	private Type.Tp type;
+
+	/**
+	 * 
+	 */
+	public TpRequest(Player from, Player to, Type.Tp type) {
+		this.from = from;
+		this.to = to;
+		this.type = type;
 	}
 
-	private final Category category;
-
-	private Type(Category category) {
-		this.category = category;
+	public void teleport() {
+		if (from != null && to != null)
+			from.teleport(to);
 	}
 
 	/**
-	 * Gets the Category assigned to this type
-	 * 
-	 * @return Category of this Type
+	 * @return the type
 	 */
-	public Category getCategory() {
-		return category;
+	public Type.Tp getType() {
+		return type;
 	}
 
-	public enum Category {
-		PLAYER, WORLD, OTHER, SANCTION;
-	}
-	public enum Weather {
-		STORM, RAIN, CLEAR, FREEZE;
-	}
-	public enum Tp {
-		TP_HERE, TP_TO, TP_PLAYERS;
-	}
 }

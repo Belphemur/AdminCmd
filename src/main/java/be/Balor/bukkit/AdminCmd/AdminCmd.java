@@ -309,7 +309,17 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.WHITE + "%world");
 		Utils.addLocale("timePaused", ChatColor.DARK_RED + "Time is paused in " + ChatColor.WHITE
 				+ "%world. " + ChatColor.DARK_GREEN + "To unpause : /time unpause .");
-		Utils.addLocale("moreAll", ChatColor.AQUA+"All your items are now at their max stack size.");
+		Utils.addLocale("moreAll", ChatColor.AQUA
+				+ "All your items are now at their max stack size.");
+		Utils.addLocale("tpRequestTo", ChatColor.BLUE + "%player " + ChatColor.GOLD
+				+ " want to tp to you." + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN
+				+ "to accept.");
+		Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE + "You send a Tp request to "
+				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a " + ChatColor.AQUA
+				+ "%tp_type");
+		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player " + ChatColor.GOLD
+				+ " want to tp you at his/her location." + ChatColor.GREEN + "/tpt yes "
+				+ ChatColor.DARK_GREEN + "to accept.");
 		LocaleManager.getInstance().save();
 	}
 
@@ -325,9 +335,9 @@ public class AdminCmd extends JavaPlugin {
 
 		worker = ACHelper.getInstance();
 		registerPermParents();
-		worker.setPluginInstance(this);		
-		setDefaultLocale();		
-		TerminalCommandManager.getInstance();		
+		worker.setPluginInstance(this);
+		setDefaultLocale();
+		TerminalCommandManager.getInstance();
 		PermissionManager.getInstance().registerAllPermParent();
 		worker.loadInfos();
 		ACPlayerListener playerListener = new ACPlayerListener();
@@ -340,7 +350,8 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
+		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
+				this);
 		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
