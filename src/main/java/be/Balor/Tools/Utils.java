@@ -336,23 +336,28 @@ public class Utils {
 					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 				replace.put("player", nTo);
 				Utils.sI18n(sender, "playerNotFound", replace);
-				return ;
+				return;
 			}
 			if ((type.equals(Type.Tp.TP_HERE) || type.equals(Type.Tp.TP_PLAYERS))
 					&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
 							.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
 				replace.put("player", nFrom);
 				Utils.sI18n(sender, "playerNotFound", replace);
-				return ;
+				return;
 			}
-			if ((type.equals(Type.Tp.TP_TO) || type.equals(Type.Tp.TP_PLAYERS))
+			if (PermissionManager.hasPerm(sender, "admincmd.tp.norequest", false)) {
+				pFrom.teleport(pTo);
+				replace.put("fromPlayer", pFrom.getName());
+				replace.put("toPlayer", pTo.getName());
+				Utils.sI18n(sender, "tp", replace);
+			} else if ((type.equals(Type.Tp.TP_TO) || type.equals(Type.Tp.TP_PLAYERS))
 					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pTo)) {
 				ACHelper.getInstance().addValue(Type.TP_REQUEST, pTo, new TpRequest(pFrom, pTo));
 				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pTo.getName());
 				replace2.put("tp_type", type.toString());
-				Utils.sI18n(pFrom, "tpRequestSend", replace2);				
+				Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
 			} else if ((type.equals(Type.Tp.TP_HERE) || type.equals(Type.Tp.TP_PLAYERS))
 					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pFrom)) {
@@ -361,7 +366,7 @@ public class Utils {
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pFrom.getName());
 				replace2.put("tp_type", type.toString());
-				Utils.sI18n(pTo, "tpRequestSend", replace2);	
+				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 			} else {
 				pFrom.teleport(pTo);
