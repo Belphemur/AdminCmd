@@ -33,18 +33,6 @@ public class MaterialContainer {
 	}
 
 	public MaterialContainer(String mat) {
-		if (Utils.oddItem != null) {
-			try {
-				ItemStack is = Utils.oddItem.getItemStack(mat);
-				if (is != null) {
-					this.material = is.getType();
-					this.dmg = is.getDurability();
-					return;
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-		}
 		String[] info = new String[2];
 		if (mat.contains(":"))
 			info = mat.split(":");
