@@ -99,4 +99,12 @@ public class BukkitPermissions extends AbstractPermission {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getPrefix(String world, String player) {
+		return null;
+	}
+
 }

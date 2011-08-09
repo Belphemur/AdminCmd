@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -27,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Reload extends ACCommands {
+public class Reload extends ACCommand {
 
 	/**
 	 * 

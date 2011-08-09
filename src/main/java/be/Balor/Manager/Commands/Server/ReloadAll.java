@@ -18,14 +18,14 @@ package be.Balor.Manager.Commands.Server;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class ReloadAll extends ACCommands {
+public class ReloadAll extends ACCommand {
 
 	/**
 	 * 

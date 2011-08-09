@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Permissions.AbstractPermission;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -31,8 +30,7 @@ import com.nijiko.permissions.PermissionHandler;
  * 
  */
 public class YetiPermissions extends AbstractPermission {
-	protected PermissionHandler permission = null;
-
+	protected PermissionHandler permission = null;	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -45,6 +43,7 @@ public class YetiPermissions extends AbstractPermission {
 	 */
 	public YetiPermissions(PermissionHandler perm) {
 		this.permission = perm;
+		haveInfoNode = true;		
 	}
 
 	/**
@@ -99,12 +98,12 @@ public class YetiPermissions extends AbstractPermission {
 	public String getPermissionLimit(Player p, String type) {
 		Integer limitInteger = null;
 		try {
-			limitInteger = PermissionManager.getPermission().getInfoInteger(p.getWorld().getName(),
+			limitInteger = permission.getInfoInteger(p.getWorld().getName(),
 					p.getName(), "admincmd." + type, false);
 		} catch (NoSuchMethodError e) {
 			try {
 
-				limitInteger = PermissionManager.getPermission().getPermissionInteger(
+				limitInteger = permission.getPermissionInteger(
 						p.getWorld().getName(), p.getName(), "admincmd." + type);
 			} catch (Throwable e2) {
 				limitInteger = null;
@@ -114,6 +113,26 @@ public class YetiPermissions extends AbstractPermission {
 			return limitInteger.toString();
 		else
 			return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String, java.lang.String)
+	 */
+	@SuppressWarnings("deprecation")
+	@Override
+	public String getPrefix(String world, String player) {
+		String prefixstring= null;
+		try {
+			prefixstring = permission.safeGetUser(world, player)
+					.getPrefix();
+		} catch (Exception e) {
+			String group = permission.getGroup(world, player);
+			prefixstring = permission.getGroupPrefix(world, group);
+		} catch (NoSuchMethodError e) {
+			String group = permission.getGroup(world, player);
+			prefixstring = permission.getGroupPrefix(world, group);
+		}
+		return prefixstring;
 	}
 
 }

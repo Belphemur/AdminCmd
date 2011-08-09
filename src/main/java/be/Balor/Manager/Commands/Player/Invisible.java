@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -31,7 +31,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Invisible extends ACCommands {
+public class Invisible extends ACCommand {
 
 	/**
 	 * 

@@ -46,7 +46,7 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * 
  */
 public class CommandManager implements CommandExecutor {
-	private HashMap<Command, ACCommands> commands = new HashMap<Command, ACCommands>();
+	private HashMap<Command, ACCommand> commands = new HashMap<Command, ACCommand>();
 	private final int MAX_THREADS = 5;
 	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
 			MAX_THREADS);
@@ -56,7 +56,7 @@ public class CommandManager implements CommandExecutor {
 	private boolean threadsStarted = false;
 	private List<String> disabledCommands;
 	private List<String> prioritizedCommands;
-	private HashMap<String, ACCommands> commandReplacer = new HashMap<String, ACCommands>();
+	private HashMap<String, ACCommand> commandReplacer = new HashMap<String, ACCommand>();
 	private HashMap<String, Command> pluginCommands = new HashMap<String, Command>();
 
 	/**
@@ -142,7 +142,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param alias
 	 * @return
 	 */
-	public ACCommands getCommand(String alias) {
+	public ACCommand getCommand(String alias) {
 		return commandReplacer.get(alias);
 	}
 
@@ -174,9 +174,9 @@ public class CommandManager implements CommandExecutor {
 	 * @param clazz
 	 */
 	public void registerCommand(Class<?> clazz) {
-		ACCommands command = null;
+		ACCommand command = null;
 		try {
-			command = (ACCommands) clazz.newInstance();
+			command = (ACCommand) clazz.newInstance();
 			command.initializeCommand(plugin);
 			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
 				if (disabledCommands.contains(alias))
@@ -244,7 +244,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param args
 	 * @return
 	 */
-	public boolean executeCommand(CommandSender sender, ACCommands cmd, String[] args) {
+	public boolean executeCommand(CommandSender sender, ACCommand cmd, String[] args) {
 		try {
 			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
@@ -292,7 +292,7 @@ public class CommandManager implements CommandExecutor {
 	 * {@inheritDoc}
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		ACCommands cmd = null;
+		ACCommand cmd = null;
 		if ((cmd = commands.get(command)) != null)
 			return executeCommand(sender, cmd, args);
 		else
@@ -366,14 +366,14 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	private class SyncTask implements Runnable {
-		private ACCommands cmd;
+		private ACCommand cmd;
 		private CommandSender sender;
 		private String[] args;
 
 		/**
 		 * 
 		 */
-		public SyncTask(ACCommands cmd, CommandSender sender, String[] args) {
+		public SyncTask(ACCommand cmd, CommandSender sender, String[] args) {
 			this.cmd = cmd;
 			this.sender = sender;
 			this.args = args;

@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class News extends ACCommands {
+public class News extends ACCommand {
 
 	/**
 	 * 

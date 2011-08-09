@@ -16,16 +16,16 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class AbstractPermission {
+	protected boolean haveInfoNode = false;
 
 	/**
 	 * Check the permissions
@@ -50,10 +50,19 @@ public abstract class AbstractPermission {
 	 * @param errorMsg
 	 * @return
 	 */
-	public abstract  boolean hasPerm(CommandSender player, String perm, boolean errorMsg);
+	public abstract boolean hasPerm(CommandSender player, String perm, boolean errorMsg);
 
-	public abstract  boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg);
+	public abstract boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg);
 
-	public  abstract String getPermissionLimit(Player p, String limit);
+	public abstract String getPermissionLimit(Player p, String limit);
+
+	public abstract String getPrefix(String world, String player);
+
+	/**
+	 * @return the haveInfoNode
+	 */
+	public boolean haveInfoNode() {
+		return haveInfoNode;
+	}
 
 }

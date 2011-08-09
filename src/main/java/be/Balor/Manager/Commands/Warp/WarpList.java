@@ -22,14 +22,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class WarpList extends ACCommands {
+public class WarpList extends ACCommand {
 
 	/**
 	 * 

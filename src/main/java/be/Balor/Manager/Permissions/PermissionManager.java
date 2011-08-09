@@ -105,10 +105,11 @@ public class PermissionManager {
 	 * @param parentNode
 	 * @return
 	 */
-	public Permission addOnTheFly(String permNode, String parentNode) {		
+	public Permission addOnTheFly(String permNode, String parentNode) {
 		Permission child;
 		if ((child = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			Permission parent = AdminCmd.getBukkitServer().getPluginManager().getPermission(parentNode);
+			Permission parent = AdminCmd.getBukkitServer().getPluginManager()
+					.getPermission(parentNode);
 			child = new Permission(permNode, PermissionDefault.OP);
 			AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
 			parent.getChildren().put(permNode, true);
@@ -175,12 +176,23 @@ public class PermissionManager {
 		return permissionHandler.getPermissionLimit(p, limit);
 	}
 
+	public static String getPrefix(String world, String player) {
+		return permissionHandler.getPrefix(world, player);
+	}
+
+	public static boolean hasInfoNode() {
+		return permissionHandler.haveInfoNode();
+	}
+
 	/**
 	 * Permission plugin
 	 * 
 	 * @return
 	 */
-	public static PermissionHandler getPermission() {
+	/**
+	 * @return the permission
+	 */
+	public static PermissionHandler getYetiPermissions() {
 		return permission;
 	}
 
@@ -190,7 +202,7 @@ public class PermissionManager {
 	 * @param plugin
 	 * @return
 	 */
-	public static boolean setPermission(PermissionHandler plugin) {
+	public static boolean setYetiPermissions(PermissionHandler plugin) {
 		if (permission == null) {
 			permission = plugin;
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {

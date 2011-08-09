@@ -34,7 +34,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.bukkit.util.config.Configuration;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.FilesManager;
@@ -215,7 +215,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (split.length == 0)
 			return;
 		String cmdName = split[0].substring(1).toLowerCase();
-		ACCommands cmd = CommandManager.getInstance().getCommand(cmdName);
+		ACCommand cmd = CommandManager.getInstance().getCommand(cmdName);
 		if (cmd != null) {
 			event.setCancelled(true);
 			System.out.print("[AdminCmd] Command "+cmdName+" intercepted.");

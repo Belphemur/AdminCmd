@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class PrivateMessage extends ACCommands {
+public class PrivateMessage extends ACCommand {
 
 	/**
 	 * 
@@ -47,7 +47,6 @@ public class PrivateMessage extends ACCommands {
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player buddy = sender.getServer().getPlayer(args[0]);
@@ -59,24 +58,13 @@ public class PrivateMessage extends ACCommands {
 			if (Utils.isPlayer(sender, false)) {
 				Player pSender = (Player) sender;
 				senderName = pSender.getName();
-				if (PermissionManager.getPermission() != null) {
+				if (PermissionManager.hasInfoNode()) {
 					String name = pSender.getName();
 					String prefixstring;
 					String world = "";
 					world = pSender.getWorld().getName();
 
-					try {
-						prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
-								.getPrefix();
-					} catch (Exception e) {
-						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
-								group);
-					} catch (NoSuchMethodError e) {
-						String group = PermissionManager.getPermission().getGroup(world, name);
-						prefixstring = PermissionManager.getPermission().getGroupPrefix(world,
-								group);
-					}
+					prefixstring = PermissionManager.getPrefix(world, name);
 
 					if (prefixstring != null && prefixstring.length() > 1) {
 						String result = Utils.colorParser(prefixstring);

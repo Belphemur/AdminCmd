@@ -21,7 +21,7 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class BanPlayer extends ACCommands {
+public class BanPlayer extends ACCommand {
 
 	/**
 	 * 
@@ -68,6 +68,7 @@ public class BanPlayer extends ACCommands {
 					unbanString = toBan.getName();
 				else
 					unbanString = args[0];
+				message += "(Banned for "+tmpBan+" minutes)";
 				final String unban = unbanString;
 				AdminCmd.getBukkitServer()
 						.getScheduler()

@@ -18,7 +18,7 @@ package be.Balor.Manager.Commands.Weather;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Rain extends ACCommands {
+public class Rain extends ACCommand {
 
 	/**
 	 * 

@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
@@ -30,7 +30,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class PlayerList extends ACCommands {
+public class PlayerList extends ACCommand {
 
 	/**
 	 * 
@@ -48,7 +48,6 @@ public class PlayerList extends ACCommands {
 	 * java.lang.String[])
 	 */
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player[] online = sender.getServer().getOnlinePlayers();
@@ -57,7 +56,7 @@ public class PlayerList extends ACCommands {
 			amount -= InvisibleWorker.getInstance().nbInvisibles();
 		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
 		String buffer = "";
-		if (PermissionManager.getPermission() == null) {
+		if (!PermissionManager.hasInfoNode()) {
 			boolean isInv = false;
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
@@ -94,17 +93,7 @@ public class PlayerList extends ACCommands {
 					invPrefix = Utils.I18n("invTitle");
 				if (AFKWorker.getInstance().isAfk(online[i]))
 					invPrefix = Utils.I18n("afkTitle") + invPrefix;
-				try {
-					prefixstring = PermissionManager.getPermission().safeGetUser(world, name)
-							.getPrefix();
-				} catch (Exception e) {
-					String group = PermissionManager.getPermission().getGroup(world, name);
-					prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
-				} catch (NoSuchMethodError e) {
-					String group = PermissionManager.getPermission().getGroup(world, name);
-					prefixstring = PermissionManager.getPermission().getGroupPrefix(world, group);
-				}
-
+				prefixstring = PermissionManager.getPrefix(world, name);
 				if (prefixstring != null && prefixstring.length() > 1) {
 					String result = Utils.colorParser(prefixstring);
 					if (result == null)

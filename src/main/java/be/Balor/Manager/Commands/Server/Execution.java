@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 
@@ -27,7 +27,7 @@ import be.Balor.Manager.Terminal.TerminalCommandManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Execution extends ACCommands {
+public class Execution extends ACCommand {
 
 	/**
 	 * 

@@ -23,7 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import static be.Balor.Tools.Utils.sendMessage;
@@ -32,7 +32,7 @@ import static be.Balor.Tools.Utils.sendMessage;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpToWarp extends ACCommands {
+public class TpToWarp extends ACCommand {
 
 	/**
 	 * 

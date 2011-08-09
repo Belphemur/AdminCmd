@@ -21,7 +21,7 @@ import java.util.HashMap;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MobLimit extends ACCommands {
+public class MobLimit extends ACCommand {
 
 	/**
 	 * 

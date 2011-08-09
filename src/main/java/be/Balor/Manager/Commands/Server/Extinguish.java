@@ -21,14 +21,14 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Extinguish extends ACCommands {
+public class Extinguish extends ACCommand {
 
 	/**
 	 * 

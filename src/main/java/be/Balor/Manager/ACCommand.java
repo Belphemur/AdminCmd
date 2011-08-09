@@ -30,7 +30,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class ACCommands {
+public abstract class ACCommand {
 	protected String permNode = null;
 	protected String cmdName = null;
 	protected Permission bukkitPerm = null;
@@ -41,7 +41,7 @@ public abstract class ACCommands {
 	/**
 	 * 
 	 */
-	public ACCommands() {
+	public ACCommand() {
 		permNode = "";
 		cmdName = "";
 	}

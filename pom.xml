@@ -173,6 +173,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.tehkode</groupId>
+			<artifactId>PermissionsEx</artifactId>
+			<version>1.13</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

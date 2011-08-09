@@ -33,11 +33,11 @@ public class ACPluginListener extends ServerListener {
 	   
     @Override
     public void onPluginEnable(PluginEnableEvent event) {
-        if(PermissionManager.getPermission() == null) {
+        if(PermissionManager.getYetiPermissions() == null) {
             Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager().getPlugin("Permissions");
             if (Permissions != null) {
                 if(Permissions.isEnabled())
-                	PermissionManager.setPermission(((Permissions) Permissions).getHandler());
+                	PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
             }
         }        
     }

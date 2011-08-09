@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Weather;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.ACCommands;
+import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ClearSky extends ACCommands {
+public class ClearSky extends ACCommand {
 
 	/**
 	 * 
