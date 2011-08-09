@@ -282,3 +282,7 @@ commands:
     description: Set the amount of every item in the inventory to the max.
     aliases: moreall
     usage: /<command>
+  bal_tptoggle:
+    description: Toggle the tp protection/ accept tp request.
+    aliases: [tptoggle, tpt]
+    usage: /<command> [yes]

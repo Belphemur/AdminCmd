@@ -347,7 +347,7 @@ public class Utils {
 			}
 			if ((type.equals(Type.Tp.TP_TO) || type.equals(Type.Tp.TP_PLAYERS))
 					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pTo)) {
-				ACHelper.getInstance().addValue(Type.TP_REQUEST, pTo, new TpRequest(pFrom, pTo, type));
+				ACHelper.getInstance().addValue(Type.TP_REQUEST, pTo, new TpRequest(pFrom, pTo));
 				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pTo.getName());
@@ -356,7 +356,7 @@ public class Utils {
 
 			} else if ((type.equals(Type.Tp.TP_HERE) || type.equals(Type.Tp.TP_PLAYERS))
 					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pFrom)) {
-				ACHelper.getInstance().addValue(Type.TP_REQUEST, pFrom, new TpRequest(pFrom, pTo, type));
+				ACHelper.getInstance().addValue(Type.TP_REQUEST, pFrom, new TpRequest(pFrom, pTo));
 				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pFrom.getName());

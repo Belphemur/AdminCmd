@@ -138,6 +138,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(RepeatCmd.class);
 		CommandManager.getInstance().registerCommand(Afk.class);
 		CommandManager.getInstance().registerCommand(MoreAll.class);
+		CommandManager.getInstance().registerCommand(TpToggle.class);
 	}
 
 	private void setDefaultLocale() {
@@ -318,8 +319,10 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a " + ChatColor.AQUA
 				+ "%tp_type");
 		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player " + ChatColor.GOLD
-				+ " want to tp you at his/her location." + ChatColor.GREEN + "/tpt yes "
+				+ " want to tp you at his/her location. " + ChatColor.GREEN + "/tpt yes "
 				+ ChatColor.DARK_GREEN + "to accept.");
+		Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN + "Tp Request system Disabled.");
+		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED + "Tp Request system Enabled.");
 		LocaleManager.getInstance().save();
 	}
 

@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommand;
+import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -48,15 +49,21 @@ public class TpToggle extends ACCommand {
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
-			if (args.length >= 1 && ACHelper.getInstance().isValueSet(Type.TP_REQUEST, player.getName())) {
-				
+			if (args.length >= 1
+					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, player.getName())) {
+				Object obj = ACHelper.getInstance().getValue(Type.TP_REQUEST, player);
+				if (obj instanceof TpRequest) {
+					TpRequest request = (TpRequest) obj;
+					request.teleport();
+					ACHelper.getInstance().addValue(Type.TP_REQUEST, player);
+				}
 			} else {
 				if (ACHelper.getInstance().isValueSet(Type.TP_REQUEST, player.getName())) {
 					ACHelper.getInstance().removeValue(Type.TP_REQUEST, player);
-					Utils.sI18n(player, "tpOn");
+					Utils.sI18n(player, "tpRequestOff");
 				} else {
 					ACHelper.getInstance().addValue(Type.TP_REQUEST, player);
-					Utils.sI18n(player, "tpOff");
+					Utils.sI18n(player, "tpRequestOn");
 				}
 			}
 		}

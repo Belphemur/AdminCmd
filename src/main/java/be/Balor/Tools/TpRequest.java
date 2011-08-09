@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import java.util.HashMap;
+
 import org.bukkit.entity.Player;
 
 /**
@@ -24,27 +26,23 @@ import org.bukkit.entity.Player;
  */
 public class TpRequest {
 	private Player from, to;
-	private Type.Tp type;
 
 	/**
 	 * 
 	 */
-	public TpRequest(Player from, Player to, Type.Tp type) {
+	public TpRequest(Player from, Player to) {
 		this.from = from;
 		this.to = to;
-		this.type = type;
 	}
 
 	public void teleport() {
-		if (from != null && to != null)
+		if (from != null && to != null) {
 			from.teleport(to);
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("fromPlayer", from.getName());
+			replace.put("toPlayer", to.getName());
+			Utils.sI18n(to, "tp", replace);
+			Utils.sI18n(from, "tp", replace);
+		}
 	}
-
-	/**
-	 * @return the type
-	 */
-	public Type.Tp getType() {
-		return type;
-	}
-
 }
