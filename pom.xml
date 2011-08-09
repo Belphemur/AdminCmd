@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.Balor</groupId>
 	<artifactId>AdminCmd</artifactId>
-	<version>5.7.1</version>
+	<version>5.7.5-SNAPSHOT</version>
 	<name>AdminCmd</name>
 	<url>http://forums.bukkit.org/threads/admn-gen-admincmd-5-4-time-give-tp-repair-heal-kill-item-blacklist-weather-etc-1000.10770/</url>
 	<scm>

@@ -25,6 +25,7 @@ import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -52,10 +53,38 @@ public class BanPlayer extends ACCommands {
 		Player toBan = sender.getServer().getPlayer(args[0]);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
-		if (args.length >= 2)
-			for (int i = 1; i < args.length; i++)
+		if (args.length >= 2) {
+			Integer tmpBan = null;
+			for (int i = 1; i < args.length - 1; i++)
 				message += args[i] + " ";
-		else {
+			try {
+				tmpBan = Integer.parseInt(args[args.length - 1]);
+			} catch (Exception e) {
+				message += args[args.length - 1];
+			}
+			if (tmpBan != null) {
+				String unbanString;
+				if (toBan != null)
+					unbanString = toBan.getName();
+				else
+					unbanString = args[0];
+				final String unban = unbanString;
+				AdminCmd.getBukkitServer()
+						.getScheduler()
+						.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+								new Runnable() {
+
+									@Override
+									public void run() {
+										ACHelper.getInstance().removeValueWithFile(Type.BANNED,
+												unban);
+										String unbanMsg = Utils.I18n("unban", "player", unban);
+										if (unbanMsg != null)
+											AdminCmd.getBukkitServer().broadcastMessage(unbanMsg);
+									}
+								}, 20 * 60 * tmpBan);
+			}
+		} else {
 			message = "You have been ban by ";
 			if (!Utils.isPlayer(sender, false))
 				message += "Server Admin";

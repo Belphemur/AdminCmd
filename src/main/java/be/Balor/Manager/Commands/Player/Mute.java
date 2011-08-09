@@ -25,6 +25,7 @@ import be.Balor.Manager.ACCommands;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -62,6 +63,29 @@ public class Mute extends ACCommands {
 				Utils.sI18n(player, "muteEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteEnabledTarget", replace);
+				if (args.length >= 2) {
+					Integer tmpMute;
+					try {
+						tmpMute = Integer.parseInt(args[args.length - 1]);
+						final String unmute = player.getName();
+						final CommandSender senderFinal = sender;
+						AdminCmd.getBukkitServer()
+								.getScheduler()
+								.scheduleAsyncDelayedTask(
+										ACHelper.getInstance().getPluginInstance(), new Runnable() {
+
+											@Override
+											public void run() {
+												ACHelper.getInstance().removeValueWithFile(
+														Type.MUTED, unmute);
+												Utils.sI18n(senderFinal, "muteDisabledTarget",
+														"player", unmute);
+											}
+										}, 20 * 60 * tmpMute);
+
+					} catch (Exception e) {
+					}
+				}
 			} else
 				Utils.sI18n(sender, "alreadyMuted");
 

@@ -9,7 +9,7 @@ commands:
   bal_timeset:
     description: Set world time to a given timestamp/alias.
     aliases: time
-    usage: /<command> day|night|dusk|dawn|<raw>
+    usage: /<command> day|night|dusk|dawn|<raw>|pause|unpause
   bal_timeday:
     description: Short for /time day.
     aliases: day
