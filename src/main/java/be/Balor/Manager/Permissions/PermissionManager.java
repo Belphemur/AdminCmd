@@ -25,6 +25,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
@@ -41,7 +42,8 @@ public class PermissionManager {
 	private static PermissionManager instance = null;
 	protected static PermissionHandler permission = null;
 	public static final Logger log = Logger.getLogger("Minecraft");
-	public static AbstractPermission permissionHandler;
+	private static ru.tehkode.permissions.PermissionManager PEX = null;
+	private static AbstractPermission permissionHandler;
 
 	/**
 	 * 
@@ -197,13 +199,38 @@ public class PermissionManager {
 	}
 
 	/**
+	 * @return the pEX
+	 */
+	public static ru.tehkode.permissions.PermissionManager getPEX() {
+		return PEX;
+	}
+
+	/**
+	 * @param pEX
+	 *            the pEX to set
+	 */
+	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
+		if (PEX == null) {
+			PEX = pEX;
+			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
+				permissionHandler = new PermissionsEx(pEX);
+				System.out.println("[AdminCmd] Successfully linked with PermissionsEX");
+			} else
+				System.out
+						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System instead of PermissionsEX.");
+			return true;
+		} else
+			return false;
+	}
+
+	/**
 	 * Set Permission Plugin
 	 * 
 	 * @param plugin
 	 * @return
 	 */
 	public static boolean setYetiPermissions(PermissionHandler plugin) {
-		if (permission == null) {
+		if (permission == null && PEX == null) {
 			permission = plugin;
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
 				permissionHandler = new YetiPermissions(plugin);

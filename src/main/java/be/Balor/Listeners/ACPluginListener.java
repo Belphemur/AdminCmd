@@ -20,6 +20,8 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
+import ru.tehkode.permissions.bukkit.PermissionsEx;
+
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
@@ -27,18 +29,27 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPluginListener extends ServerListener {
-	   
-    @Override
-    public void onPluginEnable(PluginEnableEvent event) {
-        if(PermissionManager.getYetiPermissions() == null) {
-            Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager().getPlugin("Permissions");
-            if (Permissions != null) {
-                if(Permissions.isEnabled())
-                	PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
-            }
-        }        
-    }
+
+	@Override
+	public void onPluginEnable(PluginEnableEvent event) {
+		if (PermissionManager.getYetiPermissions() == null) {
+			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
+					.getPlugin("Permissions");
+			if (Permissions != null) {
+				if (Permissions.isEnabled())
+					PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
+			}
+		}
+		if (PermissionManager.getPEX() == null) {
+			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
+					.getPlugin("PermissionsEx");
+			if (Permissions != null) {
+				if (Permissions.isEnabled())
+					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+			}
+		}
+	}
 }
