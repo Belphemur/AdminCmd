@@ -27,7 +27,20 @@ public class MaterialContainer {
 	public Material material = null;
 	public short dmg = 0;
 
+	public MaterialContainer(ItemStack is) {
+		material = is.getType();
+		dmg = is.getDurability();
+	}
+
 	public MaterialContainer(String mat) {
+		if (Utils.oddItem != null) {
+			ItemStack is = Utils.oddItem.getItemStack(mat);
+			if (is != null) {
+				this.material = is.getType();
+				this.dmg = is.getDurability();
+				return;
+			}
+		}
 		String[] info = new String[2];
 		if (mat.contains(":"))
 			info = mat.split(":");
@@ -50,13 +63,6 @@ public class MaterialContainer {
 
 	private void parseMat(String material) {
 		Material m = null;
-		if (Utils.oddItem != null) {
-			ItemStack is = Utils.oddItem.getItemStack(material);
-			if (is != null) {
-				this.material = is.getType();
-				return;
-			}
-		}
 		try {
 			int id = Integer.parseInt(material);
 			m = Material.getMaterial(id);

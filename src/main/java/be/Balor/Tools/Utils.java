@@ -59,18 +59,9 @@ public class Utils {
 	 * @return Material
 	 */
 	public static MaterialContainer checkMaterial(String mat) {
-		MaterialContainer mc = new MaterialContainer();
-		String[] info = new String[2];
-		if (mat.contains(":")) {
-			info = mat.split(":");
-			mc = new MaterialContainer(info[0], info[1]);
-		} else {
-			info[0] = mat;
-			info[1] = "0";
-			if ((mc = ACHelper.getInstance().getAlias(info[0])) == null) {
-				mc = new MaterialContainer(info[0], info[1]);
-			}
-		}
+		MaterialContainer mc = new MaterialContainer(mat);
+		if (mc.isNull())
+			mc = ACHelper.getInstance().getAlias(mat);
 
 		return mc;
 
