@@ -747,7 +747,7 @@ public class ACHelper {
 	public int getLimit(Player player, String type) {
 		Integer limit = null;
 		String toParse = PermissionManager.getPermissionLimit(player, "maxHomeByUser");
-		limit = toParse != null ? Integer.parseInt(toParse) : null;
+		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(type, 0);
 		if (limit == 0)
