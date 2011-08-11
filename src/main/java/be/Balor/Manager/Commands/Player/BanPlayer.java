@@ -86,7 +86,7 @@ public class BanPlayer extends ACCommand {
 								}, 20 * 60 * tmpBan);
 			}
 		} else {
-			message = "You have been ban by ";
+			message = "You have been banned by ";
 			if (!Utils.isPlayer(sender, false))
 				message += "Server Admin";
 			else
