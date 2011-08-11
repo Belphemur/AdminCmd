@@ -2,6 +2,7 @@ package be.Balor.bukkit.AdminCmd;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -229,11 +230,10 @@ public class ACHelper {
 		pluginConfig.addProperty("glinding.multiplicator", 0.1F);
 		pluginConfig.addProperty("glinding.YvelocityCheckToGlide", -0.2F);
 		pluginConfig.addProperty("glinding.newYvelocity", -0.5F);
-		List<String> list = new LinkedList<String>();
-		list.add("reload");
-		pluginConfig.addProperty("prioritizedCommands", list);
+		pluginConfig.addProperty("prioritizedCommands", Arrays.asList("reload"));
 		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
 		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
+		pluginConfig.addProperty("mutedPlayerCantPm", false);
 		pluginConfig.save();
 		init();
 	}

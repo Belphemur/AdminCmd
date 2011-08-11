@@ -49,6 +49,12 @@ public class PrivateMessage extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
+		if (Utils.isPlayer(sender, false)
+				&& ACHelper.getInstance().isValueSet(Type.MUTED, ((Player) sender).getName())
+				&& (Boolean) ACHelper.getInstance().getConfValue("mutedPlayerCantPm")) {
+			Utils.sI18n(sender, "muteEnabled");
+			return;
+		}
 		Player buddy = sender.getServer().getPlayer(args[0]);
 		if (buddy != null) {
 			String senderPm = "";
