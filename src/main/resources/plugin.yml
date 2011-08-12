@@ -286,3 +286,7 @@ commands:
     description: Toggle the tp protection/ accept tp request.
     aliases: [tptoggle, tpt]
     usage: /<command> [yes]
+  bal_tpsee:
+    description: Tp where you are looking at.
+    aliases: [tps, tpsee]
+    usage: /<command>

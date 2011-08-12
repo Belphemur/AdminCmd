@@ -35,7 +35,8 @@ public enum Type {
 	WEATHER_FROZEN(Category.WORLD), 
 	REPEAT_CMD(Category.OTHER), 
 	TIME_FREEZED(Category.WORLD),
-	TP_REQUEST(Category.OTHER);
+	TP_REQUEST(Category.OTHER),
+	TP_AT_SEE(Category.PLAYER);
 	@Override
 	public String toString() {
 		String s = super.toString();
