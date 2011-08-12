@@ -17,6 +17,7 @@
 package be.Balor.Listeners;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -174,11 +175,10 @@ public class ACPlayerListener extends PlayerListener {
 				ShootFireball.shoot(p, power);
 			if (ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, playerName))
 				try {
-					p.teleport(p
-							.getTargetBlock(
-									null,
-									(Integer) ACHelper.getInstance().getConfValue(
-											"maxRangeForTpAtSee")).getLocation().add(0, 1, 0));
+					Block toTp = p.getTargetBlock(null, (Integer) ACHelper.getInstance()
+							.getConfValue("maxRangeForTpAtSee"));
+					if (toTp.getTypeId() != 0)
+						p.teleport(toTp.getLocation().add(0, 1, 0));
 				} catch (Exception e) {
 				}
 		}
