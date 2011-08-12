@@ -56,10 +56,16 @@ public class SpawnMob extends ACCommand {
 			final String name = args[0];
 			replace.put("mob", name);
 			int nbTaped;
+			int distance = 0;
 			try {
 				nbTaped = Integer.parseInt(args[1]);
 			} catch (Exception e) {
 				nbTaped = 1;
+			}
+			try {
+				distance = Integer.parseInt(args[2]);
+			} catch (Exception e) {
+				distance = 0;
 			}
 			final int nb = nbTaped;
 			final CreatureType ct = CreatureType.fromName(name);
@@ -68,13 +74,19 @@ public class SpawnMob extends ACCommand {
 				return;
 			}
 			final Player player = ((Player) sender);
+			final int dist = distance;
 			AdminCmd.getBukkitServer()
 					.getScheduler()
 					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 							new Runnable() {
 
 								public void run() {
-									Location loc = player.getTargetBlock(null, 100).getLocation().add(0, 1, 0);
+									Location loc;
+									if (dist == 0)
+										loc = player.getTargetBlock(null, 100).getLocation()
+												.add(0, 1, 0);
+									else
+										loc = player.getLocation().add(dist, 1, 0);
 									for (int i = 0; i < nb; i++) {
 										player.getWorld().spawnCreature(loc, ct);
 										try {
