@@ -173,7 +173,7 @@ public class ACPlayerListener extends PlayerListener {
 			if ((power = (Float) ACHelper.getInstance().getValue(Type.FIREBALL, playerName)) != null)
 				ShootFireball.shoot(p, power);
 			if(ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, playerName))
-				p.teleport(p.getTargetBlock(null, 600).getLocation().add(0, 1, 0));
+				p.teleport(p.getTargetBlock(null, (Integer)ACHelper.getInstance().getConfValue("maxRangeForTpAtSee")).getLocation().add(0, 1, 0));
 		}
 	}
 

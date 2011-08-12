@@ -234,6 +234,7 @@ public class ACHelper {
 		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
 		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
 		pluginConfig.addProperty("mutedPlayerCantPm", false);
+		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
 		pluginConfig.save();
 		init();
 	}
