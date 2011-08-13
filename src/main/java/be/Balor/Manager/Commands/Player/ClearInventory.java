@@ -20,8 +20,6 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.MaterialContainer;
