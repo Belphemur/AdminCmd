@@ -46,7 +46,7 @@ public class ACPluginListener extends ServerListener {
 					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 			}
 		}
-		else if (!PermissionManager.isYetiPermissionsSet()) {
+		if (!PermissionManager.isYetiPermissionsSet()) {
 			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
 					.getPlugin("Permissions");
 			if (Permissions != null) {
