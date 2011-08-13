@@ -539,7 +539,6 @@ public class Utils {
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
 		for (int y = block.getY() - radius; y <= limitY; y++) {
 			for (int x = block.getX() - radius; x <= limitX; x++)
 				for (int z = block.getZ() - radius; z <= limitZ; z++) {
@@ -547,14 +546,10 @@ public class Utils {
 					if (mat.contains(current.getType())) {
 						br = new BlockRemanence(current.getLocation());
 						blocks.push(br);
-						toReplace.push(br);
+						br.setBlockType(0);
 					}
 				}
-			while (!toReplace.isEmpty())
-				toReplace.pop().setBlockType(0);
 		}
-		while (!toReplace.isEmpty())
-			toReplace.pop().setBlockType(0);
 		return blocks;
 	}
 
@@ -586,7 +581,7 @@ public class Utils {
 				}
 			}
 		}
-		Stack<BlockRemanence> toReplace = new Stack<BlockRemanence>();
+
 		while (!processQueue.isEmpty()) {
 			SimplifiedLocation loc = processQueue.pop();
 			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
@@ -598,18 +593,15 @@ public class Utils {
 							processQueue.push(newPos);
 							current = new BlockRemanence(newPos);
 							blocks.push(current);
-							toReplace.push(current);
+							current.setBlockType(0);
 							newPos.setVisited();
 						}
 					}
 
 				}
 			}
-			while (!toReplace.isEmpty())
-				toReplace.pop().setBlockType(0);
 		}
-		while (!toReplace.isEmpty())
-			toReplace.pop().setBlockType(0);
+
 		return blocks;
 	}
 
