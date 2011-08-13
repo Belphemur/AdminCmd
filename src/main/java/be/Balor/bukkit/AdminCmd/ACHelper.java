@@ -164,7 +164,7 @@ public class ACHelper {
 	 * @param kit
 	 * @return
 	 */
-	public List<ItemStack> getKit(String kit) {
+	public ArrayList<ItemStack> getKit(String kit) {
 		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
 		try {
 			if (Utils.oddItem != null) {

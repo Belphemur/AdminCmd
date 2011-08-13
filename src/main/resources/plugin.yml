@@ -294,3 +294,7 @@ commands:
     description: Minecraft Server uptime.
     aliases: [uptime, up]
     usage: /<command>
+  bal_kit:
+    description: add the chosen kit to the player.
+    aliases: [kit]
+    usage: /<command> kit [player]

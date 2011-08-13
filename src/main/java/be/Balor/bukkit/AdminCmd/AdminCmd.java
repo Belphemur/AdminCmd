@@ -142,11 +142,13 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(TpToggle.class);
 		CommandManager.getInstance().registerCommand(TpAtSee.class);
 		CommandManager.getInstance().registerCommand(Uptime.class);
+		CommandManager.getInstance().registerCommand(Kit.class);
 	}
 
 	private void setDefaultLocale() {
 		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
 				+ "%player");
+		Utils.addLocale("kitNotFound", ChatColor.RED + "No such kit: " + ChatColor.WHITE + "%kit");
 		Utils.addLocale("pluginNotFound", ChatColor.RED + "No such Plugin: " + ChatColor.WHITE
 				+ "%plugin");
 		Utils.addLocale("worldNotFound", ChatColor.RED + "No such world: " + ChatColor.WHITE
@@ -329,6 +331,13 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN + "You Tp at see when you left click.");
 		Utils.addLocale("tpSeeDisabled", ChatColor.DARK_RED + "TP AT SEE mode disabled.");
 		Utils.addLocale("elapsedTime", "Uptime : " + ChatColor.YELLOW + "%d day(s) %h:%m:%s");
+		Utils.addLocale("kitList", ChatColor.GOLD + "Available Kits : " + ChatColor.AQUA + "%list");
+		Utils.addLocale("kitOtherPlayer", ChatColor.RED + "[%sender]" + ChatColor.WHITE
+				+ " send you the kit : " + ChatColor.GOLD + "%kit");
+		Utils.addLocale("kitCommandSender", ChatColor.RED + "Added " + ChatColor.GOLD
+				+ "%kit to " + ChatColor.WHITE + "%target's inventory");
+		Utils.addLocale("kitYourself", ChatColor.RED + "Added " + ChatColor.GOLD
+				+ "%kit" + ChatColor.WHITE + " to your inventory");
 		LocaleManager.getInstance().save();
 	}
 
