@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 public class MaterialContainer {
 	private Material material = null;
 	private short dmg = 0;
+	private int amount = 1;
 
 	public MaterialContainer(ItemStack is) {
 		material = is.getType();
@@ -42,6 +43,15 @@ public class MaterialContainer {
 		}
 		parseMat(info[0]);
 		parseDmg(info[1]);
+	}
+
+	/**
+	 * @param amount
+	 *            the amount to set
+	 */
+	public void setAmount(int amount) {
+		if (material != null && material.getMaxStackSize() >= amount)
+			this.amount = amount;
 	}
 
 	public MaterialContainer(String mat, String damage) {
@@ -88,7 +98,7 @@ public class MaterialContainer {
 	}
 
 	public ItemStack getItemStack() {
-		return getItemStack(1);
+		return getItemStack(amount);
 	}
 
 	@Override
@@ -105,6 +115,7 @@ public class MaterialContainer {
 		else
 			return "";
 	}
+
 	/**
 	 * @return the material
 	 */

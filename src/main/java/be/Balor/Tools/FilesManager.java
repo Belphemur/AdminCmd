@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
@@ -367,15 +368,19 @@ public class FilesManager {
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		Configuration conf = getYml("kits");
 		if (conf.getKeys("kits") != null) {
-			for (String key : conf.getKeys("kits")) {
-				for (String item : conf.getStringList("kits." + key, new ArrayList<String>())) {
+			ConfigurationNode nodes = conf.getNode("kits");
+			for (String key : nodes.getKeys()) {
+				ConfigurationNode itemsNode = nodes.getNode(key);
+				for (String item : itemsNode.getKeys()) {
 					MaterialContainer m = Utils.checkMaterial(item);
+					m.setAmount(itemsNode.getInt(item, 1));
 					if (!m.isNull())
 						items.add(m);
 				}
 				result.put(key, items);
 				items.clear();
 			}
+			System.out.print("[AdminCmd] "+items.size()+" kits loaded.");
 		}
 		return result;
 	}

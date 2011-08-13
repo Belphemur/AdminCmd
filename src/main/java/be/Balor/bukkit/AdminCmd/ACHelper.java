@@ -181,6 +181,31 @@ public class ACHelper {
 	}
 
 	/**
+	 * Get the list of kit.
+	 * 
+	 * @return
+	 */
+	public String getKitList() {
+		String kitList = "";
+		HashSet<String> list = new HashSet<String>();
+		/*
+		 * try { list.addAll(kits.keySet()); if (Utils.oddItem != null) {
+		 * Utils.oddItem.get
+		 * 
+		 * 
+		 * } catch (Exception e) { }}
+		 */
+		for (String kit : list) {
+			kitList += kit + ", ";
+		}
+		if (!kitList.equals("")) {
+			if (kitList.endsWith(", "))
+				kitList = kitList.substring(0, kitList.lastIndexOf(","));
+		}
+		return kitList.trim();
+	}
+
+	/**
 	 * Reload the "plugin"
 	 */
 	public synchronized void reload() {
