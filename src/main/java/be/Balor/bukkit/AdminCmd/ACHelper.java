@@ -60,6 +60,7 @@ public class ACHelper {
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
+	private static long pluginStarted = System.currentTimeMillis();
 	private ExtendedConfiguration pluginConfig;
 
 	private ACHelper() {
@@ -96,6 +97,28 @@ public class ACHelper {
 
 	public static void killInstance() {
 		instance = null;
+	}
+
+	/**
+	 * Return the elapsed time.
+	 * 
+	 * @return
+	 */
+	public static Long[] getElapsedTime() {
+		long diff = pluginStarted - System.currentTimeMillis();
+		long secondInMillis = 1000;
+		long minuteInMillis = secondInMillis * 60;
+		long hourInMillis = minuteInMillis * 60;
+		long dayInMillis = hourInMillis * 24;
+
+		long elapsedDays = diff / dayInMillis;
+		diff = diff % dayInMillis;
+		long elapsedHours = diff / hourInMillis;
+		diff = diff % hourInMillis;
+		long elapsedMinutes = diff / minuteInMillis;
+		diff = diff % minuteInMillis;
+		long elapsedSeconds = diff / secondInMillis;
+		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
 	}
 
 	/**

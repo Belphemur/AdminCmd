@@ -290,3 +290,7 @@ commands:
     description: Tp where you are looking at.
     aliases: [tps, tpsee]
     usage: /<command>
+  bal_uptime:
+    description: Minecraft Server uptime.
+    aliases: [uptime, up]
+    usage: /<command>

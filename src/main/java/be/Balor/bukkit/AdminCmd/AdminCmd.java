@@ -141,6 +141,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(MoreAll.class);
 		CommandManager.getInstance().registerCommand(TpToggle.class);
 		CommandManager.getInstance().registerCommand(TpAtSee.class);
+		CommandManager.getInstance().registerCommand(Uptime.class);
 	}
 
 	private void setDefaultLocale() {
@@ -327,6 +328,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED + "Tp Request system Enabled.");
 		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN + "You Tp at see when you left click.");
 		Utils.addLocale("tpSeeDisabled", ChatColor.DARK_RED + "TP AT SEE mode disabled.");
+		Utils.addLocale("elapsedTime", "Uptime : " + ChatColor.YELLOW + "%d day(s) %h:%m%s");
 		LocaleManager.getInstance().save();
 	}
 
