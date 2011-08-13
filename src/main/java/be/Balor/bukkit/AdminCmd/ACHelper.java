@@ -105,7 +105,7 @@ public class ACHelper {
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
-		long diff = pluginStarted - System.currentTimeMillis();
+		long diff = System.currentTimeMillis() - pluginStarted;
 		long secondInMillis = 1000;
 		long minuteInMillis = secondInMillis * 60;
 		long hourInMillis = minuteInMillis * 60;
