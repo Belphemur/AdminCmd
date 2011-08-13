@@ -80,9 +80,9 @@ public class PrivateMessage extends ACCommand {
 							senderPm = result + name + ChatColor.WHITE + " - ";
 
 					} else
-						senderPm = pSender.getDisplayName() + " - ";
+						senderPm = name + " - ";
 				} else
-					senderPm = pSender.getDisplayName() + " - ";
+					senderPm = pSender.getName() + " - ";
 			} else
 				senderPm = "Server Admin" + " - ";
 

@@ -38,7 +38,7 @@ public class ACPluginListener extends ServerListener {
 
 	@Override
 	public void onPluginEnable(PluginEnableEvent event) {
-		if (PermissionManager.getPEX() == null) {
+		if (!PermissionManager.isPermissionsExSet()) {
 			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
 					.getPlugin("PermissionsEx");
 			if (Permissions != null) {
@@ -46,7 +46,7 @@ public class ACPluginListener extends ServerListener {
 					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 			}
 		}
-		if (PermissionManager.getYetiPermissions() == null) {
+		else if (!PermissionManager.isYetiPermissionsSet()) {
 			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
 					.getPlugin("Permissions");
 			if (Permissions != null) {

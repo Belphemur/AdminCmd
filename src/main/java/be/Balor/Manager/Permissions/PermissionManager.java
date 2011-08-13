@@ -40,9 +40,9 @@ public class PermissionManager {
 	private LinkedList<PermParent> permissions = new LinkedList<PermParent>();
 	private PermParent majorPerm;
 	private static PermissionManager instance = null;
-	protected static PermissionHandler permission = null;
+	private static boolean permissionsEx = false;
+	private static boolean yetiPermissions = false;
 	public static final Logger log = Logger.getLogger("Minecraft");
-	private static ru.tehkode.permissions.PermissionManager PEX = null;
 	private static AbstractPermission permissionHandler;
 
 	/**
@@ -187,22 +187,17 @@ public class PermissionManager {
 	}
 
 	/**
-	 * Permission plugin
-	 * 
-	 * @return
+	 * @return the permissionsEx
 	 */
-	/**
-	 * @return the permission
-	 */
-	public static PermissionHandler getYetiPermissions() {
-		return permission;
+	public static boolean isPermissionsExSet() {
+		return permissionsEx;
 	}
 
 	/**
-	 * @return the pEX
+	 * @return the yetiPermissions
 	 */
-	public static ru.tehkode.permissions.PermissionManager getPEX() {
-		return PEX;
+	public static boolean isYetiPermissionsSet() {
+		return yetiPermissions;
 	}
 
 	/**
@@ -210,11 +205,11 @@ public class PermissionManager {
 	 *            the pEX to set
 	 */
 	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
-		if (PEX == null) {
-			PEX = pEX;
+		if (!permissionsEx) {
+			permissionsEx = true;
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
 				permissionHandler = new PermissionsEx(pEX);
-				if (permission == null)
+				if (!yetiPermissions)
 					System.out.println("[AdminCmd] Successfully linked with PermissionsEX");
 				else
 					System.out
@@ -234,8 +229,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setYetiPermissions(PermissionHandler plugin) {
-		if (permission == null && PEX == null) {
-			permission = plugin;
+		if (!yetiPermissions && !permissionsEx) {
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
 				permissionHandler = new YetiPermissions(plugin);
 				System.out.println("[AdminCmd] Successfully linked with Yeti's Permissions.");
