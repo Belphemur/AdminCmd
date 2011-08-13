@@ -181,7 +181,12 @@ public class ACPlayerListener extends PlayerListener {
 									(Integer) ACHelper.getInstance().getConfValue(
 											"maxRangeForTpAtSee")).getLocation().add(0, 1, 0));
 					if (toTp.getTypeId() == 0)
-						p.teleport(toTp.getLocation());
+					{
+						Location loc = toTp.getLocation().clone();
+						loc.setPitch(p.getLocation().getPitch());
+						loc.setYaw(p.getLocation().getYaw());
+						p.teleport(loc);
+					}
 				} catch (Exception e) {
 				}
 		}
