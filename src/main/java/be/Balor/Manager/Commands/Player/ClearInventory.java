@@ -20,9 +20,13 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.ACCommand;
+import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,14 +53,21 @@ public class ClearInventory extends ACCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player target = Utils.getUser(sender, args, permNode);
-		if (target == null) 
+		if (target == null)
 			return;
-		
-		target.getInventory().clear();
-		target.getInventory().setHelmet(null);
-		target.getInventory().setChestplate(null);
-		target.getInventory().setLeggings(null);
-		target.getInventory().setBoots(null);
+		if (args.length >= 2) {
+			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args[1]);
+			if (mc.isNull())
+				return;
+			target.getInventory().remove(mc.getMaterial());
+
+		} else {
+			target.getInventory().clear();
+			target.getInventory().setHelmet(null);
+			target.getInventory().setChestplate(null);
+			target.getInventory().setLeggings(null);
+			target.getInventory().setBoots(null);
+		}
 		if (!sender.equals(target)) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", target.getName());
@@ -73,7 +84,6 @@ public class ClearInventory extends ACCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		// TODO Auto-generated method stub
 		return args != null;
 	}
 
