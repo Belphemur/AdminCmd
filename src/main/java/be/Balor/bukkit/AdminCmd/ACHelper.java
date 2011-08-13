@@ -171,7 +171,7 @@ public class ACHelper {
 				result.addAll(Utils.oddItem.getItemGroup(kit));
 				return result;
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 		}
 		List<MaterialContainer> list = kits.get(kit);
 		if (list != null)
@@ -187,14 +187,17 @@ public class ACHelper {
 	 */
 	public String getKitList() {
 		String kitList = "";
-		/*
-		 * try { list.addAll(kits.keySet()); if (Utils.oddItem != null) {
-		 * Utils.oddItem.get
-		 * 
-		 * 
-		 * } catch (Exception e) { }}
-		 */
-		for (String kit : kits.keySet()) {
+		HashSet<String> list = new HashSet<String>();
+		try {
+			list.addAll(kits.keySet());
+			if (Utils.oddItem != null) {
+				list.addAll(Utils.oddItem.getGroups());
+			}
+
+		} catch (Throwable e) {
+		}
+
+		for (String kit : list) {
 			kitList += kit + ", ";
 		}
 		if (!kitList.equals("")) {

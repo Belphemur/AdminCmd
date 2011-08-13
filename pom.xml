@@ -190,7 +190,7 @@
 		<dependency>
 			<groupId>info.somethingodd.bukkit</groupId>
 			<artifactId>OddItem</artifactId>
-			<version>0.7</version>
+			<version>0.7.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
