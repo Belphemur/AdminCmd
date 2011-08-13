@@ -187,7 +187,6 @@ public class ACHelper {
 	 */
 	public String getKitList() {
 		String kitList = "";
-		HashSet<String> list = new HashSet<String>();
 		/*
 		 * try { list.addAll(kits.keySet()); if (Utils.oddItem != null) {
 		 * Utils.oddItem.get
@@ -195,7 +194,7 @@ public class ACHelper {
 		 * 
 		 * } catch (Exception e) { }}
 		 */
-		for (String kit : list) {
+		for (String kit : kits.keySet()) {
 			kitList += kit + ", ";
 		}
 		if (!kitList.equals("")) {
