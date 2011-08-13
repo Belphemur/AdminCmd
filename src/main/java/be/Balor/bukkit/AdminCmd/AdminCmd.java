@@ -325,8 +325,8 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.DARK_GREEN + "to accept.");
 		Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN + "Tp Request system Disabled.");
 		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED + "Tp Request system Enabled.");
-		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GRAY + "You Tp at see when you right click.");
-		Utils.addLocale("tpSeeDisabled", ChatColor.DARK_GRAY + "TP AT SEE mode disabled.");
+		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN + "You Tp at see when you left click.");
+		Utils.addLocale("tpSeeDisabled", ChatColor.DARK_RED + "TP AT SEE mode disabled.");
 		LocaleManager.getInstance().save();
 	}
 
