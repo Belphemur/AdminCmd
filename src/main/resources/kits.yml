@@ -4,3 +4,6 @@ kits:
         '278' : 1
         '277' : 1
         'Diamond_Axe' : 1
+    dirt:
+        'dirt': 64
+        'grass': 2
