@@ -29,6 +29,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
@@ -115,16 +116,18 @@ public class CommandManager implements CommandExecutor {
 	/**
 	 * Unregister a command from bukkit.
 	 * 
-	 * @param cmdName
+	 * @param cmd
 	 */
-	private void unRegisterBukkitCommand(String cmdName) {
+	private void unRegisterBukkitCommand(PluginCommand cmd) {
 		try {
 			Object result = getPrivateField(plugin.getServer().getPluginManager(), "commandMap");
 			SimpleCommandMap commandMap = (SimpleCommandMap) result;
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			knownCommands.remove(cmdName);
+			knownCommands.remove(cmd.getName());
+			for (String alias : cmd.getAliases())
+				knownCommands.remove(alias);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
@@ -192,9 +195,8 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (CommandDisabled e) {
-			for (String alias : command.getPluginCommand().getAliases())
-				unRegisterBukkitCommand(alias);
+		} catch (CommandDisabled e) {			
+				unRegisterBukkitCommand(command.getPluginCommand());
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
 			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
@@ -205,7 +207,7 @@ public class CommandManager implements CommandExecutor {
 					commands.put(command.getPluginCommand(), command);
 					return;
 				}
-			unRegisterBukkitCommand(command.getCmdName());
+			unRegisterBukkitCommand(command.getPluginCommand());
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandException e) {
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
