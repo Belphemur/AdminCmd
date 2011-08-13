@@ -57,7 +57,7 @@ public class Kit extends ACCommand {
 			return;
 		}
 		ArrayList<ItemStack> items = ACHelper.getInstance().getKit(args[0]);
-		if(items==null)
+		if(items.isEmpty())
 		{
 			Utils.sI18n(sender, "kitNotFound", "kit", args[0]);
 			return;
@@ -68,6 +68,7 @@ public class Kit extends ACCommand {
 		}
 
 		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("kit", args[0]);
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
 				replace.put("sender", ((Player) sender).getName());
