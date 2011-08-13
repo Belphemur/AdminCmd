@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,7 +41,9 @@ public class ReloadAll extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
+		long pluginStarted = ACHelper.getPluginStarted();
 		sender.getServer().reload();
+		ACHelper.setPluginStarted(pluginStarted);
 		Utils.sI18n(sender, "serverReload");
 	}
 

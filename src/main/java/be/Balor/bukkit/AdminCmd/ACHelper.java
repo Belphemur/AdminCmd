@@ -122,6 +122,21 @@ public class ACHelper {
 	}
 
 	/**
+	 * @return the pluginStarted
+	 */
+	public static long getPluginStarted() {
+		return pluginStarted;
+	}
+
+	/**
+	 * @param pluginStarted
+	 *            the pluginStarted to set
+	 */
+	public static void setPluginStarted(long pluginStarted) {
+		ACHelper.pluginStarted = pluginStarted;
+	}
+
+	/**
 	 * Add modified block in the undoQueue
 	 * 
 	 * @param blocks
