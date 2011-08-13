@@ -65,7 +65,7 @@ public class PlayerList extends ACCommand {
 					continue;
 				String name = "";
 				if (isInv)
-					name = Utils.I18n("invTitle") + p.getDisplayName();
+					name = Utils.I18n("invTitle") + p.getName();
 				else
 					name = p.getDisplayName();
 				if (AFKWorker.getInstance().isAfk(p))
@@ -97,14 +97,14 @@ public class PlayerList extends ACCommand {
 				if (prefixstring != null && prefixstring.length() > 1) {
 					String result = Utils.colorParser(prefixstring);
 					if (result == null)
-						buffer += invPrefix + prefixstring + online[i].getDisplayName()
+						buffer += invPrefix + prefixstring + name
 								+ ChatColor.WHITE + ", ";
 					else
-						buffer += invPrefix + result + online[i].getDisplayName() + ChatColor.WHITE
+						buffer += invPrefix + result + name + ChatColor.WHITE
 								+ ", ";
 
 				} else {
-					buffer += invPrefix + online[i].getDisplayName() + ", ";
+					buffer += invPrefix + name + ", ";
 				}
 				if (buffer.length() >= 256) {
 					sender.sendMessage(buffer);

@@ -85,8 +85,18 @@ public class SpawnMob extends ACCommand {
 									if (dist == 0)
 										loc = player.getTargetBlock(null, 100).getLocation()
 												.add(0, 1, 0);
-									else
-										loc = player.getLocation().add(dist, 1, 0);
+									else {
+										Location playerLoc = player.getLocation();
+										loc = playerLoc.add(
+												playerLoc
+														.getDirection()
+														.normalize()
+														.multiply(dist)
+														.toLocation(player.getWorld(),
+																playerLoc.getYaw(),
+																playerLoc.getPitch()))
+												.add(0, 1D, 0);
+									}
 									for (int i = 0; i < nb; i++) {
 										player.getWorld().spawnCreature(loc, ct);
 										try {
