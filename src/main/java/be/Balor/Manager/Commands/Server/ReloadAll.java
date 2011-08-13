@@ -24,7 +24,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ReloadAll extends ACCommand {
 
@@ -36,18 +36,24 @@ public class ReloadAll extends ACCommand {
 		cmdName = "bal_reloadall";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		long pluginStarted = ACHelper.getPluginStarted();
+		long pluginStarted = ACHelper.getInstance().getPluginStarted();
 		sender.getServer().reload();
-		ACHelper.setPluginStarted(pluginStarted);
+		ACHelper.getInstance().setPluginStarted(pluginStarted);
 		Utils.sI18n(sender, "serverReload");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
