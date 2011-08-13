@@ -380,7 +380,7 @@ public class FilesManager {
 				result.put(key, new ArrayList<MaterialContainer>(items));
 				items.clear();
 			}
-			System.out.print("[AdminCmd] "+items.size()+" kits loaded.");
+			System.out.print("[AdminCmd] "+result.size()+" kits loaded.");
 		}
 		return result;
 	}
