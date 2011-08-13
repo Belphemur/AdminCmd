@@ -252,7 +252,7 @@ public class CommandManager implements CommandExecutor {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
 					plugin.getServer().getScheduler()
-							.scheduleSyncDelayedTask(plugin, new SyncTask(cmd, sender, args));
+							.scheduleAsyncDelayedTask(plugin, new CommandTask(cmd, sender, args));
 				else {
 					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
 					cmdCount++;
@@ -367,7 +367,7 @@ public class CommandManager implements CommandExecutor {
 
 	}
 
-	private class SyncTask implements Runnable {
+	private class CommandTask implements Runnable {
 		private ACCommand cmd;
 		private CommandSender sender;
 		private String[] args;
@@ -375,7 +375,7 @@ public class CommandManager implements CommandExecutor {
 		/**
 		 * 
 		 */
-		public SyncTask(ACCommand cmd, CommandSender sender, String[] args) {
+		public CommandTask(ACCommand cmd, CommandSender sender, String[] args) {
 			this.cmd = cmd;
 			this.sender = sender;
 			this.args = args;
