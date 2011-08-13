@@ -377,7 +377,7 @@ public class FilesManager {
 					if (!m.isNull())
 						items.add(m);
 				}
-				result.put(key, items);
+				result.put(key, new ArrayList<MaterialContainer>(items));
 				items.clear();
 			}
 			System.out.print("[AdminCmd] "+items.size()+" kits loaded.");
