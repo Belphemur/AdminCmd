@@ -24,8 +24,8 @@ import org.bukkit.inventory.ItemStack;
  * 
  */
 public class MaterialContainer {
-	public Material material = null;
-	public short dmg = 0;
+	private Material material = null;
+	private short dmg = 0;
 
 	public MaterialContainer(ItemStack is) {
 		material = is.getType();
@@ -77,6 +77,20 @@ public class MaterialContainer {
 		return material == null;
 	}
 
+	/**
+	 * Transform the MaterialContainer to an ItemStack
+	 * 
+	 * @param amount
+	 * @return
+	 */
+	public ItemStack getItemStack(int amount) {
+		return new ItemStack(material, amount, dmg);
+	}
+
+	public ItemStack getItemStack() {
+		return getItemStack(1);
+	}
+
 	@Override
 	public String toString() {
 		if (material != null)
@@ -90,5 +104,11 @@ public class MaterialContainer {
 			return material + ":" + dmg;
 		else
 			return "";
+	}
+	/**
+	 * @return the material
+	 */
+	public Material getMaterial() {
+		return material;
 	}
 }

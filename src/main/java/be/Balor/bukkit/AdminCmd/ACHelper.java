@@ -52,6 +52,7 @@ public class ACHelper {
 	EnumMap<Type, ConcurrentMap<String, Object>> storedTypeValues = new EnumMap<Type, ConcurrentMap<String, Object>>(
 			Type.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
+	private HashMap<String, List<MaterialContainer>> kits = new HashMap<String, List<MaterialContainer>>();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
 	private Set<String> warpList = new HashSet<String>();
@@ -158,6 +159,28 @@ public class ACHelper {
 	}
 
 	/**
+	 * Get ItemStacks for given kit
+	 * 
+	 * @param kit
+	 * @return
+	 */
+	public List<ItemStack> getKit(String kit) {
+		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
+		try {
+			if (Utils.oddItem != null) {
+				result.addAll(Utils.oddItem.getItemGroup(kit));
+				return result;
+			}
+		} catch (Exception e) {
+		}
+		List<MaterialContainer> list = kits.get(kit);
+		if (list != null)
+			for (MaterialContainer mc : list)
+				result.add(mc.getItemStack());
+		return result;
+	}
+
+	/**
 	 * Reload the "plugin"
 	 */
 	public synchronized void reload() {
@@ -236,6 +259,7 @@ public class ACHelper {
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		fManager.getInnerFile("de_DE.yml", "locales");
+		fManager.getInnerFile("kits.yml");
 		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
 				"config.yml"));
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
@@ -318,14 +342,14 @@ public class ACHelper {
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
-			list.add(m.material.getId());
+			list.add(m.getMaterial().getId());
 			config.setProperty("BlackListed", list);
 			config.save();
 			if (blacklist == null)
 				blacklist = new ArrayList<Integer>();
-			blacklist.add(m.material.getId());
+			blacklist.add(m.getMaterial().getId());
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("material", m.material.toString());
+			replace.put("material", m.getMaterial().toString());
 			Utils.sI18n(sender, "addBlacklist", replace);
 			return true;
 		}
@@ -480,20 +504,19 @@ public class ACHelper {
 	 */
 	public boolean removeBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
-		if (m.material != null) {
+		if (!m.isNull()) {
 			Configuration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListed", null);
-			if (list == null)
-				list = new ArrayList<Integer>();
-			if (!list.isEmpty() && list.contains(m.material.getId())) {
-				list.remove((Integer) m.material.getId());
+			List<Integer> list = config.getIntList("BlackListed", new ArrayList<Integer>());
+			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
+				list.remove((Integer) m.getMaterial().getId());
 				config.setProperty("BlackListed", list);
 				config.save();
 			}
-			if (blacklist != null && !blacklist.isEmpty() && blacklist.contains(m.material.getId()))
-				blacklist.remove((Integer) m.material.getId());
+			if (blacklist != null && !blacklist.isEmpty()
+					&& blacklist.contains(m.getMaterial().getId()))
+				blacklist.remove((Integer) m.getMaterial().getId());
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("material", m.material.toString());
+			replace.put("getMaterial()", m.getMaterial().toString());
 			Utils.sI18n(sender, "rmBlacklist", replace);
 			return true;
 		}
@@ -727,7 +750,7 @@ public class ACHelper {
 
 	public boolean inBlackList(CommandSender sender, MaterialContainer mat) {
 		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
-				&& blacklist.contains(mat.material.getId())) {
+				&& blacklist.contains(mat.getMaterial().getId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
 			Utils.sI18n(sender, "inBlacklist", replace);
@@ -784,9 +807,10 @@ public class ACHelper {
 		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
 		for (String key : map.keySet())
 			addValue(Type.BANNED, key, map.get(key));
-		Map<String, Object> map2 = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
-		for (String key : map2.keySet())
-			addValue(Type.MUTED, key, map2.get(key));
+		map = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
+		for (String key : map.keySet())
+			addValue(Type.MUTED, key, map.get(key));
+		kits.putAll(fManager.loadKits());
 	}
 
 	public int getLimit(Player player, String type) {

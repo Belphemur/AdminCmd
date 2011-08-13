@@ -356,4 +356,27 @@ public class FilesManager {
 		}
 		return result;
 	}
+
+	/**
+	 * Load all the kits
+	 * 
+	 * @return
+	 */
+	public Map<String, List<MaterialContainer>> loadKits() {
+		Map<String, List<MaterialContainer>> result = new HashMap<String, List<MaterialContainer>>();
+		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
+		Configuration conf = getYml("kits");
+		if (conf.getKeys("kits") != null) {
+			for (String key : conf.getKeys("kits")) {
+				for (String item : conf.getStringList("kits." + key, new ArrayList<String>())) {
+					MaterialContainer m = Utils.checkMaterial(item);
+					if (!m.isNull())
+						items.add(m);
+				}
+				result.put(key, items);
+				items.clear();
+			}
+		}
+		return result;
+	}
 }

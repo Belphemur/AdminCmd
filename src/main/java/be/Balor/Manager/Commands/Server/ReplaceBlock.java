@@ -54,17 +54,17 @@ public class ReplaceBlock extends ACCommand {
 		if (mc.isNull())
 			return;
 		ArrayList<Material> mats = new ArrayList<Material>();
-		mats.add(mc.material);
-		if(mc.material.equals(Material.LAVA))
+		mats.add(mc.getMaterial());
+		if(mc.getMaterial().equals(Material.LAVA))
 			mats.add(Material.STATIONARY_LAVA);
-		else if(mc.material.equals(Material.WATER))
+		else if(mc.getMaterial().equals(Material.WATER))
 			mats.add(Material.STATIONARY_WATER);
 		Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
 		if (count == null)
 			return;
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("nb", String.valueOf(count));
-		replace.put("mat", mc.material.toString());
+		replace.put("mat", mc.getMaterial().toString());
 		Utils.sI18n(sender, "replaced", replace);
 	}
 

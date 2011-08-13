@@ -48,6 +48,14 @@
 				<filtering>false</filtering>
 				<directory>${basedir}/src/main/resources/</directory>
 				<includes>
+					<include>kits.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
 					<include>items.csv</include>
 				</includes>
 			</resource>
@@ -182,7 +190,7 @@
 		<dependency>
 			<groupId>info.somethingodd.bukkit</groupId>
 			<artifactId>OddItem</artifactId>
-			<version>0.6.5</version>
+			<version>0.7</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

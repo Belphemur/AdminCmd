@@ -81,10 +81,10 @@ public class Give extends ACCommand {
 			else
 				return;
 		}
-		ItemStack stack = new ItemStack(mat.material, cnt, mat.dmg);
+		ItemStack stack = mat.getItemStack(cnt);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(cnt));
-		replace.put("material", mat.material.toString());
+		replace.put("material", mat.getMaterial().toString());
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
 				replace.put("sender", ((Player) sender).getName());
