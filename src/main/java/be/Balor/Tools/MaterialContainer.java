@@ -50,8 +50,11 @@ public class MaterialContainer {
 	 *            the amount to set
 	 */
 	public void setAmount(int amount) {
-		if (material != null && material.getMaxStackSize() >= amount)
-			this.amount = amount;
+		if (material != null)
+			if (material.getMaxStackSize() >= amount)
+				this.amount = amount;
+			else
+				this.amount = material.getMaxStackSize();
 	}
 
 	public MaterialContainer(String mat, String damage) {
