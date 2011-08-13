@@ -205,9 +205,9 @@ public class PermissionManager {
 	 *            the pEX to set
 	 */
 	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
-		if (!permissionsEx) {
-			permissionsEx = true;
+		if (!permissionsEx) {		
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
+				permissionsEx = true;
 				permissionHandler = new PermissionsEx(pEX);
 				if (!yetiPermissions)
 					System.out.println("[AdminCmd] Successfully linked with PermissionsEX");
@@ -231,6 +231,7 @@ public class PermissionManager {
 	public static boolean setYetiPermissions(PermissionHandler plugin) {
 		if (!yetiPermissions && !permissionsEx) {
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
+				yetiPermissions = true;
 				permissionHandler = new YetiPermissions(plugin);
 				System.out.println("[AdminCmd] Successfully linked with Yeti's Permissions.");
 			} else
