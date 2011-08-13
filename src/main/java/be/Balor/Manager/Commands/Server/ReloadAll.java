@@ -45,9 +45,8 @@ public class ReloadAll extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		long pluginStarted = ACHelper.getInstance().getPluginStarted();
+		ACHelper.getInstance().saveElapsedTime();
 		sender.getServer().reload();
-		ACHelper.getInstance().setPluginStarted(pluginStarted);
 		Utils.sI18n(sender, "serverReload");
 	}
 

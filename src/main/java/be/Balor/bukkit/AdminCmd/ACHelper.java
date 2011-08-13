@@ -60,7 +60,7 @@ public class ACHelper {
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
-	private long pluginStarted = System.currentTimeMillis();
+	private static long pluginStarted;
 	private ExtendedConfiguration pluginConfig;
 
 	private ACHelper() {
@@ -104,7 +104,7 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	public Long[] getElapsedTime() {
+	public static Long[] getElapsedTime() {
 		long diff = System.currentTimeMillis() - pluginStarted;
 		long secondInMillis = 1000;
 		long minuteInMillis = secondInMillis * 60;
@@ -119,21 +119,6 @@ public class ACHelper {
 		diff = diff % minuteInMillis;
 		long elapsedSeconds = diff / secondInMillis;
 		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
-	}
-
-	/**
-	 * @return the pluginStarted
-	 */
-	public long getPluginStarted() {
-		return pluginStarted;
-	}
-
-	/**
-	 * @param pluginStarted
-	 *            the pluginStarted to set
-	 */
-	public void setPluginStarted(long pluginStarted) {
-		this.pluginStarted = pluginStarted;
 	}
 
 	/**
@@ -234,6 +219,12 @@ public class ACHelper {
 				pluginConfig.getStringList("prioritizedCommands", new LinkedList<String>()));
 		AdminCmd.registerCmds();
 		CommandManager.getInstance().checkAlias();
+		if (pluginConfig.getProperty("pluginStarted") != null) {
+			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
+			pluginConfig.removeProperty("pluginStarted");
+			pluginConfig.save();
+		} else
+			pluginStarted = System.currentTimeMillis();
 	}
 
 	/**
@@ -287,8 +278,22 @@ public class ACHelper {
 		return pluginConfig.getProperty(path);
 	}
 
+	/**
+	 * Get float parameter of config file.
+	 * 
+	 * @param path
+	 * @return
+	 */
 	public Float getFloat(String path) {
 		return Float.parseFloat(pluginConfig.getString(path));
+	}
+
+	/**
+	 * Save elapsed time when reload
+	 */
+	public void saveElapsedTime() {
+		pluginConfig.setProperty("pluginStarted", pluginStarted);
+		pluginConfig.save();
 	}
 
 	/**

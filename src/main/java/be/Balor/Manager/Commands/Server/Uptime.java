@@ -46,7 +46,7 @@ public class Uptime extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Long[] time = ACHelper.getInstance().getElapsedTime();
+		Long[] time = ACHelper.getElapsedTime();
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());

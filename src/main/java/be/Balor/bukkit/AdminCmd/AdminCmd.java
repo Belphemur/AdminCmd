@@ -336,7 +336,6 @@ public class AdminCmd extends JavaPlugin {
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
-
 		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
 				+ pdfFile.getVersion() + ")");
