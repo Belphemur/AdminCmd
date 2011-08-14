@@ -60,11 +60,10 @@ public class Mute extends ACCommand {
 					msg = ((Player) sender).getName();
 				ACHelper.getInstance().addValueWithFile(Type.MUTED, player.getName(),
 						"Muted by " + msg);
-				Utils.sI18n(player, "muteEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteEnabledTarget", replace);
 				if (args.length >= 2) {
-					Integer tmpMute;
+					Integer tmpMute = null;
 					try {
 						tmpMute = Integer.parseInt(args[args.length - 1]);
 						final String unmute = player.getName();
@@ -85,6 +84,10 @@ public class Mute extends ACCommand {
 
 					} catch (Exception e) {
 					}
+					if (tmpMute == null)
+						Utils.sI18n(player, "muteEnabled");
+					else
+						Utils.sI18n(player, "tmpMuteEnabled");
 				}
 			} else
 				Utils.sI18n(sender, "alreadyMuted");

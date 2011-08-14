@@ -280,6 +280,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("muteDisabled", ChatColor.DARK_GREEN + "You can chat again.");
 		Utils.addLocale("muteDisabledTarget", ChatColor.DARK_GREEN + "%player is unmuted.");
 		Utils.addLocale("muteEnabled", ChatColor.DARK_RED + "You can't chat anymore.");
+		Utils.addLocale("tmpMuteEnabled", ChatColor.DARK_RED + "You can't chat anymore for %minutes minutes.");
 		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED + "%player is muted.");
 		Utils.addLocale("alreadyMuted", ChatColor.DARK_AQUA
 				+ "This player is already muted. To unmute him it's the unmute command.");
