@@ -567,6 +567,7 @@ public class Utils {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
 		BlockRemanence current = null;
+		long squaredRadius = radius ^ 2;
 		World w = block.getWorld();
 		Location start = block.getLocation();
 		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
@@ -592,7 +593,7 @@ public class Utils {
 					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
 						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
 						if (!newPos.isVisited() && isFluid(newPos)
-								&& start.distance(newPos) < radius) {
+								&& start.distanceSquared(newPos) < squaredRadius) {
 							processQueue.push(newPos);
 							current = new BlockRemanence(newPos);
 							blocks.push(current);

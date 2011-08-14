@@ -293,7 +293,7 @@ public class ACHelper {
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");
 		pluginConfig.addProperty("statutCheckInSec", 20);
-		pluginConfig.addProperty("invisibleRangeInBlock", 512);
+		pluginConfig.addProperty("invisibleRangeInBlock", 320);
 		pluginConfig.addProperty("autoAfk", true);
 		pluginConfig.addProperty("afkTimeInSecond", 60);
 		pluginConfig.addProperty("autoKickAfkPlayer", false);
