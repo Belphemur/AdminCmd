@@ -20,12 +20,15 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.bukkit.AdminCmd.ACHelper;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class TpRequest {
 	private Player from, to;
+	private long timeOut;
 
 	/**
 	 * 
@@ -33,9 +36,15 @@ public class TpRequest {
 	public TpRequest(Player from, Player to) {
 		this.from = from;
 		this.to = to;
+		timeOut = System.currentTimeMillis()
+				+ ((Integer) ACHelper.getInstance().getConfValue("tpRequestTimeOutInMinutes") * 60000);
 	}
 
-	public void teleport() {
+	public void teleport(Player sender) {
+		if (System.currentTimeMillis() > timeOut) {
+			Utils.sI18n(sender, "tpRequestTimeOut");
+			return;
+		}
 		if (from != null && to != null) {
 			from.teleport(to);
 			HashMap<String, String> replace = new HashMap<String, String>();

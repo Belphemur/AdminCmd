@@ -315,6 +315,7 @@ public class ACHelper {
 		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
 		pluginConfig.addProperty("mutedPlayerCantPm", false);
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
+		pluginConfig.addProperty("tpRequestTimeOutInMinutes", 5);
 		pluginConfig.save();
 		init();
 	}
