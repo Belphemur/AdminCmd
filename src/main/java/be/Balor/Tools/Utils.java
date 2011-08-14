@@ -492,7 +492,7 @@ public class Utils {
 			replace.put("connected", connected);
 			String motd = I18n(locale, replace);
 			if (motd != null)
-				for (String toSend : motd.split("/n"))
+				for (String toSend : motd.split("//n"))
 					p.sendMessage(toSend);
 		}
 	}
