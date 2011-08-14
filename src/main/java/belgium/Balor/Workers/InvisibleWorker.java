@@ -59,13 +59,14 @@ final public class InvisibleWorker {
 			instance = new InvisibleWorker();
 		return instance;
 	}
-
 	/**
 	 * Destroy the instance
 	 */
-	public static void killInstance() {
-		instance = null;
+	public static void killInstance()
+	{
+		instance = null;		
 	}
+
 
 	/**
 	 * @param maxRange
@@ -140,7 +141,7 @@ final public class InvisibleWorker {
 		if (hide.getName().equals(hideFrom.getName()))
 			return;
 
-		if (hide.getLocation().distanceSquared(hideFrom.getLocation()) > maxRange)
+		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
 			return;
 
 		((CraftPlayer) hideFrom).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(
@@ -157,12 +158,12 @@ final public class InvisibleWorker {
 		if (unHide.equals(unHideFrom))
 			return;
 
-		if (unHide.getLocation().distanceSquared(unHideFrom.getLocation()) > maxRange)
+		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange)
 			return;
-
+		
 		if (PermissionManager.hasPerm(unHide, "admincmd.invisible.cansee", false))
 			return;
-
+		
 		((CraftPlayer) unHideFrom).getHandle().netServerHandler
 				.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
 		((CraftPlayer) unHideFrom).getHandle().netServerHandler
