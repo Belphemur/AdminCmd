@@ -112,7 +112,7 @@ final public class InvisibleWorker {
 					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 							new Runnable() {
 								public void run() {
-									for (Player p : AdminCmd.getBukkitServer().getOnlinePlayers())
+									for (Player p : Utils.getOnlinePlayers())
 										uninvisible(toReappear, p);
 								}
 							});
@@ -160,7 +160,10 @@ final public class InvisibleWorker {
 
 		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange)
 			return;
-
+		
+		if (PermissionManager.hasPerm(unHide, "admincmd.invisible.cansee", false))
+			return;
+		
 		((CraftPlayer) unHideFrom).getHandle().netServerHandler
 				.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
 		((CraftPlayer) unHideFrom).getHandle().netServerHandler

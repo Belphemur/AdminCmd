@@ -67,48 +67,52 @@ public class SpawnMob extends ACCommand {
 			} catch (Exception e) {
 				distance = 0;
 			}
-			final int nb = nbTaped;
-			final CreatureType ct = CreatureType.fromName(name);
-			if (ct == null) {
-				Utils.sI18n(sender, "errorMob", replace);
-				return;
-			}
-			final Player player = ((Player) sender);
-			final int dist = distance;
-			AdminCmd.getBukkitServer()
-					.getScheduler()
-					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-							new Runnable() {
 
-								public void run() {
-									Location loc;
-									if (dist == 0)
-										loc = player.getTargetBlock(null, 100).getLocation()
-												.add(0, 1, 0);
-									else {
-										Location playerLoc = player.getLocation();
-										loc = playerLoc.add(
-												playerLoc
-														.getDirection()
-														.normalize()
-														.multiply(dist)
-														.toLocation(player.getWorld(),
-																playerLoc.getYaw(),
-																playerLoc.getPitch()))
-												.add(0, 1D, 0);
-									}
-									for (int i = 0; i < nb; i++) {
-										player.getWorld().spawnCreature(loc, ct);
-										try {
-											Thread.sleep(5);
-										} catch (InterruptedException e) {
-											// e.printStackTrace();
-										}
-									}
-									replace.put("nb", String.valueOf(nb));
-									Utils.sI18n(player, "spawnMob", replace);
-								}
-							});
+			final Player player = ((Player) sender);
+			Location loc;
+			if (distance == 0)
+				loc = player.getTargetBlock(null, 100).getLocation().add(0, 1, 0);
+			else {
+				Location playerLoc = player.getLocation();
+				loc = playerLoc.add(
+						playerLoc
+								.getDirection()
+								.normalize()
+								.multiply(distance)
+								.toLocation(player.getWorld(), playerLoc.getYaw(),
+										playerLoc.getPitch())).add(0, 1D, 0);
+			}
+			CreatureType ct = null;
+			if (name.contains(":")) {
+				String[] creatures = name.split(":");
+				ct = CreatureType.fromName(creatures[0]);
+				CreatureType ct2 = CreatureType.fromName(creatures[1]);
+				if (ct == null) {
+					replace.put("mob", creatures[0]);
+					Utils.sI18n(sender, "errorMob", replace);
+				}
+				if (ct2 == null) {
+					replace.put("mob", creatures[1]);
+					Utils.sI18n(sender, "errorMob", replace);
+				}
+				if (ct == null || ct2 == null)
+					return;
+				AdminCmd.getBukkitServer()
+						.getScheduler()
+						.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+								new PassengerMob(loc, nbTaped, ct, ct2, player));
+			} else {
+				ct = CreatureType.fromName(name);
+				if (ct == null) {
+					Utils.sI18n(sender, "errorMob", replace);
+					return;
+				}
+
+				AdminCmd.getBukkitServer()
+						.getScheduler()
+						.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+								new NormalMob(loc, nbTaped, ct, player));
+			}
 		}
 
 	}
@@ -121,6 +125,72 @@ public class SpawnMob extends ACCommand {
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null && args.length >= 1;
+	}
+
+	protected class NormalMob implements Runnable {
+		protected Location loc;
+		protected int nb;
+		protected CreatureType ct;
+		protected Player player;
+
+		/**
+		 * 
+		 */
+		public NormalMob(Location loc, int nb, CreatureType ct, Player player) {
+			this.loc = loc;
+			this.nb = nb;
+			this.ct = ct;
+			this.player = player;
+		}
+
+		public void run() {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("mob", ct.getName());
+			for (int i = 0; i < nb; i++) {
+				loc.getWorld().spawnCreature(loc, ct);
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					// e.printStackTrace();
+				}
+			}
+			replace.put("nb", String.valueOf(nb));
+			Utils.sI18n(player, "spawnMob", replace);
+		}
+	}
+
+	protected class PassengerMob extends NormalMob {
+		protected CreatureType passenger;
+
+		/**
+		 * @param loc
+		 * @param nb
+		 * @param ct
+		 * @param player
+		 */
+		public PassengerMob(Location loc, int nb, CreatureType mount, CreatureType passenger,
+				Player player) {
+			super(loc, nb, mount, player);
+			this.passenger = passenger;
+		}
+
+		@Override
+		public void run() {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("mob", ct.getName() + "-" + passenger.getName());
+			for (int i = 0; i < nb; i++) {
+				loc.getWorld().spawnCreature(loc, ct)
+						.setPassenger(loc.getWorld().spawnCreature(loc, passenger));
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					// e.printStackTrace();
+				}
+			}
+			replace.put("nb", String.valueOf(nb));
+			Utils.sI18n(player, "spawnMob", replace);
+		}
+
 	}
 
 }
