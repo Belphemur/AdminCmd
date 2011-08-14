@@ -168,7 +168,7 @@ public class ACHelper {
 		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
 		try {
 			if (Utils.oddItem != null) {
-				result.addAll(Utils.oddItem.getItemGroup(kit));
+				result.addAll(Utils.oddItem.getItemGroup(kit, -1));
 				return result;
 			}
 		} catch (Throwable e) {
