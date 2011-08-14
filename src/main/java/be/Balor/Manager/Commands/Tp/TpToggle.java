@@ -56,7 +56,8 @@ public class TpToggle extends ACCommand {
 					TpRequest request = (TpRequest) obj;
 					request.teleport(player);
 					ACHelper.getInstance().addValue(Type.TP_REQUEST, player);
-				}
+				} else
+					Utils.sI18n(sender, "noTpRequest");
 			} else {
 				if (ACHelper.getInstance().isValueSet(Type.TP_REQUEST, player.getName())) {
 					ACHelper.getInstance().removeValue(Type.TP_REQUEST, player);

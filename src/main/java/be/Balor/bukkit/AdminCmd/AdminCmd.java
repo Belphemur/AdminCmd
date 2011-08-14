@@ -339,7 +339,9 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("kitYourself", ChatColor.RED + "Added " + ChatColor.GOLD + "%kit"
 				+ ChatColor.WHITE + " to your inventory");
 		Utils.addLocale("tpRequestTimeOut", ChatColor.RED
-				+ "This tp request has time out and will not be executed.");
+				+ "This tp request has timed out and will not be executed.");
+		Utils.addLocale("noTpRequest", ChatColor.GREEN
+				+ "There is no tp request to execute");
 		LocaleManager.getInstance().save();
 	}
 
