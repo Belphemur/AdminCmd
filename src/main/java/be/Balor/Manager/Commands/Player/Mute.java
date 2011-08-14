@@ -87,7 +87,7 @@ public class Mute extends ACCommand {
 					if (tmpMute == null)
 						Utils.sI18n(player, "muteEnabled");
 					else
-						Utils.sI18n(player, "tmpMuteEnabled");
+						Utils.sI18n(player, "tmpMuteEnabled", "minutes", tmpMute.toString());
 				}
 			} else
 				Utils.sI18n(sender, "alreadyMuted");
