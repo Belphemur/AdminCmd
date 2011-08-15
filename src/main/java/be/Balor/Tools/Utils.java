@@ -284,6 +284,8 @@ public class Utils {
 				try {
 					newtime += Integer.parseInt(arg);
 				} catch (Exception e) {
+					sI18n(sender, "timeNotSet", replace);
+					return;
 				}
 			}
 			sI18n(sender, "timeSet", replace);
