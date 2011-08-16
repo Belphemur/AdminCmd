@@ -265,7 +265,7 @@ commands:
   bal_reload:
     description: reload the wanted plugin.
     aliases: [areload,ar]
-    usage: /<command> [nbOfFace]
+    usage: /<command> [plugin]
   bal_reloadall:
     description: reload the server.
     aliases: [reloadall, arall, reload]
@@ -298,3 +298,7 @@ commands:
     description: add the chosen kit to the player.
     aliases: [kit]
     usage: /<command> kit [player]
+  bal_version:
+    description: Check the version of the wanted plugin.
+    aliases: [aversion,av]
+    usage: /<command> [plugin]

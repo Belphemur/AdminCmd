@@ -143,6 +143,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(TpAtSee.class);
 		CommandManager.getInstance().registerCommand(Uptime.class);
 		CommandManager.getInstance().registerCommand(Kit.class);
+		CommandManager.getInstance().registerCommand(Version.class);
 	}
 
 	private void setDefaultLocale() {
@@ -347,6 +348,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("noteAfk", ChatColor.DARK_RED + "Note: " + ChatColor.WHITE
 				+ "%player is AFK at the moment:");
 		Utils.addLocale("idleTime", ChatColor.DARK_AQUA + "Idle for %mins minute(s)");
+		Utils.addLocale("pluginVersion", ChatColor.YELLOW + "Version of " + ChatColor.WHITE
+				+ "%plugin :" + ChatColor.GREEN + "%version");
 		LocaleManager.getInstance().save();
 	}
 
