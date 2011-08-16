@@ -316,6 +316,7 @@ public class ACHelper {
 		pluginConfig.addProperty("mutedPlayerCantPm", false);
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
 		pluginConfig.addProperty("tpRequestTimeOutInMinutes", 5);
+		pluginConfig.addProperty("verboseLog", true);
 		pluginConfig.save();
 		init();
 	}

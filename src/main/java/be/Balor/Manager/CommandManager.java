@@ -195,9 +195,10 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (CommandDisabled e) {			
-				unRegisterBukkitCommand(command.getPluginCommand());
-			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+		} catch (CommandDisabled e) {
+			unRegisterBukkitCommand(command.getPluginCommand());
+			if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
 			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
 				if (prioritizedCommands.contains(alias)) {
@@ -208,9 +209,11 @@ public class CommandManager implements CommandExecutor {
 					return;
 				}
 			unRegisterBukkitCommand(command.getPluginCommand());
-			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+			if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandException e) {
-			Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+			if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
 	}
 
@@ -223,7 +226,8 @@ public class CommandManager implements CommandExecutor {
 				String aliases = "";
 				for (String alias : cmd.getAliases())
 					aliases += alias + ", ";
-				if (!aliases.isEmpty())
+				if (!aliases.isEmpty()
+						&& (Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
 					Logger.getLogger("Minecraft").info(
 							"[" + plugin.getDescription().getName() + "] Disabled Alias(es) for "
 									+ cmd.getName() + " : " + aliases);
