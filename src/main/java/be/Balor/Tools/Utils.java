@@ -611,6 +611,29 @@ public class Utils {
 	}
 
 	/**
+	 * Get the elapsed time since the start.
+	 * 
+	 * @param start
+	 * @return
+	 */
+	public static Long[] getElapsedTime(long start) {
+		long diff = System.currentTimeMillis() - start;
+		long secondInMillis = 1000;
+		long minuteInMillis = secondInMillis * 60;
+		long hourInMillis = minuteInMillis * 60;
+		long dayInMillis = hourInMillis * 24;
+
+		long elapsedDays = diff / dayInMillis;
+		diff = diff % dayInMillis;
+		long elapsedHours = diff / hourInMillis;
+		diff = diff % hourInMillis;
+		long elapsedMinutes = diff / minuteInMillis;
+		diff = diff % minuteInMillis;
+		long elapsedSeconds = diff / secondInMillis;
+		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
+	}
+
+	/**
 	 * Check if the block is a fluid.
 	 * 
 	 * @param loc

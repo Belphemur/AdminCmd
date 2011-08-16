@@ -1,6 +1,5 @@
 package be.Balor.bukkit.AdminCmd;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
@@ -108,20 +107,7 @@ public class ACHelper {
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
-		long diff = System.currentTimeMillis() - pluginStarted;
-		long secondInMillis = 1000;
-		long minuteInMillis = secondInMillis * 60;
-		long hourInMillis = minuteInMillis * 60;
-		long dayInMillis = hourInMillis * 24;
-
-		long elapsedDays = diff / dayInMillis;
-		diff = diff % dayInMillis;
-		long elapsedHours = diff / hourInMillis;
-		diff = diff % hourInMillis;
-		long elapsedMinutes = diff / minuteInMillis;
-		diff = diff % minuteInMillis;
-		long elapsedSeconds = diff / secondInMillis;
-		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
+		return Utils.getElapsedTime(pluginStarted);
 	}
 
 	/**
@@ -219,8 +205,7 @@ public class ACHelper {
 		alias.clear();
 		blacklist.clear();
 		undoQueue.clear();
-		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
-				"config.yml"));
+		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
@@ -289,8 +274,7 @@ public class ACHelper {
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		fManager.getInnerFile("de_DE.yml", "locales");
 		fManager.getInnerFile("kits.yml");
-		pluginConfig = new ExtendedConfiguration(new File(pluginInstance.getDataFolder().getPath(),
-				"config.yml"));
+		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");
@@ -347,6 +331,7 @@ public class ACHelper {
 	 * Save elapsed time when reload
 	 */
 	public void saveElapsedTime() {
+		pluginConfig.load();
 		pluginConfig.setProperty("pluginStarted", pluginStarted);
 		pluginConfig.save();
 	}

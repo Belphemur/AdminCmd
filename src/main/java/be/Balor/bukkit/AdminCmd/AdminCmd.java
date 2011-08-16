@@ -280,7 +280,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("muteDisabled", ChatColor.DARK_GREEN + "You can chat again.");
 		Utils.addLocale("muteDisabledTarget", ChatColor.DARK_GREEN + "%player is unmuted.");
 		Utils.addLocale("muteEnabled", ChatColor.DARK_RED + "You can't chat anymore.");
-		Utils.addLocale("tmpMuteEnabled", ChatColor.DARK_RED + "You can't chat anymore for %minutes minutes.");
+		Utils.addLocale("tmpMuteEnabled", ChatColor.DARK_RED
+				+ "You can't chat anymore for %minutes minutes.");
 		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED + "%player is muted.");
 		Utils.addLocale("alreadyMuted", ChatColor.DARK_AQUA
 				+ "This player is already muted. To unmute him it's the unmute command.");
@@ -342,8 +343,10 @@ public class AdminCmd extends JavaPlugin {
 				+ ChatColor.WHITE + " to your inventory");
 		Utils.addLocale("tpRequestTimeOut", ChatColor.RED
 				+ "This tp request has timed out and will not be executed.");
-		Utils.addLocale("noTpRequest", ChatColor.GREEN
-				+ "There is no tp request to execute");
+		Utils.addLocale("noTpRequest", ChatColor.GREEN + "There is no tp request to execute");
+		Utils.addLocale("noteAfk", ChatColor.DARK_RED + "Note: " + ChatColor.WHITE
+				+ "%player is AFK at the moment:");
+		Utils.addLocale("idleTime", ChatColor.DARK_AQUA + "Idle for %mins minute(s)");
 		LocaleManager.getInstance().save();
 	}
 

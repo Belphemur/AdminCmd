@@ -93,13 +93,14 @@ final public class AFKWorker {
 		if (afkTime > 0)
 			this.kickTime = kickTime * 1000 * 60;
 	}
+
 	/**
 	 * Set the expiration for the values in memory.
+	 * 
 	 * @param exp
 	 */
-	public void setExpiration(long exp)
-	{
-		playerTimeStamp= new MapMaker().expiration(exp, TimeUnit.MINUTES).makeMap();
+	public void setExpiration(long exp) {
+		playerTimeStamp = new MapMaker().expiration(exp, TimeUnit.MINUTES).makeMap();
 	}
 
 	/**
@@ -128,13 +129,46 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	public void setAfk(Player p) {
+		setAfk(p, null);
+	}
+
+	/**
+	 * Set the player AFK with the given msg
+	 * 
+	 * @param p
+	 * @param msg
+	 */
+	public void setAfk(Player p, String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 			String afkString = Utils.I18n("afk", "player", p.getName());
 			if (afkString != null)
 				p.getServer().broadcastMessage(afkString);
 		}
-		playersAfk.put(p, new Object());
+		if (msg == null || (msg != null && msg.isEmpty()))
+			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
+		else
+			playersAfk.put(p, msg);
 		p.setSleepingIgnored(true);
+	}
+
+	/**
+	 * Send the corresponding afk message to the user
+	 * 
+	 * @param sender
+	 * @param buddy
+	 */
+	public void sendAfkMessage(Player sender, Player buddy) {
+		Object obj = playersAfk.get(buddy);
+		if (obj != null) {
+			Utils.sI18n(sender, "noteAfk", "player", buddy.getName());
+			if (obj instanceof String)
+				sender.sendMessage((String) obj);
+			else if (obj instanceof Long) {
+				Long[] time = Utils.getElapsedTime((Long) obj);
+				Utils.sI18n(sender, "idleTime", "%mins", time[1].toString());
+			}
+
+		}
 	}
 
 	/**

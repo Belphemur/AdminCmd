@@ -25,6 +25,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import belgium.Balor.Workers.AFKWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -91,7 +92,10 @@ public class PrivateMessage extends ACCommand {
 			if (parsed == null)
 				parsed = msg;
 			buddy.sendMessage(msgPrefix + senderPm + parsed);
-			sender.sendMessage(msgPrefix + senderPm + parsed);
+			if (AFKWorker.getInstance().isAfk(buddy)) {
+				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
+			} else
+				sender.sendMessage(msgPrefix + senderPm + parsed);
 			for (Player p : ACHelper.getInstance().getAllPowerUserOf(Type.SPYMSG))
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))

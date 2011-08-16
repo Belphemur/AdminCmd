@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,8 +51,12 @@ public class Afk extends ACCommand {
 			if (player != null) {
 				if (AFKWorker.getInstance().isAfk(player))
 					AFKWorker.getInstance().setOnline(player);
-				else
-					AFKWorker.getInstance().setAfk(player);
+				else {
+					if (args.length >= 1)
+						AFKWorker.getInstance().setAfk(player, args[0]);
+					else
+						AFKWorker.getInstance().setAfk(player);
+				}
 
 			}
 		}
@@ -67,7 +70,7 @@ public class Afk extends ACCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		return args != null;
 	}
 
 }
