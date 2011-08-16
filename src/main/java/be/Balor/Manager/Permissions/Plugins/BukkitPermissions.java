@@ -118,15 +118,20 @@ public class BukkitPermissions extends AbstractPermission {
 	 */
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
-		Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-		for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
-			Matcher regexMatcher = regex.matcher(info.getPermission());
-			if (regexMatcher.find())
-				return info.getPermission().split("\\.")[2];
-
-		}
+		String result = null;
 		if (mChatAPI != null)
-			return mChatAPI.getInfo(p, "admincmd." + limit);
+			result = mChatAPI.getInfo(p, "admincmd." + limit);
+		if (result == null || (result != null && result.isEmpty())) {
+			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
+			for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+				Matcher regexMatcher = regex.matcher(info.getPermission());
+				if (regexMatcher.find())
+					return info.getPermission().split("\\.")[2];
+
+			}
+		}
+		else
+			return result;
 		return null;
 	}
 
