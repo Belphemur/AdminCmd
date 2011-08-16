@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -836,10 +838,20 @@ public class ACHelper {
 		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
 		for (String key : map.keySet())
 			addValue(Type.BANNED, key, map.get(key));
-		map = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
-		for (String key : map.keySet())
-			addValue(Type.MUTED, key, map.get(key));
+		Map<String, Object> map2 = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
+		for (String key : map2.keySet())
+			addValue(Type.MUTED, key, map2.get(key));
 		kits.putAll(fManager.loadKits());
+		if (pluginConfig.getBoolean("verboseLog", true)) {
+			Logger.getLogger("Minecraft").info(
+					"[AdminCmd] " + blacklist.size() + " blacklisted items loaded.");
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + alias.size() + " alias loaded.");
+			Logger.getLogger("Minecraft").info(
+					"[AdminCmd] " + map.size() + " Banned players loaded.");
+			Logger.getLogger("Minecraft").info(
+					"[AdminCmd] " + map2.size() + " Muted players loaded.");
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + kits.size() + " kits loaded.");
+		}
 	}
 
 	public int getLimit(Player player, String type) {
