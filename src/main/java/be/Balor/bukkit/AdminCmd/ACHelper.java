@@ -218,6 +218,10 @@ public class ACHelper {
 			for (Player p : pluginInstance.getServer().getOnlinePlayers())
 				AFKWorker.getInstance().updateTimeStamp(p);
 		}
+		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
+			for (Player p : pluginInstance.getServer().getOnlinePlayers())
+				addValue(Type.TP_REQUEST, p.getName());
+		}
 	}
 
 	/**
@@ -303,6 +307,7 @@ public class ACHelper {
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
 		pluginConfig.addProperty("tpRequestTimeOutInMinutes", 5);
 		pluginConfig.addProperty("verboseLog", true);
+		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
 		pluginConfig.save();
 		init();
 	}
