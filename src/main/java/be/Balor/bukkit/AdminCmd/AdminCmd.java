@@ -349,7 +349,7 @@ public class AdminCmd extends JavaPlugin {
 				+ "%player is AFK at the moment:");
 		Utils.addLocale("idleTime", ChatColor.DARK_AQUA + "Idle for %mins minute(s)");
 		Utils.addLocale("pluginVersion", ChatColor.YELLOW + "Version of " + ChatColor.WHITE
-				+ "%plugin :" + ChatColor.GREEN + "%version");
+				+ "%plugin: " + ChatColor.GREEN + "%version");
 		LocaleManager.getInstance().save();
 	}
 
