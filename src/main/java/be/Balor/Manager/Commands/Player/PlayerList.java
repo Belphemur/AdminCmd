@@ -83,9 +83,7 @@ public class PlayerList extends ACCommand {
 			for (int i = 0; i < online.length; ++i) {
 				String name = online[i].getName();
 				String prefixstring;
-				String world = "";
 				String invPrefix = "";
-				world = online[i].getWorld().getName();
 				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(name))
 						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 					continue;
@@ -93,7 +91,7 @@ public class PlayerList extends ACCommand {
 					invPrefix = Utils.I18n("invTitle");
 				if (AFKWorker.getInstance().isAfk(online[i]))
 					invPrefix = Utils.I18n("afkTitle") + invPrefix;
-				prefixstring = PermissionManager.getPrefix(world, name);
+				prefixstring = PermissionManager.getPrefix(online[i]);
 				if (prefixstring != null && prefixstring.length() > 1) {
 					String result = Utils.colorParser(prefixstring);
 					if (result == null)

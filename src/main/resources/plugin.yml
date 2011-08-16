@@ -2,7 +2,7 @@ name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
 version: ${project.version}
 author: Balor
-softdepend: [MultiVerse,Permissions,BLAH]
+softdepend: [MultiVerse,Permissions,BLAH,mChat,OddItem]
 description: >
              This plugin implements the basic commands for running a server.
 commands:

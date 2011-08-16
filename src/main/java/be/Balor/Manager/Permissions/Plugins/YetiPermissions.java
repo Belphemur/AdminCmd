@@ -120,16 +120,18 @@ public class YetiPermissions extends AbstractPermission {
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public String getPrefix(String world, String player) {
+	public String getPrefix(Player player) {
+		String world = player.getWorld().getName();
+		String pName = player.getName();
 		String prefixstring= null;
 		try {
-			prefixstring = permission.safeGetUser(world, player)
+			prefixstring = permission.safeGetUser(world, pName)
 					.getPrefix();
 		} catch (Exception e) {
-			String group = permission.getGroup(world, player);
+			String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupPrefix(world, group);
 		} catch (NoSuchMethodError e) {
-			String group = permission.getGroup(world, player);
+			String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupPrefix(world, group);
 		}
 		return prefixstring;

@@ -67,10 +67,8 @@ public class PrivateMessage extends ACCommand {
 				if (PermissionManager.hasInfoNode()) {
 					String name = pSender.getName();
 					String prefixstring;
-					String world = "";
-					world = pSender.getWorld().getName();
 
-					prefixstring = PermissionManager.getPrefix(world, name);
+					prefixstring = PermissionManager.getPrefix(pSender);
 
 					if (prefixstring != null && prefixstring.length() > 1) {
 						String result = Utils.colorParser(prefixstring);

@@ -88,7 +88,7 @@ public class PermissionsEx extends AbstractPermission {
 	 * , java.lang.String)
 	 */
 	@Override
-	public String getPrefix(String world, String player) {
+	public String getPrefix(Player player) {
 		String prefix = "";
 		for (PermissionGroup group : PEX.getUser(player).getGroups())
 			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty())

@@ -178,8 +178,8 @@ public class PermissionManager {
 		return permissionHandler.getPermissionLimit(p, limit);
 	}
 
-	public static String getPrefix(String world, String player) {
-		return permissionHandler.getPrefix(world, player);
+	public static String getPrefix(Player player) {
+		return permissionHandler.getPrefix(player);
 	}
 
 	public static boolean hasInfoNode() {

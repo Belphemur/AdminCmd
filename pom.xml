@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.Balor</groupId>
 	<artifactId>AdminCmd</artifactId>
-	<version>5.7.11</version>
+	<version>5.7.15-SNAPSHOT</version>
 	<name>AdminCmd</name>
 	<url>http://forums.bukkit.org/threads/admn-gen-admincmd-5-4-time-give-tp-repair-heal-kill-item-blacklist-weather-etc-1000.10770/</url>
 	<scm>
@@ -191,6 +191,12 @@
 			<groupId>info.somethingodd.bukkit</groupId>
 			<artifactId>OddItem</artifactId>
 			<version>0.7.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.D3GN.MiracleM4n</groupId>
+			<artifactId>mChat</artifactId>
+			<version>v1.7.10_5</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

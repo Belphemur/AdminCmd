@@ -18,6 +18,8 @@ package be.Balor.Listeners;
 
 import info.somethingodd.bukkit.OddItem.OddItem;
 
+import net.D3GN.MiracleM4n.mChat.mChat;
+
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -25,6 +27,7 @@ import org.bukkit.plugin.Plugin;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
@@ -38,6 +41,9 @@ public class ACPluginListener extends ServerListener {
 
 	@Override
 	public void onPluginEnable(PluginEnableEvent event) {
+		if (event.getPlugin().getDescription().getName().equals("PermissionsEx"))
+			PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+
 		if (!PermissionManager.isPermissionsExSet()) {
 			Plugin Permissions = AdminCmd.getBukkitServer().getPluginManager()
 					.getPlugin("PermissionsEx");
@@ -58,7 +64,14 @@ public class ACPluginListener extends ServerListener {
 			Plugin items = AdminCmd.getBukkitServer().getPluginManager().getPlugin("OddItem");
 			if (items != null && items.isEnabled()) {
 				Utils.oddItem = (OddItem) items;
-				System.out.print("[AdminCmd] Successfully linked to OddItem");
+				System.out.print("[AdminCmd] Successfully linked with OddItem");
+			}
+		}
+		if (!BukkitPermissions.isApiSet()) {
+			Plugin mChatPlugin = AdminCmd.getBukkitServer().getPluginManager().getPlugin("mChat");
+			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
+				BukkitPermissions.setmChatapi(mChat.API);
+				System.out.print("[AdminCmd] Successfully linked with mChat");
 			}
 		}
 	}

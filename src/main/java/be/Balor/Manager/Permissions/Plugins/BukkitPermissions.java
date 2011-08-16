@@ -19,6 +19,8 @@ package be.Balor.Manager.Permissions.Plugins;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.D3GN.MiracleM4n.mChat.mChatAPI;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -32,11 +34,38 @@ import be.Balor.Tools.Utils;
  * 
  */
 public class BukkitPermissions extends AbstractPermission {
+	private static mChatAPI mChatAPI = null;
 
 	/**
 	 * 
 	 */
 	public BukkitPermissions() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Permissions.AbstractPermission#haveInfoNode()
+	 */
+	@Override
+	public boolean haveInfoNode() {
+		return mChatAPI != null;
+	}
+
+	/**
+	 * @param mChatAPI
+	 *            the mChatAPI to set
+	 */
+	public static void setmChatapi(mChatAPI mChatAPI) {
+		if (BukkitPermissions.mChatAPI == null && mChatAPI != null)
+			BukkitPermissions.mChatAPI = mChatAPI;
+	}
+
+	/**
+	 * @return the mChatAPI
+	 */
+	public static boolean isApiSet() {
+		return mChatAPI != null;
 	}
 
 	/*
@@ -96,15 +125,24 @@ public class BukkitPermissions extends AbstractPermission {
 				return info.getPermission().split("\\.")[2];
 
 		}
+		if (mChatAPI != null)
+			return mChatAPI.getInfo(p, "admincmd." + limit);
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
+	 * , java.lang.String)
 	 */
 	@Override
-	public String getPrefix(String world, String player) {
-		return null;
+	public String getPrefix(Player player) {
+		if (mChatAPI != null)
+			return mChatAPI.getPrefix(player);
+		else
+			return null;
 	}
 
 }

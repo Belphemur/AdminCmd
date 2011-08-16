@@ -56,7 +56,7 @@ public abstract class AbstractPermission {
 
 	public abstract String getPermissionLimit(Player p, String limit);
 
-	public abstract String getPrefix(String world, String player);
+	public abstract String getPrefix(Player player);
 
 	/**
 	 * @return the haveInfoNode
