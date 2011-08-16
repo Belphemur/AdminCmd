@@ -165,7 +165,7 @@ final public class AFKWorker {
 				sender.sendMessage((String) obj);
 			else if (obj instanceof Long) {
 				Long[] time = Utils.getElapsedTime((Long) obj);
-				Utils.sI18n(sender, "idleTime", "mins", time[1].toString());
+				Utils.sI18n(sender, "idleTime", "mins", time[2].toString());
 			}
 
 		}
