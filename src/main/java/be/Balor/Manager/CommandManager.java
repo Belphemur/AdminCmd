@@ -218,21 +218,23 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	public void checkAlias() {
-		for (String cmdName : pluginCommands.keySet()) {
-			Command cmd = pluginCommands.get(cmdName);
-			if (plugin.getCommand(cmd.getName()) != null) {
-				cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
-				cmd.getAliases().removeAll(prioritizedCommands);
-				String aliases = "";
-				for (String alias : cmd.getAliases())
-					aliases += alias + ", ";
-				if (!aliases.isEmpty()
-						&& (Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
-					Logger.getLogger("Minecraft").info(
-							"[" + plugin.getDescription().getName() + "] Disabled Alias(es) for "
-									+ cmd.getName() + " : " + aliases);
+		if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+			for (String cmdName : pluginCommands.keySet()) {
+				Command cmd = pluginCommands.get(cmdName);
+				if (plugin.getCommand(cmd.getName()) != null) {
+					cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
+					cmd.getAliases().removeAll(prioritizedCommands);
+					String aliases = "";
+					for (String alias : cmd.getAliases())
+						aliases += alias + ", ";
+					if (!aliases.isEmpty()
+							&& (Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+						Logger.getLogger("Minecraft").info(
+								"[" + plugin.getDescription().getName()
+										+ "] Disabled Alias(es) for " + cmd.getName() + " : "
+										+ aliases);
+				}
 			}
-		}
 	}
 
 	public void stopAllExecutorThreads() {
