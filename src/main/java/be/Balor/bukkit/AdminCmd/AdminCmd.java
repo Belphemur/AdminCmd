@@ -315,7 +315,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("reExec", ChatColor.YELLOW + "Repeating the last command.");
 		Utils.addLocale("timeSet", ChatColor.GOLD + "Time set to %type in world : "
 				+ ChatColor.WHITE + "%world");
-		Utils.addLocale("timeSet", ChatColor.RED + "%type doesn't exist.");
+		Utils.addLocale("timeNotSet", ChatColor.RED + "%type doesn't exist.");
 		Utils.addLocale("timePaused", ChatColor.DARK_RED + "Time is paused in " + ChatColor.WHITE
 				+ "%world. " + ChatColor.DARK_GREEN + "To unpause : /time unpause .");
 		Utils.addLocale("moreAll", ChatColor.AQUA
