@@ -110,9 +110,9 @@ public class ACPlayerListener extends PlayerListener {
 			if ((Boolean) ACHelper.getInstance().getConfValue("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
 		}
-		if ((Boolean) ACHelper.getInstance().getConfValue("tpRequestActivatedByDefault"))
-			if (!ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName()))
-				ACHelper.getInstance().addValue(Type.TP_REQUEST, p.getName());
+		if ((Boolean) ACHelper.getInstance().getConfValue("tpRequestActivatedByDefault")
+				&& !ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName()))
+			ACHelper.getInstance().addValue(Type.TP_REQUEST, p.getName());
 	}
 
 	@Override
