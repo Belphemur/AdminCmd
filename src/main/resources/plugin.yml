@@ -305,4 +305,4 @@ commands:
   bal_list:
     description: List the player having the "type"
     aliases: [list,info]
-    usage: /<command> type
+    usage: /<command> <FLY,VULCAN,GOD,THOR,BANNED,FIREBALL,SPYMSG,FROZEN,MUTED,MOB_LIMIT,NO_PICKUP,WEATHER_FROZEN,REPEAT_CMD,TIME_FREEZED,TP_REQUEST,TP_AT_SEE>

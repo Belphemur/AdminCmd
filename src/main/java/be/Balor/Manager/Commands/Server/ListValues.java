@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
@@ -48,6 +49,12 @@ public class ListValues extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
+		if(args.length==0)
+		{
+			sender.sendMessage(ChatColor.DARK_AQUA+"Possibles Types :");
+			sender.sendMessage(Arrays.toString(Type.values()));
+			return;
+		}
 		String arg = "";
 		for (String str : args)
 			arg += str + " ";
@@ -55,7 +62,7 @@ public class ListValues extends ACCommand {
 		Set<String> list = ACHelper.getInstance().getUserList(arg);
 		if (list != null) {
 			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
-					+ "(" + list.size() + ")" + ChatColor.AQUA + ":");
+					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");
 			String buffer = "";
 			for (String value : list)
 				buffer += value + ", ";
