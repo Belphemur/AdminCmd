@@ -50,7 +50,7 @@ public class DeleteHome extends ACCommand {
 		{
 			Player p = (Player)sender;
 			ACHelper.getInstance().getHomeList(p.getName()).remove(args[0]);
-			ACHelper.getInstance().removeLocation("home", p.getName()+"."+args[0], args[0], p.getName());
+			ACHelper.getInstance().removeLocation("home", p.getName()+"."+args[0], "home."+args[0], p.getName());
 			Utils.sI18n(sender, "rmHome", "home", args[0]);
 		}
 

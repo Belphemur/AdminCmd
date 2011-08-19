@@ -49,8 +49,7 @@ public class Home extends ACCommand {
 			if (args.length >= 1)
 				home = args[0];
 			Location loc = ACHelper.getInstance().getLocation("home",
-					player.getName() + "." + home, home,
-					player.getName());
+					player.getName() + "." + home, "home." + home, player.getName());
 			if (loc == null)
 				Utils.sI18n(sender, "errorMultiHome", "home", home);
 			else {

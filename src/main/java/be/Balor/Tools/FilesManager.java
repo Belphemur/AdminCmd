@@ -252,12 +252,12 @@ public class FilesManager {
 	 */
 	public void writeLocationFile(Location loc, String name, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		conf.setProperty(directory + "." + name + ".world", loc.getWorld().getName());
-		conf.setProperty(directory + "." + name + ".x", loc.getX());
-		conf.setProperty(directory + "." + name + ".y", loc.getY());
-		conf.setProperty(directory + "." + name + ".z", loc.getZ());
-		conf.setProperty(directory + "." + name + ".yaw", loc.getYaw());
-		conf.setProperty(directory + "." + name + ".pitch", loc.getPitch());
+		conf.setProperty(name + ".world", loc.getWorld().getName());
+		conf.setProperty(name + ".x", loc.getX());
+		conf.setProperty(name + ".y", loc.getY());
+		conf.setProperty(name + ".z", loc.getZ());
+		conf.setProperty(name + ".yaw", loc.getYaw());
+		conf.setProperty(name + ".pitch", loc.getPitch());
 		conf.save();
 	}
 
@@ -271,15 +271,15 @@ public class FilesManager {
 	 */
 	public Location getLocationFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		if (conf.getProperty(directory + "." + property + ".world") == null)
+		if (conf.getProperty(property + ".world") == null)
 			return parseLocation(property, conf, directory);
 		else {
 			return new Location(AdminCmd.getBukkitServer().getWorld(
-					conf.getString(directory + "." + property + ".world")), conf.getDouble(
-					directory + "." + property + ".x", 0), conf.getDouble(directory + "."
-					+ property + ".y", 0), conf.getDouble(directory + "." + property + ".z", 0),
-					Float.parseFloat(conf.getString(directory + "." + property + ".yaw")),
-					Float.parseFloat(conf.getString(directory + "." + property + ".pitch")));
+					conf.getString( property + ".world")), conf.getDouble(
+					 property + ".x", 0), conf.getDouble(directory + "."
+					+ property + ".y", 0), conf.getDouble( property + ".z", 0),
+					Float.parseFloat(conf.getString( property + ".yaw")),
+					Float.parseFloat(conf.getString( property + ".pitch")));
 		}
 	}
 
@@ -292,7 +292,7 @@ public class FilesManager {
 	 */
 	public void removeLocationFromFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		conf.removeProperty(directory + "." + property);
+		conf.removeProperty(property);
 		conf.save();
 	}
 

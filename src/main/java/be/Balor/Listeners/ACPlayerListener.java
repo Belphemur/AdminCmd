@@ -136,6 +136,8 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
+		ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc", playername,
+				from);
 		if (ACHelper.getInstance().isValueSet(Type.FROZEN, playername)) {
 			event.setCancelled(true);
 			return;

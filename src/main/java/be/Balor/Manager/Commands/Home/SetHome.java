@@ -64,8 +64,8 @@ public class SetHome extends ACCommand {
 				return;
 			}
 			tmp.add(home);
-			ACHelper.getInstance().addLocation("home", p.getName() + "." + home, home, p.getName(),
-					loc);
+			ACHelper.getInstance().addLocation("home", p.getName() + "." + home, "home." + home,
+					p.getName(), loc);
 			Utils.sI18n(sender, "setMultiHome", "home", home);
 		}
 
