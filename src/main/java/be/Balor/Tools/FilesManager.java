@@ -275,11 +275,10 @@ public class FilesManager {
 			return parseLocation(property, conf, directory);
 		else {
 			return new Location(AdminCmd.getBukkitServer().getWorld(
-					conf.getString( property + ".world")), conf.getDouble(
-					 property + ".x", 0), conf.getDouble(directory + "."
-					+ property + ".y", 0), conf.getDouble( property + ".z", 0),
-					Float.parseFloat(conf.getString( property + ".yaw")),
-					Float.parseFloat(conf.getString( property + ".pitch")));
+					conf.getString(property + ".world")), conf.getDouble(property + ".x", 0),
+					conf.getDouble(property + ".y", 0), conf.getDouble(property
+							+ ".z", 0), Float.parseFloat(conf.getString(property + ".yaw")),
+					Float.parseFloat(conf.getString(property + ".pitch")));
 		}
 	}
 
@@ -379,7 +378,7 @@ public class FilesManager {
 				}
 				result.put(key, new ArrayList<MaterialContainer>(items));
 				items.clear();
-			}			
+			}
 		}
 		return result;
 	}
