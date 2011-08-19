@@ -144,6 +144,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Uptime.class);
 		CommandManager.getInstance().registerCommand(Kit.class);
 		CommandManager.getInstance().registerCommand(Version.class);
+		CommandManager.getInstance().registerCommand(ListValues.class);
 	}
 
 	private void setDefaultLocale() {
@@ -350,6 +351,8 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("idleTime", ChatColor.DARK_AQUA + "Idle for %mins minute(s)");
 		Utils.addLocale("pluginVersion", ChatColor.YELLOW + "Version of " + ChatColor.WHITE
 				+ "%plugin: " + ChatColor.GREEN + "%version");
+		Utils.addLocale("emptyList", ChatColor.RED
+				+ "Empty list or the selected type don't exists.");
 		LocaleManager.getInstance().save();
 	}
 

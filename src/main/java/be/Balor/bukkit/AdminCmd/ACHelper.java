@@ -679,9 +679,25 @@ public class ACHelper {
 	 * Get a list of the StoredValue using the wanted type.
 	 * 
 	 * @param type
+	 *            String
 	 * @return
 	 */
-	public Set<String> getAllKeys(Type type) {
+	public Set<String> getUserList(String type) {
+		Type toList = Type.matchType(type);
+		if (toList == null)
+			return null;
+		else
+			return getUserList(toList);
+	}
+
+	/**
+	 * Get a list of the StoredValue using the wanted type.
+	 * 
+	 * @param type
+	 *            Type
+	 * @return
+	 */
+	public Set<String> getUserList(Type type) {
 		if (storedTypeValues.containsKey(type))
 			return new HashSet<String>(storedTypeValues.get(type).keySet());
 		return null;

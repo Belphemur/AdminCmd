@@ -16,37 +16,72 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import java.util.HashMap;
+import java.util.Map;
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public enum Type {
-	FLY(Category.PLAYER), 
-	VULCAN(Category.PLAYER), 
-	GOD(Category.PLAYER), 
-	THOR(Category.PLAYER), 
-	BANNED(Category.SANCTION), 
-	FIREBALL(Category.PLAYER), 
-	SPYMSG(Category.OTHER), 
-	FROZEN(Category.SANCTION), 
-	MUTED(Category.SANCTION), 
-	MOB_LIMIT(Category.WORLD), 
-	NO_PICKUP(Category.PLAYER), 
-	WEATHER_FROZEN(Category.WORLD), 
-	REPEAT_CMD(Category.OTHER), 
+	FLY(Category.PLAYER),
+	VULCAN(Category.PLAYER),
+	GOD(Category.PLAYER),
+	THOR(Category.PLAYER),
+	BANNED(	Category.SANCTION),
+	FIREBALL(Category.PLAYER),
+	SPYMSG(Category.OTHER),
+	FROZEN(	Category.SANCTION),
+	MUTED(Category.SANCTION),
+	MOB_LIMIT(Category.WORLD),
+	NO_PICKUP(Category.PLAYER),
+	WEATHER_FROZEN(Category.WORLD),
+	REPEAT_CMD(Category.OTHER),
 	TIME_FREEZED(Category.WORLD),
 	TP_REQUEST(Category.OTHER),
 	TP_AT_SEE(Category.PLAYER);
+
+	private static final Map<String, Type> lookupName = new HashMap<String, Type>();
+
 	@Override
 	public String toString() {
 		String s = super.toString();
 		return s.toLowerCase();
+	}
+	
+	public String display() {
+		String s = super.toString();
+		return s.substring(0, 1) + s.substring(1).toLowerCase().replaceAll("_", " ");
 	}
 
 	private final Category category;
 
 	private Type(Category category) {
 		this.category = category;
+	}
+
+	/**
+	 * Attempts to match the Type with the given name. This is a match lookup;
+	 * names will be converted to uppercase, then stripped of special characters
+	 * in an attempt to format it like the enum
+	 * 
+	 * @param name
+	 *            Name of the type to get
+	 * @return Type if found, or null
+	 */
+	public static Type matchType(final String name) {
+		Type result = null;
+
+		String filtered = name.toUpperCase();
+		filtered = filtered.replaceAll("\\s+", "_").replaceAll("\\W", "");
+		result = lookupName.get(filtered);
+
+		return result;
+	}
+
+	static {
+		for (Type type : values()) {
+			lookupName.put(type.name(), type);
+		}
 	}
 
 	/**
@@ -61,15 +96,17 @@ public enum Type {
 	public enum Category {
 		PLAYER, WORLD, OTHER, SANCTION;
 	}
+
 	public enum Weather {
 		STORM, RAIN, CLEAR, FREEZE;
 	}
+
 	public enum Tp {
 		TP_HERE, TP_TO, TP_PLAYERS;
 		@Override
 		public String toString() {
 			String s = super.toString();
-			return s.toLowerCase().replaceAll("_"," ");
+			return s.toLowerCase().replaceAll("_", " ");
 		}
 	}
 }

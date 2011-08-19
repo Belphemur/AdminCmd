@@ -54,4 +54,14 @@ public class TpRequest {
 			Utils.sI18n(from, "tp", replace);
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Teleport : " + from.getName() + " -> " + to.getName();
+	}
 }
