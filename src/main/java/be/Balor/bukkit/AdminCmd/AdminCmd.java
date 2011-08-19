@@ -145,6 +145,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Kit.class);
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
+		CommandManager.getInstance().registerCommand(LastLocation.class);
 	}
 
 	private void setDefaultLocale() {
@@ -353,6 +354,10 @@ public class AdminCmd extends JavaPlugin {
 				+ "%plugin: " + ChatColor.GREEN + "%version");
 		Utils.addLocale("emptyList", ChatColor.RED
 				+ "Empty list or the selected type don't exists.");
+		Utils.addLocale("telportSuccess", ChatColor.DARK_GREEN
+				+ "You have been successfully teleported.");
+		Utils.addLocale("noLastLocation", ChatColor.RED
+				+ "You don't have a last location to tp back");
 		LocaleManager.getInstance().save();
 	}
 

@@ -306,3 +306,7 @@ commands:
     description: List the player having the "type"
     aliases: [list,info]
     usage: /<command> <FLY,VULCAN,GOD,THOR,BANNED,FIREBALL,SPYMSG,FROZEN,MUTED,MOB_LIMIT,NO_PICKUP,WEATHER_FROZEN,REPEAT_CMD,TIME_FREEZED,TP_REQUEST,TP_AT_SEE>
+  bal_back:
+    description: Return to the last location before tp.
+    aliases: [back,lastloc]
+    usage: /<command>

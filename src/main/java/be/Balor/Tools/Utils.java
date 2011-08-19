@@ -337,14 +337,14 @@ public class Utils {
 		}
 
 		if (found) {
-			if ((type.equals(Type.Tp.TP_TO) || type.equals(Type.Tp.TP_PLAYERS))
+			if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
 					&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
 					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 				replace.put("player", nTo);
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return;
 			}
-			if ((type.equals(Type.Tp.TP_HERE) || type.equals(Type.Tp.TP_PLAYERS))
+			if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
 					&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
 							.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
 				replace.put("player", nFrom);
@@ -356,7 +356,7 @@ public class Utils {
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
 				Utils.sI18n(sender, "tp", replace);
-			} else if ((type.equals(Type.Tp.TP_TO) || type.equals(Type.Tp.TP_PLAYERS))
+			} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
 					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pTo)) {
 				ACHelper.getInstance().addValue(Type.TP_REQUEST, pTo, new TpRequest(pFrom, pTo));
 				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
@@ -365,7 +365,7 @@ public class Utils {
 				replace2.put("tp_type", type.toString());
 				Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
-			} else if ((type.equals(Type.Tp.TP_HERE) || type.equals(Type.Tp.TP_PLAYERS))
+			} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
 					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pFrom)) {
 				ACHelper.getInstance().addValue(Type.TP_REQUEST, pFrom, new TpRequest(pFrom, pTo));
 				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());

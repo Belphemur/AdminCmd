@@ -16,48 +16,61 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Tp;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommand;
-import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpHere extends ACCommand {
+public class LastLocation extends ACCommand {
 
 	/**
 	 * 
 	 */
-	public TpHere() {
-		permNode = "admincmd.tp.here";
-		cmdName = "bal_tphere";
+	public LastLocation() {
+		permNode = "admincmd.tp.back";
+		cmdName = "bal_back";
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if (Utils.isPlayer(sender))
-			Utils.tpP2P(sender, args[0], ((Player) sender).getName(), Type.Tp.HERE);
+		if (Utils.isPlayer(sender)) {
+			Player player = (Player) sender;
+
+			Location loc = ACHelper.getInstance().getLocation("home",
+					player.getName() + ".lastLoc", "lastLoc", player.getName());
+			if (loc == null) {
+				Utils.sI18n(sender, "noLastLocation");
+				return;
+			}
+			player.teleport(loc);
+			Utils.sI18n(sender, "telportSuccess");
+			ACHelper.getInstance().removeLocation("home", player.getName() + ".lastLoc", "lastLoc",
+					player.getName());
+		}
+
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
+		return true;
 	}
 
 }

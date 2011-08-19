@@ -102,7 +102,7 @@ public enum Type {
 	}
 
 	public enum Tp {
-		TP_HERE, TP_TO, TP_PLAYERS;
+		HERE, TO, PLAYERS;
 		@Override
 		public String toString() {
 			String s = super.toString();

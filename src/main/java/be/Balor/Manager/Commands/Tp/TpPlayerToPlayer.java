@@ -48,11 +48,11 @@ public class TpPlayerToPlayer extends ACCommand {
 		Player from = sender.getServer().getPlayer(args[0]);
 		Player to = sender.getServer().getPlayer(args[1]);
 		if (from != null && from.equals(sender))
-			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TP_TO);
+			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TO);
 		else if (to != null && to.equals(sender))
-			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TP_HERE);
+			Utils.tpP2P(sender, args[0], args[1], Type.Tp.HERE);
 		else
-			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TP_PLAYERS);
+			Utils.tpP2P(sender, args[0], args[1], Type.Tp.PLAYERS);
 	}
 
 	/*

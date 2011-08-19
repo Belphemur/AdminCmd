@@ -47,7 +47,7 @@ public class TpTo extends ACCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender))
-			Utils.tpP2P(sender, ((Player) sender).getName(), args[0], Type.Tp.TP_TO);
+			Utils.tpP2P(sender, ((Player) sender).getName(), args[0], Type.Tp.TO);
 	}
 
 	/*
