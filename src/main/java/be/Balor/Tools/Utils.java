@@ -39,6 +39,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
+import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -99,7 +100,7 @@ public class Utils {
 			Pattern regex = Pattern.compile(delimiter + "[A-Fa-f]|" + delimiter + "1[0-5]|"
 					+ delimiter + "[0-9]");
 			Matcher regexMatcher = regex.matcher(toParse);
-			String result = null;
+			String result = toParse;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
 				int colorint = Integer.parseInt(ResultString.substring(1, 2), 16);
@@ -113,7 +114,7 @@ public class Utils {
 			}
 			return result;
 		} catch (Exception ex) {
-			return null;
+			return toParse;
 		}
 	}
 
@@ -486,7 +487,7 @@ public class Utils {
 			String connected = "";
 			for (Player player : p.getServer().getOnlinePlayers())
 				if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
-					connected += player.getDisplayName() + ", ";
+					connected += getPrefix(player, p) + player.getName() + ", ";
 			if (!connected.equals("")) {
 				if (connected.endsWith(", "))
 					connected = connected.substring(0, connected.lastIndexOf(","));
@@ -670,6 +671,30 @@ public class Utils {
 			throw new IllegalArgumentException();
 		}
 		throw new ArrayIndexOutOfBoundsException();
+	}
+
+	/**
+	 * Get the prefix of the player, by checking the right the sender have
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public static String getPrefix(Player player, CommandSender sender) {
+		boolean isInv = false;
+		String prefixstring;
+		String statusPrefix = "";
+		isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())
+				&& PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
+		if (isInv)
+			statusPrefix = Utils.I18n("invTitle");
+		if (AFKWorker.getInstance().isAfk(player))
+			statusPrefix = Utils.I18n("afkTitle") + statusPrefix;
+		prefixstring = PermissionManager.getPrefix(player);
+		String result = statusPrefix;
+		if (prefixstring != null && prefixstring.length() > 1)
+			result += prefixstring;
+		return colorParser(result);
+
 	}
 
 	private static class FreezeTime implements Runnable {

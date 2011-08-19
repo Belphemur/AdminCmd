@@ -262,7 +262,7 @@ public class ACHelper {
 			pluginConfig.save();
 		} else
 			pluginStarted = System.currentTimeMillis();
-		
+
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (Player p : pluginInstance.getServer().getOnlinePlayers())
 				addValue(Type.TP_REQUEST, p.getName());
@@ -661,12 +661,30 @@ public class ACHelper {
 		return getValue(powerName, user.getName());
 	}
 
-	public List<Player> getAllPowerUserOf(Type power) {
+	/**
+	 * Get all the Player having the "Power"
+	 * 
+	 * @param power
+	 * @return
+	 */
+	public List<Player> getAllUserOf(Type power) {
 		List<Player> players = new ArrayList<Player>();
 		if (storedTypeValues.containsKey(power))
 			for (String player : storedTypeValues.get(power).keySet())
 				players.add(pluginInstance.getServer().getPlayer(player));
 		return players;
+	}
+
+	/**
+	 * Get a list of the StoredValue using the wanted type.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public Set<String> getAllKeys(Type type) {
+		if (storedTypeValues.containsKey(type))
+			return new HashSet<String>(storedTypeValues.get(type).keySet());
+		return null;
 	}
 
 	/**

@@ -68,18 +68,9 @@ public class PrivateMessage extends ACCommand {
 				if (PermissionManager.hasInfoNode()) {
 					String name = pSender.getName();
 					String prefixstring;
+					prefixstring = Utils.getPrefix(pSender, buddy);
+					senderPm = prefixstring + name + ChatColor.WHITE + " - ";
 
-					prefixstring = PermissionManager.getPrefix(pSender);
-
-					if (prefixstring != null && prefixstring.length() > 1) {
-						String result = Utils.colorParser(prefixstring);
-						if (result == null)
-							senderPm = prefixstring + name + ChatColor.WHITE + " - ";
-						else
-							senderPm = result + name + ChatColor.WHITE + " - ";
-
-					} else
-						senderPm = name + " - ";
 				} else
 					senderPm = pSender.getName() + " - ";
 			} else
@@ -96,7 +87,7 @@ public class PrivateMessage extends ACCommand {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
 				sender.sendMessage(msgPrefix + senderPm + parsed);
-			for (Player p : ACHelper.getInstance().getAllPowerUserOf(Type.SPYMSG))
+			for (Player p : ACHelper.getInstance().getAllUserOf(Type.SPYMSG))
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))
 					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "

@@ -57,19 +57,12 @@ public class PlayerList extends ACCommand {
 		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
 		String buffer = "";
 		if (!PermissionManager.hasInfoNode()) {
-			boolean isInv = false;
 			for (int i = 0; i < online.length; ++i) {
 				Player p = online[i];
-				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+				if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 					continue;
-				String name = "";
-				if (isInv)
-					name = Utils.I18n("invTitle") + p.getName();
-				else
-					name = p.getDisplayName();
-				if (AFKWorker.getInstance().isAfk(p))
-					name = Utils.I18n("afkTitle") + name;
+				String name = Utils.getPrefix(p, sender) + p.getName();
 				if (buffer.length() + name.length() + 2 >= 256) {
 					sender.sendMessage(buffer);
 					buffer = "";
@@ -95,11 +88,9 @@ public class PlayerList extends ACCommand {
 				if (prefixstring != null && prefixstring.length() > 1) {
 					String result = Utils.colorParser(prefixstring);
 					if (result == null)
-						buffer += invPrefix + prefixstring + name
-								+ ChatColor.WHITE + ", ";
+						buffer += invPrefix + prefixstring + name + ChatColor.WHITE + ", ";
 					else
-						buffer += invPrefix + result + name + ChatColor.WHITE
-								+ ", ";
+						buffer += invPrefix + result + name + ChatColor.WHITE + ", ";
 
 				} else {
 					buffer += invPrefix + name + ", ";
