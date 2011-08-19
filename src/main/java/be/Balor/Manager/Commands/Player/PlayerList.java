@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
-import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -56,52 +55,17 @@ public class PlayerList extends ACCommand {
 			amount -= InvisibleWorker.getInstance().nbInvisibles();
 		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
 		String buffer = "";
-		if (!PermissionManager.hasInfoNode()) {
-			for (int i = 0; i < online.length; ++i) {
-				Player p = online[i];
-				if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
-					continue;
-				String name = Utils.getPrefix(p, sender) + p.getName();
-				if (buffer.length() + name.length() + 2 >= 256) {
-					sender.sendMessage(buffer);
-					buffer = "";
-				}
-				buffer += name + ", ";
-
+		for (int i = 0; i < online.length; ++i) {
+			Player p = online[i];
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
+				continue;
+			String name = Utils.getPrefix(p, sender) + p.getName();
+			if (buffer.length() + name.length() + 2 >= 256) {
+				sender.sendMessage(buffer);
+				buffer = "";
 			}
-		} else {
-			// changed the playerlist, now support prefixes from groups!!! @foxy
-			boolean isInv = false;
-			for (int i = 0; i < online.length; ++i) {
-				String name = online[i].getName();
-				String prefixstring;
-				String invPrefix = "";
-				if ((isInv = InvisibleWorker.getInstance().hasInvisiblePowers(name))
-						&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
-					continue;
-				if (isInv)
-					invPrefix = Utils.I18n("invTitle");
-				if (AFKWorker.getInstance().isAfk(online[i]))
-					invPrefix = Utils.I18n("afkTitle") + invPrefix;
-				prefixstring = PermissionManager.getPrefix(online[i]);
-				if (prefixstring != null && prefixstring.length() > 1) {
-					String result = Utils.colorParser(prefixstring);
-					if (result == null)
-						buffer += invPrefix + prefixstring + name + ChatColor.WHITE + ", ";
-					else
-						buffer += invPrefix + result + name + ChatColor.WHITE + ", ";
-
-				} else {
-					buffer += invPrefix + name + ", ";
-				}
-				if (buffer.length() >= 256) {
-					sender.sendMessage(buffer);
-					buffer = "";
-				}
-
-			}
-
+			buffer += name + ", ";
 		}
 		if (!buffer.equals("")) {
 			if (buffer.endsWith(", "))

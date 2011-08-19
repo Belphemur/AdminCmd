@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommand;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -65,14 +64,11 @@ public class PrivateMessage extends ACCommand {
 			if (Utils.isPlayer(sender, false)) {
 				Player pSender = (Player) sender;
 				senderName = pSender.getName();
-				if (PermissionManager.hasInfoNode()) {
-					String name = pSender.getName();
-					String prefixstring;
-					prefixstring = Utils.getPrefix(pSender, buddy);
-					senderPm = prefixstring + name + ChatColor.WHITE + " - ";
+				String name = pSender.getName();
+				String prefixstring;
+				prefixstring = Utils.getPrefix(pSender, buddy);
+				senderPm = prefixstring + name + ChatColor.WHITE + " - ";
 
-				} else
-					senderPm = pSender.getName() + " - ";
 			} else
 				senderPm = "Server Admin" + " - ";
 
