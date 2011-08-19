@@ -53,6 +53,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACPlayerListener extends PlayerListener {
+	private boolean otherWorld = false;
 
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
@@ -136,8 +137,11 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
-		ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc", playername,
-				from);
+		if (!otherWorld) {
+			ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc",
+					playername, from);
+		}
+		otherWorld = !from.getWorld().equals(to.getWorld());
 		if (ACHelper.getInstance().isValueSet(Type.FROZEN, playername)) {
 			event.setCancelled(true);
 			return;
