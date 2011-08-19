@@ -53,7 +53,6 @@ public class Home extends ACCommand {
 			if (loc == null)
 				Utils.sI18n(sender, "errorMultiHome", "home", home);
 			else {
-				System.out.print(loc.toString());
 				player.teleport(loc);
 				Utils.sI18n(sender, "multiHome", "home", home);
 			}
