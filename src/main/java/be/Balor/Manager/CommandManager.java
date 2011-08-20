@@ -19,6 +19,7 @@ package be.Balor.Manager;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
@@ -34,9 +35,11 @@ import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
+import be.Balor.Tools.FilesManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -74,22 +77,6 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public static void killInstance() {
 		instance = null;
-	}
-
-	/**
-	 * @param disabledCommands
-	 *            the disabledCommands to set
-	 */
-	public void setDisabledCommands(List<String> disabledCommands) {
-		this.disabledCommands = disabledCommands;
-	}
-
-	/**
-	 * @param prioritizedCommands
-	 *            the prioritizedCommands to set
-	 */
-	public void setPrioritizedCommands(List<String> prioritizedCommands) {
-		this.prioritizedCommands = prioritizedCommands;
 	}
 
 	/**
@@ -157,6 +144,9 @@ public class CommandManager implements CommandExecutor {
 		this.plugin = plugin;
 		for (Command cmd : PluginCommandYamlParser.parse(plugin))
 			pluginCommands.put(cmd.getName(), cmd);
+		Configuration cmds = FilesManager.getInstance().getYml("commands");
+		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
+		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
 		startThreads();
 	}
 

@@ -257,10 +257,6 @@ public class ACHelper {
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		CommandManager.getInstance().setPlugin(pluginInstance);
-		CommandManager.getInstance().setDisabledCommands(
-				pluginConfig.getStringList("disabledCommands", new LinkedList<String>()));
-		CommandManager.getInstance().setPrioritizedCommands(
-				pluginConfig.getStringList("prioritizedCommands", new LinkedList<String>()));
 		AdminCmd.registerCmds();
 		CommandManager.getInstance().checkAlias();
 		if (pluginConfig.getProperty("pluginStarted") != null) {
@@ -308,8 +304,6 @@ public class ACHelper {
 		pluginConfig.addProperty("glinding.multiplicator", 0.1F);
 		pluginConfig.addProperty("glinding.YvelocityCheckToGlide", -0.2F);
 		pluginConfig.addProperty("glinding.newYvelocity", -0.5F);
-		pluginConfig.addProperty("prioritizedCommands", Arrays.asList("reload"));
-		pluginConfig.addProperty("disabledCommands", new LinkedList<String>());
 		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
 		pluginConfig.addProperty("mutedPlayerCantPm", false);
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
@@ -317,6 +311,21 @@ public class ACHelper {
 		pluginConfig.addProperty("verboseLog", true);
 		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
 		pluginConfig.save();
+		List<String> disabled = new ArrayList<String>();
+		List<String> priority = new ArrayList<String>();
+		if (pluginConfig.getProperty("disabledCommands") != null) {
+			disabled = pluginConfig.getStringList("disabledCommands", disabled);
+			pluginConfig.removeProperty("disabledCommands");
+		}
+		if (pluginConfig.getProperty("prioritizedCommands") != null) {
+			priority = pluginConfig.getStringList("prioritizedCommands", priority);
+			pluginConfig.removeProperty("prioritizedCommands");
+		}
+		ExtendedConfiguration commands = new ExtendedConfiguration("commands", null);
+		commands.addProperty("disabledCommands", disabled);
+		commands.addProperty("prioritizedCommands",
+				priority.isEmpty() ? Arrays.asList("reload", "/") : priority);
+		commands.save();
 		init();
 	}
 
@@ -721,7 +730,8 @@ public class ACHelper {
 		for (Type type : storedTypeValues.keySet()) {
 			if (!type.getCategory().equals(Category.PLAYER))
 				continue;
-			if(type.equals(Type.TP_REQUEST) && PermissionManager.hasPerm(player, "admincmd.tp.toggle"))
+			if (type.equals(Type.TP_REQUEST)
+					&& PermissionManager.hasPerm(player, "admincmd.tp.toggle"))
 				continue;
 			if (storedTypeValues.get(type).remove(player.getName()) != null)
 				found = true;
