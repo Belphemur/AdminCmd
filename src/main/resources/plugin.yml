@@ -193,7 +193,7 @@ commands:
   bal_ban:
     description: ban the player.
     aliases: [ban,pban]
-    usage: /<command> playerName [reason] 
+    usage: /<command> playerName [reason] <duration>
   bal_unban:
     description: unban the player.
     aliases: [unban,ub]
@@ -213,7 +213,7 @@ commands:
   bal_mute:
     description: mute the player.
     aliases: [mute]
-    usage: /<command> playerName
+    usage: /<command> playerName <duration>
   bal_unmute:
     description: unmute the player.
     aliases: [unmute]
