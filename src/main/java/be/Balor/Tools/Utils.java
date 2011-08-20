@@ -167,7 +167,8 @@ public class Utils {
 			target.setFireTicks(0);
 		} else {
 			target.setHealth(0);
-			logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
+			if (logBlock != null)
+				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
 		}
 
 		return true;
