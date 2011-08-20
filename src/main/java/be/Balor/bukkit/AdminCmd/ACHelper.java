@@ -309,8 +309,7 @@ public class ACHelper {
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
 		pluginConfig.addProperty("tpRequestTimeOutInMinutes", 5);
 		pluginConfig.addProperty("verboseLog", true);
-		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
-		pluginConfig.save();
+		pluginConfig.addProperty("tpRequestActivatedByDefault", false);		
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {
@@ -321,6 +320,7 @@ public class ACHelper {
 			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.removeProperty("prioritizedCommands");
 		}
+		pluginConfig.save();
 		ExtendedConfiguration commands = new ExtendedConfiguration("commands.yml", null);
 		commands.addProperty("disabledCommands", disabled);
 		commands.addProperty("prioritizedCommands",
