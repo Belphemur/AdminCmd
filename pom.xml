@@ -7,9 +7,9 @@
 	<name>AdminCmd</name>
 	<url>http://forums.bukkit.org/threads/admn-gen-admincmd-5-4-time-give-tp-repair-heal-kill-item-blacklist-weather-etc-1000.10770/</url>
 	<scm>
-		<connection>git@github.com:Belphemur/AdminCmd.git</connection>
-		<developerConnection>Balor</developerConnection>
-		<url>https://github.com/Belphemur/AdminCmd</url>
+		<connection>scm:git:git@github.com:Belphemur/AdminCmd.git</connection>
+		<url>scm:git:git@github.com:Belphemur/AdminCmd.git</url>
+		<developerConnection>scm:git:git@github.com:Belphemur/AdminCmd.git</developerConnection>
 	</scm>
 	<build>
 
@@ -87,6 +87,7 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -108,6 +109,24 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>true</doCheck>
+					<doUpdate>false</doUpdate>
+					<timestampFormat>{0, date, yyyy-MM-dd HH:mm:ss}</timestampFormat>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
