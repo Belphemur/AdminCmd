@@ -44,6 +44,7 @@ public class PermissionManager {
 	private static boolean yetiPermissions = false;
 	public static final Logger log = Logger.getLogger("Minecraft");
 	private static AbstractPermission permissionHandler;
+	private static boolean warningSend = false;
 
 	/**
 	 * 
@@ -205,7 +206,7 @@ public class PermissionManager {
 	 *            the pEX to set
 	 */
 	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
-		if (!permissionsEx) {		
+		if (!permissionsEx) {
 			if (!(Boolean) ACHelper.getInstance().getConfValue("forceOfficialBukkitPerm")) {
 				permissionsEx = true;
 				permissionHandler = new PermissionsEx(pEX);
@@ -214,9 +215,11 @@ public class PermissionManager {
 				else
 					System.out
 							.println("[AdminCmd] Use PermissionsEX instead of Yeti's Permissions.");
-			} else
+			} else if (!warningSend) {
 				System.out
-						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System instead of PermissionsEX.");
+						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System");
+				warningSend = true;
+			}
 			return true;
 		} else
 			return false;
@@ -234,9 +237,11 @@ public class PermissionManager {
 				yetiPermissions = true;
 				permissionHandler = new YetiPermissions(plugin);
 				System.out.println("[AdminCmd] Successfully linked with Yeti's Permissions.");
-			} else
+			} else if (!warningSend) {
 				System.out
-						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System instead of Yeti's Permissions.");
+						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System");
+				warningSend = true;
+			}
 		} else {
 			return false;
 		}
