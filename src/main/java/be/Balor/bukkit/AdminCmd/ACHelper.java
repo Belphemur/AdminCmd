@@ -321,7 +321,7 @@ public class ACHelper {
 			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.removeProperty("prioritizedCommands");
 		}
-		ExtendedConfiguration commands = new ExtendedConfiguration("commands", null);
+		ExtendedConfiguration commands = new ExtendedConfiguration("commands.yml", null);
 		commands.addProperty("disabledCommands", disabled);
 		commands.addProperty("prioritizedCommands",
 				priority.isEmpty() ? Arrays.asList("reload", "/") : priority);
