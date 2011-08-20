@@ -312,5 +312,5 @@ commands:
     usage: /<command>
   bal_sp:
     description: Super Breaker mode, you break every block you touch.
-    aliases: [sp,//]
+    aliases: [sp,break]
     usage: /<command> <player>
