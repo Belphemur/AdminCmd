@@ -61,7 +61,8 @@ public class UnMute extends ACCommand {
 					Utils.sI18n(sender, "muteDisabledTarget", replace);
 			} else
 				Utils.sI18n(sender, "muteDisabledTarget", replace);
-		}
+		} else
+			Utils.sI18n(sender, "playerNotFound", replace);
 
 	}
 
