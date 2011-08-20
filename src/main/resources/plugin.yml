@@ -310,3 +310,7 @@ commands:
     description: Return to the last location before tp.
     aliases: [back,lastloc]
     usage: /<command>
+  bal_sp:
+    description: Super Breaker mode, you break every block you touch.
+    aliases: [sp,//]
+    usage: /<command> <player>

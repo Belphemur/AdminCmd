@@ -716,12 +716,14 @@ public class ACHelper {
 	 * @param player
 	 * @return
 	 */
-	public boolean removeKeyFromValues(String player) {
+	public boolean removeKeyFromValues(Player player) {
 		boolean found = false;
 		for (Type type : storedTypeValues.keySet()) {
 			if (!type.getCategory().equals(Category.PLAYER))
 				continue;
-			if (storedTypeValues.get(type).remove(player) != null)
+			if(type.equals(Type.TP_REQUEST) && PermissionManager.hasPerm(player, "admincmd.tp.toggle"))
+				continue;
+			if (storedTypeValues.get(type).remove(player.getName()) != null)
 				found = true;
 		}
 		return found;

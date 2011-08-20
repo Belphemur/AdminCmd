@@ -32,6 +32,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.bukkit.util.config.Configuration;
 
@@ -112,7 +113,8 @@ public class ACPlayerListener extends PlayerListener {
 				ACHelper.getInstance().spawn(p);
 		}
 		if ((Boolean) ACHelper.getInstance().getConfValue("tpRequestActivatedByDefault")
-				&& !ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName()))
+				&& !ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName())
+				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))
 			ACHelper.getInstance().addValue(Type.TP_REQUEST, p.getName());
 	}
 
@@ -149,7 +151,7 @@ public class ACPlayerListener extends PlayerListener {
 		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
 				&& !from.getWorld().equals(to.getWorld())
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
-			if (ACHelper.getInstance().removeKeyFromValues(playername)
+			if (ACHelper.getInstance().removeKeyFromValues(event.getPlayer())
 					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());
 				Utils.sI18n(event.getPlayer(), "changedWorld");
@@ -171,8 +173,18 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 			return;
 		}
+		String playerName = p.getName();
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK
+				&& ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, playerName)) {
+			Block b = event.getClickedBlock();
+			b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getType()));
+			if (Utils.logBlock != null)
+				Utils.logBlock.queueBlockBreak(playerName, b.getState());
+			b.setTypeId(0);
+			return;
+		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			String playerName = p.getName();
+
 			if ((ACHelper.getInstance().hasThorPowers(playerName)))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
 			Float power = null;

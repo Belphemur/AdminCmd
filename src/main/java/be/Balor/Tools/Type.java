@@ -38,7 +38,8 @@ public enum Type {
 	REPEAT_CMD(Category.OTHER),
 	TIME_FREEZED(Category.WORLD),
 	TP_REQUEST(Category.OTHER),
-	TP_AT_SEE(Category.PLAYER);
+	TP_AT_SEE(Category.PLAYER),
+	SUPER_BREAKER(Category.PLAYER);
 
 	private static final Map<String, Type> lookupName = new HashMap<String, Type>();
 

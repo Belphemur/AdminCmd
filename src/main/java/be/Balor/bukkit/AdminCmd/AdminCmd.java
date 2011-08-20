@@ -146,6 +146,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
 		CommandManager.getInstance().registerCommand(LastLocation.class);
+		CommandManager.getInstance().registerCommand(SuperBreaker.class);
 	}
 
 	private void setDefaultLocale() {
@@ -358,6 +359,10 @@ public class AdminCmd extends JavaPlugin {
 				+ "You have been successfully teleported.");
 		Utils.addLocale("noLastLocation", ChatColor.RED
 				+ "You don't have a last location to tp back");
+		Utils.addLocale("super_breackerDisabled", ChatColor.GOLD + "Super Breaker mode disabled.");
+		Utils.addLocale("super_breackerDisabledTarget", ChatColor.GOLD + "Super Breaker mode disabled for %player");
+		Utils.addLocale("super_breackerEnabled", ChatColor.GOLD + "Super Breaker mode enabled.");
+		Utils.addLocale("super_breackerEnabledTarget", ChatColor.GOLD + "Super Breaker mode enabled for %player");
 		LocaleManager.getInstance().save();
 	}
 
