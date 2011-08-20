@@ -21,6 +21,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityListener;
@@ -57,6 +58,15 @@ public class ACEntityListener extends EntityListener {
 			event.setDamage(0);
 		}
 
+	}
+
+	@Override
+	public void onEntityDeath(EntityDeathEvent event) {
+		if (!(event.getEntity() instanceof Player))
+			return;
+		Player player = (Player) event.getEntity();
+		ACHelper.getInstance().addLocation("home", player.getName() + ".lastLoc", "lastLoc",
+				player.getName(), player.getLocation());
 	}
 
 	@Override

@@ -397,6 +397,7 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
+		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
