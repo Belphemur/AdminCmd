@@ -26,7 +26,7 @@ import org.bukkit.block.Block;
 public class BlockRemanence {
 	private Location loc;
 	private int oldType;
-	private int data;
+	private byte data = 0;
 	private boolean useData;
 
 	/**
@@ -37,19 +37,35 @@ public class BlockRemanence {
 		Block b = loc.getWorld().getBlockAt(loc);
 		this.oldType = b.getTypeId();
 		if ((useData = usesData(oldType)))
-			data = b.getData();
+			data = b.getState().getRawData();
 
 	}
 
-	public void returnToThePast() {
+	public Block returnToThePast() {
+		Block b = loc.getWorld().getBlockAt(loc);
 		if (useData)
-			loc.getWorld().getBlockAt(loc).setTypeIdAndData(oldType, (byte) data, true);
+			b.setTypeIdAndData(oldType, data, true);
 		else
-			this.setBlockType(oldType);
+			b.setTypeId(oldType, true);
+		return b;
 	}
 
 	public void setBlockType(int type) {
 		loc.getWorld().getBlockAt(loc).setTypeId(type, true);
+	}
+
+	/**
+	 * @return the oldType
+	 */
+	public int getOldType() {
+		return oldType;
+	}
+
+	/**
+	 * @return the data
+	 */
+	public byte getData() {
+		return data;
 	}
 
 	/**

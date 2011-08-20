@@ -123,9 +123,9 @@
 					</execution>
 				</executions>
 				<configuration>
-					<doCheck>true</doCheck>
+					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
-					<timestampFormat>{0, date, yyyy-MM-dd HH:mm:ss}</timestampFormat>
+					<timestampFormat>{0, date, yyyy-MM-dd HH/mm/ss}</timestampFormat>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -216,6 +216,12 @@
 			<groupId>net.D3GN.MiracleM4n</groupId>
 			<artifactId>mChat</artifactId>
 			<version>v1.7.10_5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.diddiz</groupId>
+			<artifactId>LogBlock</artifactId>
+			<version>1.26</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

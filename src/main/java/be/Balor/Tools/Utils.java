@@ -35,6 +35,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import de.diddiz.LogBlock.Consumer;
+
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -48,6 +50,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public class Utils {
 	public static OddItem oddItem = null;
+	public static Consumer logBlock = null;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -162,8 +165,10 @@ public class Utils {
 		if (toDo.equals("heal")) {
 			target.setHealth(20);
 			target.setFireTicks(0);
-		} else
+		} else {
 			target.setHealth(0);
+			logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
+		}
 
 		return true;
 	}
@@ -517,12 +522,13 @@ public class Utils {
 				}
 
 			}
+			String playername = ((Player) sender).getName();
 			Stack<BlockRemanence> blocks;
 			Block block = ((Player) sender).getLocation().getBlock();
 			if (mat.contains(Material.LAVA) || mat.contains(Material.WATER))
-				blocks = drainFluid(block, radius);
+				blocks = drainFluid(playername, block, radius);
 			else
-				blocks = replaceInCuboid(mat, block, radius);
+				blocks = replaceInCuboid(playername, mat, block, radius);
 			if (!blocks.isEmpty())
 				ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
 			return blocks.size();
@@ -538,24 +544,39 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> replaceInCuboid(List<Material> mat, Block block, int radius) {
+	private static Stack<BlockRemanence> replaceInCuboid(String playername, List<Material> mat,
+			Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		int limitX = block.getX() + radius;
 		int limitY = block.getY() + radius;
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		for (int y = block.getY() - radius; y <= limitY; y++) {
-			for (int x = block.getX() - radius; x <= limitX; x++)
-				for (int z = block.getZ() - radius; z <= limitZ; z++) {
-					current = block.getWorld().getBlockAt(x, y, z);
-					if (mat.contains(current.getType())) {
-						br = new BlockRemanence(current.getLocation());
-						blocks.push(br);
-						br.setBlockType(0);
+		if (logBlock == null)
+			for (int y = block.getY() - radius; y <= limitY; y++) {
+				for (int x = block.getX() - radius; x <= limitX; x++)
+					for (int z = block.getZ() - radius; z <= limitZ; z++) {
+						current = block.getWorld().getBlockAt(x, y, z);
+						if (mat.contains(current.getType())) {
+							br = new BlockRemanence(current.getLocation());
+							blocks.push(br);
+							br.setBlockType(0);
+						}
 					}
-				}
-		}
+			}
+		else
+			for (int y = block.getY() - radius; y <= limitY; y++) {
+				for (int x = block.getX() - radius; x <= limitX; x++)
+					for (int z = block.getZ() - radius; z <= limitZ; z++) {
+						current = block.getWorld().getBlockAt(x, y, z);
+						if (mat.contains(current.getType())) {
+							br = new BlockRemanence(current.getLocation());
+							logBlock.queueBlockBreak(playername, current.getState());
+							blocks.push(br);
+							br.setBlockType(0);
+						}
+					}
+			}
 		return blocks;
 	}
 
@@ -566,44 +587,84 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> drainFluid(Block block, int radius) {
+	private static Stack<BlockRemanence> drainFluid(String playername, Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
 		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
-		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
-			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
-				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
-					SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-					if (isFluid(newPos) && !newPos.isVisited()) {
-						newPos.setVisited();
-						processQueue.push(newPos);
-						current = new BlockRemanence(newPos);
-						blocks.push(current);
-						current.setBlockType(0);
-					}
-
-				}
-			}
-		}
-
-		while (!processQueue.isEmpty()) {
-			SimplifiedLocation loc = processQueue.pop();
-			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
-				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
-					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
+		if (logBlock == null) {
+			for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
+				for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
+					for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
 						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-						if (!newPos.isVisited() && isFluid(newPos)
-								&& start.distance(newPos) < radius) {
+						if (isFluid(newPos) && !newPos.isVisited()) {
+							newPos.setVisited();
 							processQueue.push(newPos);
 							current = new BlockRemanence(newPos);
 							blocks.push(current);
 							current.setBlockType(0);
-							newPos.setVisited();
 						}
-					}
 
+					}
+				}
+			}
+			while (!processQueue.isEmpty()) {
+				SimplifiedLocation loc = processQueue.pop();
+				for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
+					for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
+						for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
+							SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+							if (!newPos.isVisited() && isFluid(newPos)
+									&& start.distance(newPos) < radius) {
+								processQueue.push(newPos);
+								current = new BlockRemanence(newPos);
+								blocks.push(current);
+								current.setBlockType(0);
+								newPos.setVisited();
+							}
+						}
+
+					}
+				}
+			}
+		} else {
+			for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
+				for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
+					for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
+						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+						if (isFluid(newPos) && !newPos.isVisited()) {
+							newPos.setVisited();
+							processQueue.push(newPos);
+							current = new BlockRemanence(newPos);
+							logBlock.queueBlockBreak(playername, newPos, current.getOldType(),
+									current.getData());
+							blocks.push(current);
+							current.setBlockType(0);
+						}
+
+					}
+				}
+			}
+			while (!processQueue.isEmpty()) {
+				SimplifiedLocation loc = processQueue.pop();
+				for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
+					for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
+						for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
+							SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+							if (!newPos.isVisited() && isFluid(newPos)
+									&& start.distance(newPos) < radius) {
+								processQueue.push(newPos);
+								current = new BlockRemanence(newPos);
+								logBlock.queueBlockBreak(playername, newPos, current.getOldType(),
+										current.getData());
+								blocks.push(current);
+								current.setBlockType(0);
+								newPos.setVisited();
+							}
+						}
+
+					}
 				}
 			}
 		}

@@ -135,10 +135,17 @@ public class ACHelper {
 		Stack<BlockRemanence> undo = blockQueue.pop();
 		int i = 0;
 		try {
-			while (!undo.isEmpty()) {
-				undo.pop().returnToThePast();
-				i++;
-			}
+			if (Utils.logBlock == null)
+				while (!undo.isEmpty()) {
+					undo.pop().returnToThePast();
+					i++;
+				}
+			else
+				while (!undo.isEmpty()) {
+					BlockRemanence br = undo.pop();
+					Utils.logBlock.queueBlockPlace(player, br.returnToThePast().getState());
+					i++;
+				}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return i;

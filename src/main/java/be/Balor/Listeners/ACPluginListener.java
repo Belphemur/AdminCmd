@@ -33,6 +33,8 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 
+import de.diddiz.LogBlock.LogBlock;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -72,6 +74,13 @@ public class ACPluginListener extends ServerListener {
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				BukkitPermissions.setmChatapi(mChat.API);
 				System.out.print("[AdminCmd] Successfully linked with mChat");
+			}
+		}
+		if (Utils.logBlock == null) {
+			Plugin plugin = AdminCmd.getBukkitServer().getPluginManager().getPlugin("LogBlock");
+			if (plugin != null && plugin.isEnabled()) {
+				Utils.logBlock = ((LogBlock) plugin).getConsumer();
+				System.out.print("[AdminCmd] Successfully linked with LogBlock");
 			}
 		}
 	}
