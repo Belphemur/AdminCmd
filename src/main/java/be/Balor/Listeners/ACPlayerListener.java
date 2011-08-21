@@ -71,7 +71,7 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player p = event.getPlayer();
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
+		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
@@ -84,13 +84,13 @@ public class ACPlayerListener extends PlayerListener {
 		if (power != null)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else if ((Boolean) ACHelper.getInstance().getConfValue("glideWhenFallingInFlyMode")) {
+			else if (ACHelper.getInstance().getConfBoolean("glideWhenFallingInFlyMode")) {
 				Vector vel = p.getVelocity();
 				vel.add(p.getLocation().getDirection()
-						.multiply(ACHelper.getInstance().getFloat("glinding.multiplicator"))
+						.multiply(ACHelper.getInstance().getConfFloat("glinding.multiplicator"))
 						.setY(0));
-				if (vel.getY() < ACHelper.getInstance().getFloat("glinding.YvelocityCheckToGlide")) {
-					vel.setY(ACHelper.getInstance().getFloat("glinding.newYvelocity"));
+				if (vel.getY() < ACHelper.getInstance().getConfFloat("glinding.YvelocityCheckToGlide")) {
+					vel.setY(ACHelper.getInstance().getConfFloat("glinding.newYvelocity"));
 					p.setVelocity(vel);
 				}
 			}
@@ -109,10 +109,10 @@ public class ACPlayerListener extends PlayerListener {
 		if (conf.getBoolean("infos.firstTime", true)) {
 			conf.setProperty("infos.firstTime", false);
 			conf.save();
-			if ((Boolean) ACHelper.getInstance().getConfValue("firstConnectionToSpawnPoint"))
+			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
 		}
-		if ((Boolean) ACHelper.getInstance().getConfValue("tpRequestActivatedByDefault")
+		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))
 			ACHelper.getInstance().addValue(Type.TP_REQUEST, p.getName());
@@ -123,7 +123,7 @@ public class ACPlayerListener extends PlayerListener {
 		Player p = event.getPlayer();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
+		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
 		}
 	}
@@ -148,7 +148,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 			return;
 		}
-		if ((Boolean) ACHelper.getInstance().getConfValue("resetPowerWhenTpAnotherWorld")
+		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
 				&& !from.getWorld().equals(to.getWorld())
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
 			if (ACHelper.getInstance().removeKeyFromValues(event.getPlayer())
@@ -164,7 +164,7 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
+		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
@@ -199,7 +199,7 @@ public class ACPlayerListener extends PlayerListener {
 					Block toTp = p.getWorld().getBlockAt(
 							p.getTargetBlock(
 									null,
-									(Integer) ACHelper.getInstance().getConfValue(
+									ACHelper.getInstance().getConfInt(
 											"maxRangeForTpAtSee")).getLocation().add(0, 1, 0));
 					if (toTp.getTypeId() == 0) {
 						Location loc = toTp.getLocation().clone();
@@ -230,7 +230,7 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerChat(PlayerChatEvent event) {
 		Player p = event.getPlayer();
-		if ((Boolean) ACHelper.getInstance().getConfValue("autoAfk")) {
+		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);

@@ -309,7 +309,9 @@ public class ACHelper {
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
 		pluginConfig.addProperty("tpRequestTimeOutInMinutes", 5);
 		pluginConfig.addProperty("verboseLog", true);
-		pluginConfig.addProperty("tpRequestActivatedByDefault", false);		
+		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
+		pluginConfig.addProperty("logPrivateMessages", false);
+
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {
@@ -330,13 +332,13 @@ public class ACHelper {
 	}
 
 	/**
-	 * get the value of the path in the config
+	 * Get boolean from config
 	 * 
 	 * @param path
 	 * @return
 	 */
-	public Object getConfValue(String path) {
-		return pluginConfig.getProperty(path);
+	public boolean getConfBoolean(String path) {
+		return pluginConfig.getBoolean(path, false);
 	}
 
 	/**
@@ -345,8 +347,17 @@ public class ACHelper {
 	 * @param path
 	 * @return
 	 */
-	public Float getFloat(String path) {
+	public Float getConfFloat(String path) {
 		return Float.parseFloat(pluginConfig.getString(path));
+	}
+
+	/**
+	 * Get Integer parameter from config.
+	 * @param path
+	 * @return
+	 */
+	public Integer getConfInt(String path) {
+		return pluginConfig.getInt(path, 0);
 	}
 
 	/**

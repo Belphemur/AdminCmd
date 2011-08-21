@@ -31,7 +31,7 @@ public class ACBlockListener extends BlockListener {
 	public void onSignChange(SignChangeEvent event) {
 		if (event.isCancelled())
 			return;
-		if (!(Boolean) ACHelper.getInstance().getConfValue("ColoredSign"))
+		if (!ACHelper.getInstance().getConfBoolean("ColoredSign"))
 			return;
 		String parsed = null;
 		String line;

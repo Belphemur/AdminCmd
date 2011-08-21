@@ -187,7 +187,7 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (CommandDisabled e) {
 			unRegisterBukkitCommand(command.getPluginCommand());
-			if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
 			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
@@ -199,16 +199,16 @@ public class CommandManager implements CommandExecutor {
 					return;
 				}
 			unRegisterBukkitCommand(command.getPluginCommand());
-			if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandException e) {
-			if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
 	}
 
 	public void checkAlias() {
-		if ((Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+		if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 			for (String cmdName : pluginCommands.keySet()) {
 				Command cmd = pluginCommands.get(cmdName);
 				if (plugin.getCommand(cmd.getName()) != null) {
@@ -218,7 +218,7 @@ public class CommandManager implements CommandExecutor {
 					for (String alias : cmd.getAliases())
 						aliases += alias + ", ";
 					if (!aliases.isEmpty()
-							&& (Boolean) ACHelper.getInstance().getConfValue("verboseLog"))
+							&& ACHelper.getInstance().getConfBoolean("verboseLog"))
 						Logger.getLogger("Minecraft").info(
 								"[" + plugin.getDescription().getName()
 										+ "] Disabled Alias(es) for " + cmd.getName() + " : "

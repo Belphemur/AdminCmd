@@ -483,7 +483,7 @@ public class Utils {
 	}
 
 	public static void sParsedLocale(Player p, String locale) {
-		if ((Boolean) ACHelper.getInstance().getConfValue("MessageOfTheDay")) {
+		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay")) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", p.getName());
 			replace.put(

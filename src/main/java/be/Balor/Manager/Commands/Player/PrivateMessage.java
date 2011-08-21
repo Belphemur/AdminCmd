@@ -16,8 +16,11 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
+import java.util.logging.Logger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommand;
@@ -51,7 +54,7 @@ public class PrivateMessage extends ACCommand {
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender, false)
 				&& ACHelper.getInstance().isValueSet(Type.MUTED, ((Player) sender).getName())
-				&& (Boolean) ACHelper.getInstance().getConfValue("mutedPlayerCantPm")) {
+				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
@@ -83,11 +86,15 @@ public class PrivateMessage extends ACCommand {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
 				sender.sendMessage(msgPrefix + senderPm + parsed);
+			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
+					+ "-" + buddy.getName() + ": " + parsed;
 			for (Player p : ACHelper.getInstance().getAllUserOf(Type.SPYMSG))
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))
-					p.sendMessage("[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] "
-							+ senderName + "-" + buddy.getName() + ": " + parsed);
+					p.sendMessage(spyMsg);
+			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages")
+					&& !(sender instanceof ConsoleCommandSender))
+				Logger.getLogger("Minecraft").info(spyMsg);
 		} else
 			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
 					+ ChatColor.RED + " not found!");

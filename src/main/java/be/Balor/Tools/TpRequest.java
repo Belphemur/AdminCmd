@@ -37,7 +37,7 @@ public class TpRequest {
 		this.from = from;
 		this.to = to;
 		timeOut = System.currentTimeMillis()
-				+ ((Integer) ACHelper.getInstance().getConfValue("tpRequestTimeOutInMinutes") * 60000);
+				+ (ACHelper.getInstance().getConfInt("tpRequestTimeOutInMinutes") * 60000);
 	}
 
 	public void teleport(Player sender) {

@@ -51,13 +51,13 @@ public class Fly extends ACCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		Player player = null;
-		float power = ACHelper.getInstance().getFloat("DefaultFlyPower");
+		float power = ACHelper.getInstance().getConfFloat("DefaultFlyPower");
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = Float.parseFloat(args[0]);
 			} catch (NumberFormatException e) {
-				power = ACHelper.getInstance().getFloat("DefaultFlyPower");
+				power = ACHelper.getInstance().getConfFloat("DefaultFlyPower");
 				player = Utils.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2)
