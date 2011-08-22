@@ -29,6 +29,14 @@
 			</resource>
 			<resource>
 				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>ReadMe.txt</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
 				<filtering>false</filtering>
 				<directory>${basedir}/src/main/resources/</directory>
 				<includes>

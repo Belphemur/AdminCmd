@@ -41,7 +41,7 @@ public class TerminalCommandManager {
 	 * 
 	 */
 	private TerminalCommandManager() {
-		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
+		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
 		conf.load();
@@ -86,7 +86,7 @@ public class TerminalCommandManager {
 	}
 
 	public void reloadScripts() {
-		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
+		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
 		conf.load();
@@ -125,7 +125,7 @@ public class TerminalCommandManager {
 			throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null || reload) {
-			File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts");
+			File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 			File workingDir = scripts.getParentFile();
 			Configuration conf = new Configuration(scripts);
 			conf.load();

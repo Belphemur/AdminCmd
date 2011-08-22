@@ -280,8 +280,9 @@ public class ACHelper {
 		this.pluginInstance = pluginInstance;
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
-		fManager.getInnerFile("de_DE.yml", "locales");
+		fManager.getInnerFile("de_DE.yml", "locales", false);
 		fManager.getInnerFile("kits.yml");
+		fManager.getInnerFile("ReadMe.txt", null, true);
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
@@ -354,6 +355,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
+	 * 
 	 * @param path
 	 * @return
 	 */

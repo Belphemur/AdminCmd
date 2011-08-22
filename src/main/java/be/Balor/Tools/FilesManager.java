@@ -169,10 +169,10 @@ public class FilesManager {
 	 * @return
 	 */
 	public File getInnerFile(String filename) {
-		return getInnerFile(filename, null);
+		return getInnerFile(filename, null, false);
 	}
 
-	public File getInnerFile(String filename, String directory) {
+	public File getInnerFile(String filename, String directory, boolean replace) {
 		final File file;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);
@@ -182,7 +182,8 @@ public class FilesManager {
 			file = new File(directoryFile, filename);
 		} else
 			file = new File(pathFile, filename);
-
+		if(file.exists() && replace)
+			file.delete();
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
 			FileWriter tx = null;
@@ -276,9 +277,9 @@ public class FilesManager {
 		else {
 			return new Location(AdminCmd.getBukkitServer().getWorld(
 					conf.getString(property + ".world")), conf.getDouble(property + ".x", 0),
-					conf.getDouble(property + ".y", 0), conf.getDouble(property
-							+ ".z", 0), Float.parseFloat(conf.getString(property + ".yaw")),
-					Float.parseFloat(conf.getString(property + ".pitch")));
+					conf.getDouble(property + ".y", 0), conf.getDouble(property + ".z", 0),
+					Float.parseFloat(conf.getString(property + ".yaw")), Float.parseFloat(conf
+							.getString(property + ".pitch")));
 		}
 	}
 
