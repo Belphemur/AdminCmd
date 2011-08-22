@@ -311,6 +311,7 @@ public class ACHelper {
 		pluginConfig.addProperty("verboseLog", true);
 		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
 		pluginConfig.addProperty("logPrivateMessages", false);
+		pluginConfig.addProperty("broadcastServerReload", true);
 
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
