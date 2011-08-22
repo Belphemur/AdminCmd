@@ -24,10 +24,12 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import belgium.Balor.Workers.AFKWorker;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -60,6 +62,11 @@ public class PrivateMessage extends ACCommand {
 		}
 		Player buddy = sender.getServer().getPlayer(args[0]);
 		if (buddy != null) {
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
+					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
+				Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+				return;
+			}
 			String senderPm = "";
 			String msgPrefix = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
 			String msg = "";
@@ -96,8 +103,7 @@ public class PrivateMessage extends ACCommand {
 					&& !(sender instanceof ConsoleCommandSender))
 				Logger.getLogger("Minecraft").info(spyMsg);
 		} else
-			sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
-					+ ChatColor.RED + " not found!");
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 
 	}
 
