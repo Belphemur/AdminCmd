@@ -4,7 +4,7 @@
  * Description:
  * Date: Mar 31, 2011
  */
-package be.Balor.Tools.String;
+package be.Balor.Tools.Help.String;
 
 import java.io.IOException;
 import java.io.OutputStream;

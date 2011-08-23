@@ -16,7 +16,7 @@
  * https://github.com/tkelly910/Help
  * 
  */
-package be.Balor.Tools.String;
+package be.Balor.Tools.Help.String;
 
 import java.util.LinkedList;
 

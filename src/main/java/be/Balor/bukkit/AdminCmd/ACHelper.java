@@ -313,6 +313,8 @@ public class ACHelper {
 		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
 		pluginConfig.addProperty("logPrivateMessages", false);
 		pluginConfig.addProperty("broadcastServerReload", true);
+		pluginConfig.addProperty("help.file", "defaultHelpFile");
+		pluginConfig.addProperty("help.entryPerPage", 9);
 
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();

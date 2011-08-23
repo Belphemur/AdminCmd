@@ -46,8 +46,9 @@ public class ReloadAll extends ACCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		ACHelper.getInstance().saveElapsedTime();
+		boolean bcast = ACHelper.getInstance().getConfBoolean("broadcastServerReload");
 		sender.getServer().reload();
-		if (ACHelper.getInstance().getConfBoolean("broadcastServerReload"))
+		if (bcast)
 			sender.getServer().broadcastMessage(Utils.I18n("serverReload"));
 		else
 			Utils.sI18n(sender, "serverReload");
