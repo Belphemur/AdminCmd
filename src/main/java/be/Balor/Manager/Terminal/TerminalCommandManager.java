@@ -27,7 +27,7 @@ import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
 import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
-import be.Balor.Tools.FilesManager;
+import be.Balor.Tools.Files.FilesManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)

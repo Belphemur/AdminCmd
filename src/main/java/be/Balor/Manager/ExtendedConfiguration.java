@@ -20,7 +20,7 @@ import java.io.File;
 
 import org.bukkit.util.config.Configuration;
 
-import be.Balor.Tools.FilesManager;
+import be.Balor.Tools.Files.FilesManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)

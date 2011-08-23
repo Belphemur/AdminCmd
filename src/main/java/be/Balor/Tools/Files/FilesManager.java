@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Files;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +32,9 @@ import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
 import au.com.bytecode.opencsv.CSVReader;
+import be.Balor.Tools.MaterialContainer;
+import be.Balor.Tools.Type;
+import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
@@ -96,7 +99,7 @@ public class FilesManager {
 		return getFile(directory, filename, true);
 	}
 
-	private File getFile(String directory, String filename, boolean create) {
+	public File getFile(String directory, String filename, boolean create) {
 		File file = null;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);

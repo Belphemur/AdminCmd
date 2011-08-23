@@ -67,10 +67,10 @@ public class HelpList {
 	}
 
 	/**
-	 * @return the plugin
+	 * @return the pluginName
 	 */
-	public Plugin getPlugin() {
-		return plugin;
+	public String getPluginName() {
+		return plugin.getDescription().getName();
 	}
 
 	/**
@@ -93,18 +93,21 @@ public class HelpList {
 	 * Get a list of the string to display for the wanted page, and the given
 	 * user
 	 * 
-	 * @param page int the wanted page
-	 * @param sender CommandSender the sender of the command
+	 * @param page
+	 *            int the wanted page
+	 * @param sender
+	 *            CommandSender the sender of the command
 	 * @return
 	 */
 	public List<String> getPage(int page, CommandSender sender) {
 		int entryPerPage = ACHelper.getInstance().getConfInt("help.entryPerPage");
 		List<String> helpList = new ArrayList<String>();
-		int start = (page - 1) * entryPerPage;
 		checkPermissions(sender);
+		int maxPages = (int) Math.ceil(lastHelpEntries.size() / (double) entryPerPage);
+		page = page > maxPages ? maxPages : page;
+		int start = (page - 1) * entryPerPage;
 		int end = start + entryPerPage > lastHelpEntries.size() ? lastHelpEntries.size() : start
 				+ entryPerPage;
-		int maxPages = (int) Math.ceil(lastHelpEntries.size() / (double) entryPerPage);
 		helpList.add(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
 						+ plugin.getDescription().getName() + " (" + page + "/" + maxPages + ") "
