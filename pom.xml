@@ -67,6 +67,22 @@
 					<include>items.csv</include>
 				</includes>
 			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>AdminCmd.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>acmotd.yml</include>
+				</includes>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>

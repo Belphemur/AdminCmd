@@ -179,8 +179,8 @@ public class FilesManager {
 		final File file;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);
-			if (!directoryFile.exists()) {
-				directoryFile.mkdir();
+			if (!directoryFile.exists()) {				
+				directoryFile.mkdirs();
 			}
 			file = new File(directoryFile, filename);
 		} else

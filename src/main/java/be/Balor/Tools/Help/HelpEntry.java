@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -38,7 +39,6 @@ public class HelpEntry {
 		this.description = description;
 		this.permissions = permissions;
 	}
-
 
 	public boolean hasPerm(CommandSender p) {
 		for (String perm : permissions)
@@ -60,12 +60,20 @@ public class HelpEntry {
 
 		int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
-
+		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
 		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				description.replace("[", ChatColor.RED + "[").replace("]", "]" + ChatColor.WHITE),
 				sizeRemaining, ' ');
 
-		return line;
+		if (ACHelper.getInstance().getConfBoolean("help.shortenEntries")) {
+	            return ACMinecraftFontWidthCalculator.strChatTrim(line);
+	        } else if (sizeRemaining > descriptionSize ||  !ACHelper.getInstance().getConfBoolean("help.useWordWrap")) {
+	            return line;
+	        } else if (ACHelper.getInstance().getConfBoolean("help.wordWrapRight")) {
+	            return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line, 10, ' ', ':');
+	        } else {
+	            return ACMinecraftFontWidthCalculator.strChatWordWrap(line, 10);
+	        }
 	}
 
 	public String consoleString() {
@@ -74,12 +82,28 @@ public class HelpEntry {
 				ChatColor.WHITE.toString(), ChatColor.WHITE);
 
 		int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
-
+		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
 		line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
 				description.replace("[", ChatColor.RED + "[").replace("]", "]" + ChatColor.WHITE),
 				sizeRemaining, ' ');
 
-		return line;
+		if (ACHelper.getInstance().getConfBoolean("help.shortenEntries")) {
+			return ACMinecraftFontWidthCalculator.strTrim(line, width);
+		} else if (sizeRemaining > descriptionSize
+				|| !ACHelper.getInstance().getConfBoolean("help.useWordWrap")) {
+			return line;
+		} else if (ACHelper.getInstance().getConfBoolean("help.wordWrapRight")) {
+			return ACMinecraftFontWidthCalculator.strWordWrapRight(line, width, 10, ' ', ':');
+		} else {
+			return ACMinecraftFontWidthCalculator.strWordWrap(line, width, 10);
+		}
 
+	}
+
+	/**
+	 * @return the command
+	 */
+	public String getCommand() {
+		return command;
 	}
 }

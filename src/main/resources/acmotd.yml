@@ -1,0 +1,7 @@
+#Made by Lathanael
+acmotd:
+    command: help acmotd
+    description: "Format info for MOTD and NEWS: %player = new\n connected player's name, %nb = (number of player connected\n - invisibles players). You can use color by typing & before\n the number of the color."
+    plugin: AdminCmd
+    permissions: admincmd.server.motd
+    main: false

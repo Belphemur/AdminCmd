@@ -29,6 +29,8 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.HelpLister;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -82,6 +84,10 @@ public class ACPluginListener extends ServerListener {
 				Utils.logBlock = ((LogBlock) plugin).getConsumer();
 				System.out.print("[AdminCmd] Successfully linked with LogBlock");
 			}
+		}
+		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins")) {
+			for (Plugin plugin : event.getPlugin().getServer().getPluginManager().getPlugins())
+					HelpLister.getInstance().addPlugin(plugin);
 		}
 	}
 }

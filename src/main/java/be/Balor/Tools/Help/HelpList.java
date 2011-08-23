@@ -17,9 +17,11 @@
 package be.Balor.Tools.Help;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -34,21 +36,30 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * 
  */
 public class HelpList {
-	private List<HelpEntry> pluginHelp = new ArrayList<HelpEntry>();
-	private Plugin plugin;
+	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryComparator());
+	private String pluginName;
 	private CommandSender lastCommandSender;
-	private List<HelpEntry> lastHelpEntries;
+	private TreeSet<HelpEntry> lastHelpEntries;
 
-	public HelpList(Plugin plugin, List<HelpEntry> help) {
-		this.plugin = plugin;
-		this.pluginHelp = help;
+	/**
+	 * 
+	 */
+	public HelpList(String plugin) {
+		this.pluginName = plugin;
+	}
+
+	public void addEntry(HelpEntry he) {
+		pluginHelp.add(he);
 	}
 
 	@SuppressWarnings("unchecked")
-	public HelpList(Plugin plugin) {
-		List<HelpEntry> list = new ArrayList<HelpEntry>();
+	public HelpList(Plugin plugin) throws IllegalArgumentException {
+		TreeSet<HelpEntry> list = new TreeSet<HelpEntry>(new EntryComparator());
 		final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>) plugin
 				.getDescription().getCommands();
+		this.pluginName = plugin.getDescription().getName();
+		if (cmds == null)
+			throw new IllegalArgumentException(pluginName + " don't have any commands to list");
 		List<String> perms = new ArrayList<String>();
 		for (Entry<String, HashMap<String, String>> k : cmds.entrySet()) {
 			final HashMap<String, String> value = k.getValue();
@@ -58,11 +69,12 @@ public class HelpList {
 			else if (value.containsKey("permissions") && value.get("permissions") != null
 					&& !(value.get("permissions").equals("")))
 				perms.add(value.get("permissions"));
-			list.add(new HelpEntry(k.getKey(), value.get("description"), new ArrayList<String>(
+			String desc = value.get("description");
+			list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, new ArrayList<String>(
 					perms)));
 			perms.clear();
 		}
-		this.plugin = plugin;
+
 		this.pluginHelp = list;
 	}
 
@@ -70,7 +82,7 @@ public class HelpList {
 	 * @return the pluginName
 	 */
 	public String getPluginName() {
-		return plugin.getDescription().getName();
+		return pluginName;
 	}
 
 	/**
@@ -82,7 +94,7 @@ public class HelpList {
 	private void checkPermissions(CommandSender sender) {
 		if (lastCommandSender != null && sender.equals(lastCommandSender))
 			return;
-		lastHelpEntries = new ArrayList<HelpEntry>();
+		lastHelpEntries = new TreeSet<HelpEntry>(new EntryComparator());
 		lastCommandSender = sender;
 		for (HelpEntry he : pluginHelp)
 			if (he.hasPerm(sender))
@@ -110,20 +122,32 @@ public class HelpList {
 				+ entryPerPage;
 		helpList.add(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
-						+ plugin.getDescription().getName() + " (" + page + "/" + maxPages + ") "
-						+ ChatColor.AQUA, '='));
+						+ pluginName + " (" + page + "/" + maxPages + ") " + ChatColor.AQUA, '='));
+		HelpEntry[] array = lastHelpEntries.toArray(new HelpEntry[] {});
 		if (Utils.isPlayer(sender, false)) {
 			for (int i = start; i < end; i++) {
-				HelpEntry he = lastHelpEntries.get(i);
+				HelpEntry he = array[i];
 				helpList.add(he.chatString());
 			}
 		} else {
 			for (int i = start; i < end; i++) {
-				HelpEntry he = lastHelpEntries.get(i);
+				HelpEntry he = array[i];
 				helpList.add(he.consoleString());
 			}
 		}
 		return helpList;
 
+	}
+
+	private static class EntryComparator implements Comparator<HelpEntry> {
+
+		boolean descending = true;
+
+		public EntryComparator() {
+		}
+
+		public int compare(HelpEntry o1, HelpEntry o2) {
+			return o1.getCommand().compareTo(o2.getCommand()) * (descending ? 1 : -1);
+		}
 	}
 }

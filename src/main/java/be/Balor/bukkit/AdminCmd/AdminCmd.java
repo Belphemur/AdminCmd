@@ -31,6 +31,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -412,6 +413,7 @@ public class AdminCmd extends JavaPlugin {
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
+		HelpLister.killInstance();
 		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");

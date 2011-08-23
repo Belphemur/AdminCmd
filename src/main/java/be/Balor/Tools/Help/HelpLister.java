@@ -16,32 +16,35 @@
  ************************************************************************/
 package be.Balor.Tools.Help;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
-
-import be.Balor.Tools.Files.FilesManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Lister {
-	private static Lister instance = null;
+public class HelpLister {
+	private static HelpLister instance = null;
 	private HashMap<String, HelpList> plugins = new HashMap<String, HelpList>();
+	private List<String> noCmds = new ArrayList<String>();
 
-	private Lister() {
+	private HelpLister() {
 	}
 
 	/**
 	 * @return the instance
 	 */
-	public static Lister getInstance() {
+	public static HelpLister getInstance() {
 		if (instance == null)
-			instance = new Lister();
+			instance = new HelpLister();
 		return instance;
+	}
+
+	public static void killInstance() {
+		instance = null;
 	}
 
 	/**
@@ -50,7 +53,32 @@ public class Lister {
 	 * @param plugin
 	 */
 	public void addPlugin(Plugin plugin) {
-		HelpList toAdd = new HelpList(plugin);
-		plugins.put(toAdd.getPluginName(), toAdd);
+		String pName = plugin.getDescription().getName();
+		if (!plugins.containsKey(pName) || !noCmds.contains(pName))
+			try {
+				plugins.put(pName, new HelpList(plugin));
+			} catch (IllegalArgumentException e) {
+				noCmds.add(pName);
+			}
+			
+	}
+
+	/**
+	 * Add a new helpEntry for the wanted plugin. If the plugin is not found,
+	 * add in the database
+	 * 
+	 * @param command
+	 * @param description
+	 * @param plugin
+	 * @param permissions
+	 */
+	public void addHelpEntry(String command, String description, String plugin,
+			List<String> permissions) {
+		HelpList help = plugins.get(plugin);
+		if (help == null) {
+			help = new HelpList(plugin);
+			plugins.put(plugin, help);
+		}
+		help.addEntry(new HelpEntry(command, description, permissions));
 	}
 }

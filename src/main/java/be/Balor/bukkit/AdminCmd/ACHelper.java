@@ -1,5 +1,6 @@
 package be.Balor.bukkit.AdminCmd;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
@@ -21,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.CommandManager;
@@ -31,6 +33,8 @@ import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Files.FilesManager;
+import be.Balor.Tools.Help.HelpLoader;
+import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
@@ -219,7 +223,11 @@ public class ACHelper {
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
+		HelpLister.killInstance();
 		System.gc();
+		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
+			for (Plugin plugin : pluginInstance.getServer().getPluginManager().getPlugins())
+				HelpLister.getInstance().addPlugin(plugin);
 		init();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			for (Player p : pluginInstance.getServer().getOnlinePlayers())
@@ -259,6 +267,7 @@ public class ACHelper {
 		CommandManager.getInstance().setPlugin(pluginInstance);
 		AdminCmd.registerCmds();
 		CommandManager.getInstance().checkAlias();
+		HelpLoader.load(pluginInstance.getDataFolder());
 		if (pluginConfig.getProperty("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.removeProperty("pluginStarted");
@@ -283,6 +292,8 @@ public class ACHelper {
 		fManager.getInnerFile("de_DE.yml", "locales", false);
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
+		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
+		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
@@ -313,8 +324,11 @@ public class ACHelper {
 		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
 		pluginConfig.addProperty("logPrivateMessages", false);
 		pluginConfig.addProperty("broadcastServerReload", true);
-		pluginConfig.addProperty("help.file", "defaultHelpFile");
 		pluginConfig.addProperty("help.entryPerPage", 9);
+		pluginConfig.addProperty("help.shortenEntries", false);
+		pluginConfig.addProperty("help.useWordWrap", false);
+		pluginConfig.addProperty("help.wordWrapRight", false);
+		pluginConfig.addProperty("help.getHelpForAllPlugins", true);
 
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
@@ -331,7 +345,7 @@ public class ACHelper {
 		commands.addProperty("disabledCommands", disabled);
 		commands.addProperty("prioritizedCommands",
 				priority.isEmpty() ? Arrays.asList("reload", "/") : priority);
-		commands.addProperty("alias.god", Arrays.asList("gg","gd"));
+		commands.addProperty("alias.god", Arrays.asList("gg", "gd"));
 		commands.save();
 		init();
 	}
