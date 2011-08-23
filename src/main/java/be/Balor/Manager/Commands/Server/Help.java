@@ -74,7 +74,7 @@ public class Help extends ACCommand {
 					Utils.sI18n(sender, "pluginNotFound", "plugin", args[0]);
 			} else {
 				try {
-					page = Integer.parseInt(args[0]);
+					page = Integer.parseInt(args[1]);
 					if (!HelpLister.getInstance().sendHelpPage(args[0], page, sender))
 						Utils.sI18n(sender, "pluginNotFound", "plugin", args[0]);
 				} catch (NumberFormatException e1) {
