@@ -131,7 +131,7 @@ public class HelpLoader {
 			// (filesLoaded.length()>2 ? " from files: " +
 			// filesLoaded.replaceFirst(", $", "") : ""));
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
-				HelpLogger.info("[AdminCmd]"
+				HelpLogger.info("[AdminCmd] "
 						+ count
 						+ " extra help entries loaded"
 						+ (loaded.length() > 2 ? " from files: "

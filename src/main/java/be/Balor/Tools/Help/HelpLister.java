@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -54,23 +55,27 @@ public class HelpLister {
 	 */
 	public void addPlugin(Plugin plugin) {
 		String pName = plugin.getDescription().getName();
-		if (!plugins.containsKey(pName) || !noCmds.contains(pName))
+		if (!plugins.containsKey(pName) && !noCmds.contains(pName))
 			try {
 				plugins.put(pName, new HelpList(plugin));
 			} catch (IllegalArgumentException e) {
 				noCmds.add(pName);
 			}
-			
+
 	}
 
 	/**
 	 * Add a new helpEntry for the wanted plugin. If the plugin is not found,
-	 * add in the database
+	 * add it in the database.
 	 * 
 	 * @param command
+	 *            name of the command
 	 * @param description
+	 *            description of the command
 	 * @param plugin
+	 *            plugin that is attached to the command
 	 * @param permissions
+	 *            list of permissions to execute the command.
 	 */
 	public void addHelpEntry(String command, String description, String plugin,
 			List<String> permissions) {
@@ -80,5 +85,28 @@ public class HelpLister {
 			plugins.put(plugin, help);
 		}
 		help.addEntry(new HelpEntry(command, description, permissions));
+	}
+
+	/**
+	 * Send the help for the given plugin.
+	 * 
+	 * @param plugin
+	 *            name of the plugin
+	 * @param page
+	 *            number of the page
+	 * @param sender
+	 *            the sender of the command
+	 * @return
+	 */
+	public boolean sendHelpPage(String plugin, int page, CommandSender sender) {
+		HelpList help = plugins.get(plugin);
+		if (help == null)
+			return false;
+		List<String> toDisplay = help.getPage(page, sender);
+		for (String send : toDisplay)
+			for (String l : send.split("\n"))
+				sender.sendMessage(l);
+		return true;
+
 	}
 }
