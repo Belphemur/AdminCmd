@@ -329,6 +329,7 @@ public class ACHelper {
 		commands.addProperty("disabledCommands", disabled);
 		commands.addProperty("prioritizedCommands",
 				priority.isEmpty() ? Arrays.asList("reload", "/") : priority);
+		commands.addProperty("alias.god", Arrays.asList("gg","gd"));
 		commands.save();
 		init();
 	}

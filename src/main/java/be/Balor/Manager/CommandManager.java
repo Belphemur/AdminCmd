@@ -37,6 +37,7 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
@@ -61,6 +62,7 @@ public class CommandManager implements CommandExecutor {
 	private boolean threadsStarted = false;
 	private List<String> disabledCommands;
 	private List<String> prioritizedCommands;
+	private HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
 	private HashMap<String, ACCommand> commandReplacer = new HashMap<String, ACCommand>();
 	private HashMap<String, Command> pluginCommands = new HashMap<String, Command>();
 
@@ -148,6 +150,10 @@ public class CommandManager implements CommandExecutor {
 		Configuration cmds = FilesManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
+		ConfigurationNode alias = cmds.getNode("alias");
+		for (String cmd : alias.getKeys())
+			aliasCommands.put(cmd,
+					new ArrayList<String>(alias.getStringList(cmd, new ArrayList<String>())));
 		startThreads();
 	}
 
@@ -172,13 +178,7 @@ public class CommandManager implements CommandExecutor {
 		try {
 			command = (ACCommand) clazz.newInstance();
 			command.initializeCommand(plugin);
-			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
-				if (disabledCommands.contains(alias))
-					throw new CommandDisabled("Command " + command.getCmdName()
-							+ " selected to be disabled in the configuration file.");
-				else if (prioritizedCommands.contains(alias))
-					commandReplacer.put(alias, command);
-
+			checkCommand(command);
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
 			commands.put(command.getPluginCommand(), command);
@@ -208,6 +208,29 @@ public class CommandManager implements CommandExecutor {
 		}
 	}
 
+	/**
+	 * Check the command if it have alias, prioritized or disabled.
+	 * 
+	 * @param command
+	 * @throws CommandDisabled
+	 */
+	private void checkCommand(final ACCommand command) throws CommandDisabled {
+		for (String alias : pluginCommands.get(command.getCmdName()).getAliases()) {
+			if (disabledCommands.contains(alias))
+				throw new CommandDisabled("Command " + command.getCmdName()
+						+ " selected to be disabled in the configuration file.");
+			if (prioritizedCommands.contains(alias))
+				commandReplacer.put(alias, command);
+			if (aliasCommands.containsKey(alias)) {
+				for (String cmd : aliasCommands.get(alias))
+					commandReplacer.put(cmd, command);
+			}
+		}
+	}
+
+	/**
+	 * Check if some alias have been disabled for the registered commands
+	 */
 	public void checkAlias() {
 		if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 			for (String cmdName : pluginCommands.keySet()) {

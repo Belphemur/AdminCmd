@@ -89,7 +89,8 @@ public class ACPlayerListener extends PlayerListener {
 				vel.add(p.getLocation().getDirection()
 						.multiply(ACHelper.getInstance().getConfFloat("glinding.multiplicator"))
 						.setY(0));
-				if (vel.getY() < ACHelper.getInstance().getConfFloat("glinding.YvelocityCheckToGlide")) {
+				if (vel.getY() < ACHelper.getInstance().getConfFloat(
+						"glinding.YvelocityCheckToGlide")) {
 					vel.setY(ACHelper.getInstance().getConfFloat("glinding.newYvelocity"));
 					p.setVelocity(vel);
 				}
@@ -197,10 +198,9 @@ public class ACPlayerListener extends PlayerListener {
 			if (ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, playerName))
 				try {
 					Block toTp = p.getWorld().getBlockAt(
-							p.getTargetBlock(
-									null,
-									ACHelper.getInstance().getConfInt(
-											"maxRangeForTpAtSee")).getLocation().add(0, 1, 0));
+							p.getTargetBlock(null,
+									ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
+									.getLocation().add(0, 1, 0));
 					if (toTp.getTypeId() == 0) {
 						Location loc = toTp.getLocation().clone();
 						loc.setPitch(p.getLocation().getPitch());
@@ -256,7 +256,8 @@ public class ACPlayerListener extends PlayerListener {
 		ACCommand cmd = CommandManager.getInstance().getCommand(cmdName);
 		if (cmd != null) {
 			event.setCancelled(true);
-			System.out.print("[AdminCmd] Command " + cmdName + " intercepted.");
+			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+				System.out.print("[AdminCmd] Command " + cmdName + " intercepted.");
 			CommandManager.getInstance().executeCommand(event.getPlayer(), cmd,
 					Utils.Arrays_copyOfRange(split, 1, split.length));
 			event.setMessage("/AdminCmd took the control");
