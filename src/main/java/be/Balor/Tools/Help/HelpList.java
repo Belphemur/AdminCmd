@@ -61,21 +61,27 @@ public class HelpList {
 		if (cmds == null)
 			throw new IllegalArgumentException(pluginName + " don't have any commands to list");
 		List<String> perms = new ArrayList<String>();
-		for (Entry<String, HashMap<String, String>> k : cmds.entrySet()) {
-			final HashMap<String, String> value = k.getValue();
-			if (value.containsKey("permission") && value.get("permission") != null
-					&& !(value.get("permission").equals("")))
-				perms.add(value.get("permission"));
-			else if (value.containsKey("permissions") && value.get("permissions") != null
-					&& !(value.get("permissions").equals("")))
-				perms.add(value.get("permissions"));
-			String desc = value.get("description");
-			list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, new ArrayList<String>(
-					perms)));
-			perms.clear();
+		try {
+			for (Entry<String, HashMap<String, String>> k : cmds.entrySet()) {
+				final HashMap<String, String> value = k.getValue();
+				if (value.containsKey("permission") && value.get("permission") != null
+						&& !(value.get("permission").equals("")))
+					perms.add(value.get("permission"));
+				else if (value.containsKey("permissions") && value.get("permissions") != null
+						&& !(value.get("permissions").equals("")))
+					perms.add(value.get("permissions"));
+				String desc = value.get("description");
+				list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, new ArrayList<String>(
+						perms)));
+				perms.clear();
+			}
+			this.pluginHelp = list;
+		} catch (Exception e) {
+			System.out.print("[AdminCmd] Problem with permissions of "+pluginName);
+			this.pluginHelp = new TreeSet<HelpEntry>(new EntryComparator());
 		}
 
-		this.pluginHelp = list;
+		
 	}
 
 	/**

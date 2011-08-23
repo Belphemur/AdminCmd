@@ -276,7 +276,12 @@ public class FilesManager {
 	public Location getLocationFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
 		if (conf.getProperty(property + ".world") == null)
-			return parseLocation(property, conf, directory);
+		{
+			Location loc = parseLocation(property, conf);
+			if(loc!=null)
+				writeLocationFile(loc, property, filename, directory);
+			return loc;
+		}
 		else {
 			return new Location(AdminCmd.getBukkitServer().getWorld(
 					conf.getString(property + ".world")), conf.getDouble(property + ".x", 0),
@@ -317,8 +322,8 @@ public class FilesManager {
 	 * @param conf
 	 * @return
 	 */
-	private Location parseLocation(String property, Configuration conf, String parentProperty) {
-		String toParse = conf.getString(parentProperty + "." + property, null);
+	private Location parseLocation(String property, Configuration conf) {
+		String toParse = conf.getString(property, null);
 		if (toParse == null)
 			return null;
 		if (toParse.isEmpty())
