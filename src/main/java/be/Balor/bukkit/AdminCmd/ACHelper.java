@@ -510,7 +510,7 @@ public class ACHelper {
 	}
 
 	public void addLocation(String type, String name, String filename, Location loc) {
-		addLocation(type, name, name, filename, loc);
+		addLocation(type, name, type + '.' + name, filename, loc);
 
 	}
 
@@ -536,7 +536,7 @@ public class ACHelper {
 	}
 
 	public Location getLocation(String type, String name, String filename) {
-		return getLocation(type, name, name, filename);
+		return getLocation(type, name, type + "." + name, filename);
 	}
 
 	/**
