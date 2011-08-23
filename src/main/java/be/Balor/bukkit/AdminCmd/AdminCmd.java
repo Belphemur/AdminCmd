@@ -148,6 +148,7 @@ public class AdminCmd extends JavaPlugin {
 		CommandManager.getInstance().registerCommand(ListValues.class);
 		CommandManager.getInstance().registerCommand(LastLocation.class);
 		CommandManager.getInstance().registerCommand(SuperBreaker.class);
+		CommandManager.getInstance().registerCommand(Help.class);
 	}
 
 	private void setDefaultLocale() {

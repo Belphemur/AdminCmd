@@ -19,6 +19,7 @@ package be.Balor.Tools.Help;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -62,6 +63,14 @@ public class HelpLister {
 				noCmds.add(pName);
 			}
 
+	}
+
+	/**
+	 * 
+	 * @return the list of all registered plugin
+	 */
+	public Set<String> getPluginList() {
+		return plugins.keySet();
 	}
 
 	/**
