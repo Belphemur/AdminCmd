@@ -18,6 +18,7 @@ package be.Balor.Manager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -217,8 +218,7 @@ public class CommandManager implements CommandExecutor {
 					String aliases = "";
 					for (String alias : cmd.getAliases())
 						aliases += alias + ", ";
-					if (!aliases.isEmpty()
-							&& ACHelper.getInstance().getConfBoolean("verboseLog"))
+					if (!aliases.isEmpty() && ACHelper.getInstance().getConfBoolean("verboseLog"))
 						Logger.getLogger("Minecraft").info(
 								"[" + plugin.getDescription().getName()
 										+ "] Disabled Alias(es) for " + cmd.getName() + " : "
@@ -248,7 +248,7 @@ public class CommandManager implements CommandExecutor {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
 					plugin.getServer().getScheduler()
-							.scheduleSyncDelayedTask(plugin, new SyncTask(cmd, sender, args));
+							.scheduleSyncDelayedTask(plugin, new SyncCommand(cmd, sender, args));
 				else {
 					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
 					cmdCount++;
@@ -323,7 +323,7 @@ public class CommandManager implements CommandExecutor {
 		 */
 		@Override
 		public void run() {
-			String cmdname = null;
+			ACCommandContainer current = null;
 			while (true) {
 				try {
 					sema.acquire();
@@ -331,18 +331,21 @@ public class CommandManager implements CommandExecutor {
 						if (this.stop)
 							break;
 					}
-					cmdname = commands.peek().getCmdName();
-					commands.poll().execute();
+					current = commands.poll();
+					current.execute();
 				} catch (InterruptedException e) {
+				} catch (ConcurrentModificationException cme) {
+					plugin.getServer().getScheduler()
+							.scheduleSyncDelayedTask(plugin, new SyncCommand(current));
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft")
 							.severe("[AdminCmd] The command "
-									+ cmdname
+									+ current.getCmdName()
 									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 					AdminCmd.getBukkitServer()
 							.broadcastMessage(
 									"[AdminCmd] The command "
-											+ cmdname
+											+ current.getCmdName()
 											+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
 					t.printStackTrace();
 				}
@@ -363,18 +366,18 @@ public class CommandManager implements CommandExecutor {
 
 	}
 
-	private class SyncTask implements Runnable {
-		private ACCommand cmd;
-		private CommandSender sender;
-		private String[] args;
+	private class SyncCommand implements Runnable {
+		private ACCommandContainer acc = null;
 
 		/**
 		 * 
 		 */
-		public SyncTask(ACCommand cmd, CommandSender sender, String[] args) {
-			this.cmd = cmd;
-			this.sender = sender;
-			this.args = args;
+		public SyncCommand(ACCommand cmd, CommandSender sender, String[] args) {
+			this.acc = new ACCommandContainer(sender, cmd, args);
+		}
+
+		public SyncCommand(ACCommandContainer acc) {
+			this.acc = acc;
 		}
 
 		/*
@@ -384,8 +387,20 @@ public class CommandManager implements CommandExecutor {
 		 */
 		@Override
 		public void run() {
-			cmd.execute(sender, args);
-
+			try {
+				acc.execute();
+			} catch (Throwable t) {
+				Logger.getLogger("Minecraft")
+						.severe("[AdminCmd] The command "
+								+ acc.getCmdName()
+								+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+				AdminCmd.getBukkitServer()
+						.broadcastMessage(
+								"[AdminCmd] The command "
+										+ acc.getCmdName()
+										+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+				t.printStackTrace();
+			}
 		}
 
 	}
