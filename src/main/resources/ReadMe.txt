@@ -27,6 +27,28 @@ Features :
     Prioritize system for the command, meaning you can choose if some of my command will override other plugin commands.
     Disable command : you can choose witch command you want to disable.
 
+Files and Folder :
+==================
+Folders : 
+---------
+Folder /home/ -> Contain all information about the players, there home, there last location before and if it's there first connection. Each file have the name of the player.
+Folder /locale/ -> Contain the locales files.
+Folder /scripts/ -> Contain a single file scripts.yml where you can configure your own bash/batch script to be executed by the server (only for experienced admins)
+Folder /spawn/ -> Contain a single file spawnLocations.yml containing all the spawn location that your setted in-game with the command /setspawn.
+Folder /warp/ -> Pretty same as Folder /spawn/ but for warpoint.
+Folder /HelpFiles/ -> Contain directory that contain the file to explain each command of the plugin. (Look on /HelpFiles/AdminCmd/ to see what I mean)
+
+Files :
+-------
+Alias.yml -> Contain every Item alias you create inGame.
+banned.yml -> Contain the name of the banned player and the reason of the ban
+blacklist.yml -> Contain blacklisted items
+config.yml -> Config file
+items.csv -> Contain the default alias of Essentials
+kits.yml -> Contain the kits.
+muted.yml -> Like banned, but for muted players.
+commands.yml -> Contain the command you want to disable, prioritize and your alias for each commands.
+
 Configuration Explanation :
 ===========================
 #Display for all new player the MOTD and the news
@@ -79,16 +101,6 @@ glinding:
 #Activate the color sign, using & to select the color.
 ColoredSign: true
 
-#Command that will have all priority under other plugins.
-prioritizedCommands:
-- reload
-- ex
-- undo
-#Disabled commands
-disabledCommands:
-- blah
-- thor
-
 #Disallow muted player to do private message
 mutedPlayerCantPm: false
 
@@ -109,3 +121,33 @@ logPrivateMessages: true
 
 #Broadcast a message to every player when reloading the server.
 broadcastServerReload: true
+
+#For the help command
+help:
+    #Number of help entry per page
+    entryPerPage: 9
+    #Shorten the help text
+    shortenEntries: false
+    #Check the world to do the new line
+    useWordWrap: false
+    wordWrapRight: false
+    #If set to true, get the commands of every plugins installed
+    #Else only from the folder HelpFiles where you set your help files
+    getHelpForAllPlugins: true
+    
+Commands.yml Explanations :
+===========================
+#Command that will have all priority under other plugins.
+prioritizedCommands:
+- reload
+- ex
+- undo
+#Disabled commands
+disabledCommands:
+- blah
+- thor
+#Here you can set your own alias for the commands.
+alias:
+    god:
+    - gg
+    - gd
