@@ -49,6 +49,8 @@ public class HelpList {
 	}
 
 	public void addEntry(HelpEntry he) {
+		if(pluginHelp.contains(he))
+			pluginHelp.remove(he);
 		pluginHelp.add(he);
 	}
 
