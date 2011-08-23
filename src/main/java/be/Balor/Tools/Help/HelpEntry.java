@@ -55,37 +55,40 @@ public class HelpEntry {
 	}
 
 	public String chatString() {
-		String line = String.format("%s/%s%s : %s", ChatColor.GOLD, command,
+		String line = String.format("%s/%s%s : %s", ChatColor.GOLD,
+				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
 				ChatColor.WHITE.toString(), ChatColor.WHITE);
 
 		int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
 		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
 		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				description.replace("[", ChatColor.RED + "[").replace("]", "]" + ChatColor.WHITE),
-				sizeRemaining, ' ');
+				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
+						"]" + ChatColor.WHITE), sizeRemaining, ' ');
 
 		if (ACHelper.getInstance().getConfBoolean("help.shortenEntries")) {
-	            return ACMinecraftFontWidthCalculator.strChatTrim(line);
-	        } else if (sizeRemaining > descriptionSize ||  !ACHelper.getInstance().getConfBoolean("help.useWordWrap")) {
-	            return line;
-	        } else if (ACHelper.getInstance().getConfBoolean("help.wordWrapRight")) {
-	            return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line, 10, ' ', ':');
-	        } else {
-	            return ACMinecraftFontWidthCalculator.strChatWordWrap(line, 10);
-	        }
+			return ACMinecraftFontWidthCalculator.strChatTrim(line);
+		} else if (sizeRemaining > descriptionSize
+				|| !ACHelper.getInstance().getConfBoolean("help.useWordWrap")) {
+			return line;
+		} else if (ACHelper.getInstance().getConfBoolean("help.wordWrapRight")) {
+			return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line, 10, ' ', ':');
+		} else {
+			return ACMinecraftFontWidthCalculator.strChatWordWrap(line, 10);
+		}
 	}
 
 	public String consoleString() {
 		int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
-		String line = String.format("%s/%s%s : %s", ChatColor.GOLD, command,
+		String line = String.format("%s/%s%s : %s", ChatColor.GOLD,
+				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
 				ChatColor.WHITE.toString(), ChatColor.WHITE);
 
 		int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
 		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
 		line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-				description.replace("[", ChatColor.RED + "[").replace("]", "]" + ChatColor.WHITE),
-				sizeRemaining, ' ');
+				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
+						"]" + ChatColor.WHITE), sizeRemaining, ' ');
 
 		if (ACHelper.getInstance().getConfBoolean("help.shortenEntries")) {
 			return ACMinecraftFontWidthCalculator.strTrim(line, width);
