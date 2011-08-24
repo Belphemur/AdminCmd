@@ -178,10 +178,13 @@ public class ACPlayerListener extends PlayerListener {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK
 				&& ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, playerName)) {
 			Block b = event.getClickedBlock();
-			if (b.getTypeId() != 64)
-				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(b.getType(), 1));
-			else
+			int typeId = b.getTypeId();
+			if (typeId == 64)
 				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(324, 1));
+			else if (typeId == 71)
+				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(330, 1));
+			else
+				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(typeId, 1));
 			if (Utils.logBlock != null)
 				Utils.logBlock.queueBlockBreak(playerName, b.getState());
 			b.setTypeId(0);
