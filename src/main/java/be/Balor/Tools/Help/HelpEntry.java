@@ -107,7 +107,7 @@ public class HelpEntry {
 	}
 
 	private String getFormatedCmd() {
-		return String.format("%s/%s%s :", ChatColor.GOLD,
+		return String.format("%s/%s%s : ", ChatColor.GOLD,
 				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
 				ChatColor.WHITE);
 	}
