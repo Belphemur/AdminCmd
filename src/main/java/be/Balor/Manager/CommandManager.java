@@ -204,15 +204,17 @@ public class CommandManager implements CommandExecutor {
 				}
 			}
 			if (disableCommand)
+			{
 				unRegisterBukkitCommand(command.getPluginCommand());
+				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+					Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+			}
 			else
 			{
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				commands.put(command.getPluginCommand(), command);
-			}
-			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
-				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+			}			
 		} catch (CommandException e) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
