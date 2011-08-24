@@ -225,10 +225,10 @@ public class ACHelper {
 		CommandManager.killInstance();
 		HelpLister.killInstance();
 		System.gc();
+		init();
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
 			for (Plugin plugin : pluginInstance.getServer().getPluginManager().getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
-		init();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			for (Player p : pluginInstance.getServer().getOnlinePlayers())
 				AFKWorker.getInstance().updateTimeStamp(p);

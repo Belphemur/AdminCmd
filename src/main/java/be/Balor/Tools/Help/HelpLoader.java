@@ -91,14 +91,10 @@ public class HelpLoader {
 									+ "\" is missing a description in " + fn);
 							continue;
 						}
-						if (!helpNode.containsKey("plugin")) {
-							HelpLogger.warning("Help entry node \"" + helpKey
-									+ "\" is missing a plugin in " + fn);
-							continue;
-						}
 						String command = helpNode.get("command").toString();
 						String description = helpNode.get("description").toString();
-						String plugin = helpNode.get("plugin").toString();
+						String plugin = helpNode.containsKey("plugin") ? helpNode.get("plugin")
+								.toString() : fileName;
 						ArrayList<String> permissions = new ArrayList<String>();
 
 						if (helpNode.containsKey("permissions")) {

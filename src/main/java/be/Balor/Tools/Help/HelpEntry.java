@@ -22,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -41,8 +42,14 @@ public class HelpEntry {
 	}
 
 	public boolean hasPerm(CommandSender p) {
-		for (String perm : permissions)
+		for (String perm : permissions) {
+			if (perm.equals("OP"))
+				if (Utils.isPlayer(p, false))
+					return p.isOp();
+				else
+					return true;
 			return PermissionManager.hasPerm(p, perm, false);
+		}
 		return true;
 	}
 
@@ -55,9 +62,7 @@ public class HelpEntry {
 	}
 
 	public String chatString() {
-		String line = String.format("%s/%s%s : %s", ChatColor.GOLD,
-				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
-				ChatColor.WHITE.toString(), ChatColor.WHITE);
+		String line = getFormatedCmd();
 
 		int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
@@ -80,9 +85,7 @@ public class HelpEntry {
 
 	public String consoleString() {
 		int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
-		String line = String.format("%s/%s%s : %s", ChatColor.GOLD,
-				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
-				ChatColor.WHITE.toString(), ChatColor.WHITE);
+		String line = getFormatedCmd();
 
 		int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
 		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
@@ -101,6 +104,12 @@ public class HelpEntry {
 			return ACMinecraftFontWidthCalculator.strWordWrap(line, width, 10);
 		}
 
+	}
+
+	private String getFormatedCmd() {
+		return String.format("%s/%s%s :", ChatColor.GOLD,
+				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
+				ChatColor.WHITE);
 	}
 
 	/**

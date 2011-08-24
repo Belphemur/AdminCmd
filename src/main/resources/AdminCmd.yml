@@ -6,7 +6,7 @@ AdminCmd:
     plugin: AdminCmd
 
 actimeset:
-    command: time day|night|dusk|dawn|<raw>|pause|unpause
+    command: time [day|night|dusk|dawn|<raw>|pause|unpause]
     description: "Set world time\n to a given timestamp/alias."
     plugin: AdminCmd
     permissions: admincmd.time.set
