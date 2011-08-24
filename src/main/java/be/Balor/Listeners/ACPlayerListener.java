@@ -315,8 +315,15 @@ public class ACPlayerListener extends PlayerListener {
 			dropItem(block, 295);
 			break;
 		case 26:
-			if (block.getData() == 1)
+			if (block.getData() < 4)
 				dropItem(block, 355);
+			break;
+		case 75:
+			dropItem(block, 76);
+			break;
+		case 93:
+		case 94:
+			dropItem(block, 356);
 			break;
 		default:
 			dropItem(block, typeId);
