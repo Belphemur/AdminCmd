@@ -317,7 +317,6 @@ public class ACPlayerListener extends PlayerListener {
 		case 26:
 			if (block.getData() == 1)
 				dropItem(block, 355);
-			System.out.print(block.getData());
 			break;
 		default:
 			dropItem(block, typeId);
