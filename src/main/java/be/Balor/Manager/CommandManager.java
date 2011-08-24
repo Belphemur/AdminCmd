@@ -191,15 +191,26 @@ public class CommandManager implements CommandExecutor {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
-			for (String alias : pluginCommands.get(command.getCmdName()).getAliases())
+			boolean disableCommand = true;
+			for (String alias : pluginCommands.get(command.getCmdName()).getAliases()) {
 				if (prioritizedCommands.contains(alias)) {
 					commandReplacer.put(alias, command);
-					command.registerBukkitPerm();
-					command.getPluginCommand().setExecutor(this);
-					commands.put(command.getPluginCommand(), command);
-					return;
+					disableCommand = false;
 				}
-			unRegisterBukkitCommand(command.getPluginCommand());
+				if (aliasCommands.containsKey(alias)) {
+					for (String cmd : aliasCommands.get(alias))
+						commandReplacer.put(cmd, command);
+					disableCommand = false;
+				}
+			}
+			if (disableCommand)
+				unRegisterBukkitCommand(command.getPluginCommand());
+			else
+			{
+				command.registerBukkitPerm();
+				command.getPluginCommand().setExecutor(this);
+				commands.put(command.getPluginCommand(), command);
+			}
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandException e) {
