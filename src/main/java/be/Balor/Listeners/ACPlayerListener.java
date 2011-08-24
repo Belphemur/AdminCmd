@@ -18,6 +18,7 @@ package be.Balor.Listeners;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -177,17 +178,7 @@ public class ACPlayerListener extends PlayerListener {
 		String playerName = p.getName();
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK
 				&& ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, playerName)) {
-			Block b = event.getClickedBlock();
-			int typeId = b.getTypeId();
-			if (typeId == 64)
-				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(324, 1));
-			else if (typeId == 71)
-				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(330, 1));
-			else
-				b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(typeId, 1));
-			if (Utils.logBlock != null)
-				Utils.logBlock.queueBlockBreak(playerName, b.getState());
-			b.setTypeId(0);
+			superBreaker(playerName, event.getClickedBlock());
 			return;
 		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
@@ -201,20 +192,8 @@ public class ACPlayerListener extends PlayerListener {
 			power = null;
 			if ((power = (Float) ACHelper.getInstance().getValue(Type.FIREBALL, playerName)) != null)
 				ShootFireball.shoot(p, power);
-			if (ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, playerName))
-				try {
-					Block toTp = p.getWorld().getBlockAt(
-							p.getTargetBlock(null,
-									ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
-									.getLocation().add(0, 1, 0));
-					if (toTp.getTypeId() == 0) {
-						Location loc = toTp.getLocation().clone();
-						loc.setPitch(p.getLocation().getPitch());
-						loc.setYaw(p.getLocation().getYaw());
-						p.teleport(loc);
-					}
-				} catch (Exception e) {
-				}
+			tpAtSee(p);
+
 		}
 	}
 
@@ -268,6 +247,86 @@ public class ACPlayerListener extends PlayerListener {
 					Utils.Arrays_copyOfRange(split, 1, split.length));
 			event.setMessage("/AdminCmd took the control");
 		}
+	}
+
+	/**
+	 * Tp at see mode
+	 * 
+	 * @param p
+	 */
+	private void tpAtSee(Player p) {
+		if (ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, p))
+			try {
+				Block toTp = p.getWorld().getBlockAt(
+						p.getTargetBlock(null,
+								ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
+								.getLocation().add(0, 1, 0));
+				if (toTp.getTypeId() == 0) {
+					Location loc = toTp.getLocation().clone();
+					loc.setPitch(p.getLocation().getPitch());
+					loc.setYaw(p.getLocation().getYaw());
+					p.teleport(loc);
+				}
+			} catch (Exception e) {
+			}
+	}
+
+	/**
+	 * Drop the wanted item
+	 * 
+	 * @param block
+	 * @param itemId
+	 * @return
+	 */
+	private Item dropItem(Block block, int itemId) {
+		return block.getWorld().dropItemNaturally(block.getLocation(),
+				new ItemStack(itemId, 1, block.getData()));
+	}
+
+	/**
+	 * Super breaker mode
+	 * 
+	 * @param playerName
+	 * @param block
+	 */
+	private void superBreaker(String playerName, Block block) {
+		int typeId = block.getTypeId();
+		switch (typeId) {
+		case 64:
+			if (block.getData() < 8)
+				dropItem(block, 324);
+			break;
+		case 71:
+			if (block.getData() < 8)
+				dropItem(block, 330);
+			break;
+		case 55:
+			dropItem(block, 331);
+			break;
+		case 63:
+		case 68:
+			dropItem(block, 323);
+			break;
+		case 83:
+			dropItem(block, 338);
+			break;
+		case 59:
+		case 31:
+			dropItem(block, 295);
+			break;
+		case 26:
+			if (block.getData() == 1)
+				dropItem(block, 355);
+			System.out.print(block.getData());
+			break;
+		default:
+			dropItem(block, typeId);
+			break;
+		}
+
+		if (Utils.logBlock != null)
+			Utils.logBlock.queueBlockBreak(playerName, block.getState());
+		block.setTypeId(0);
 	}
 
 	protected class UpdateInvisibleOnJoin implements Runnable {
