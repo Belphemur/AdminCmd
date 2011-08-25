@@ -24,6 +24,7 @@ import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 
 import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,7 +52,13 @@ public class PermissionsEx extends AbstractPermission {
 	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
-		return PEX.has((Player) player, perm);
+		if (PEX.has((Player) player, perm))
+			return true;
+		else {
+			if (errorMsg)
+				Utils.sI18n(player, "errorNotPerm", "p", perm);
+			return false;
+		}
 	}
 
 	/*
@@ -65,7 +72,13 @@ public class PermissionsEx extends AbstractPermission {
 	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
-		return PEX.has((Player) player, perm.getName());
+		if (PEX.has((Player) player, perm.getName()))
+			return true;
+		else {
+			if (errorMsg)
+				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
+			return false;
+		}
 	}
 
 	/*
