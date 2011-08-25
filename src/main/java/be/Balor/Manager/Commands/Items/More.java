@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -72,7 +71,7 @@ public class More extends ACCommand {
 					int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
 					hand.setAmount(hand.getMaxStackSize());
 					((Player) sender).getInventory().addItem(
-							new ItemStack(hand.getType(), inInventory));
+							new ItemStack(hand.getType(), inInventory, hand.getDurability()));
 					HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("amount", String.valueOf(inInventory));
 					Utils.sI18n(sender, "moreTooMuch", replace);
