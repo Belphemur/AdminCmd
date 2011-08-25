@@ -32,7 +32,7 @@ public class ACBlockListener extends BlockListener {
 			return;
 		String parsed = null;
 		String line;
-		if (Utils.signExtention && event.getLine(0).endsWith("Sign]"))
+		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]"))
 			return;
 		for (int i = 0; i < 4; i++) {
 			line = event.getLine(i);
