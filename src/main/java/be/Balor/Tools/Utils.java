@@ -51,6 +51,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class Utils {
 	public static OddItem oddItem = null;
 	public static Consumer logBlock = null;
+	public static boolean signExtention = false;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)

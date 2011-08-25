@@ -32,15 +32,16 @@ public class ACBlockListener extends BlockListener {
 			return;
 		String parsed = null;
 		String line;
-		for (int i=0; i < 4; i++)
-		{
+		if (Utils.signExtention && event.getLine(0).endsWith("Sign]"))
+			return;
+		for (int i = 0; i < 4; i++) {
 			line = event.getLine(i);
-			if (line != null && !line.isEmpty()) {				
+			if (line != null && !line.isEmpty()) {
 				parsed = Utils.colorParser(line);
 				if (parsed != null)
 					event.setLine(i, parsed);
 			}
 		}
 	}
-		
+
 }

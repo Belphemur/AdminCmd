@@ -87,7 +87,13 @@ public class ACPluginListener extends ServerListener {
 		}
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins")) {
 			for (Plugin plugin : event.getPlugin().getServer().getPluginManager().getPlugins())
-					HelpLister.getInstance().addPlugin(plugin);
+				HelpLister.getInstance().addPlugin(plugin);
+		}
+		if (!Utils.signExtention) {
+			Plugin plugin = AdminCmd.getBukkitServer().getPluginManager()
+					.getPlugin("SignExtensions");
+			if (plugin != null)
+				Utils.signExtention = true;
 		}
 	}
 }
