@@ -362,9 +362,11 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("noLastLocation", ChatColor.RED
 				+ "You don't have a last location to tp back");
 		Utils.addLocale("super_breakerDisabled", ChatColor.GOLD + "Super Breaker mode disabled.");
-		Utils.addLocale("super_breakerDisabledTarget", ChatColor.GOLD + "Super Breaker mode disabled for %player");
+		Utils.addLocale("super_breakerDisabledTarget", ChatColor.GOLD
+				+ "Super Breaker mode disabled for %player");
 		Utils.addLocale("super_breakerEnabled", ChatColor.GOLD + "Super Breaker mode enabled.");
-		Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD + "Super Breaker mode enabled for %player");
+		Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD
+				+ "Super Breaker mode enabled for %player");
 		LocaleManager.getInstance().save();
 	}
 
@@ -401,7 +403,8 @@ public class AdminCmd extends JavaPlugin {
 		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
-		pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
+		if (worker.getConfBoolean("ColoredSign"))
+			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 

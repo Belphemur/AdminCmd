@@ -20,7 +20,6 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
 
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -30,8 +29,6 @@ public class ACBlockListener extends BlockListener {
 	@Override
 	public void onSignChange(SignChangeEvent event) {
 		if (event.isCancelled())
-			return;
-		if (!ACHelper.getInstance().getConfBoolean("ColoredSign"))
 			return;
 		String parsed = null;
 		String line;
