@@ -94,7 +94,7 @@ fakeQuitWhenInvisible: true
 #Activate the parachute when falling in fly mode
 glideWhenFallingInFlyMode: true
 #Tweak the parachute value.
-glinding:
+gliding:
     newYvelocity: -0.5
     YvelocityCheckToGlide: -0.2
     multiplicator: 0.1

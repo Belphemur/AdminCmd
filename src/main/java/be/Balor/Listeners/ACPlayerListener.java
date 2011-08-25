@@ -88,11 +88,11 @@ public class ACPlayerListener extends PlayerListener {
 			else if (ACHelper.getInstance().getConfBoolean("glideWhenFallingInFlyMode")) {
 				Vector vel = p.getVelocity();
 				vel.add(p.getLocation().getDirection()
-						.multiply(ACHelper.getInstance().getConfFloat("glinding.multiplicator"))
+						.multiply(ACHelper.getInstance().getConfFloat("gliding.multiplicator"))
 						.setY(0));
 				if (vel.getY() < ACHelper.getInstance().getConfFloat(
-						"glinding.YvelocityCheckToGlide")) {
-					vel.setY(ACHelper.getInstance().getConfFloat("glinding.newYvelocity"));
+						"gliding.YvelocityCheckToGlide")) {
+					vel.setY(ACHelper.getInstance().getConfFloat("gliding.newYvelocity"));
 					p.setVelocity(vel);
 				}
 			}

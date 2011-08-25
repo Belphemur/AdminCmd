@@ -313,9 +313,6 @@ public class ACHelper {
 		pluginConfig.addProperty("DefaultFlyPower", 1.75F);
 		pluginConfig.addProperty("DefaultFireBallPower", 1.0F);
 		pluginConfig.addProperty("DefaultVulcanPower", 4.0F);
-		pluginConfig.addProperty("glinding.multiplicator", 0.1F);
-		pluginConfig.addProperty("glinding.YvelocityCheckToGlide", -0.2F);
-		pluginConfig.addProperty("glinding.newYvelocity", -0.5F);
 		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
 		pluginConfig.addProperty("mutedPlayerCantPm", false);
 		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
@@ -339,6 +336,19 @@ public class ACHelper {
 		if (pluginConfig.getProperty("prioritizedCommands") != null) {
 			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.removeProperty("prioritizedCommands");
+		}
+		if (pluginConfig.getProperty("glinding") != null) {
+			pluginConfig
+					.addProperty("gliding.multiplicator", getConfFloat("glinding.multiplicator"));
+			pluginConfig.addProperty("gliding.YvelocityCheckToGlide",
+					getConfFloat("glinding.YvelocityCheckToGlide"));
+			pluginConfig.addProperty("gliding.newYvelocity", getConfFloat("glinding.newYvelocity"));
+			pluginConfig.removeProperty("glinding");
+			
+		} else {
+			pluginConfig.addProperty("gliding.multiplicator", 0.1F);
+			pluginConfig.addProperty("gliding.YvelocityCheckToGlide", -0.2F);
+			pluginConfig.addProperty("gliding.newYvelocity", -0.5F);
 		}
 		pluginConfig.save();
 		ExtendedConfiguration commands = new ExtendedConfiguration("commands.yml", null);
