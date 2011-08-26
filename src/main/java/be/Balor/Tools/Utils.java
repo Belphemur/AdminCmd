@@ -359,6 +359,8 @@ public class Utils {
 				return;
 			}
 			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
+				ACHelper.getInstance().addLocation("home", pFrom.getName() + ".lastLoc", "lastLoc",
+						pFrom.getName(), pFrom.getLocation());
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
@@ -382,6 +384,8 @@ public class Utils {
 				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 			} else {
+				ACHelper.getInstance().addLocation("home", pFrom.getName() + ".lastLoc", "lastLoc",
+						pFrom.getName(), pFrom.getLocation());
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());

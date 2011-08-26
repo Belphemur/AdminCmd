@@ -55,8 +55,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACPlayerListener extends PlayerListener {
-	private boolean otherWorld = false;
-
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName())) {
@@ -141,17 +139,16 @@ public class ACPlayerListener extends PlayerListener {
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
-		if (!otherWorld) {
+		boolean otherWorld = !from.getWorld().equals(to.getWorld());
+		if (otherWorld) {
 			ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc",
 					playername, from);
 		}
-		otherWorld = !from.getWorld().equals(to.getWorld());
 		if (ACHelper.getInstance().isValueSet(Type.FROZEN, playername)) {
 			event.setCancelled(true);
 			return;
 		}
-		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
-				&& !from.getWorld().equals(to.getWorld())
+		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld") && !otherWorld
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
 			if (ACHelper.getInstance().removeKeyFromValues(event.getPlayer())
 					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
@@ -257,15 +254,18 @@ public class ACPlayerListener extends PlayerListener {
 	private void tpAtSee(Player p) {
 		if (ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, p))
 			try {
+				String playername = p.getName();
 				Block toTp = p.getWorld().getBlockAt(
 						p.getTargetBlock(null,
 								ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
 								.getLocation().add(0, 1, 0));
 				if (toTp.getTypeId() == 0) {
 					Location loc = toTp.getLocation().clone();
+					ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc",
+							playername, loc);
 					loc.setPitch(p.getLocation().getPitch());
-					loc.setYaw(p.getLocation().getYaw());
-					p.teleport(loc);
+					loc.setYaw(p.getLocation().getYaw());					
+					p.teleport(loc);					
 				}
 			} catch (Exception e) {
 			}
