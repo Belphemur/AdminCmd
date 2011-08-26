@@ -46,6 +46,8 @@ public class TpRequest {
 			return;
 		}
 		if (from != null && to != null) {
+			ACHelper.getInstance().addLocation("home", from.getName() + ".lastLoc", "lastLoc",
+					from.getName(), from.getLocation());
 			from.teleport(to);
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("fromPlayer", from.getName());
