@@ -179,13 +179,13 @@ public class FilesManager {
 		final File file;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);
-			if (!directoryFile.exists()) {				
+			if (!directoryFile.exists()) {
 				directoryFile.mkdirs();
 			}
 			file = new File(directoryFile, filename);
 		} else
 			file = new File(pathFile, filename);
-		if(file.exists() && replace)
+		if (file.exists() && replace)
 			file.delete();
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
@@ -275,14 +275,12 @@ public class FilesManager {
 	 */
 	public Location getLocationFile(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
-		if (conf.getProperty(property + ".world") == null)
-		{
+		if (conf.getProperty(property + ".world") == null) {
 			Location loc = parseLocation(property, conf);
-			if(loc!=null)
+			if (loc != null)
 				writeLocationFile(loc, property, filename, directory);
 			return loc;
-		}
-		else {
+		} else {
 			return new Location(AdminCmd.getBukkitServer().getWorld(
 					conf.getString(property + ".world")), conf.getDouble(property + ".x", 0),
 					conf.getDouble(property + ".y", 0), conf.getDouble(property + ".z", 0),
@@ -360,8 +358,9 @@ public class FilesManager {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Configuration conf = getYml(filename, directory);
 		if (conf.getKeys(type.toString()) != null) {
-			for (String key : conf.getKeys(type.toString()))
-				result.put(key, conf.getProperty(type + "." + key));
+			ConfigurationNode node = conf.getNode(type.toString());
+			for (String key : node.getKeys())
+				result.put(key, node.getProperty(key));
 		}
 		return result;
 	}

@@ -367,6 +367,7 @@ public class AdminCmd extends JavaPlugin {
 		Utils.addLocale("super_breakerEnabled", ChatColor.GOLD + "Super Breaker mode enabled.");
 		Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD
 				+ "Super Breaker mode enabled for %player");
+		Utils.addLocale("airForbidden", ChatColor.DARK_RED + "You can't give AIR item.");
 		LocaleManager.getInstance().save();
 	}
 

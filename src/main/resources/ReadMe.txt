@@ -134,6 +134,9 @@ help:
     #If set to true, get the commands of every plugins installed
     #Else only from the folder HelpFiles where you set your help files
     getHelpForAllPlugins: true
+
+#Item used for the SuperBreaker mode
+superBreakerItem: 278
     
 Commands.yml Explanations :
 ===========================

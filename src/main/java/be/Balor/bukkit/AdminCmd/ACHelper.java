@@ -326,6 +326,7 @@ public class ACHelper {
 		pluginConfig.addProperty("help.useWordWrap", false);
 		pluginConfig.addProperty("help.wordWrapRight", false);
 		pluginConfig.addProperty("help.getHelpForAllPlugins", true);
+		pluginConfig.addProperty("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
 
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
@@ -414,7 +415,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean setBlackListedItem(CommandSender sender, String name) {
+	public boolean addBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			Configuration config = fManager.getYml("blacklist");
@@ -915,6 +916,7 @@ public class ACHelper {
 
 	public synchronized void loadInfos() {
 		blacklist = getBlackListedItems();
+		
 		alias.putAll(fManager.getAlias());
 		List<String> tmp = fManager.getYmlKeyFromFile("warpPoints", "warp");
 		if (tmp != null)

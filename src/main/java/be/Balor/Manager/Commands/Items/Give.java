@@ -18,6 +18,7 @@ package be.Balor.Manager.Commands.Items;
 
 import java.util.HashMap;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -56,9 +57,14 @@ public class Give extends ACCommand {
 		MaterialContainer mat = null;
 		mat = ACHelper.getInstance().checkMaterial(sender, args[0]);
 		if (mat.isNull())
-			return;
+			return;		
 		if (ACHelper.getInstance().inBlackList(sender, mat))
 			return;
+		if(mat.getMaterial().equals(Material.AIR))
+		{
+			Utils.sI18n(sender, "airForbidden");
+			return;
+		}
 		// amount, damage and target player
 		int cnt = 1;
 		Player target = null;

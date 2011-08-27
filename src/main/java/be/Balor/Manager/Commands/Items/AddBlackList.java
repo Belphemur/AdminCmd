@@ -45,7 +45,7 @@ public class AddBlackList extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().setBlackListedItem(sender, args[0]);
+		ACHelper.getInstance().addBlackListedItem(sender, args[0]);
 	}
 
 	/*

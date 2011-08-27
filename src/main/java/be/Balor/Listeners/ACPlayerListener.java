@@ -174,6 +174,8 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		String playerName = p.getName();
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK
+				&& event.getItem().getTypeId() == ACHelper.getInstance().getConfInt(
+						"superBreakerItem")
 				&& ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, playerName)) {
 			superBreaker(playerName, event.getClickedBlock());
 			return;
@@ -260,12 +262,12 @@ public class ACPlayerListener extends PlayerListener {
 								ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
 								.getLocation().add(0, 1, 0));
 				if (toTp.getTypeId() == 0) {
-					Location loc = toTp.getLocation().clone();					
+					Location loc = toTp.getLocation().clone();
 					loc.setPitch(p.getLocation().getPitch());
-					loc.setYaw(p.getLocation().getYaw());	
+					loc.setYaw(p.getLocation().getYaw());
 					ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc",
 							playername, p.getLocation());
-					p.teleport(loc);					
+					p.teleport(loc);
 				}
 			} catch (Exception e) {
 			}

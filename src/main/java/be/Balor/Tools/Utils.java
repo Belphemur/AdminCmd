@@ -85,8 +85,7 @@ public class Utils {
 			if ((mc = ACHelper.getInstance().getAlias(info[0])) == null) {
 				mc = new MaterialContainer(info[0], info[1]);
 			}
-		}
-
+		}		
 		return mc;
 
 	}
@@ -128,7 +127,7 @@ public class Utils {
 
 	public static double getDistanceSquared(Player player1, Player player2) {
 		if (!player1.getWorld().getName().equals(player2.getWorld().getName()))
-			return Long.MAX_VALUE;
+			return Double.MAX_VALUE;
 		Location loc1 = player1.getLocation();
 		Location loc2 = player2.getLocation();
 		return Math.pow((loc1.getX() - loc2.getX()), 2) + Math.pow((loc1.getZ() - loc2.getZ()), 2);
