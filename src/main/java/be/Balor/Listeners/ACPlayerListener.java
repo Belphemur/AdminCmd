@@ -199,13 +199,13 @@ public class ACPlayerListener extends PlayerListener {
 	private boolean playerRespawnOrJoin(Player newPlayer) {
 		AdminCmd.getBukkitServer()
 				.getScheduler()
-				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-						new UpdateInvisibleOnJoin(newPlayer), 25);
+				.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+						new UpdateInvisibleOnJoin(newPlayer), 15);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
 			AdminCmd.getBukkitServer()
 					.getScheduler()
-					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
-							new UpdateInvisible(newPlayer), 25);
+					.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+							new UpdateInvisible(newPlayer), 15);
 			return true;
 		}
 		return false;
