@@ -108,7 +108,7 @@ final public class InvisibleWorker {
 
 			AdminCmd.getBukkitServer()
 					.getScheduler()
-					.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+					.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 							new Runnable() {
 								public void run() {
 									for (Player p : Utils.getOnlinePlayers())
@@ -188,7 +188,7 @@ final public class InvisibleWorker {
 		String name = toVanish.getName();
 		AdminCmd.getBukkitServer()
 				.getScheduler()
-				.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+				.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
 						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
