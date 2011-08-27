@@ -50,17 +50,20 @@ public class PlayerLocation extends ACCommand {
 	public void execute(CommandSender sender, String... args) {
 		Location loc;
 		String msg;
+		Player target;
 		if (args.length == 0) {
 			if (Utils.isPlayer(sender)) {
-				loc = ((Player) sender).getLocation();
+				target = (Player) sender;
+				loc = target.getLocation();
 				msg = "You are";
 			} else
 				return;
 		} else
 			try {
-				loc = sender.getServer().getPlayer(args[0]).getLocation();
-				msg = sender.getServer().getPlayer(args[0]).getName() + " is";
-			} catch (Exception ex) {
+				target = sender.getServer().getPlayer(args[0]);
+				loc = target.getLocation();
+				msg = target.getName() + " is";
+			} catch (NullPointerException ex) {
 				Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 				return;
 			}
@@ -70,7 +73,8 @@ public class PlayerLocation extends ACCommand {
 		double yaw = ((loc.getYaw() + 22.5) % 360);
 		if (yaw < 0)
 			yaw += 360;
-		sender.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]);
+		sender.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]
+				+ ChatColor.WHITE + " in World " + ChatColor.AQUA + target.getWorld().getName());
 
 	}
 
