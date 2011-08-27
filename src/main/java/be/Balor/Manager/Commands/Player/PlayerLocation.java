@@ -21,7 +21,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Utils;
 
@@ -62,8 +61,7 @@ public class PlayerLocation extends ACCommand {
 				loc = sender.getServer().getPlayer(args[0]).getLocation();
 				msg = sender.getServer().getPlayer(args[0]).getName() + " is";
 			} catch (Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Player " + ChatColor.WHITE + args[0]
-						+ ChatColor.RED + " not found!");
+				Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 				return;
 			}
 		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()

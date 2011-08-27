@@ -66,7 +66,8 @@ public class Invisible extends ACCommand {
 				if (!target.equals(sender))
 					Utils.sI18n(sender, "invisibleDisabledTarget", replace);
 			}
-		}
+		} else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 	}
 
 	/*

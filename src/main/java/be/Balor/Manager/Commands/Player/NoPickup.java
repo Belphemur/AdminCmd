@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class NoPickup extends ACCommand {
 
@@ -65,7 +65,8 @@ public class NoPickup extends ACCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "npEnabledTarget", replace);
 			}
-		}
+		} else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 	}
 
 	/*

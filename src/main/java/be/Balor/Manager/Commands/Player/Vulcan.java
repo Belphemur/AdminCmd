@@ -21,7 +21,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.ACCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -78,7 +77,8 @@ public class Vulcan extends ACCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "vulcanEnabledTarget", replace);
 			}
-		}
+		} else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 	}
 
 	/*

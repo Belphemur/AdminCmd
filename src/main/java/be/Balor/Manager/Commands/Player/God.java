@@ -65,7 +65,8 @@ public class God extends ACCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "godEnabledTarget", replace);
 			}
-		}
+		} else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 	}
 
 	/*

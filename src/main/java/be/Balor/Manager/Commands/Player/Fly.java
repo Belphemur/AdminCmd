@@ -81,6 +81,8 @@ public class Fly extends ACCommand {
 					Utils.sI18n(sender, "flyEnabledTarget", replace);
 			}
 		}
+		else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 
 	}
 

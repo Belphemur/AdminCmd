@@ -65,7 +65,8 @@ public class SuperBreaker extends ACCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget", replace);
 			}
-		}
+		} else
+			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
 	}
 
 	/*
