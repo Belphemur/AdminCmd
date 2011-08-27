@@ -38,7 +38,7 @@ public class Afk extends ACCommand {
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * (non-Javadoc) 
 	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
