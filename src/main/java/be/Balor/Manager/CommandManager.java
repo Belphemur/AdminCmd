@@ -203,18 +203,15 @@ public class CommandManager implements CommandExecutor {
 					disableCommand = false;
 				}
 			}
-			if (disableCommand)
-			{
+			if (disableCommand) {
 				unRegisterBukkitCommand(command.getPluginCommand());
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
-			}
-			else
-			{
+			} else {
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				commands.put(command.getPluginCommand(), command);
-			}			
+			}
 		} catch (CommandException e) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
@@ -374,15 +371,8 @@ public class CommandManager implements CommandExecutor {
 					plugin.getServer().getScheduler()
 							.scheduleSyncDelayedTask(plugin, new SyncCommand(current));
 				} catch (Throwable t) {
-					Logger.getLogger("Minecraft")
-							.severe("[AdminCmd] The command "
-									+ current.getCmdName()
-									+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-					AdminCmd.getBukkitServer()
-							.broadcastMessage(
-									"[AdminCmd] The command "
-											+ current.getCmdName()
-											+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+					Logger.getLogger("Minecraft").severe(current.debug());
+					AdminCmd.getBukkitServer().broadcastMessage(current.debug());
 					t.printStackTrace();
 				}
 
@@ -426,15 +416,8 @@ public class CommandManager implements CommandExecutor {
 			try {
 				acc.execute();
 			} catch (Throwable t) {
-				Logger.getLogger("Minecraft")
-						.severe("[AdminCmd] The command "
-								+ acc.getCmdName()
-								+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-				AdminCmd.getBukkitServer()
-						.broadcastMessage(
-								"[AdminCmd] The command "
-										+ acc.getCmdName()
-										+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
+				Logger.getLogger("Minecraft").severe(acc.debug());
+				AdminCmd.getBukkitServer().broadcastMessage(acc.debug());
 				t.printStackTrace();
 			}
 		}

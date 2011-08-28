@@ -1,7 +1,8 @@
 Admin Command 
 =============
 Version : ${project.version} (BUILD${timestamp})
-Url : http://forums.bukkit.org/threads/admincmd.10770/
+Thread : http://forums.bukkit.org/threads/admincmd.10770/
+Ticket (for bug/feature request) : http://dev.bukkit.org/server-mods/admincmd/tickets/
 
 Features :
 ==========

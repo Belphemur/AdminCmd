@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.util.Arrays;
+
 import org.bukkit.command.CommandSender;
 
 /**
@@ -44,10 +46,15 @@ public class ACCommandContainer {
 	}
 
 	/**
+	 * Debug display
 	 * 
-	 * @return the command name.
+	 * @return
 	 */
-	public String getCmdName() {
-		return cmd.getCmdName();
+	public String debug() {
+		return "[AdminCmd] The command "
+				+ cmd.getCmdName()
+				+ " "
+				+ Arrays.toString(args)
+				+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/";
 	}
 }
