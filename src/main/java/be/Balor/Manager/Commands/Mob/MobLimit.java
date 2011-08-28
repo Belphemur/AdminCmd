@@ -49,7 +49,7 @@ public class MobLimit extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		World world = sender.getServer().getWorld(args[0]);
+		World world = sender.getServer().getWorld(args[0].replaceAll("_", " "));
 		if (world != null) {
 			int limit;
 			try {
