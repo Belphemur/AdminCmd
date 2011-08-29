@@ -18,6 +18,7 @@ package be.Balor.Listeners;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -76,7 +77,8 @@ public class ACPlayerListener extends PlayerListener {
 				AFKWorker.getInstance().setOnline(p);
 		}
 		if (ACHelper.getInstance().isValueSet(Type.FROZEN, p)) {
-			event.setCancelled(true);
+			// event.setCancelled(true);
+			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
 			return;
 		}
 		Float power = (Float) ACHelper.getInstance().getValue(Type.FLY, p.getName());
@@ -136,6 +138,8 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		if (event.isCancelled())
+			return;
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
@@ -162,6 +166,8 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.isCancelled())
+			return;
 		Player p = event.getPlayer();
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
@@ -227,6 +233,8 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+		if(event.isCancelled())
+			return;
 		if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, event.getPlayer()))
 			event.setCancelled(true);
 	}
