@@ -78,6 +78,11 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		if (ACHelper.getInstance().isValueSet(Type.FROZEN, p)) {
 			// event.setCancelled(true);
+			/**
+			 * https://github.com/Bukkit/CraftBukkit/pull/434
+			 * 
+			 * @author Evenprime
+			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
 			return;
 		}
@@ -233,7 +238,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if(event.isCancelled())
+		if (event.isCancelled())
 			return;
 		if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, event.getPlayer()))
 			event.setCancelled(true);
