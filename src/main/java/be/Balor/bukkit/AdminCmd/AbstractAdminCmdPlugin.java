@@ -35,7 +35,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		ACHelper.getInstance().registerACPlugin(this);
+		PluginInstance.getInstance().registerACPlugin(this);
 	}
 
 	/**

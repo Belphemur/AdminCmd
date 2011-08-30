@@ -300,7 +300,7 @@ acplayerbreak:
     permissions: admincmd.player.break
 
 acweatherclear:
-    command: clearw
+    command: wclear
     description: Clear the weather.
     plugin: AdminCmd
     permissions: admincmd.weather.clear

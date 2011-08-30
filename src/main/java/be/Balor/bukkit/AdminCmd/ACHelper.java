@@ -67,8 +67,7 @@ public class ACHelper {
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private static long pluginStarted;
-	private ExtendedConfiguration pluginConfig;
-	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
+	private ExtendedConfiguration pluginConfig;	
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -106,25 +105,6 @@ public class ACHelper {
 		instance = null;
 	}
 
-	/**
-	 * Register a AdminCmd addon
-	 * 
-	 * @param addon 
-	 */
-	public void registerACPlugin(AbstractAdminCmdPlugin addon) {
-		pluginInstances.put(addon.getName(), addon);
-	}
-
-	/**
-	 * Get addon
-	 * 
-	 * @param name
-	 *            name of the addon
-	 * @return the addon or null if not registered
-	 */
-	public AbstractAdminCmdPlugin getPluginInstance(String name) {
-		return pluginInstances.get(name);
-	}
 
 	/**
 	 * Return the elapsed time.
