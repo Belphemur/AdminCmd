@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 import com.google.common.collect.MapMaker;
@@ -225,7 +226,7 @@ final public class AFKWorker {
 		public void run() {
 			long now = System.currentTimeMillis();
 			for (Player p : playersAfk.keySet()) {
-				if (now - playerTimeStamp.get(p) >= kickTime) {
+				if (now - playerTimeStamp.get(p) >= kickTime && !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
 					p.kickPlayer(Utils.I18n("afkKick"));
 					playersAfk.remove(p);
 					playerTimeStamp.remove(p);

@@ -73,6 +73,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
 		permissionLinker.addPermChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
+		permissionLinker.addPermChild("admincmd.player.noafkkick");
 	}
 
 	public void registerCmds() {
