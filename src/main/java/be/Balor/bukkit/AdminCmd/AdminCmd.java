@@ -8,7 +8,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
@@ -28,7 +27,6 @@ import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Weather.*;
 import be.Balor.Manager.Commands.Warp.*;
 import be.Balor.Manager.Permissions.PermParent;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
@@ -40,7 +38,14 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  * @authors Plague, Balor
  */
-public class AdminCmd extends JavaPlugin {
+public class AdminCmd extends AbstractAdminCmdPlugin {
+	/**
+	 * @param name
+	 */
+	public AdminCmd() {
+		super("Core");
+	}
+
 	private static Server server = null;
 	private ACHelper worker;
 
@@ -51,22 +56,22 @@ public class AdminCmd extends JavaPlugin {
 	public static final Logger log = Logger.getLogger("Minecraft");
 
 	private void registerPermParents() {
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.item.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.player.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.mob.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.server.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.spawn.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.time.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.tp.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.weather.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.warp.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.invisible.*"));
-		PermissionManager.getInstance().addPermParent(new PermParent("admincmd.server.exec.*"));
-		PermissionManager.getInstance().setMajorPerm(new PermParent("admincmd.*"));
-		PermissionManager.getInstance().addPermChild("admincmd.player.bypass");
-		PermissionManager.getInstance().addPermChild("admincmd.item.noblacklist");
-		PermissionManager.getInstance().addPermChild("admincmd.player.noreset");
-		PermissionManager.getInstance().addPermChild("admincmd.spec.notprequest");
+		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
+		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
+		permissionLinker.addPermChild("admincmd.player.bypass");
+		permissionLinker.addPermChild("admincmd.item.noblacklist");
+		permissionLinker.addPermChild("admincmd.player.noreset");
+		permissionLinker.addPermChild("admincmd.spec.notprequest");
 	}
 
 	public static void registerCmds() {
@@ -371,7 +376,7 @@ public class AdminCmd extends JavaPlugin {
 		LocaleManager.getInstance().save();
 	}
 
-	public void onEnable() {
+	public void onEnable() {	
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
@@ -384,8 +389,8 @@ public class AdminCmd extends JavaPlugin {
 		registerPermParents();
 		worker.setPluginInstance(this);
 		setDefaultLocale();
-		TerminalCommandManager.getInstance();
-		PermissionManager.getInstance().registerAllPermParent();
+		TerminalCommandManager.getInstance().setPerm(this);
+		permissionLinker.registerAllPermParent();
 		worker.loadInfos();
 		ACPlayerListener playerListener = new ACPlayerListener();
 		ACEntityListener entityListener = new ACEntityListener();

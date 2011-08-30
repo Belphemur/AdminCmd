@@ -23,8 +23,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.ACCommand;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -86,11 +86,11 @@ public class Invisible extends ACCommand {
 	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
 	 */
 	@Override
-	public void registerBukkitPerm() {
-		super.registerBukkitPerm();
-		PermissionManager.getInstance().addPermChild("admincmd.invisible.notatarget",
+	public void registerBukkitPerm(AbstractAdminCmdPlugin plugin) {
+		super.registerBukkitPerm(plugin);
+		plugin.getPermissionLinker().addPermChild("admincmd.invisible.notatarget",
 				PermissionDefault.OP);
-		PermissionManager.getInstance().addPermChild("admincmd.invisible.cansee",
+		plugin.getPermissionLinker().addPermChild("admincmd.invisible.cansee",
 				PermissionDefault.OP);
 	}
 

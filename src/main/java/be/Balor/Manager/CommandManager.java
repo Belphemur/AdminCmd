@@ -35,7 +35,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
@@ -45,6 +44,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.FilesManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
@@ -58,7 +58,7 @@ public class CommandManager implements CommandExecutor {
 			MAX_THREADS);
 	private int cmdCount = 0;
 	private static CommandManager instance = null;
-	private JavaPlugin plugin;
+	private AbstractAdminCmdPlugin plugin;
 	private boolean threadsStarted = false;
 	private List<String> disabledCommands;
 	private List<String> prioritizedCommands;
@@ -143,7 +143,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin to set
 	 */
-	public void setPlugin(JavaPlugin plugin) {
+	public void setPlugin(AbstractAdminCmdPlugin plugin) {
 		this.plugin = plugin;
 		for (Command cmd : PluginCommandYamlParser.parse(plugin))
 			pluginCommands.put(cmd.getName(), cmd);
@@ -179,7 +179,7 @@ public class CommandManager implements CommandExecutor {
 			command = (ACCommand) clazz.newInstance();
 			command.initializeCommand(plugin);
 			checkCommand(command);
-			command.registerBukkitPerm();
+			command.registerBukkitPerm(plugin);
 			command.getPluginCommand().setExecutor(this);
 			commands.put(command.getPluginCommand(), command);
 		} catch (InstantiationException e) {
@@ -208,7 +208,7 @@ public class CommandManager implements CommandExecutor {
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 			} else {
-				command.registerBukkitPerm();
+				command.registerBukkitPerm(plugin);
 				command.getPluginCommand().setExecutor(this);
 				commands.put(command.getPluginCommand(), command);
 			}

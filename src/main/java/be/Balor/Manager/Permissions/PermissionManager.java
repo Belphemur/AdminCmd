@@ -16,19 +16,18 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.LinkedList;
+import java.lang.ref.WeakReference;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 import com.nijiko.permissions.PermissionHandler;
 
@@ -37,20 +36,20 @@ import com.nijiko.permissions.PermissionHandler;
  * 
  */
 public class PermissionManager {
-	private LinkedList<PermParent> permissions = new LinkedList<PermParent>();
-	private PermParent majorPerm;
 	private static PermissionManager instance = null;
 	private static boolean permissionsEx = false;
 	private static boolean yetiPermissions = false;
 	public static final Logger log = Logger.getLogger("Minecraft");
 	private static AbstractPermission permissionHandler;
 	private static boolean warningSend = false;
+	private Hashtable<String, WeakReference<PermissionLinker>> permissionLinkers = new Hashtable<String, WeakReference<PermissionLinker>>();
 
 	/**
 	 * 
 	 */
 	private PermissionManager() {
-		permissionHandler = new BukkitPermissions();
+		if (permissionHandler == null)
+			permissionHandler = new BukkitPermissions();
 	}
 
 	/**
@@ -62,86 +61,52 @@ public class PermissionManager {
 		return instance;
 	}
 
-	/**
-	 * Set major permission, the root.
-	 * 
-	 * @param major
-	 */
-	public void setMajorPerm(PermParent major) {
-		majorPerm = major;
-		for (PermParent pp : permissions)
-			majorPerm.addChild(pp.getPermName());
-	}
-
-	/**
-	 * Add some important node (like myplygin.item)
-	 * 
-	 * @param toAdd
-	 */
-	public void addPermParent(PermParent toAdd) {
-		permissions.add(toAdd);
-	}
-
-	/**
-	 * Add permission child (like myplugin.item.add)
-	 * 
-	 * @param permNode
-	 * @param bukkitDefault
-	 * @return
-	 */
-	public Permission addPermChild(String permNode, PermissionDefault bukkitDefault) {
-		Permission bukkitPerm = null;
-		if ((bukkitPerm = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			bukkitPerm = new Permission(permNode, bukkitDefault);
-			AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
-			for (PermParent pp : permissions)
-				if (permNode.contains(pp.getCompareName()))
-					pp.addChild(permNode);
+	public synchronized PermissionLinker getPermissionLinker(String name) {
+		WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
+		if (ref == null) {
+			return null;
 		}
-		return bukkitPerm;
-	}
-
-	/**
-	 * Add a perm on the fly
-	 * 
-	 * @param permNode
-	 * @param parentNode
-	 * @return
-	 */
-	public Permission addOnTheFly(String permNode, String parentNode) {
-		Permission child;
-		if ((child = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			Permission parent = AdminCmd.getBukkitServer().getPluginManager()
-					.getPermission(parentNode);
-			child = new Permission(permNode, PermissionDefault.OP);
-			AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
-			parent.getChildren().put(permNode, true);
+		PermissionLinker perm = ref.get();
+		if (perm == null) {
+			// Hashtable holds stale weak reference
+			// to a logger which has been GC-ed.
+			permissionLinkers.remove(name);
 		}
-		return child;
-
+		return perm;
 	}
 
-	/**
-	 * Add permission child (like myplugin.item.add)
-	 * 
-	 * @param permNode
-	 * @return
-	 */
-	public Permission addPermChild(String permNode) {
-		return addPermChild(permNode, PermissionDefault.OP);
-	}
+	public synchronized boolean addPermissionLinker(PermissionLinker perm) {
+		final String name = perm.getName();
+		if (name == null) {
+			throw new NullPointerException();
+		}
 
-	/**
-	 * Register all parent node.
-	 */
-	public void registerAllPermParent() {
-		for (PermParent pp : permissions)
-			pp.registerBukkitPerm();
-		majorPerm.registerBukkitPerm();
-		permissions = null;
-		majorPerm = null;
+		WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
+		if (ref != null) {
+			if (ref.get() == null) {
+				// Hashtable holds stale weak reference
+				// to a logger which has been GC-ed.
+				// Allow to register new one.
+				permissionLinkers.remove(name);
+			} else {
+				// We already have a registered logger with the given name.
+				return false;
+			}
+		}
+		// We're adding a new logger.
+		// Note that we are creating a weak reference here.
+		permissionLinkers.put(name, new WeakReference<PermissionLinker>(perm));
+		return true;
 	}
-
+    PermissionLinker demandPermissionLinker(String name) {
+        PermissionLinker result = getPermissionLinker(name);
+        if (result == null) {
+            result = new PermissionLinker(name);
+            addPermissionLinker(result);
+            result = getPermissionLinker(name);
+        }
+        return result;
+      }
 	/**
 	 * Check the permissions
 	 * 

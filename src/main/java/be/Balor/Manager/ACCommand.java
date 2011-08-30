@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -88,10 +89,10 @@ public abstract class ACCommand {
 	/**
 	 * Register the bukkit Permission
 	 */
-	public void registerBukkitPerm() {
-		bukkitPerm = PermissionManager.getInstance().addPermChild(permNode, bukkitDefault);
+	public void registerBukkitPerm(AbstractAdminCmdPlugin plugin) {
+		bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
 		if (other)
-			PermissionManager.getInstance().addPermChild(permNode + ".other", bukkitDefault);
+			plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
 	}
 
 	/**

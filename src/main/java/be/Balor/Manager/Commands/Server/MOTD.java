@@ -23,6 +23,7 @@ import be.Balor.Manager.ACCommand;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -84,9 +85,9 @@ public class MOTD extends ACCommand {
 	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
 	 */
 	@Override
-	public void registerBukkitPerm() {
-		super.registerBukkitPerm();
-		PermissionManager.getInstance().addPermChild("admincmd.server.motd.edit");
+	public void registerBukkitPerm(AbstractAdminCmdPlugin plugin) {
+		super.registerBukkitPerm(plugin);
+		plugin.getPermissionLinker().addPermChild("admincmd.server.motd.edit");
 	}
 
 }
