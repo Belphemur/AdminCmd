@@ -280,10 +280,10 @@ public class Utils {
 			else if (arg.equalsIgnoreCase("pause")) {
 				int taskId = ACHelper
 						.getInstance()
-						.getPluginInstance()
+						.getCoreInstance()
 						.getServer()
 						.getScheduler()
-						.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
+						.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
 								new FreezeTime(w), 0, 10);
 				ACHelper.getInstance().addValue(Type.TIME_FREEZED, w.getName(), taskId);
 			} else {
@@ -299,7 +299,7 @@ public class Utils {
 		} else if (arg.equalsIgnoreCase("unpause")) {
 			int removeTask = (Integer) ACHelper.getInstance().getValue(Type.TIME_FREEZED,
 					w.getName());
-			ACHelper.getInstance().getPluginInstance().getServer().getScheduler()
+			ACHelper.getInstance().getCoreInstance().getServer().getScheduler()
 					.cancelTask(removeTask);
 			ACHelper.getInstance().removeValue(Type.TIME_FREEZED, w.getName());
 			sI18n(sender, "timeSet", replace);

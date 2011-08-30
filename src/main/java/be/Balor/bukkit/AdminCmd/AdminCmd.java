@@ -38,7 +38,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  * @authors Plague, Balor
  */
-public class AdminCmd extends AbstractAdminCmdPlugin {
+public final class AdminCmd extends AbstractAdminCmdPlugin {
 	/**
 	 * @param name
 	 */
@@ -55,7 +55,7 @@ public class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
-	private void registerPermParents() {
+	protected void registerPermParents() {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
@@ -74,7 +74,7 @@ public class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 	}
 
-	public static void registerCmds() {
+	public void registerCmds() {
 
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
@@ -156,7 +156,7 @@ public class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Help.class);
 	}
 
-	private void setDefaultLocale() {
+	protected void setDefaultLocale() {
 		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
 				+ "%player");
 		Utils.addLocale("kitNotFound", ChatColor.RED + "No such kit: " + ChatColor.WHITE + "%kit");

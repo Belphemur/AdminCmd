@@ -99,7 +99,7 @@ public class SpawnMob extends ACCommand {
 					return;
 				AdminCmd.getBukkitServer()
 						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 								new PassengerMob(loc, nbTaped, ct, ct2, player));
 			} else {
 				ct = CreatureType.fromName(name);
@@ -110,7 +110,7 @@ public class SpawnMob extends ACCommand {
 
 				AdminCmd.getBukkitServer()
 						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 								new NormalMob(loc, nbTaped, ct, player));
 			}
 		}

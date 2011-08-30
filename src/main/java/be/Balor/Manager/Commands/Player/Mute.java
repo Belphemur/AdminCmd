@@ -71,7 +71,7 @@ public class Mute extends ACCommand {
 						AdminCmd.getBukkitServer()
 								.getScheduler()
 								.scheduleAsyncDelayedTask(
-										ACHelper.getInstance().getPluginInstance(), new Runnable() {
+										ACHelper.getInstance().getCoreInstance(), new Runnable() {
 
 											@Override
 											public void run() {

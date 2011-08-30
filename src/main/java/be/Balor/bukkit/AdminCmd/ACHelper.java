@@ -53,7 +53,7 @@ public class ACHelper {
 	private List<Integer> listOfPossibleRepair;
 	private FilesManager fManager;
 	private List<Integer> blacklist;
-	private AdminCmd pluginInstance;
+	private AbstractAdminCmdPlugin coreInstance;
 	EnumMap<Type, ConcurrentMap<String, Object>> storedTypeValues = new EnumMap<Type, ConcurrentMap<String, Object>>(
 			Type.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
@@ -211,7 +211,7 @@ public class ACHelper {
 	 */
 	public synchronized void reload() {
 		CommandManager.getInstance().stopAllExecutorThreads();
-		pluginInstance.getServer().getScheduler().cancelTasks(pluginInstance);
+		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
 		storedTypeValues.clear();
 		alias.clear();
 		blacklist.clear();
@@ -227,10 +227,10 @@ public class ACHelper {
 		System.gc();
 		init();
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
-			for (Plugin plugin : pluginInstance.getServer().getPluginManager().getPlugins())
+			for (Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			for (Player p : pluginInstance.getServer().getOnlinePlayers())
+			for (Player p : coreInstance.getServer().getOnlinePlayers())
 				AFKWorker.getInstance().updateTimeStamp(p);
 		}
 	}
@@ -244,17 +244,17 @@ public class ACHelper {
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
-			this.pluginInstance
+			this.coreInstance
 					.getServer()
 					.getScheduler()
-					.scheduleAsyncRepeatingTask(this.pluginInstance,
+					.scheduleAsyncRepeatingTask(this.coreInstance,
 							AFKWorker.getInstance().getAfkChecker(), 0,
 							pluginConfig.getInt("statutCheckInSec", 20) * 20);
 			if (pluginConfig.getBoolean("autoKickAfkPlayer", false))
-				this.pluginInstance
+				this.coreInstance
 						.getServer()
 						.getScheduler()
-						.scheduleAsyncRepeatingTask(this.pluginInstance,
+						.scheduleAsyncRepeatingTask(this.coreInstance,
 								AFKWorker.getInstance().getKickChecker(), 0,
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
@@ -264,10 +264,10 @@ public class ACHelper {
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		CommandManager.getInstance().setPlugin(pluginInstance);
-		AdminCmd.registerCmds();
+		CommandManager.getInstance().setPlugin(coreInstance);
+		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias();
-		HelpLoader.load(pluginInstance.getDataFolder());
+		HelpLoader.load(coreInstance.getDataFolder());
 		if (pluginConfig.getProperty("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.removeProperty("pluginStarted");
@@ -276,7 +276,7 @@ public class ACHelper {
 			pluginStarted = System.currentTimeMillis();
 
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
-			for (Player p : pluginInstance.getServer().getOnlinePlayers())
+			for (Player p : coreInstance.getServer().getOnlinePlayers())
 				addValue(Type.TP_REQUEST, p.getName());
 		}
 	}
@@ -286,7 +286,7 @@ public class ACHelper {
 	 *            the pluginInstance to set
 	 */
 	public void setPluginInstance(AdminCmd pluginInstance) {
-		this.pluginInstance = pluginInstance;
+		this.coreInstance = pluginInstance;
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		fManager.getInnerFile("de_DE.yml", "locales", false);
@@ -403,8 +403,8 @@ public class ACHelper {
 	/**
 	 * @return the pluginInstance
 	 */
-	public AdminCmd getPluginInstance() {
-		return pluginInstance;
+	public AbstractAdminCmdPlugin getCoreInstance() {
+		return coreInstance;
 	}
 
 	// teleports chosen player to another player
@@ -729,7 +729,7 @@ public class ACHelper {
 		List<Player> players = new ArrayList<Player>();
 		if (storedTypeValues.containsKey(power))
 			for (String player : storedTypeValues.get(power).keySet())
-				players.add(pluginInstance.getServer().getPlayer(player));
+				players.add(coreInstance.getServer().getPlayer(player));
 		return players;
 	}
 

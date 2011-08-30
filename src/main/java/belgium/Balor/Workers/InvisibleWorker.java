@@ -108,7 +108,7 @@ final public class InvisibleWorker {
 
 			AdminCmd.getBukkitServer()
 					.getScheduler()
-					.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 							new Runnable() {
 								public void run() {
 									for (Player p : Utils.getOnlinePlayers())
@@ -188,7 +188,7 @@ final public class InvisibleWorker {
 		String name = toVanish.getName();
 		AdminCmd.getBukkitServer()
 				.getScheduler()
-				.scheduleSyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
@@ -196,7 +196,7 @@ final public class InvisibleWorker {
 					(Integer) AdminCmd
 							.getBukkitServer()
 							.getScheduler()
-							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getPluginInstance(),
+							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 			toVanish.getServer().broadcastMessage(ChatColor.YELLOW + name + " left the game.");

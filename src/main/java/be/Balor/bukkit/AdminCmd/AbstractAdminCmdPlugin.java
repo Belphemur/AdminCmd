@@ -26,16 +26,33 @@ import be.Balor.Manager.Permissions.PermissionLinker;
  */
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
+
 	/**
 	 * 
 	 */
 	public AbstractAdminCmdPlugin(String name) {
-		permissionLinker = PermissionLinker.getPermissionLinker(name);		
+		permissionLinker = PermissionLinker.getPermissionLinker(name);
 	}
+
 	/**
 	 * @return the permissionLinker
 	 */
 	public PermissionLinker getPermissionLinker() {
 		return permissionLinker;
 	}
+
+	/**
+	 * Definition of the Permissions used by the plugin
+	 */
+	protected abstract void registerPermParents();
+
+	/**
+	 * Definitions of the command used by the plugin
+	 */
+	public abstract void registerCmds();
+
+	/**
+	 * Definitions of the locale used by the plugin
+	 */
+	protected abstract void setDefaultLocale();
 }

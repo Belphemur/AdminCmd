@@ -72,7 +72,7 @@ public class BanPlayer extends ACCommand {
 				final String unban = unbanString;
 				AdminCmd.getBukkitServer()
 						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getPluginInstance(),
+						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 								new Runnable() {
 
 									@Override

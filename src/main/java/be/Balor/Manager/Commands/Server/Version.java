@@ -48,7 +48,7 @@ public class Version extends ACCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Plugin plug = ACHelper.getInstance().getPluginInstance();
+		Plugin plug = ACHelper.getInstance().getCoreInstance();
 		if (args.length >= 1)
 			plug = plug.getServer().getPluginManager().getPlugin(args[0]);
 		if (plug == null) {

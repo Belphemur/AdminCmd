@@ -18,7 +18,9 @@ package be.Balor.Manager.Permissions;
 
 import java.util.LinkedList;
 
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
 
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
@@ -85,11 +87,11 @@ public class PermissionLinker {
 	 * @param bukkitDefault
 	 * @return
 	 */
-	public org.bukkit.permissions.Permission addPermChild(String permNode,
+	public Permission addPermChild(String permNode,
 			PermissionDefault bukkitDefault) {
-		org.bukkit.permissions.Permission bukkitPerm = null;
+		Permission bukkitPerm = null;
 		if ((bukkitPerm = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			bukkitPerm = new org.bukkit.permissions.Permission(permNode, bukkitDefault);
+			bukkitPerm = new Permission(permNode, bukkitDefault);
 			AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
 			for (PermParent pp : permissions)
 				if (permNode.contains(pp.getCompareName()))
@@ -105,12 +107,12 @@ public class PermissionLinker {
 	 * @param parentNode
 	 * @return
 	 */
-	public org.bukkit.permissions.Permission addOnTheFly(String permNode, String parentNode) {
-		org.bukkit.permissions.Permission child;
+	public Permission addOnTheFly(String permNode, String parentNode) {
+		Permission child;
 		if ((child = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			org.bukkit.permissions.Permission parent = AdminCmd.getBukkitServer()
+			Permission parent = AdminCmd.getBukkitServer()
 					.getPluginManager().getPermission(parentNode);
-			child = new org.bukkit.permissions.Permission(permNode, PermissionDefault.OP);
+			child = new Permission(permNode, PermissionDefault.OP);
 			AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
 			parent.getChildren().put(permNode, true);
 		}
@@ -124,7 +126,7 @@ public class PermissionLinker {
 	 * @param permNode
 	 * @return
 	 */
-	public org.bukkit.permissions.Permission addPermChild(String permNode) {
+	public Permission addPermChild(String permNode) {
 		return addPermChild(permNode, PermissionDefault.OP);
 	}
 
