@@ -68,7 +68,7 @@ public class ACHelper {
 			.makeMap();
 	private static long pluginStarted;
 	private ExtendedConfiguration pluginConfig;
-	private HashMap<String, AbstractAdminCmdPlugin> pluginsIntances = new HashMap<String, AbstractAdminCmdPlugin>();
+	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -112,7 +112,7 @@ public class ACHelper {
 	 * @param addon 
 	 */
 	public void registerACPlugin(AbstractAdminCmdPlugin addon) {
-		pluginsIntances.put(addon.getName(), addon);
+		pluginInstances.put(addon.getName(), addon);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class ACHelper {
 	 * @return the addon or null if not registered
 	 */
 	public AbstractAdminCmdPlugin getPluginInstance(String name) {
-		return pluginsIntances.get(name);
+		return pluginInstances.get(name);
 	}
 
 	/**

@@ -32,8 +32,8 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
  * 
  */
 public abstract class CoreCommand {
-	protected String permNode = null;
-	protected String cmdName = null;
+	protected String permNode = "";
+	protected String cmdName = "";
 	protected Permission bukkitPerm = null;
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
