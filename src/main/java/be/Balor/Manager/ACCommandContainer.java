@@ -26,13 +26,13 @@ import org.bukkit.command.CommandSender;
  */
 public class ACCommandContainer {
 	private CommandSender sender;
-	private ACCommand cmd;
+	private CoreCommand cmd;
 	private String[] args;
 
 	/**
  * 
  */
-	public ACCommandContainer(CommandSender sender, ACCommand cmd, String[] args) {
+	public ACCommandContainer(CommandSender sender, CoreCommand cmd, String[] args) {
 		this.sender = sender;
 		this.cmd = cmd;
 		this.args = args;

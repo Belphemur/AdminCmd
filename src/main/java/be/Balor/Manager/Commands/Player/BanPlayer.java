@@ -21,7 +21,7 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class BanPlayer extends ACCommand {
+public class BanPlayer extends CoreCommand {
 
 	/**
 	 * 

@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 
@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class KickAllPlayers extends ACCommand {
+public class KickAllPlayers extends CoreCommand {
 
 	/**
 	 * 

@@ -19,14 +19,14 @@ package be.Balor.Manager.Commands.Time;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SetTime extends ACCommand {
+public class SetTime extends CoreCommand {
 
 	/**
 	 * 

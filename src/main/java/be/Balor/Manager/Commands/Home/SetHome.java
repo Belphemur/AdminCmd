@@ -23,16 +23,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SetHome extends ACCommand {
+public class SetHome extends CoreCommand {
 
 	/**
 	 * 
@@ -82,8 +81,8 @@ public class SetHome extends ACCommand {
 	}
 
 	@Override
-	public void registerBukkitPerm(AbstractAdminCmdPlugin plugin) {
-		super.registerBukkitPerm(plugin);
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
 		for (int i = 0; i < 150; i++)
 			plugin.getPermissionLinker().addPermChild("admincmd.maxHomeByUser." + i,
 					PermissionDefault.FALSE);

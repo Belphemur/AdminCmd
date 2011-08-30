@@ -20,33 +20,37 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class ACCommand {
+public abstract class CoreCommand {
 	protected String permNode = null;
 	protected String cmdName = null;
 	protected Permission bukkitPerm = null;
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
 	protected PluginCommand pluginCommand;
+	protected final AbstractAdminCmdPlugin plugin;
 
 	/**
 	 * 
 	 */
-	public ACCommand() {
-		permNode = "";
-		cmdName = "";
+	public CoreCommand(String name, String perm) {
+		this.permNode = perm;
+		this.cmdName = name;
+		this.plugin = ACHelper.getInstance().getPluginInstance("Core");
 	}
-
+	public CoreCommand() {
+		this.plugin = ACHelper.getInstance().getPluginInstance("Core");
+	}
 	/**
 	 * Execute the command
 	 * 
@@ -89,7 +93,7 @@ public abstract class ACCommand {
 	/**
 	 * Register the bukkit Permission
 	 */
-	public void registerBukkitPerm(AbstractAdminCmdPlugin plugin) {
+	public void registerBukkitPerm() {
 		bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
 		if (other)
 			plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
@@ -111,7 +115,7 @@ public abstract class ACCommand {
 	 * @throws CommandNotFound
 	 * @throws CommandAlreadyExist
 	 */
-	public void initializeCommand(JavaPlugin plugin) throws CommandNotFound, CommandAlreadyExist {
+	public void initializeCommand() throws CommandNotFound, CommandAlreadyExist {
 		if ((pluginCommand = plugin.getCommand(cmdName)) == null)
 			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
 

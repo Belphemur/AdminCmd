@@ -18,6 +18,7 @@ package be.Balor.bukkit.AdminCmd;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionLinker;
 
 /**
@@ -26,12 +27,15 @@ import be.Balor.Manager.Permissions.PermissionLinker;
  */
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
+	protected final String name;
 
 	/**
 	 * 
 	 */
 	public AbstractAdminCmdPlugin(String name) {
+		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
+		ACHelper.getInstance().registerACPlugin(this);
 	}
 
 	/**
@@ -55,4 +59,17 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 * Definitions of the locale used by the plugin
 	 */
 	protected abstract void setDefaultLocale();
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.Plugin#onEnable()
+	 */
+	@Override
+	public void onEnable() {
+		CommandManager.getInstance().registerACPlugin(this);				
+	}
 }

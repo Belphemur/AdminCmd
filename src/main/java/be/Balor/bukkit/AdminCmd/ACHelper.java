@@ -53,7 +53,7 @@ public class ACHelper {
 	private List<Integer> listOfPossibleRepair;
 	private FilesManager fManager;
 	private List<Integer> blacklist;
-	private AbstractAdminCmdPlugin coreInstance;
+	private AdminCmd coreInstance;
 	EnumMap<Type, ConcurrentMap<String, Object>> storedTypeValues = new EnumMap<Type, ConcurrentMap<String, Object>>(
 			Type.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
@@ -68,6 +68,7 @@ public class ACHelper {
 			.makeMap();
 	private static long pluginStarted;
 	private ExtendedConfiguration pluginConfig;
+	private HashMap<String, AbstractAdminCmdPlugin> pluginsIntances = new HashMap<String, AbstractAdminCmdPlugin>();
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -103,6 +104,26 @@ public class ACHelper {
 
 	public static void killInstance() {
 		instance = null;
+	}
+
+	/**
+	 * Register a AdminCmd addon
+	 * 
+	 * @param addon 
+	 */
+	public void registerACPlugin(AbstractAdminCmdPlugin addon) {
+		pluginsIntances.put(addon.getName(), addon);
+	}
+
+	/**
+	 * Get addon
+	 * 
+	 * @param name
+	 *            name of the addon
+	 * @return the addon or null if not registered
+	 */
+	public AbstractAdminCmdPlugin getPluginInstance(String name) {
+		return pluginsIntances.get(name);
 	}
 
 	/**
@@ -264,7 +285,7 @@ public class ACHelper {
 		LocaleManager.getInstance().setLocaleFile(
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		CommandManager.getInstance().setPlugin(coreInstance);
+		CommandManager.getInstance().setCorePlugin(coreInstance);
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias();
 		HelpLoader.load(coreInstance.getDataFolder());
@@ -285,7 +306,7 @@ public class ACHelper {
 	 * @param pluginInstance
 	 *            the pluginInstance to set
 	 */
-	public void setPluginInstance(AdminCmd pluginInstance) {
+	public void setCoreInstance(AdminCmd pluginInstance) {
 		this.coreInstance = pluginInstance;
 		fManager = FilesManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
@@ -339,13 +360,13 @@ public class ACHelper {
 			pluginConfig.removeProperty("prioritizedCommands");
 		}
 		if (pluginConfig.getProperty("glinding") != null) {
-			pluginConfig
-					.addProperty("gliding.multiplicator", getConfFloat("glinding.multiplicator"));
+			pluginConfig.addProperty("gliding.multiplicator",
+					getConfFloat("glinding.multiplicator"));
 			pluginConfig.addProperty("gliding.YvelocityCheckToGlide",
 					getConfFloat("glinding.YvelocityCheckToGlide"));
 			pluginConfig.addProperty("gliding.newYvelocity", getConfFloat("glinding.newYvelocity"));
 			pluginConfig.removeProperty("glinding");
-			
+
 		} else {
 			pluginConfig.addProperty("gliding.multiplicator", 0.1F);
 			pluginConfig.addProperty("gliding.YvelocityCheckToGlide", -0.2F);
@@ -916,7 +937,7 @@ public class ACHelper {
 
 	public synchronized void loadInfos() {
 		blacklist = getBlackListedItems();
-		
+
 		alias.putAll(fManager.getAlias());
 		List<String> tmp = fManager.getYmlKeyFromFile("warpPoints", "warp");
 		if (tmp != null)

@@ -20,7 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -29,7 +29,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class PlayerList extends ACCommand {
+public class PlayerList extends CoreCommand {
 
 	/**
 	 * 

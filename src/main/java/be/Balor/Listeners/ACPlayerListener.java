@@ -38,7 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.bukkit.util.config.Configuration;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
@@ -250,7 +250,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (split.length == 0)
 			return;
 		String cmdName = split[0].substring(1).toLowerCase();
-		ACCommand cmd = CommandManager.getInstance().getCommand(cmdName);
+		CoreCommand cmd = CommandManager.getInstance().getCommand(cmdName);
 		if (cmd != null) {
 			event.setCancelled(true);
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))

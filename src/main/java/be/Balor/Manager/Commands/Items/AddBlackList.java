@@ -19,14 +19,14 @@ package be.Balor.Manager.Commands.Items;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class AddBlackList extends ACCommand {
+public class AddBlackList extends CoreCommand {
 
 	/**
 	 * 

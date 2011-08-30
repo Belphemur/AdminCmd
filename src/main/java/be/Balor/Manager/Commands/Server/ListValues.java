@@ -22,7 +22,7 @@ import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ListValues extends ACCommand {
+public class ListValues extends CoreCommand {
 
 	/**
 	 * 

@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Tp;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpHere extends ACCommand {
+public class TpHere extends CoreCommand {
 
 	/**
 	 * 

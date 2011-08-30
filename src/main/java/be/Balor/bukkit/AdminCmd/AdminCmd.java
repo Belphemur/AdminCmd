@@ -52,6 +52,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public static Server getBukkitServer() {
 		return server;
 	}
+	
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
@@ -377,6 +378,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	}
 
 	public void onEnable() {	
+		super.onEnable();
 		server = getServer();
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
@@ -387,7 +389,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 		worker = ACHelper.getInstance();
 		registerPermParents();
-		worker.setPluginInstance(this);
+		worker.setCoreInstance(this);
 		setDefaultLocale();
 		TerminalCommandManager.getInstance().setPerm(this);
 		permissionLinker.registerAllPermParent();

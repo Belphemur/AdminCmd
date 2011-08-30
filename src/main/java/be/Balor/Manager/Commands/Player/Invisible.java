@@ -22,16 +22,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Invisible extends ACCommand {
+public class Invisible extends CoreCommand {
 
 	/**
 	 * 
@@ -86,8 +85,8 @@ public class Invisible extends ACCommand {
 	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
 	 */
 	@Override
-	public void registerBukkitPerm(AbstractAdminCmdPlugin plugin) {
-		super.registerBukkitPerm(plugin);
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
 		plugin.getPermissionLinker().addPermChild("admincmd.invisible.notatarget",
 				PermissionDefault.OP);
 		plugin.getPermissionLinker().addPermChild("admincmd.invisible.cansee",

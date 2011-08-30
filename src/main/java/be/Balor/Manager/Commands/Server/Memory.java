@@ -20,13 +20,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Memory extends ACCommand {
+public class Memory extends CoreCommand {
 
 	/**
 	 * 

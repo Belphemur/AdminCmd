@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -28,7 +28,7 @@ import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Help extends ACCommand {
+public class Help extends CoreCommand {
 
 	/**
 	 * 

@@ -23,7 +23,7 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -36,7 +36,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class PrivateMessage extends ACCommand {
+public class PrivateMessage extends CoreCommand {
 	private ColouredConsoleSender console = null;
 	/**
 	 * 

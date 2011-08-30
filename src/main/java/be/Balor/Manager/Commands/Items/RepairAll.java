@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class RepairAll extends ACCommand {
+public class RepairAll extends CoreCommand {
 
 	/**
 	 * 

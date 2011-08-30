@@ -21,14 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Strike extends ACCommand {
+public class Strike extends CoreCommand {
 
 	/**
 	 * 

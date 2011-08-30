@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 
@@ -27,7 +27,7 @@ import belgium.Balor.Workers.AFKWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Afk extends ACCommand {
+public class Afk extends CoreCommand {
 
 	/**
 	 * 

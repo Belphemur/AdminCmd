@@ -52,19 +52,26 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * 
  */
 public class CommandManager implements CommandExecutor {
-	private HashMap<Command, ACCommand> commands = new HashMap<Command, ACCommand>();
+	private HashMap<Command, CoreCommand> commands = new HashMap<Command, CoreCommand>();
 	private final int MAX_THREADS = 5;
 	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
 			MAX_THREADS);
 	private int cmdCount = 0;
 	private static CommandManager instance = null;
-	private AbstractAdminCmdPlugin plugin;
+	private AbstractAdminCmdPlugin corePlugin;
 	private boolean threadsStarted = false;
 	private List<String> disabledCommands;
 	private List<String> prioritizedCommands;
 	private HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
-	private HashMap<String, ACCommand> commandReplacer = new HashMap<String, ACCommand>();
+	private HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
 	private HashMap<String, Command> pluginCommands = new HashMap<String, Command>();
+
+	/**
+	 * 
+	 */
+	protected CommandManager() {
+
+	}
 
 	/**
 	 * @return the instance
@@ -110,7 +117,7 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private void unRegisterBukkitCommand(PluginCommand cmd) {
 		try {
-			Object result = getPrivateField(plugin.getServer().getPluginManager(), "commandMap");
+			Object result = getPrivateField(corePlugin.getServer().getPluginManager(), "commandMap");
 			SimpleCommandMap commandMap = (SimpleCommandMap) result;
 			Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
@@ -135,7 +142,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param alias
 	 * @return
 	 */
-	public ACCommand getCommand(String alias) {
+	public CoreCommand getCommand(String alias) {
 		return commandReplacer.get(alias);
 	}
 
@@ -143,10 +150,8 @@ public class CommandManager implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin to set
 	 */
-	public void setPlugin(AbstractAdminCmdPlugin plugin) {
-		this.plugin = plugin;
-		for (Command cmd : PluginCommandYamlParser.parse(plugin))
-			pluginCommands.put(cmd.getName(), cmd);
+	public void setCorePlugin(AdminCmd plugin) {
+		this.corePlugin = plugin;
 		Configuration cmds = FilesManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
@@ -155,6 +160,15 @@ public class CommandManager implements CommandExecutor {
 			aliasCommands.put(cmd,
 					new ArrayList<String>(alias.getStringList(cmd, new ArrayList<String>())));
 		startThreads();
+	}
+	/**
+	 * Register command from plugin
+	 * @param plugin
+	 */
+	public void registerACPlugin(AbstractAdminCmdPlugin plugin)
+	{
+		for (Command cmd : PluginCommandYamlParser.parse(plugin))
+			pluginCommands.put(cmd.getName(), cmd);
 	}
 
 	public void startThreads() {
@@ -174,12 +188,12 @@ public class CommandManager implements CommandExecutor {
 	 * @param clazz
 	 */
 	public void registerCommand(Class<?> clazz) {
-		ACCommand command = null;
+		CoreCommand command = null;
 		try {
-			command = (ACCommand) clazz.newInstance();
-			command.initializeCommand(plugin);
+			command = (CoreCommand) clazz.newInstance();
+			command.initializeCommand();
 			checkCommand(command);
-			command.registerBukkitPerm(plugin);
+			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
 			commands.put(command.getPluginCommand(), command);
 		} catch (InstantiationException e) {
@@ -208,7 +222,7 @@ public class CommandManager implements CommandExecutor {
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 			} else {
-				command.registerBukkitPerm(plugin);
+				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				commands.put(command.getPluginCommand(), command);
 			}
@@ -224,7 +238,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param command
 	 * @throws CommandDisabled
 	 */
-	private void checkCommand(final ACCommand command) throws CommandDisabled {
+	private void checkCommand(final CoreCommand command) throws CommandDisabled {
 		for (String alias : pluginCommands.get(command.getCmdName()).getAliases()) {
 			if (disabledCommands.contains(alias))
 				throw new CommandDisabled("Command " + command.getCmdName()
@@ -245,15 +259,15 @@ public class CommandManager implements CommandExecutor {
 		if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 			for (String cmdName : pluginCommands.keySet()) {
 				Command cmd = pluginCommands.get(cmdName);
-				if (plugin.getCommand(cmd.getName()) != null) {
-					cmd.getAliases().removeAll(plugin.getCommand(cmd.getName()).getAliases());
+				if (corePlugin.getCommand(cmd.getName()) != null) {
+					cmd.getAliases().removeAll(corePlugin.getCommand(cmd.getName()).getAliases());
 					cmd.getAliases().removeAll(prioritizedCommands);
 					String aliases = "";
 					for (String alias : cmd.getAliases())
 						aliases += alias + ", ";
 					if (!aliases.isEmpty() && ACHelper.getInstance().getConfBoolean("verboseLog"))
 						Logger.getLogger("Minecraft").info(
-								"[" + plugin.getDescription().getName()
+								"[" + corePlugin.getDescription().getName()
 										+ "] Disabled Alias(es) for " + cmd.getName() + " : "
 										+ aliases);
 				}
@@ -275,13 +289,13 @@ public class CommandManager implements CommandExecutor {
 	 * @param args
 	 * @return
 	 */
-	public boolean executeCommand(CommandSender sender, ACCommand cmd, String[] args) {
+	public boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
 		try {
 			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
-					plugin.getServer().getScheduler()
-							.scheduleSyncDelayedTask(plugin, new SyncCommand(cmd, sender, args));
+					corePlugin.getServer().getScheduler()
+							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(cmd, sender, args));
 				else {
 					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
 					cmdCount++;
@@ -323,7 +337,7 @@ public class CommandManager implements CommandExecutor {
 	 * {@inheritDoc}
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		ACCommand cmd = null;
+		CoreCommand cmd = null;
 		if ((cmd = commands.get(command)) != null)
 			return executeCommand(sender, cmd, args);
 		else
@@ -368,8 +382,8 @@ public class CommandManager implements CommandExecutor {
 					current.execute();
 				} catch (InterruptedException e) {
 				} catch (ConcurrentModificationException cme) {
-					plugin.getServer().getScheduler()
-							.scheduleSyncDelayedTask(plugin, new SyncCommand(current));
+					corePlugin.getServer().getScheduler()
+							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(current));
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft").severe(current.debug());
 					AdminCmd.getBukkitServer().broadcastMessage(current.debug());
@@ -398,7 +412,7 @@ public class CommandManager implements CommandExecutor {
 		/**
 		 * 
 		 */
-		public SyncCommand(ACCommand cmd, CommandSender sender, String[] args) {
+		public SyncCommand(CoreCommand cmd, CommandSender sender, String[] args) {
 			this.acc = new ACCommandContainer(sender, cmd, args);
 		}
 

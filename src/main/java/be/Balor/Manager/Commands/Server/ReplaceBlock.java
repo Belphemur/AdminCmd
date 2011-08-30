@@ -22,7 +22,7 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.ACCommand;
+import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ReplaceBlock extends ACCommand {
+public class ReplaceBlock extends CoreCommand {
 
 	/**
 	 * 
