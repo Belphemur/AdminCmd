@@ -22,7 +22,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -90,9 +90,9 @@ public class PermissionLinker {
 	public Permission addPermChild(String permNode,
 			PermissionDefault bukkitDefault) {
 		Permission bukkitPerm = null;
-		if ((bukkitPerm = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
+		if ((bukkitPerm = PluginInstance.getServer().getPluginManager().getPermission(permNode)) == null) {
 			bukkitPerm = new Permission(permNode, bukkitDefault);
-			AdminCmd.getBukkitServer().getPluginManager().addPermission(bukkitPerm);
+			PluginInstance.getServer().getPluginManager().addPermission(bukkitPerm);
 			for (PermParent pp : permissions)
 				if (permNode.contains(pp.getCompareName()))
 					pp.addChild(permNode);
@@ -109,11 +109,11 @@ public class PermissionLinker {
 	 */
 	public Permission addOnTheFly(String permNode, String parentNode) {
 		Permission child;
-		if ((child = AdminCmd.getBukkitServer().getPluginManager().getPermission(permNode)) == null) {
-			Permission parent = AdminCmd.getBukkitServer()
+		if ((child = PluginInstance.getServer().getPluginManager().getPermission(permNode)) == null) {
+			Permission parent = PluginInstance.getServer()
 					.getPluginManager().getPermission(parentNode);
 			child = new Permission(permNode, PermissionDefault.OP);
-			AdminCmd.getBukkitServer().getPluginManager().addPermission(child);
+			PluginInstance.getServer().getPluginManager().addPermission(child);
 			parent.getChildren().put(permNode, true);
 		}
 		return child;

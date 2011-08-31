@@ -18,6 +18,8 @@ package be.Balor.bukkit.AdminCmd;
 
 import java.util.HashMap;
 
+import org.bukkit.Server;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -25,6 +27,7 @@ import java.util.HashMap;
 public class PluginInstance {
 	private static PluginInstance instance;
 	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
+	private static Server server = null;
 
 	private PluginInstance() {
 
@@ -37,6 +40,21 @@ public class PluginInstance {
 		if (instance == null)
 			instance = new PluginInstance();
 		return instance;
+	}
+
+	/**
+	 * @return the server
+	 */
+	public static Server getServer() {
+		return server;
+	}
+
+	/**
+	 * @param server
+	 *            the server to set
+	 */
+	public static void setServer(Server server) {
+		PluginInstance.server = server;
 	}
 
 	/**

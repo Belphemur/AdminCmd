@@ -30,7 +30,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 
 import com.google.common.collect.MapMaker;
 
@@ -91,7 +91,7 @@ final public class InvisibleWorker {
 	public LinkedList<Player> getAllInvisiblePlayers() {
 		LinkedList<Player> result = new LinkedList<Player>();
 		for (String p : invisblesWithTaskIds.keySet())
-			result.add(AdminCmd.getBukkitServer().getPlayer(p));
+			result.add(PluginInstance.getServer().getPlayer(p));
 		return result;
 	}
 
@@ -103,10 +103,11 @@ final public class InvisibleWorker {
 	public void reappear(final Player toReappear) {
 		String name = toReappear.getName();
 		if (invisblesWithTaskIds.containsKey(name)) {
-			AdminCmd.getBukkitServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
+			PluginInstance.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
 			invisblesWithTaskIds.remove(name);
 
-			AdminCmd.getBukkitServer()
+			PluginInstance
+					.getServer()
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 							new Runnable() {
@@ -186,15 +187,16 @@ final public class InvisibleWorker {
 	 */
 	public void vanish(final Player toVanish) {
 		String name = toVanish.getName();
-		AdminCmd.getBukkitServer()
+		PluginInstance
+				.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
 					name,
-					(Integer) AdminCmd
-							.getBukkitServer()
+					(Integer) PluginInstance
+							.getServer()
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));

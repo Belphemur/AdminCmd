@@ -64,7 +64,7 @@ public interface DataManager {
 	 * @param directory
 	 * @return
 	 */
-	public Location getLocation(String property, String filename, String directory);
+	public Location getLocation(String property, String filename, String directory) throws WorldNotLoaded;
 
 	/**
 	 * Store the location informations

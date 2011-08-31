@@ -28,7 +28,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -44,7 +44,7 @@ public class PrivateMessage extends CoreCommand {
 	public PrivateMessage() {
 		permNode = "admincmd.player.msg";
 		cmdName = "bal_playermsg";
-		console = new ColouredConsoleSender((CraftServer)AdminCmd.getBukkitServer());
+		console = new ColouredConsoleSender((CraftServer)PluginInstance.getServer());
 	}
 
 	/*

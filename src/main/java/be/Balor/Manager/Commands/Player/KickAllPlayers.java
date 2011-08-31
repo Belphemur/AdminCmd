@@ -22,7 +22,6 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -61,7 +60,7 @@ public class KickAllPlayers extends CoreCommand {
 			message += playerName;
 		}
 		message = message.trim();
-		for (Player toKick : AdminCmd.getBukkitServer().getOnlinePlayers())
+		for (Player toKick : Utils.getOnlinePlayers())
 			if (!toKick.getName().equals(playerName))
 				toKick.kickPlayer(message);
 	}

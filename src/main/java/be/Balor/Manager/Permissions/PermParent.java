@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -73,7 +73,7 @@ public class PermParent {
 	}
 
 	public void registerBukkitPerm() {
-		AdminCmd.getBukkitServer().getPluginManager()
+		PluginInstance.getServer().getPluginManager()
 				.addPermission(new Permission(permName, PermissionDefault.OP, children));
 	}
 

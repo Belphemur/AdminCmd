@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
@@ -35,7 +36,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -273,7 +274,8 @@ public class FileManager implements DataManager {
 	 * @param directory
 	 * @return
 	 */
-	public Location getLocation(String property, String filename, String directory) {
+	public Location getLocation(String property, String filename, String directory)
+			throws WorldNotLoaded {
 		Configuration conf = getYml(filename, directory);
 		if (conf.getProperty(property + ".world") == null) {
 			Location loc = parseLocation(property, conf);
@@ -281,11 +283,15 @@ public class FileManager implements DataManager {
 				writeLocation(loc, property, filename, directory);
 			return loc;
 		} else {
-			return new Location(AdminCmd.getBukkitServer().getWorld(
-					conf.getString(property + ".world")), conf.getDouble(property + ".x", 0),
-					conf.getDouble(property + ".y", 0), conf.getDouble(property + ".z", 0),
-					Float.parseFloat(conf.getString(property + ".yaw")), Float.parseFloat(conf
-							.getString(property + ".pitch")));
+			World w = PluginInstance.getServer().getWorld(conf.getString(property + ".world"));
+			if (w != null)
+				return new Location(w, conf.getDouble(property + ".x", 0), conf.getDouble(property
+						+ ".y", 0), conf.getDouble(property + ".z", 0), Float.parseFloat(conf
+						.getString(property + ".yaw")), Float.parseFloat(conf.getString(property
+						+ ".pitch")));
+			else
+				throw new WorldNotLoaded(conf.getString(property + ".world"));
+
 		}
 	}
 
@@ -342,7 +348,7 @@ public class FileManager implements DataManager {
 			} catch (NumberFormatException e) {
 				return null;
 			}
-		return new Location(AdminCmd.getBukkitServer().getWorld(infos[5]), coords[0], coords[1],
+		return new Location(PluginInstance.getServer().getWorld(infos[5]), coords[0], coords[1],
 				coords[2], direction[0], direction[1]);
 	}
 

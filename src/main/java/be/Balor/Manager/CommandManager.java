@@ -43,9 +43,11 @@ import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.FileManager;
+import be.Balor.Tools.Files.WorldNotLoaded;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -161,12 +163,13 @@ public class CommandManager implements CommandExecutor {
 					new ArrayList<String>(alias.getStringList(cmd, new ArrayList<String>())));
 		startThreads();
 	}
+
 	/**
 	 * Register command from plugin
+	 * 
 	 * @param plugin
 	 */
-	public void registerACPlugin(AbstractAdminCmdPlugin plugin)
-	{
+	public void registerACPlugin(AbstractAdminCmdPlugin plugin) {
 		for (Command cmd : PluginCommandYamlParser.parse(plugin))
 			pluginCommands.put(cmd.getName(), cmd);
 	}
@@ -294,7 +297,9 @@ public class CommandManager implements CommandExecutor {
 			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
-					corePlugin.getServer().getScheduler()
+					corePlugin
+							.getServer()
+							.getScheduler()
 							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(cmd, sender, args));
 				else {
 					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
@@ -384,9 +389,14 @@ public class CommandManager implements CommandExecutor {
 				} catch (ConcurrentModificationException cme) {
 					corePlugin.getServer().getScheduler()
 							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(current));
+				} catch (WorldNotLoaded e) {
+					Logger.getLogger("Minecraft").severe(
+							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
+					PluginInstance.getServer().broadcastMessage(
+							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft").severe(current.debug());
-					AdminCmd.getBukkitServer().broadcastMessage(current.debug());
+					PluginInstance.getServer().broadcastMessage(current.debug());
 					t.printStackTrace();
 				}
 
@@ -431,7 +441,7 @@ public class CommandManager implements CommandExecutor {
 				acc.execute();
 			} catch (Throwable t) {
 				Logger.getLogger("Minecraft").severe(acc.debug());
-				AdminCmd.getBukkitServer().broadcastMessage(acc.debug());
+				PluginInstance.getServer().broadcastMessage(acc.debug());
 				t.printStackTrace();
 			}
 		}

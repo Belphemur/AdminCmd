@@ -40,7 +40,7 @@ import de.diddiz.LogBlock.Consumer;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.PluginInstance;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -327,8 +327,8 @@ public class Utils {
 
 	public static void tpP2P(CommandSender sender, String nFrom, String nTo, Type.Tp type) {
 		boolean found = true;
-		Player pFrom = AdminCmd.getBukkitServer().getPlayer(nFrom);
-		Player pTo = AdminCmd.getBukkitServer().getPlayer(nTo);
+		Player pFrom = PluginInstance.getServer().getPlayer(nFrom);
+		Player pTo = PluginInstance.getServer().getPlayer(nTo);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", nFrom);
 		if (pFrom == null) {
@@ -720,7 +720,7 @@ public class Utils {
 	 * @return
 	 */
 	public static Player[] getOnlinePlayers() {
-		return AdminCmd.getBukkitServer().getOnlinePlayers();
+		return PluginInstance.getServer().getOnlinePlayers();
 	}
 
 	@SuppressWarnings("unchecked")

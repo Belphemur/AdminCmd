@@ -3,7 +3,6 @@ package be.Balor.bukkit.AdminCmd;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -45,14 +44,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public AdminCmd() {
 		super("Core");
 	}
-
-	private static Server server = null;
 	private ACHelper worker;
 
-	public static Server getBukkitServer() {
-		return server;
-	}
-	
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
@@ -380,7 +373,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public void onEnable() {	
 		super.onEnable();
-		server = getServer();
+		
+		PluginInstance.setServer(getServer());
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
 		PluginDescriptionFile pdfFile = this.getDescription();
