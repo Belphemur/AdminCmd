@@ -32,7 +32,8 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Files.FilesManager;
+import be.Balor.Tools.Files.DataManager;
+import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Type.Category;
@@ -51,7 +52,7 @@ public class ACHelper {
 
 	private HashMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
-	private FilesManager fManager;
+	private FileManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd coreInstance;
 	EnumMap<Type, ConcurrentMap<String, Object>> storedTypeValues = new EnumMap<Type, ConcurrentMap<String, Object>>(
@@ -67,7 +68,8 @@ public class ACHelper {
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private static long pluginStarted;
-	private ExtendedConfiguration pluginConfig;	
+	private ExtendedConfiguration pluginConfig;
+	private DataManager dataManager;
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -226,6 +228,7 @@ public class ACHelper {
 		CommandManager.killInstance();
 		HelpLister.killInstance();
 		System.gc();
+		CommandManager.getInstance().registerACPlugin(coreInstance);
 		init();
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
 			for (Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
@@ -288,8 +291,9 @@ public class ACHelper {
 	 */
 	public void setCoreInstance(AdminCmd pluginInstance) {
 		this.coreInstance = pluginInstance;
-		fManager = FilesManager.getInstance();
+		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
+		dataManager = fManager;
 		fManager.getInnerFile("de_DE.yml", "locales", false);
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
@@ -499,7 +503,7 @@ public class ACHelper {
 	 */
 	public void removeLocation(String type, String nameMemory, String property, String filename) {
 		removeLocationFromMemory(type, nameMemory);
-		fManager.removeLocationFromFile(property, filename, type);
+		dataManager.removeKey(property, filename, type);
 	}
 
 	public void removeLocation(String type, String name, String filename) {
@@ -518,7 +522,7 @@ public class ACHelper {
 	public void addLocation(String type, String nameMemory, String property, String filename,
 			Location loc) {
 		addLocationInMemory(type, nameMemory, loc);
-		fManager.writeLocationFile(loc, property, filename, type);
+		dataManager.writeLocation(loc, property, filename, type);
 	}
 
 	public void addLocation(String type, String name, String filename, Location loc) {
@@ -539,7 +543,7 @@ public class ACHelper {
 		Location loc = null;
 		loc = getLocationFromMemory(type, nameMemory);
 		if (loc == null) {
-			loc = fManager.getLocationFile(property, filename, type);
+			loc = dataManager.getLocation(property, filename, type);
 			if (loc != null)
 				addLocationInMemory(type, nameMemory, loc);
 		}
@@ -890,9 +894,7 @@ public class ACHelper {
 
 	public void addValueWithFile(Type power, String user, Object value) {
 		addValue(power, user, value);
-		Configuration ban = fManager.getYml(power.toString());
-		ban.setProperty(power + "." + user, value);
-		ban.save();
+		dataManager.writeUserInformation(value, power + "." + user, power.toString());
 	}
 
 	public void removeValueWithFile(Type power, String user) {
@@ -906,7 +908,7 @@ public class ACHelper {
 		if (homeList.containsKey(player)) {
 			return homeList.get(player);
 		} else {
-			List<String> tmp = fManager.getYmlKeyFromFile(player, "home");
+			List<String> tmp = dataManager.getKeys(player, "home");
 			if (tmp != null)
 				homeList.put(player, new HashSet<String>(tmp));
 			else
@@ -919,14 +921,14 @@ public class ACHelper {
 		blacklist = getBlackListedItems();
 
 		alias.putAll(fManager.getAlias());
-		List<String> tmp = fManager.getYmlKeyFromFile("warpPoints", "warp");
+		List<String> tmp = dataManager.getKeys("warpPoints", "warp");
 		if (tmp != null)
 			warpList.addAll(tmp);
 
-		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
+		Map<String, Object> map = dataManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
 		for (String key : map.keySet())
 			addValue(Type.BANNED, key, map.get(key));
-		Map<String, Object> map2 = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
+		Map<String, Object> map2 = dataManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
 		for (String key : map2.keySet())
 			addValue(Type.MUTED, key, map2.get(key));
 		kits.putAll(fManager.loadKits());

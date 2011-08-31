@@ -41,16 +41,16 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class FilesManager {
+public class FileManager implements DataManager {
 	protected File pathFile;
-	private static FilesManager instance = null;
+	private static FileManager instance = null;
 
 	/**
 	 * @return the instance
 	 */
-	public static FilesManager getInstance() {
+	public static FileManager getInstance() {
 		if (instance == null)
-			instance = new FilesManager();
+			instance = new FileManager();
 		return instance;
 	}
 
@@ -254,7 +254,7 @@ public class FilesManager {
 	 * @param filename
 	 * @param directory
 	 */
-	public void writeLocationFile(Location loc, String name, String filename, String directory) {
+	public void writeLocation(Location loc, String name, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
 		conf.setProperty(name + ".world", loc.getWorld().getName());
 		conf.setProperty(name + ".x", loc.getX());
@@ -273,12 +273,12 @@ public class FilesManager {
 	 * @param directory
 	 * @return
 	 */
-	public Location getLocationFile(String property, String filename, String directory) {
+	public Location getLocation(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
 		if (conf.getProperty(property + ".world") == null) {
 			Location loc = parseLocation(property, conf);
 			if (loc != null)
-				writeLocationFile(loc, property, filename, directory);
+				writeLocation(loc, property, filename, directory);
 			return loc;
 		} else {
 			return new Location(AdminCmd.getBukkitServer().getWorld(
@@ -296,7 +296,7 @@ public class FilesManager {
 	 * @param filename
 	 * @param directory
 	 */
-	public void removeLocationFromFile(String property, String filename, String directory) {
+	public void removeKey(String property, String filename, String directory) {
 		Configuration conf = getYml(filename, directory);
 		conf.removeProperty(property);
 		conf.save();
@@ -309,7 +309,7 @@ public class FilesManager {
 	 * @param directory
 	 * @return
 	 */
-	public List<String> getYmlKeyFromFile(String filename, String directory) {
+	public List<String> getKeys(String filename, String directory) {
 		return getYml(filename, directory).getKeys(directory);
 	}
 
@@ -390,4 +390,16 @@ public class FilesManager {
 		}
 		return result;
 	}
+
+	/**
+	 * @see be.Balor.Tools.Files.DataManager#writeUserInformation(java.lang.Object,
+	 *      java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void writeUserInformation(Object info, String name, String filename) {
+		Configuration conf = getYml(filename);
+		conf.setProperty(name, info);
+		conf.save();
+	}
+
 }

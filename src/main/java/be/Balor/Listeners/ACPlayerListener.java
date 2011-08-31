@@ -45,7 +45,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Files.FilesManager;
+import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 import belgium.Balor.Workers.AFKWorker;
@@ -112,7 +112,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
-		Configuration conf = FilesManager.getInstance().getYml(p.getName(), "home");
+		Configuration conf = FileManager.getInstance().getYml(p.getName(), "home");
 		if (conf.getBoolean("infos.firstTime", true)) {
 			conf.setProperty("infos.firstTime", false);
 			conf.save();
@@ -182,15 +182,14 @@ public class ACPlayerListener extends PlayerListener {
 			return;
 		}
 		String playerName = p.getName();
-		if (event.getAction() == Action.LEFT_CLICK_BLOCK
-				&& event.getItem().getTypeId() == ACHelper.getInstance().getConfInt(
-						"superBreakerItem")
+		ItemStack itemInHand = event.getItem();
+		if (itemInHand != null && event.getAction() == Action.LEFT_CLICK_BLOCK
+				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
 				&& ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, playerName)) {
 			superBreaker(playerName, event.getClickedBlock());
 			return;
 		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-
 			if ((ACHelper.getInstance().hasThorPowers(playerName)))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
 			Float power = null;

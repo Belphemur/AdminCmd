@@ -42,7 +42,7 @@ import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Files.FilesManager;
+import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
@@ -152,7 +152,7 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setCorePlugin(AdminCmd plugin) {
 		this.corePlugin = plugin;
-		Configuration cmds = FilesManager.getInstance().getYml("commands");
+		Configuration cmds = FileManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
 		ConfigurationNode alias = cmds.getNode("alias");

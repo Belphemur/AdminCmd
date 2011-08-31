@@ -20,7 +20,7 @@ import java.io.File;
 
 import org.bukkit.util.config.Configuration;
 
-import be.Balor.Tools.Files.FilesManager;
+import be.Balor.Tools.Files.FileManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -36,7 +36,7 @@ public class ExtendedConfiguration extends Configuration{
 		load();
 	}
 	public ExtendedConfiguration(String fileName, String directory) {
-		super(FilesManager.getInstance().getFile(directory, fileName));
+		super(FileManager.getInstance().getFile(directory, fileName));
 		load();
 	}
 

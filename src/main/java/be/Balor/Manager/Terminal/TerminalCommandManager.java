@@ -27,7 +27,7 @@ import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionLinker;
 import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
 import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
-import be.Balor.Tools.Files.FilesManager;
+import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
@@ -59,7 +59,7 @@ public class TerminalCommandManager {
 	 */
 	public void setPerm(AbstractAdminCmdPlugin plugin) {
 		this.perm = plugin.getPermissionLinker();
-		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
+		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
 		conf.load();
@@ -94,7 +94,7 @@ public class TerminalCommandManager {
 	}
 
 	public void reloadScripts() {
-		File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
+		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
 		Configuration conf = new Configuration(scripts);
 		conf.load();
@@ -133,7 +133,7 @@ public class TerminalCommandManager {
 			throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null || reload) {
-			File scripts = FilesManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
+			File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 			File workingDir = scripts.getParentFile();
 			Configuration conf = new Configuration(scripts);
 			conf.load();
