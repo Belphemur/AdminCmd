@@ -65,7 +65,7 @@ public class Kit extends CoreCommand {
 		// which material?
 		Player target;
 		if (args.length == 0) {
-			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList());
+			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
 			return;
 		}
 		ArrayList<ItemStack> items = ACHelper.getInstance().getKit(args[0]);

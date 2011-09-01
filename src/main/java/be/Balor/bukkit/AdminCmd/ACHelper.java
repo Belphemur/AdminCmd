@@ -107,7 +107,6 @@ public class ACHelper {
 		instance = null;
 	}
 
-
 	/**
 	 * Return the elapsed time.
 	 * 
@@ -187,7 +186,7 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	public String getKitList() {
+	public String getKitList(CommandSender sender) {
 		String kitList = "";
 		HashSet<String> list = new HashSet<String>();
 		try {
@@ -200,7 +199,8 @@ public class ACHelper {
 		}
 
 		for (String kit : list) {
-			kitList += kit + ", ";
+			if (PermissionManager.hasPerm(sender, "admincmd.kit." + kit, false))
+				kitList += kit + ", ";
 		}
 		if (!kitList.equals("")) {
 			if (kitList.endsWith(", "))
@@ -227,8 +227,8 @@ public class ACHelper {
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
 		HelpLister.killInstance();
-		System.gc();		
-		CommandManager.getInstance().registerACPlugin(coreInstance);		
+		System.gc();
+		CommandManager.getInstance().registerACPlugin(coreInstance);
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias(coreInstance);
 		init();
@@ -931,7 +931,11 @@ public class ACHelper {
 		Map<String, Object> map2 = dataManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
 		for (String key : map2.keySet())
 			addValue(Type.MUTED, key, map2.get(key));
-		kits.putAll(fManager.loadKits());
+		Map<String, List<MaterialContainer>> kitsLoaded = fManager.loadKits();
+		for (String kit : kitsLoaded.keySet()) {
+			kits.put(kit, kitsLoaded.get(kit));
+			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);
+		}
 		if (pluginConfig.getBoolean("verboseLog", true)) {
 			Logger.getLogger("Minecraft").info(
 					"[AdminCmd] " + blacklist.size() + " blacklisted items loaded.");

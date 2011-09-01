@@ -61,6 +61,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
 		permissionLinker.addPermChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
@@ -385,8 +386,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		worker.setCoreInstance(this);
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
-		permissionLinker.registerAllPermParent();
 		worker.loadInfos();
+		permissionLinker.registerAllPermParent();		
 		ACPlayerListener playerListener = new ACPlayerListener();
 		ACEntityListener entityListener = new ACEntityListener();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
