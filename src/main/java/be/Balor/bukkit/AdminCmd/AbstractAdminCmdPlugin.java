@@ -29,6 +29,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
 	private final int hashCode;
+
 	/**
 	 * 
 	 */
@@ -60,29 +61,49 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 * Definitions of the locale used by the plugin
 	 */
 	protected abstract void setDefaultLocale();
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	@Override
 	public void onEnable() {
 		registerPermParents();
-		CommandManager.getInstance().registerACPlugin(this);		
+		CommandManager.getInstance().registerACPlugin(this);
 		registerCmds();
 		CommandManager.getInstance().checkAlias(this);
 		setDefaultLocale();
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	public int hashCode() {		
+	public int hashCode() {
 		return hashCode;
 	}
-	 
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (obj.hashCode() == this.hashCode)
+			return true;
+		return false;
+	}
 }

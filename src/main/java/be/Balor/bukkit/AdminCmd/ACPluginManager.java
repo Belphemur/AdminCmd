@@ -80,26 +80,33 @@ public class ACPluginManager {
 	 * 
 	 * @param addon
 	 */
-	protected void registerPlugin(AbstractAdminCmdPlugin addon) {
-		pluginInstances.put(addon.getName(), addon);
+	protected void registerPlugin(AbstractAdminCmdPlugin addon) throws IllegalArgumentException {
+		if (!pluginInstances.containsKey(addon.getName()))
+			pluginInstances.put(addon.getName(), addon);
+		else
+			throw new IllegalArgumentException("Plugin Already registered.");
 	}
 
-	public static void registerACPlugin(AbstractAdminCmdPlugin addon) {
+	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
+			throws IllegalArgumentException {
 		getInstance().registerPlugin(addon);
 	}
+
 	/**
 	 * Get Bukkit Scheduler
+	 * 
 	 * @return
 	 */
-	public static BukkitScheduler getScheduler()
-	{
+	public static BukkitScheduler getScheduler() {
 		return server.getScheduler();
 	}
+
 	/**
 	 * Register a Plugin Command
+	 * 
 	 * @param clazz
 	 */
-	public static void registerCommand(Class<?> clazz) {
+	public static void registerCommand(Class<?> clazz) throws IllegalArgumentException {
 		CommandManager.getInstance().registerCommand(clazz);
 	}
 }
