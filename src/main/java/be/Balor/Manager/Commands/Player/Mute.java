@@ -25,7 +25,7 @@ import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -68,7 +68,7 @@ public class Mute extends CoreCommand {
 						tmpMute = Integer.parseInt(args[args.length - 1]);
 						final String unmute = player.getName();
 						final CommandSender senderFinal = sender;
-						PluginInstance.getServer()
+						ACPluginManager.getServer()
 								.getScheduler()
 								.scheduleAsyncDelayedTask(
 										ACHelper.getInstance().getCoreInstance(), new Runnable() {

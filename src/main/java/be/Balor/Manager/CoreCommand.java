@@ -25,7 +25,7 @@ import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -46,11 +46,19 @@ public abstract class CoreCommand {
 	public CoreCommand(String name, String perm) {
 		this.permNode = perm;
 		this.cmdName = name;
-		this.plugin = PluginInstance.getInstance().getPluginInstance("Core");
+		this.plugin = ACPluginManager.getPluginInstance("Core");
 	}
+
 	public CoreCommand() {
-		this.plugin = PluginInstance.getInstance().getPluginInstance("Core");
+		this.plugin = ACPluginManager.getPluginInstance("Core");
 	}
+
+	public CoreCommand(String name, String perm, String plugin) {
+		this.permNode = perm;
+		this.cmdName = name;
+		this.plugin = ACPluginManager.getPluginInstance(plugin);
+	}
+
 	/**
 	 * Execute the command
 	 * 
@@ -129,6 +137,13 @@ public abstract class CoreCommand {
 	 */
 	public PluginCommand getPluginCommand() {
 		return pluginCommand;
+	}
+
+	/**
+	 * @return the plugin
+	 */
+	public AbstractAdminCmdPlugin getPlugin() {
+		return plugin;
 	}
 
 }

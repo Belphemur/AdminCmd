@@ -19,26 +19,29 @@ package be.Balor.bukkit.AdminCmd;
 import java.util.HashMap;
 
 import org.bukkit.Server;
+import org.bukkit.scheduler.BukkitScheduler;
+
+import be.Balor.Manager.CommandManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class PluginInstance {
-	private static PluginInstance instance;
+public class ACPluginManager {
+	private static ACPluginManager instance;
 	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
 	private static Server server = null;
 
-	private PluginInstance() {
+	private ACPluginManager() {
 
 	}
 
 	/**
 	 * @return the instance
 	 */
-	public static PluginInstance getInstance() {
+	protected static ACPluginManager getInstance() {
 		if (instance == null)
-			instance = new PluginInstance();
+			instance = new ACPluginManager();
 		return instance;
 	}
 
@@ -54,7 +57,7 @@ public class PluginInstance {
 	 *            the server to set
 	 */
 	public static void setServer(Server server) {
-		PluginInstance.server = server;
+		ACPluginManager.server = server;
 	}
 
 	/**
@@ -64,8 +67,12 @@ public class PluginInstance {
 	 *            name of the addon
 	 * @return the addon or null if not registered
 	 */
-	public AbstractAdminCmdPlugin getPluginInstance(String name) {
+	protected AbstractAdminCmdPlugin getPlugin(String name) {
 		return pluginInstances.get(name);
+	}
+
+	public static AbstractAdminCmdPlugin getPluginInstance(String name) {
+		return getInstance().getPlugin(name);
 	}
 
 	/**
@@ -73,8 +80,26 @@ public class PluginInstance {
 	 * 
 	 * @param addon
 	 */
-	public void registerACPlugin(AbstractAdminCmdPlugin addon) {
+	protected void registerPlugin(AbstractAdminCmdPlugin addon) {
 		pluginInstances.put(addon.getName(), addon);
 	}
 
+	public static void registerACPlugin(AbstractAdminCmdPlugin addon) {
+		getInstance().registerPlugin(addon);
+	}
+	/**
+	 * Get Bukkit Scheduler
+	 * @return
+	 */
+	public static BukkitScheduler getScheduler()
+	{
+		return server.getScheduler();
+	}
+	/**
+	 * Register a Plugin Command
+	 * @param clazz
+	 */
+	public static void registerCommand(Class<?> clazz) {
+		CommandManager.getInstance().registerCommand(clazz);
+	}
 }

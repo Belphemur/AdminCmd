@@ -28,14 +28,15 @@ import be.Balor.Manager.Permissions.PermissionLinker;
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
-
+	private final int hashCode;
 	/**
 	 * 
 	 */
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		PluginInstance.getInstance().registerACPlugin(this);
+		ACPluginManager.registerACPlugin(this);
+		hashCode = name.hashCode();
 	}
 
 	/**
@@ -70,6 +71,18 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		CommandManager.getInstance().registerACPlugin(this);				
+		registerPermParents();
+		CommandManager.getInstance().registerACPlugin(this);		
+		registerCmds();
+		CommandManager.getInstance().checkAlias(this);
+		setDefaultLocale();
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {		
+		return hashCode;
+	}
+	 
 }

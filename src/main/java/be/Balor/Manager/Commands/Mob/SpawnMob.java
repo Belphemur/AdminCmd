@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -97,7 +97,7 @@ public class SpawnMob extends CoreCommand {
 				}
 				if (ct == null || ct2 == null)
 					return;
-				PluginInstance.getServer()
+				ACPluginManager.getServer()
 						.getScheduler()
 						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 								new PassengerMob(loc, nbTaped, ct, ct2, player));
@@ -108,7 +108,7 @@ public class SpawnMob extends CoreCommand {
 					return;
 				}
 
-				PluginInstance.getServer()
+				ACPluginManager.getServer()
 						.getScheduler()
 						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 								new NormalMob(loc, nbTaped, ct, player));

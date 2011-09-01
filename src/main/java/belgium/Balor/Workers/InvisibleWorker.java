@@ -30,7 +30,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.collect.MapMaker;
 
@@ -91,7 +91,7 @@ final public class InvisibleWorker {
 	public LinkedList<Player> getAllInvisiblePlayers() {
 		LinkedList<Player> result = new LinkedList<Player>();
 		for (String p : invisblesWithTaskIds.keySet())
-			result.add(PluginInstance.getServer().getPlayer(p));
+			result.add(ACPluginManager.getServer().getPlayer(p));
 		return result;
 	}
 
@@ -103,10 +103,10 @@ final public class InvisibleWorker {
 	public void reappear(final Player toReappear) {
 		String name = toReappear.getName();
 		if (invisblesWithTaskIds.containsKey(name)) {
-			PluginInstance.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
+			ACPluginManager.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
 			invisblesWithTaskIds.remove(name);
 
-			PluginInstance
+			ACPluginManager
 					.getServer()
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
@@ -187,7 +187,7 @@ final public class InvisibleWorker {
 	 */
 	public void vanish(final Player toVanish) {
 		String name = toVanish.getName();
-		PluginInstance
+		ACPluginManager
 				.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
@@ -195,7 +195,7 @@ final public class InvisibleWorker {
 		if (!invisblesWithTaskIds.containsKey(name))
 			invisblesWithTaskIds.put(
 					name,
-					(Integer) PluginInstance
+					(Integer) ACPluginManager
 							.getServer()
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),

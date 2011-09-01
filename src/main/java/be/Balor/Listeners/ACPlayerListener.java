@@ -47,7 +47,7 @@ import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -205,12 +205,12 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	private boolean playerRespawnOrJoin(Player newPlayer) {
-		PluginInstance.getServer()
+		ACPluginManager.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisibleOnJoin(newPlayer), 5);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
-			PluginInstance.getServer()
+			ACPluginManager.getServer()
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 							new UpdateInvisible(newPlayer), 5);

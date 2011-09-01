@@ -31,7 +31,7 @@ import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 
@@ -49,7 +49,7 @@ public class ACPluginListener extends ServerListener {
 			PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 
 		if (!PermissionManager.isPermissionsExSet()) {
-			Plugin Permissions = PluginInstance.getServer().getPluginManager()
+			Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsEx");
 			if (Permissions != null) {
 				if (Permissions.isEnabled())
@@ -57,7 +57,7 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
-			Plugin Permissions = PluginInstance.getServer().getPluginManager()
+			Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("Permissions");
 			if (Permissions != null) {
 				if (Permissions.isEnabled())
@@ -65,21 +65,21 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (Utils.oddItem == null) {
-			Plugin items = PluginInstance.getServer().getPluginManager().getPlugin("OddItem");
+			Plugin items = ACPluginManager.getServer().getPluginManager().getPlugin("OddItem");
 			if (items != null && items.isEnabled()) {
 				Utils.oddItem = (OddItem) items;
 				System.out.print("[AdminCmd] Successfully linked with OddItem");
 			}
 		}
 		if (!BukkitPermissions.isApiSet()) {
-			Plugin mChatPlugin = PluginInstance.getServer().getPluginManager().getPlugin("mChat");
+			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager().getPlugin("mChat");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				BukkitPermissions.setmChatapi(mChat.API);
 				System.out.print("[AdminCmd] Successfully linked with mChat");
 			}
 		}
 		if (Utils.logBlock == null) {
-			Plugin plugin = PluginInstance.getServer().getPluginManager().getPlugin("LogBlock");
+			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("LogBlock");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.logBlock = ((LogBlock) plugin).getConsumer();
 				System.out.print("[AdminCmd] Successfully linked with LogBlock");
@@ -90,7 +90,7 @@ public class ACPluginListener extends ServerListener {
 				HelpLister.getInstance().addPlugin(plugin);
 		}
 		if (!Utils.signExtention) {
-			Plugin plugin = PluginInstance.getServer().getPluginManager()
+			Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("SignExtensions");
 			if (plugin != null)
 				Utils.signExtention = true;

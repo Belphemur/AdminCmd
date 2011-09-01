@@ -47,14 +47,14 @@ import be.Balor.Tools.Files.WorldNotLoaded;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class CommandManager implements CommandExecutor {
-	private HashMap<Command, CoreCommand> commands = new HashMap<Command, CoreCommand>();
+	private HashMap<Command, CoreCommand> registeredCommands = new HashMap<Command, CoreCommand>();
 	private final int MAX_THREADS = 5;
 	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
 			MAX_THREADS);
@@ -66,7 +66,7 @@ public class CommandManager implements CommandExecutor {
 	private List<String> prioritizedCommands;
 	private HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
 	private HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
-	private HashMap<String, Command> pluginCommands = new HashMap<String, Command>();
+	private HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
 
 	/**
 	 * 
@@ -170,8 +170,10 @@ public class CommandManager implements CommandExecutor {
 	 * @param plugin
 	 */
 	public void registerACPlugin(AbstractAdminCmdPlugin plugin) {
+		HashMap<String, Command> commands = new HashMap<String, Command>();
 		for (Command cmd : PluginCommandYamlParser.parse(plugin))
-			pluginCommands.put(cmd.getName(), cmd);
+			commands.put(cmd.getName(), cmd);
+		pluginCommands.put(plugin, new HashMap<String, Command>(commands));
 	}
 
 	public void startThreads() {
@@ -198,7 +200,7 @@ public class CommandManager implements CommandExecutor {
 			checkCommand(command);
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
-			commands.put(command.getPluginCommand(), command);
+			registeredCommands.put(command.getPluginCommand(), command);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -209,17 +211,19 @@ public class CommandManager implements CommandExecutor {
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
 			boolean disableCommand = true;
-			for (String alias : pluginCommands.get(command.getCmdName()).getAliases()) {
-				if (prioritizedCommands.contains(alias)) {
-					commandReplacer.put(alias, command);
-					disableCommand = false;
+			HashMap<String, Command> commands = pluginCommands.get(command.getPlugin());
+			if (commands != null)
+				for (String alias : commands.get(command.getCmdName()).getAliases()) {
+					if (prioritizedCommands.contains(alias)) {
+						commandReplacer.put(alias, command);
+						disableCommand = false;
+					}
+					if (aliasCommands.containsKey(alias)) {
+						for (String cmd : aliasCommands.get(alias))
+							commandReplacer.put(cmd, command);
+						disableCommand = false;
+					}
 				}
-				if (aliasCommands.containsKey(alias)) {
-					for (String cmd : aliasCommands.get(alias))
-						commandReplacer.put(cmd, command);
-					disableCommand = false;
-				}
-			}
 			if (disableCommand) {
 				unRegisterBukkitCommand(command.getPluginCommand());
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
@@ -227,7 +231,7 @@ public class CommandManager implements CommandExecutor {
 			} else {
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
-				commands.put(command.getPluginCommand(), command);
+				registeredCommands.put(command.getPluginCommand(), command);
 			}
 		} catch (CommandException e) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
@@ -242,39 +246,47 @@ public class CommandManager implements CommandExecutor {
 	 * @throws CommandDisabled
 	 */
 	private void checkCommand(final CoreCommand command) throws CommandDisabled {
-		for (String alias : pluginCommands.get(command.getCmdName()).getAliases()) {
-			if (disabledCommands.contains(alias))
-				throw new CommandDisabled("Command " + command.getCmdName()
-						+ " selected to be disabled in the configuration file.");
-			if (prioritizedCommands.contains(alias))
-				commandReplacer.put(alias, command);
-			if (aliasCommands.containsKey(alias)) {
-				for (String cmd : aliasCommands.get(alias))
-					commandReplacer.put(cmd, command);
+		HashMap<String, Command> commands = pluginCommands.get(command.getPlugin());
+		if (commands != null)
+			for (String alias : commands.get(command.getCmdName()).getAliases()) {
+				if (disabledCommands.contains(alias))
+					throw new CommandDisabled("Command " + command.getCmdName()
+							+ " selected to be disabled in the configuration file.");
+				if (prioritizedCommands.contains(alias))
+					commandReplacer.put(alias, command);
+				if (aliasCommands.containsKey(alias)) {
+					for (String cmd : aliasCommands.get(alias))
+						commandReplacer.put(cmd, command);
+				}
 			}
-		}
 	}
 
 	/**
 	 * Check if some alias have been disabled for the registered commands
 	 */
-	public void checkAlias() {
-		if (ACHelper.getInstance().getConfBoolean("verboseLog"))
-			for (String cmdName : pluginCommands.keySet()) {
-				Command cmd = pluginCommands.get(cmdName);
-				if (corePlugin.getCommand(cmd.getName()) != null) {
-					cmd.getAliases().removeAll(corePlugin.getCommand(cmd.getName()).getAliases());
-					cmd.getAliases().removeAll(prioritizedCommands);
-					String aliases = "";
-					for (String alias : cmd.getAliases())
-						aliases += alias + ", ";
-					if (!aliases.isEmpty() && ACHelper.getInstance().getConfBoolean("verboseLog"))
-						Logger.getLogger("Minecraft").info(
-								"[" + corePlugin.getDescription().getName()
-										+ "] Disabled Alias(es) for " + cmd.getName() + " : "
-										+ aliases);
+	public void checkAlias(AbstractAdminCmdPlugin plugin) {
+		if (ACHelper.getInstance().getConfBoolean("verboseLog")) {
+			HashMap<String, Command> commands = pluginCommands.get(plugin);
+			if (commands != null)
+				for (String cmdName : commands.keySet()) {
+					Command cmd = commands.get(cmdName);
+					if (corePlugin.getCommand(cmd.getName()) != null) {
+						List<String> aliasesList = new ArrayList<String>(cmd.getAliases());
+						aliasesList.removeAll(
+								corePlugin.getCommand(cmd.getName()).getAliases());
+						aliasesList.removeAll(prioritizedCommands);
+						String aliases = "";
+						for (String alias : aliasesList)
+							aliases += alias + ", ";
+						if (!aliases.isEmpty()
+								&& ACHelper.getInstance().getConfBoolean("verboseLog"))
+							Logger.getLogger("Minecraft").info(
+									"[" + corePlugin.getDescription().getName()
+											+ "] Disabled Alias(es) for " + cmd.getName() + " : "
+											+ aliases);
+					}
 				}
-			}
+		}
 	}
 
 	public void stopAllExecutorThreads() {
@@ -343,7 +355,7 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		CoreCommand cmd = null;
-		if ((cmd = commands.get(command)) != null)
+		if ((cmd = registeredCommands.get(command)) != null)
 			return executeCommand(sender, cmd, args);
 		else
 			return false;
@@ -392,11 +404,11 @@ public class CommandManager implements CommandExecutor {
 				} catch (WorldNotLoaded e) {
 					Logger.getLogger("Minecraft").severe(
 							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
-					PluginInstance.getServer().broadcastMessage(
+					ACPluginManager.getServer().broadcastMessage(
 							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft").severe(current.debug());
-					PluginInstance.getServer().broadcastMessage(current.debug());
+					ACPluginManager.getServer().broadcastMessage(current.debug());
 					t.printStackTrace();
 				}
 
@@ -441,7 +453,7 @@ public class CommandManager implements CommandExecutor {
 				acc.execute();
 			} catch (Throwable t) {
 				Logger.getLogger("Minecraft").severe(acc.debug());
-				PluginInstance.getServer().broadcastMessage(acc.debug());
+				ACPluginManager.getServer().broadcastMessage(acc.debug());
 				t.printStackTrace();
 			}
 		}

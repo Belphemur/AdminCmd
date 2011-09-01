@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -37,9 +38,20 @@ public class Kit extends CoreCommand {
 	 * 
 	 */
 	public Kit() {
-		permNode = "admincmd.item.add";
 		cmdName = "bal_kit";
 		other = true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.CoreCommand#permissionCheck(org.bukkit.command.CommandSender
+	 * )
+	 */
+	@Override
+	public boolean permissionCheck(CommandSender sender) {
+		return true;
 	}
 
 	/*
@@ -57,8 +69,7 @@ public class Kit extends CoreCommand {
 			return;
 		}
 		ArrayList<ItemStack> items = ACHelper.getInstance().getKit(args[0]);
-		if(items.isEmpty())
-		{
+		if (items.isEmpty()) {
 			Utils.sI18n(sender, "kitNotFound", "kit", args[0]);
 			return;
 		}
@@ -66,7 +77,9 @@ public class Kit extends CoreCommand {
 		if (target == null) {
 			return;
 		}
-
+		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args[0])) {
+			return;
+		}
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("kit", args[0]);
 		if (Utils.isPlayer(sender, false)) {

@@ -36,7 +36,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.PluginInstance;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -283,7 +283,7 @@ public class FileManager implements DataManager {
 				writeLocation(loc, property, filename, directory);
 			return loc;
 		} else {
-			World w = PluginInstance.getServer().getWorld(conf.getString(property + ".world"));
+			World w = ACPluginManager.getServer().getWorld(conf.getString(property + ".world"));
 			if (w != null)
 				return new Location(w, conf.getDouble(property + ".x", 0), conf.getDouble(property
 						+ ".y", 0), conf.getDouble(property + ".z", 0), Float.parseFloat(conf
@@ -348,7 +348,7 @@ public class FileManager implements DataManager {
 			} catch (NumberFormatException e) {
 				return null;
 			}
-		return new Location(PluginInstance.getServer().getWorld(infos[5]), coords[0], coords[1],
+		return new Location(ACPluginManager.getServer().getWorld(infos[5]), coords[0], coords[1],
 				coords[2], direction[0], direction[1]);
 	}
 

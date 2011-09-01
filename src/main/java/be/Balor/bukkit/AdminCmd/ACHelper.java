@@ -227,8 +227,10 @@ public class ACHelper {
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
 		HelpLister.killInstance();
-		System.gc();
-		CommandManager.getInstance().registerACPlugin(coreInstance);
+		System.gc();		
+		CommandManager.getInstance().registerACPlugin(coreInstance);		
+		coreInstance.registerCmds();
+		CommandManager.getInstance().checkAlias(coreInstance);
 		init();
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
 			for (Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
@@ -269,8 +271,6 @@ public class ACHelper {
 				pluginConfig.getString("locale", "en_US") + ".yml");
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		CommandManager.getInstance().setCorePlugin(coreInstance);
-		coreInstance.registerCmds();
-		CommandManager.getInstance().checkAlias();
 		HelpLoader.load(coreInstance.getDataFolder());
 		if (pluginConfig.getProperty("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));

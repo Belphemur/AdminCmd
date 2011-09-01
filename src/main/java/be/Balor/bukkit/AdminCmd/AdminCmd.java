@@ -372,9 +372,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	}
 
 	public void onEnable() {	
-		super.onEnable();
+		ACPluginManager.setServer(getServer());	
 		
-		PluginInstance.setServer(getServer());
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -383,9 +382,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 
 		worker = ACHelper.getInstance();
-		registerPermParents();
 		worker.setCoreInstance(this);
-		setDefaultLocale();
+		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
 		permissionLinker.registerAllPermParent();
 		worker.loadInfos();
