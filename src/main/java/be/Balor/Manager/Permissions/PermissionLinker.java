@@ -70,6 +70,11 @@ public class PermissionLinker {
 		for (PermParent pp : permissions)
 			majorPerm.addChild(pp.getPermName());
 	}
+	public void setMajorPerm(String major) {
+		majorPerm = new PermParent(major);
+		for (PermParent pp : permissions)
+			majorPerm.addChild(pp.getPermName());
+	}
 
 	/**
 	 * Add some important node (like myplygin.item)
@@ -79,6 +84,10 @@ public class PermissionLinker {
 	public void addPermParent(PermParent toAdd) {
 		permissions.add(toAdd);
 	}
+	public void addPermParent(String toAdd) {
+		permissions.add(new PermParent(toAdd));
+	}
+
 
 	/**
 	 * Add permission child (like myplugin.item.add)

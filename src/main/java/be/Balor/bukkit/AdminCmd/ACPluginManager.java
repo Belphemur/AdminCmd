@@ -84,7 +84,7 @@ public class ACPluginManager {
 		if (!pluginInstances.containsKey(addon.getName()))
 			pluginInstances.put(addon.getName(), addon);
 		else
-			throw new IllegalArgumentException("Plugin Already registered.");
+			throw new IllegalArgumentException("Plugin "+addon.getName()+" Already registered.");
 	}
 
 	public static void registerACPlugin(AbstractAdminCmdPlugin addon)

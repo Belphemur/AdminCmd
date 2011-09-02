@@ -16,7 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -28,20 +29,19 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermParent {
-	protected LinkedHashMap<String, Boolean> children;
+	protected Map<String, Boolean> children = new HashMap<String, Boolean>();
 	protected String permName = "";
 	protected String compareName = "";
+	protected PermissionDefault def;
 
-	public PermParent(String perm, String compare) {
+	public PermParent(String perm, String compare, PermissionDefault def) {
 		this.permName = perm;
 		this.compareName = compare;
-		children = new LinkedHashMap<String, Boolean>();
+		this.def = def;
 	}
 
 	public PermParent(String perm) {
-		this.permName = perm;
-		this.compareName = perm.substring(0, perm.length() - 1);
-		children = new LinkedHashMap<String, Boolean>();
+		this(perm, perm.substring(0, perm.length() - 1), PermissionDefault.OP);
 	}
 
 	/**
@@ -73,8 +73,13 @@ public class PermParent {
 	}
 
 	public void registerBukkitPerm() {
-		ACPluginManager.getServer().getPluginManager()
-				.addPermission(new Permission(permName, PermissionDefault.OP, children));
+		Permission perm = ACPluginManager.getServer().getPluginManager().getPermission(permName);
+		if (perm == null)
+			ACPluginManager.getServer().getPluginManager()
+					.addPermission(new Permission(permName, def, children));
+		else {
+			perm.getChildren().putAll(children);
+		}
 	}
 
 }

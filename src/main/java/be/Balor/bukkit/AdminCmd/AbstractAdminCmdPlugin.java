@@ -31,7 +31,10 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	private final int hashCode;
 
 	/**
+	 * Create the AdminCmd plugin.
 	 * 
+	 * @param name
+	 *            the name used for the plugin.
 	 */
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
@@ -101,6 +104,8 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
+			return false;
+		if (!(obj instanceof AbstractAdminCmdPlugin))
 			return false;
 		if (obj.hashCode() == this.hashCode)
 			return true;
