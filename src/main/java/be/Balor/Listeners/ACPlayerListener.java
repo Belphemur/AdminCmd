@@ -137,7 +137,16 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		playerRespawnOrJoin(event.getPlayer());
+		Player player = event.getPlayer();
+		playerRespawnOrJoin(player);
+		if (ACHelper.getInstance().getConfBoolean("respawnAtSpawnPoint")) {
+			Location loc = null;
+			String worldName = player.getWorld().getName();
+			loc = ACHelper.getInstance().getLocation("spawn", worldName, "spawnLocations");
+			if (loc == null)
+				loc = player.getWorld().getSpawnLocation();
+			event.setRespawnLocation(loc);
+		}
 
 	}
 
@@ -205,12 +214,14 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	private boolean playerRespawnOrJoin(Player newPlayer) {
-		ACPluginManager.getServer()
+		ACPluginManager
+				.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisibleOnJoin(newPlayer), 5);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
-			ACPluginManager.getServer()
+			ACPluginManager
+					.getServer()
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 							new UpdateInvisible(newPlayer), 5);

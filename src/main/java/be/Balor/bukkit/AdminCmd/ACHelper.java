@@ -227,11 +227,11 @@ public class ACHelper {
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
 		HelpLister.killInstance();
-		System.gc();
+		System.gc();		
+		init();
 		CommandManager.getInstance().registerACPlugin(coreInstance);
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias(coreInstance);
-		init();
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
 			for (Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
@@ -332,6 +332,7 @@ public class ACHelper {
 		pluginConfig.addProperty("help.wordWrapRight", false);
 		pluginConfig.addProperty("help.getHelpForAllPlugins", true);
 		pluginConfig.addProperty("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
+		pluginConfig.addProperty("respawnAtSpawnPoint", false);
 
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();

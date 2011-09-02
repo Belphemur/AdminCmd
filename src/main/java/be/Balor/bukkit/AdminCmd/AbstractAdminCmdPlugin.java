@@ -40,7 +40,10 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		ACPluginManager.registerACPlugin(this);
-		hashCode = name.hashCode();
+		final int prime = 31;
+		int result = 5;
+		result = prime * result + this.name.hashCode();
+		hashCode = result;
 	}
 
 	/**
@@ -86,9 +89,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		setDefaultLocale();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -96,19 +97,25 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		return hashCode;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
 		if (obj == null)
 			return false;
 		if (!(obj instanceof AbstractAdminCmdPlugin))
 			return false;
-		if (obj.hashCode() == this.hashCode)
-			return true;
-		return false;
+		AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
+
+
 }
