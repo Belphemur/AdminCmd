@@ -77,8 +77,7 @@ public class Vulcan extends CoreCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "vulcanEnabledTarget", replace);
 			}
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		}
 	}
 
 	/*

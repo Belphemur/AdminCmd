@@ -55,8 +55,7 @@ public class Ip extends CoreCommand {
 			replace.put("player", target.getName());
 			replace.put("ip", target.getAddress().getAddress().toString());
 			Utils.sI18n(sender, "ip", replace);
-		}else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		}
 
 	}
 

@@ -65,8 +65,7 @@ public class NoPickup extends CoreCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "npEnabledTarget", replace);
 			}
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		} 
 	}
 
 	/*

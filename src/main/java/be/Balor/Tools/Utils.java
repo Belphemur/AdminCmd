@@ -189,12 +189,11 @@ public class Utils {
 		Player target = null;
 		if (args.length >= index + 1) {
 			target = sender.getServer().getPlayer(args[index]);
-			if (target != null && target.equals(sender))
-				return target;
-			else if (PermissionManager.hasPerm(sender, permNode + ".other"))
-				return target;
-			else
-				return null;
+			if (target != null)
+				if (target.equals(sender))
+					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other"))
+					return target;
 		} else if (isPlayer(sender, false))
 			target = ((Player) sender);
 		else if (errorMsg) {
@@ -732,6 +731,21 @@ public class Utils {
 	 */
 	public static Player[] getOnlinePlayers() {
 		return ACPluginManager.getServer().getOnlinePlayers();
+	}
+
+	/**
+	 * Update the time played on the server
+	 * 
+	 * @param player
+	 *            player to update
+	 */
+	public static void updatePlayedTime(String player) {
+		long total = ACPluginManager.getDataManager()
+				.getPlayerInformation(player, "infos.totalTime").getLong(0)
+				+ System.currentTimeMillis()
+				- ACPluginManager.getDataManager()
+						.getPlayerInformation(player, "infos.lastConnection").getLong(0);
+		ACPluginManager.getDataManager().setPlayerInformation(player, "infos.totalTime", total);
 	}
 
 	@SuppressWarnings("unchecked")

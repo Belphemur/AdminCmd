@@ -133,13 +133,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
 		}
-		long total = ACPluginManager.getDataManager()
-				.getPlayerInformation(p.getName(), "infos.totalTime").getLong(0)
-				+ System.currentTimeMillis()
-				- ACPluginManager.getDataManager()
-						.getPlayerInformation(p.getName(), "infos.lastConnection").getLong(0);
-		ACPluginManager.getDataManager()
-				.setPlayerInformation(p.getName(), "infos.totalTime", total);
+		Utils.updatePlayedTime(p.getName());
 	}
 
 	@Override

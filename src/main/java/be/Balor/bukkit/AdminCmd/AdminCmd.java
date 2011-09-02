@@ -3,6 +3,7 @@ package be.Balor.bukkit.AdminCmd;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -150,6 +151,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(LastLocation.class);
 		CommandManager.getInstance().registerCommand(SuperBreaker.class);
 		CommandManager.getInstance().registerCommand(Help.class);
+		CommandManager.getInstance().registerCommand(Played.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -369,6 +371,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD
 				+ "Super Breaker mode enabled for %player");
 		Utils.addLocale("airForbidden", ChatColor.DARK_RED + "You can't give AIR item.");
+		Utils.addLocale("playedTime", ChatColor.DARK_AQUA+"%player "+ChatColor.WHITE+"played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
 		LocaleManager.getInstance().save();
 	}
 
@@ -412,8 +415,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
+		for(Player p : getServer().getOnlinePlayers())
+			Utils.updatePlayedTime(p.getName());
 		CommandManager.getInstance().stopAllExecutorThreads();
-		worker = null;
+		worker = null;		
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
 		InvisibleWorker.killInstance();

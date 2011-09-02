@@ -22,22 +22,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
-import be.Balor.Tools.Type;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SuperBreaker extends CoreCommand {
-
+public class Played extends CoreCommand {
 	/**
 	 * 
 	 */
-	public SuperBreaker() {
-		permNode = "admincmd.player.superbreaker";
-		cmdName = "bal_sp";
+	public Played() {
+		super("bal_played", "admincmd.player.played");
 		other = true;
 	}
 
@@ -45,33 +43,36 @@ public class SuperBreaker extends CoreCommand {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * be.Balor.Manager.CoreCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		Player player = Utils.getUser(sender, args, permNode);
-		if (player != null) {
+		Player target = Utils.getUser(sender, args, permNode);
+		if (target != null) {
+			String playername = target.getName();
+			long total = ACPluginManager.getDataManager()
+					.getPlayerInformation(playername, "infos.totalTime").getLong(0)
+					+ System.currentTimeMillis()
+					- ACPluginManager.getDataManager()
+							.getPlayerInformation(playername, "infos.lastConnection").getLong(0);
+			Long[] time = Utils.transformToElapsedTime(total);
+			String prefix = Utils.colorParser(PermissionManager.getPrefix(target));
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.SUPER_BREAKER, player);
-				Utils.sI18n(player, Type.SUPER_BREAKER + "Disabled");
-				if (!player.equals(sender))
-					Utils.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget", replace);
-			} else {
-				ACHelper.getInstance().addValue(Type.SUPER_BREAKER, player);
-				Utils.sI18n(player, Type.SUPER_BREAKER + "Enabled");
-				if (!player.equals(sender))
-					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget", replace);
-			}
+			replace.put("d", time[0].toString());
+			replace.put("h", time[1].toString());
+			replace.put("m", time[2].toString());
+			replace.put("s", time[3].toString());
+			replace.put("player", prefix + playername);
+			Utils.sI18n(sender, "playedTime", replace);
+
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 * @see be.Balor.Manager.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {

@@ -449,4 +449,19 @@ public class FileManager implements DataManager {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Files.DataManager#getAllPlayer()
+	 */
+	@Override
+	public List<String> getAllPlayer() {
+		ArrayList<String> list = new ArrayList<String>();
+		File[] players = YmlFilter.listRecursively(getFile(null, "home"), 1);
+		for (File player : players) {
+			String name = player.getName();
+			list.add(name.substring(0, name.lastIndexOf('.') - 1));
+		}
+		return list;
+	}
 }

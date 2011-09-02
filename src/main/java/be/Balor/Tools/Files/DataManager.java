@@ -102,4 +102,11 @@ public interface DataManager {
 	 */
 	public void setPlayerInformation(String player, String info, Object value);
 
+	/**
+	 * Get all existing player
+	 * 
+	 * @return list containing the player's names.
+	 */
+	public List<String> getAllPlayer();
+
 }

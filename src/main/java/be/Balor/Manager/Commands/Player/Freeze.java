@@ -64,8 +64,7 @@ public class Freeze extends CoreCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "freezeEnabledTarget", replace);
 			}
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		}
 
 	}
 

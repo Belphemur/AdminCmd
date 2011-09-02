@@ -92,8 +92,7 @@ public class Mute extends CoreCommand {
 			} else
 				Utils.sI18n(sender, "alreadyMuted");
 
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+		}
 
 	}
 
