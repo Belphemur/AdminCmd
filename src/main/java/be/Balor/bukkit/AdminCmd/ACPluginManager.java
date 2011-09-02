@@ -22,6 +22,7 @@ import org.bukkit.Server;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import be.Balor.Manager.CommandManager;
+import be.Balor.Tools.Files.DataManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -31,6 +32,7 @@ public class ACPluginManager {
 	private static ACPluginManager instance;
 	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
 	private static Server server = null;
+	static DataManager dataManager;
 
 	private ACPluginManager() {
 
@@ -84,7 +86,7 @@ public class ACPluginManager {
 		if (!pluginInstances.containsKey(addon.getName()))
 			pluginInstances.put(addon.getName(), addon);
 		else
-			throw new IllegalArgumentException("Plugin "+addon.getName()+" Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getName() + " Already registered.");
 	}
 
 	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
@@ -108,5 +110,12 @@ public class ACPluginManager {
 	 */
 	public static void registerCommand(Class<?> clazz) throws IllegalArgumentException {
 		CommandManager.getInstance().registerCommand(clazz);
+	}
+
+	/**
+	 * @return the dataManager
+	 */
+	public static DataManager getDataManager() {
+		return dataManager;
 	}
 }

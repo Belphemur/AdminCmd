@@ -85,7 +85,7 @@ public class Utils {
 			if ((mc = ACHelper.getInstance().getAlias(info[0])) == null) {
 				mc = new MaterialContainer(info[0], info[1]);
 			}
-		}		
+		}
 		return mc;
 
 	}
@@ -684,7 +684,18 @@ public class Utils {
 	 * @return
 	 */
 	public static Long[] getElapsedTime(long start) {
-		long diff = System.currentTimeMillis() - start;
+		return transformToElapsedTime(System.currentTimeMillis() - start);
+	}
+
+	/**
+	 * Transform a given time to an elapsed time.
+	 * 
+	 * @param time
+	 *            in milisec
+	 * @return Long[] containing days, hours, mins and sec.
+	 */
+	public static Long[] transformToElapsedTime(long time) {
+		long diff = time;
 		long secondInMillis = 1000;
 		long minuteInMillis = secondInMillis * 60;
 		long hourInMillis = minuteInMillis * 60;

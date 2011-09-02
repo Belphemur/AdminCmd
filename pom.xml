@@ -48,14 +48,6 @@
 				<filtering>false</filtering>
 				<directory>${basedir}/src/main/resources/</directory>
 				<includes>
-					<include>de_DE.yml</include>
-				</includes>
-			</resource>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>false</filtering>
-				<directory>${basedir}/src/main/resources/</directory>
-				<includes>
 					<include>kits.yml</include>
 				</includes>
 			</resource>

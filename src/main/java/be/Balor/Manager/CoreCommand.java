@@ -41,7 +41,12 @@ public abstract class CoreCommand {
 	protected final AbstractAdminCmdPlugin plugin;
 
 	/**
+	 * Constructor of CoreCommand
 	 * 
+	 * @param name
+	 *            name of the command (in the plugin.yml)
+	 * @param perm
+	 *            permission needed by the player to execute the command
 	 */
 	public CoreCommand(String name, String perm) {
 		this.permNode = perm;
@@ -53,6 +58,16 @@ public abstract class CoreCommand {
 		this.plugin = ACPluginManager.getPluginInstance("Core");
 	}
 
+	/**
+	 * Constructor of CoreCommand
+	 * 
+	 * @param name
+	 *            name of the command (in the plugin.yml)
+	 * @param perm
+	 *            permission needed by the player to execute the command
+	 * @param plugin
+	 *            name of the AdminCmd plugin that the command belong to.
+	 */
 	public CoreCommand(String name, String perm, String plugin) {
 		this.permNode = perm;
 		this.cmdName = name;

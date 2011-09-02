@@ -77,9 +77,8 @@ public class PermParent {
 		if (perm == null)
 			ACPluginManager.getServer().getPluginManager()
 					.addPermission(new Permission(permName, def, children));
-		else {
+		else
 			perm.getChildren().putAll(children);
-		}
 	}
 
 }

@@ -103,7 +103,7 @@ public class ACHelper {
 		return instance;
 	}
 
-	public static void killInstance() {
+	static void killInstance() {
 		instance = null;
 	}
 
@@ -227,7 +227,7 @@ public class ACHelper {
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
 		HelpLister.killInstance();
-		System.gc();		
+		System.gc();
 		init();
 		CommandManager.getInstance().registerACPlugin(coreInstance);
 		coreInstance.registerCmds();
@@ -294,7 +294,7 @@ public class ACHelper {
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
-		fManager.getInnerFile("de_DE.yml", "locales", false);
+		ACPluginManager.dataManager = fManager;
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
@@ -895,7 +895,7 @@ public class ACHelper {
 
 	public void addValueWithFile(Type power, String user, Object value) {
 		addValue(power, user, value);
-		dataManager.writeUserInformation(value, power + "." + user, power.toString());
+		dataManager.writePowerInformation(value, power + "." + user, power.toString());
 	}
 
 	public void removeValueWithFile(Type power, String user) {

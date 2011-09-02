@@ -64,7 +64,8 @@ public interface DataManager {
 	 * @param directory
 	 * @return
 	 */
-	public Location getLocation(String property, String filename, String directory) throws WorldNotLoaded;
+	public Location getLocation(String property, String filename, String directory)
+			throws WorldNotLoaded;
 
 	/**
 	 * Store the location informations
@@ -82,6 +83,23 @@ public interface DataManager {
 	 * @param filename
 	 * @param directory
 	 */
-	public void writeUserInformation(Object info, String name, String filename);
+	public void writePowerInformation(Object info, String name, String filename);
+
+	/**
+	 * Get an information from the player.
+	 * 
+	 * @param player
+	 * @param info
+	 */
+	public ObjectContainer getPlayerInformation(String player, String info);
+
+	/**
+	 * Set a player information.
+	 * 
+	 * @param player
+	 * @param info
+	 * @param value
+	 */
+	public void setPlayerInformation(String player, String info, Object value);
 
 }

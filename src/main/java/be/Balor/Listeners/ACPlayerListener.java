@@ -36,7 +36,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.CommandManager;
@@ -45,7 +44,6 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
@@ -112,13 +110,15 @@ public class ACPlayerListener extends PlayerListener {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
-		Configuration conf = FileManager.getInstance().getYml(p.getName(), "home");
-		if (conf.getBoolean("infos.firstTime", true)) {
-			conf.setProperty("infos.firstTime", false);
-			conf.save();
+		if (ACPluginManager.getDataManager().getPlayerInformation(p.getName(), "infos.firstTime")
+				.getBoolean(true)) {
+			ACPluginManager.getDataManager().setPlayerInformation(p.getName(), "infos.firstTime",
+					false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
 		}
+		ACPluginManager.getDataManager().setPlayerInformation(p.getName(), "infos.lastConnection",
+				System.currentTimeMillis());
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))
@@ -133,6 +133,13 @@ public class ACPlayerListener extends PlayerListener {
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
 		}
+		long total = ACPluginManager.getDataManager()
+				.getPlayerInformation(p.getName(), "infos.totalTime").getLong(0)
+				+ System.currentTimeMillis()
+				- ACPluginManager.getDataManager()
+						.getPlayerInformation(p.getName(), "infos.lastConnection").getLong(0);
+		ACPluginManager.getDataManager()
+				.setPlayerInformation(p.getName(), "infos.totalTime", total);
 	}
 
 	@Override

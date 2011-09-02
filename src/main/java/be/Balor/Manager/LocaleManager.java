@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -108,5 +109,21 @@ public class LocaleManager {
 		if (locale != null && alias != null)
 			locale = locale.replaceAll("%" + alias, replaceBy);
 		return locale;
+	}
+
+	/**
+	 * Get all the possible locale key.
+	 * 
+	 * @return
+	 */
+	public List<String> getKeys() {
+		return localeFile.getKeys();
+	}
+
+	/**
+	 * Reload the locale file
+	 */
+	public void reload() {
+		localeFile.load();
 	}
 }

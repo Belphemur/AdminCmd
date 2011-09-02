@@ -45,6 +45,10 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class FileManager implements DataManager {
 	protected File pathFile;
 	private static FileManager instance = null;
+	private String lastDirectory = "";
+	private String lastFilename = "";
+	private File lastFile = null;
+	private Configuration lastLoadedConf = null;
 
 	/**
 	 * @return the instance
@@ -80,8 +84,12 @@ public class FileManager implements DataManager {
 	 * @return the configuration file
 	 */
 	public Configuration getYml(String filename, String directory) {
+		if (lastLoadedConf != null && lastDirectory.equals(directory == null ? "" : directory)
+				&& lastFilename.equals(filename))
+			return lastLoadedConf;
 		Configuration config = new Configuration(getFile(directory, filename + ".yml"));
 		config.load();
+		lastLoadedConf = config;
 		return config;
 	}
 
@@ -101,6 +109,9 @@ public class FileManager implements DataManager {
 	}
 
 	public File getFile(String directory, String filename, boolean create) {
+		if (lastFile != null && lastDirectory.equals(directory == null ? "" : directory)
+				&& lastFilename.equals(filename))
+			return lastFile;
 		File file = null;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);
@@ -119,6 +130,9 @@ public class FileManager implements DataManager {
 				System.out.println("cannot create file " + file.getPath());
 			}
 		}
+		lastFile = file;
+		lastDirectory = directory == null ? "" : directory;
+		lastFilename = filename;
 		return file;
 	}
 
@@ -402,10 +416,37 @@ public class FileManager implements DataManager {
 	 *      java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void writeUserInformation(Object info, String name, String filename) {
+	public void writePowerInformation(Object info, String name, String filename) {
 		Configuration conf = getYml(filename);
 		conf.setProperty(name, info);
 		conf.save();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Files.DataManager#getPlayerInformation(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public ObjectContainer getPlayerInformation(String player, String info) {
+		return new ObjectContainer(getYml(player, "home").getProperty(info));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Files.DataManager#setPlayerInformation(java.lang.String,
+	 * java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public void setPlayerInformation(String player, String info, Object value) {
+		Configuration conf = getYml(player, "home");
+		conf.setProperty(info, value);
+		conf.save();
+
 	}
 
 }
