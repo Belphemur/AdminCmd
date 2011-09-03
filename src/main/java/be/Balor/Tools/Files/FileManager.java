@@ -460,7 +460,7 @@ public class FileManager implements DataManager {
 		File[] players = YmlFilter.listRecursively(getFile(null, "home"), 1);
 		for (File player : players) {
 			String name = player.getName();
-			list.add(name.substring(0, name.lastIndexOf('.') - 1));
+			list.add(name.substring(0, name.lastIndexOf('.')));
 		}
 		return list;
 	}
