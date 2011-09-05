@@ -48,7 +48,7 @@ public class Home extends CoreCommand {
 			String home = player.getWorld().getName();
 			if (args.length >= 1)
 				home = args[0];
-			Location loc = ACHelper.getInstance().getLocation("home",
+			Location loc = ACHelper.getInstance().getLocation("userData",
 					player.getName() + "." + home, "home." + home, player.getName());
 			if (loc == null)
 				Utils.sI18n(sender, "errorMultiHome", "home", home);

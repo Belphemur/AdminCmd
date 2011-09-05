@@ -69,11 +69,14 @@ public class FileManager implements DataManager {
 			pathFile.mkdir();
 		}
 		File spawn = getFile(null, "spawnLocations.yml", false);
+		File homeDir = new File(this.pathFile, "home");		
 		if (spawn.exists()) {
 			File dir = new File(this.pathFile, "spawn");
 			dir.mkdir();
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
+		if(homeDir.exists())
+			homeDir.renameTo(new File(this.pathFile,"userData"));
 	}
 
 	/**
@@ -329,8 +332,8 @@ public class FileManager implements DataManager {
 	 * @param directory
 	 * @return
 	 */
-	public List<String> getKeys(String filename, String directory) {
-		return getYml(filename, directory).getKeys(directory);
+	public List<String> getKeys(String info, String filename, String directory) {
+		return getYml(filename, directory).getKeys(info);
 	}
 
 	/**
@@ -431,7 +434,7 @@ public class FileManager implements DataManager {
 	 */
 	@Override
 	public ObjectContainer getPlayerInformation(String player, String info) {
-		return new ObjectContainer(getYml(player, "home").getProperty(info));
+		return new ObjectContainer(getYml(player, "userData").getProperty(info));
 	}
 
 	/*
@@ -443,7 +446,7 @@ public class FileManager implements DataManager {
 	 */
 	@Override
 	public void setPlayerInformation(String player, String info, Object value) {
-		Configuration conf = getYml(player, "home");
+		Configuration conf = getYml(player, "userData");
 		conf.setProperty(info, value);
 		conf.save();
 

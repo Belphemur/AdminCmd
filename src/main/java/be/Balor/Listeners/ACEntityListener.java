@@ -65,7 +65,7 @@ public class ACEntityListener extends EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-		ACHelper.getInstance().addLocation("home", player.getName() + ".lastLoc", "lastLoc",
+		ACHelper.getInstance().addLocation("userData", player.getName() + ".lastLoc", "lastLoc",
 				player.getName(), player.getLocation());
 	}
 

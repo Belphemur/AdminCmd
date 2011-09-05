@@ -160,7 +160,7 @@ public class ACPlayerListener extends PlayerListener {
 		String playername = event.getPlayer().getName();
 		boolean otherWorld = !from.getWorld().equals(to.getWorld());
 		if (otherWorld) {
-			ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc",
+			ACHelper.getInstance().addLocation("userData", playername + ".lastLoc", "lastLoc",
 					playername, from);
 		}
 		if (ACHelper.getInstance().isValueSet(Type.FROZEN, playername)) {

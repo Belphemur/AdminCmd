@@ -63,7 +63,7 @@ public class SetHome extends CoreCommand {
 				return;
 			}
 			tmp.add(home);
-			ACHelper.getInstance().addLocation("home", p.getName() + "." + home, "home." + home,
+			ACHelper.getInstance().addLocation("userData", p.getName() + "." + home, "home." + home,
 					p.getName(), loc);
 			Utils.sI18n(sender, "setMultiHome", "home", home);
 		}

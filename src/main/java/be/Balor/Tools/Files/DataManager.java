@@ -41,11 +41,11 @@ public interface DataManager {
 	/**
 	 * Return a string List containing all locations names
 	 * 
-	 * @param filename
-	 * @param directory
+	 * @param user
+	 * @param table
 	 * @return
 	 */
-	public List<String> getKeys(String filename, String directory);
+	public List<String> getKeys(String info, String user, String table);
 
 	/**
 	 * Remove the given location

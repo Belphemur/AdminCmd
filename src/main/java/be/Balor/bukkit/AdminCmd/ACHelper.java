@@ -909,7 +909,7 @@ public class ACHelper {
 		if (homeList.containsKey(player)) {
 			return homeList.get(player);
 		} else {
-			List<String> tmp = dataManager.getKeys(player, "home");
+			List<String> tmp = dataManager.getKeys("home", player, "userData");
 			if (tmp != null)
 				homeList.put(player, new HashSet<String>(tmp));
 			else
@@ -922,7 +922,7 @@ public class ACHelper {
 		blacklist = getBlackListedItems();
 
 		alias.putAll(fManager.getAlias());
-		List<String> tmp = dataManager.getKeys("warpPoints", "warp");
+		List<String> tmp = dataManager.getKeys("warp", "warpPoints", "warp");
 		if (tmp != null)
 			warpList.addAll(tmp);
 
