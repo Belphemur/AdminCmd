@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import static be.Balor.Tools.Utils.sendMessage;
@@ -61,6 +62,7 @@ public class TpToWarp extends CoreCommand {
 			if (loc == null)
 				Utils.sI18n(sender, "errorWarp", replace);
 			else {
+				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(loc);
 				sendMessage(sender, target, "tpWarp", replace);
 			}
