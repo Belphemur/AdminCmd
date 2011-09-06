@@ -98,8 +98,8 @@ public class PlayerManager {
 	 * @return
 	 */
 	public boolean setOffline(ACPlayer player) {
-		player.forceSave();
 		player.updatePlayedTime();
+		player.forceSave();		
 		player.setOnline(false);
 		return onlinePlayers.remove(player);
 	}

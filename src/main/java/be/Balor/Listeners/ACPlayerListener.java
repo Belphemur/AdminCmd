@@ -106,8 +106,6 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
-		Utils.sParsedLocale(p, "MOTD");
-		Utils.sParsedLocale(p, "NEWS");
 		PlayerManager.getInstance().setOnline(p.getName());
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
@@ -120,6 +118,8 @@ public class ACPlayerListener extends PlayerListener {
 				ACHelper.getInstance().spawn(p);
 		}
 		player.setInformation("lastConnection", System.currentTimeMillis());
+		Utils.sParsedLocale(p, "MOTD");
+		Utils.sParsedLocale(p, "NEWS");
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))

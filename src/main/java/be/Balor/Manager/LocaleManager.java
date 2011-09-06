@@ -98,7 +98,12 @@ public class LocaleManager {
 		String locale = localeFile.getString(key);
 		if (locale != null && values != null)
 			for (String toReplace : values.keySet())
-				locale = locale.replaceAll("%" + toReplace, values.get(toReplace).replaceAll("\\W", ""));
+				try {
+					locale = locale.replaceAll("%" + toReplace, values.get(toReplace));
+				} catch (StringIndexOutOfBoundsException  e) {
+					locale = locale.replaceAll("%" + toReplace, values.get(toReplace).replaceAll("\\W", ""));
+				}
+				
 		return locale;
 	}
 
@@ -107,7 +112,12 @@ public class LocaleManager {
 			return null;
 		String locale = localeFile.getString(key);
 		if (locale != null && alias != null)
-			locale = locale.replaceAll("%" + alias, replaceBy.replaceAll("\\W", ""));
+			try {
+				locale = locale.replaceAll("%" + alias, replaceBy);
+			} catch (StringIndexOutOfBoundsException e) {
+				locale = locale.replaceAll("%" + alias, replaceBy.replaceAll("\\W", ""));
+			}
+			
 		return locale;
 	}
 

@@ -205,7 +205,7 @@ public abstract class ACPlayer {
 	 */
 	public long updatePlayedTime() {
 		long total = getInformation("totalTime").getLong(0) + System.currentTimeMillis()
-				- getInformation("lastConnection").getLong(0);
+				- getInformation("lastConnection").getLong(System.currentTimeMillis());
 		setInformation("totalTime", total);
 		return total;
 	}

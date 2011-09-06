@@ -47,8 +47,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public AdminCmd() {
 		super("Core");
 	}
-	private ACHelper worker;
 
+	private ACHelper worker;
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
@@ -307,7 +307,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("invTitle", "[INV]");
 		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected");
+				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
+				+ "%d day(s) %h:%m:%s");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
@@ -373,13 +375,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD
 				+ "Super Breaker mode enabled for %player");
 		Utils.addLocale("airForbidden", ChatColor.DARK_RED + "You can't give AIR item.");
-		Utils.addLocale("playedTime", ChatColor.DARK_AQUA+"%player "+ChatColor.WHITE+"played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
+		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
+				+ "played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
 		LocaleManager.getInstance().save();
 	}
 
-	public void onEnable() {	
-		ACPluginManager.setServer(getServer());	
-		
+	public void onEnable() {
+		ACPluginManager.setServer(getServer());
+
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -393,7 +396,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
 		worker.loadInfos();
-		permissionLinker.registerAllPermParent();		
+		permissionLinker.registerAllPermParent();
 		ACPlayerListener playerListener = new ACPlayerListener();
 		ACEntityListener entityListener = new ACEntityListener();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
@@ -418,12 +421,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		for(Player p : getServer().getOnlinePlayers())
-		{
+		for (Player p : getServer().getOnlinePlayers()) {
 			PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
 		}
 		CommandManager.getInstance().stopAllExecutorThreads();
-		worker = null;		
+		worker = null;
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
 		InvisibleWorker.killInstance();

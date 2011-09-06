@@ -492,6 +492,12 @@ public class Utils {
 		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay")) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", p.getName());
+			long total = ACPlayer.getPlayer(p.getName()).updatePlayedTime();
+			Long[] time = Utils.transformToElapsedTime(total);
+			replace.put("d", time[0].toString());
+			replace.put("h", time[1].toString());
+			replace.put("m", time[2].toString());
+			replace.put("s", time[3].toString());
 			replace.put(
 					"nb",
 					String.valueOf(p.getServer().getOnlinePlayers().length
