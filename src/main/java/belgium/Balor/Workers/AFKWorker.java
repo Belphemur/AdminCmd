@@ -226,7 +226,9 @@ final public class AFKWorker {
 		public void run() {
 			long now = System.currentTimeMillis();
 			for (Player p : playersAfk.keySet()) {
-				if (now - playerTimeStamp.get(p) >= kickTime && !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
+				Long timeStamp = playerTimeStamp.get(p);
+				if (timeStamp != null && (now - timeStamp >= kickTime)
+						&& !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
 					p.kickPlayer(Utils.I18n("afkKick"));
 					playersAfk.remove(p);
 					playerTimeStamp.remove(p);
