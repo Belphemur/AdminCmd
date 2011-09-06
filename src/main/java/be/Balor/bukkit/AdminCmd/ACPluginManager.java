@@ -19,10 +19,10 @@ package be.Balor.bukkit.AdminCmd;
 import java.util.HashMap;
 
 import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import be.Balor.Manager.CommandManager;
-import be.Balor.Tools.Files.DataManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -32,7 +32,6 @@ public class ACPluginManager {
 	private static ACPluginManager instance;
 	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
 	private static Server server = null;
-	static DataManager dataManager;
 
 	private ACPluginManager() {
 
@@ -95,6 +94,20 @@ public class ACPluginManager {
 	}
 
 	/**
+	 * Unregister an AdminCmd addon
+	 * 
+	 * @param addon
+	 */
+	protected void unRegisterPlugin(AbstractAdminCmdPlugin addon) {
+		pluginInstances.remove(addon.getName());
+	}
+
+	public static void unRegisterACPlugin(Plugin addon) {
+		if (addon instanceof AbstractAdminCmdPlugin)
+			getInstance().unRegisterPlugin((AbstractAdminCmdPlugin) addon);
+	}
+
+	/**
 	 * Get Bukkit Scheduler
 	 * 
 	 * @return
@@ -110,12 +123,5 @@ public class ACPluginManager {
 	 */
 	public static void registerCommand(Class<?> clazz) throws IllegalArgumentException {
 		CommandManager.getInstance().registerCommand(clazz);
-	}
-
-	/**
-	 * @return the dataManager
-	 */
-	public static DataManager getDataManager() {
-		return dataManager;
 	}
 }

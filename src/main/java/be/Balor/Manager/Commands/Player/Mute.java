@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -54,12 +55,12 @@ public class Mute extends CoreCommand {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (!ACHelper.getInstance().isValueSet(Type.MUTED, player.getName())) {
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (!acp.hasPower(Type.MUTED)) {
 				String msg = "Server Admin";
 				if (Utils.isPlayer(sender, false))
 					msg = ((Player) sender).getName();
-				ACHelper.getInstance().addValueWithFile(Type.MUTED, player.getName(),
-						"Muted by " + msg);
+				acp.setPower(Type.MUTED, "Muted by " + msg);
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteEnabledTarget", replace);
 				if (args.length >= 2) {
@@ -68,15 +69,15 @@ public class Mute extends CoreCommand {
 						tmpMute = Integer.parseInt(args[args.length - 1]);
 						final String unmute = player.getName();
 						final CommandSender senderFinal = sender;
-						ACPluginManager.getServer()
+						ACPluginManager
+								.getServer()
 								.getScheduler()
-								.scheduleAsyncDelayedTask(
-										ACHelper.getInstance().getCoreInstance(), new Runnable() {
+								.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
+										new Runnable() {
 
 											@Override
 											public void run() {
-												ACHelper.getInstance().removeValueWithFile(
-														Type.MUTED, unmute);
+												ACPlayer.getPlayer(unmute).removePower(Type.MUTED);
 												Utils.sI18n(senderFinal, "muteDisabledTarget",
 														"player", unmute);
 											}

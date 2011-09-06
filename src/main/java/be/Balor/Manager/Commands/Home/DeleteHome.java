@@ -20,12 +20,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class DeleteHome extends CoreCommand {
 
@@ -46,11 +46,9 @@ public class DeleteHome extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, String... args) {
-		if(Utils.isPlayer(sender))
-		{
-			Player p = (Player)sender;
-			ACHelper.getInstance().getHomeList(p.getName()).remove(args[0]);
-			ACHelper.getInstance().removeLocation("home", p.getName()+"."+args[0], "home."+args[0], p.getName());
+		if (Utils.isPlayer(sender)) {
+			Player p = (Player) sender;
+			ACPlayer.getPlayer(p.getName()).removeHome(args[0]);
 			Utils.sI18n(sender, "rmHome", "home", args[0]);
 		}
 

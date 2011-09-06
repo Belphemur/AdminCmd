@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Home;
 
-import java.util.Set;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -52,7 +53,8 @@ public class SetHome extends CoreCommand {
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
 			Player p = ((Player) sender);
-			Set<String> tmp = ACHelper.getInstance().getHomeList(p.getName());
+			ACPlayer player = ACPlayer.getPlayer(p.getName());
+			List<String> tmp = player.getHomeList();
 			String home = p.getWorld().getName();
 			if (args.length >= 1)
 				home = args[0];
@@ -62,9 +64,7 @@ public class SetHome extends CoreCommand {
 				Utils.sI18n(sender, "homeLimit");
 				return;
 			}
-			tmp.add(home);
-			ACHelper.getInstance().addLocation("userData", p.getName() + "." + home, "home." + home,
-					p.getName(), loc);
+			player.setHome(home, loc);
 			Utils.sI18n(sender, "setMultiHome", "home", home);
 		}
 

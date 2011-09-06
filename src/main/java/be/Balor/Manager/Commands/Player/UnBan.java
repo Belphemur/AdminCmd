@@ -19,9 +19,9 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -47,8 +47,9 @@ public class UnBan extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		String unban = args[0];
-		if (ACHelper.getInstance().isValueSet(Type.BANNED, unban)) {
-			ACHelper.getInstance().removeValueWithFile(Type.BANNED, unban);
+		ACPlayer acp = ACPlayer.getPlayer(unban);
+		if (acp.hasPower(Type.BANNED)) {
+			acp.removePower(Type.BANNED);
 			String unbanMsg = Utils.I18n("unban", "player", unban);
 			if (unbanMsg != null)
 				sender.getServer().broadcastMessage(unbanMsg);

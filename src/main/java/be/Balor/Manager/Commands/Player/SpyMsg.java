@@ -19,11 +19,10 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,11 +48,12 @@ public class SpyMsg extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
-			if (ACHelper.getInstance().isValueSet(Type.SPYMSG, (Player) sender)) {
-				ACHelper.getInstance().removeValue(Type.SPYMSG, (Player) sender);
+			ACPlayer acp = ACPlayer.getPlayer(((Player) sender).getName());
+			if (acp.hasPower(Type.SPYMSG)) {
+				acp.removePower(Type.SPYMSG);
 				Utils.sI18n(sender, "spymsgDisabled");
 			} else {
-				ACHelper.getInstance().addValue(Type.SPYMSG, (Player) sender);
+				acp.setPower(Type.SPYMSG);
 				Utils.sI18n(sender, "spymsgEnabled");
 			}
 

@@ -40,6 +40,8 @@ import org.bukkit.util.Vector;
 import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.UpdateInvisible;
@@ -56,10 +58,9 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (ACHelper.getInstance().isValueSet(Type.BANNED, event.getPlayer().getName())) {
-			event.disallow(Result.KICK_BANNED,
-					ACHelper.getInstance().getValue(Type.BANNED, event.getPlayer().getName())
-							.toString());
+		ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
+		if (player.hasPower(Type.BANNED)) {
+			event.disallow(Result.KICK_BANNED, player.getPower(Type.BANNED).getString());
 			return;
 		}
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
@@ -74,7 +75,8 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isValueSet(Type.FROZEN, p)) {
+		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (player.hasPower(Type.FROZEN)) {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
@@ -84,8 +86,8 @@ public class ACPlayerListener extends PlayerListener {
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
 			return;
 		}
-		Float power = (Float) ACHelper.getInstance().getValue(Type.FLY, p.getName());
-		if (power != null)
+		Float power = player.getPower(Type.FLY).getFloat(0);
+		if (power != 0)
 			if (p.isSneaking())
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
 			else if (ACHelper.getInstance().getConfBoolean("glideWhenFallingInFlyMode")) {
@@ -106,34 +108,33 @@ public class ACPlayerListener extends PlayerListener {
 		Player p = event.getPlayer();
 		Utils.sParsedLocale(p, "MOTD");
 		Utils.sParsedLocale(p, "NEWS");
+		PlayerManager.getInstance().setOnline(p.getName());
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
-		if (ACPluginManager.getDataManager().getPlayerInformation(p.getName(), "infos.firstTime")
-				.getBoolean(true)) {
-			ACPluginManager.getDataManager().setPlayerInformation(p.getName(), "infos.firstTime",
-					false);
+		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (player.getInformation("firstTime").getBoolean(true)) {
+			player.setInformation("firstTime", false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
 		}
-		ACPluginManager.getDataManager().setPlayerInformation(p.getName(), "infos.lastConnection",
-				System.currentTimeMillis());
+		player.setInformation("lastConnection", System.currentTimeMillis());
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
-				&& !ACHelper.getInstance().isValueSet(Type.TP_REQUEST, p.getName())
+				&& !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))
-			ACHelper.getInstance().addValue(Type.TP_REQUEST, p.getName());
+			player.setPower(Type.TP_REQUEST);
 	}
 
 	@Override
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
+		PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
-		}
-		Utils.updatePlayedTime(p.getName());
+		}		
 	}
 
 	@Override
@@ -159,24 +160,24 @@ public class ACPlayerListener extends PlayerListener {
 		Location to = event.getTo();
 		String playername = event.getPlayer().getName();
 		boolean otherWorld = !from.getWorld().equals(to.getWorld());
+		ACPlayer player = ACPlayer.getPlayer(playername);
 		if (otherWorld) {
-			ACHelper.getInstance().addLocation("userData", playername + ".lastLoc", "lastLoc",
-					playername, from);
+			player.setLastLocation(from);
 		}
-		if (ACHelper.getInstance().isValueSet(Type.FROZEN, playername)) {
+		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
 		}
 		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld") && !otherWorld
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
-			if (ACHelper.getInstance().removeKeyFromValues(event.getPlayer())
-					|| InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
+			player.removeAllSuperPower();
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());
 				Utils.sI18n(event.getPlayer(), "changedWorld");
 			}
 
-		} else
-			playerRespawnOrJoin(event.getPlayer());
+		}
+		playerRespawnOrJoin(event.getPlayer());
 	}
 
 	@Override
@@ -187,29 +188,29 @@ public class ACPlayerListener extends PlayerListener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isValueSet(Type.FROZEN, p)) {
+		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
-		}
-		String playerName = p.getName();
+		}		
 		ItemStack itemInHand = event.getItem();
 		if (itemInHand != null && event.getAction() == Action.LEFT_CLICK_BLOCK
 				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
-				&& ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, playerName)) {
-			superBreaker(playerName, event.getClickedBlock());
+				&& player.hasPower(Type.SUPER_BREAKER)) {
+			superBreaker(player, event.getClickedBlock());
 			return;
 		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			if ((ACHelper.getInstance().hasThorPowers(playerName)))
+			if (player.hasPower(Type.THOR))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
 			Float power = null;
-			if ((power = ACHelper.getInstance().getVulcainExplosionPower(playerName)) != null)
+			if ((power = player.getPower(Type.VULCAN).getFloat(0)) != 0)
 				p.getWorld()
 						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
 			power = null;
-			if ((power = (Float) ACHelper.getInstance().getValue(Type.FIREBALL, playerName)) != null)
+			if ((power = player.getPower(Type.FIREBALL).getFloat(0)) != 0)
 				ShootFireball.shoot(p, power);
-			tpAtSee(p);
+			tpAtSee(player);
 
 		}
 	}
@@ -219,13 +220,13 @@ public class ACPlayerListener extends PlayerListener {
 				.getServer()
 				.getScheduler()
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-						new UpdateInvisibleOnJoin(newPlayer), 5);
+						new UpdateInvisibleOnJoin(newPlayer), 15);
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
 			ACPluginManager
 					.getServer()
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-							new UpdateInvisible(newPlayer), 5);
+							new UpdateInvisible(newPlayer), 15);
 			return true;
 		}
 		return false;
@@ -234,12 +235,13 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerChat(PlayerChatEvent event) {
 		Player p = event.getPlayer();
+		ACPlayer player = ACPlayer.getPlayer(p.getName());
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		if (ACHelper.getInstance().isValueSet(Type.MUTED, p)) {
+		if (player.hasPower(Type.MUTED)) {
 			event.setCancelled(true);
 			Utils.sI18n(p, "muteEnabled");
 		}
@@ -249,7 +251,8 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (event.isCancelled())
 			return;
-		if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, event.getPlayer()))
+		ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
+		if (player.hasPower(Type.NO_PICKUP))
 			event.setCancelled(true);
 	}
 
@@ -275,9 +278,10 @@ public class ACPlayerListener extends PlayerListener {
 	 * 
 	 * @param p
 	 */
-	private void tpAtSee(Player p) {
-		if (ACHelper.getInstance().isValueSet(Type.TP_AT_SEE, p))
+	private void tpAtSee(ACPlayer player) {
+		if (player.hasPower(Type.TP_AT_SEE))			
 			try {
+				Player p = player.getHandler();
 				String playername = p.getName();
 				Block toTp = p.getWorld().getBlockAt(
 						p.getTargetBlock(null,
@@ -310,10 +314,10 @@ public class ACPlayerListener extends PlayerListener {
 	/**
 	 * Super breaker mode
 	 * 
-	 * @param playerName
+	 * @param player
 	 * @param block
 	 */
-	private void superBreaker(String playerName, Block block) {
+	private void superBreaker(ACPlayer player, Block block) {
 		int typeId = block.getTypeId();
 		switch (typeId) {
 		case 64:
@@ -355,7 +359,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 
 		if (Utils.logBlock != null)
-			Utils.logBlock.queueBlockBreak(playerName, block.getState());
+			Utils.logBlock.queueBlockBreak(player.getName(), block.getState());
 		block.setTypeId(0);
 	}
 

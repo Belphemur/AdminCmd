@@ -16,15 +16,15 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Home;
 
-import java.util.Set;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,7 +51,7 @@ public class ListHomes extends CoreCommand {
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
 			String msg = "";
-			Set<String> homes = ACHelper.getInstance().getHomeList(((Player)sender).getName());
+			List<String> homes = ACPlayer.getPlayer(((Player)sender).getName()).getHomeList();
 			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE + homes.size());
 			for (String name : homes) {
 				msg += name + ", ";

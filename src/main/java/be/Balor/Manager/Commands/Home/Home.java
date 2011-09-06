@@ -21,8 +21,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -48,8 +48,7 @@ public class Home extends CoreCommand {
 			String home = player.getWorld().getName();
 			if (args.length >= 1)
 				home = args[0];
-			Location loc = ACHelper.getInstance().getLocation("userData",
-					player.getName() + "." + home, "home." + home, player.getName());
+			Location loc = ACPlayer.getPlayer(player.getName()).getHome(home);
 			if (loc == null)
 				Utils.sI18n(sender, "errorMultiHome", "home", home);
 			else {

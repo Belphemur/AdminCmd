@@ -39,6 +39,7 @@ import de.diddiz.LogBlock.Consumer;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
@@ -357,15 +358,16 @@ public class Utils {
 				return;
 			}
 			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-				ACHelper.getInstance().addLocation("userData", pFrom.getName() + ".lastLoc", "lastLoc",
-						pFrom.getName(), pFrom.getLocation());
+				ACHelper.getInstance().addLocation("userData", pFrom.getName() + ".lastLoc",
+						"lastLoc", pFrom.getName(), pFrom.getLocation());
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
 				Utils.sI18n(sender, "tp", replace);
 			} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pTo)) {
-				ACHelper.getInstance().addValue(Type.TP_REQUEST, pTo, new TpRequest(pFrom, pTo));
+					&& ACPlayer.getPlayer(pTo.getName()).hasPower(Type.TP_REQUEST)) {
+				ACPlayer.getPlayer(pTo.getName()).setPower(Type.TP_REQUEST,
+						new TpRequest(pFrom, pTo));
 				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pTo.getName());
@@ -373,8 +375,9 @@ public class Utils {
 				Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
 			} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, pFrom)) {
-				ACHelper.getInstance().addValue(Type.TP_REQUEST, pFrom, new TpRequest(pFrom, pTo));
+					&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
+				ACPlayer.getPlayer(pFrom.getName()).setPower(Type.TP_REQUEST,
+						new TpRequest(pFrom, pTo));
 				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pFrom.getName());
@@ -382,8 +385,8 @@ public class Utils {
 				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 			} else {
-				ACHelper.getInstance().addLocation("userData", pFrom.getName() + ".lastLoc", "lastLoc",
-						pFrom.getName(), pFrom.getLocation());
+				ACHelper.getInstance().addLocation("userData", pFrom.getName() + ".lastLoc",
+						"lastLoc", pFrom.getName(), pFrom.getLocation());
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
@@ -731,21 +734,6 @@ public class Utils {
 	 */
 	public static Player[] getOnlinePlayers() {
 		return ACPluginManager.getServer().getOnlinePlayers();
-	}
-
-	/**
-	 * Update the time played on the server
-	 * 
-	 * @param player
-	 *            player to update
-	 */
-	public static void updatePlayedTime(String player) {
-		long total = ACPluginManager.getDataManager()
-				.getPlayerInformation(player, "infos.totalTime").getLong(0)
-				+ System.currentTimeMillis()
-				- ACPluginManager.getDataManager()
-						.getPlayerInformation(player, "infos.lastConnection").getLong(0);
-		ACPluginManager.getDataManager().setPlayerInformation(player, "infos.totalTime", total);
 	}
 
 	@SuppressWarnings("unchecked")

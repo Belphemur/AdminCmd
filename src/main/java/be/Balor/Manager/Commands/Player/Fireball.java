@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -63,13 +64,14 @@ public class Fireball extends CoreCommand {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.FIREBALL, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.FIREBALL, player);
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (acp.hasPower(Type.FIREBALL)) {
+				acp.removePower(Type.FIREBALL);
 				Utils.sI18n(player, "fireballDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fireballDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addValue(Type.FIREBALL, player, power);
+				acp.setPower(Type.FIREBALL, power);
 				Utils.sI18n(player, "fireballEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fireballEnabledTarget", replace);

@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -66,13 +67,14 @@ public class Vulcan extends CoreCommand {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.VULCAN, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.VULCAN, player);
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (acp.hasPower(Type.VULCAN)) {
+				acp.removePower(Type.VULCAN);
 				Utils.sI18n(player, "vulcanDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "vulcanDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addValue(Type.VULCAN, player, power);
+				acp.setPower(Type.VULCAN, power);
 				Utils.sI18n(player, "vulcanEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "vulcanEnabledTarget", replace);

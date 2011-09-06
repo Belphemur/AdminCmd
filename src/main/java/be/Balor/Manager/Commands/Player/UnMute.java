@@ -22,9 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -53,8 +53,9 @@ public class UnMute extends CoreCommand {
 
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", args[0]);
-		if (ACHelper.getInstance().isValueSet(Type.MUTED, args[0])) {
-			ACHelper.getInstance().removeValueWithFile(Type.MUTED, args[0]);
+		ACPlayer acp = ACPlayer.getPlayer(args[0]);
+		if (acp.hasPower(Type.MUTED)) {
+			acp.removePower(Type.MUTED);
 			if (player != null) {
 				Utils.sI18n(player, "muteDisabled");
 				if (!player.equals(sender))

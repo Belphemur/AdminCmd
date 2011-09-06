@@ -22,9 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,13 +54,14 @@ public class SuperBreaker extends CoreCommand {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.SUPER_BREAKER, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.SUPER_BREAKER, player);
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (acp.hasPower(Type.SUPER_BREAKER)) {
+				acp.removePower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Disabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addValue(Type.SUPER_BREAKER, player);
+				acp.setPower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Enabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget", replace);

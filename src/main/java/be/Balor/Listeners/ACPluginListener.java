@@ -20,6 +20,7 @@ import info.somethingodd.bukkit.OddItem.OddItem;
 
 import net.D3GN.MiracleM4n.mChat.mChat;
 
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -95,5 +96,9 @@ public class ACPluginListener extends ServerListener {
 			if (plugin != null)
 				Utils.signExtention = true;
 		}
+	}
+	@Override
+	 public void onPluginDisable(PluginDisableEvent event) {
+		ACPluginManager.unRegisterACPlugin(event.getPlugin());
 	}
 }

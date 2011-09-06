@@ -27,6 +27,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityListener;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -45,12 +46,12 @@ public class ACEntityListener extends EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-		if (ACHelper.getInstance().isValueSet(Type.FLY, player)
+		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.FLY)
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);
 			return;
-		} else if (ACHelper.getInstance().hasGodPowers(player.getName())) {
+		} else if (ACPlayer.getPlayer(player.getName()).hasPower(Type.GOD)) {
 			if (event.getCause().equals(DamageCause.FIRE)
 					|| event.getCause().equals(DamageCause.FIRE_TICK))
 				player.setFireTicks(0);
@@ -65,8 +66,7 @@ public class ACEntityListener extends EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player player = (Player) event.getEntity();
-		ACHelper.getInstance().addLocation("userData", player.getName() + ".lastLoc", "lastLoc",
-				player.getName(), player.getLocation());
+		ACPlayer.getPlayer(player.getName()).setLastLocation(player.getLocation());
 	}
 
 	@Override

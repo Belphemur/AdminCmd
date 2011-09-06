@@ -38,8 +38,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
-		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		ACPluginManager.registerACPlugin(this);
+		permissionLinker = PermissionLinker.getPermissionLinker(name);		
 		final int prime = 31;
 		int result = 5;
 		result = prime * result + this.name.hashCode();
@@ -82,6 +81,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		ACPluginManager.registerACPlugin(this);
 		registerPermParents();
 		CommandManager.getInstance().registerACPlugin(this);
 		registerCmds();

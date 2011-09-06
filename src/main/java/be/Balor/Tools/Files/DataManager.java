@@ -76,37 +76,4 @@ public interface DataManager {
 	 */
 	public void writeLocation(Location loc, String name, String filename, String directory);
 
-	/**
-	 * Store the information
-	 * 
-	 * @param loc
-	 * @param filename
-	 * @param directory
-	 */
-	public void writePowerInformation(Object info, String name, String filename);
-
-	/**
-	 * Get an information from the player.
-	 * 
-	 * @param player
-	 * @param info
-	 */
-	public ObjectContainer getPlayerInformation(String player, String info);
-
-	/**
-	 * Set a player information.
-	 * 
-	 * @param player
-	 * @param info
-	 * @param value
-	 */
-	public void setPlayerInformation(String player, String info, Object value);
-
-	/**
-	 * Get all existing player
-	 * 
-	 * @return list containing the player's names.
-	 */
-	public List<String> getAllPlayer();
-
 }

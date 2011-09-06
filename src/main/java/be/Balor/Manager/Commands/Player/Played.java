@@ -23,8 +23,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,11 +51,7 @@ public class Played extends CoreCommand {
 		Player target = Utils.getUser(sender, args, permNode);
 		if (target != null) {
 			String playername = target.getName();
-			long total = ACPluginManager.getDataManager()
-					.getPlayerInformation(playername, "infos.totalTime").getLong(0)
-					+ System.currentTimeMillis()
-					- ACPluginManager.getDataManager()
-							.getPlayerInformation(playername, "infos.lastConnection").getLong(0);
+			long total = ACPlayer.getPlayer(playername).updatePlayedTime();
 			Long[] time = Utils.transformToElapsedTime(total);
 			String prefix = Utils.colorParser(PermissionManager.getPrefix(target));
 			HashMap<String, String> replace = new HashMap<String, String>();

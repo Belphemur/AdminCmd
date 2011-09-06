@@ -22,9 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,18 +54,19 @@ public class NoPickup extends CoreCommand {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.NO_PICKUP, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.NO_PICKUP, player);
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (acp.hasPower(Type.NO_PICKUP)) {
+				acp.removePower(Type.NO_PICKUP);
 				Utils.sI18n(player, "npDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "npDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addValue(Type.NO_PICKUP, player);
+				acp.setPower(Type.NO_PICKUP);
 				Utils.sI18n(player, "npEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "npEnabledTarget", replace);
 			}
-		} 
+		}
 	}
 
 	/*

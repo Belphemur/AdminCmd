@@ -20,7 +20,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
-import be.Balor.Tools.TpRequest;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.TpRequest; 
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -49,21 +50,21 @@ public class TpToggle extends CoreCommand {
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (args.length >= 1
-					&& ACHelper.getInstance().isValueSet(Type.TP_REQUEST, player.getName())) {
-				Object obj = ACHelper.getInstance().getValue(Type.TP_REQUEST, player);
-				if (obj instanceof TpRequest) {
-					TpRequest request = (TpRequest) obj;
+					&& acp.hasPower(Type.TP_REQUEST)) {
+				TpRequest request = acp.getPower(Type.TP_REQUEST).getTpRequest();
+				if (request != null) {
 					request.teleport(player);
 					ACHelper.getInstance().addValue(Type.TP_REQUEST, player);
 				} else
 					Utils.sI18n(sender, "noTpRequest");
 			} else {
-				if (ACHelper.getInstance().isValueSet(Type.TP_REQUEST, player.getName())) {
-					ACHelper.getInstance().removeValue(Type.TP_REQUEST, player);
+				if (acp.hasPower(Type.TP_REQUEST)) {
+					acp.removePower(Type.TP_REQUEST);
 					Utils.sI18n(player, "tpRequestOff");
 				} else {
-					ACHelper.getInstance().addValue(Type.TP_REQUEST, player);
+					acp.setPower(Type.TP_REQUEST);
 					Utils.sI18n(player, "tpRequestOn");
 				}
 			}

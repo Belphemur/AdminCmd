@@ -28,6 +28,8 @@ import be.Balor.Manager.Commands.Weather.*;
 import be.Balor.Manager.Commands.Warp.*;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
@@ -384,6 +386,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
 				+ pdfFile.getVersion() + ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pL, Priority.Monitor, this);
 
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
@@ -416,7 +419,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		for(Player p : getServer().getOnlinePlayers())
-			Utils.updatePlayedTime(p.getName());
+		{
+			PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
+		}
 		CommandManager.getInstance().stopAllExecutorThreads();
 		worker = null;		
 		getServer().getScheduler().cancelTasks(this);

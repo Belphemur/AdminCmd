@@ -23,23 +23,24 @@ import java.util.Map;
  * 
  */
 public enum Type {
-	FLY(Category.PLAYER),
-	VULCAN(Category.PLAYER),
-	GOD(Category.PLAYER),
-	THOR(Category.PLAYER),
+	FLY(Category.SUPER_POWER),
+	VULCAN(Category.SUPER_POWER),
+	GOD(Category.SUPER_POWER),
+	THOR(Category.SUPER_POWER),
 	BANNED(	Category.SANCTION),
-	FIREBALL(Category.PLAYER),
+	FIREBALL(Category.SUPER_POWER),
 	SPYMSG(Category.OTHER),
 	FROZEN(	Category.SANCTION),
 	MUTED(Category.SANCTION),
 	MOB_LIMIT(Category.WORLD),
-	NO_PICKUP(Category.PLAYER),
+	NO_PICKUP(Category.SUPER_POWER),
 	WEATHER_FROZEN(Category.WORLD),
 	REPEAT_CMD(Category.OTHER),
 	TIME_FREEZED(Category.WORLD),
 	TP_REQUEST(Category.OTHER),
-	TP_AT_SEE(Category.PLAYER),
-	SUPER_BREAKER(Category.PLAYER);
+	TP_AT_SEE(Category.SUPER_POWER),
+	SUPER_BREAKER(Category.SUPER_POWER),
+	INVISIBLE(Category.SUPER_POWER);
 
 	private static final Map<String, Type> lookupName = new HashMap<String, Type>();
 
@@ -95,7 +96,7 @@ public enum Type {
 	}
 
 	public enum Category {
-		PLAYER, WORLD, OTHER, SANCTION;
+		SUPER_POWER, WORLD, OTHER, SANCTION;
 	}
 
 	public enum Weather {

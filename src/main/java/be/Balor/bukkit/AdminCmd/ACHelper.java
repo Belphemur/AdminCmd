@@ -29,6 +29,7 @@ import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -62,8 +63,6 @@ public class ACHelper {
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
 	private Set<String> warpList = new HashSet<String>();
-	private ConcurrentMap<String, Set<String>> homeList = new MapMaker().softValues()
-			.expiration(15, TimeUnit.MINUTES).makeMap();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -294,7 +293,8 @@ public class ACHelper {
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
-		ACPluginManager.dataManager = fManager;
+		PlayerManager.getInstance().setFilePlayer(
+				coreInstance.getDataFolder().getPath() + File.separator + "userData");
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
@@ -776,7 +776,7 @@ public class ACHelper {
 	public boolean removeKeyFromValues(Player player) {
 		boolean found = false;
 		for (Type type : storedTypeValues.keySet()) {
-			if (!type.getCategory().equals(Category.PLAYER))
+			if (!type.getCategory().equals(Category.SUPER_POWER))
 				continue;
 			if (type.equals(Type.TP_REQUEST)
 					&& PermissionManager.hasPerm(player, "admincmd.tp.toggle"))
@@ -893,29 +893,11 @@ public class ACHelper {
 		return false;
 	}
 
-	public void addValueWithFile(Type power, String user, Object value) {
-		addValue(power, user, value);
-		dataManager.writePowerInformation(value, power + "." + user, power.toString());
-	}
-
 	public void removeValueWithFile(Type power, String user) {
 		removeValue(power, user);
 		Configuration ban = fManager.getYml(power.toString());
 		ban.removeProperty(power + "." + user);
 		ban.save();
-	}
-
-	public Set<String> getHomeList(String player) {
-		if (homeList.containsKey(player)) {
-			return homeList.get(player);
-		} else {
-			List<String> tmp = dataManager.getKeys("home", player, "userData");
-			if (tmp != null)
-				homeList.put(player, new HashSet<String>(tmp));
-			else
-				homeList.put(player, new HashSet<String>());
-			return homeList.get(player);
-		}
 	}
 
 	public synchronized void loadInfos() {

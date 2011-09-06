@@ -20,9 +20,9 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -48,9 +48,9 @@ public class TpLoc extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, String... args) {
 		if (Utils.isPlayer(sender)) {
-			double x;
-			double y;
-			double z;
+			final double x;
+			final double y;
+			final double z;
 			try {
 				x = Double.parseDouble(args[0]);
 				y = Double.parseDouble(args[1]);
@@ -59,7 +59,16 @@ public class TpLoc extends CoreCommand {
 				Utils.sI18n(sender, "errorLocation");
 				return;
 			}
-			((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z));
+			final Player player = (Player) sender;
+			if (!player.getWorld().isChunkLoaded((int) x, (int) z)) {
+				ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {					
+					@Override
+					public void run() {
+						player.teleport(new Location(player.getWorld(), x, y, z));						
+					}
+				});
+			} else
+				((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z));
 		}
 	}
 

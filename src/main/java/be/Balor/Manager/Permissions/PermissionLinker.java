@@ -146,8 +146,6 @@ public class PermissionLinker {
 		for (PermParent pp : permissions)
 			pp.registerBukkitPerm();
 		majorPerm.registerBukkitPerm();
-		permissions = null;
-		majorPerm = null;
 	}
 
 	/**

@@ -20,18 +20,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import be.Balor.Tools.TpRequest;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class ObjectContainer {
-	private Object obj;
+	private final Object obj;
+	private static int objContainerCount = 0;
+	private final int objId;
 
 	/**
  * 
  */
 	public ObjectContainer(Object obj) {
 		this.obj = obj;
+		this.objId = objContainerCount++;
+	}
+
+	/**
+	 * 
+	 */
+	public boolean isNull() {
+		return obj == null;
 	}
 
 	/**
@@ -52,6 +64,20 @@ public class ObjectContainer {
 	}
 
 	/**
+	 * Gets a TpRequest at a location. This will either return an String or
+	 * null, with null meaning that no configuration value exists at that
+	 * location. If the object at the particular location is not actually a
+	 * TpRequest, it will return null.
+	 * 
+	 * @return TpRequest or null
+	 */
+	public TpRequest getTpRequest() {
+		if (obj == null || !(obj instanceof TpRequest))
+			return null;
+		return (TpRequest) obj;
+	}
+
+	/**
 	 * Gets an integer at a location. This will either return an integer or the
 	 * default value. If the object at the particular location is not actually a
 	 * integer, the default value will be returned. However, other number types
@@ -63,6 +89,23 @@ public class ObjectContainer {
 	 */
 	public int getInt(int def) {
 		Integer o = castInt(obj);
+		if (o == null)
+			return def;
+		return o;
+	}
+
+	/**
+	 * Gets an float at a location. This will either return an float or the
+	 * default value. If the object at the particular location is not actually a
+	 * float, the default value will be returned. However, other number types
+	 * will be casted to an float.
+	 * 
+	 * @param def
+	 *            default value
+	 * @return float or default
+	 */
+	public float getFloat(float def) {
+		Float o = castFloat(obj);
 		if (o == null)
 			return def;
 		return o;
@@ -351,6 +394,30 @@ public class ObjectContainer {
 		}
 	}
 
+	/**
+	 * Casts a value to a float. May return null.
+	 * 
+	 * @param o
+	 * @return
+	 */
+	private static Float castFloat(Object o) {
+		if (o == null) {
+			return null;
+		} else if (o instanceof Float) {
+			return (Float) o;
+		} else if (o instanceof Long) {
+			return Float.parseFloat(((Long) o).toString());
+		} else if (o instanceof Double) {
+			return Float.parseFloat(((Double) o).toString());
+		} else if (o instanceof Byte) {
+			return Float.parseFloat(((Byte) o).toString());
+		} else if (o instanceof Integer) {
+			return Float.parseFloat(((Integer) o).toString());
+		} else {
+			return null;
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -371,7 +438,35 @@ public class ObjectContainer {
 	 */
 	@Override
 	public int hashCode() {
-		return obj.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((obj == null) ? 0 : obj.hashCode());
+		result = prime * result + objId;
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ObjectContainer))
+			return false;
+		ObjectContainer other = (ObjectContainer) obj;
+		if (this.obj == null) {
+			if (other.obj != null)
+				return false;
+		} else if (!this.obj.equals(other.obj))
+			return false;
+		if (objId != other.objId)
+			return false;
+		return true;
 	}
 
 }

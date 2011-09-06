@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -53,6 +54,11 @@ public class BanPlayer extends CoreCommand {
 		Player toBan = sender.getServer().getPlayer(args[0]);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
+		String unbanString;
+		if (toBan != null)
+			unbanString = toBan.getName();
+		else
+			unbanString = args[0];
 		if (args.length >= 2) {
 			Integer tmpBan = null;
 			for (int i = 1; i < args.length - 1; i++)
@@ -63,27 +69,19 @@ public class BanPlayer extends CoreCommand {
 				message += args[args.length - 1];
 			}
 			if (tmpBan != null) {
-				String unbanString;
-				if (toBan != null)
-					unbanString = toBan.getName();
-				else
-					unbanString = args[0];
-				message += "(Banned for "+tmpBan+" minutes)";
+				message += "(Banned for " + tmpBan + " minutes)";
 				final String unban = unbanString;
-				ACPluginManager.getServer()
-						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new Runnable() {
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACHelper.getInstance().getCoreInstance(), new Runnable() {
 
-									@Override
-									public void run() {
-										ACHelper.getInstance().removeValueWithFile(Type.BANNED,
-												unban);
-										String unbanMsg = Utils.I18n("unban", "player", unban);
-										if (unbanMsg != null)
-											ACPluginManager.getServer().broadcastMessage(unbanMsg);
-									}
-								}, 20 * 60 * tmpBan);
+							@Override
+							public void run() {
+								ACPlayer.getPlayer(unban).removePower(Type.BANNED);
+								String unbanMsg = Utils.I18n("unban", "player", unban);
+								if (unbanMsg != null)
+									ACPluginManager.getServer().broadcastMessage(unbanMsg);
+							}
+						}, 20 * 60 * tmpBan);
 			}
 		} else {
 			message = "You have been banned by ";
@@ -93,16 +91,11 @@ public class BanPlayer extends CoreCommand {
 				message += ((Player) sender).getName();
 		}
 		message = message.trim();
-		if (toBan != null) {
-			replace.put("player", toBan.getName());
-			ACHelper.getInstance().addValueWithFile(Type.BANNED, toBan.getName(), message);
+		replace.put("player", unbanString);
+		if (toBan != null) 			
 			toBan.kickPlayer(message);
-			toBan.getServer().broadcastMessage(Utils.I18n("ban", replace));
-		} else {
-			replace.put("player", args[0]);
-			ACHelper.getInstance().addValueWithFile(Type.BANNED, args[0], message);
-			sender.getServer().broadcastMessage(Utils.I18n("ban", replace));
-		}
+		ACPlayer.getPlayer(unbanString).setPower(Type.BANNED, message);
+		sender.getServer().broadcastMessage(Utils.I18n("ban", replace));
 
 	}
 
