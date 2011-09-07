@@ -26,7 +26,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.CommandManager;
-import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
@@ -35,6 +34,7 @@ import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Help.HelpLoader;
@@ -221,6 +221,7 @@ public class ACHelper {
 		blacklist.clear();
 		undoQueue.clear();
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
+		pluginConfig.load();
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
@@ -321,6 +322,7 @@ public class ACHelper {
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
+		pluginConfig.load();
 		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
 		pluginConfig.addProperty("noMessage", false);
 		pluginConfig.addProperty("locale", "en_US");

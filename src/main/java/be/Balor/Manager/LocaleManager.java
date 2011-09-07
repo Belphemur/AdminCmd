@@ -19,6 +19,8 @@ package be.Balor.Manager;
 import java.util.List;
 import java.util.Map;
 
+import be.Balor.Tools.Configuration.ExtendedConfiguration;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -52,6 +54,7 @@ public class LocaleManager {
 	 */
 	public void setLocaleFile(String fileName) {
 		localeFile = new ExtendedConfiguration(fileName, "locales");
+		localeFile.load();
 	}
 
 	/**

@@ -24,7 +24,6 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.TpRequest; 
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -56,7 +55,7 @@ public class TpToggle extends CoreCommand {
 				TpRequest request = acp.getPower(Type.TP_REQUEST).getTpRequest();
 				if (request != null) {
 					request.teleport(player);
-					ACHelper.getInstance().addValue(Type.TP_REQUEST, player);
+					acp.setPower(Type.TP_REQUEST);
 				} else
 					Utils.sI18n(sender, "noTpRequest");
 			} else {

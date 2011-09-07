@@ -282,7 +282,6 @@ public class ACPlayerListener extends PlayerListener {
 		if (player.hasPower(Type.TP_AT_SEE))			
 			try {
 				Player p = player.getHandler();
-				String playername = p.getName();
 				Block toTp = p.getWorld().getBlockAt(
 						p.getTargetBlock(null,
 								ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
@@ -291,8 +290,7 @@ public class ACPlayerListener extends PlayerListener {
 					Location loc = toTp.getLocation().clone();
 					loc.setPitch(p.getLocation().getPitch());
 					loc.setYaw(p.getLocation().getYaw());
-					ACHelper.getInstance().addLocation("home", playername + ".lastLoc", "lastLoc",
-							playername, p.getLocation());
+					player.setLastLocation(p.getLocation());
 					p.teleport(loc);
 				}
 			} catch (Exception e) {

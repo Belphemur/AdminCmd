@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Player.ACPlayer;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -46,8 +47,7 @@ public class TpRequest {
 			return;
 		}
 		if (from != null && to != null) {
-			ACHelper.getInstance().addLocation("userData", from.getName() + ".lastLoc", "lastLoc",
-					from.getName(), from.getLocation());
+			ACPlayer.getPlayer(from.getName()).setLastLocation(from.getLocation());
 			from.teleport(to);
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("fromPlayer", from.getName());
@@ -57,13 +57,17 @@ public class TpRequest {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the from
 	 */
-	@Override
-	public String toString() {
-		return "Teleport : " + from.getName() + " -> " + to.getName();
+	public String getFrom() {
+		return from == null ? "null" : from.getName();
+	}
+
+	/**
+	 * @return the to
+	 */
+	public String getTo() {
+		return to == null ? "null" : to.getName();
 	}
 }

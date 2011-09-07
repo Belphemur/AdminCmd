@@ -18,16 +18,15 @@ package be.Balor.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.util.config.ConfigurationNode;
 
-import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.Category;
+import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Files.WorldNotLoaded;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -39,9 +38,9 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class FilePlayer extends ACPlayer {
 
 	private final ExtendedConfiguration datas;
-	private final ConfigurationNode informations;
-	private final ConfigurationNode homes;
-	private final ConfigurationNode powers;
+	private final ExtendedNode informations;
+	private final ExtendedNode homes;
+	private final ExtendedNode powers;
 	private int saveCount = 0;
 	private int SAVE_BEFORE_WRITE = 5;
 
@@ -60,17 +59,15 @@ public class FilePlayer extends ACPlayer {
 				e.printStackTrace();
 			}
 		datas = new ExtendedConfiguration(pFile);
-		datas.addProperty("home", new HashMap<String, Object>());
-		datas.addProperty("powers", new HashMap<String, Object>());
-		datas.addProperty("infos", new HashMap<String, Object>());
+		datas.load();
 		datas.save();
-		informations = datas.getNode("infos");
-		homes = datas.getNode("home");
-		powers = datas.getNode("powers");
+		informations = datas.createNode("infos");
+		homes = datas.createNode("home");
+		powers = datas.createNode("powers");
 	}
 
 	public void setHome(String home, Location loc) {
-		ConfigurationNode homeToSet = homes.getNode(home);
+		ExtendedNode homeToSet = homes.createNode(home);
 		homeToSet.setProperty("world", loc.getWorld().getName());
 		homeToSet.setProperty("x", loc.getX());
 		homeToSet.setProperty("y", loc.getY());
@@ -141,14 +138,14 @@ public class FilePlayer extends ACPlayer {
 	 * )
 	 */
 	public void setLastLocation(Location loc) {
-		datas.setProperty("lastLoc", null);
-		ConfigurationNode lastLoc = datas.getNode("lastLoc");
+		ExtendedNode lastLoc = datas.createNode("lastLoc");
 		lastLoc.setProperty("world", loc.getWorld().getName());
 		lastLoc.setProperty("x", loc.getX());
 		lastLoc.setProperty("y", loc.getY());
 		lastLoc.setProperty("z", loc.getZ());
 		lastLoc.setProperty("yaw", loc.getYaw());
 		lastLoc.setProperty("pitch", loc.getPitch());
+
 		writeFile();
 
 	}
@@ -164,7 +161,7 @@ public class FilePlayer extends ACPlayer {
 	}
 
 	private Location getLocation(String location) throws WorldNotLoaded {
-		ConfigurationNode node = datas.getNode(location);
+		ExtendedNode node = datas.getNode(location);
 		if (node.getProperty("world") == null) {
 			Location loc = parseLocation(location);
 			if (loc != null)
