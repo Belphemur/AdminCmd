@@ -33,7 +33,7 @@ Files and Folder :
 ==================
 Folders : 
 ---------
-Folder /home/ -> Contain all information about the players, there home, there last location before and if it's there first connection. Each file have the name of the player.
+Folder /userData/ -> Contain all information about the players, there home, there last location before and if it's there first connection. Each file have the name of the player.
 Folder /locale/ -> Contain the locales files.
 Folder /scripts/ -> Contain a single file scripts.yml where you can configure your own bash/batch script to be executed by the server (only for experienced admins)
 Folder /spawn/ -> Contain a single file spawnLocations.yml containing all the spawn location that your setted in-game with the command /setspawn.
@@ -43,10 +43,8 @@ Folder /HelpFiles/ -> Contain directory that contain the file to explain each co
 Files :
 -------
 Alias.yml -> Contain every Item alias you create inGame.
-banned.yml -> Contain the name of the banned player and the reason of the ban
 blacklist.yml -> Contain blacklisted items
 config.yml -> Config file
 items.csv -> Contain the default alias of Essentials
 kits.yml -> Contain the kits.
-muted.yml -> Like banned, but for muted players.
 commands.yml -> Contain the command you want to disable, prioritize and your alias for each commands.
