@@ -120,7 +120,7 @@ final public class InvisibleWorker {
 								}
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-				toReappear.getServer().broadcastMessage(
+				Utils.broadcastMessage(
 						ChatColor.YELLOW + name + " joined the game.");
 		}
 
@@ -207,7 +207,7 @@ final public class InvisibleWorker {
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-			toVanish.getServer().broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 
 	}
 

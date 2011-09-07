@@ -49,7 +49,7 @@ public class ReloadAll extends CoreCommand {
 		boolean bcast = ACHelper.getInstance().getConfBoolean("broadcastServerReload");
 		sender.getServer().reload();
 		if (bcast)
-			sender.getServer().broadcastMessage(Utils.I18n("serverReload"));
+			Utils.broadcastMessage(Utils.I18n("serverReload"));
 		else
 			Utils.sI18n(sender, "serverReload");
 	}

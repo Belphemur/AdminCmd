@@ -32,6 +32,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -486,6 +488,17 @@ public class Utils {
 				weatherChange(sender, w, type, duration);
 
 		return true;
+	}
+
+	/**
+	 * Broadcast message to every user since the bukkit one is bugged
+	 * 
+	 * @param message
+	 */
+	public static void broadcastMessage(String message) {
+		for (Player p : getOnlinePlayers())
+			p.sendMessage(message);
+		new ColouredConsoleSender((CraftServer) ACPluginManager.getServer()).sendMessage(message);
 	}
 
 	public static void sParsedLocale(Player p, String locale) {

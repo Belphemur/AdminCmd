@@ -143,7 +143,7 @@ final public class AFKWorker {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 			String afkString = Utils.I18n("afk", "player", p.getName());
 			if (afkString != null)
-				p.getServer().broadcastMessage(afkString);
+				Utils.broadcastMessage(afkString);
 		}
 		if (msg == null || (msg != null && msg.isEmpty()))
 			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
@@ -181,7 +181,7 @@ final public class AFKWorker {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 			String online = Utils.I18n("online", "player", p.getName());
 			if (online != null)
-				p.getServer().broadcastMessage(online);
+				Utils.broadcastMessage(online);
 		}
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);

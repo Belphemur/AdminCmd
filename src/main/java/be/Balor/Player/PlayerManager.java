@@ -16,12 +16,10 @@
  ************************************************************************/
 package be.Balor.Player;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import be.Balor.Tools.Files.YmlFilter;
 
 import com.google.common.collect.MapMaker;
 
@@ -30,12 +28,11 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class PlayerManager {
-	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(5)
+	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
 			.weakValues().makeMap();
 	private Set<ACPlayer> onlinePlayers = new HashSet<ACPlayer>();
 	private static PlayerManager instance = null;
 	private ACPlayerFactory playerFactory;
-	private final Set<String> existingPlayers = new HashSet<String>();
 
 	/**
 	 * @return the instance
@@ -45,14 +42,11 @@ public class PlayerManager {
 			instance = new PlayerManager();
 		return instance;
 	}
-
-	public void setFilePlayer(String directory) {
-		playerFactory = new ACPlayerFactory(directory);
-		File[] players = YmlFilter.listRecursively(new File(directory), 1);
-		for (File player : players) {
-			String name = player.getName();
-			existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
-		}
+	/**
+	 * @param playerFactory the playerFactory to set
+	 */
+	public void setPlayerFactory(ACPlayerFactory playerFactory) {
+		this.playerFactory = playerFactory;
 	}
 
 	/**
@@ -105,19 +99,19 @@ public class PlayerManager {
 	}
 	public void setOnline(String player)
 	{
-		existingPlayers.add(player);
+		playerFactory.addExistingPlayer(player);
 	}
 	ACPlayer demandACPlayer(String name) {
 		ACPlayer result = getPlayer(name);
 		if (result == null) {
-			if (existingPlayers.contains(name))
-				result = playerFactory.createPlayer(name);
-			else
-				result = new EmptyPlayer(name);
+			result = playerFactory.createPlayer(name);
 			addPlayer(result);
 			result = getPlayer(name);
-		} else if (result instanceof EmptyPlayer && existingPlayers.contains(name)) {
-			result = playerFactory.createPlayer(name);
+		} else if (result instanceof EmptyPlayer) {
+			ACPlayer tmp = playerFactory.createPlayer(name);
+			if(tmp.equals(result))
+				return result;
+			result = tmp;
 			players.remove(name);
 			addPlayer(result);
 			result = getPlayer(name);

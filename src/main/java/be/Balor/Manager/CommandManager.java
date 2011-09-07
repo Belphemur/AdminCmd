@@ -404,7 +404,7 @@ public class CommandManager implements CommandExecutor {
 				} catch (WorldNotLoaded e) {
 					Logger.getLogger("Minecraft").severe(
 							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
-					ACPluginManager.getServer().broadcastMessage(
+					Utils.broadcastMessage(
 							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft").severe(current.debug());
@@ -453,7 +453,7 @@ public class CommandManager implements CommandExecutor {
 				acc.execute();
 			} catch (Throwable t) {
 				Logger.getLogger("Minecraft").severe(acc.debug());
-				ACPluginManager.getServer().broadcastMessage(acc.debug());
+				Utils.broadcastMessage(acc.debug());
 				t.printStackTrace();
 			}
 		}

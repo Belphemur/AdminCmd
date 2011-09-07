@@ -63,7 +63,7 @@ public class Roll extends CoreCommand {
 		else
 			replace.put("player", "Server Admin");
 		replace.put("result", String.valueOf(rand.nextInt(dice) + 1));
-		sender.getServer().broadcastMessage(Utils.I18n("roll", replace));
+		Utils.broadcastMessage(Utils.I18n("roll", replace));
 
 	}
 

@@ -16,22 +16,40 @@
  ************************************************************************/
 package be.Balor.Player;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+
+import be.Balor.Tools.Files.YmlFilter;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class ACPlayerFactory {
 	final String directory;
+	private final Set<String> existingPlayers = new HashSet<String>();
 
 	/**
 	 * 
 	 */
-	ACPlayerFactory(String directory) {
+	public ACPlayerFactory(String directory) {
 		this.directory = directory;
+		File[] players = YmlFilter.listRecursively(new File(directory), 1);
+		for (File player : players) {
+			String name = player.getName();
+			existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
+		}
+	}
+
+	void addExistingPlayer(String player) {
+		existingPlayers.add(player);
 	}
 
 	ACPlayer createPlayer(String playername) {
-		if (directory != null)
+		if (!existingPlayers.contains(playername))
+			return new EmptyPlayer(playername);
+		else if (directory != null)
 			return new FilePlayer(directory, playername);
 		else
 			return null;

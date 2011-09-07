@@ -79,7 +79,7 @@ public class BanPlayer extends CoreCommand {
 								ACPlayer.getPlayer(unban).removePower(Type.BANNED);
 								String unbanMsg = Utils.I18n("unban", "player", unban);
 								if (unbanMsg != null)
-									ACPluginManager.getServer().broadcastMessage(unbanMsg);
+									Utils.broadcastMessage(unbanMsg);
 							}
 						}, 20 * 60 * tmpBan);
 			}

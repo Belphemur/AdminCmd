@@ -29,6 +29,8 @@ import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.ExtendedConfiguration;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
@@ -284,6 +286,23 @@ public class ACHelper {
 		}
 	}
 
+	private void convertBannedMuted() {
+		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
+		for (String key : map.keySet())
+		{
+			PlayerManager.getInstance().setOnline(key);
+			ACPlayer.getPlayer(key).setPower(Type.BANNED, map.get(key));
+		}
+		map = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
+		for (String key : map.keySet())
+		{
+			PlayerManager.getInstance().setOnline(key);
+			ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key));
+		}
+		fManager.getFile(null, "banned.yml").delete();
+		fManager.getFile(null, "muted.yml").delete();
+	}
+
 	/**
 	 * @param pluginInstance
 	 *            the pluginInstance to set
@@ -293,8 +312,10 @@ public class ACHelper {
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
-		PlayerManager.getInstance().setFilePlayer(
-				coreInstance.getDataFolder().getPath() + File.separator + "userData");
+		PlayerManager.getInstance().setPlayerFactory(
+				new ACPlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
+						+ "userData"));
+		convertBannedMuted();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
@@ -908,12 +929,6 @@ public class ACHelper {
 		if (tmp != null)
 			warpList.addAll(tmp);
 
-		Map<String, Object> map = dataManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
-		for (String key : map.keySet())
-			addValue(Type.BANNED, key, map.get(key));
-		Map<String, Object> map2 = dataManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
-		for (String key : map2.keySet())
-			addValue(Type.MUTED, key, map2.get(key));
 		Map<String, List<MaterialContainer>> kitsLoaded = fManager.loadKits();
 		for (String kit : kitsLoaded.keySet()) {
 			kits.put(kit, kitsLoaded.get(kit));
@@ -923,10 +938,6 @@ public class ACHelper {
 			Logger.getLogger("Minecraft").info(
 					"[AdminCmd] " + blacklist.size() + " blacklisted items loaded.");
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + alias.size() + " alias loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + map.size() + " Banned players loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + map2.size() + " Muted players loaded.");
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + kits.size() + " kits loaded.");
 		}
 	}

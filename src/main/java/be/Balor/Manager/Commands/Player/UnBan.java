@@ -52,7 +52,7 @@ public class UnBan extends CoreCommand {
 			acp.removePower(Type.BANNED);
 			String unbanMsg = Utils.I18n("unban", "player", unban);
 			if (unbanMsg != null)
-				sender.getServer().broadcastMessage(unbanMsg);
+				Utils.broadcastMessage(unbanMsg);
 		} else
 			Utils.sI18n(sender, "playerNotFound", "player", unban);
 
