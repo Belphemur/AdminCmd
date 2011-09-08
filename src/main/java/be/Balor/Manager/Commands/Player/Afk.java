@@ -38,7 +38,7 @@ public class Afk extends CoreCommand {
 	}
 
 	/*
-	 * (non-Javadoc) 
+	 * (non-Javadoc)
 	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
@@ -52,9 +52,12 @@ public class Afk extends CoreCommand {
 				if (AFKWorker.getInstance().isAfk(player))
 					AFKWorker.getInstance().setOnline(player);
 				else {
-					if (args.length >= 1)
-						AFKWorker.getInstance().setAfk(player, args[0]);
-					else
+					if (args.length >= 1) {
+						String msg = "";
+						for (int i = 0; i < args.length; i++)
+							msg += args[i] + " ";
+						AFKWorker.getInstance().setAfk(player, msg.trim());
+					} else
 						AFKWorker.getInstance().setAfk(player);
 				}
 

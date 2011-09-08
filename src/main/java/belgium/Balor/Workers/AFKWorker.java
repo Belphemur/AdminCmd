@@ -19,6 +19,7 @@ package belgium.Balor.Workers;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -142,8 +143,10 @@ final public class AFKWorker {
 	public void setAfk(Player p, String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 			String afkString = Utils.I18n("afk", "player", p.getName());
-			if (afkString != null)
+			if (afkString != null) {
+				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
 				Utils.broadcastMessage(afkString);
+			}
 		}
 		if (msg == null || (msg != null && msg.isEmpty()))
 			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
