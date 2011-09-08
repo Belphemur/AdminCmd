@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 
@@ -45,23 +46,23 @@ public class Execution extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (args.length == 0) {
 			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			return;
 		}
-		if (args.length == 2 && args[0].equals("-reload")) {
-			if (args[1].equals("all")) {
+		if (args.hasFlag('r')) {
+			if (args.getString(0).equals("all")) {
 				TerminalCommandManager.getInstance().reloadScripts();
 				sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
 				sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			} else
-				TerminalCommandManager.getInstance().execute(sender, args[1], true);
+				TerminalCommandManager.getInstance().execute(sender, args.getString(0), true);
 			return;
 		}
 		try {
 
-			TerminalCommandManager.getInstance().execute(sender, args[0], false);
+			TerminalCommandManager.getInstance().execute(sender, args.getString(0), false);
 		} catch (CommandNotFound e) {
 			sender.sendMessage(e.getMessage());
 

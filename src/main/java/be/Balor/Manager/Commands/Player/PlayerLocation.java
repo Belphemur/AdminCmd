@@ -21,7 +21,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
@@ -47,7 +48,7 @@ public class PlayerLocation extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Location loc;
 		String msg;
 		Player target;
@@ -60,11 +61,11 @@ public class PlayerLocation extends CoreCommand {
 				return;
 		} else
 			try {
-				target = sender.getServer().getPlayer(args[0]);
+				target = sender.getServer().getPlayer(args.getString(0));
 				loc = target.getLocation();
 				msg = target.getName() + " is";
 			} catch (NullPointerException ex) {
-				Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;
 			}
 		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()

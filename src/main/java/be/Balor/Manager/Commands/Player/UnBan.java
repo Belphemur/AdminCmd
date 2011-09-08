@@ -18,7 +18,8 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -45,8 +46,8 @@ public class UnBan extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		String unban = args[0];
+	public void execute(CommandSender sender, CommandArgs args) {
+		String unban = args.getString(0);
 		ACPlayer acp = ACPlayer.getPlayer(unban);
 		if (acp.hasPower(Type.BANNED)) {
 			acp.removePower(Type.BANNED);

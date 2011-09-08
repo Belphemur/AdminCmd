@@ -23,7 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -61,27 +62,27 @@ public class Kit extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		// which material?
 		Player target;
 		if (args.length == 0) {
 			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
 			return;
 		}
-		ArrayList<ItemStack> items = ACHelper.getInstance().getKit(args[0]);
+		ArrayList<ItemStack> items = ACHelper.getInstance().getKit(args.getString(0));
 		if (items.isEmpty()) {
-			Utils.sI18n(sender, "kitNotFound", "kit", args[0]);
+			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
 			return;
 		}
 		target = Utils.getUser(sender, args, permNode, 1, true);
 		if (target == null) {
 			return;
 		}
-		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args[0])) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
 			return;
 		}
 		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("kit", args[0]);
+		replace.put("kit", args.getString(0));
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
 				replace.put("sender", ((Player) sender).getName());

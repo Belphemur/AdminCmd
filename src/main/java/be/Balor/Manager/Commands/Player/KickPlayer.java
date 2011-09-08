@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
@@ -46,13 +47,13 @@ public class KickPlayer extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		Player toKick = sender.getServer().getPlayer(args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		Player toKick = sender.getServer().getPlayer(args.getString(0));
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
-				message += args[i] + " ";
+				message += args.getString(i) + " ";
 		else {
 			message = "You have been kick by ";
 			if (!Utils.isPlayer(sender, false))
@@ -65,7 +66,7 @@ public class KickPlayer extends CoreCommand {
 			replace.put("player", toKick.getName());
 			toKick.kickPlayer(message);
 		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 
 	}
 

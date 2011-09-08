@@ -27,6 +27,7 @@ import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.ACPlayerFactory;
@@ -834,11 +835,11 @@ public class ACHelper {
 		return (Float) getValue(Type.VULCAN, player);
 	}
 
-	public boolean alias(CommandSender sender, String[] args) {
-		MaterialContainer m = checkMaterial(sender, args[1]);
+	public boolean alias(CommandSender sender, CommandArgs args) {
+		MaterialContainer m = checkMaterial(sender, args.getString(1));
 		if (m.isNull())
 			return true;
-		String alias = args[0];
+		String alias = args.getString(0);
 		this.alias.put(alias, m);
 		this.fManager.addAlias(alias, m);
 		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias

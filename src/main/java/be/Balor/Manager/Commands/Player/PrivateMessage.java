@@ -23,7 +23,8 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -55,18 +56,18 @@ public class PrivateMessage extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender, false)
 				&& ACHelper.getInstance().isValueSet(Type.MUTED, ((Player) sender).getName())
 				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
-		Player buddy = sender.getServer().getPlayer(args[0]);
+		Player buddy = sender.getServer().getPlayer(args.getString(0));
 		if (buddy != null) {
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
-				Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;
 			}
 			String senderPm = "";
@@ -85,7 +86,7 @@ public class PrivateMessage extends CoreCommand {
 				senderPm = "Server Admin" + " - ";
 
 			for (int i = 1; i < args.length; ++i)
-				msg += args[i] + " ";
+				msg += args.getString(i) + " ";
 			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);
 			if (parsed == null)
@@ -105,7 +106,7 @@ public class PrivateMessage extends CoreCommand {
 					&& !(sender instanceof ConsoleCommandSender))				
 				console.sendMessage(spyMsg);
 		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args[0]);
+			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 
 	}
 

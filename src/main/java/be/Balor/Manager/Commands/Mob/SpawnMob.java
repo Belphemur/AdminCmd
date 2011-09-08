@@ -23,7 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -50,20 +51,20 @@ public class SpawnMob extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			final String name = args[0];
+			final String name = args.getString(0);
 			replace.put("mob", name);
 			int nbTaped;
 			int distance = 0;
 			try {
-				nbTaped = Integer.parseInt(args[1]);
+				nbTaped = args.getInt(1);
 			} catch (Exception e) {
 				nbTaped = 1;
 			}
 			try {
-				distance = Integer.parseInt(args[2]);
+				distance = args.getInt(2);
 			} catch (Exception e) {
 				distance = 0;
 			}

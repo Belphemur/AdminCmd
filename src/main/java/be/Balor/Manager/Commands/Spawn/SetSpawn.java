@@ -17,7 +17,9 @@
 package be.Balor.Manager.Commands.Spawn;
 
 import org.bukkit.command.CommandSender;
-import be.Balor.Manager.CoreCommand;
+
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -43,15 +45,15 @@ public class SetSpawn extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		ACHelper.getInstance().setSpawn(sender);
 		if (args.length >= 1 && Utils.isPlayer(sender)) {
 			try {
 				int nbTaped;
-				nbTaped = Integer.parseInt(args[0]);
+				nbTaped = args.getInt(0);
 				sender.getServer().setSpawnRadius(nbTaped);
 			} catch (Exception e) {
-				Utils.sI18n(sender, "NaN", "number", args[0]);
+				Utils.sI18n(sender, "NaN", "number", args.getString(0));
 			}
 
 		}

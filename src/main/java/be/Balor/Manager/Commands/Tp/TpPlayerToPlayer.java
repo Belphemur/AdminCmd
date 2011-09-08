@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Tp;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 /**
@@ -44,15 +45,15 @@ public class TpPlayerToPlayer extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		Player from = sender.getServer().getPlayer(args[0]);
-		Player to = sender.getServer().getPlayer(args[1]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		Player from = sender.getServer().getPlayer(args.getString(0));
+		Player to = sender.getServer().getPlayer(args.getString(1));
 		if (from != null && from.equals(sender))
-			Utils.tpP2P(sender, args[0], args[1], Type.Tp.TO);
+			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.TO);
 		else if (to != null && to.equals(sender))
-			Utils.tpP2P(sender, args[0], args[1], Type.Tp.HERE);
+			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.HERE);
 		else
-			Utils.tpP2P(sender, args[0], args[1], Type.Tp.PLAYERS);
+			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.PLAYERS);
 	}
 
 	/*

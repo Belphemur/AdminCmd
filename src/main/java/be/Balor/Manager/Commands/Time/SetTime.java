@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Time;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
@@ -44,8 +45,8 @@ public class SetTime extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		Utils.timeSet(sender, args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		Utils.timeSet(sender, args.getString(0));
 	}
 
 	/*

@@ -19,8 +19,9 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
@@ -46,7 +47,7 @@ public class MOTD extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		String message = "";
 		if (args.length == 0) {
 			if (Utils.isPlayer(sender, false))
@@ -56,8 +57,8 @@ public class MOTD extends CoreCommand {
 			return;
 		}
 		if (PermissionManager.hasPerm(sender, "admincmd.server.motd.edit")) {
-			for (int i = 0; i < args.length; i++)
-				message += args[i] + " ";
+			for (String msg : args)
+				message += msg + " ";
 			message = message.trim();
 			String result = Utils.colorParser(message);
 			if (result == null)

@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -49,12 +50,12 @@ public class ClearInventory extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;
 		if (args.length >= 2) {
-			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args[1]);
+			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args.getString(1));
 			if (mc.isNull())
 				return;
 			target.getInventory().remove(mc.getMaterial());

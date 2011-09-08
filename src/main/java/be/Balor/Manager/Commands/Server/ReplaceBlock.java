@@ -22,7 +22,8 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -49,8 +50,8 @@ public class ReplaceBlock extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
 		if (mc.isNull())
 			return;
 		ArrayList<Material> mats = new ArrayList<Material>();

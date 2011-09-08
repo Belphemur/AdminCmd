@@ -22,7 +22,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -48,13 +49,13 @@ public class AddWarp extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			ACHelper.getInstance().addLocation("warp", args[0], "warpPoints",
+			ACHelper.getInstance().addLocation("warp", args.getString(0), "warpPoints",
 					((Player) sender).getLocation());
-			ACHelper.getInstance().getWarpList().add(args[0]);
+			ACHelper.getInstance().getWarpList().add(args.getString(0));
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", args[0]);
+			replace.put("name", args.getString(0));
 			Utils.sI18n(sender, "addWarp", replace);
 		}
 

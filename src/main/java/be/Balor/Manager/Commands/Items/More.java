@@ -23,7 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -49,7 +50,7 @@ public class More extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			ItemStack hand = ((Player) sender).getItemInHand();
 			if (hand == null || hand.getType() == Material.AIR) {
@@ -63,7 +64,7 @@ public class More extends CoreCommand {
 			else {
 				int toAdd;
 				try {
-					toAdd = Integer.parseInt(args[0]);
+					toAdd = Integer.parseInt(args.getString(0));
 				} catch (Exception e) {
 					return;
 				}

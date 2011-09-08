@@ -38,6 +38,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
+import be.Balor.Manager.Commands.ACCommandContainer;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Tools.Type;

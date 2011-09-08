@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
@@ -46,7 +47,7 @@ public class Extinguish extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(Material.FIRE);
 		Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);

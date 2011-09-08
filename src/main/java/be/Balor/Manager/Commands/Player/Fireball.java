@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -46,13 +47,13 @@ public class Fireball extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Player player = null;
 		float power = ACHelper.getInstance().getConfFloat("DefaultFireBallPower");
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
-				power = Float.parseFloat(args[0]);
+				power = args.getFloat(0);
 			} catch (NumberFormatException e) {
 				power = ACHelper.getInstance().getConfFloat("DefaultFireBallPower");
 				player = Utils.getUser(sender, args, permNode);

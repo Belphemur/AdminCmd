@@ -18,7 +18,8 @@ package be.Balor.Manager.Commands.Server;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -44,7 +45,7 @@ public class ReloadAll extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		ACHelper.getInstance().saveElapsedTime();
 		boolean bcast = ACHelper.getInstance().getConfBoolean("broadcastServerReload");
 		sender.getServer().reload();

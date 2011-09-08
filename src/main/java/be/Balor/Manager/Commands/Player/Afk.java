@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.AFKWorker;
 
@@ -45,7 +46,7 @@ public class Afk extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
 			if (player != null) {
@@ -55,7 +56,7 @@ public class Afk extends CoreCommand {
 					if (args.length >= 1) {
 						String msg = "";
 						for (int i = 0; i < args.length; i++)
-							msg += args[i] + " ";
+							msg += args.getString(i) + " ";
 						AFKWorker.getInstance().setAfk(player, msg.trim());
 					} else
 						AFKWorker.getInstance().setAfk(player);

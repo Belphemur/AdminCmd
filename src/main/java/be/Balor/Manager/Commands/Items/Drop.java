@@ -24,7 +24,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -51,10 +52,10 @@ public class Drop extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		// which material?
 		MaterialContainer mat = null;
-		mat = ACHelper.getInstance().checkMaterial(sender, args[0]);
+		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
 		if (mat.isNull())
 			return;
 		if (ACHelper.getInstance().inBlackList(sender, mat))
@@ -69,7 +70,7 @@ public class Drop extends CoreCommand {
 		Player target = null;
 		if (args.length >= 2) {
 			try {
-				cnt = Integer.parseInt(args[1]);
+				cnt = args.getInt(1);
 			} catch (Exception e) {
 				return;
 			}

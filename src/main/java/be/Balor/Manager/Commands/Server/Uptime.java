@@ -20,7 +20,8 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -45,7 +46,7 @@ public class Uptime extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Long[] time = ACHelper.getElapsedTime();
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());

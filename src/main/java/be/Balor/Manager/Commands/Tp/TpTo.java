@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Tp;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
@@ -45,9 +46,9 @@ public class TpTo extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender))
-			Utils.tpP2P(sender, ((Player) sender).getName(), args[0], Type.Tp.TO);
+			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
 	}
 
 	/*

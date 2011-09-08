@@ -20,7 +20,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -46,15 +47,15 @@ public class TpLoc extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final double x;
 			final double y;
 			final double z;
 			try {
-				x = Double.parseDouble(args[0]);
-				y = Double.parseDouble(args[1]);
-				z = Double.parseDouble(args[2]);
+				x = args.getDouble(0);
+				y = args.getDouble(1);
+				z = args.getDouble(2);
 			} catch (Exception e) {
 				Utils.sI18n(sender, "errorLocation");
 				return;

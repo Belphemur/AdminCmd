@@ -28,7 +28,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Utils;
 
@@ -54,12 +55,12 @@ public class KillMob extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		final List<LivingEntity> mobs = new ArrayList<LivingEntity>();
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String type = "all";
 		if (args.length >= 1)
-			type = args[0];
+			type = args.getString(0);
 		replace.put("type", type);
 
 		if (Utils.isPlayer(sender, false)) {

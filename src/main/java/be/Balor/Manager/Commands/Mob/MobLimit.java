@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -48,27 +49,27 @@ public class MobLimit extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		World world = sender.getServer().getWorld(args[0].replaceAll("_", " "));
+	public void execute(CommandSender sender, CommandArgs args) {
+		World world = sender.getServer().getWorld(args.getString(0).replaceAll("_", " "));
 		if (world != null) {
 			int limit;
 			try {
 				HashMap<String, String> replace = new HashMap<String, String>();
-				limit = Integer.parseInt(args[1]);
+				limit = args.getInt(1);
 				ACHelper.getInstance().addValue(Type.MOB_LIMIT, world.getName(), limit);
-				replace.put("number", args[0]);
-				replace.put("world", args[1]);
+				replace.put("number", args.getString(0));
+				replace.put("world", args.getString(1));
 				Utils.sI18n(sender, "mobLimit", replace);
 			} catch (NumberFormatException e) {
-				if (args[1].equals("none")) {
+				if (args.getString(1).equals("none")) {
 					ACHelper.getInstance().removeValue(Type.MOB_LIMIT, world.getName());
 					Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
 				} else
-					Utils.sI18n(sender, "NaN", "number", args[1]);
+					Utils.sI18n(sender, "NaN", "number", args.getString(1));
 			}
 
 		} else
-			Utils.sI18n(sender, "worldNotFound", "world", args[0]);
+			Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 	}
 
 	/*

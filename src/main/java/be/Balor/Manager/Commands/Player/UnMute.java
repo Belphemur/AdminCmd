@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -48,12 +49,12 @@ public class UnMute extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		Player player = sender.getServer().getPlayer(args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		Player player = sender.getServer().getPlayer(args.getString(0));
 
 		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", args[0]);
-		ACPlayer acp = ACPlayer.getPlayer(args[0]);
+		replace.put("player", args.getString(0));
+		ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 		if (acp.hasPower(Type.MUTED)) {
 			acp.removePower(Type.MUTED);
 			if (player != null) {

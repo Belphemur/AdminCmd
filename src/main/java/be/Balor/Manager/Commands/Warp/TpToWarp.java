@@ -23,7 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -52,13 +53,13 @@ public class TpToWarp extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode, 1, true);
 
 		if (target != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", args[0]);
-			Location loc = ACHelper.getInstance().getLocation("warp", args[0], "warpPoints");
+			replace.put("name", args.getString(0));
+			Location loc = ACHelper.getInstance().getLocation("warp", args.getString(0), "warpPoints");
 			if (loc == null)
 				Utils.sI18n(sender, "errorWarp", replace);
 			else {

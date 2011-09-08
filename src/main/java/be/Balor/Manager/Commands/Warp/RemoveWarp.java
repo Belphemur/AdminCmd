@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -47,11 +48,11 @@ public class RemoveWarp extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-			ACHelper.getInstance().removeLocation("warp", args[0], "warpPoints");
-			ACHelper.getInstance().getWarpList().remove(args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+			ACHelper.getInstance().removeLocation("warp", args.getString(0), "warpPoints");
+			ACHelper.getInstance().getWarpList().remove(args.getString(0));
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", args[0]);
+			replace.put("name", args.getString(0));
 			Utils.sI18n(sender, "rmWarp", replace);
 
 	}

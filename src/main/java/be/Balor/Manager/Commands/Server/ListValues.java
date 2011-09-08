@@ -22,7 +22,8 @@ import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -48,10 +49,9 @@ public class ListValues extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		if(args.length==0)
-		{
-			sender.sendMessage(ChatColor.DARK_AQUA+"Possibles Types :");
+	public void execute(CommandSender sender, CommandArgs args) {
+		if (args.length == 0) {
+			sender.sendMessage(ChatColor.DARK_AQUA + "Possibles Types :");
 			sender.sendMessage(Arrays.toString(Type.values()));
 			return;
 		}

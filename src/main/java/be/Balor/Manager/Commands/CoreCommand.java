@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager;
+package be.Balor.Manager.Commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -76,10 +76,9 @@ public abstract class CoreCommand {
 
 	/**
 	 * Execute the command
-	 * 
-	 * @param args
+	 * @param args TODO
 	 */
-	public abstract void execute(CommandSender sender, String... args);
+	public abstract void execute(CommandSender sender, CommandArgs args);
 
 	/**
 	 * Check if the command can be executed

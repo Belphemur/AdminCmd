@@ -22,7 +22,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -47,7 +48,7 @@ public class WarpList extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		String msg = "";
 		Set<String> wp = ACHelper.getInstance().getWarpList();
 		sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());

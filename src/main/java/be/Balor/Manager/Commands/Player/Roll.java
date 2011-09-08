@@ -22,7 +22,8 @@ import java.util.Random;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
@@ -47,11 +48,11 @@ public class Roll extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		int dice = 6;
 		if (args.length >= 1) {
 			try {
-				dice = Integer.parseInt(args[0]);
+				dice = args.getInt(0);
 			} catch (NumberFormatException e) {
 			}
 		}

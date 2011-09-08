@@ -20,7 +20,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
@@ -45,12 +46,12 @@ public class KickAllPlayers extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		String message = "";
 		String playerName = "";
 		if (args.length >= 1)
 			for (int i = 0; i < args.length; i++)
-				message += args[i] + " ";
+				message += args.getString(i) + " ";
 		else {
 			message = "You have been kick by ";
 			if (!Utils.isPlayer(sender, false))

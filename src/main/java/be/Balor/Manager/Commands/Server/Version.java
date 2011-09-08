@@ -22,7 +22,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -47,12 +48,12 @@ public class Version extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Plugin plug = ACHelper.getInstance().getCoreInstance();
 		if (args.length >= 1)
-			plug = plug.getServer().getPluginManager().getPlugin(args[0]);
+			plug = plug.getServer().getPluginManager().getPlugin(args.getString(0));
 		if (plug == null) {
-			Utils.sI18n(sender, "pluginNotFound", "plugin", args[0]);
+			Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 			return;
 		}
 		PluginDescriptionFile pdf = plug.getDescription();

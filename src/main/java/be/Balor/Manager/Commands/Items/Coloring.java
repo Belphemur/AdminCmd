@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Items;
 import org.bukkit.command.CommandSender;
 
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -44,8 +45,8 @@ public class Coloring extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		ACHelper.getInstance().itemColor(sender, args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		ACHelper.getInstance().itemColor(sender, args.getString(0));
 
 	}
 

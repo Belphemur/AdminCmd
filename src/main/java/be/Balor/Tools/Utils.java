@@ -38,6 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import de.diddiz.LogBlock.Consumer;
 
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -159,7 +160,7 @@ public class Utils {
 	 * @param name
 	 * @return
 	 */
-	public static boolean setPlayerHealth(CommandSender sender, String[] name, String toDo) {
+	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, String toDo) {
 		Player target = getUser(sender, name, "admincmd.player." + toDo);
 		if (target == null)
 			return false;
@@ -185,11 +186,11 @@ public class Utils {
 	 * @param errorMsg
 	 * @return
 	 */
-	public static Player getUser(CommandSender sender, String[] args, String permNode, int index,
-			boolean errorMsg) {
+	public static Player getUser(CommandSender sender, CommandArgs args, String permNode,
+			int index, boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
-			target = sender.getServer().getPlayer(args[index]);
+			target = sender.getServer().getPlayer(args.getString(index));
 			if (target != null)
 				if (target.equals(sender))
 					return target;
@@ -203,7 +204,7 @@ public class Utils {
 		}
 		if (target == null && errorMsg) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", args[index]);
+			replace.put("player", args.getString(index));
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return target;
 		}
@@ -211,7 +212,7 @@ public class Utils {
 
 	}
 
-	public static Player getUser(CommandSender sender, String[] args, String permNode) {
+	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
@@ -396,7 +397,7 @@ public class Utils {
 	}
 
 	private static void weatherChange(CommandSender sender, World w, Type.Weather type,
-			String[] duration) {
+			CommandArgs duration) {
 		if (!type.equals(Type.Weather.FREEZE)
 				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, w.getName())) {
 			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " " + w.getName());
@@ -420,12 +421,12 @@ public class Utils {
 				try {
 					w.setStorm(true);
 					w.setThundering(true);
-					int time = Integer.parseInt(duration[0]);
+					int time = duration.getInt(0);
 					w.setWeatherDuration(time * 1200);
-					replace.put("duration", duration[0]);
+					replace.put("duration", String.valueOf(time));
 					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				} catch (NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration.getString(0)
 							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
@@ -457,13 +458,13 @@ public class Utils {
 				try {
 					w.setStorm(true);
 					w.setThundering(false);
-					int time = Integer.parseInt(duration[0]);
+					int time = duration.getInt(0);
 					w.setWeatherDuration(time * 1200);
-					replaceRain.put("duration", duration[0]);
+					replaceRain.put("duration", String.valueOf(time));
 					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
 							+ w.getName());
 				} catch (NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration[0]
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration.getString(0)
 							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
@@ -478,7 +479,7 @@ public class Utils {
 		}
 	}
 
-	public static boolean weather(CommandSender sender, Type.Weather type, String[] duration) {
+	public static boolean weather(CommandSender sender, Type.Weather type, CommandArgs duration) {
 		if (isPlayer(sender, false)) {
 			weatherChange(sender, ((Player) sender).getWorld(), type, duration);
 		} else
@@ -496,7 +497,8 @@ public class Utils {
 	public static void broadcastMessage(String message) {
 		for (Player p : getOnlinePlayers())
 			p.sendMessage(message);
-		//new ColouredConsoleSender((CraftServer) ACPluginManager.getServer()).sendMessage(message);
+		// new ColouredConsoleSender((CraftServer)
+		// ACPluginManager.getServer()).sendMessage(message);
 	}
 
 	public static void sParsedLocale(Player p, String locale) {
@@ -529,17 +531,17 @@ public class Utils {
 		}
 	}
 
-	public static Integer replaceBlockByAir(CommandSender sender, String[] args,
+	public static Integer replaceBlockByAir(CommandSender sender, CommandArgs args,
 			List<Material> mat, int defaultRadius) {
 		if (Utils.isPlayer(sender)) {
 			int radius = defaultRadius;
 			if (args.length >= 1) {
 				try {
-					radius = Integer.parseInt(args[0]);
+					radius = args.getInt(0);
 				} catch (NumberFormatException e) {
 					if (args.length >= 2)
 						try {
-							radius = Integer.parseInt(args[1]);
+							radius = args.getInt(1);
 						} catch (NumberFormatException e2) {
 
 						}

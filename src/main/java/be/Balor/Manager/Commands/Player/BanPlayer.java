@@ -21,7 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -50,23 +51,23 @@ public class BanPlayer extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
-		Player toBan = sender.getServer().getPlayer(args[0]);
+	public void execute(CommandSender sender, CommandArgs args) {
+		Player toBan = sender.getServer().getPlayer(args.getString(0));
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		String unbanString;
 		if (toBan != null)
 			unbanString = toBan.getName();
 		else
-			unbanString = args[0];
+			unbanString = args.getString(0);
 		if (args.length >= 2) {
 			Integer tmpBan = null;
 			for (int i = 1; i < args.length - 1; i++)
-				message += args[i] + " ";
+				message += args.getString(i) + " ";
 			try {
-				tmpBan = Integer.parseInt(args[args.length - 1]);
+				tmpBan = args.getInt(args.length - 1);
 			} catch (Exception e) {
-				message += args[args.length - 1];
+				message += args.getString(args.length - 1);
 			}
 			if (tmpBan != null) {
 				message += "(Banned for " + tmpBan + " minutes)";

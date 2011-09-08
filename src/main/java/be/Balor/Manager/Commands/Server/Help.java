@@ -19,7 +19,8 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -45,12 +46,12 @@ public class Help extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (args.length == 0) {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", 1, sender);
 			return;
 		}
-		if (args[0].equals("list")) {
+		if (args.getString(0).equals("list")) {
 			String msg = "";
 			sender.sendMessage(ChatColor.DARK_AQUA
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.WHITE + " Plugins "
@@ -66,19 +67,19 @@ public class Help extends CoreCommand {
 		}
 		int page = 1;
 		try {
-			page = Integer.parseInt(args[0]);
+			page = args.getInt(0);
 			HelpLister.getInstance().sendHelpPage("AdminCmd", page, sender);
 		} catch (NumberFormatException e) {
 			if (args.length == 1) {
-				if (!HelpLister.getInstance().sendHelpPage(args[0], 1, sender))
-					Utils.sI18n(sender, "pluginNotFound", "plugin", args[0]);
+				if (!HelpLister.getInstance().sendHelpPage(args.getString(0), 1, sender))
+					Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 			} else {
 				try {
-					page = Integer.parseInt(args[1]);
-					if (!HelpLister.getInstance().sendHelpPage(args[0], page, sender))
-						Utils.sI18n(sender, "pluginNotFound", "plugin", args[0]);
+					page = args.getInt(1);
+					if (!HelpLister.getInstance().sendHelpPage(args.getString(0), page, sender))
+						Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 				} catch (NumberFormatException e1) {
-					Utils.sI18n(sender, "NaN", "number", args[1]);
+					Utils.sI18n(sender, "NaN", "number", args.getString(1));
 				}
 			}
 		}

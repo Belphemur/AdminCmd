@@ -20,7 +20,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
@@ -42,12 +43,12 @@ public class Home extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
 			String home = player.getWorld().getName();
 			if (args.length >= 1)
-				home = args[0];
+				home = args.getString(0);
 			Location loc = ACPlayer.getPlayer(player.getName()).getHome(home);
 			if (loc == null)
 				Utils.sI18n(sender, "errorMultiHome", "home", home);

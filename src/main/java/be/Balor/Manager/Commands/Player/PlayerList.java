@@ -20,7 +20,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.CoreCommand;
+import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -48,7 +49,7 @@ public class PlayerList extends CoreCommand {
 	 */
 
 	@Override
-	public void execute(CommandSender sender, String... args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Player[] online = sender.getServer().getOnlinePlayers();
 		int amount = online.length;
 		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
