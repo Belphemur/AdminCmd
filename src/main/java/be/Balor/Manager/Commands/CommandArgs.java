@@ -44,9 +44,9 @@ public class CommandArgs implements Iterable<String> {
 		 */
 	public CommandArgs(String[] args) {
 		char quotedChar;
-		for (int i = 1; i < args.length; ++i) {
+		for (int i = 0; i < args.length; ++i) {
 			if (args[i].length() == 0) {
-				args = Str.removePortionOfArray(args, i, i, null);
+				args = Str.removeCaseOfArray(args, i);
 			} else if (QUOTE_CHARS.indexOf(String.valueOf(args[i].charAt(0))) != -1) {
 				StringBuilder build = new StringBuilder();
 				quotedChar = args[i].charAt(0);
@@ -69,7 +69,8 @@ public class CommandArgs implements Iterable<String> {
 				for (int k = 1; k < args[i].length(); ++k) {
 					booleanFlags.add(args[i].charAt(k));
 				}
-				args = Str.removePortionOfArray(args, i, i, null);
+				args = Str.removeCaseOfArray(args, i);			
+				i--;
 			}
 		}
 		this.args = Arrays.asList(args);
@@ -108,7 +109,7 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(args.toArray(new String[]{})) + " Flags : "
+		return Arrays.toString(args.toArray(new String[] {})) + " Flags : "
 				+ Arrays.toString(booleanFlags.toArray(new Character[] {}));
 	}
 

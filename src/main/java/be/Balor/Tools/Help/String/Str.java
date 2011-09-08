@@ -278,4 +278,22 @@ public class Str extends OutputStream {
 				+ (replace == null ? 0 : 1), array.length - to - 1);
 		return newArray;
 	}
+
+	public static String[] removeCaseOfArray(String[] array, int index) {
+		String[] newArray = new String[array.length - 1];
+		for (int i = 0; i < index; i++)
+			newArray[i] = array[i];
+		for (int j = index + 1; j < array.length; j++)
+			newArray[j - 1] = array[j];
+		return newArray;
+	}
+
+	public static String[] concat(String[] A, String[] B) {
+		String[] C = new String[A.length + B.length];
+		System.arraycopy(A, 0, C, 0, A.length);
+		System.arraycopy(B, 0, C, A.length, B.length);
+
+		return C;
+	}
+
 } // end class Str

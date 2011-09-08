@@ -309,14 +309,15 @@ public class CommandManager implements CommandExecutor {
 	public boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
 		try {
 			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
+				ACCommandContainer container = new ACCommandContainer(sender, cmd, args);
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
 					corePlugin
 							.getServer()
 							.getScheduler()
-							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(cmd, sender, args));
+							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
 				else {
-					threads.get(cmdCount).addCommand(new ACCommandContainer(sender, cmd, args));
+					threads.get(cmdCount).addCommand(container);
 					cmdCount++;
 					if (cmdCount == MAX_THREADS)
 						cmdCount = 0;
@@ -324,10 +325,10 @@ public class CommandManager implements CommandExecutor {
 				if (!cmd.getCmdName().equals("bal_repeat")) {
 					if (Utils.isPlayer(sender, false))
 						ACHelper.getInstance().addValue(Type.REPEAT_CMD, (Player) sender,
-								new ACCommandContainer(sender, cmd, args));
+								container);
 					else
 						ACHelper.getInstance().addValue(Type.REPEAT_CMD, "serverConsole",
-								new ACCommandContainer(sender, cmd, args));
+								container);
 				}
 
 				return true;
@@ -433,12 +434,6 @@ public class CommandManager implements CommandExecutor {
 	private class SyncCommand implements Runnable {
 		private ACCommandContainer acc = null;
 
-		/**
-		 * 
-		 */
-		public SyncCommand(CoreCommand cmd, CommandSender sender, String[] args) {
-			this.acc = new ACCommandContainer(sender, cmd, args);
-		}
 
 		public SyncCommand(ACCommandContainer acc) {
 			this.acc = acc;

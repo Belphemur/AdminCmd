@@ -57,7 +57,13 @@ public class Execution extends CoreCommand {
 				sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
 				sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			} else
-				TerminalCommandManager.getInstance().execute(sender, args.getString(0), true);
+				try {
+					TerminalCommandManager.getInstance().execute(sender, args.getString(0), true);
+				} catch (CommandNotFound e) {
+					sender.sendMessage(e.getMessage());
+
+					sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
+				}
 			return;
 		}
 		try {
