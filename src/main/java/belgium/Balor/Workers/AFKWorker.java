@@ -142,7 +142,8 @@ final public class AFKWorker {
 	 */
 	public void setAfk(Player p, String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
-			String afkString = Utils.I18n("afk", "player", p.getName());
+			String afkString = Utils.I18n("afk", "player",
+					Utils.colorParser(PermissionManager.getPrefix(p)) + p.getName());
 			if (afkString != null) {
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
 				Utils.broadcastMessage(afkString);
@@ -182,7 +183,8 @@ final public class AFKWorker {
 	 */
 	public void setOnline(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
-			String online = Utils.I18n("online", "player", p.getName());
+			String online = Utils.I18n("online", "player",
+					Utils.colorParser(PermissionManager.getPrefix(p)) + p.getName());
 			if (online != null)
 				Utils.broadcastMessage(online);
 		}

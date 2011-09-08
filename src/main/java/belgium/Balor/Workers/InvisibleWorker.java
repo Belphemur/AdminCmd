@@ -45,6 +45,7 @@ final public class InvisibleWorker {
 	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
 	private long maxRange = 262144;
 	private int tickCheck = 400;
+	private boolean mChatInstalled = false;
 
 	/**
 	 * 
@@ -86,6 +87,14 @@ final public class InvisibleWorker {
 	}
 
 	/**
+	 * @param mChatInstalled
+	 *            the mChatInstalled to set
+	 */
+	public void setmChatInstalled(boolean mChatInstalled) {
+		this.mChatInstalled = mChatInstalled;
+	}
+
+	/**
 	 * return all invisible Players
 	 * 
 	 * @return
@@ -120,8 +129,14 @@ final public class InvisibleWorker {
 								}
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-				Utils.broadcastMessage(
-						ChatColor.YELLOW + name + " joined the game.");
+				if (mChatInstalled)
+					Utils.broadcastMessage(Utils.colorParser(PermissionManager
+							.getPrefix(toReappear))
+							+ name
+							+ ChatColor.YELLOW
+							+ " has joined the game.");
+				else
+					Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
 		}
 
 	}
@@ -195,8 +210,7 @@ final public class InvisibleWorker {
 				.getScheduler()
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisible(toVanish));
-		if (!invisblesWithTaskIds.containsKey(name))
-		{
+		if (!invisblesWithTaskIds.containsKey(name)) {
 			ACPlayer.getPlayer(name).setPower(Type.INVISIBLE);
 			invisblesWithTaskIds.put(
 					name,
@@ -207,7 +221,11 @@ final public class InvisibleWorker {
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+			if (mChatInstalled)
+				Utils.broadcastMessage(Utils.colorParser(PermissionManager.getPrefix(toVanish))
+						+ name + ChatColor.YELLOW + " has left the game.");
+			else
+				Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 
 	}
 

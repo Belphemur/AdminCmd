@@ -33,6 +33,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import belgium.Balor.Workers.InvisibleWorker;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 
@@ -76,6 +77,7 @@ public class ACPluginListener extends ServerListener {
 			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager().getPlugin("mChat");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				BukkitPermissions.setmChatapi(mChat.API);
+				InvisibleWorker.getInstance().setmChatInstalled(true);
 				System.out.print("[AdminCmd] Successfully linked with mChat");
 			}
 		}
