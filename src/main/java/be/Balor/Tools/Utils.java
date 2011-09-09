@@ -386,8 +386,7 @@ public class Utils {
 				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 			} else {
-				ACHelper.getInstance().addLocation("userData", pFrom.getName() + ".lastLoc",
-						"lastLoc", pFrom.getName(), pFrom.getLocation());
+				ACPlayer.getPlayer(nFrom).setLastLocation(pFrom.getLocation());
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
