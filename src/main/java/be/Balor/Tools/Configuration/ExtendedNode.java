@@ -85,4 +85,5 @@ public class ExtendedNode extends ConfigurationNode {
 		addProperty(path, new HashMap<String, Object>());
 		return getNode(path);
 	}
+	
 }

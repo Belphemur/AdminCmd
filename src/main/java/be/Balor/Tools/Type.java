@@ -40,7 +40,8 @@ public enum Type {
 	TP_REQUEST(Category.OTHER),
 	TP_AT_SEE(Category.SUPER_POWER),
 	SUPER_BREAKER(Category.SUPER_POWER),
-	INVISIBLE(Category.SUPER_POWER);
+	INVISIBLE(Category.SUPER_POWER),
+	CUSTOM(Category.MISC);
 
 	private static final Map<String, Type> lookupName = new HashMap<String, Type>();
 
@@ -79,7 +80,10 @@ public enum Type {
 
 		return result;
 	}
-
+	public static void addCustomPower(final String name)
+	{
+		lookupName.put(name, CUSTOM);
+	}
 	static {
 		for (Type type : values()) {
 			lookupName.put(type.name(), type);
@@ -96,7 +100,7 @@ public enum Type {
 	}
 
 	public enum Category {
-		SUPER_POWER, WORLD, OTHER, SANCTION;
+		SUPER_POWER, WORLD, OTHER, SANCTION, MISC;
 	}
 
 	public enum Weather {

@@ -215,17 +215,6 @@ public class FilePlayer extends ACPlayer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Player.Data.PlayerDataManager#setPower(be.Balor.Tools.Type)
-	 */
-
-	public void setPower(Type power) {
-		setPower(power, true);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see be.Balor.Player.Data.PlayerDataManager#setPower(be.Balor.Tools.Type,
 	 * java.lang.Object)
 	 */
@@ -309,6 +298,29 @@ public class FilePlayer extends ACPlayer {
 		}
 		writeFile();
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#setCustomPower(java.lang.String,
+	 * java.lang.Object)
+	 */
+	@Override
+	public void setCustomPower(String power, Object value) {
+		Type.addCustomPower(power);
+		powers.setProperty(power, value);
+		writeFile();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getCustomPower(java.lang.String)
+	 */
+	@Override
+	public ObjectContainer getCustomPower(String power) {
+		return new ObjectContainer(powers.getProperty(power));
 	}
 
 }

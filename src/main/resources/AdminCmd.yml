@@ -141,19 +141,19 @@ actptoggle:
     command: tptoggle <yes>
     description: "De-/Activate the Tp Request System for you.\n You will receive a request that you can accept with '/tpt yes' if activated."
     plugin: AdminCmd
-    permissionsions: admincmd.tp.toggle
+    permissions: admincmd.tp.toggle
 
 actpsee:
     command: tpsee
     description: "En-/Disable the 'teleport at see' mode, left click and you are teleported where you are looking at."
     plugin: AdminCmd
-    permissionsions: admincmd.tp.see
+    permissions: admincmd.tp.see
 
 actpback:
     command: back
     description: "Return to the location you where at before you tele-\n ported/warped"
     plugin: AdminCmd
-    permissionsions: admincmd.tp.back
+    permissions: admincmd.tp.back
 
 acplayerlist:
     command: playerlist

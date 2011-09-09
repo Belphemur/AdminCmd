@@ -144,16 +144,6 @@ public class EmptyPlayer extends ACPlayer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Player.ACPlayer#setPower(be.Balor.Tools.Type)
-	 */
-	@Override
-	public void setPower(Type power) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see be.Balor.Player.ACPlayer#setPower(be.Balor.Tools.Type,
 	 * java.lang.Object)
 	 */
@@ -210,6 +200,22 @@ public class EmptyPlayer extends ACPlayer {
 	@Override
 	void forceSave() {
 
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#setCustomPower(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public void setCustomPower(String power, Object value) {	
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#getCustomPower(java.lang.String)
+	 */
+	@Override
+	public ObjectContainer getCustomPower(String power) {
+		return new ObjectContainer(null);
 	}
 
 }

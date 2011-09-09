@@ -30,9 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public abstract class ACPlayer {
-	private static int playerCount = 0;
 	private final String name;
-	private final int playerID;
 	private final int hashCode;
 	protected boolean isOnline = false;
 
@@ -41,11 +39,9 @@ public abstract class ACPlayer {
 	 */
 	protected ACPlayer(String name) {
 		this.name = name;
-		playerID = playerCount++;
-		final int prime = 31;
-		int result = 1;
+		final int prime = 41;
+		int result = 7;
 		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-		result = prime * result + playerID;
 		hashCode = result;
 	}
 
@@ -155,7 +151,9 @@ public abstract class ACPlayer {
 	 * 
 	 * @param power
 	 */
-	public abstract void setPower(Type power);
+	public void setPower(Type power) {
+		setPower(power, true);
+	}
 
 	/**
 	 * Set the power of the user with a given value
@@ -164,6 +162,33 @@ public abstract class ACPlayer {
 	 * @param value
 	 */
 	public abstract void setPower(Type power, Object value);
+
+	/**
+	 * Set the custom power of the user with a default value
+	 * 
+	 * @param custom
+	 *            power
+	 */
+	public void setCustomPower(String power) {
+		setCustomPower(power, true);
+	}
+
+	/**
+	 * Set the custom power of the user with a given value
+	 * 
+	 * @param custom
+	 *            power
+	 * @param value
+	 */
+	public abstract void setCustomPower(String power, Object value);
+
+	/**
+	 * Get the custom power of the user
+	 * 
+	 * @param Power
+	 * @return
+	 */
+	public abstract ObjectContainer getCustomPower(String power);
 
 	/**
 	 * Get the power of the user
@@ -209,12 +234,15 @@ public abstract class ACPlayer {
 		setInformation("totalTime", total);
 		return total;
 	}
+
 	/**
-	 * @param isOnline the isOnline to set
+	 * @param isOnline
+	 *            the isOnline to set
 	 */
 	void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -243,8 +271,6 @@ public abstract class ACPlayer {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (playerID != other.playerID)
 			return false;
 		return true;
 	}
