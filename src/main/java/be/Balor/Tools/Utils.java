@@ -19,6 +19,7 @@ package be.Balor.Tools;
 import info.somethingodd.bukkit.OddItem.OddItem;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +27,18 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.server.Packet4UpdateTime;
+import net.minecraft.server.WorldServer;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -279,13 +286,8 @@ public class Utils {
 			else if (arg.equalsIgnoreCase("dawn"))
 				newtime += 23000;
 			else if (arg.equalsIgnoreCase("pause")) {
-				int taskId = ACHelper
-						.getInstance()
-						.getCoreInstance()
-						.getServer()
-						.getScheduler()
-						.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
-								new FreezeTime(w), 0, 10);
+				int taskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new SetTime(w), 0, 10);
 				ACHelper.getInstance().addValue(Type.TIME_FREEZED, w.getName(), taskId);
 			} else {
 				// if not a constant, use raw time
@@ -307,7 +309,8 @@ public class Utils {
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
 
-		w.setTime(newtime);
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getPluginInstance("Core"), new SetTime(w, newtime));
 	}
 
 	// all functions return if they handled the command
@@ -501,7 +504,6 @@ public class Utils {
 	}
 
 	public static void sParsedLocale(Player p, String locale) {
-		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay")) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", p.getName());
 			long total = ACPlayer.getPlayer(p.getName()).updatePlayedTime();
@@ -527,7 +529,7 @@ public class Utils {
 			if (motd != null)
 				for (String toSend : motd.split("//n"))
 					p.sendMessage(toSend);
-		}
+
 	}
 
 	public static Integer replaceBlockByAir(CommandSender sender, CommandArgs args,
@@ -794,16 +796,25 @@ public class Utils {
 
 	}
 
-	private static class FreezeTime implements Runnable {
+	private static class SetTime implements Runnable {
 		private World w;
 		private Long time;
 
 		/**
 		 * 
 		 */
-		public FreezeTime(World w) {
+		public SetTime(World w) {
 			this.w = w;
 			this.time = w.getTime();
+		}
+
+		/**
+		 * @param w
+		 * @param time
+		 */
+		public SetTime(World w, Long time) {
+			this.w = w;
+			this.time = time;
 		}
 
 		/*
@@ -813,7 +824,27 @@ public class Utils {
 		 */
 		@Override
 		public void run() {
-			w.setTime(time);
+			long margin = (time - w.getFullTime()) % 24000;
+			if (margin < 0)
+				margin += 24000;
+			long newTime = w.getFullTime() + margin;
+			WorldServer world = ((CraftWorld) w).getHandle();
+			world.setTime(newTime);
+			@SuppressWarnings("unchecked")
+			List<Object> entityList = (ArrayList<Object>) ((ArrayList<Object>)world.entityList).clone();
+			// Forces the client to update to the new time immediately
+			for (Object o : entityList) {
+				if (o instanceof net.minecraft.server.Entity) {
+					net.minecraft.server.Entity mcEnt = (net.minecraft.server.Entity) o;
+					Entity bukkitEntity = mcEnt.getBukkitEntity();
+
+					if ((bukkitEntity != null) && (bukkitEntity instanceof Player)) {
+						CraftPlayer cp = (CraftPlayer) bukkitEntity;
+						cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp
+								.getHandle().getPlayerTime()));
+					}
+				}
+			}
 		}
 
 	}

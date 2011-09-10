@@ -357,6 +357,7 @@ public class ACHelper {
 		pluginConfig.addProperty("help.getHelpForAllPlugins", true);
 		pluginConfig.addProperty("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
 		pluginConfig.addProperty("respawnAtSpawnPoint", false);
+		pluginConfig.addProperty("DisplayNewsOnJoin", true);
 
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();

@@ -118,8 +118,10 @@ public class ACPlayerListener extends PlayerListener {
 				ACHelper.getInstance().spawn(p);
 		}
 		player.setInformation("lastConnection", System.currentTimeMillis());
-		Utils.sParsedLocale(p, "MOTD");
-		Utils.sParsedLocale(p, "NEWS");
+		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+			Utils.sParsedLocale(p, "MOTD");
+		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
+			Utils.sParsedLocale(p, "NEWS");
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))
@@ -134,7 +136,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setQuitMessage(null);
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
-		}		
+		}
 	}
 
 	@Override
@@ -192,7 +194,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
-		}		
+		}
 		ItemStack itemInHand = event.getItem();
 		if (itemInHand != null && event.getAction() == Action.LEFT_CLICK_BLOCK
 				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
@@ -279,7 +281,7 @@ public class ACPlayerListener extends PlayerListener {
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {
-		if (player.hasPower(Type.TP_AT_SEE))			
+		if (player.hasPower(Type.TP_AT_SEE))
 			try {
 				Player p = player.getHandler();
 				Block toTp = p.getWorld().getBlockAt(
