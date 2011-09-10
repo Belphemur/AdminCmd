@@ -21,6 +21,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -33,6 +34,7 @@ public abstract class ACPlayer {
 	private final String name;
 	private final int hashCode;
 	protected boolean isOnline = false;
+	protected ACCommandContainer lastCmd = null;
 
 	/**
 	 * 
@@ -241,6 +243,23 @@ public abstract class ACPlayer {
 	 */
 	void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
+	}
+
+	/**
+	 * @param lastCmd
+	 *            the last Command to set
+	 */
+	public void setLastCmd(ACCommandContainer lastCmd) {
+		this.lastCmd = lastCmd;
+	}
+
+	/**
+	 * Execute the last command
+	 */
+	public void executeLastCmd() throws NullPointerException {
+		if (this.lastCmd == null)
+			throw new NullPointerException();
+		this.lastCmd.execute();
 	}
 
 	/*

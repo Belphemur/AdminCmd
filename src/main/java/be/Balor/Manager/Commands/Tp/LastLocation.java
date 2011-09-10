@@ -22,8 +22,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,17 +49,15 @@ public class LastLocation extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
-
-			Location loc = ACHelper.getInstance().getLocation("home",
-					player.getName() + ".lastLoc", "lastLoc", player.getName());
+			ACPlayer p = ACPlayer.getPlayer(player.getName());
+			Location loc = p.getLastLocation();
 			if (loc == null) {
 				Utils.sI18n(sender, "noLastLocation");
 				return;
 			}
 			player.teleport(loc);
 			Utils.sI18n(sender, "telportSuccess");
-			ACHelper.getInstance().removeLocation("home", player.getName() + ".lastLoc", "lastLoc",
-					player.getName());
+			p.setLastLocation(null);
 		}
 
 	}

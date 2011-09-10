@@ -19,12 +19,10 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Tools.Type;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,18 +47,16 @@ public class RepeatCmd extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Object cmd;
-		if (Utils.isPlayer(sender, false))
-			cmd = ACHelper.getInstance().getValue(Type.REPEAT_CMD, (Player) sender);
+		try {
 
-		else
-			cmd = ACHelper.getInstance().getValue(Type.REPEAT_CMD, "serverConsole");
-		if (cmd == null) {
+			if (Utils.isPlayer(sender, false))
+				ACPlayer.getPlayer(((Player) sender).getName()).executeLastCmd();
+			else
+				ACPlayer.getPlayer("serverConsole").executeLastCmd();
+			Utils.sI18n(sender, "reExec");
+		} catch (NullPointerException e) {
 			Utils.sI18n(sender, "noRepeat");
-			return;
 		}
-		Utils.sI18n(sender, "reExec");
-		((ACCommandContainer) cmd).execute();
 
 	}
 

@@ -138,13 +138,17 @@ public class FilePlayer extends ACPlayer {
 	 * )
 	 */
 	public void setLastLocation(Location loc) {
-		ExtendedNode lastLoc = datas.createNode("lastLoc");
-		lastLoc.setProperty("world", loc.getWorld().getName());
-		lastLoc.setProperty("x", loc.getX());
-		lastLoc.setProperty("y", loc.getY());
-		lastLoc.setProperty("z", loc.getZ());
-		lastLoc.setProperty("yaw", loc.getYaw());
-		lastLoc.setProperty("pitch", loc.getPitch());
+		if (loc == null)
+			datas.removeProperty("lastLoc");
+		else {
+			ExtendedNode lastLoc = datas.createNode("lastLoc");
+			lastLoc.setProperty("world", loc.getWorld().getName());
+			lastLoc.setProperty("x", loc.getX());
+			lastLoc.setProperty("y", loc.getY());
+			lastLoc.setProperty("z", loc.getZ());
+			lastLoc.setProperty("yaw", loc.getYaw());
+			lastLoc.setProperty("pitch", loc.getPitch());
+		}
 
 		writeFile();
 
@@ -162,6 +166,8 @@ public class FilePlayer extends ACPlayer {
 
 	private Location getLocation(String location) throws WorldNotLoaded {
 		ExtendedNode node = datas.getNode(location);
+		if (node == null)
+			return null;
 		if (node.getProperty("world") == null) {
 			Location loc = parseLocation(location);
 			if (loc != null)
@@ -293,7 +299,8 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public void removeAllSuperPower() {
 		for (String power : powers.getKeys()) {
-			if (Type.matchType(power).getCategory().equals(Category.SUPER_POWER))
+			Type matched = Type.matchType(power);
+			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
 				powers.removeProperty(power);
 		}
 		writeFile();

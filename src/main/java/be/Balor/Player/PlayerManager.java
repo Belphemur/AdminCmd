@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-
 import com.google.common.collect.MapMaker;
 
 /**
@@ -35,6 +34,15 @@ public class PlayerManager {
 	private ACPlayerFactory playerFactory;
 
 	/**
+	 * 
+	 */
+	private PlayerManager() {
+		EmptyPlayer console = new EmptyPlayer("serverConsole");
+		onlinePlayers.add(console);
+		addPlayer(console);
+	}
+
+	/**
 	 * @return the instance
 	 */
 	public static PlayerManager getInstance() {
@@ -42,8 +50,10 @@ public class PlayerManager {
 			instance = new PlayerManager();
 		return instance;
 	}
+
 	/**
-	 * @param playerFactory the playerFactory to set
+	 * @param playerFactory
+	 *            the playerFactory to set
 	 */
 	public void setPlayerFactory(ACPlayerFactory playerFactory) {
 		this.playerFactory = playerFactory;
@@ -64,8 +74,7 @@ public class PlayerManager {
 		if (ref != null)
 			return false;
 		players.put(name, player);
-		if (player.getHandler() != null)
-		{
+		if (player.getHandler() != null) {
 			onlinePlayers.add(player);
 			player.setOnline(true);
 		}
@@ -93,14 +102,15 @@ public class PlayerManager {
 	 */
 	public boolean setOffline(ACPlayer player) {
 		player.updatePlayedTime();
-		player.forceSave();		
+		player.forceSave();
 		player.setOnline(false);
 		return onlinePlayers.remove(player);
 	}
-	public void setOnline(String player)
-	{
+
+	public void setOnline(String player) {
 		playerFactory.addExistingPlayer(player);
 	}
+
 	ACPlayer demandACPlayer(String name) {
 		ACPlayer result = getPlayer(name);
 		if (result == null) {
@@ -109,7 +119,7 @@ public class PlayerManager {
 			result = getPlayer(name);
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(name);
-			if(tmp.equals(result))
+			if (tmp.equals(result))
 				return result;
 			result = tmp;
 			players.remove(name);

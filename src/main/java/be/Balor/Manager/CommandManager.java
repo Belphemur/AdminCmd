@@ -42,7 +42,7 @@ import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
-import be.Balor.Tools.Type;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.WorldNotLoaded;
@@ -324,11 +324,9 @@ public class CommandManager implements CommandExecutor {
 				}
 				if (!cmd.getCmdName().equals("bal_repeat")) {
 					if (Utils.isPlayer(sender, false))
-						ACHelper.getInstance().addValue(Type.REPEAT_CMD, (Player) sender,
-								container);
+						ACPlayer.getPlayer(((Player)sender).getName()).setLastCmd(container);
 					else
-						ACHelper.getInstance().addValue(Type.REPEAT_CMD, "serverConsole",
-								container);
+						ACPlayer.getPlayer("serverConsole").setLastCmd(container);
 				}
 
 				return true;
