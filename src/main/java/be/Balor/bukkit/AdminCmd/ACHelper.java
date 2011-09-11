@@ -1,6 +1,7 @@
 package be.Balor.bukkit.AdminCmd;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
@@ -32,6 +33,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -970,7 +972,30 @@ public class ACHelper {
 			kits.put(kit, kitsLoaded.get(kit));
 			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);
 		}
-		bannedPlayers.putAll(dataManager.loadBan());
+		Map<String, BannedPlayer> bans = dataManager.loadBan();
+		Date current = new Date(System.currentTimeMillis());
+		for (final String key : bans.keySet()) {
+			BannedPlayer player = bans.get(key);
+			if (player instanceof TempBannedPlayer) {
+				TempBannedPlayer temp = (TempBannedPlayer) player;
+				if (temp.getEndBan().after(current)) {
+					bannedPlayers.put(key, bans.get(key));
+					int tickLeft = (int) ((temp.getEndBan().getTime() - System.currentTimeMillis()) / 1000) * 20;
+					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance, new Runnable() {
+						
+						@Override
+						public void run() {
+							unBanPlayer(key);							
+						}
+					}, tickLeft);
+
+				} else {
+					dataManager.unBanPlayer(key);
+				}
+			} else
+				bannedPlayers.put(key, bans.get(key));
+		}
+
 		if (pluginConfig.getBoolean("verboseLog", true)) {
 			Logger.getLogger("Minecraft").info(
 					"[AdminCmd] " + blacklist.size() + " blacklisted items loaded.");
