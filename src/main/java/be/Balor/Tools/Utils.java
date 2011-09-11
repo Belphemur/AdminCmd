@@ -19,7 +19,6 @@ package be.Balor.Tools;
 import info.somethingodd.bukkit.OddItem.OddItem;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -48,6 +46,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.PlayerManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
@@ -504,31 +503,31 @@ public class Utils {
 	}
 
 	public static void sParsedLocale(Player p, String locale) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", p.getName());
-			long total = ACPlayer.getPlayer(p.getName()).updatePlayedTime();
-			Long[] time = Utils.transformToElapsedTime(total);
-			replace.put("d", time[0].toString());
-			replace.put("h", time[1].toString());
-			replace.put("m", time[2].toString());
-			replace.put("s", time[3].toString());
-			replace.put(
-					"nb",
-					String.valueOf(p.getServer().getOnlinePlayers().length
-							- InvisibleWorker.getInstance().nbInvisibles()));
-			String connected = "";
-			for (Player player : p.getServer().getOnlinePlayers())
-				if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
-					connected += getPrefix(player, p) + player.getName() + ", ";
-			if (!connected.equals("")) {
-				if (connected.endsWith(", "))
-					connected = connected.substring(0, connected.lastIndexOf(","));
-			}
-			replace.put("connected", connected);
-			String motd = I18n(locale, replace);
-			if (motd != null)
-				for (String toSend : motd.split("//n"))
-					p.sendMessage(toSend);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", p.getName());
+		long total = ACPlayer.getPlayer(p.getName()).updatePlayedTime();
+		Long[] time = Utils.transformToElapsedTime(total);
+		replace.put("d", time[0].toString());
+		replace.put("h", time[1].toString());
+		replace.put("m", time[2].toString());
+		replace.put("s", time[3].toString());
+		replace.put(
+				"nb",
+				String.valueOf(p.getServer().getOnlinePlayers().length
+						- InvisibleWorker.getInstance().nbInvisibles()));
+		String connected = "";
+		for (Player player : p.getServer().getOnlinePlayers())
+			if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
+				connected += getPrefix(player, p) + player.getName() + ", ";
+		if (!connected.equals("")) {
+			if (connected.endsWith(", "))
+				connected = connected.substring(0, connected.lastIndexOf(","));
+		}
+		replace.put("connected", connected);
+		String motd = I18n(locale, replace);
+		if (motd != null)
+			for (String toSend : motd.split("//n"))
+				p.sendMessage(toSend);
 
 	}
 
@@ -752,8 +751,8 @@ public class Utils {
 	 * 
 	 * @return
 	 */
-	public static Player[] getOnlinePlayers() {
-		return ACPluginManager.getServer().getOnlinePlayers();
+	public static List<Player> getOnlinePlayers() {
+		return PlayerManager.getInstance().getOnlinePlayers();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -830,21 +829,13 @@ public class Utils {
 			long newTime = w.getFullTime() + margin;
 			WorldServer world = ((CraftWorld) w).getHandle();
 			world.setTime(newTime);
-			@SuppressWarnings("unchecked")
-			List<Object> entityList = (ArrayList<Object>) ((ArrayList<Object>)world.entityList).clone();
-			// Forces the client to update to the new time immediately
-			for (Object o : entityList) {
-				if (o instanceof net.minecraft.server.Entity) {
-					net.minecraft.server.Entity mcEnt = (net.minecraft.server.Entity) o;
-					Entity bukkitEntity = mcEnt.getBukkitEntity();
-
-					if ((bukkitEntity != null) && (bukkitEntity instanceof Player)) {
-						CraftPlayer cp = (CraftPlayer) bukkitEntity;
-						cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp
-								.getHandle().getPlayerTime()));
-					}
-				}
+			for(Player p : getOnlinePlayers())
+			{
+				CraftPlayer cp = (CraftPlayer) p;
+				cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp
+						.getHandle().getPlayerTime()));
 			}
+
 		}
 
 	}

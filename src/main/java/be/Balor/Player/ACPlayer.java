@@ -35,6 +35,7 @@ public abstract class ACPlayer {
 	private final int hashCode;
 	protected boolean isOnline = false;
 	protected ACCommandContainer lastCmd = null;
+	protected Player handler = null;
 
 	/**
 	 * 
@@ -63,7 +64,7 @@ public abstract class ACPlayer {
 	 * @return
 	 */
 	public Player getHandler() {
-		return ACPluginManager.getServer().getPlayer(name);
+		return handler;
 	}
 
 	/**
@@ -243,6 +244,10 @@ public abstract class ACPlayer {
 	 */
 	void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
+		if (this.isOnline)
+			handler = ACPluginManager.getServer().getPlayer(this.name);
+		else
+			handler = null;
 	}
 
 	/**

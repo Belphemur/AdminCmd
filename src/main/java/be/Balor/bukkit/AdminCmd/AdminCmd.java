@@ -3,7 +3,6 @@ package be.Balor.bukkit.AdminCmd;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -421,8 +420,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		for (Player p : getServer().getOnlinePlayers()) {
-			PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
+		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
+			PlayerManager.getInstance().setOffline(p);
 		}
 		CommandManager.getInstance().stopAllExecutorThreads();
 		worker = null;

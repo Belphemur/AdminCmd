@@ -16,9 +16,11 @@
  ************************************************************************/
 package be.Balor.Player;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
+
+import org.bukkit.entity.Player;
 
 import com.google.common.collect.MapMaker;
 
@@ -29,7 +31,8 @@ import com.google.common.collect.MapMaker;
 public class PlayerManager {
 	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
 			.weakValues().makeMap();
-	private Set<ACPlayer> onlinePlayers = new HashSet<ACPlayer>();
+	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
+			.weakValues().makeMap();
 	private static PlayerManager instance = null;
 	private ACPlayerFactory playerFactory;
 
@@ -38,7 +41,7 @@ public class PlayerManager {
 	 */
 	private PlayerManager() {
 		EmptyPlayer console = new EmptyPlayer("serverConsole");
-		onlinePlayers.add(console);
+		onlinePlayers.put(console, true);
 		addPlayer(console);
 	}
 
@@ -75,10 +78,34 @@ public class PlayerManager {
 			return false;
 		players.put(name, player);
 		if (player.getHandler() != null) {
-			onlinePlayers.add(player);
+			onlinePlayers.put(player, true);
 			player.setOnline(true);
 		}
 		return true;
+	}
+
+	/**
+	 * Return online AC players
+	 * 
+	 * @return
+	 */
+	public List<ACPlayer> getOnlineACPlayers() {
+		return new ArrayList<ACPlayer>(onlinePlayers.keySet());
+	}
+
+	/**
+	 * Get Online Bukkit Player
+	 * 
+	 * @return
+	 */
+	public List<Player> getOnlinePlayers() {
+		ArrayList<Player> list = new ArrayList<Player>(onlinePlayers.size());
+		for (ACPlayer p : onlinePlayers.keySet()) {
+			Player handler = p.getHandler();
+			if (handler != null)
+				list.add(handler);
+		}
+		return list;
 	}
 
 	/**
