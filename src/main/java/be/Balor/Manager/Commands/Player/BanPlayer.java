@@ -101,7 +101,7 @@ public class BanPlayer extends CoreCommand {
 		if (toBan != null)
 			toBan.kickPlayer(message);
 		ACPlayer.getPlayer(banPlayerString).setPower(Type.BANNED, message);
-		sender.getServer().broadcastMessage(Utils.I18n("ban", replace));
+		Utils.broadcastMessage(Utils.I18n("ban", replace));
 
 	}
 
