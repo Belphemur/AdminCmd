@@ -27,6 +27,11 @@ public class BannedPlayer {
 	private String reason;
 	private Date date;
 	/**
+	 * 
+	 */
+	public BannedPlayer() {
+	}
+	/**
 	 * @param player
 	 * @param reason
 	 */

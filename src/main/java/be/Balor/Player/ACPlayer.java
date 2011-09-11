@@ -194,6 +194,21 @@ public abstract class ACPlayer {
 	public abstract ObjectContainer getCustomPower(String power);
 
 	/**
+	 * Check if the player have the wanted custom power
+	 * 
+	 * @param power
+	 * @return
+	 */
+	public abstract boolean hasCustomPower(String power);
+
+	/**
+	 * Remove the custom power of the user
+	 * 
+	 * @param power
+	 */
+	public abstract void removeCustomPower(String power);
+
+	/**
 	 * Get the power of the user
 	 * 
 	 * @param Power

@@ -29,7 +29,6 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.AbstractConstruct;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.CollectionNode;
 import org.yaml.snakeyaml.nodes.MappingNode;
@@ -295,24 +294,12 @@ class MyYamlConstructor extends Constructor {
 	 * constructor, except that class information is pre-populated during
 	 * initialization rather than runtime.
 	 * 
-	 * @see org.yaml.snakeyaml.constructor.Constructor#getClassForNode(org.yaml
+	 * @see org.yaml.snakeyaml.constructor.Constructor#getClassForName(org.yaml
 	 * .snakeyaml.nodes.Node)
 	 */
 	@Override
-	protected Class<?> getClassForNode(Node node) {
-		String name = node.getTag().getClassName();
-		Class<?> cl = classMap.get(name);
-		System.out.print("FUNCTION CALLED : " + name);
-		if (cl == null)
-			throw new YAMLException("Class not found: " + name);
-		else
-			return cl;
-	}
-
-	@Override
 	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
 		Class<?> cl = classMap.get(name);
-		System.out.print("FUNCTION2 CALLED : " + name);
 		if (cl == null)
 			return super.getClassForName(name);
 		else

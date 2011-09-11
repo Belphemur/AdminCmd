@@ -41,6 +41,7 @@ import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
@@ -58,9 +59,9 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
-		if (player.hasPower(Type.BANNED)) {
-			event.disallow(Result.KICK_BANNED, player.getPower(Type.BANNED).getString());
+		BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
+		if (player != null) {
+			event.disallow(Result.KICK_BANNED, player.getReason());
 			return;
 		}
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))

@@ -218,4 +218,22 @@ public class EmptyPlayer extends ACPlayer {
 		return new ObjectContainer(null);
 	}
 
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#hasCustomPower(java.lang.String)
+	 */
+	@Override
+	public boolean hasCustomPower(String power) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#removeCustomPower(java.lang.String)
+	 */
+	@Override
+	public void removeCustomPower(String power) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

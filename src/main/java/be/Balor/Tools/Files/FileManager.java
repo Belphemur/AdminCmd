@@ -32,6 +32,7 @@ import org.bukkit.World;
 
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -70,14 +71,14 @@ public class FileManager implements DataManager {
 			pathFile.mkdir();
 		}
 		File spawn = getFile(null, "spawnLocations.yml", false);
-		File homeDir = new File(this.pathFile, "home");		
+		File homeDir = new File(this.pathFile, "home");
 		if (spawn.exists()) {
 			File dir = new File(this.pathFile, "spawn");
 			dir.mkdir();
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
-		if(homeDir.exists())
-			homeDir.renameTo(new File(this.pathFile,"userData"));
+		if (homeDir.exists())
+			homeDir.renameTo(new File(this.pathFile, "userData"));
 	}
 
 	/**
@@ -91,8 +92,10 @@ public class FileManager implements DataManager {
 		if (lastLoadedConf != null && lastDirectory.equals(directory == null ? "" : directory)
 				&& lastFilename.equals(filename))
 			return lastLoadedConf;
-		ExtendedConfiguration config = new ExtendedConfiguration(getFile(directory, filename + ".yml"));
+		ExtendedConfiguration config = new ExtendedConfiguration(getFile(directory, filename
+				+ ".yml"));
 		config.registerClass(BannedPlayer.class);
+		config.registerClass(TempBannedPlayer.class);
 		config.load();
 		lastLoadedConf = config;
 		return config;
@@ -389,9 +392,19 @@ public class FileManager implements DataManager {
 		}
 		return result;
 	}
-	public Map<String, Object> loadBan() {
-		return loadMap(Type.BANNED, null, "banned");
+
+	public Map<String, BannedPlayer> loadBan() {
+		Map<String, BannedPlayer> result = new HashMap<String, BannedPlayer>();
+		ExtendedConfiguration conf = getYml("banned");
+		if (conf.getProperty("bans") != null) {
+			ExtendedNode node = conf.getNode("bans");
+			for (String key : node.getKeys())
+				result.put(key, (BannedPlayer) node.getProperty(key));
+
+		}
+		return result;
 	}
+
 	/**
 	 * Load all the kits
 	 * 
@@ -416,6 +429,33 @@ public class FileManager implements DataManager {
 			}
 		}
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Files.DataManager#addBannedPlayer(be.Balor.Player.BannedPlayer
+	 * )
+	 */
+	@Override
+	public void addBannedPlayer(BannedPlayer player) {
+		ExtendedConfiguration banFile = getYml("banned");
+		ExtendedNode bans = banFile.createNode("bans");
+		bans.setProperty(player.getPlayer(), player);
+		banFile.save();
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
+	 */
+	@Override
+	public void unBanPlayer(String player) {
+		ExtendedConfiguration banFile = getYml("banned");
+		ExtendedNode bans = banFile.createNode("bans");
+		bans.removeProperty(player);
+		banFile.save();
+		
 	}
 
 }

@@ -30,6 +30,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.ACPlayerFactory;
+import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
@@ -64,6 +65,7 @@ public class ACHelper {
 	private HashMap<String, List<MaterialContainer>> kits = new HashMap<String, List<MaterialContainer>>();
 	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
 			.makeMap();
+	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private Set<String> warpList = new HashSet<String>();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
@@ -115,6 +117,36 @@ public class ACHelper {
 	 */
 	public static Long[] getElapsedTime() {
 		return Utils.getElapsedTime(pluginStarted);
+	}
+
+	/**
+	 * Ban a new player
+	 * 
+	 * @param ban
+	 */
+	public void addBannedPlayer(BannedPlayer ban) {
+		bannedPlayers.put(ban.getPlayer(), ban);
+		dataManager.addBannedPlayer(ban);
+	}
+
+	/**
+	 * Is the player banned.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public BannedPlayer isBanned(String player) {
+		return bannedPlayers.get(player);
+	}
+
+	/**
+	 * Unban the player
+	 * 
+	 * @param player
+	 */
+	public void unBanPlayer(String player) {
+		bannedPlayers.remove(player);
+		dataManager.unBanPlayer(player);
 	}
 
 	/**
@@ -289,19 +321,20 @@ public class ACHelper {
 
 	private void convertBannedMuted() {
 		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
-		for (String key : map.keySet())
-		{
-			PlayerManager.getInstance().setOnline(key);
-			ACPlayer.getPlayer(key).setPower(Type.BANNED, map.get(key));
+		if (!map.isEmpty()) {
+			fManager.getFile(null, "banned.yml", false).delete();
+			for (String key : map.keySet())
+				dataManager.addBannedPlayer(new BannedPlayer(key, String.valueOf(map.get(key))));
 		}
-		map = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
-		for (String key : map.keySet())
-		{
-			PlayerManager.getInstance().setOnline(key);
-			ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key));
+		File muted = fManager.getFile(null, "muted.yml", false);
+		if (muted.exists()) {
+			map = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
+			for (String key : map.keySet()) {
+				PlayerManager.getInstance().setOnline(key);
+				ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key));
+			}
+			muted.delete();
 		}
-		fManager.getFile(null, "banned.yml").delete();
-		fManager.getFile(null, "muted.yml").delete();
 	}
 
 	/**
@@ -937,11 +970,14 @@ public class ACHelper {
 			kits.put(kit, kitsLoaded.get(kit));
 			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);
 		}
+		bannedPlayers.putAll(dataManager.loadBan());
 		if (pluginConfig.getBoolean("verboseLog", true)) {
 			Logger.getLogger("Minecraft").info(
 					"[AdminCmd] " + blacklist.size() + " blacklisted items loaded.");
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + alias.size() + " alias loaded.");
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + kits.size() + " kits loaded.");
+			Logger.getLogger("Minecraft").info(
+					"[AdminCmd] " + bannedPlayers.size() + " banned players loaded.");
 		}
 	}
 

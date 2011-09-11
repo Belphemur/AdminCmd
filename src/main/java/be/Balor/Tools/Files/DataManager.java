@@ -21,6 +21,8 @@ import java.util.Map;
 
 import org.bukkit.Location;
 
+import be.Balor.Player.BannedPlayer;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -31,7 +33,21 @@ public interface DataManager {
 	 * 
 	 * @return
 	 */
-	public Map<String, Object> loadBan();
+	public Map<String, BannedPlayer> loadBan();
+
+	/**
+	 * Added a new ban
+	 * 
+	 * @param player
+	 */
+	public void addBannedPlayer(BannedPlayer player);
+
+	/**
+	 * Unban banned player.
+	 * 
+	 * @param player
+	 */
+	public void unBanPlayer(String player);
 
 	/**
 	 * Return a string List containing all locations names

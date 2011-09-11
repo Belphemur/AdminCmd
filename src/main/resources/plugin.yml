@@ -322,3 +322,7 @@ commands:
     description: How many time the player have played on the server.
     aliases: [played, ptime]
     usage: /<command> [player]
+  bal_banconvert:
+    description: to convert old dev ban to new ban.
+    aliases: [cban]
+    usage: /<command>

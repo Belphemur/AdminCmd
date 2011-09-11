@@ -14,59 +14,55 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Player;
+package be.Balor.Manager.Commands.Server;
+
+import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class UnBan extends CoreCommand {
+public class BanConvert extends CoreCommand {
 
-	/**
-	 * 
-	 */
-	public UnBan() {
-		permNode = "admincmd.player.ban";
-		cmdName = "bal_unban";
+	public BanConvert() {
+		super("bal_banconvert", "admincmd.server.converter");
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		String unban = args.getString(0);
-		BannedPlayer player = ACHelper.getInstance().isBanned(unban);
-		if (player != null) {
-			ACHelper.getInstance().unBanPlayer(unban);
-			String unbanMsg = Utils.I18n("unban", "player", unban);
-			if (unbanMsg != null)
-				Utils.broadcastMessage(unbanMsg);
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", unban);
-
+		List<ACPlayer> toConvert = PlayerManager.getInstance().getACPlayerHavingPower(Type.BANNED);
+		for (ACPlayer player : toConvert) {
+			ACHelper.getInstance().addBannedPlayer(
+					new BannedPlayer(player.getName(), player.getPower(Type.BANNED).getString()));
+			player.removePower(Type.BANNED);
+		}
+		sender.sendMessage("Converted " + toConvert.size() + " bans to banned.yml");
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
+		return true;
 	}
 
 }

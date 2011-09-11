@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Type;
+
 import com.google.common.collect.MapMaker;
 
 /**
@@ -104,6 +106,46 @@ public class PlayerManager {
 			Player handler = p.getHandler();
 			if (handler != null)
 				list.add(handler);
+		}
+		return list;
+	}
+
+	/**
+	 * Get the list of AC Player having the wanted custom power
+	 * 
+	 * @param power
+	 * @return
+	 */
+	public List<ACPlayer> getACPlayerHavingPower(String power) {
+		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
+		for (ACPlayer p : getExistingPlayers()) {
+			if (p.hasCustomPower(power))
+				list.add(p);
+		}
+		return list;
+	}
+
+	/**
+	 * Get the list of AC Player having the wanted power
+	 * 
+	 * @param power
+	 * @return
+	 */
+	public List<ACPlayer> getACPlayerHavingPower(Type power) {
+		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
+		for (ACPlayer p : getExistingPlayers()) {
+			if (p.hasPower(power))
+				list.add(p);
+		}
+		return list;
+	}
+
+	private List<ACPlayer> getExistingPlayers() {
+		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
+		for (String name : playerFactory.getExistingPlayers()) {
+			ACPlayer player = demandACPlayer(name);
+			if (!(player instanceof EmptyPlayer))
+				list.add(player);
 		}
 		return list;
 	}

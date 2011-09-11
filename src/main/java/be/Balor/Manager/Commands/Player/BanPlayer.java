@@ -24,7 +24,8 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.EmptyPlayer;
+import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -61,12 +62,8 @@ public class BanPlayer extends CoreCommand {
 			banPlayerString = toBan.getName();
 		else
 			banPlayerString = args.getString(0);
-		if (ACPlayer.getPlayer(banPlayerString) instanceof EmptyPlayer) {
-			Utils.sI18n(sender, "playerNotFound", "player", banPlayerString);
-			return;
-		}
+		Integer tmpBan = null;
 		if (args.length >= 2) {
-			Integer tmpBan = null;
 			for (int i = 1; i < args.length - 1; i++)
 				message += args.getString(i) + " ";
 			try {
@@ -100,7 +97,11 @@ public class BanPlayer extends CoreCommand {
 		replace.put("player", banPlayerString);
 		if (toBan != null)
 			toBan.kickPlayer(message);
-		ACPlayer.getPlayer(banPlayerString).setPower(Type.BANNED, message);
+		if (tmpBan != null)
+			ACHelper.getInstance().addBannedPlayer(
+					new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
+		else
+			ACHelper.getInstance().addBannedPlayer(new BannedPlayer(banPlayerString, message));
 		Utils.broadcastMessage(Utils.I18n("ban", replace));
 
 	}

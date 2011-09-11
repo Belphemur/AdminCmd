@@ -16,49 +16,44 @@
  ************************************************************************/
 package be.Balor.Player;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
-
-import be.Balor.Tools.Files.YmlFilter;
+import java.sql.Date;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPlayerFactory {
-	final String directory;
-	private final Set<String> existingPlayers = new HashSet<String>();
+public class TempBannedPlayer extends BannedPlayer {
+	private Date endBan;
 
 	/**
 	 * 
 	 */
-	public ACPlayerFactory(String directory) {
-		this.directory = directory;
-		File[] players = YmlFilter.listRecursively(new File(directory), 1);
-		for (File player : players) {
-			String name = player.getName();
-			existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
-		}
+	public TempBannedPlayer() {
 	}
 
-	void addExistingPlayer(String player) {
-		existingPlayers.add(player);
-	}
-
-	ACPlayer createPlayer(String playername) {
-		if (!existingPlayers.contains(playername))
-			return new EmptyPlayer(playername);
-		else if (directory != null)
-			return new FilePlayer(directory, playername);
-		else
-			return null;
-	}
 	/**
-	 * @return the existingPlayers
+	 * @param player
+	 * @param reason
+	 * @param time
 	 */
-	Set<String> getExistingPlayers() {
-		return existingPlayers;
+	public TempBannedPlayer(String player, String reason, long time) {
+		super(player, reason);
+		endBan = new Date(System.currentTimeMillis() + time);
+	}
+
+	/**
+	 * @return the endBan
+	 */
+	public Date getEndBan() {
+		return endBan;
+	}
+
+	/**
+	 * @param endBan
+	 *            the endBan to set
+	 */
+	public void setEndBan(Date endBan) {
+		this.endBan = endBan;
 	}
 
 }

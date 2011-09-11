@@ -330,4 +330,24 @@ public class FilePlayer extends ACPlayer {
 		return new ObjectContainer(powers.getProperty(power));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#hasCustomPower(java.lang.String)
+	 */
+	@Override
+	public boolean hasCustomPower(String power) {
+		return getCustomPower(power) != null;
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#removeCustomPower(java.lang.String)
+	 */
+	@Override
+	public void removeCustomPower(String power) {
+		powers.removeProperty(power);
+		writeFile();
+		
+	}
+
 }
