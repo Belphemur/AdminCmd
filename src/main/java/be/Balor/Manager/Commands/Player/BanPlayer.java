@@ -23,10 +23,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.TempBannedPlayer;
-import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -79,7 +77,7 @@ public class BanPlayer extends CoreCommand {
 
 							@Override
 							public void run() {
-								ACPlayer.getPlayer(unban).removePower(Type.BANNED);
+								ACHelper.getInstance().unBanPlayer(unban);
 								String unbanMsg = Utils.I18n("unban", "player", unban);
 								if (unbanMsg != null)
 									Utils.broadcastMessage(unbanMsg);
