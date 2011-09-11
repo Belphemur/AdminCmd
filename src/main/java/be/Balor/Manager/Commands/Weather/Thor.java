@@ -24,9 +24,9 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -56,13 +56,14 @@ public class Thor extends CoreCommand {
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
-			if (ACHelper.getInstance().isValueSet(Type.THOR, player.getName())) {
-				ACHelper.getInstance().removeValue(Type.THOR, player);
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (acp.hasPower(Type.THOR)) {
+				acp.removePower(Type.THOR);
 				Utils.sI18n(player, "thorDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "thorDisabledTarget", replace);
 			} else {
-				ACHelper.getInstance().addValue(Type.THOR, player);
+				acp.setPower(Type.THOR);
 				Utils.sI18n(player, "thorEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "thorEnabledTarget", replace);
