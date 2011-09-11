@@ -274,8 +274,7 @@ public class CommandManager implements CommandExecutor {
 					Command cmd = commands.get(cmdName);
 					if (corePlugin.getCommand(cmd.getName()) != null) {
 						List<String> aliasesList = new ArrayList<String>(cmd.getAliases());
-						aliasesList.removeAll(
-								corePlugin.getCommand(cmd.getName()).getAliases());
+						aliasesList.removeAll(corePlugin.getCommand(cmd.getName()).getAliases());
 						aliasesList.removeAll(prioritizedCommands);
 						String aliases = "";
 						for (String alias : aliasesList)
@@ -312,9 +311,7 @@ public class CommandManager implements CommandExecutor {
 				ACCommandContainer container = new ACCommandContainer(sender, cmd, args);
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
-					corePlugin
-							.getServer()
-							.getScheduler()
+					corePlugin.getServer().getScheduler()
 							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
 				else {
 					threads.get(cmdCount).addCommand(container);
@@ -324,7 +321,7 @@ public class CommandManager implements CommandExecutor {
 				}
 				if (!cmd.getCmdName().equals("bal_repeat")) {
 					if (Utils.isPlayer(sender, false))
-						ACPlayer.getPlayer(((Player)sender).getName()).setLastCmd(container);
+						ACPlayer.getPlayer(((Player) sender).getName()).setLastCmd(container);
 					else
 						ACPlayer.getPlayer("serverConsole").setLastCmd(container);
 				}
@@ -400,16 +397,15 @@ public class CommandManager implements CommandExecutor {
 					current.execute();
 				} catch (InterruptedException e) {
 				} catch (ConcurrentModificationException cme) {
-					corePlugin.getServer().getScheduler()
-							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(current));
+					ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
+							new SyncCommand(current));
 				} catch (WorldNotLoaded e) {
 					Logger.getLogger("Minecraft").severe(
 							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
-					Utils.broadcastMessage(
-							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
+					Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
 				} catch (Throwable t) {
 					Logger.getLogger("Minecraft").severe(current.debug());
-					ACPluginManager.getServer().broadcastMessage(current.debug());
+					Utils.broadcastMessage(current.debug());
 					t.printStackTrace();
 				}
 
@@ -432,7 +428,6 @@ public class CommandManager implements CommandExecutor {
 	private class SyncCommand implements Runnable {
 		private ACCommandContainer acc = null;
 
-
 		public SyncCommand(ACCommandContainer acc) {
 			this.acc = acc;
 		}
@@ -446,6 +441,10 @@ public class CommandManager implements CommandExecutor {
 		public void run() {
 			try {
 				acc.execute();
+			} catch (WorldNotLoaded e) {
+				Logger.getLogger("Minecraft").severe(
+						"[AdminCmd] World " + e.getMessage() + " is not loaded.");
+				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
 			} catch (Throwable t) {
 				Logger.getLogger("Minecraft").severe(acc.debug());
 				Utils.broadcastMessage(acc.debug());
