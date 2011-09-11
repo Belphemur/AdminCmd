@@ -173,7 +173,7 @@ public class PlayerManager {
 		player.updatePlayedTime();
 		player.forceSave();
 		player.setOnline(false);
-		return onlinePlayers.remove(player);
+		return onlinePlayers.remove(player) != null;
 	}
 
 	public void setOnline(String player) {

@@ -256,6 +256,7 @@ public class ACHelper {
 		undoQueue.clear();
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		pluginConfig.load();
+		bannedPlayers.clear();
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
@@ -272,7 +273,7 @@ public class ACHelper {
 			for (Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			for (Player p : coreInstance.getServer().getOnlinePlayers())
+			for (Player p : Utils.getOnlinePlayers())
 				AFKWorker.getInstance().updateTimeStamp(p);
 		}
 	}
