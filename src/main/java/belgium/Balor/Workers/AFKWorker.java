@@ -32,7 +32,7 @@ import com.google.common.collect.MapMaker;
  * 
  */
 final public class AFKWorker {
-	private ConcurrentMap<Player, Long> playerTimeStamp;
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
 	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private int afkTime = 60000;
 	private int kickTime = 180000;
