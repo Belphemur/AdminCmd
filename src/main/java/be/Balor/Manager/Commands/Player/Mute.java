@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -57,6 +58,11 @@ public class Mute extends CoreCommand {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if(acp instanceof EmptyPlayer)
+			{
+				Utils.sI18n(sender, "playerNotFound", replace);
+				return;
+			}
 			if (!acp.hasPower(Type.MUTED)) {
 				String msg = "Server Admin";
 				if (Utils.isPlayer(sender, false))

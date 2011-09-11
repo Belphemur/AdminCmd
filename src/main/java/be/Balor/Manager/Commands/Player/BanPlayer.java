@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -55,11 +56,15 @@ public class BanPlayer extends CoreCommand {
 		Player toBan = sender.getServer().getPlayer(args.getString(0));
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
-		String unbanString;
+		String banPlayerString;
 		if (toBan != null)
-			unbanString = toBan.getName();
+			banPlayerString = toBan.getName();
 		else
-			unbanString = args.getString(0);
+			banPlayerString = args.getString(0);
+		if (ACPlayer.getPlayer(banPlayerString) instanceof EmptyPlayer) {
+			Utils.sI18n(sender, "playerNotFound", "player", banPlayerString);
+			return;
+		}
 		if (args.length >= 2) {
 			Integer tmpBan = null;
 			for (int i = 1; i < args.length - 1; i++)
@@ -71,7 +76,7 @@ public class BanPlayer extends CoreCommand {
 			}
 			if (tmpBan != null) {
 				message += "(Banned for " + tmpBan + " minutes)";
-				final String unban = unbanString;
+				final String unban = banPlayerString;
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACHelper.getInstance().getCoreInstance(), new Runnable() {
 
@@ -92,10 +97,10 @@ public class BanPlayer extends CoreCommand {
 				message += ((Player) sender).getName();
 		}
 		message = message.trim();
-		replace.put("player", unbanString);
-		if (toBan != null) 			
+		replace.put("player", banPlayerString);
+		if (toBan != null)
 			toBan.kickPlayer(message);
-		ACPlayer.getPlayer(unbanString).setPower(Type.BANNED, message);
+		ACPlayer.getPlayer(banPlayerString).setPower(Type.BANNED, message);
 		sender.getServer().broadcastMessage(Utils.I18n("ban", replace));
 
 	}
