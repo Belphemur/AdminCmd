@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
@@ -449,7 +448,7 @@ public class ACHelper {
 	public boolean addBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
-			Configuration config = fManager.getYml("blacklist");
+			ExtendedConfiguration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListed", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
@@ -616,7 +615,7 @@ public class ACHelper {
 	public boolean removeBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
-			Configuration config = fManager.getYml("blacklist");
+			ExtendedConfiguration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListed", new ArrayList<Integer>());
 			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
 				list.remove((Integer) m.getMaterial().getId());
@@ -920,7 +919,7 @@ public class ACHelper {
 
 	public void removeValueWithFile(Type power, String user) {
 		removeValue(power, user);
-		Configuration ban = fManager.getYml(power.toString());
+		ExtendedConfiguration ban = fManager.getYml(power.toString());
 		ban.removeProperty(power + "." + user);
 		ban.save();
 	}

@@ -35,7 +35,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
@@ -44,6 +43,7 @@ import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.WorldNotLoaded;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -156,7 +156,7 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setCorePlugin(AdminCmd plugin) {
 		this.corePlugin = plugin;
-		Configuration cmds = FileManager.getInstance().getYml("commands");
+		ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
 		ConfigurationNode alias = cmds.getNode("alias");

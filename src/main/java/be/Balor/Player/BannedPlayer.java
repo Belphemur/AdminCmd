@@ -14,61 +14,63 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Files;
+package be.Balor.Player;
 
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Location;
+import java.sql.Date;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public interface DataManager {
+public class BannedPlayer {
+	private String player;
+	private String reason;
+	private Date date;
 	/**
-	 * Load the Bans
-	 * 
-	 * @return
+	 * @param player
+	 * @param reason
 	 */
-	public Map<String, Object> loadBan();
-
+	public BannedPlayer(String player, String reason) {
+		this.player = player;
+		this.reason = reason;
+		date = new Date(System.currentTimeMillis());		
+	}
 	/**
-	 * Return a string List containing all locations names
-	 * 
-	 * @param user
-	 * @param table
-	 * @return
+	 * @return the player
 	 */
-	public List<String> getKeys(String info, String user, String table);
-
+	public String getPlayer() {
+		return player;
+	}
 	/**
-	 * Remove the given location
-	 * 
-	 * @param property
-	 * @param filename
-	 * @param directory
+	 * @param player the player to set
 	 */
-	public void removeKey(String property, String filename, String directory);
-
+	public void setPlayer(String player) {
+		this.player = player;
+	}
 	/**
-	 * Return the location
-	 * 
-	 * @param property
-	 * @param filename
-	 * @param directory
-	 * @return
+	 * @return the reason
 	 */
-	public Location getLocation(String property, String filename, String directory)
-			throws WorldNotLoaded;
-
+	public String getReason() {
+		return reason;
+	}
 	/**
-	 * Store the location informations
-	 * 
-	 * @param loc
-	 * @param filename
-	 * @param directory
+	 * @param reason the reason to set
 	 */
-	public void writeLocation(Location loc, String name, String filename, String directory);
-
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}	
+	
+	
 }

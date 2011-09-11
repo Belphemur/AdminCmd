@@ -29,13 +29,14 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
 
 import au.com.bytecode.opencsv.CSVReader;
+import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -48,7 +49,7 @@ public class FileManager implements DataManager {
 	private String lastDirectory = "";
 	private String lastFilename = "";
 	private File lastFile = null;
-	private Configuration lastLoadedConf = null;
+	private ExtendedConfiguration lastLoadedConf = null;
 
 	/**
 	 * @return the instance
@@ -80,23 +81,24 @@ public class FileManager implements DataManager {
 	}
 
 	/**
-	 * Open the file and return the Configuration object
+	 * Open the file and return the ExtendedConfiguration object
 	 * 
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
 	 */
-	public Configuration getYml(String filename, String directory) {
+	public ExtendedConfiguration getYml(String filename, String directory) {
 		if (lastLoadedConf != null && lastDirectory.equals(directory == null ? "" : directory)
 				&& lastFilename.equals(filename))
 			return lastLoadedConf;
-		Configuration config = new Configuration(getFile(directory, filename + ".yml"));
+		ExtendedConfiguration config = new ExtendedConfiguration(getFile(directory, filename + ".yml"));
+		config.registerClass(BannedPlayer.class);
 		config.load();
 		lastLoadedConf = config;
 		return config;
 	}
 
-	public Configuration getYml(String filename) {
+	public ExtendedConfiguration getYml(String filename) {
 		return getYml(filename, null);
 	}
 
@@ -146,7 +148,7 @@ public class FileManager implements DataManager {
 	 * @param mc
 	 */
 	public void addAlias(String alias, MaterialContainer mc) {
-		Configuration conf = getYml("Alias");
+		ExtendedConfiguration conf = getYml("Alias");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
@@ -169,7 +171,7 @@ public class FileManager implements DataManager {
 	 * @param alias
 	 */
 	public void removeAlias(String alias) {
-		Configuration conf = getYml("Alias");
+		ExtendedConfiguration conf = getYml("Alias");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
@@ -235,7 +237,7 @@ public class FileManager implements DataManager {
 
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
-		Configuration conf = getYml("Alias");
+		ExtendedConfiguration conf = getYml("Alias");
 		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
 				new ArrayList<String>());
 		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
@@ -273,7 +275,7 @@ public class FileManager implements DataManager {
 	 * @param directory
 	 */
 	public void writeLocation(Location loc, String name, String filename, String directory) {
-		Configuration conf = getYml(filename, directory);
+		ExtendedConfiguration conf = getYml(filename, directory);
 		conf.setProperty(name + ".world", loc.getWorld().getName());
 		conf.setProperty(name + ".x", loc.getX());
 		conf.setProperty(name + ".y", loc.getY());
@@ -293,7 +295,7 @@ public class FileManager implements DataManager {
 	 */
 	public Location getLocation(String property, String filename, String directory)
 			throws WorldNotLoaded {
-		Configuration conf = getYml(filename, directory);
+		ExtendedConfiguration conf = getYml(filename, directory);
 		if (conf.getProperty(property + ".world") == null) {
 			Location loc = parseLocation(property, conf);
 			if (loc != null)
@@ -320,7 +322,7 @@ public class FileManager implements DataManager {
 	 * @param directory
 	 */
 	public void removeKey(String property, String filename, String directory) {
-		Configuration conf = getYml(filename, directory);
+		ExtendedConfiguration conf = getYml(filename, directory);
 		conf.removeProperty(property);
 		conf.save();
 	}
@@ -343,7 +345,7 @@ public class FileManager implements DataManager {
 	 * @param conf
 	 * @return
 	 */
-	private Location parseLocation(String property, Configuration conf) {
+	private Location parseLocation(String property, ExtendedConfiguration conf) {
 		String toParse = conf.getString(property, null);
 		if (toParse == null)
 			return null;
@@ -379,15 +381,17 @@ public class FileManager implements DataManager {
 	 */
 	public Map<String, Object> loadMap(Type type, String directory, String filename) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		Configuration conf = getYml(filename, directory);
+		ExtendedConfiguration conf = getYml(filename, directory);
 		if (conf.getKeys(type.toString()) != null) {
-			ConfigurationNode node = conf.getNode(type.toString());
+			ExtendedNode node = conf.getNode(type.toString());
 			for (String key : node.getKeys())
 				result.put(key, node.getProperty(key));
 		}
 		return result;
 	}
-
+	public Map<String, Object> loadBan() {
+		return loadMap(Type.BANNED, null, "banned");
+	}
 	/**
 	 * Load all the kits
 	 * 
@@ -396,11 +400,11 @@ public class FileManager implements DataManager {
 	public Map<String, List<MaterialContainer>> loadKits() {
 		Map<String, List<MaterialContainer>> result = new HashMap<String, List<MaterialContainer>>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
-		Configuration conf = getYml("kits");
+		ExtendedConfiguration conf = getYml("kits");
 		if (conf.getKeys("kits") != null) {
-			ConfigurationNode nodes = conf.getNode("kits");
+			ExtendedNode nodes = conf.getNode("kits");
 			for (String key : nodes.getKeys()) {
-				ConfigurationNode itemsNode = nodes.getNode(key);
+				ExtendedNode itemsNode = nodes.getNode(key);
 				for (String item : itemsNode.getKeys()) {
 					MaterialContainer m = Utils.checkMaterial(item);
 					m.setAmount(itemsNode.getInt(item, 1));
