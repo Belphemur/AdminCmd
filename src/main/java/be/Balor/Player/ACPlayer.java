@@ -260,6 +260,9 @@ public abstract class ACPlayer {
 
 	/**
 	 * Execute the last command
+	 * 
+	 * @throws NullPointerException
+	 *             if last command is not defined
 	 */
 	public void executeLastCmd() throws NullPointerException {
 		if (this.lastCmd == null)
