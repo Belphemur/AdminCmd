@@ -33,11 +33,10 @@ Files and Folder :
 ==================
 Folders : 
 ---------
-Folder /userData/ -> Contain all information about the players, there home, there last location before and if it's there first connection. Each file have the name of the player.
+Folder /userData/ -> Contain all informations about the players, there home, there last location before and if it's there first connection. Each file have the name of the player.
 Folder /locale/ -> Contain the locales files.
 Folder /scripts/ -> Contain a single file scripts.yml where you can configure your own bash/batch script to be executed by the server (only for experienced admins)
-Folder /spawn/ -> Contain a single file spawnLocations.yml containing all the spawn location that your setted in-game with the command /setspawn.
-Folder /warp/ -> Pretty same as Folder /spawn/ but for warpoint.
+Folder /worldData/ -> Contain all the informations about the worlds, spawn point, warp, time frozen and weather frozen.
 Folder /HelpFiles/ -> Contain directory that contain the file to explain each command of the plugin. (Look on /HelpFiles/AdminCmd/ to see what I mean)
 
 Files :
