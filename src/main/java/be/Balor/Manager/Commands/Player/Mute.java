@@ -27,7 +27,6 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -58,8 +57,7 @@ public class Mute extends CoreCommand {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", player.getName());
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
-			if(acp instanceof EmptyPlayer)
-			{
+			if (acp instanceof EmptyPlayer) {
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return;
 			}
@@ -76,19 +74,16 @@ public class Mute extends CoreCommand {
 						tmpMute = args.getInt(args.length - 1);
 						final String unmute = player.getName();
 						final CommandSender senderFinal = sender;
-						ACPluginManager
-								.getServer()
-								.getScheduler()
-								.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-										new Runnable() {
+						ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
+								new Runnable() {
 
-											@Override
-											public void run() {
-												ACPlayer.getPlayer(unmute).removePower(Type.MUTED);
-												Utils.sI18n(senderFinal, "muteDisabledTarget",
-														"player", unmute);
-											}
-										}, 20 * 60 * tmpMute);
+									@Override
+									public void run() {
+										ACPlayer.getPlayer(unmute).removePower(Type.MUTED);
+										Utils.sI18n(senderFinal, "muteDisabledTarget", "player",
+												unmute);
+									}
+								}, 20 * 60 * tmpMute);
 
 					} catch (Exception e) {
 					}

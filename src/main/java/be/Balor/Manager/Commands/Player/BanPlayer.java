@@ -73,7 +73,7 @@ public class BanPlayer extends CoreCommand {
 				message += "(Banned for " + tmpBan + " minutes)";
 				final String unban = banPlayerString;
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACHelper.getInstance().getCoreInstance(), new Runnable() {
+						getPlugin(), new Runnable() {
 
 							@Override
 							public void run() {
