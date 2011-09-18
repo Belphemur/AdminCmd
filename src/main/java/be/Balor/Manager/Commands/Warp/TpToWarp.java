@@ -22,12 +22,11 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.World.ACWorld;
 import static be.Balor.Tools.Utils.sendMessage;
 
 /**
@@ -55,17 +54,19 @@ public class TpToWarp extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode, 1, true);
-
-		if (target != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", args.getString(0));
-			Location loc = ACHelper.getInstance().getLocation("warp", args.getString(0), "warpPoints");
-			if (loc == null)
-				Utils.sI18n(sender, "errorWarp", replace);
-			else {
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
-				target.teleport(loc);
-				sendMessage(sender, target, "tpWarp", replace);
+		if (Utils.isPlayer(sender)) {
+			Player p = (Player) sender;			
+			if (target != null) {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("name", args.getString(0));
+				Location loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
+				if (loc == null)
+					Utils.sI18n(sender, "errorWarp", replace);
+				else {
+					ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+					target.teleport(loc);
+					sendMessage(sender, target, "tpWarp", replace);
+				}
 			}
 		}
 

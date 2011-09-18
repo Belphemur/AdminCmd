@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,9 +51,8 @@ public class AddWarp extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			ACHelper.getInstance().addLocation("warp", args.getString(0), "warpPoints",
-					((Player) sender).getLocation());
-			ACHelper.getInstance().getWarpList().add(args.getString(0));
+			Player p = (Player) sender;
+			ACWorld.getWorld(p.getWorld().getName()).addWarp(args.getString(0), p.getLocation());
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", args.getString(0));
 			Utils.sI18n(sender, "addWarp", replace);
