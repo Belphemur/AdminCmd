@@ -17,16 +17,16 @@
 package be.Balor.Manager.Commands.Server;
 
 import java.util.Arrays;
-import java.util.Set;
-
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -59,13 +59,13 @@ public class ListValues extends CoreCommand {
 		for (String str : args)
 			arg += str + " ";
 		arg = arg.trim();
-		Set<String> list = ACHelper.getInstance().getUserList(arg);
+		List<ACPlayer> list = PlayerManager.getInstance().getACPlayerHavingPower(arg);
 		if (list != null) {
 			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
 					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");
 			String buffer = "";
-			for (String value : list)
-				buffer += value + ", ";
+			for (ACPlayer value : list)
+				buffer += value.getName() + ", ";
 			if (!buffer.equals("")) {
 				if (buffer.endsWith(", "))
 					buffer = buffer.substring(0, buffer.lastIndexOf(","));

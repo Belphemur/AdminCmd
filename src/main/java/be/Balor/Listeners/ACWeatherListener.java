@@ -20,16 +20,17 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.weather.WeatherListener;
 
 import be.Balor.Tools.Type;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACWeatherListener extends WeatherListener {
 	@Override
-	  public void onWeatherChange(WeatherChangeEvent event) {
-		if(ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, event.getWorld().getName()))
+	public void onWeatherChange(WeatherChangeEvent event) {
+		if (!ACWorld.getWorld(event.getWorld().getName())
+				.getInformation(Type.WEATHER_FROZEN.toString()).isNull())
 			event.setCancelled(true);
 	}
 

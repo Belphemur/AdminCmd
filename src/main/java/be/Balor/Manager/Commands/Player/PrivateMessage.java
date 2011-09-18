@@ -26,6 +26,8 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -39,13 +41,14 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public class PrivateMessage extends CoreCommand {
 	private ColouredConsoleSender console = null;
+
 	/**
 	 * 
 	 */
 	public PrivateMessage() {
 		permNode = "admincmd.player.msg";
 		cmdName = "bal_playermsg";
-		console = new ColouredConsoleSender((CraftServer)ACPluginManager.getServer());
+		console = new ColouredConsoleSender((CraftServer) ACPluginManager.getServer());
 	}
 
 	/*
@@ -58,7 +61,7 @@ public class PrivateMessage extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender, false)
-				&& ACHelper.getInstance().isValueSet(Type.MUTED, ((Player) sender).getName())
+				&& ACPlayer.getPlayer(((Player) sender).getName()).hasPower(Type.MUTED)
 				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
@@ -98,12 +101,12 @@ public class PrivateMessage extends CoreCommand {
 				sender.sendMessage(msgPrefix + senderPm + parsed);
 			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
 					+ "-" + buddy.getName() + ": " + parsed;
-			for (Player p : ACHelper.getInstance().getAllUserOf(Type.SPYMSG))
+			for (ACPlayer p : PlayerManager.getInstance().getACPlayerHavingPower(Type.SPYMSG))
 				if (p != null && !p.getName().equals(senderName)
-						&& !p.getName().equals(buddy.getName()))
-					p.sendMessage(spyMsg);
+						&& !p.getName().equals(buddy.getName()) && p.getHandler() != null)
+					p.getHandler().sendMessage(spyMsg);
 			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages")
-					&& !(sender instanceof ConsoleCommandSender))				
+					&& !(sender instanceof ConsoleCommandSender))
 				console.sendMessage(spyMsg);
 		} else
 			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));

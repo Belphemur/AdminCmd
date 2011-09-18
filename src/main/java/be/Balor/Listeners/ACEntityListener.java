@@ -30,7 +30,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.World.ACWorld;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -87,8 +87,8 @@ public class ACEntityListener extends EntityListener {
 		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
 			return;
 		World world = e.getWorld();
-		Integer limit = (Integer) ACHelper.getInstance().getValue(Type.MOB_LIMIT, world.getName());
-		if (limit != null) {
+		Integer limit = ACWorld.getWorld(world.getName()).getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
+		if (limit != -1) {
 			if ((world.getLivingEntities().size() - world.getPlayers().size()) >= limit)
 				event.setCancelled(true);
 		}

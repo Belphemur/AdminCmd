@@ -29,6 +29,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -72,7 +73,7 @@ public class ACPluginListener extends ServerListener {
 			Plugin items = ACPluginManager.getServer().getPluginManager().getPlugin("OddItem");
 			if (items != null && items.isEnabled()) {
 				Utils.oddItem = (OddItem) items;
-				System.out.print("[AdminCmd] Successfully linked with OddItem");
+				ACLogger.info("Successfully linked with OddItem");
 			}
 		}
 		if (!BukkitPermissions.isApiSet()) {
@@ -80,14 +81,14 @@ public class ACPluginListener extends ServerListener {
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				BukkitPermissions.setmChatapi(mChat.API);
 				InvisibleWorker.getInstance().setmChatInstalled(true);
-				System.out.print("[AdminCmd] Successfully linked with mChat");
+				ACLogger.info("Successfully linked with mChat");
 			}
 		}
 		if (Utils.logBlock == null) {
 			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("LogBlock");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.logBlock = ((LogBlock) plugin).getConsumer();
-				System.out.print("[AdminCmd] Successfully linked with LogBlock");
+				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins")) {
@@ -104,7 +105,7 @@ public class ACPluginListener extends ServerListener {
 			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("Heroes");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.heroes = (Heroes) plugin;
-				System.out.print("[AdminCmd] Successfully linked with Heroes");
+				ACLogger.info("Successfully linked with Heroes");
 			}
 		}
 	}

@@ -25,7 +25,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -56,13 +56,13 @@ public class MobLimit extends CoreCommand {
 			try {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				limit = args.getInt(1);
-				ACHelper.getInstance().addValue(Type.MOB_LIMIT, world.getName(), limit);
+				ACWorld.getWorld(world.getName()).setInformation(Type.MOB_LIMIT.toString(), limit);
 				replace.put("number", args.getString(0));
 				replace.put("world", args.getString(1));
 				Utils.sI18n(sender, "mobLimit", replace);
 			} catch (NumberFormatException e) {
 				if (args.getString(1).equals("none")) {
-					ACHelper.getInstance().removeValue(Type.MOB_LIMIT, world.getName());
+					ACWorld.getWorld(world.getName()).removeInformation(Type.MOB_LIMIT.toString());
 					Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
 				} else
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));

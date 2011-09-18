@@ -47,6 +47,7 @@ import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
+import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
@@ -152,7 +153,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (ACHelper.getInstance().getConfBoolean("respawnAtSpawnPoint")) {
 			Location loc = null;
 			String worldName = player.getWorld().getName();
-			loc = ACHelper.getInstance().getLocation("spawn", worldName, "spawnLocations");
+			loc = ACWorld.getWorld(worldName).getSpawn();
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
 			event.setRespawnLocation(loc);

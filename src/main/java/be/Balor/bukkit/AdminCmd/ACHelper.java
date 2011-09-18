@@ -5,21 +5,19 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +26,7 @@ import org.bukkit.plugin.Plugin;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.ACPlayerFactory;
@@ -38,12 +37,13 @@ import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Help.HelpLister;
-import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Utils;
+import be.Balor.World.ACWorld;
 import be.Balor.World.ACWorldFactory;
 import be.Balor.World.WorldManager;
 import belgium.Balor.Workers.AFKWorker;
@@ -63,14 +63,9 @@ public class ACHelper {
 	private FileManager fManager;
 	private List<Integer> blacklist;
 	private AdminCmd coreInstance;
-	EnumMap<Type, ConcurrentMap<String, Object>> storedTypeValues = new EnumMap<Type, ConcurrentMap<String, Object>>(
-			Type.class);
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, List<MaterialContainer>> kits = new HashMap<String, List<MaterialContainer>>();
-	private ConcurrentMap<String, ConcurrentMap<String, Location>> locations = new MapMaker()
-			.makeMap();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
-	private Set<String> warpList = new HashSet<String>();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -132,7 +127,8 @@ public class ACHelper {
 	}
 
 	/**
-	 * @param serverLocked the serverLocked to set
+	 * @param serverLocked
+	 *            the serverLocked to set
 	 */
 	public void setServerLocked(boolean serverLocked) {
 		this.serverLocked = serverLocked;
@@ -267,7 +263,6 @@ public class ACHelper {
 	public synchronized void reload() {
 		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
-		storedTypeValues.clear();
 		alias.clear();
 		blacklist.clear();
 		undoQueue.clear();
@@ -335,7 +330,7 @@ public class ACHelper {
 
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (Player p : coreInstance.getServer().getOnlinePlayers())
-				addValue(Type.TP_REQUEST, p.getName());
+				ACPlayer.getPlayer(p.getName()).setPower(Type.TP_REQUEST);
 		}
 	}
 
@@ -357,6 +352,40 @@ public class ACHelper {
 		}
 	}
 
+	private void convertSpawnWarp() {
+		List<World> worlds = coreInstance.getServer().getWorlds();
+		HashMap<String, ACWorld> tmpMap = new HashMap<String, ACWorld>(worlds.size());
+		for (World w : worlds)
+			tmpMap.put(w.getName(), ACWorld.getWorld(w.getName()));
+		File spawnFile = fManager.getFile("spawn", "spawnLocations.yml", false);
+		if (spawnFile.exists()) {
+			ExtendedConfiguration spawn = new ExtendedConfiguration(spawnFile);
+			spawn.load();
+			ExtendedNode spawnPoints = spawn.getNode("spawn");
+			for (String key : spawnPoints.getKeys())
+				try {
+					tmpMap.get(key).setSpawn(
+							fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
+				} catch (WorldNotLoaded e) {
+				}
+
+			spawnFile.delete();
+			spawnFile.getParentFile().delete();
+		}
+		File warpFile = fManager.getFile("warp", "warpPoints.yml", false);
+		if (warpFile.exists()) {
+			for (String key : fManager.getKeys("warp", "warpPoints", "warp")) {
+				try {
+					Location loc = fManager.getLocation("warp." + key, "warpPoints", "warp");
+					tmpMap.get(loc.getWorld().getName()).addWarp(key, loc);
+				} catch (WorldNotLoaded e) {
+				}
+			}
+			warpFile.delete();
+			warpFile.getParentFile().delete();
+		}
+	}
+
 	/**
 	 * @param pluginInstance
 	 *            the pluginInstance to set
@@ -369,9 +398,11 @@ public class ACHelper {
 		PlayerManager.getInstance().setPlayerFactory(
 				new ACPlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "userData"));
-		WorldManager.getInstance().setWorldFactory(new ACWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
+		WorldManager.getInstance().setWorldFactory(
+				new ACWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "worldData"));
 		convertBannedMuted();
+		convertSpawnWarp();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
@@ -523,128 +554,15 @@ public class ACHelper {
 	}
 
 	/**
-	 * @return the warpList
-	 */
-	public Set<String> getWarpList() {
-		return warpList;
-	}
-
-	/**
-	 * Add a location in the location cache
-	 * 
-	 * @param type
-	 * @param name
-	 * @param loc
-	 */
-	private void addLocationInMemory(String type, String name, Location loc) {
-		if (locations.containsKey(type))
-			locations.get(type).put(name, loc);
-		else {
-			ConcurrentMap<String, Location> tmp = new MapMaker().softValues()
-					.expiration(15, TimeUnit.MINUTES).makeMap();
-			tmp.put(name, loc);
-			locations.put(type, tmp);
-		}
-	}
-
-	/**
-	 * Get a location that is cached in memory.
-	 * 
-	 * @param type
-	 * @param name
-	 * @return
-	 */
-	private Location getLocationFromMemory(String type, String name) {
-		Location loc = null;
-		if (locations.containsKey(type))
-			loc = locations.get(type).get(name);
-		return loc;
-	}
-
-	/**
-	 * Remove the location from the memory
-	 * 
-	 * @param type
-	 * @param name
-	 */
-	private void removeLocationFromMemory(String type, String name) {
-		if (locations.containsKey(type)) {
-			locations.get(type).remove(name);
-			if (locations.get(type).isEmpty())
-				locations.remove(type);
-		}
-	}
-
-	/**
-	 * Remove the location from memory and from disk
-	 * 
-	 * @param type
-	 * @param name
-	 * @param filename
-	 */
-	public void removeLocation(String type, String nameMemory, String property, String filename) {
-		removeLocationFromMemory(type, nameMemory);
-		dataManager.removeKey(property, filename, type);
-	}
-
-	public void removeLocation(String type, String name, String filename) {
-		removeLocation(type, name, name, filename);
-	}
-
-	/**
-	 * Add a location in memory and on the disk.
-	 * 
-	 * @param type
-	 * @param property
-	 * @param filename
-	 * @param loc
-	 */
-
-	public void addLocation(String type, String nameMemory, String property, String filename,
-			Location loc) {
-		addLocationInMemory(type, nameMemory, loc);
-		dataManager.writeLocation(loc, property, filename, type);
-	}
-
-	public void addLocation(String type, String name, String filename, Location loc) {
-		addLocation(type, name, type + '.' + name, filename, loc);
-
-	}
-
-	/**
-	 * Get a location, if not in memory check on the disk, if found, add it in
-	 * memory and return it.
-	 * 
-	 * @param type
-	 * @param name
-	 * @param property
-	 * @return
-	 */
-	public Location getLocation(String type, String nameMemory, String property, String filename) {
-		Location loc = null;
-		loc = getLocationFromMemory(type, nameMemory);
-		if (loc == null) {
-			loc = dataManager.getLocation(property, filename, type);
-			if (loc != null)
-				addLocationInMemory(type, nameMemory, loc);
-		}
-
-		return loc;
-	}
-
-	public Location getLocation(String type, String name, String filename) {
-		return getLocation(type, name, type + "." + name, filename);
-	}
-
-	/**
 	 * Set the spawn point.
 	 */
 	public void setSpawn(CommandSender sender) {
 		if (Utils.isPlayer(sender)) {
 			Location loc = ((Player) sender).getLocation();
-			((Player) sender).getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
+			World w = ((Player) sender).getWorld();
+			w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
 					loc.getBlockZ());
-			addLocation("spawn", loc.getWorld().getName(), "spawnLocations", loc);
+			ACWorld.getWorld(w.getName()).setSpawn(loc);
 			Utils.sI18n(sender, "setSpawn");
 		}
 	}
@@ -654,7 +572,7 @@ public class ACHelper {
 			Player player = ((Player) sender);
 			Location loc = null;
 			String worldName = player.getWorld().getName();
-			loc = getLocation("spawn", worldName, "spawnLocations");
+			loc = ACWorld.getWorld(worldName).getSpawn();
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
 			player.teleport(loc);
@@ -750,146 +668,6 @@ public class ACHelper {
 		return output;
 	}
 
-	public void addVulcain(String playerName, float power) {
-		addValue(Type.VULCAN, playerName, power);
-	}
-
-	public void removeVulcan(String playerName) {
-		removeValue(Type.VULCAN, playerName);
-	}
-
-	public void addValue(Type powerName, String user, Object power) {
-		if (storedTypeValues.containsKey(powerName))
-			storedTypeValues.get(powerName).put(user, power);
-		else {
-			ConcurrentMap<String, Object> tmp = new MapMaker().makeMap();
-			tmp.put(user, power);
-			storedTypeValues.put(powerName, tmp);
-		}
-
-	}
-
-	public void addValue(Type powerName, Player user, Object power) {
-		addValue(powerName, user.getName(), power);
-	}
-
-	public void addValue(Type powerName, Player user) {
-		addValue(powerName, user.getName(), 0);
-	}
-
-	public void addValue(Type powerName, String user) {
-		addValue(powerName, user, 0);
-	}
-
-	public void removeValue(Type powerName, String user) {
-		if (storedTypeValues.containsKey(powerName))
-			storedTypeValues.get(powerName).remove(user);
-	}
-
-	public void removeValue(Type powerName, Player user) {
-		removeValue(powerName, user.getName());
-	}
-
-	public boolean isValueSet(Type powerName, String user) {
-		return storedTypeValues.containsKey(powerName)
-				&& storedTypeValues.get(powerName).containsKey(user);
-	}
-
-	public Object getValue(Type powerName, String user) {
-		if (user != null && isValueSet(powerName, user))
-			return storedTypeValues.get(powerName).get(user);
-		return null;
-	}
-
-	public Object getValue(Type powerName, Player user) {
-		return getValue(powerName, user.getName());
-	}
-
-	/**
-	 * Get all the Player having the "Power"
-	 * 
-	 * @param power
-	 * @return
-	 */
-	public List<Player> getAllUserOf(Type power) {
-		List<Player> players = new ArrayList<Player>();
-		if (storedTypeValues.containsKey(power))
-			for (String player : storedTypeValues.get(power).keySet())
-				players.add(coreInstance.getServer().getPlayer(player));
-		return players;
-	}
-
-	/**
-	 * Get a list of the StoredValue using the wanted type.
-	 * 
-	 * @param type
-	 *            String
-	 * @return
-	 */
-	public Set<String> getUserList(String type) {
-		Type toList = Type.matchType(type);
-		if (toList == null)
-			return null;
-		else
-			return getUserList(toList);
-	}
-
-	/**
-	 * Get a list of the StoredValue using the wanted type.
-	 * 
-	 * @param type
-	 *            Type
-	 * @return
-	 */
-	public Set<String> getUserList(Type type) {
-		if (storedTypeValues.containsKey(type))
-			return new HashSet<String>(storedTypeValues.get(type).keySet());
-		return null;
-	}
-
-	/**
-	 * Remove all user Power.
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public boolean removeKeyFromValues(Player player) {
-		boolean found = false;
-		for (Type type : storedTypeValues.keySet()) {
-			if (!type.getCategory().equals(Category.SUPER_POWER))
-				continue;
-			if (type.equals(Type.TP_REQUEST)
-					&& PermissionManager.hasPerm(player, "admincmd.tp.toggle"))
-				continue;
-			if (storedTypeValues.get(type).remove(player.getName()) != null)
-				found = true;
-		}
-		return found;
-	}
-
-	public boolean isValueSet(Type powerName, Player user) {
-		return isValueSet(powerName, user.getName());
-	}
-
-	public void addThor(String playerName) {
-		addValue(Type.THOR, playerName);
-	}
-
-	public void removeThor(String playerName) {
-		removeValue(Type.THOR, playerName);
-	}
-
-	public boolean hasThorPowers(String player) {
-		return isValueSet(Type.THOR, player);
-	}
-
-	public boolean hasGodPowers(String player) {
-		return isValueSet(Type.GOD, player);
-	}
-
-	public Float getVulcainExplosionPower(String player) {
-		return (Float) getValue(Type.VULCAN, player);
-	}
 
 	public boolean alias(CommandSender sender, CommandArgs args) {
 		MaterialContainer m = checkMaterial(sender, args.getString(1));
@@ -973,20 +751,10 @@ public class ACHelper {
 		return false;
 	}
 
-	public void removeValueWithFile(Type power, String user) {
-		removeValue(power, user);
-		ExtendedConfiguration ban = fManager.getYml(power.toString());
-		ban.removeProperty(power + "." + user);
-		ban.save();
-	}
-
 	public synchronized void loadInfos() {
 		blacklist = getBlackListedItems();
 
 		alias.putAll(fManager.getAlias());
-		List<String> tmp = dataManager.getKeys("warp", "warpPoints", "warp");
-		if (tmp != null)
-			warpList.addAll(tmp);
 
 		Map<String, List<MaterialContainer>> kitsLoaded = fManager.loadKits();
 		for (String kit : kitsLoaded.keySet()) {
@@ -1002,13 +770,14 @@ public class ACHelper {
 				if (temp.getEndBan().after(current)) {
 					bannedPlayers.put(key, bans.get(key));
 					int tickLeft = (int) ((temp.getEndBan().getTime() - System.currentTimeMillis()) / 1000) * 20;
-					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance, new Runnable() {
-						
-						@Override
-						public void run() {
-							unBanPlayer(key);							
-						}
-					}, tickLeft);
+					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance,
+							new Runnable() {
+
+								@Override
+								public void run() {
+									unBanPlayer(key);
+								}
+							}, tickLeft);
 
 				} else {
 					dataManager.unBanPlayer(key);
