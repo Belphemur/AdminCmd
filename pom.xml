@@ -173,6 +173,11 @@
 			<name>libs-snapshot</name>
 			<url>http://gestdown.info:8888/artifactory/libs-snapshot</url>
 		</repository>
+		<repository>
+			<id>Gestdown</id>
+			<name>Gestdown-releases</name>
+			<url>http://www.gestdown.info:8888/artifactory/BukkitPlugin-release-local</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -238,6 +243,12 @@
 			<groupId>de.diddiz</groupId>
 			<artifactId>LogBlock</artifactId>
 			<version>1.26</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>Heroes</groupId>
+			<artifactId>Heroes</artifactId>
+			<version>366</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
