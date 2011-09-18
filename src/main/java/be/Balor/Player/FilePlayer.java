@@ -23,12 +23,12 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.Tools.Files.ObjectContainer;
-import be.Balor.Tools.Files.WorldNotLoaded;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
