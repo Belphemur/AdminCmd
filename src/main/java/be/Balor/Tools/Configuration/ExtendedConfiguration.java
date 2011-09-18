@@ -40,6 +40,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
+import org.yaml.snakeyaml.scanner.ScannerException;
 
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Files.FileManager;
@@ -82,9 +83,12 @@ public class ExtendedConfiguration extends ExtendedNode {
 	}
 
 	/**
-	 * Loads the configuration file. All errors are thrown away.
+	 * Loads the configuration file.
+	 * 
+	 * @throws LoadScannerException
+	 *             when snakeyaml encounter a problem while scanning the stream.
 	 */
-	public void load() {
+	public void load() throws LoadScannerException {
 		FileInputStream stream = null;
 
 		try {
@@ -94,6 +98,8 @@ public class ExtendedConfiguration extends ExtendedNode {
 			root = new HashMap<String, Object>();
 		} catch (ConfigurationException e) {
 			root = new HashMap<String, Object>();
+		} catch (ScannerException e) {
+			throw new LoadScannerException(e, file);
 		} finally {
 			try {
 				if (stream != null) {
@@ -196,16 +202,17 @@ public class ExtendedConfiguration extends ExtendedNode {
 			throw new ConfigurationException("Root document must be an key-value structure");
 		}
 	}
-    /**
-     * This method returns an empty ConfigurationNode for using as a
-     * default in methods that select a node from a node list.
-     * @return
-     */
-    public static ExtendedNode getEmptyNode() {
-        return new ExtendedNode(new HashMap<String, Object>());
-    }
 
-	
+	/**
+	 * This method returns an empty ConfigurationNode for using as a default in
+	 * methods that select a node from a node list.
+	 * 
+	 * @return
+	 */
+	public static ExtendedNode getEmptyNode() {
+		return new ExtendedNode(new HashMap<String, Object>());
+	}
+
 }
 
 class ExtendedRepresenter extends Representer {
