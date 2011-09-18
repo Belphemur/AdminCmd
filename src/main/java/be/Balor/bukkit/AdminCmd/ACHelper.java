@@ -44,6 +44,8 @@ import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Utils;
+import be.Balor.World.ACWorldFactory;
+import be.Balor.World.WorldManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -367,6 +369,8 @@ public class ACHelper {
 		PlayerManager.getInstance().setPlayerFactory(
 				new ACPlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "userData"));
+		WorldManager.getInstance().setWorldFactory(new ACWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
+						+ "worldData"));
 		convertBannedMuted();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
@@ -434,6 +438,7 @@ public class ACHelper {
 		}
 		pluginConfig.save();
 		ExtendedConfiguration commands = new ExtendedConfiguration("commands.yml", null);
+		commands.load();
 		commands.addProperty("disabledCommands", disabled);
 		commands.addProperty("prioritizedCommands",
 				priority.isEmpty() ? Arrays.asList("reload", "/") : priority);

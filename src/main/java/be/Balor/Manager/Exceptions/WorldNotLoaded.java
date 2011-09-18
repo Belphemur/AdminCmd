@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Files;
+package be.Balor.Manager.Exceptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
