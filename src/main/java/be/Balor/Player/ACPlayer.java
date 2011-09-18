@@ -46,6 +46,7 @@ public abstract class ACPlayer {
 		int result = 7;
 		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
+		handler = ACPluginManager.getServer().getPlayer(this.name);
 	}
 
 	/**
@@ -259,9 +260,7 @@ public abstract class ACPlayer {
 	 */
 	void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
-		if (this.isOnline)
-			handler = ACPluginManager.getServer().getPlayer(this.name);
-		else
+		if (!this.isOnline)
 			handler = null;
 	}
 
