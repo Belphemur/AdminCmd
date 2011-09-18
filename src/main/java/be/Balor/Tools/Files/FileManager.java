@@ -124,7 +124,7 @@ public class FileManager implements DataManager {
 		File file = null;
 		if (directory != null) {
 			File directoryFile = new File(this.pathFile, directory);
-			if (!directoryFile.exists()) {
+			if (!directoryFile.exists() && create) {
 				directoryFile.mkdir();
 			}
 			file = new File(directoryFile, filename);

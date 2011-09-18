@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
@@ -55,11 +56,15 @@ public class TpToWarp extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode, 1, true);
 		if (Utils.isPlayer(sender)) {
-			Player p = (Player) sender;			
+			Player p = (Player) sender;
 			if (target != null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("name", args.getString(0));
-				Location loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
+				Location loc = null;
+				try {
+					loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
+				} catch (WorldNotLoaded e) {
+				}
 				if (loc == null)
 					Utils.sI18n(sender, "errorWarp", replace);
 				else {

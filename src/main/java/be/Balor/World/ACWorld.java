@@ -104,8 +104,10 @@ public abstract class ACWorld {
 	 * @param name
 	 *            name of the Warp
 	 * @return location of the Warp
+	 * @throws WorldNotLoaded
+	 *             if the location's world is not loaded
 	 */
-	public abstract Location getWarp(String name);
+	public abstract Location getWarp(String name) throws WorldNotLoaded;
 
 	/**
 	 * List of the warps' name
