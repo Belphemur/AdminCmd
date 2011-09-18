@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -40,6 +40,9 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.herocraftonline.dev.heroes.Heroes;
+import com.herocraftonline.dev.heroes.persistence.Hero;
+
 import de.diddiz.LogBlock.Consumer;
 
 import be.Balor.Manager.LocaleManager;
@@ -54,21 +57,22 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Utils {
 	public static OddItem oddItem = null;
 	public static Consumer logBlock = null;
+	public static Heroes heroes = null;
 	public static boolean signExtention = false;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 * 
+	 *
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -100,7 +104,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 * 
+	 *
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -143,7 +147,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 * 
+	 *
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -162,18 +166,27 @@ public class Utils {
 
 	/**
 	 * Heal the selected player.
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
 	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, String toDo) {
 		Player target = getUser(sender, name, "admincmd.player." + toDo);
+		Hero hero = null;
+		if (heroes != null) {
+			hero = heroes.getHeroManager().getHero(target);
+		}
 		if (target == null)
 			return false;
-		if (toDo.equals("heal")) {
+		if (toDo.equals("heal") && hero == null) {
 			target.setHealth(20);
 			target.setFireTicks(0);
-		} else {
+		}
+		else if (toDo.equals("heal") && hero != null) {
+			hero.setHealth(hero.getMaxHealth());
+			target.setFireTicks(0);
+		}
+		else {
 			target.setHealth(0);
 			if (logBlock != null)
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
@@ -184,7 +197,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 * 
+	 *
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -492,7 +505,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -564,7 +577,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 * 
+	 *
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -608,7 +621,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 * 
+	 *
 	 * @param block
 	 * @param radius
 	 * @return
@@ -700,7 +713,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 * 
+	 *
 	 * @param start
 	 * @return
 	 */
@@ -710,7 +723,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 * 
+	 *
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -734,7 +747,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 * 
+	 *
 	 * @param loc
 	 * @return
 	 */
@@ -748,7 +761,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -773,7 +786,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -800,7 +813,7 @@ public class Utils {
 		private Long time;
 
 		/**
-		 * 
+		 *
 		 */
 		public SetTime(World w) {
 			this.w = w;
@@ -818,7 +831,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
