@@ -49,7 +49,7 @@ public class ACCommandContainer {
 	 * @return
 	 */
 	public String debug() {
-		return "[AdminCmd] The command "
+		return "The command "
 				+ cmd.getCmdName()
 				+ " "
 				+ args.toString()

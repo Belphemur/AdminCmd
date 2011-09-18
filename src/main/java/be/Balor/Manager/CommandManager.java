@@ -42,6 +42,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
@@ -400,13 +401,11 @@ public class CommandManager implements CommandExecutor {
 					ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
 							new SyncCommand(current));
 				} catch (WorldNotLoaded e) {
-					Logger.getLogger("Minecraft").severe(
-							"[AdminCmd] World " + e.getMessage() + " is not loaded.");
+					ACLogger.severe("World not Loaded", e);
 					Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
 				} catch (Throwable t) {
-					Logger.getLogger("Minecraft").severe(current.debug());
-					Utils.broadcastMessage(current.debug());
-					t.printStackTrace();
+					ACLogger.severe(current.debug(), t);
+					Utils.broadcastMessage("[AdminCmd] " + current.debug());
 				}
 
 			}
@@ -442,13 +441,11 @@ public class CommandManager implements CommandExecutor {
 			try {
 				acc.execute();
 			} catch (WorldNotLoaded e) {
-				Logger.getLogger("Minecraft").severe(
-						"[AdminCmd] World " + e.getMessage() + " is not loaded.");
+				ACLogger.severe("World not Loaded", e);
 				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
 			} catch (Throwable t) {
-				Logger.getLogger("Minecraft").severe(acc.debug());
-				Utils.broadcastMessage(acc.debug());
-				t.printStackTrace();
+				ACLogger.severe(acc.debug(), t);
+				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
 			}
 		}
 
