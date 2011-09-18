@@ -16,14 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
-import java.util.logging.Logger;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -56,7 +55,7 @@ public class LockServer extends CoreCommand {
 			String bcast = Utils.I18n("serverLock");
 			if (bcast != null) {
 				Utils.broadcastMessage(bcast);
-				Logger.getLogger("Minecraft").info("[AdminCmd] " + bcast);				
+				ACLogger.info(bcast);			
 			}
 			ACHelper.getInstance().setServerLocked(true);
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(), new Runnable() {
@@ -81,6 +80,14 @@ public class LockServer extends CoreCommand {
 	@Override
 	public boolean argsCheck(String... args) {
 		return true;
+	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		plugin.getPermissionLinker().addPermChild("admincmd.server.lockdown");
+		super.registerBukkitPerm();
 	}
 
 }
