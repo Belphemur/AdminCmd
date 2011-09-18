@@ -36,8 +36,6 @@ public class FileWorld extends ACWorld {
 	private final ExtendedConfiguration datas;
 	private final ExtendedNode warps;
 	private final ExtendedNode informations;
-	private int saveCount = 0;
-	private int SAVE_BEFORE_WRITE = 5;
 
 	/**
 	 * @param name
@@ -56,9 +54,9 @@ public class FileWorld extends ACWorld {
 		datas = new ExtendedConfiguration(wFile);
 		datas.registerClass(SimpleLocation.class);
 		datas.load();
-		datas.save();
 		warps = datas.createNode("warps");
 		informations = datas.createNode("informations");
+		datas.save();
 	}
 
 	/*
@@ -171,12 +169,7 @@ public class FileWorld extends ACWorld {
 	 * 
 	 */
 	private void writeFile() {
-		if (saveCount == SAVE_BEFORE_WRITE) {
-			datas.save();
-			saveCount = 0;
-		} else
-			saveCount++;
-
+		datas.save();
 	}
 
 	/*

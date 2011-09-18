@@ -59,11 +59,11 @@ public class FilePlayer extends ACPlayer {
 				e.printStackTrace();
 			}
 		datas = new ExtendedConfiguration(pFile);
-		datas.load();
-		datas.save();
+		datas.load();		
 		informations = datas.createNode("infos");
-		homes = datas.createNode("home");
+		homes = datas.createNode("home");		
 		powers = datas.createNode("powers");
+		datas.save();
 	}
 
 	public void setHome(String home, Location loc) {
