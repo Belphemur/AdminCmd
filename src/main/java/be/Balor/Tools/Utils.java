@@ -50,6 +50,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
@@ -57,7 +58,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static OddItem oddItem = null;
@@ -67,12 +68,12 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -104,7 +105,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -147,7 +148,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -166,7 +167,7 @@ public class Utils {
 
 	/**
 	 * Heal the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -181,12 +182,10 @@ public class Utils {
 		if (toDo.equals("heal") && hero == null) {
 			target.setHealth(20);
 			target.setFireTicks(0);
-		}
-		else if (toDo.equals("heal") && hero != null) {
+		} else if (toDo.equals("heal") && hero != null) {
 			hero.setHealth(hero.getMaxHealth());
 			target.setFireTicks(0);
-		}
-		else {
+		} else {
 			target.setHealth(0);
 			if (logBlock != null)
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
@@ -197,7 +196,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -288,7 +287,7 @@ public class Utils {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("type", arg);
 		replace.put("world", w.getName());
-		if (!ACHelper.getInstance().isValueSet(Type.TIME_FREEZED, w.getName())) {
+		if (ACWorld.getWorld(w.getName()).getInformation(Type.TIME_FREEZED.toString()).isNull()) {
 			if (arg.equalsIgnoreCase("day"))
 				newtime += 0;
 			else if (arg.equalsIgnoreCase("night"))
@@ -300,7 +299,7 @@ public class Utils {
 			else if (arg.equalsIgnoreCase("pause")) {
 				int taskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 						ACHelper.getInstance().getCoreInstance(), new SetTime(w), 0, 10);
-				ACHelper.getInstance().addValue(Type.TIME_FREEZED, w.getName(), taskId);
+				ACWorld.getWorld(w.getName()).setInformation(Type.TIME_FREEZED.toString(), taskId);
 			} else {
 				// if not a constant, use raw time
 				try {
@@ -312,11 +311,10 @@ public class Utils {
 			}
 			sI18n(sender, "timeSet", replace);
 		} else if (arg.equalsIgnoreCase("unpause")) {
-			int removeTask = (Integer) ACHelper.getInstance().getValue(Type.TIME_FREEZED,
-					w.getName());
-			ACHelper.getInstance().getCoreInstance().getServer().getScheduler()
-					.cancelTask(removeTask);
-			ACHelper.getInstance().removeValue(Type.TIME_FREEZED, w.getName());
+			int removeTask = ACWorld.getWorld(w.getName())
+					.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
+			ACPluginManager.getScheduler().cancelTask(removeTask);
+			ACWorld.getWorld(w.getName()).removeInformation(Type.TIME_FREEZED.toString());
 			sI18n(sender, "timeSet", replace);
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
@@ -374,8 +372,7 @@ public class Utils {
 				return;
 			}
 			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-				ACHelper.getInstance().addLocation("userData", pFrom.getName() + ".lastLoc",
-						"lastLoc", pFrom.getName(), pFrom.getLocation());
+				ACPlayer.getPlayer(nFrom).setLastLocation(pFrom.getLocation());
 				pFrom.teleport(pTo);
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
@@ -413,7 +410,8 @@ public class Utils {
 	private static void weatherChange(CommandSender sender, World w, Type.Weather type,
 			CommandArgs duration) {
 		if (!type.equals(Type.Weather.FREEZE)
-				&& ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, w.getName())) {
+				&& !ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
+						.isNull()) {
 			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " " + w.getName());
 			return;
 		}
@@ -450,12 +448,13 @@ public class Utils {
 			}
 			break;
 		case FREEZE:
-			if (ACHelper.getInstance().isValueSet(Type.WEATHER_FROZEN, w.getName())) {
-				ACHelper.getInstance().removeValue(Type.WEATHER_FROZEN, w.getName());
+			if (!ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
+					.isNull()) {
+				ACWorld.getWorld(w.getName()).removeInformation(Type.WEATHER_FROZEN.toString());
 				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFrozen") + " "
 						+ ChatColor.WHITE + w.getName());
 			} else {
-				ACHelper.getInstance().addValue(Type.WEATHER_FROZEN, w.getName());
+				ACWorld.getWorld(w.getName()).setInformation(Type.WEATHER_FROZEN.toString(), true);
 				sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen") + " " + ChatColor.WHITE
 						+ w.getName());
 			}
@@ -505,7 +504,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -577,7 +576,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -621,7 +620,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -713,7 +712,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -723,7 +722,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -747,7 +746,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -761,7 +760,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -786,7 +785,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -831,7 +830,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -842,11 +841,10 @@ public class Utils {
 			long newTime = w.getFullTime() + margin;
 			WorldServer world = ((CraftWorld) w).getHandle();
 			world.setTime(newTime);
-			for(Player p : getOnlinePlayers())
-			{
+			for (Player p : getOnlinePlayers()) {
 				CraftPlayer cp = (CraftPlayer) p;
-				cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp
-						.getHandle().getPlayerTime()));
+				cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp.getHandle()
+						.getPlayerTime()));
 			}
 
 		}
