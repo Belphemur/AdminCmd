@@ -16,13 +16,18 @@
  ************************************************************************/
 package be.Balor.Tools.Configuration;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.bukkit.util.config.ConfigurationException;
 import org.yaml.snakeyaml.DumperOptions;
@@ -42,6 +47,7 @@ import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.scanner.ScannerException;
 
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -55,6 +61,7 @@ public class ExtendedConfiguration extends ExtendedNode {
 	protected final File file;
 	protected String header = null;
 	protected final MyYamlConstructor ymlConstructor;
+	protected Lock lock = new ReentrantLock();
 
 	public ExtendedConfiguration(File file) {
 		super(new HashMap<String, Object>());
@@ -84,11 +91,9 @@ public class ExtendedConfiguration extends ExtendedNode {
 
 	/**
 	 * Loads the configuration file.
-	 * 
-	 * @throws LoadScannerException
-	 *             when snakeyaml encounter a problem while scanning the stream.
 	 */
-	public void load() throws LoadScannerException {
+	public void load() {
+		lock.lock();
 		FileInputStream stream = null;
 
 		try {
@@ -99,7 +104,16 @@ public class ExtendedConfiguration extends ExtendedNode {
 		} catch (ConfigurationException e) {
 			root = new HashMap<String, Object>();
 		} catch (ScannerException e) {
-			throw new LoadScannerException(e, file);
+			try {
+				if (stream != null) {
+					stream.close();
+				}
+			} catch (IOException e2) {
+			}
+			removeLineFromFile(e.getContextMark().getLine());
+			ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
+					+ (e.getContextMark().getLine() + 1) + " DELETED");
+			load();
 		} finally {
 			try {
 				if (stream != null) {
@@ -107,7 +121,9 @@ public class ExtendedConfiguration extends ExtendedNode {
 				}
 			} catch (IOException e) {
 			}
+			lock.unlock();
 		}
+
 	}
 
 	/**
@@ -160,6 +176,7 @@ public class ExtendedConfiguration extends ExtendedNode {
 	 * @return true if it was successful
 	 */
 	public boolean save() {
+		lock.lock();
 		FileOutputStream stream = null;
 
 		File parent = file.getParentFile();
@@ -185,8 +202,8 @@ public class ExtendedConfiguration extends ExtendedNode {
 				}
 			} catch (IOException e) {
 			}
+			lock.unlock();
 		}
-
 		return false;
 	}
 
@@ -213,6 +230,60 @@ public class ExtendedConfiguration extends ExtendedNode {
 		return new ExtendedNode(new HashMap<String, Object>());
 	}
 
+	private void removeLineFromFile(int lineToRemove) {
+		BufferedReader br = null;
+		PrintWriter pw = null;
+		try {
+
+			File inFile = file;
+			// Construct the new file that will later be renamed to the original
+			// filename.
+			File tempFile = File.createTempFile(file.getName(), null);
+			br = new BufferedReader(new UnicodeReader(new FileInputStream(file)));
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8"));
+
+			String line = null;
+
+			// Read from the original file and write to the new
+			// unless content matches data to be removed.
+			int i = 0;
+			while ((line = br.readLine()) != null) {
+				try {
+					if (i == lineToRemove)
+						continue;
+					pw.println(line);
+				} finally {
+					i++;
+				}
+			}
+			pw.flush();
+			pw.close();
+			br.close();
+			// Delete the original file
+			if (!inFile.delete()) {
+				System.out.println("Could not delete file");
+				return;
+			}
+
+			// Rename the new file to the filename the original file had.
+			if (!tempFile.renameTo(inFile))
+				System.out.println("Could not rename file");
+
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (pw != null)
+				pw.close();
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+			}
+		}
+	}
+
 }
 
 class ExtendedRepresenter extends Representer {
@@ -224,6 +295,7 @@ class ExtendedRepresenter extends Representer {
 	}
 
 	protected class EmptyRepresentNull implements Represent {
+		@Override
 		public Node representData(Object data) {
 			return representScalar(Tag.NULL, ""); // Changed "null" to "" so as
 													// to avoid writing nulls
@@ -231,6 +303,7 @@ class ExtendedRepresenter extends Representer {
 	}
 
 	private class RepresentTpRequest implements Represent {
+		@Override
 		public Node representData(Object data) {
 			TpRequest tpRequest = (TpRequest) data;
 			String value = tpRequest.getFrom() + ";" + tpRequest.getTo();
@@ -282,6 +355,7 @@ class MyYamlConstructor extends Constructor {
 	}
 
 	private class ConstructTpRequest extends AbstractConstruct {
+		@Override
 		public Object construct(Node node) {
 			String val = (String) constructScalar((ScalarNode) node);
 			String[] split = val.split(";");
