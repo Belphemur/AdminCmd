@@ -64,6 +64,9 @@ public class ACPlayerListener extends PlayerListener {
 			event.disallow(Result.KICK_BANNED, player.getReason());
 			return;
 		}
+		if (ACHelper.getInstance().isServerLocked()
+				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown"))
+			event.disallow(Result.KICK_OTHER, "Server is Locked.");
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
 			event.allow();
 	}
@@ -125,7 +128,7 @@ public class ACPlayerListener extends PlayerListener {
 			Utils.sParsedLocale(p, "NEWS");
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !player.hasPower(Type.TP_REQUEST)
-				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle"))
+				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
 			player.setPower(Type.TP_REQUEST);
 	}
 

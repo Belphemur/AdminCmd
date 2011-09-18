@@ -326,3 +326,7 @@ commands:
     description: to convert old dev ban to new ban.
     aliases: [cban]
     usage: /<command>
+  bal_lockdown:
+    description: to lock the server.
+    aliases: [lock,lockdown]
+    usage: /<command>

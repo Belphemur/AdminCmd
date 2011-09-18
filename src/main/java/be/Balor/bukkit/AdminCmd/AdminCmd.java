@@ -154,6 +154,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Help.class);
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
+		CommandManager.getInstance().registerCommand(LockServer.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -377,6 +378,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("airForbidden", ChatColor.DARK_RED + "You can't give AIR item.");
 		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
 				+ "played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
+		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
+		Utils.addLocale(
+				"serverLock",
+				ChatColor.RED
+						+ "Server will be lock in 5 seconds, you'll be kicked if you don't have the Permission to stay.");
 		LocaleManager.getInstance().save();
 	}
 

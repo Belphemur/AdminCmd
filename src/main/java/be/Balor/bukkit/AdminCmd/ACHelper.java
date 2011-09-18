@@ -75,6 +75,7 @@ public class ACHelper {
 	private static long pluginStarted;
 	private ExtendedConfiguration pluginConfig;
 	private DataManager dataManager;
+	private boolean serverLocked = false;
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -119,6 +120,20 @@ public class ACHelper {
 	 */
 	public static Long[] getElapsedTime() {
 		return Utils.getElapsedTime(pluginStarted);
+	}
+
+	/**
+	 * @return the serverLocked
+	 */
+	public boolean isServerLocked() {
+		return serverLocked;
+	}
+
+	/**
+	 * @param serverLocked the serverLocked to set
+	 */
+	public void setServerLocked(boolean serverLocked) {
+		this.serverLocked = serverLocked;
 	}
 
 	/**
