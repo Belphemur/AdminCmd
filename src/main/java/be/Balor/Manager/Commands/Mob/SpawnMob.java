@@ -144,6 +144,7 @@ public class SpawnMob extends CoreCommand {
 			this.player = player;
 		}
 
+		@Override
 		public void run() {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName());

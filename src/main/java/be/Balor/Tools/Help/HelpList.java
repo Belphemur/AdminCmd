@@ -154,6 +154,7 @@ public class HelpList {
 		public EntryComparator() {
 		}
 
+		@Override
 		public int compare(HelpEntry o1, HelpEntry o2) {
 			return o1.getCommand().compareTo(o2.getCommand()) * (descending ? 1 : -1);
 		}

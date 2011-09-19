@@ -63,7 +63,7 @@ public class ACLogger {
 			Log(loglevel, params);
 		} else {
 			logger.log(loglevel, String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)),
-					(Exception) params);
+					params);
 		}
 	}
 

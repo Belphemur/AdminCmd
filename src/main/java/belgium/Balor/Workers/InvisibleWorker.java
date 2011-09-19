@@ -123,6 +123,7 @@ final public class InvisibleWorker {
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 							new Runnable() {
+								@Override
 								public void run() {
 									for (Player p : Utils.getOnlinePlayers())
 										uninvisible(toReappear, p);
@@ -214,7 +215,7 @@ final public class InvisibleWorker {
 			ACPlayer.getPlayer(name).setPower(Type.INVISIBLE);
 			invisblesWithTaskIds.put(
 					name,
-					(Integer) ACPluginManager
+					ACPluginManager
 							.getServer()
 							.getScheduler()
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),

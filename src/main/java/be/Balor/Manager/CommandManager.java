@@ -352,6 +352,7 @@ public class CommandManager implements CommandExecutor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		CoreCommand cmd = null;
 		if ((cmd = registeredCommands.get(command)) != null)

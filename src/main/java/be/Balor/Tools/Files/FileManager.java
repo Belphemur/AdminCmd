@@ -278,6 +278,7 @@ public class FileManager implements DataManager {
 	 * @param filename
 	 * @param directory
 	 */
+	@Override
 	public void writeLocation(Location loc, String name, String filename, String directory) {
 		ExtendedConfiguration conf = getYml(filename, directory);
 		conf.setProperty(name + ".world", loc.getWorld().getName());
@@ -297,6 +298,7 @@ public class FileManager implements DataManager {
 	 * @param directory
 	 * @return
 	 */
+	@Override
 	public Location getLocation(String property, String filename, String directory)
 			throws WorldNotLoaded {
 		ExtendedConfiguration conf = getYml(filename, directory);
@@ -325,6 +327,7 @@ public class FileManager implements DataManager {
 	 * @param filename
 	 * @param directory
 	 */
+	@Override
 	public void removeKey(String property, String filename, String directory) {
 		ExtendedConfiguration conf = getYml(filename, directory);
 		conf.removeProperty(property);
@@ -338,8 +341,13 @@ public class FileManager implements DataManager {
 	 * @param directory
 	 * @return
 	 */
+	@Override
 	public List<String> getKeys(String info, String filename, String directory) {
-		return getYml(filename, directory).getKeys(info);
+		List<String> keys = getYml(filename, directory).getKeys(info);
+		if (keys == null)
+			return new ArrayList<String>();
+		else
+			return keys;
 	}
 
 	/**
@@ -394,6 +402,7 @@ public class FileManager implements DataManager {
 		return result;
 	}
 
+	@Override
 	public Map<String, BannedPlayer> loadBan() {
 		Map<String, BannedPlayer> result = new HashMap<String, BannedPlayer>();
 		ExtendedConfiguration conf = getYml("banned");
@@ -447,7 +456,9 @@ public class FileManager implements DataManager {
 		banFile.save();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
 	 */
 	@Override
@@ -456,7 +467,7 @@ public class FileManager implements DataManager {
 		ExtendedNode bans = banFile.createNode("bans");
 		bans.removeProperty(player);
 		banFile.save();
-		
+
 	}
 
 }

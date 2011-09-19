@@ -380,6 +380,7 @@ public class ACPlayerListener extends PlayerListener {
 			newPlayer = p;
 		}
 
+		@Override
 		public void run() {
 			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);

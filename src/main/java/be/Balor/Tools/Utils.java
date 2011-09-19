@@ -807,7 +807,7 @@ public class Utils {
 
 	}
 
-	private static class SetTime implements Runnable {
+	public static class SetTime implements Runnable {
 		private World w;
 		private Long time;
 

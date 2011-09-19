@@ -85,6 +85,7 @@ public class KillMob extends CoreCommand {
 		pluginCommand.getPlugin().getServer().getScheduler()
 				.scheduleAsyncDelayedTask(pluginCommand.getPlugin(), new Runnable() {
 
+					@Override
 					public void run() {
 						killMobs(mobs, finalType,finalSender);
 					}

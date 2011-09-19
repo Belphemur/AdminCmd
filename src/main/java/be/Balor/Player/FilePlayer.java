@@ -66,6 +66,7 @@ public class FilePlayer extends ACPlayer {
 		datas.save();
 	}
 
+	@Override
 	public void setHome(String home, Location loc) {
 		ExtendedNode homeToSet = homes.createNode(home);
 		homeToSet.setProperty("world", loc.getWorld().getName());
@@ -82,6 +83,7 @@ public class FilePlayer extends ACPlayer {
 	 * 
 	 * @see be.Balor.Player.Data.PlayerDataManager#removeHome(java.lang.String)
 	 */
+	@Override
 	public void removeHome(String home) {
 		homes.removeProperty(home);
 		writeFile();
@@ -92,6 +94,7 @@ public class FilePlayer extends ACPlayer {
 	 * 
 	 * @see be.Balor.Player.Data.PlayerDataManager#getHome(java.lang.String)
 	 */
+	@Override
 	public Location getHome(String home) {
 		return getLocation("home." + home);
 	}
@@ -103,6 +106,7 @@ public class FilePlayer extends ACPlayer {
 	 * be.Balor.Player.Data.PlayerDataManager#setInformation(java.lang.String,
 	 * java.lang.Object)
 	 */
+	@Override
 	public void setInformation(String info, Object value) {
 		informations.setProperty(info, value);
 		writeFile();
@@ -115,6 +119,7 @@ public class FilePlayer extends ACPlayer {
 	 * be.Balor.Player.Data.PlayerDataManager#removeInformation(java.lang.String
 	 * )
 	 */
+	@Override
 	public void removeInformation(String info) {
 		informations.removeProperty(info);
 		writeFile();
@@ -126,6 +131,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see
 	 * be.Balor.Player.Data.PlayerDataManager#getInformation(java.lang.String)
 	 */
+	@Override
 	public ObjectContainer getInformation(String info) {
 		return new ObjectContainer(informations.getProperty(info));
 	}
@@ -137,6 +143,7 @@ public class FilePlayer extends ACPlayer {
 	 * be.Balor.Player.Data.PlayerDataManager#setLastLocation(org.bukkit.Location
 	 * )
 	 */
+	@Override
 	public void setLastLocation(Location loc) {
 		if (loc == null)
 			datas.removeProperty("lastLoc");
@@ -160,6 +167,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.Data.PlayerDataManager#getLastLocation()
 	 */
 
+	@Override
 	public Location getLastLocation() {
 		return getLocation("lastLoc");
 	}
@@ -225,6 +233,7 @@ public class FilePlayer extends ACPlayer {
 	 * java.lang.Object)
 	 */
 
+	@Override
 	public void setPower(Type power, Object value) {
 		powers.setProperty(power.toString(), value);
 		writeFile();
@@ -237,6 +246,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.Data.PlayerDataManager#getPower(be.Balor.Tools.Type)
 	 */
 
+	@Override
 	public ObjectContainer getPower(Type power) {
 		return new ObjectContainer(powers.getProperty(power.toString()));
 	}
@@ -258,6 +268,7 @@ public class FilePlayer extends ACPlayer {
 	 * be.Balor.Player.Data.PlayerDataManager#removePower(be.Balor.Tools.Type)
 	 */
 
+	@Override
 	public void removePower(Type power) {
 		powers.removeProperty(power.toString());
 		writeFile();
@@ -269,6 +280,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.Data.PlayerDataManager#getHomeList()
 	 */
 
+	@Override
 	public List<String> getHomeList() {
 		return homes.getKeys();
 	}

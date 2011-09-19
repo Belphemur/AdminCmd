@@ -34,6 +34,7 @@ public class UpdateInvisible implements Runnable {
 		toVanish = p;
 	}
 
+	@Override
 	public void run() {
 		for (Player p : Utils.getOnlinePlayers())
 			InvisibleWorker.getInstance().invisible(toVanish, p);
