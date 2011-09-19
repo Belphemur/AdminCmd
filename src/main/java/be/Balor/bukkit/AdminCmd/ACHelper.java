@@ -362,10 +362,6 @@ public class ACHelper {
 	}
 
 	private void convertSpawnWarp() {
-		List<World> worlds = coreInstance.getServer().getWorlds();
-		HashMap<String, ACWorld> tmpMap = new HashMap<String, ACWorld>(worlds.size());
-		for (World w : worlds)
-			tmpMap.put(w.getName(), ACWorld.getWorld(w.getName()));
 		File spawnFile = fManager.getFile("spawn", "spawnLocations.yml", false);
 		if (spawnFile.exists()) {
 			ExtendedConfiguration spawn = new ExtendedConfiguration(spawnFile);
@@ -373,7 +369,7 @@ public class ACHelper {
 			ExtendedNode spawnPoints = spawn.getNode("spawn");
 			for (String key : spawnPoints.getKeys())
 				try {
-					tmpMap.get(key).setSpawn(
+					ACWorld.getWorld(key).setSpawn(
 							fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
 				} catch (WorldNotLoaded e) {
 				}
@@ -386,7 +382,7 @@ public class ACHelper {
 			for (String key : fManager.getKeys("warp", "warpPoints", "warp")) {
 				try {
 					Location loc = fManager.getLocation("warp." + key, "warpPoints", "warp");
-					tmpMap.get(loc.getWorld().getName()).addWarp(key, loc);
+					ACWorld.getWorld(loc.getWorld().getName()).addWarp(key, loc);
 				} catch (WorldNotLoaded e) {
 				}
 			}
