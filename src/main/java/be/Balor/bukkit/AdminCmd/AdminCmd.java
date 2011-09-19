@@ -157,6 +157,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(BanConvert.class);
 		CommandManager.getInstance().registerCommand(LockServer.class);
 		CommandManager.getInstance().registerCommand(Set.class);
+		CommandManager.getInstance().registerCommand(Rules.class);
 	}
 
 	protected void setDefaultLocale() {
