@@ -36,7 +36,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -64,6 +64,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.set.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
 		permissionLinker.addPermChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
