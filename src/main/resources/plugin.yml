@@ -149,7 +149,7 @@ commands:
   bal_spymsg:
     description: You can see every private message.
     aliases: [spy,smsg]
-    usage: /<command> 
+    usage: /<command>
   bal_fireball:
     description: Give the power of Fireball (shoot fireball).
     aliases: [fireball,fb]
@@ -165,7 +165,7 @@ commands:
   bal_homelist:
     description: List your homes.
     aliases: [listhomes,lh]
-    usage: /<command> 
+    usage: /<command>
   bal_rmhome:
     description: remove a home.
     aliases: [rmhome,rh]
@@ -185,7 +185,7 @@ commands:
   bal_warplist:
     description: List all warp points.
     aliases: [lwp,lwarp]
-    usage: /<command> 
+    usage: /<command>
   bal_ip:
     description: get the ip of the player.
     aliases: [ip,address]
@@ -231,7 +231,7 @@ commands:
     aliases: [wfreeze,wf]
     usage: /<command>
   bal_motd:
-    description: set the message of the day.
+    description: Display the message of the day.
     aliases: [motd]
     usage: /<command> message
   bal_exec:
@@ -239,7 +239,7 @@ commands:
     aliases: [exec]
     usage: /<command> scriptName
   bal_news:
-    description: set the current news.
+    description: Display the current news.
     aliases: [news]
     usage: /<command> message
   bal_wrain:
@@ -329,4 +329,12 @@ commands:
   bal_lockdown:
     description: to lock the server.
     aliases: [lock,lockdown]
+    usage: /<command>
+  bal_set:
+    description: Set MOTD, NEWS and RULES
+    aliases: [set]
+    usage /<command> [motd|news|rules] [new Message]
+  bal_rules:
+    description: Displays the rules of the server
+    aliases: [rules]
     usage: /<command>
