@@ -332,6 +332,15 @@ public class ACHelper {
 			for (Player p : coreInstance.getServer().getOnlinePlayers())
 				ACPlayer.getPlayer(p.getName()).setPower(Type.TP_REQUEST);
 		}
+		for (World w : coreInstance.getServer().getWorlds()) {
+			ACWorld world = ACWorld.getWorld(w.getName());
+			int task = world.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
+			if (task != -1) {
+				task = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new Utils.SetTime(w), 0, 10);
+				world.setInformation(Type.TIME_FREEZED.toString(), task);
+			}
+		}
 	}
 
 	private void convertBannedMuted() {
@@ -560,8 +569,7 @@ public class ACHelper {
 		if (Utils.isPlayer(sender)) {
 			Location loc = ((Player) sender).getLocation();
 			World w = ((Player) sender).getWorld();
-			w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-					loc.getBlockZ());
+			w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 			ACWorld.getWorld(w.getName()).setSpawn(loc);
 			Utils.sI18n(sender, "setSpawn");
 		}
@@ -667,7 +675,6 @@ public class ACHelper {
 			output += materialsColors.get(mat)[i] + ", ";
 		return output;
 	}
-
 
 	public boolean alias(CommandSender sender, CommandArgs args) {
 		MaterialContainer m = checkMaterial(sender, args.getString(1));
