@@ -36,7 +36,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -63,6 +63,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
 		permissionLinker.addPermChild("admincmd.player.bypass");
@@ -155,6 +156,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
 		CommandManager.getInstance().registerCommand(LockServer.class);
+		CommandManager.getInstance().registerCommand(Set.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -383,6 +385,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				"serverLock",
 				ChatColor.RED
 						+ "Server will be lock in 5 seconds, you'll be kicked if you don't have the Permission to stay.");
+		Utils.addLocale("Rules","1. Do not grief! //n" +
+						"2. Do not use strong language! //n" +
+						"3. Be friendly to other players!");
+		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
 		LocaleManager.getInstance().save();
 	}
 

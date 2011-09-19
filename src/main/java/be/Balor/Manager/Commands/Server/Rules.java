@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
+
 package be.Balor.Manager.Commands.Server;
 
 import org.bukkit.command.CommandSender;
@@ -24,17 +25,18 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class News extends CoreCommand {
+
+public class Rules extends CoreCommand {
 
 	/**
 	 *
 	 */
-	public News() {
-		permNode = "admincmd.server.news";
-		cmdName = "bal_news";
+	public Rules(){
+		permNode = "admincmd.server.rules";
+		cmdName =  "bal_rules";
 	}
 
 	/*
@@ -47,9 +49,9 @@ public class News extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender, false))
-			Utils.sParsedLocale((Player) sender,"NEWS");
+			Utils.sParsedLocale((Player) sender, "Rules");
 		else
-			Utils.sI18n(sender, "NEWS");
+			Utils.sI18n(sender, "Rules");
 		return;
 	}
 
@@ -62,5 +64,4 @@ public class News extends CoreCommand {
 	public boolean argsCheck(String... args) {
 		return true;
 	}
-
 }

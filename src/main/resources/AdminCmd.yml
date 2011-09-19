@@ -295,9 +295,15 @@ acplayerafk:
 
 acplayerbreak:
     command: break [player]
-    description: "En-/Disables the 'Super-breaker' mode for\n the [player], defaults to yourself."
+    description: "En-/Disables the 'Super-breaker' mode for\n the [player], defaults to yourself. Alias: //"
     plugin: AdminCmd
-    permissions: admincmd.player.break
+    permissions: admincmd.player.superbreaker
+
+acplayerplayed:
+    command: played [player]
+    description: "How long the player or yourself if no name\n provided has played on the server."
+    plugin: AdminCmd
+    permissions: admincmd.player.played
 
 acweatherclear:
     command: wclear
@@ -396,16 +402,28 @@ acservermemory:
     permissions: admincmd.server.memory
 
 acservermotd:
-    command: motd [message]
-    description: "You can set the current motd or show it if\n no [message] is given. For more Info do /help acmotd"
+    command: motd
+    description: "Displays the current MotD."
     plugin: AdminCmd
     permissions: admincmd.server.motd
 
 acservernews:
-    command: news [message]
-    description: "You can set the current news. Formatting\n as motd! If no [message] is given it shows the current NEWS."
+    command: news
+    description: "Displays the current NEWs"
     plugin: AdminCmd
     permissions: admincmd.server.news
+
+acserverrules:
+    command: rules
+    description: "Displays the current Rules"
+    plugin: AdminCmd
+    permissions: admincmd.server.rules
+
+acserverset:
+    command: set [-m|-r|-n] [message]
+    description: "Change the message of motd|rules|news.\n Format options are the same for all 3, see acsetformat for more info."
+    plugin: AdminCmd
+    permissions: admincmd.server.set.*
 
 acserverexec:
     command: exec [ScriptName|-reload all/ScriptName]
@@ -461,11 +479,17 @@ acserveraversion:
     plugin: AdminCmd
     permissions: admincmd.server.version
 
-acserverlist:
-    command: list [mode]
+acserverinfo:
+    command: info [mode]
     description: "Lists the available abilities (God, fly etc.) if no\n [mode] given, else lists the users having the given [mode]."
     plugin: AdminCmd
     permissions: admincmd.server.list
+
+acserverlockdown:
+    command: lockdown
+    description: "Lock the server, kick every connected user that doesn't have\n the perm admincmd.server.lockdown and disallow them to connect to the\n locked server."
+    plugin: AdminCmd
+    permissions: admincmd.server.lock
 
 acserverhelp:
     command: help [page#]
