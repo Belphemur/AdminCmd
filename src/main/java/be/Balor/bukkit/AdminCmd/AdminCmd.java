@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
@@ -13,6 +14,7 @@ import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
+import be.Balor.Listeners.ACWorldListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.*;
@@ -405,6 +407,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.registerAllPermParent();
 		ACPlayerListener playerListener = new ACPlayerListener();
 		ACEntityListener entityListener = new ACEntityListener();
+		ACWorldListener worldListener = new ACWorldListener();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
@@ -423,6 +426,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
+		pm.registerEvent(Type.WORLD_LOAD, worldListener, Priority.Normal, this);
 	}
 
 	public void onDisable() {
