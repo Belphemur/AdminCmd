@@ -367,12 +367,13 @@ public class ACHelper {
 			ExtendedConfiguration spawn = new ExtendedConfiguration(spawnFile);
 			spawn.load();
 			ExtendedNode spawnPoints = spawn.getNode("spawn");
-			for (String key : spawnPoints.getKeys())
-				try {
-					ACWorld.getWorld(key).setSpawn(
-							fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
-				} catch (WorldNotLoaded e) {
-				}
+			if (spawnPoints != null)
+				for (String key : spawnPoints.getKeys())
+					try {
+						ACWorld.getWorld(key).setSpawn(
+								fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
+					} catch (WorldNotLoaded e) {
+					}
 
 			spawnFile.delete();
 			spawnFile.getParentFile().delete();
