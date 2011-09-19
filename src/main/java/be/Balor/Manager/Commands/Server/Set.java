@@ -81,7 +81,19 @@ public class Set extends CoreCommand {
 			}
 		}
 		else if (args.getString(0).equalsIgnoreCase("rules")) {
-			//TODO: Setting rules code
+			if (PermissionManager.hasPerm(sender, "admincmd.server.set.rules")) {
+				for (int i = 1; i < args.length; i++){
+					msg = args.getString(i);
+					message += msg + " ";
+				}
+				message = message.trim();
+				String result = Utils.colorParser(message);
+				if (result == null)
+					result = message;
+				LocaleManager.getInstance().addLocale("Rules", result, true);
+				LocaleManager.getInstance().save();
+				Utils.sI18n(sender, "RulesSet", "rules", result);
+			}
 		}
 	}
 

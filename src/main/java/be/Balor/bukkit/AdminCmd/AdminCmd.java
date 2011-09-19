@@ -385,6 +385,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				"serverLock",
 				ChatColor.RED
 						+ "Server will be lock in 5 seconds, you'll be kicked if you don't have the Permission to stay.");
+		Utils.addLocale("Rules","1. Do not grief! //n" +
+						"2. Do not use strong language! //n" +
+						"3. Be friendly to other players!");
+		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
 		LocaleManager.getInstance().save();
 	}
 
