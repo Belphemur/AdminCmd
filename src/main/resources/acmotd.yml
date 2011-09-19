@@ -1,7 +1,7 @@
 #Made by Lathanael
 acmotd:
     command: acmotd
-    description: "Format info for MOTD and NEWS: %player = new\n connected player's name, %nb = (number of player connected\n - invisibles players). You can use color by typing & before\n the number of the color."
+    description: "Format info for MOTD and NEWS: %player = new\n connected player's name, %nb = (number of player connected\n - invisibles players), %connected name of all connected\n players not invisible. You can use color by typing & before\n the number of the color. The newline character is //n.\n Displaying the time a user has spent on your server is also\n posibble with the following varaibles: %d %h %m %s."
     plugin: AdminCmd
     permissions: admincmd.server.motd
     main: false
