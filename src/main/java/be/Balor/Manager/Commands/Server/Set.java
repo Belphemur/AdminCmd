@@ -36,7 +36,6 @@ public class Set extends CoreCommand {
 	 *
 	 */
 	public Set(){
-		//permNode = "admincmd.server.set"; // Is this needed?
 		cmdName = "bal_set";
 	}
 	/*
@@ -98,6 +97,13 @@ public class Set extends CoreCommand {
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null;
+	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command.CommandSender)
+	 */
+	@Override
+	public boolean permissionCheck(CommandSender sender) {
+		return true;
 	}
 
 }
