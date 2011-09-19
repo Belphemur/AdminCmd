@@ -76,7 +76,9 @@ public abstract class CoreCommand {
 
 	/**
 	 * Execute the command
-	 * @param args TODO
+	 * 
+	 * @param args
+	 *            TODO
 	 */
 	public abstract void execute(CommandSender sender, CommandArgs args);
 
@@ -95,7 +97,10 @@ public abstract class CoreCommand {
 	 * @return
 	 */
 	public boolean permissionCheck(CommandSender sender) {
-		return PermissionManager.hasPerm(sender, bukkitPerm);
+		if (permNode != null && !permNode.isEmpty())
+			return PermissionManager.hasPerm(sender, bukkitPerm);
+		else
+			return true;
 	}
 
 	/**
@@ -116,9 +121,11 @@ public abstract class CoreCommand {
 	 * Register the bukkit Permission
 	 */
 	public void registerBukkitPerm() {
-		bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
-		if (other)
-			plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
+		if (permNode != null && !permNode.isEmpty()) {
+			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
+			if (other)
+				plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
+		}
 	}
 
 	/**
