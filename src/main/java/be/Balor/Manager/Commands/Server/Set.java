@@ -49,13 +49,10 @@ public class Set extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		String message = "";
-		String msg = "";
-		if (args.getString(0).equalsIgnoreCase("motd")){
+		if (args.hasFlag('m')){
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
-				for (int i = 1; i < args.length; i++){
-					msg = args.getString(i);
+				for (String msg : args)
 					message += msg + " ";
-				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
 				if (result == null)
@@ -65,12 +62,10 @@ public class Set extends CoreCommand {
 				Utils.sI18n(sender, "MOTDset", "motd", result);
 			}
 		}
-		else if (args.getString(0).equalsIgnoreCase("news")){
+		else if (args.hasFlag('n')){
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.news")) {
-				for (int i = 1; i < args.length; i++){
-					msg = args.getString(i);
+				for (String msg : args)
 					message += msg + " ";
-				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
 				if (result == null)
@@ -80,12 +75,10 @@ public class Set extends CoreCommand {
 				Utils.sI18n(sender, "NEWSset", "news", result);
 			}
 		}
-		else if (args.getString(0).equalsIgnoreCase("rules")) {
+		else if (args.hasFlag('r')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.rules")) {
-				for (int i = 1; i < args.length; i++){
-					msg = args.getString(i);
+				for (String msg : args)
 					message += msg + " ";
-				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
 				if (result == null)
