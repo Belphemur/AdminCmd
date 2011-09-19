@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 
 public class Set extends CoreCommand {
@@ -35,12 +35,13 @@ public class Set extends CoreCommand {
 	/**
 	 *
 	 */
-	public Set(){
+	public Set() {
 		cmdName = "bal_set";
 	}
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -48,7 +49,7 @@ public class Set extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		String message = "";
-		if (args.hasFlag('m')){
+		if (args.hasFlag('m')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
 				for (String msg : args)
 					message += msg + " ";
@@ -60,8 +61,7 @@ public class Set extends CoreCommand {
 				LocaleManager.getInstance().save();
 				Utils.sI18n(sender, "MOTDset", "motd", result);
 			}
-		}
-		else if (args.hasFlag('n')){
+		} else if (args.hasFlag('n')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.news")) {
 				for (String msg : args)
 					message += msg + " ";
@@ -73,8 +73,7 @@ public class Set extends CoreCommand {
 				LocaleManager.getInstance().save();
 				Utils.sI18n(sender, "NEWSset", "news", result);
 			}
-		}
-		else if (args.hasFlag('r')) {
+		} else if (args.hasFlag('r')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.rules")) {
 				for (String msg : args)
 					message += msg + " ";
@@ -91,15 +90,20 @@ public class Set extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null;
+		return args != null && args.length >= 2;
 	}
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command.CommandSender)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
+	 * .CommandSender)
 	 */
 	@Override
 	public boolean permissionCheck(CommandSender sender) {
