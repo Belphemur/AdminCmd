@@ -333,7 +333,7 @@ commands:
   bal_set:
     description: Set MOTD, NEWS and RULES
     aliases: [set]
-    usage /<command> [-m|-r|-n] [new Message]
+    usage: /<command> [-m|-r|-n] [new Message]
   bal_rules:
     description: Displays the rules of the server
     aliases: [rules]
