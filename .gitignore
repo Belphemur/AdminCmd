@@ -1,7 +1,39 @@
-*.class
-*.jar
+#Balors
 nbproject*
 build*
 manifest.mf
 .settings*
 target*
+#Eclipse
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# CDT-specific
+.cproject
+
+# Windows image file caches
+Thumbs.db 
+
+# Folder config file
+Desktop.ini
+
+#Java
+*.class
+*.jar
+/createJAR.jardesc
+
+#7zip
+*.7z
+
