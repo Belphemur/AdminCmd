@@ -23,8 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.herocraftonline.dev.heroes.command.CommandHandler;
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
@@ -54,7 +52,7 @@ public class ClearInventory extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandHandler sender, CommandArgs args) {
+	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;
