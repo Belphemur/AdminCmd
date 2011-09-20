@@ -53,7 +53,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- * 
+ *
  * @authors Plague, Balor
  */
 public class ACHelper {
@@ -112,7 +112,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -136,7 +136,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -146,7 +146,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -156,7 +156,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 * 
+	 *
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -166,7 +166,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 * 
+	 *
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -209,7 +209,7 @@ public class ACHelper {
 
 	/**
 	 * Get ItemStacks for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
@@ -231,7 +231,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -449,7 +449,8 @@ public class ACHelper {
 		pluginConfig.addProperty("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
 		pluginConfig.addProperty("respawnAtSpawnPoint", false);
 		pluginConfig.addProperty("DisplayNewsOnJoin", true);
-
+		pluginConfig.addProperty("DateAndTime.Format", "E, dd/MM/yy '-' HH:mm:ss");
+		pluginConfig.addProperty("DateAndTime.GMToffset", "+00:00");
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {
@@ -486,7 +487,7 @@ public class ACHelper {
 
 	/**
 	 * Get boolean from config
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -496,7 +497,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -506,12 +507,22 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
 	public Integer getConfInt(String path) {
 		return pluginConfig.getInt(path, 0);
+	}
+
+	/**
+	 * Get String parameter from config.
+	 *
+	 * @param path
+	 * @return
+	 */
+	public String getConfString(String path) {
+		return pluginConfig.getString(path, "");
 	}
 
 	/**
@@ -534,7 +545,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -587,7 +598,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -614,7 +625,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
@@ -623,7 +634,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
