@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Roll extends CoreCommand {
 
@@ -42,7 +42,7 @@ public class Roll extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -50,13 +50,16 @@ public class Roll extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		int dice = 6;
-		if (args.length >= 1 && args.getInt(0) >= 1) {
+		if (args.length >= 1) {
 			try {
 				dice = args.getInt(0);
 			} catch (NumberFormatException e) {
 			}
 		}
+
 		Random rand = new Random();
+		if (dice < 1)
+			dice = rand.nextInt(19) + 1;
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("face", String.valueOf(dice));
 		if (Utils.isPlayer(sender, false))
@@ -70,7 +73,7 @@ public class Roll extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
