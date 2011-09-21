@@ -158,6 +158,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(LockServer.class);
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
+		CommandManager.getInstance().registerCommand(Eternal.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -390,6 +391,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 						"2. Do not use strong language! //n" +
 						"3. Be friendly to other players!");
 		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
+		Utils.addLocale("eternalDisabled", ChatColor.DARK_RED + "ETERNAL mode disabled.");
+		Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED
+				+ "ETERNAL mode disabled for %player");
+		Utils.addLocale("eternalEnabled", ChatColor.DARK_RED + "ETERNAL mode enabled.");
+		Utils.addLocale("eternalEnabledTarget", ChatColor.DARK_RED
+				+ "ETERNAL mode enabled for %player");
 		LocaleManager.getInstance().save();
 	}
 
