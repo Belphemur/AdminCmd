@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -55,7 +55,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener extends PlayerListener {
 	@Override
@@ -87,7 +87,7 @@ public class ACPlayerListener extends PlayerListener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -129,6 +129,8 @@ public class ACPlayerListener extends PlayerListener {
 			Utils.sParsedLocale(p, "MOTD");
 		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
 			Utils.sParsedLocale(p, "NEWS");
+		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin"))
+			Utils.sParsedLocale(p, "Rules");
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
@@ -284,7 +286,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Tp at see mode
-	 * 
+	 *
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {
@@ -308,7 +310,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Drop the wanted item
-	 * 
+	 *
 	 * @param block
 	 * @param itemId
 	 * @return
@@ -320,7 +322,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Super breaker mode
-	 * 
+	 *
 	 * @param player
 	 * @param block
 	 */
@@ -374,7 +376,7 @@ public class ACPlayerListener extends PlayerListener {
 		Player newPlayer;
 
 		/**
-		 * 
+		 *
 		 */
 		public UpdateInvisibleOnJoin(Player p) {
 			newPlayer = p;
