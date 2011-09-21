@@ -19,8 +19,8 @@ package be.Balor.Manager.Commands.Player;
 import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
@@ -76,11 +76,11 @@ public class Fly extends CoreCommand {
 				player.setFallDistance(0.0F);
 				Utils.sI18n(player, "flyDisabled");
 				//MC 1.8 creative hack
-				//((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet70Bed(3, 0));
+				/*((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet70Bed(3, 0));
 				((CraftPlayer)player).getHandle().abilities.canInstantlyBuild = false;
 				((CraftPlayer)player).getHandle().abilities.isInvulnerable = false;
 				((CraftPlayer)player).getHandle().abilities.canFly = false;
-				((CraftPlayer)player).getHandle().abilities.isFlying = false;
+				((CraftPlayer)player).getHandle().abilities.isFlying = false;*/
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
