@@ -55,7 +55,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPlayerListener extends PlayerListener {
 	@Override
@@ -87,7 +87,7 @@ public class ACPlayerListener extends PlayerListener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 *
+			 * 
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -119,6 +119,8 @@ public class ACPlayerListener extends PlayerListener {
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
 		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (player.hasPower(Type.FAKEQUIT))
+			event.setJoinMessage(null);
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
@@ -141,7 +143,9 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
 		PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+		if (ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT))
+			event.setQuitMessage(null);
+		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
@@ -286,7 +290,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Tp at see mode
-	 *
+	 * 
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {
@@ -310,7 +314,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Drop the wanted item
-	 *
+	 * 
 	 * @param block
 	 * @param itemId
 	 * @return
@@ -322,7 +326,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Super breaker mode
-	 *
+	 * 
 	 * @param player
 	 * @param block
 	 */
