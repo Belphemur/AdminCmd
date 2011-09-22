@@ -251,7 +251,8 @@ public class CommandManager implements CommandExecutor {
 	 *            plugin that want the command to be unregister. It has to be
 	 *            the same that belong to the command.
 	 */
-	public void unRegisterCommand(Class<? extends CoreCommand> clazz, AbstractAdminCmdPlugin plugin) {
+	public boolean unRegisterCommand(Class<? extends CoreCommand> clazz,
+			AbstractAdminCmdPlugin plugin) {
 		try {
 			CoreCommand command = (CoreCommand) clazz.newInstance();
 			if (plugin.equals(command.getPlugin())) {
@@ -261,14 +262,17 @@ public class CommandManager implements CommandExecutor {
 					registeredCommands.remove(pCmd);
 					unRegisterBukkitCommand(pCmd);
 				} catch (Exception e) {
-					// TODO: handle exception
+					return false;
 				}
+				return true;
+
 			}
 		} catch (InstantiationException e) {
 
 		} catch (IllegalAccessException e) {
 
 		}
+		return false;
 
 	}
 

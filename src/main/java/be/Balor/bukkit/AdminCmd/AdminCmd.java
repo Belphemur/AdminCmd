@@ -37,7 +37,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -389,20 +389,23 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				"serverLock",
 				ChatColor.RED
 						+ "Server will be lock in 5 seconds, you'll be kicked if you don't have the Permission to stay.");
-		Utils.addLocale("Rules","1. Do not grief! //n" +
-						"2. Do not use strong language! //n" +
-						"3. Be friendly to other players!");
-		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
+		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
+				+ "3. Be friendly to other players!");
+		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("eternalDisabled", ChatColor.DARK_RED + "ETERNAL mode disabled.");
 		Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode disabled for %player");
 		Utils.addLocale("eternalEnabled", ChatColor.DARK_RED + "ETERNAL mode enabled.");
 		Utils.addLocale("eternalEnabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode enabled for %player");
-		Utils.addLocale("fakeQuitDisabled", ChatColor.DARK_AQUA + "FakeQuit mode disabled, you are now listed online again.");
-		Utils.addLocale("fakeQuitDisabledTarget", ChatColor.DARK_AQUA + "FakeQuit mode disabled for %player");
-		Utils.addLocale("fakeQuitEnabled", ChatColor.DARK_AQUA + "FakeQuit mode enabled, you are now not listed online anymore.");
-		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA + "FakeQuit mode enabled for %player");
+		Utils.addLocale("fakeQuitDisabled", ChatColor.DARK_AQUA
+				+ "FakeQuit mode disabled, you are now listed online again.");
+		Utils.addLocale("fakeQuitDisabledTarget", ChatColor.DARK_AQUA
+				+ "FakeQuit mode disabled for %player");
+		Utils.addLocale("fakeQuitEnabled", ChatColor.DARK_AQUA
+				+ "FakeQuit mode enabled, you are now not listed online anymore.");
+		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA
+				+ "FakeQuit mode enabled for %player");
 		LocaleManager.getInstance().save();
 	}
 
@@ -442,10 +445,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		try {
 			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
 		} catch (Throwable e) {
-			ACLogger.info("Need bukkit version 1185 to play with food. Command /eternal disabled.");
-			CommandManager.getInstance().unRegisterCommand(Eternal.class, this);
+			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
+				ACLogger.info("Need bukkit version 1185 to play with food. Command /eternal disabled.");
 		}
-		
+
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
