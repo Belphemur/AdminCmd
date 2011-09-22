@@ -125,13 +125,16 @@ public class ACPlayerListener extends PlayerListener {
 			player.setInformation("firstTime", false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
+			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
+				Utils.sParsedLocale(p, "Rules");
 		}
 		player.setInformation("lastConnection", System.currentTimeMillis());
 		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
 			Utils.sParsedLocale(p, "MOTD");
 		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
 			Utils.sParsedLocale(p, "NEWS");
-		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin"))
+		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin")
+				&& !ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
 			Utils.sParsedLocale(p, "Rules");
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !player.hasPower(Type.TP_REQUEST)

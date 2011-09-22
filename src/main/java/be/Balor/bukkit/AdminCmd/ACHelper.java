@@ -450,6 +450,7 @@ public class ACHelper {
 		pluginConfig.addProperty("respawnAtSpawnPoint", false);
 		pluginConfig.addProperty("DisplayNewsOnJoin", true);
 		pluginConfig.addProperty("DisplayRulesOnJoin", true);
+		pluginConfig.addProperty("DisplayRulesOnlyOnFirstJoin", false);
 		pluginConfig.addProperty("DateAndTime.Format", "E, dd/MM/yy '-' HH:mm:ss");
 		pluginConfig.addProperty("DateAndTime.GMToffset", "+00:00");
 		List<String> disabled = new ArrayList<String>();
