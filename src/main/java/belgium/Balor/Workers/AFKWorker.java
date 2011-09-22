@@ -23,6 +23,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
 import com.google.common.collect.MapMaker;
@@ -141,7 +143,8 @@ final public class AFKWorker {
 	 * @param msg
 	 */
 	public void setAfk(Player p, String msg) {
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
 			String afkString = Utils.I18n("afk", "player",
 					Utils.colorParser(PermissionManager.getPrefix(p)) + p.getName());
 			if (afkString != null) {
@@ -163,6 +166,9 @@ final public class AFKWorker {
 	 * @param buddy
 	 */
 	public void sendAfkMessage(Player sender, Player buddy) {
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
+				|| ACPlayer.getPlayer(buddy.getName()).hasPower(Type.FAKEQUIT))
+			return;
 		Object obj = playersAfk.get(buddy);
 		if (obj != null) {
 			Utils.sI18n(sender, "noteAfk", "player", buddy.getName());
@@ -182,7 +188,8 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	public void setOnline(Player p) {
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
 			String online = Utils.I18n("online", "player",
 					Utils.colorParser(PermissionManager.getPrefix(p)) + p.getName());
 			if (online != null)
