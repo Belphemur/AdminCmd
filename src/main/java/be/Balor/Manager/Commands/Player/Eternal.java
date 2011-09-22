@@ -53,7 +53,7 @@ public class Eternal extends CoreCommand {
 				acp.setPower(Type.ETERNAL);
 				acp.setInformation("foodLvl", player.getFoodLevel());
 				player.setFoodLevel(20);
-				Utils.sI18n(player, "vulcanEnabled");
+				Utils.sI18n(player, "eternalEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "eternalEnabledTarget", replace);
 			}
