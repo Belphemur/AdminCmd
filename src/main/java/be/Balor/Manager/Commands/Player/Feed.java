@@ -25,6 +25,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
 public class Feed extends CoreCommand {
