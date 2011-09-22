@@ -158,7 +158,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(BanConvert.class);
 		CommandManager.getInstance().registerCommand(LockServer.class);
 		CommandManager.getInstance().registerCommand(Set.class);
-		CommandManager.getInstance().registerCommand(Rules.class);		
+		CommandManager.getInstance().registerCommand(Rules.class);
+		CommandManager.getInstance().registerCommand(Eternal.class);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 	}
 
@@ -440,9 +441,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
 		try {
 			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
-			CommandManager.getInstance().registerCommand(Eternal.class);
 		} catch (Throwable e) {
-			ACLogger.info("Need bukkit version 1185 to play with food.");
+			ACLogger.info("Need bukkit version 1185 to play with food. Command /eternal disabled.");
+			CommandManager.getInstance().unRegisterCommand(Eternal.class, this);
 		}
 		
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
