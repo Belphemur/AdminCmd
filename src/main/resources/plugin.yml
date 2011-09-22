@@ -346,3 +346,7 @@ commands:
     description: Makes a player eternal, no need to eat food anymore. BUT he can be damaged!
     aliases: [eternal, pet]
     usage: /<command> <player>
+  bal_feed:
+    description: Refills the Foodbar of the provided player or yours.
+    aliases: [feed, pf]
+    usage: /<command> <player>
