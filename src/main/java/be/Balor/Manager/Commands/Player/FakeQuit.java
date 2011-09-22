@@ -60,12 +60,14 @@ public class FakeQuit extends CoreCommand {
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.FAKEQUIT)) {
 				acp.removePower(Type.FAKEQUIT);
+				Utils.broadcastFakeJoin(player);
 				Utils.sI18n(player, "fakeQuitDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fakeQuitDisabledTarget", replace);
 			} else {
 				acp.setPower(Type.FAKEQUIT);
 				Utils.sI18n(player, "fakeQuitEnabled");
+				Utils.broadcastFakeQuit(player);
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fakeQuitEnabledTarget", replace);
 			}

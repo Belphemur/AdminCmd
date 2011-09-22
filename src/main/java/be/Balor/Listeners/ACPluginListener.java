@@ -34,7 +34,6 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
-import belgium.Balor.Workers.InvisibleWorker;
 
 import com.herocraftonline.dev.heroes.Heroes;
 
@@ -44,7 +43,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPluginListener extends ServerListener {
 
@@ -80,7 +79,7 @@ public class ACPluginListener extends ServerListener {
 			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager().getPlugin("mChat");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				BukkitPermissions.setmChatapi(mChat.API);
-				InvisibleWorker.getInstance().setmChatInstalled(true);
+				Utils.mChatInstalled = true;
 				ACLogger.info("Successfully linked with mChat");
 			}
 		}
@@ -101,7 +100,7 @@ public class ACPluginListener extends ServerListener {
 			if (plugin != null)
 				Utils.signExtention = true;
 		}
-		if (Utils.heroes == null){
+		if (Utils.heroes == null) {
 			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("Heroes");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.heroes = (Heroes) plugin;
@@ -109,8 +108,9 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 	}
+
 	@Override
-	 public void onPluginDisable(PluginDisableEvent event) {
+	public void onPluginDisable(PluginDisableEvent event) {
 		ACPluginManager.unRegisterACPlugin(event.getPlugin());
 	}
 }

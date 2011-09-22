@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentMap;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
 
-import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -45,7 +44,6 @@ final public class InvisibleWorker {
 	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
 	private long maxRange = 262144;
 	private int tickCheck = 400;
-	private boolean mChatInstalled = false;
 
 	/**
 	 * 
@@ -87,14 +85,6 @@ final public class InvisibleWorker {
 	}
 
 	/**
-	 * @param mChatInstalled
-	 *            the mChatInstalled to set
-	 */
-	public void setmChatInstalled(boolean mChatInstalled) {
-		this.mChatInstalled = mChatInstalled;
-	}
-
-	/**
 	 * return all invisible Players
 	 * 
 	 * @return
@@ -130,14 +120,7 @@ final public class InvisibleWorker {
 								}
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-				if (mChatInstalled)
-					Utils.broadcastMessage(Utils.colorParser(PermissionManager
-							.getPrefix(toReappear))
-							+ name
-							+ ChatColor.YELLOW
-							+ " has joined the game.");
-				else
-					Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
+				Utils.broadcastFakeJoin(toReappear);
 		}
 
 	}
@@ -222,11 +205,7 @@ final public class InvisibleWorker {
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-			if (mChatInstalled)
-				Utils.broadcastMessage(Utils.colorParser(PermissionManager.getPrefix(toVanish))
-						+ name + ChatColor.YELLOW + " has left the game.");
-			else
-				Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+			Utils.broadcastFakeQuit(toVanish);
 
 	}
 
