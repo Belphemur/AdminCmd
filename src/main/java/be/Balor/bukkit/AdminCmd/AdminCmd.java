@@ -29,6 +29,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
@@ -438,7 +439,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
+		try {
+			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
+		} catch (Throwable e) {
+			ACLogger.info("Need bukkit version to play with food.");
+		}
+		
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);

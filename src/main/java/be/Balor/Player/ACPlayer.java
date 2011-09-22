@@ -34,7 +34,6 @@ public abstract class ACPlayer {
 	private final String name;
 	private final int hashCode;
 	protected boolean isOnline = false;
-	protected int foodLevel = 0;
 	protected ACCommandContainer lastCmd = null;
 	protected Player handler = null;
 
@@ -283,23 +282,6 @@ public abstract class ACPlayer {
 		if (this.lastCmd == null)
 			throw new NullPointerException();
 		this.lastCmd.execute();
-	}
-
-	/**
-	 * @author Lathanael
-	 * @param level
-	 *            the FoodLevel to set
-	 */
-	public void setFoodLevel(int level) {
-		this.foodLevel = level;
-	}
-
-	/**
-	 * @author Lathanael
-	 * @return foodLevel
-	 */
-	public int getFoodLevel() {
-		return this.foodLevel;
 	}
 	/*
 	 * (non-Javadoc)
