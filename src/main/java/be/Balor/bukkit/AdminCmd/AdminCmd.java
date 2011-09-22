@@ -37,7 +37,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -161,6 +161,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Rules.class);
 		CommandManager.getInstance().registerCommand(Eternal.class);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
+		CommandManager.getInstance().registerCommand(Feed.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -451,7 +452,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
 		} catch (Throwable e) {
 			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
-				ACLogger.info("Need bukkit version 1185 to play with food. Command /eternal disabled.");
+				CommandManager.getInstance().unRegisterCommand(Feed.class,this);
+				ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
 		}
 
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);

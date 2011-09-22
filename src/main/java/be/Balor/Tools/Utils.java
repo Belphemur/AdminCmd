@@ -63,7 +63,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Utils {
 	public static OddItem oddItem = null;
@@ -74,12 +74,12 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 * 
+	 *
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -111,7 +111,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 * 
+	 *
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -154,7 +154,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 * 
+	 *
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -172,8 +172,8 @@ public class Utils {
 	}
 
 	/**
-	 * Heal the selected player.
-	 * 
+	 * Heal or refill the FoodBar of the selected player.
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -191,6 +191,8 @@ public class Utils {
 		} else if (toDo.equals("heal") && hero != null) {
 			hero.setHealth(hero.getMaxHealth());
 			target.setFireTicks(0);
+		} else if (toDo.equals("feed")) {
+			target.setFoodLevel(20);
 		} else {
 			target.setHealth(0);
 			if (logBlock != null)
@@ -202,7 +204,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 * 
+	 *
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -510,7 +512,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -584,7 +586,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 * 
+	 *
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -628,7 +630,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 * 
+	 *
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -642,7 +644,7 @@ public class Utils {
 	}
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 * 
+	 *
 	 * @param player
 	 *            that fake join.
 	 */
@@ -656,7 +658,7 @@ public class Utils {
 	}
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 * 
+	 *
 	 * @param block
 	 * @param radius
 	 * @return
@@ -748,7 +750,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 * 
+	 *
 	 * @param start
 	 * @return
 	 */
@@ -758,7 +760,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 * 
+	 *
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -783,7 +785,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 * 
+	 *
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -800,7 +802,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 * 
+	 *
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -817,7 +819,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 * 
+	 *
 	 * @param loc
 	 * @return
 	 */
@@ -831,7 +833,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -856,7 +858,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -901,7 +903,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
