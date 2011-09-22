@@ -50,7 +50,7 @@ public class MobLimit extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		World world = sender.getServer().getWorld(args.getString(0).replaceAll("_", " "));
+		World world = sender.getServer().getWorld(args.getString(0));
 		if (world != null) {
 			int limit;
 			try {
