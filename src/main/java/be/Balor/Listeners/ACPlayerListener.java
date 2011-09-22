@@ -127,10 +127,12 @@ public class ACPlayerListener extends PlayerListener {
 				ACHelper.getInstance().spawn(p);
 			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
 				Utils.sParsedLocale(p, "Rules");
-		}
-		player.setInformation("lastConnection", System.currentTimeMillis());
-		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+			if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+				Utils.sParsedLocale(p, "MOTDNewUser");
+		} else if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
 			Utils.sParsedLocale(p, "MOTD");
+		player.setInformation("lastConnection", System.currentTimeMillis());
+
 		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
 			Utils.sParsedLocale(p, "NEWS");
 		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin")

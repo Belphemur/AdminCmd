@@ -317,6 +317,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
 				+ "%d day(s) %h:%m:%s");
+		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
+				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
+				+ "%d day(s) %h:%m:%s");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
