@@ -20,7 +20,10 @@ import java.util.HashMap;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;;
+import org.bukkit.scheduler.BukkitScheduler;
+
+import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -112,5 +115,14 @@ public class ACPluginManager {
 	 */
 	public static BukkitScheduler getScheduler() {
 		return server.getScheduler();
+	}
+
+	/**
+	 * Register a Plugin Command
+	 * 
+	 * @param clazz
+	 */
+	public static void registerCommand(Class<? extends CoreCommand> clazz) throws IllegalArgumentException {
+		CommandManager.getInstance().registerCommand(clazz);
 	}
 }
