@@ -159,6 +159,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
 		CommandManager.getInstance().registerCommand(Eternal.class);
+		CommandManager.getInstance().registerCommand(FakeQuit.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -397,6 +398,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("eternalEnabled", ChatColor.DARK_RED + "ETERNAL mode enabled.");
 		Utils.addLocale("eternalEnabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode enabled for %player");
+		Utils.addLocale("fakeQuitDisabled", ChatColor.DARK_AQUA + "FakeQuit mode disabled, you are now listed online again.");
+		Utils.addLocale("fakeQuitDisabledTarget", ChatColor.DARK_AQUA + "FakeQuit mode disabled for %player");
+		Utils.addLocale("fakeQuitEnabled", ChatColor.DARK_AQUA + "FakeQuit mode enabled, you are now not listed online anymore.");
+		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA + "FakeQuit mode enabled for %player");
 		LocaleManager.getInstance().save();
 	}
 
@@ -433,6 +438,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);

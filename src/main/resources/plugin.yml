@@ -338,3 +338,11 @@ commands:
     description: Displays the rules of the server
     aliases: [rules]
     usage: /<command>
+  bal_fakequit:
+    description: Fakes a quit and removes the player form the Online-List
+    aliases: [fakequit, fq]
+    usage: /<command> <player>
+  bal_eternal:
+    description: Makes a player eternal, no need to eat food anymore. BUT he can be damaged!
+    aliases: [eternal, pet]
+    usage: /<command> <player>

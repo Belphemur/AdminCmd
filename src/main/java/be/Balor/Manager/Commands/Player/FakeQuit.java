@@ -14,32 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
+
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import belgium.Balor.Workers.InvisibleWorker;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class PlayerList extends CoreCommand {
+
+public class FakeQuit extends CoreCommand {
 
 	/**
 	 *
 	 */
-	public PlayerList() {
-		permNode = "admincmd.player.list";
-		cmdName = "bal_playerlist";
+	public FakeQuit() {
+		permNode = "admincmd.player.fakequit";
+		cmdName = "bal_fakequit";
+		other = true;
 	}
 
 	/*
@@ -49,34 +51,25 @@ public class PlayerList extends CoreCommand {
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
-
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player[] online = sender.getServer().getOnlinePlayers();
-		int amount = online.length;
-		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
-			amount -= InvisibleWorker.getInstance().nbInvisibles();
-		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
-		String buffer = "";
-		for (int i = 0; i < online.length; ++i) {
-			Player p = online[i];
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-					|| ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT))
-					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
-				continue;
-			String name = Utils.getPrefix(p, sender) + p.getName();
-			if (buffer.length() + name.length() + 2 >= 256) {
-				sender.sendMessage(buffer);
-				buffer = "";
+		Player player = Utils.getUser(sender, args, permNode);
+		if (player != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", player.getName());
+			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			if (acp.hasPower(Type.FAKEQUIT)) {
+				acp.removePower(Type.FAKEQUIT);
+				Utils.sI18n(player, "fakeQuitDisabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "fakeQuitDisabledTarget", replace);
+			} else {
+				acp.setPower(Type.FAKEQUIT);
+				Utils.sI18n(player, "fakeQuitEnabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "fakeQuitEnabledTarget", replace);
 			}
-			buffer += name + ", ";
 		}
-		if (!buffer.equals("")) {
-			if (buffer.endsWith(", "))
-				buffer = buffer.substring(0, buffer.lastIndexOf(","));
-			sender.sendMessage(buffer);
-		}
-
 	}
 
 	/*
@@ -86,7 +79,6 @@ public class PlayerList extends CoreCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		return args != null;
 	}
-
 }
