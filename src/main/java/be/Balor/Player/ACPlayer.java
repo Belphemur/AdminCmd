@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class ACPlayer {
 	private final String name;
@@ -51,8 +51,9 @@ public abstract class ACPlayer {
 
 	/**
 	 * Get an instance of the wanted player
-	 *
+	 * 
 	 * @param name
+	 *            name of the player
 	 * @return
 	 */
 	public static ACPlayer getPlayer(String name) {
@@ -60,8 +61,19 @@ public abstract class ACPlayer {
 	}
 
 	/**
+	 * Get an instance of the wanted player
+	 * 
+	 * @param player
+	 *            instance of bukkit player
+	 * @return
+	 */
+	public static ACPlayer getPlayer(Player player) {
+		return PlayerManager.getInstance().demandACPlayer(player.getName());
+	}
+
+	/**
 	 * Get the bukkit player
-	 *
+	 * 
 	 * @return
 	 */
 	public Player getHandler() {
@@ -70,7 +82,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Get Player Name
-	 *
+	 * 
 	 * @return
 	 */
 	public String getName() {
@@ -79,7 +91,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Add a new home for the player
-	 *
+	 * 
 	 * @param home
 	 *            home name
 	 * @param loc
@@ -89,7 +101,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Remove a home of the player
-	 *
+	 * 
 	 * @param home
 	 *            name of the home
 	 */
@@ -97,7 +109,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Get a home of the player
-	 *
+	 * 
 	 * @param home
 	 *            name of the home
 	 */
@@ -105,14 +117,14 @@ public abstract class ACPlayer {
 
 	/**
 	 * Get the home containing the home of the player
-	 *
+	 * 
 	 * @return list containing homes of the user
 	 */
 	public abstract List<String> getHomeList();
 
 	/**
 	 * Set player information
-	 *
+	 * 
 	 * @param info
 	 *            key of the information
 	 * @param value
@@ -122,7 +134,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Remove the information
-	 *
+	 * 
 	 * @param info
 	 *            key of the information
 	 */
@@ -130,7 +142,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Get the information
-	 *
+	 * 
 	 * @param info
 	 *            key of the information
 	 */
@@ -138,21 +150,21 @@ public abstract class ACPlayer {
 
 	/**
 	 * Set the last location of the player before TP or dying
-	 *
+	 * 
 	 * @param loc
 	 */
 	public abstract void setLastLocation(Location loc);
 
 	/**
 	 * Get the last location of the player before TP or dying
-	 *
+	 * 
 	 * @return
 	 */
 	public abstract Location getLastLocation();
 
 	/**
 	 * Set the power of the user with a default value
-	 *
+	 * 
 	 * @param power
 	 */
 	public void setPower(Type power) {
@@ -161,7 +173,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Set the power of the user with a given value
-	 *
+	 * 
 	 * @param power
 	 * @param value
 	 */
@@ -169,7 +181,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Set the custom power of the user with a default value
-	 *
+	 * 
 	 * @param custom
 	 *            power
 	 */
@@ -179,7 +191,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Set the custom power of the user with a given value
-	 *
+	 * 
 	 * @param custom
 	 *            power
 	 * @param value
@@ -188,7 +200,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Get the custom power of the user
-	 *
+	 * 
 	 * @param Power
 	 * @return
 	 */
@@ -196,7 +208,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Check if the player have the wanted custom power
-	 *
+	 * 
 	 * @param power
 	 * @return
 	 */
@@ -204,14 +216,14 @@ public abstract class ACPlayer {
 
 	/**
 	 * Remove the custom power of the user
-	 *
+	 * 
 	 * @param power
 	 */
 	public abstract void removeCustomPower(String power);
 
 	/**
 	 * Get the power of the user
-	 *
+	 * 
 	 * @param Power
 	 * @return
 	 */
@@ -219,7 +231,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Check if the player have the wanted power
-	 *
+	 * 
 	 * @param power
 	 * @return
 	 */
@@ -227,7 +239,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Remove the power of the user
-	 *
+	 * 
 	 * @param power
 	 */
 	public abstract void removePower(Type power);
@@ -244,7 +256,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Update the played time of the player
-	 *
+	 * 
 	 * @return the total played time in Long
 	 */
 	public long updatePlayedTime() {
@@ -274,7 +286,7 @@ public abstract class ACPlayer {
 
 	/**
 	 * Execute the last command
-	 *
+	 * 
 	 * @throws NullPointerException
 	 *             if last command is not defined
 	 */
@@ -283,9 +295,10 @@ public abstract class ACPlayer {
 			throw new NullPointerException();
 		this.lastCmd.execute();
 	}
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -295,7 +308,7 @@ public abstract class ACPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
