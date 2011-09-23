@@ -116,7 +116,7 @@ public class PlayerManager {
 	 * @param power
 	 * @return
 	 */
-	public List<ACPlayer> getACPlayerHavingPower(String power) {
+	List<ACPlayer> getACPlayerHavingPower(String power) {
 		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (ACPlayer p : getExistingPlayers()) {
 			if (p.hasCustomPower(power))
@@ -131,7 +131,7 @@ public class PlayerManager {
 	 * @param power
 	 * @return
 	 */
-	public List<ACPlayer> getACPlayerHavingPower(Type power) {
+	List<ACPlayer> getACPlayerHavingPower(Type power) {
 		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (ACPlayer p : getExistingPlayers()) {
 			if (p.hasPower(power))

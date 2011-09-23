@@ -72,6 +72,26 @@ public abstract class ACPlayer {
 	}
 
 	/**
+	 * Get all player having the select power
+	 * 
+	 * @param power
+	 *            power to check
+	 * @return
+	 */
+	public static List<ACPlayer> getPlayers(Type power) {
+		return PlayerManager.getInstance().getACPlayerHavingPower(power);
+	}
+	/**
+	 * Get all player having the select power
+	 * 
+	 * @param power
+	 *            power to check
+	 * @return
+	 */
+	public static List<ACPlayer> getPlayers(String power) {
+		return PlayerManager.getInstance().getACPlayerHavingPower(power);
+	}
+	/**
 	 * Get the bukkit player
 	 * 
 	 * @return
