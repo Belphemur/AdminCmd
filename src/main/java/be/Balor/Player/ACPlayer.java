@@ -81,6 +81,7 @@ public abstract class ACPlayer {
 	public static List<ACPlayer> getPlayers(Type power) {
 		return PlayerManager.getInstance().getACPlayerHavingPower(power);
 	}
+
 	/**
 	 * Get all player having the select power
 	 * 
@@ -91,6 +92,7 @@ public abstract class ACPlayer {
 	public static List<ACPlayer> getPlayers(String power) {
 		return PlayerManager.getInstance().getACPlayerHavingPower(power);
 	}
+
 	/**
 	 * Get the bukkit player
 	 * 
@@ -277,13 +279,19 @@ public abstract class ACPlayer {
 	/**
 	 * Update the played time of the player
 	 * 
+	 */
+	public void updatePlayedTime() {
+
+		setInformation("totalTime", getCurrentPlayedTime());
+	}
+
+	/**
+	 * 
 	 * @return the total played time in Long
 	 */
-	public long updatePlayedTime() {
-		long total = getInformation("totalTime").getLong(0) + System.currentTimeMillis()
-				- getInformation("lastConnection").getLong(System.currentTimeMillis());
-		setInformation("totalTime", total);
-		return total;
+	public long getCurrentPlayedTime() {
+		return (getInformation("totalTime").getLong(0) + System.currentTimeMillis() - getInformation(
+				"lastConnection").getLong(System.currentTimeMillis()));
 	}
 
 	/**

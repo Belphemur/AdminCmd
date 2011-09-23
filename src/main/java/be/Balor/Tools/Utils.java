@@ -525,7 +525,7 @@ public class Utils {
 	public static void sParsedLocale(Player p, String locale) {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
-		long total = ACPlayer.getPlayer(p.getName()).updatePlayedTime();
+		long total = ACPlayer.getPlayer(p.getName()).getCurrentPlayedTime();
 		Long[] time = Utils.transformToElapsedTime(total);
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());

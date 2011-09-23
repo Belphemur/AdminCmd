@@ -52,7 +52,7 @@ public class Played extends CoreCommand {
 		Player target = Utils.getUser(sender, args, permNode);
 		if (target != null) {
 			String playername = target.getName();
-			long total = ACPlayer.getPlayer(playername).updatePlayedTime();
+			long total = ACPlayer.getPlayer(playername).getCurrentPlayedTime();
 			Long[] time = Utils.transformToElapsedTime(total);
 			String prefix = Utils.colorParser(PermissionManager.getPrefix(target));
 			HashMap<String, String> replace = new HashMap<String, String>();
