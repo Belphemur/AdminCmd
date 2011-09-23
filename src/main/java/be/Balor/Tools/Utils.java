@@ -546,6 +546,11 @@ public class Utils {
 		replace.put("connected", connected);
 		String serverTime = replaceDateAndTimeFormat();
 		replace.put("time", serverTime);
+		String date = replaceDateAndTimeFormat(p);
+		if (date == null)
+			replace.put("lastlogin", LocaleManager.getInstance().get("noLoginInformation"));
+		else
+			replace.put("lastlogin", date);
 		String motd = I18n(locale, replace);
 		if (motd != null)
 			for (String toSend : motd.split("//n"))
@@ -802,6 +807,15 @@ public class Utils {
 		return timeFormatted;
 	}
 
+	public static String replaceDateAndTimeFormat(Player player) {
+		String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
+		SimpleDateFormat formater = new SimpleDateFormat(format);
+		String lastlogin = "";
+		lastlogin = formater.format(new Date(ACPlayer.getPlayer(player).getInformation("lastConnection").getLong(1)));
+		if (lastlogin == formater.format(new Date (1)))
+			return null;
+		return lastlogin;
+	}
 	/**
 	 * Get the real time from the server
 	 * 
