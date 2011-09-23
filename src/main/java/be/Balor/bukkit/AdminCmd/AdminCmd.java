@@ -317,7 +317,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "%d day(s) %h:%m:%s");
+				+ "%d day(s) %h:%m:%s //n" + ChatColor.DARK_GREEN + "Your last login was: "
+				+ ChatColor.AQUA + "%lastlogin");
 		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
@@ -412,6 +413,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "FakeQuit mode enabled, you are now not listed online anymore.");
 		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA
 				+ "FakeQuit mode enabled for %player");
+		Utils.addLocale("noLoginInformation", "No login information available");
 		LocaleManager.getInstance().save();
 	}
 
