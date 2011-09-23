@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
@@ -52,7 +53,15 @@ public class ListHomes extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			String msg = "";
-			List<String> homes = ACPlayer.getPlayer(((Player)sender).getName()).getHomeList();
+			String player = "serverConsole";
+			if (Utils.isPlayer(sender, false))
+				player = ((Player) sender).getName();
+			if (args.length >= 1) {
+				if(!PermissionManager.hasPerm(sender, "admincmd.admin.home"))
+					return;
+				player = args.getString(0);
+			}			
+			List<String> homes = ACPlayer.getPlayer(player).getHomeList();
 			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE + homes.size());
 			for (String name : homes) {
 				msg += name + ", ";

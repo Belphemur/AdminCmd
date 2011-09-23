@@ -25,6 +25,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -54,19 +55,19 @@ public class SetHome extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Player p = ((Player) sender);
-			ACPlayer player = ACPlayer.getPlayer(p.getName());
+			be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
+			if (home == null)
+				return;
+			ACPlayer player = ACPlayer.getPlayer(home.player);
 			List<String> tmp = player.getHomeList();
-			String home = p.getWorld().getName();
-			if (args.length >= 1)
-				home = args.getString(0);
 			Location loc = p.getLocation();
-			if (!tmp.contains(home)
+			if (!PermissionManager.hasPerm(p, "admincmd.admin.home", false) && !tmp.contains(home)
 					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {
 				Utils.sI18n(sender, "homeLimit");
 				return;
 			}
-			player.setHome(home, loc);
-			Utils.sI18n(sender, "setMultiHome", "home", home);
+			player.setHome(home.home, loc);
+			Utils.sI18n(sender, "setMultiHome", "home", home.toString());
 		}
 
 	}

@@ -65,6 +65,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
 		permissionLinker.addPermChild("admincmd.player.bypass");
@@ -72,6 +73,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		permissionLinker.addPermChild("admincmd.player.noafkkick");
+		permissionLinker.addPermChild("admincmd.admin.home");
 	}
 
 	public void registerCmds() {
