@@ -52,10 +52,10 @@ public class Home extends CoreCommand {
 				return;
 			Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
 			if (loc == null)
-				Utils.sI18n(sender, "errorMultiHome", "home", home.toString());
+				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 			else {
 				player.teleport(loc);
-				Utils.sI18n(sender, "multiHome", "home", home.toString());
+				Utils.sI18n(sender, "multiHome", "home", home.home);
 			}
 		}
 	}

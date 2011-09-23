@@ -67,7 +67,7 @@ public class SetHome extends CoreCommand {
 				return;
 			}
 			player.setHome(home.home, loc);
-			Utils.sI18n(sender, "setMultiHome", "home", home.toString());
+			Utils.sI18n(sender, "setMultiHome", "home", home.home);
 		}
 
 	}

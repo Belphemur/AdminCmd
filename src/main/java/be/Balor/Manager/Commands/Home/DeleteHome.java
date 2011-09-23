@@ -51,7 +51,7 @@ public class DeleteHome extends CoreCommand {
 			if(home == null)
 				return;
 			ACPlayer.getPlayer(home.player).removeHome(home.home);
-			Utils.sI18n(sender, "rmHome", "home", args.getString(0));
+			Utils.sI18n(sender, "rmHome", "home", home.home);
 		}
 
 	}
