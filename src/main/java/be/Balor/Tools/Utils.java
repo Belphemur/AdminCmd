@@ -548,7 +548,7 @@ public class Utils {
 		replace.put("time", serverTime);
 		String date = replaceDateAndTimeFormat(p);
 		if (date == null)
-			replace.put("lastlogin", LocaleManager.getInstance().get("noLoginInformation"));
+			replace.put("lastlogin", I18n("noLoginInformation"));
 		else
 			replace.put("lastlogin", date);
 		String motd = I18n(locale, replace);
