@@ -27,7 +27,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -101,7 +100,7 @@ public class PrivateMessage extends CoreCommand {
 				sender.sendMessage(msgPrefix + senderPm + parsed);
 			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
 					+ "-" + buddy.getName() + ": " + parsed;
-			for (ACPlayer p : PlayerManager.getInstance().getACPlayerHavingPower(Type.SPYMSG))
+			for (ACPlayer p : ACPlayer.getPlayers(Type.SPYMSG))
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()) && p.getHandler() != null)
 					p.getHandler().sendMessage(spyMsg);

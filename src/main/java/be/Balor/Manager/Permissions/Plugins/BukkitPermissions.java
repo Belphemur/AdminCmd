@@ -147,7 +147,7 @@ public class BukkitPermissions extends AbstractPermission {
 		if (mChatAPI != null)
 			return mChatAPI.getPrefix(player);
 		else
-			return null;
+			return "";
 	}
 
 }

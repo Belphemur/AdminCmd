@@ -17,7 +17,6 @@
 package be.Balor.Manager.Commands.Home;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
@@ -48,9 +47,11 @@ public class DeleteHome extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player p = (Player) sender;
-			ACPlayer.getPlayer(p.getName()).removeHome(args.getString(0));
-			Utils.sI18n(sender, "rmHome", "home", args.getString(0));
+			be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
+			if(home == null)
+				return;
+			ACPlayer.getPlayer(home.player).removeHome(home.home);
+			Utils.sI18n(sender, "rmHome", "home", home.home);
 		}
 
 	}

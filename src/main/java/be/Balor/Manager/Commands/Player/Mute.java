@@ -61,6 +61,10 @@ public class Mute extends CoreCommand {
 				Utils.sI18n(sender, "playerNotFound", replace);
 				return;
 			}
+			if (!Utils.checkImmunity(sender, player)) {
+				Utils.sI18n(sender, "insufficientLvl");
+				return;
+			}
 			if (!acp.hasPower(Type.MUTED)) {
 				String msg = "Server Admin";
 				if (Utils.isPlayer(sender, false))

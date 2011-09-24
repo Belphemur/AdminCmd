@@ -41,6 +41,7 @@ public enum Type {
 	TP_AT_SEE(Category.SUPER_POWER),
 	SUPER_BREAKER(Category.SUPER_POWER),
 	INVISIBLE(Category.SUPER_POWER),
+	FAKEQUIT(Category.SUPER_POWER),
 	ETERNAL(Category.SUPER_POWER),
 	CUSTOM(Category.MISC);
 

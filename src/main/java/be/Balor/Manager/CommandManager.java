@@ -195,7 +195,7 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 * @param clazz
 	 */
-	public void registerCommand(Class<?> clazz) {
+	public void registerCommand(Class<? extends CoreCommand> clazz) {
 		CoreCommand command = null;
 		try {
 			command = (CoreCommand) clazz.newInstance();
@@ -240,6 +240,40 @@ public class CommandManager implements CommandExecutor {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
+	}
+
+	/**
+	 * UnRegister command
+	 * 
+	 * @param clazz
+	 *            command to unregister
+	 * @param plugin
+	 *            plugin that want the command to be unregister. It has to be
+	 *            the same that belong to the command.
+	 */
+	public boolean unRegisterCommand(Class<? extends CoreCommand> clazz,
+			AbstractAdminCmdPlugin plugin) {
+		try {
+			CoreCommand command = (CoreCommand) clazz.newInstance();
+			if (plugin.equals(command.getPlugin())) {
+				try {
+					command.initializeCommand();
+					PluginCommand pCmd = command.getPluginCommand();
+					registeredCommands.remove(pCmd);
+					unRegisterBukkitCommand(pCmd);
+				} catch (Exception e) {
+					return false;
+				}
+				return true;
+
+			}
+		} catch (InstantiationException e) {
+
+		} catch (IllegalAccessException e) {
+
+		}
+		return false;
+
 	}
 
 	/**

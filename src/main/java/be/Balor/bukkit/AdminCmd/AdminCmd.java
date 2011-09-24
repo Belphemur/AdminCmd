@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
@@ -29,6 +30,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
@@ -64,6 +66,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
 		permissionLinker.addPermChild("admincmd.player.bypass");
@@ -71,6 +74,13 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		permissionLinker.addPermChild("admincmd.player.noafkkick");
+		permissionLinker.addPermChild("admincmd.admin.home");
+		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
+		for (int i = 0; i < 150; i++) {
+			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
+		}
+
 	}
 
 	public void registerCmds() {
@@ -159,6 +169,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
 		CommandManager.getInstance().registerCommand(Eternal.class);
+		CommandManager.getInstance().registerCommand(FakeQuit.class);
+		CommandManager.getInstance().registerCommand(Feed.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -314,6 +326,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
+				+ "%d day(s) %h:%m:%s //n" + ChatColor.DARK_GREEN + "Your last login was: "
+				+ ChatColor.AQUA + "%lastlogin");
+		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
+				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
 				+ "%d day(s) %h:%m:%s");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
@@ -383,20 +401,32 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
 				+ "played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
-		Utils.addLocale(
-				"serverLock",
-				ChatColor.RED
-						+ "Server will be lock in 5 seconds, you'll be kicked if you don't have the Permission to stay.");
+		Utils.addLocale("serverLock", ChatColor.RED	+ "Server will be lock in 5 seconds," +
+				" you'll be kicked if you don't have the Permission to stay.");
 		Utils.addLocale("Rules","1. Do not grief! //n" +
 						"2. Do not use strong language! //n" +
 						"3. Be friendly to other players!");
 		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
+		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
+				+ "3. Be friendly to other players!");
+		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("eternalDisabled", ChatColor.DARK_RED + "ETERNAL mode disabled.");
 		Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode disabled for %player");
 		Utils.addLocale("eternalEnabled", ChatColor.DARK_RED + "ETERNAL mode enabled.");
 		Utils.addLocale("eternalEnabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode enabled for %player");
+		Utils.addLocale("fakeQuitDisabled", ChatColor.DARK_AQUA
+				+ "FakeQuit mode disabled, you are now listed online again.");
+		Utils.addLocale("fakeQuitDisabledTarget", ChatColor.DARK_AQUA
+				+ "FakeQuit mode disabled for %player");
+		Utils.addLocale("fakeQuitEnabled", ChatColor.DARK_AQUA
+				+ "FakeQuit mode enabled, you are now not listed online anymore.");
+		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA
+				+ "FakeQuit mode enabled for %player");
+		Utils.addLocale("noLoginInformation", "No login information available");
+		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
+				+ "You don't have the sufficient lvl to do that.");
 		LocaleManager.getInstance().save();
 	}
 
@@ -433,6 +463,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
 		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
+		try {
+			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
+		} catch (Throwable e) {
+			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
+				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
+			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
+		}
+
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);

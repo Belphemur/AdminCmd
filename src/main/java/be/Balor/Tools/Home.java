@@ -14,52 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Tp;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+package be.Balor.Tools;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpHere extends CoreCommand {
-
-	/**
-	 * 
-	 */
-	public TpHere() {
-		permNode = "admincmd.tp.here";
-		cmdName = "bal_tphere";
-	}
+public class Home {
+	public String player;
+	public String home;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender)&& Utils.checkImmunity(sender, args, 0)) {
-				Utils.tpP2P(sender, args.getString(0), ((Player) sender).getName(), Type.Tp.HERE);
-		}
+	public String toString() {
+		return player + ":" + home;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
-	}
-
 }

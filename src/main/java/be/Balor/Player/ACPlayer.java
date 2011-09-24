@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -38,7 +38,7 @@ public abstract class ACPlayer {
 	protected Player handler = null;
 
 	/**
-	 * 
+	 *
 	 */
 	protected ACPlayer(String name) {
 		this.name = name;
@@ -53,10 +53,44 @@ public abstract class ACPlayer {
 	 * Get an instance of the wanted player
 	 * 
 	 * @param name
+	 *            name of the player
 	 * @return
 	 */
 	public static ACPlayer getPlayer(String name) {
 		return PlayerManager.getInstance().demandACPlayer(name);
+	}
+
+	/**
+	 * Get an instance of the wanted player
+	 * 
+	 * @param player
+	 *            instance of bukkit player
+	 * @return
+	 */
+	public static ACPlayer getPlayer(Player player) {
+		return PlayerManager.getInstance().demandACPlayer(player.getName());
+	}
+
+	/**
+	 * Get all player having the select power
+	 * 
+	 * @param power
+	 *            power to check
+	 * @return
+	 */
+	public static List<ACPlayer> getPlayers(Type power) {
+		return PlayerManager.getInstance().getACPlayerHavingPower(power);
+	}
+
+	/**
+	 * Get all player having the select power
+	 * 
+	 * @param power
+	 *            power to check
+	 * @return
+	 */
+	public static List<ACPlayer> getPlayers(String power) {
+		return PlayerManager.getInstance().getACPlayerHavingPower(power);
 	}
 
 	/**
@@ -245,13 +279,19 @@ public abstract class ACPlayer {
 	/**
 	 * Update the played time of the player
 	 * 
+	 */
+	public void updatePlayedTime() {
+
+		setInformation("totalTime", getCurrentPlayedTime());
+	}
+
+	/**
+	 * 
 	 * @return the total played time in Long
 	 */
-	public long updatePlayedTime() {
-		long total = getInformation("totalTime").getLong(0) + System.currentTimeMillis()
-				- getInformation("lastConnection").getLong(System.currentTimeMillis());
-		setInformation("totalTime", total);
-		return total;
+	public long getCurrentPlayedTime() {
+		return (getInformation("totalTime").getLong(0) + System.currentTimeMillis() - getInformation(
+				"lastConnection").getLong(System.currentTimeMillis()));
 	}
 
 	/**

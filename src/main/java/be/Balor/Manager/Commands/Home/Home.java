@@ -46,15 +46,16 @@ public class Home extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
-			String home = player.getWorld().getName();
-			if (args.length >= 1)
-				home = args.getString(0);
-			Location loc = ACPlayer.getPlayer(player.getName()).getHome(home);
+			be.Balor.Tools.Home home = null;
+			home = Utils.getHome(sender, args.getString(0));
+			if (home == null)
+				return;
+			Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
 			if (loc == null)
-				Utils.sI18n(sender, "errorMultiHome", "home", home);
+				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 			else {
 				player.teleport(loc);
-				Utils.sI18n(sender, "multiHome", "home", home);
+				Utils.sI18n(sender, "multiHome", "home", home.home);
 			}
 		}
 	}

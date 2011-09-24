@@ -24,7 +24,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
-import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -46,7 +45,7 @@ public class BanConvert extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		List<ACPlayer> toConvert = PlayerManager.getInstance().getACPlayerHavingPower(Type.BANNED);
+		List<ACPlayer> toConvert = ACPlayer.getPlayers(Type.BANNED);
 		for (ACPlayer player : toConvert) {
 			ACHelper.getInstance().addBannedPlayer(
 					new BannedPlayer(player.getName(), player.getPower(Type.BANNED).getString()));

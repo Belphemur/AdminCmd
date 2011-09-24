@@ -85,6 +85,18 @@ public class Set extends CoreCommand {
 				LocaleManager.getInstance().save();
 				Utils.sI18n(sender, "RulesSet", "rules", result);
 			}
+		} else if (args.hasFlag('u')) {
+			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
+				for (String msg : args)
+					message += msg + " ";
+				message = message.trim();
+				String result = Utils.colorParser(message);
+				if (result == null)
+					result = message;
+				LocaleManager.getInstance().addLocale("MOTDNewUser", result, true);
+				LocaleManager.getInstance().save();
+				Utils.sI18n(sender, "MOTDset", "motd", result);
+			}
 		}
 	}
 

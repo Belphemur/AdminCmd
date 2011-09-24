@@ -23,6 +23,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -46,6 +47,10 @@ public class TpPlayerToPlayer extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		if (!Utils.checkImmunity(sender, args, 0))
+			return;
+		if (!Utils.checkImmunity(sender, args, 1))
+			return;
 		Player from = sender.getServer().getPlayer(args.getString(0));
 		Player to = sender.getServer().getPlayer(args.getString(1));
 		if (from != null && from.equals(sender))

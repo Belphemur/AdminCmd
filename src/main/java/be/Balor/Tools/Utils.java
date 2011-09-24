@@ -63,22 +63,23 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static OddItem oddItem = null;
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
 	public static boolean signExtention = false;
+	public static boolean mChatInstalled = false;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -110,7 +111,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -153,7 +154,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -171,25 +172,27 @@ public class Utils {
 	}
 
 	/**
-	 * Heal the selected player.
-	 *
+	 * Heal or refill the FoodBar of the selected player.
+	 * 
 	 * @param name
 	 * @return
 	 */
 	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, String toDo) {
 		Player target = getUser(sender, name, "admincmd.player." + toDo);
 		Hero hero = null;
+		if (target == null)
+			return false;
 		if (heroes != null) {
 			hero = heroes.getHeroManager().getHero(target);
 		}
-		if (target == null)
-			return false;
 		if (toDo.equals("heal") && hero == null) {
 			target.setHealth(20);
 			target.setFireTicks(0);
 		} else if (toDo.equals("heal") && hero != null) {
 			hero.setHealth(hero.getMaxHealth());
 			target.setFireTicks(0);
+		} else if (toDo.equals("feed")) {
+			target.setFoodLevel(20);
 		} else {
 			target.setHealth(0);
 			if (logBlock != null)
@@ -201,7 +204,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -217,8 +220,15 @@ public class Utils {
 			if (target != null)
 				if (target.equals(sender))
 					return target;
-				else if (PermissionManager.hasPerm(sender, permNode + ".other"))
-					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+					if (checkImmunity(sender, target))
+						return target;
+					else {
+						Utils.sI18n(sender, "insufficientLvl");
+						return null;
+					}
+				} else
+					return null;
 		} else if (isPlayer(sender, false))
 			target = ((Player) sender);
 		else if (errorMsg) {
@@ -509,7 +519,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -522,7 +532,7 @@ public class Utils {
 	public static void sParsedLocale(Player p, String locale) {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
-		long total = ACPlayer.getPlayer(p.getName()).updatePlayedTime();
+		long total = ACPlayer.getPlayer(p.getName()).getCurrentPlayedTime();
 		Long[] time = Utils.transformToElapsedTime(total);
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());
@@ -543,6 +553,11 @@ public class Utils {
 		replace.put("connected", connected);
 		String serverTime = replaceDateAndTimeFormat();
 		replace.put("time", serverTime);
+		String date = replaceDateAndTimeFormat(p);
+		if (date == null)
+			replace.put("lastlogin", I18n("noLoginInformation"));
+		else
+			replace.put("lastlogin", date);
 		String motd = I18n(locale, replace);
 		if (motd != null)
 			for (String toSend : motd.split("//n"))
@@ -583,7 +598,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -626,8 +641,38 @@ public class Utils {
 	}
 
 	/**
+	 * Broadcast a fakeQuit message for the selected player
+	 * 
+	 * @param player
+	 *            that fake quit.
+	 */
+	public static void broadcastFakeQuit(Player player) {
+		String name = player.getName();
+		if (mChatInstalled)
+			Utils.broadcastMessage(Utils.colorParser(PermissionManager.getPrefix(player)) + name
+					+ ChatColor.YELLOW + " has left the game.");
+		else
+			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+	}
+
+	/**
+	 * Broadcast a fakeJoin message for the selected player
+	 * 
+	 * @param player
+	 *            that fake join.
+	 */
+	public static void broadcastFakeJoin(Player player) {
+		String name = player.getName();
+		if (mChatInstalled)
+			Utils.broadcastMessage(Utils.colorParser(PermissionManager.getPrefix(player)) + name
+					+ ChatColor.YELLOW + " has joined the game.");
+		else
+			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
+	}
+
+	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -719,7 +764,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -729,7 +774,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -752,8 +797,9 @@ public class Utils {
 	}
 
 	/**
-	 * Replace the time and date to the format given in the config with the corresponding date and time
-	 *
+	 * Replace the time and date to the format given in the config with the
+	 * corresponding date and time
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -762,16 +808,29 @@ public class Utils {
 		String timeFormatted = "";
 		String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
 		SimpleDateFormat formater = new SimpleDateFormat(format);
-		Date serverTime = getServerRealTime("GMT"+ ACHelper.getInstance().getConfString("DateAndTime.GMToffSet"));
+		Date serverTime = getServerRealTime("GMT"
+				+ ACHelper.getInstance().getConfString("DateAndTime.GMToffSet"));
 		timeFormatted = formater.format(serverTime);
 		return timeFormatted;
 	}
 
+	public static String replaceDateAndTimeFormat(Player player) {
+		String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
+		SimpleDateFormat formater = new SimpleDateFormat(format);
+		String lastlogin = "";
+		lastlogin = formater.format(new Date(ACPlayer.getPlayer(player)
+				.getInformation("lastConnection").getLong(1)));
+		if (lastlogin == formater.format(new Date(1)))
+			return null;
+		return lastlogin;
+	}
+
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
-	 * @param gmt The wanted GMT offset
+	 * @param gmt
+	 *            The wanted GMT offset
 	 * @return serverTime Represents the time read from the server
 	 */
 	public static Date getServerRealTime(String gmt) {
@@ -785,7 +844,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -799,7 +858,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -823,8 +882,46 @@ public class Utils {
 	}
 
 	/**
+	 * Get the home by checking the colon
+	 * 
+	 * @param sender
+	 *            who send the command
+	 * @param toParse
+	 *            what args was send
+	 * @return the home containing the player and the home name
+	 */
+	public static Home getHome(CommandSender sender, String toParse) {
+		Home result = new Home();
+		if (toParse != null && toParse.contains(":")) {
+			try {
+				String[] split = toParse.split(":");
+				result.player = split[0];
+				result.home = split[1];
+			} catch (ArrayIndexOutOfBoundsException e) {
+			}
+			if (isPlayer(sender, false)) {
+				Player p = (Player) sender;
+				if (!p.getName().equals(result.player)
+						&& !PermissionManager.hasPerm(p, "admincmd.admin.home"))
+					return null;
+			}
+			return result;
+		}
+		if (!isPlayer(sender))
+			return null;
+		Player p = ((Player) sender);
+		result.player = p.getName();
+		if (toParse != null)
+			result.home = toParse;
+		else
+			result.home = p.getWorld().getName();
+
+		return result;
+	}
+
+	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -844,6 +941,58 @@ public class Utils {
 			result += prefixstring;
 		return colorParser(result);
 
+	}
+
+	/**
+	 * Check the if the player have the right to execute the command on the
+	 * other player
+	 * 
+	 * @param sender
+	 *            the one who want to do the command
+	 * @param target
+	 *            the target of the command
+	 * @return true if the sender have the right to execute the command, else
+	 *         false.
+	 */
+	public static boolean checkImmunity(CommandSender sender, Player target) {
+		if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+			return true;
+		if (!isPlayer(sender, false))
+			return true;
+		if (target == null)
+			return true;
+		Player player = (Player) sender;
+		int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
+		int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
+		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false) && pLvl != tLvl)
+			return false;
+		if (pLvl >= tLvl)
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Check the if the player have the right to execute the command on the
+	 * other player
+	 * 
+	 * @param sender
+	 *            the one who want to do the command
+	 * @param args
+	 *            containing the name of the target
+	 * @param index
+	 *            index of the target's name in the argument
+	 * @return true if the sender have the right to execute the command, else
+	 *         false with displaying an error message to the sender.
+	 */
+	public static boolean checkImmunity(CommandSender sender, CommandArgs args, int index) {
+		Player target = sender.getServer().getPlayer(args.getString(index));
+		if (checkImmunity(sender, target))
+			return true;
+		else {
+			sI18n(sender, "insufficientLvl");
+			return false;
+		}
 	}
 
 	public static class SetTime implements Runnable {
@@ -869,7 +1018,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override

@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -119,16 +119,25 @@ public class ACPlayerListener extends PlayerListener {
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
 		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (player.hasPower(Type.FAKEQUIT))
+			event.setJoinMessage(null);
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
-		}
-		player.setInformation("lastConnection", System.currentTimeMillis());
-		if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
+				Utils.sParsedLocale(p, "Rules");
+			if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+				Utils.sParsedLocale(p, "MOTDNewUser");
+		} else if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
 			Utils.sParsedLocale(p, "MOTD");
+		player.setInformation("lastConnection", System.currentTimeMillis());
+
 		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
 			Utils.sParsedLocale(p, "NEWS");
+		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin")
+				&& !ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
+			Utils.sParsedLocale(p, "Rules");
 		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
 				&& !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
@@ -139,7 +148,9 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
 		PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+		if (ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT))
+			event.setQuitMessage(null);
+		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
 			AFKWorker.getInstance().removePlayer(p);
@@ -374,7 +385,7 @@ public class ACPlayerListener extends PlayerListener {
 		Player newPlayer;
 
 		/**
-		 * 
+		 *
 		 */
 		public UpdateInvisibleOnJoin(Player p) {
 			newPlayer = p;

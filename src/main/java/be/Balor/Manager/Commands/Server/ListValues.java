@@ -24,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
@@ -59,7 +58,7 @@ public class ListValues extends CoreCommand {
 		for (String str : args)
 			arg += str + " ";
 		arg = arg.trim();
-		List<ACPlayer> list = PlayerManager.getInstance().getACPlayerHavingPower(arg);
+		List<ACPlayer> list = ACPlayer.getPlayers(arg);
 		if (list != null) {
 			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
 					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");

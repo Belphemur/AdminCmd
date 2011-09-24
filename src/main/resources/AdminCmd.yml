@@ -305,6 +305,24 @@ acplayerplayed:
     plugin: AdminCmd
     permissions: admincmd.player.played
 
+acplayerfeed:
+    command: feed [player]
+    description: "Refills your or the provided [players'] Foodbar"
+    plugin: AdminCmd
+    permissions: admincmd.player.feed
+
+acplayereternal:
+    command: eternal [player]
+    description: "En-/Disables your or the provided [players'] Foodbar"
+    plugin: AdminCmd
+    permissions: admincmd.player.eternal
+
+acplayerfakequit:
+    command: fakequit [player]
+    description: "En-/Disables FakeQuit mode. If enabled a\n quit message will be issued and you/the [player] will no longer\n be listed online."
+    plugin: AdminCmd
+    permissions: admincmd.player.fakequit
+
 acweatherclear:
     command: wclear
     description: Clear the weather.
@@ -420,8 +438,8 @@ acserverrules:
     permissions: admincmd.server.rules
 
 acserverset:
-    command: set [-m|-r|-n] [message]
-    description: "Change the message of motd|rules|news.\n Format options are the same for all 3, see acsetformat for more info."
+    command: set [-m|-r|-n|-u] [message]
+    description: "Change the message of motd|rules|news|motd for new user.\n Format options are the same for all 3, see acsetformat for more info."
     plugin: AdminCmd
     permissions: admincmd.server.set.*
 
