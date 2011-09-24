@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
@@ -74,6 +75,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		permissionLinker.addPermChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
+		for (int i = 0; i < 150; i++)
+		{
+			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i,
+					PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.immunityLvl." + i,
+					PermissionDefault.FALSE);
+		}
+	
 	}
 
 	public void registerCmds() {
