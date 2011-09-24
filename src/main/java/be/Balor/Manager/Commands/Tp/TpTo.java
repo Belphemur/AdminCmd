@@ -47,8 +47,11 @@ public class TpTo extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender))
-			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
+		if (Utils.isPlayer(sender)) {
+			Player target = Utils.getUser(sender, args, permNode);
+			if (target != null)
+				Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
+		}
 	}
 
 	/*
