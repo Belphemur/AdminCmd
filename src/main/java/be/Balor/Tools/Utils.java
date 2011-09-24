@@ -964,7 +964,8 @@ public class Utils {
 		Player player = (Player) sender;
 		int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
 		int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
-		if (PermissionManager.hasPerm(player, "admincmd.immunity.samelvl", false) && pLvl != tLvl)
+		if ((PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false) || PermissionManager
+				.hasPerm(target, "admincmd.immunityLvl.samelvl", false)) && pLvl != tLvl)
 			return false;
 		if (pLvl >= tLvl)
 			return true;
