@@ -180,11 +180,11 @@ public class Utils {
 	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, String toDo) {
 		Player target = getUser(sender, name, "admincmd.player." + toDo);
 		Hero hero = null;
+		if (target == null)
+			return false;
 		if (heroes != null) {
 			hero = heroes.getHeroManager().getHero(target);
 		}
-		if (target == null)
-			return false;
 		if (toDo.equals("heal") && hero == null) {
 			target.setHealth(20);
 			target.setFireTicks(0);
@@ -220,8 +220,14 @@ public class Utils {
 			if (target != null)
 				if (target.equals(sender))
 					return target;
-				else if (PermissionManager.hasPerm(sender, permNode + ".other"))
-					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+					if (checkImmunity(sender, target))
+						return target;
+					else {
+						Utils.sI18n(sender, "insufficientLvl");
+						return null;
+					}
+				}
 		} else if (isPlayer(sender, false))
 			target = ((Player) sender);
 		else if (errorMsg) {
@@ -811,11 +817,13 @@ public class Utils {
 		String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
 		SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
-		lastlogin = formater.format(new Date(ACPlayer.getPlayer(player).getInformation("lastConnection").getLong(1)));
-		if (lastlogin == formater.format(new Date (1)))
+		lastlogin = formater.format(new Date(ACPlayer.getPlayer(player)
+				.getInformation("lastConnection").getLong(1)));
+		if (lastlogin == formater.format(new Date(1)))
 			return null;
 		return lastlogin;
 	}
+
 	/**
 	 * Get the real time from the server
 	 * 
@@ -932,6 +940,33 @@ public class Utils {
 			result += prefixstring;
 		return colorParser(result);
 
+	}
+
+	/**
+	 * Check the if the player have the right to execute the command on the
+	 * other player
+	 * 
+	 * @param sender
+	 *            the one who want to do the command
+	 * @param target
+	 *            the target of the command
+	 * @return true if the sender have the right to execute the command, else
+	 *         false.
+	 */
+	public static boolean checkImmunity(CommandSender sender, Player target) {
+		if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+			return true;
+		if (!isPlayer(sender, false))
+			return true;
+		Player player = (Player) sender;
+		int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
+		int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
+		if (PermissionManager.hasPerm(player, "admincmd.immunity.samelvl", false) && pLvl != tLvl)
+			return false;
+		if (pLvl >= tLvl)
+			return true;
+		else
+			return false;
 	}
 
 	public static class SetTime implements Runnable {

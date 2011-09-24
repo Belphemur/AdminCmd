@@ -38,7 +38,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -75,14 +75,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		permissionLinker.addPermChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
-		for (int i = 0; i < 150; i++)
-		{
-			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i,
-					PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.immunityLvl." + i,
-					PermissionDefault.FALSE);
+		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
+		for (int i = 0; i < 150; i++) {
+			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 		}
-	
+
 	}
 
 	public void registerCmds() {
@@ -425,6 +423,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA
 				+ "FakeQuit mode enabled for %player");
 		Utils.addLocale("noLoginInformation", "No login information available");
+		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
+				+ "You don't have the sufficient lvl to do that.");
 		LocaleManager.getInstance().save();
 	}
 
@@ -465,8 +465,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
 		} catch (Throwable e) {
 			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
-				CommandManager.getInstance().unRegisterCommand(Feed.class,this);
-				ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
+				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
+			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
 		}
 
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);

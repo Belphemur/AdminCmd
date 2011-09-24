@@ -53,7 +53,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- *
+ * 
  * @authors Plague, Balor
  */
 public class ACHelper {
@@ -112,7 +112,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 *
+	 * 
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -136,7 +136,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 *
+	 * 
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -146,7 +146,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -156,7 +156,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 *
+	 * 
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -166,7 +166,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 *
+	 * 
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -209,7 +209,7 @@ public class ACHelper {
 
 	/**
 	 * Get ItemStacks for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
@@ -231,7 +231,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -453,6 +453,8 @@ public class ACHelper {
 		pluginConfig.addProperty("DisplayRulesOnlyOnFirstJoin", false);
 		pluginConfig.addProperty("DateAndTime.Format", "E, dd/MM/yy '-' HH:mm:ss");
 		pluginConfig.addProperty("DateAndTime.GMToffset", "+00:00");
+		pluginConfig.addProperty("useImmunityLvl", false);
+		pluginConfig.addProperty("defaultImmunityLvl", 0);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {
@@ -489,7 +491,7 @@ public class ACHelper {
 
 	/**
 	 * Get boolean from config
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -499,7 +501,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -509,7 +511,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -519,7 +521,7 @@ public class ACHelper {
 
 	/**
 	 * Get String parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -547,7 +549,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -600,7 +602,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -627,7 +629,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 *
+	 * 
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
@@ -636,7 +638,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -814,11 +816,15 @@ public class ACHelper {
 	}
 
 	public int getLimit(Player player, String type) {
+		return getLimit(player, type, type);
+	}
+
+	public int getLimit(Player player, String type, String defaultLvl) {
 		Integer limit = null;
-		String toParse = PermissionManager.getPermissionLimit(player, "maxHomeByUser");
+		String toParse = PermissionManager.getPermissionLimit(player, type);
 		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1)
-			limit = pluginConfig.getInt(type, 0);
+			limit = pluginConfig.getInt(defaultLvl, 0);
 		if (limit == 0)
 			limit = Integer.MAX_VALUE;
 		return limit;
