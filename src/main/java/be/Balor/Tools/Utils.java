@@ -227,7 +227,8 @@ public class Utils {
 						Utils.sI18n(sender, "insufficientLvl");
 						return null;
 					}
-				}
+				} else
+					return null;
 		} else if (isPlayer(sender, false))
 			target = ((Player) sender);
 		else if (errorMsg) {
@@ -958,7 +959,7 @@ public class Utils {
 			return true;
 		if (!isPlayer(sender, false))
 			return true;
-		if(target == null)
+		if (target == null)
 			return true;
 		Player player = (Player) sender;
 		int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
@@ -969,6 +970,29 @@ public class Utils {
 			return true;
 		else
 			return false;
+	}
+
+	/**
+	 * Check the if the player have the right to execute the command on the
+	 * other player
+	 * 
+	 * @param sender
+	 *            the one who want to do the command
+	 * @param args
+	 *            containing the name of the target
+	 * @param index
+	 *            index of the target's name in the argument
+	 * @return true if the sender have the right to execute the command, else
+	 *         false with displaying an error message to the sender.
+	 */
+	public static boolean checkImmunity(CommandSender sender, CommandArgs args, int index) {
+		Player target = sender.getServer().getPlayer(args.getString(index));
+		if (checkImmunity(sender, target))
+			return true;
+		else {
+			sI18n(sender, "insufficientLvl");
+			return false;
+		}
 	}
 
 	public static class SetTime implements Runnable {

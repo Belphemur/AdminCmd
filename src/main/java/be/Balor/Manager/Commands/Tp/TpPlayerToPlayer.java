@@ -47,11 +47,9 @@ public class TpPlayerToPlayer extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode);
-		if (target == null)
+		if (!Utils.checkImmunity(sender, args, 0))
 			return;
-		target = Utils.getUser(sender, args, permNode, 1, true);
-		if (target == null)
+		if (!Utils.checkImmunity(sender, args, 1))
 			return;
 		Player from = sender.getServer().getPlayer(args.getString(0));
 		Player to = sender.getServer().getPlayer(args.getString(1));
