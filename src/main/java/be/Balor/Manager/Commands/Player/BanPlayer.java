@@ -56,9 +56,13 @@ public class BanPlayer extends CoreCommand {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		String banPlayerString;
-		if (toBan != null)
+		if (toBan != null) {
 			banPlayerString = toBan.getName();
-		else
+			if (!Utils.checkImmunity(sender, toBan)) {
+				Utils.sI18n(sender, "insufficientLvl");
+				return;
+			}
+		} else
 			banPlayerString = args.getString(0);
 		Integer tmpBan = null;
 		if (args.length >= 2) {
@@ -72,8 +76,8 @@ public class BanPlayer extends CoreCommand {
 			if (tmpBan != null) {
 				message += "(Banned for " + tmpBan + " minutes)";
 				final String unban = banPlayerString;
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						getPlugin(), new Runnable() {
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
+						new Runnable() {
 
 							@Override
 							public void run() {

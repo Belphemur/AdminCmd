@@ -50,6 +50,10 @@ public class UnBan extends CoreCommand {
 		String unban = args.getString(0);
 		BannedPlayer player = ACHelper.getInstance().isBanned(unban);
 		if (player != null) {
+			if (!Utils.checkImmunity(sender, plugin.getServer().getPlayer(player.getPlayer()))) {
+				Utils.sI18n(sender, "insufficientLvl");
+				return;
+			}
 			ACHelper.getInstance().unBanPlayer(unban);
 			String unbanMsg = Utils.I18n("unban", "player", unban);
 			if (unbanMsg != null)

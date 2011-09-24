@@ -56,6 +56,10 @@ public class UnMute extends CoreCommand {
 		replace.put("player", args.getString(0));
 		ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 		if (acp.hasPower(Type.MUTED)) {
+			if (!Utils.checkImmunity(sender, acp.getHandler())) {
+				Utils.sI18n(sender, "insufficientLvl");
+				return;
+			}
 			acp.removePower(Type.MUTED);
 			if (player != null) {
 				Utils.sI18n(player, "muteDisabled");

@@ -958,6 +958,8 @@ public class Utils {
 			return true;
 		if (!isPlayer(sender, false))
 			return true;
+		if(target == null)
+			return true;
 		Player player = (Player) sender;
 		int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
 		int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
