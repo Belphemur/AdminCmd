@@ -30,7 +30,6 @@ public class ACServerListener extends ServerListener {
 	public void onServerCommand(ServerCommandEvent event) {
 		if (CommandManager.getInstance()
 				.processCommandString(event.getSender(), event.getCommand())) {
-			event.setCommand("/AdminCmd took the control of that command.");
 		}
 	}
 
