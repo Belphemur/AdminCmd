@@ -38,7 +38,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import be.Balor.Manager.CommandManager;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
@@ -278,18 +277,10 @@ public class ACPlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		String[] split = event.getMessage().split("\\s+");
-		if (split.length == 0)
-			return;
-		String cmdName = split[0].substring(1).toLowerCase();
-		CoreCommand cmd = CommandManager.getInstance().getCommand(cmdName);
-		if (cmd != null) {
+		if (CommandManager.getInstance()
+				.processCommandString(event.getPlayer(), event.getMessage())) {
 			event.setCancelled(true);
-			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
-				System.out.print("[AdminCmd] Command " + cmdName + " intercepted.");
-			CommandManager.getInstance().executeCommand(event.getPlayer(), cmd,
-					Utils.Arrays_copyOfRange(split, 1, split.length));
-			event.setMessage("/AdminCmd took the control");
+			event.setMessage("/AdminCmd took the control of that command.");
 		}
 	}
 

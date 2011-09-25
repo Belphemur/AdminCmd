@@ -141,15 +141,6 @@ public class CommandManager implements CommandExecutor {
 		}
 	}
 
-	/**
-	 * Get the ACCommand having the given alias.
-	 * 
-	 * @param alias
-	 * @return
-	 */
-	public CoreCommand getCommand(String alias) {
-		return commandReplacer.get(alias);
-	}
 
 	/**
 	 * @param plugin
@@ -260,6 +251,7 @@ public class CommandManager implements CommandExecutor {
 					command.initializeCommand();
 					PluginCommand pCmd = command.getPluginCommand();
 					registeredCommands.remove(pCmd);
+					commandReplacer.remove(command.getCmdName());
 					unRegisterBukkitCommand(pCmd);
 				} catch (Exception e) {
 					return false;
@@ -332,6 +324,21 @@ public class CommandManager implements CommandExecutor {
 		threadsStarted = false;
 	}
 
+	public boolean processCommandString(CommandSender sender, String command) {
+		String[] split = command.split("\\s+");
+		if (split.length == 0)
+			return false;
+		String cmdName = split[0].substring(1).toLowerCase();
+		CoreCommand cmd = commandReplacer.get(cmdName);
+		if (cmd != null) {
+			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+				ACLogger.info("Command " + cmdName + " intercepted.");
+			return executeCommand(sender, cmd,
+					Utils.Arrays_copyOfRange(split, 1, split.length));
+		}
+		return false;
+	}
+
 	/**
 	 * Used to execute ACCommands
 	 * 
@@ -340,7 +347,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param args
 	 * @return
 	 */
-	public boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
+	private boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
 		try {
 			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
 				ACCommandContainer container = new ACCommandContainer(sender, cmd, args);
