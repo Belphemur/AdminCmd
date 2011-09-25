@@ -129,7 +129,7 @@
 
 				<configuration>
 					<!-- that's the default value -->
-					<dateFormat>dd.MM.yyyy '@' "HH:mm:ss"</dateFormat>
+					<dateFormat>dd.MM.yyyy '@' HH:mm:ss</dateFormat>
 
 					<!-- false is default here, it prints some more information during the 
 						build -->
