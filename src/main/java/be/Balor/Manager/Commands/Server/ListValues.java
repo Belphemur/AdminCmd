@@ -58,6 +58,11 @@ public class ListValues extends CoreCommand {
 		for (String str : args)
 			arg += str + " ";
 		arg = arg.trim();
+		if(Type.matchType(arg) == null)
+		{
+			Utils.sI18n(sender, "emptyList");
+			return;
+		}
 		List<ACPlayer> list = ACPlayer.getPlayers(arg);
 		if (list != null) {
 			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
