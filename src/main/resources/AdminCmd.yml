@@ -322,7 +322,13 @@ acplayerfakequit:
     description: "En-/Disables FakeQuit mode. If enabled a\n quit message will be issued and you/the [player] will no longer\n be listed online."
     plugin: AdminCmd
     permissions: admincmd.player.fakequit
-
+    
+acplayergm:
+    command: gm
+    description: "Switch the game mode for the selected player."
+    plugin: AdminCmd
+    permissions: admincmd.player.gamemode
+    
 acweatherclear:
     command: wclear
     description: Clear the weather.
@@ -508,7 +514,6 @@ acserverlockdown:
     description: "Lock the server, kick every connected user that doesn't have\n the perm admincmd.server.lockdown and disallow them to connect to the\n locked server."
     plugin: AdminCmd
     permissions: admincmd.server.lock
-
 acserverhelp:
     command: help [page#]
     description: "Displays page [#] of the AdminCmd help or page 1."

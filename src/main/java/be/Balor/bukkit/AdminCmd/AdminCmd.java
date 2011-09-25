@@ -172,6 +172,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Eternal.class);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
+		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -426,6 +427,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("noLoginInformation", "No login information available");
 		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
 				+ "You don't have the sufficient lvl to do that.");
+		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
+				+ ChatColor.GREEN + "switched to :" + ChatColor.WHITE + "%gamemode");
 		LocaleManager.getInstance().save();
 	}
 
