@@ -37,6 +37,7 @@ public class GameModeSwitch extends CoreCommand {
 	 */
 	public GameModeSwitch() {
 		super("bal_gamemode", "admincmd.player.gamemode");
+		other = true;
 	}
 
 	/*
