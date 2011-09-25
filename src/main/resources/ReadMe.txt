@@ -1,6 +1,6 @@
 Admin Command 
 =============
-Version : ${project.version} (BUILD${timestamp})
+Version : ${project.version} (BUILD ${git.build.time})
 Thread : http://forums.bukkit.org/threads/admincmd.10770/
 Ticket (for bug/feature request) : http://dev.bukkit.org/server-mods/admincmd/tickets/
 Wiki : http://dev.bukkit.org/server-mods/admincmd/
