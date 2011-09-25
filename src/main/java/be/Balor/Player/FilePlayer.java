@@ -349,7 +349,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public boolean hasCustomPower(String power) {
-		return getCustomPower(power) != null;
+		return !getCustomPower(power).isNull();
 	}
 
 	/* (non-Javadoc)

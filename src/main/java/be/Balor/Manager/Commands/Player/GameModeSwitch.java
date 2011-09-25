@@ -14,76 +14,60 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Server;
+package be.Balor.Manager.Commands.Player;
 
-import java.util.Arrays;
-import java.util.List;
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ListValues extends CoreCommand {
+public class GameModeSwitch extends CoreCommand {
 
 	/**
 	 * 
 	 */
-	public ListValues() {
-		permNode = "admincmd.server.list";
-		cmdName = "bal_list";
+	public GameModeSwitch() {
+		super("bal_gamemode", "admincmd.player.gamemode");
+		other = true;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		if (args.length == 0) {
-			sender.sendMessage(ChatColor.DARK_AQUA + "Possibles Types :");
-			sender.sendMessage(Arrays.toString(Type.values()));
+		Player target = Utils.getUser(sender, args, permNode);
+		if (target == null)
 			return;
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", target.getName());
+		if (target.getGameMode() == GameMode.CREATIVE) {
+			target.setGameMode(GameMode.SURVIVAL);
+			replace.put("gamemode", GameMode.SURVIVAL.toString());
+			Utils.sendMessage(sender, target, "gmSwitch", replace);
+		} else {
+			target.setGameMode(GameMode.CREATIVE);
+			replace.put("gamemode", GameMode.CREATIVE.toString());
+			Utils.sendMessage(sender, target, "gmSwitch", replace);
 		}
-		String arg = "";
-		for (String str : args)
-			arg += str + " ";
-		arg = arg.trim();
-		if(Type.matchType(arg) == null)
-		{
-			Utils.sI18n(sender, "emptyList");
-			return;
-		}
-		List<ACPlayer> list = ACPlayer.getPlayers(arg);
-		if (list != null) {
-			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
-					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");
-			String buffer = "";
-			for (ACPlayer value : list)
-				buffer += value.getName() + ", ";
-			if (!buffer.equals("")) {
-				if (buffer.endsWith(", "))
-					buffer = buffer.substring(0, buffer.lastIndexOf(","));
-				sender.sendMessage(buffer);
-			}
-		} else
-			Utils.sI18n(sender, "emptyList");
-
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {

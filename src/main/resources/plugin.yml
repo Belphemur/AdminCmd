@@ -350,3 +350,7 @@ commands:
     description: Refills the Foodbar of the provided player or yours.
     aliases: [feed, pf]
     usage: /<command> <player>
+  bal_gamemode:    
+    description: Switch the game mode for yourself or the player.
+    aliases: [gm, gswitch]
+    usage: /<command> <player>

@@ -13,6 +13,7 @@ import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
+import be.Balor.Listeners.ACServerListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
@@ -171,6 +172,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Eternal.class);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
+		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -427,6 +429,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("noLoginInformation", "No login information available");
 		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
 				+ "You don't have the sufficient lvl to do that.");
+		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
+				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
 		LocaleManager.getInstance().save();
 	}
 
@@ -470,7 +474,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
 			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
 		}
-
+		pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(), Priority.Normal, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);

@@ -26,8 +26,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -106,7 +105,6 @@ final public class InvisibleWorker {
 		if (invisblesWithTaskIds.containsKey(name)) {
 			ACPluginManager.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
 			invisblesWithTaskIds.remove(name);
-			ACPlayer.getPlayer(name).removePower(Type.INVISIBLE);
 
 			ACPluginManager
 					.getServer()
@@ -116,7 +114,10 @@ final public class InvisibleWorker {
 								@Override
 								public void run() {
 									for (Player p : Utils.getOnlinePlayers())
+									{
+										ACLogger.info("Player : "+p.getName());
 										uninvisible(toReappear, p);
+									}
 								}
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
@@ -179,7 +180,7 @@ final public class InvisibleWorker {
 	 * @return
 	 */
 	public boolean hasInvisiblePowers(String player) {
-		return ACPlayer.getPlayer(player).hasPower(Type.INVISIBLE);
+		return invisblesWithTaskIds.containsKey(player);
 	}
 
 	/**
@@ -195,7 +196,6 @@ final public class InvisibleWorker {
 				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name)) {
-			ACPlayer.getPlayer(name).setPower(Type.INVISIBLE);
 			invisblesWithTaskIds.put(
 					name,
 					ACPluginManager
