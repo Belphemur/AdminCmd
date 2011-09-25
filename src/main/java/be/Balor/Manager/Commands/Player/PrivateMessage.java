@@ -19,18 +19,16 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -39,7 +37,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class PrivateMessage extends CoreCommand {
-	private ColouredConsoleSender console = null;
 
 	/**
 	 * 
@@ -47,7 +44,6 @@ public class PrivateMessage extends CoreCommand {
 	public PrivateMessage() {
 		permNode = "admincmd.player.msg";
 		cmdName = "bal_playermsg";
-		console = new ColouredConsoleSender((CraftServer) ACPluginManager.getServer());
 	}
 
 	/*
@@ -106,7 +102,7 @@ public class PrivateMessage extends CoreCommand {
 					p.getHandler().sendMessage(spyMsg);
 			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages")
 					&& !(sender instanceof ConsoleCommandSender))
-				console.sendMessage(spyMsg);
+				ACLogger.info(spyMsg);
 		} else
 			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 
