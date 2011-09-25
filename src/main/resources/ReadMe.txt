@@ -29,6 +29,16 @@ Features :
     Prioritize system for the command, meaning you can choose if some of my command will override other plugin commands.
     Disable command : you can choose witch command you want to disable.
 
+Immunity
+========
+You can now set immunityLvl (like maxHomePerUser (explained http://dev.bukkit.org/server-mods/admincmd/pages/features/ )), 
+an immunityLvl is a level representing the power of the user.
+
+A user with a power of 0 can't do command against a user of a power of 1 or above.
+And the user of 150 (the max) can do everything to the lower levels.
+
+Only one exception : admincmd.immunityLvl.samelvl if a user have this node, he can only issue 
+
 Files and Folder :
 ==================
 Folders : 
