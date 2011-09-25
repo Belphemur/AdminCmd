@@ -1,6 +1,6 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
-version: ${project.version} (BUILD${timestamp})
+version: ${project.version} (BUILD ${git.build.time})
 author: Balor
 softdepend: [MultiVerse,Permissions,BLAH,mChat,OddItem]
 description: >
