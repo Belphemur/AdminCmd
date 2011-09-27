@@ -91,7 +91,7 @@ public class Memory extends CoreCommand {
 				}
 			}
 			System.gc();
-			sender.sendMessage("Freed Entity : " + count);
+			sender.sendMessage("Freed Entities : " + count);
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
