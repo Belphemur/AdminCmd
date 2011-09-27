@@ -173,6 +173,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
+		CommandManager.getInstance().registerCommand(Whois.class);
 	}
 
 	protected void setDefaultLocale() {
