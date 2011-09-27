@@ -24,9 +24,11 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
+import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,6 +51,32 @@ public class Whois extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		if (args.hasFlag('w')) {
+			ACWorld w;
+			try {
+				if (args.length >= 1)
+					w = ACWorld.getWorld(args.getString(0));
+				else if (Utils.isPlayer(sender))
+					w = ACWorld.getWorld(((Player) sender).getWorld().getName());
+				else
+					return;
+			} catch (WorldNotLoaded e) {
+				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+				return;
+			}
+			sender.sendMessage(ChatColor.GREEN
+					+ ACMinecraftFontWidthCalculator.strPadCenterChat(
+							ChatColor.AQUA + " " + w.getName() + " " + ChatColor.GREEN, '='));
+			for (Entry<String, String> power : w.getInformations().entrySet()) {
+				String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE + " : ";
+				int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+						- ACMinecraftFontWidthCalculator.getStringWidth(line);
+				line += ACMinecraftFontWidthCalculator.strPadLeftChat(
+						ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');
+				sender.sendMessage(line);
+			}
+			return;
+		}
 		Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;

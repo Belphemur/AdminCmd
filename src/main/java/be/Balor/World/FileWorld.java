@@ -19,6 +19,9 @@ package be.Balor.World;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -180,6 +183,17 @@ public class FileWorld extends ACWorld {
 	@Override
 	void forceSave() {
 		datas.save();
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.World.ACWorld#getInformations()
+	 */
+	@Override
+	public Map<String, String> getInformations() {
+		TreeMap<String, String> result = new TreeMap<String, String>();
+		for (Entry<String, Object> entry : informations.getAll().entrySet())
+			result.put(entry.getKey(), entry.getValue().toString());
+		return result;
 	}
 
 }

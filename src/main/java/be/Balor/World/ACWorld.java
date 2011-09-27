@@ -17,6 +17,7 @@
 package be.Balor.World;
 
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -149,6 +150,13 @@ public abstract class ACWorld {
 	 *            key of the information
 	 */
 	public abstract ObjectContainer getInformation(String info);
+
+	/**
+	 * Get all informations about the world
+	 * 
+	 * @return
+	 */
+	public abstract Map<String, String> getInformations();
 
 	/**
 	 * Force the save
