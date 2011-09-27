@@ -18,42 +18,40 @@ package be.Balor.Tools;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class BlockRemanence {
+	private Location loc;
 	private int oldType;
 	private byte data = 0;
-	final private boolean useData;
-	final private Block block;
+	private boolean useData;
 
 	/**
 	 * 
 	 */
-	public BlockRemanence(Block block) {
-		this.block = block;
-		this.oldType = this.block.getTypeId();
-		if ((useData = usesData(oldType)))
-			data = this.block.getState().getRawData();
-	}
-
 	public BlockRemanence(Location loc) {
-		this(loc.getWorld().getBlockAt(loc));
+		this.loc = loc;
+		Block b = loc.getWorld().getBlockAt(loc);
+		this.oldType = b.getTypeId();
+		if ((useData = usesData(oldType)))
+			data = b.getState().getRawData();
+
 	}
 
 	public Block returnToThePast() {
+		Block b = loc.getWorld().getBlockAt(loc);
 		if (useData)
-			this.block.setTypeIdAndData(oldType, data, true);
+			b.setTypeIdAndData(oldType, data, true);
 		else
-			this.block.setTypeId(oldType, true);
-		return this.block;
-
+			b.setTypeId(oldType, true);
+		return b;
 	}
 
 	public void setBlockType(int type) {
-		this.block.setTypeId(type, true);
-
+		loc.getWorld().getBlockAt(loc).setTypeId(type, true);
 	}
 
 	/**
