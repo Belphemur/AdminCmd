@@ -110,6 +110,16 @@ public class Set extends CoreCommand {
 		return args != null && args.length >= 2;
 	}
 
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {		
+		plugin.getPermissionLinker().addPermChild("admincmd.server.set.motd");
+		plugin.getPermissionLinker().addPermChild("admincmd.server.set.news");
+		plugin.getPermissionLinker().addPermChild("admincmd.server.set.rules");
+		super.registerBukkitPerm();
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
