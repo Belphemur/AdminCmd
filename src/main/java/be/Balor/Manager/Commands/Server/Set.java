@@ -118,7 +118,6 @@ public class Set extends CoreCommand {
 		plugin.getPermissionLinker().addPermChild("admincmd.server.set.motd");
 		plugin.getPermissionLinker().addPermChild("admincmd.server.set.news");
 		plugin.getPermissionLinker().addPermChild("admincmd.server.set.rules");
-		super.registerBukkitPerm();
 	}
 	/*
 	 * (non-Javadoc)
