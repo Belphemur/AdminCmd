@@ -78,6 +78,6 @@ public class TpRequest {
 	 */
 	@Override
 	public String toString() {
-		return from.getName() + ":" + to.getName();
+		return from == null || to == null ? "false" : from.getName() + ":" + to.getName();
 	}
 }
