@@ -1009,12 +1009,16 @@ public class Utils {
 			int tLvl = ACPlayer.getPlayer(args.getString(index)).getInformation("immunityLvl")
 					.getInt(0);
 			if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
-					&& pLvl != tLvl)
+					&& pLvl != tLvl) {
+				sI18n(sender, "insufficientLvl");
 				return false;
+			}
 			if (pLvl >= tLvl)
 				return true;
-			else
+			else {
+				sI18n(sender, "insufficientLvl");
 				return false;
+			}
 
 		}
 	}
