@@ -27,6 +27,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
@@ -78,9 +79,13 @@ public class Whois extends CoreCommand {
 			}
 			return;
 		}
-		Player target = Utils.getUser(sender, args, permNode);
+		Player target = Utils.getUser(sender, args, permNode, 0, !Utils.isPlayer(sender, false));
 		ACPlayer actarget;
 		if (target == null) {
+			if (args.length == 0) {
+				sender.sendMessage("You must type the player name");
+				return;
+			}
 			actarget = ACPlayer.getPlayer(args.getString(0));
 			if (actarget instanceof EmptyPlayer) {
 				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());

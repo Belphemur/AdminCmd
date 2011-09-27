@@ -329,6 +329,12 @@ acplayergm:
     plugin: AdminCmd
     permissions: admincmd.player.gamemode
     
+acplayergm:
+    command: whois
+    description: "Get information about yourself\n or the player provided."
+    plugin: AdminCmd
+    permissions: admincmd.player.whois
+    
 acweatherclear:
     command: wclear
     description: Clear the weather.
