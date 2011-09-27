@@ -116,6 +116,7 @@ public class ACPlayerListener extends PlayerListener {
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
 		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
 		if (player.hasPower(Type.FAKEQUIT))
 			event.setJoinMessage(null);
 		if (player.getInformation("firstTime").getBoolean(true)) {
@@ -144,8 +145,10 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
+		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
 		PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
-		if (ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT))
+		if (player.hasPower(Type.FAKEQUIT))
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
@@ -209,7 +212,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
-		}		
+		}
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
 			if (player.hasPower(Type.THOR))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());

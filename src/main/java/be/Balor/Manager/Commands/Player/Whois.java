@@ -26,6 +26,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
@@ -78,12 +79,31 @@ public class Whois extends CoreCommand {
 			return;
 		}
 		Player target = Utils.getUser(sender, args, permNode);
-		if (target == null)
-			return;
+		ACPlayer actarget;
+		if (target == null) {
+			actarget = ACPlayer.getPlayer(args.getString(0));
+			if (actarget instanceof EmptyPlayer) {
+				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());
+				return;
+			}
+			if (!Utils.checkImmunity(sender, args, 0))
+				return;
+		} else
+			actarget = ACPlayer.getPlayer(target.getName());
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
-						+ target.getName() + " " + ChatColor.AQUA, '='));
-		for (Entry<String, String> power : ACPlayer.getPlayer(target).getPowers().entrySet()) {
+						+ actarget.getName() + " " + ChatColor.AQUA, '='));
+		// Login
+		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE + " : ";
+		int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(loginDate);
+		loginDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget.getName()),
+				logSizeRemaining, ' ');
+		sender.sendMessage(loginDate);
+
+		// Powers
+		for (Entry<String, String> power : actarget.getPowers().entrySet()) {
 			String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE + " : ";
 			int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(line);
