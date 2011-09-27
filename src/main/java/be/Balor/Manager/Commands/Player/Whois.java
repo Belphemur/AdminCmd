@@ -119,7 +119,7 @@ public class Whois extends CoreCommand {
 		int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(played);
 		played += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.I18n("elapsedTime", replace), strSizeRem, ' ');
+				ChatColor.GREEN + Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
 		sender.sendMessage(played);		
 
 		// Powers
