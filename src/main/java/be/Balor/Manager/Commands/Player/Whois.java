@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
@@ -105,6 +106,21 @@ public class Whois extends CoreCommand {
 				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget.getName()),
 				logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
+		
+		// Played
+		long total = actarget.getCurrentPlayedTime();
+		Long[] time = Utils.transformToElapsedTime(total);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("d", time[0].toString());
+		replace.put("h", time[1].toString());
+		replace.put("m", time[2].toString());
+		replace.put("s", time[3].toString());
+		String played = ChatColor.GOLD+"Time Played"+ChatColor.WHITE+" : ";
+		int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(played);
+		played += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + Utils.I18n("elapsedTime", replace), strSizeRem, ' ');
+		sender.sendMessage(played);		
 
 		// Powers
 		for (Entry<String, String> power : actarget.getPowers().entrySet()) {
