@@ -19,7 +19,6 @@ package be.Balor.Listeners;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -28,13 +27,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import be.Balor.Manager.CommandManager;
@@ -211,14 +209,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
-		}
-		ItemStack itemInHand = event.getItem();
-		if (itemInHand != null && event.getAction() == Action.LEFT_CLICK_BLOCK
-				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
-				&& player.hasPower(Type.SUPER_BREAKER)) {
-			superBreaker(player, event.getClickedBlock());
-			return;
-		}
+		}		
 		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
 			if (player.hasPower(Type.THOR))
 				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
@@ -306,70 +297,6 @@ public class ACPlayerListener extends PlayerListener {
 				}
 			} catch (Exception e) {
 			}
-	}
-
-	/**
-	 * Drop the wanted item
-	 * 
-	 * @param block
-	 * @param itemId
-	 * @return
-	 */
-	private Item dropItem(Block block, int itemId) {
-		return block.getWorld().dropItemNaturally(block.getLocation(),
-				new ItemStack(itemId, 1, block.getData()));
-	}
-
-	/**
-	 * Super breaker mode
-	 * 
-	 * @param player
-	 * @param block
-	 */
-	private void superBreaker(ACPlayer player, Block block) {
-		int typeId = block.getTypeId();
-		switch (typeId) {
-		case 64:
-			if (block.getData() < 8)
-				dropItem(block, 324);
-			break;
-		case 71:
-			if (block.getData() < 8)
-				dropItem(block, 330);
-			break;
-		case 55:
-			dropItem(block, 331);
-			break;
-		case 63:
-		case 68:
-			dropItem(block, 323);
-			break;
-		case 83:
-			dropItem(block, 338);
-			break;
-		case 59:
-		case 31:
-			dropItem(block, 295);
-			break;
-		case 26:
-			if (block.getData() < 4)
-				dropItem(block, 355);
-			break;
-		case 75:
-			dropItem(block, 76);
-			break;
-		case 93:
-		case 94:
-			dropItem(block, 356);
-			break;
-		default:
-			dropItem(block, typeId);
-			break;
-		}
-
-		if (Utils.logBlock != null)
-			Utils.logBlock.queueBlockBreak(player.getName(), block.getState());
-		block.setTypeId(0);
 	}
 
 	protected class UpdateInvisibleOnJoin implements Runnable {

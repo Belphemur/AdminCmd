@@ -451,6 +451,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.registerAllPermParent();
 		ACPlayerListener playerListener = new ACPlayerListener();
 		ACEntityListener entityListener = new ACEntityListener();
+		ACBlockListener blkListener = new ACBlockListener();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
@@ -475,7 +476,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(), Priority.Normal, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
-			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
+			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 
