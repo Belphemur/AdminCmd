@@ -13,7 +13,6 @@ import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
-import be.Balor.Listeners.ACServerListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
@@ -475,7 +474,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
 			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
 		}
-		pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(), Priority.Normal, this);
+		// Some problem witht the bukkit API and server_command
+		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
+		// Priority.Normal, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
