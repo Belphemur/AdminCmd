@@ -55,7 +55,7 @@ public class Whois extends CoreCommand {
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
 						+ target.getName() + " " + ChatColor.AQUA, '='));
-		for (Entry<String, String> power : ACPlayer.getPlayer(target).getPlayerPowers().entrySet()) {
+		for (Entry<String, String> power : ACPlayer.getPlayer(target).getPowers().entrySet()) {
 			String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE + " : ";
 			int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(line);

@@ -290,7 +290,7 @@ public abstract class ACPlayer {
 	 * 
 	 * @return
 	 */
-	public abstract Map<String, String> getPlayerPowers();
+	public abstract Map<String, String> getPowers();
 
 	/**
 	 * 

@@ -253,7 +253,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getPlayerPowers()
 	 */
 	@Override
-	public Map<String, String> getPlayerPowers() {
+	public Map<String, String> getPowers() {
 		return new HashMap<String, String>();
 	}
 

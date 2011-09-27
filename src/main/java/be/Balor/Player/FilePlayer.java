@@ -373,7 +373,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getPlayerPowers()
 	 */
 	@Override
-	public Map<String, String> getPlayerPowers() {
+	public Map<String, String> getPowers() {
 		TreeMap<String, String> result = new TreeMap<String, String>();
 		for (Entry<String, Object> entry : powers.getAll().entrySet())
 			result.put(entry.getKey(), entry.getValue().toString());
