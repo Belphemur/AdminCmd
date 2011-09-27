@@ -295,7 +295,6 @@ public class ACHelper {
 	 */
 	private void init() {
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setExpiration(pluginConfig.getInt("afkKickInMinutes", 3) + 1);
 			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
