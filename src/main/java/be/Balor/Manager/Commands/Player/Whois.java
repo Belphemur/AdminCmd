@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -31,14 +31,15 @@ import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Whois extends CoreCommand {
 	/**
-	 * 
+	 *
 	 */
 	public Whois() {
 		super("bal_whois", "admincmd.player.whois");
@@ -47,7 +48,7 @@ public class Whois extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -106,7 +107,7 @@ public class Whois extends CoreCommand {
 				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget.getName()),
 				logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
-		
+
 		// Played
 		long total = actarget.getCurrentPlayedTime();
 		Long[] time = Utils.transformToElapsedTime(total);
@@ -120,7 +121,7 @@ public class Whois extends CoreCommand {
 				- ACMinecraftFontWidthCalculator.getStringWidth(played);
 		played += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN + Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
-		sender.sendMessage(played);		
+		sender.sendMessage(played);
 
 		// Powers
 		for (Entry<String, String> power : actarget.getPowers().entrySet()) {
@@ -131,11 +132,20 @@ public class Whois extends CoreCommand {
 					ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');
 			sender.sendMessage(line);
 		}
+
+		// Immunity Level
+		int level = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
+		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
+		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);
+		immuLvl += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + String.valueOf(level), strSizeRem, ' ');
+		sender.sendMessage(immuLvl);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
