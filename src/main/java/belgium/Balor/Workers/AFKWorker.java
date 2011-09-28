@@ -34,10 +34,11 @@ import com.google.common.collect.MapMaker;
  * 
  */
 final public class AFKWorker {
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private int afkTime = 60000;
 	private int kickTime = 180000;
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().expiration(
+			kickTime + 60000, TimeUnit.MILLISECONDS).makeMap();
+	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
 	private static AFKWorker instance;
@@ -94,17 +95,11 @@ final public class AFKWorker {
 	 *            the kickTime to set
 	 */
 	public void setKickTime(int kickTime) {
-		if (afkTime > 0)
+		if (afkTime > 0) {
 			this.kickTime = kickTime * 1000 * 60;
-	}
-
-	/**
-	 * Set the expiration for the values in memory.
-	 * 
-	 * @param exp
-	 */
-	public void setExpiration(long exp) {
-		playerTimeStamp = new MapMaker().expiration(exp, TimeUnit.MINUTES).makeMap();
+			playerTimeStamp = new MapMaker().expiration(kickTime + 60000, TimeUnit.MILLISECONDS)
+					.makeMap();
+		}
 	}
 
 	/**
@@ -218,10 +213,11 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			for (Player p : Utils.getOnlinePlayers())
-				if (playerTimeStamp.containsKey(p) && !playersAfk.containsKey(p)
-						&& (now - playerTimeStamp.get(p)) >= afkTime)
+			for (Player p : Utils.getOnlinePlayers()) {
+				Long timeStamp = playerTimeStamp.get(p);
+				if (timeStamp != null && !playersAfk.containsKey(p) && (now - timeStamp) >= afkTime)
 					setAfk(p);
+			}
 
 		}
 

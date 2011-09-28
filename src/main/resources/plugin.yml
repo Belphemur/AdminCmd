@@ -354,3 +354,7 @@ commands:
     description: Switch the game mode for yourself or the player.
     aliases: [gm, gswitch]
     usage: /<command> <player>
+  bal_whois:    
+    description: Get informations about the player.
+    aliases: [whois, ws]
+    usage: /<command> <player>

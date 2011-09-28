@@ -17,6 +17,7 @@
 package be.Balor.Player;
 
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -281,9 +282,15 @@ public abstract class ACPlayer {
 	 * 
 	 */
 	public void updatePlayedTime() {
-
 		setInformation("totalTime", getCurrentPlayedTime());
 	}
+
+	/**
+	 * Get a power's list with all there values
+	 * 
+	 * @return
+	 */
+	public abstract Map<String, String> getPowers();
 
 	/**
 	 * 

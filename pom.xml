@@ -4,7 +4,6 @@
 	<groupId>be.Balor</groupId>
 	<artifactId>AdminCmd</artifactId>
 	<name>AdminCmd</name>
-	<version>5.9</version>
 	<url>http://forums.bukkit.org/threads/admn-gen-admincmd-5-4-time-give-tp-repair-heal-kill-item-blacklist-weather-etc-1000.10770/</url>
 	<scm>
 		<connection>scm:git:git@github.com:Belphemur/AdminCmd.git</connection>
@@ -268,7 +267,7 @@
 		<dependency>
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
-			<version>1.13</version>
+			<version>1.14</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -299,4 +298,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<version>5.9.1-SNAPSHOT</version>
 </project>

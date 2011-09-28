@@ -17,7 +17,9 @@
 package be.Balor.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -202,15 +204,20 @@ public class EmptyPlayer extends ACPlayer {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Player.ACPlayer#setCustomPower(java.lang.String, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#setCustomPower(java.lang.String,
+	 * java.lang.Object)
 	 */
 	@Override
-	public void setCustomPower(String power, Object value) {	
-		
+	public void setCustomPower(String power, Object value) {
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#getCustomPower(java.lang.String)
 	 */
 	@Override
@@ -218,7 +225,9 @@ public class EmptyPlayer extends ACPlayer {
 		return new ObjectContainer(null);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#hasCustomPower(java.lang.String)
 	 */
 	@Override
@@ -227,13 +236,25 @@ public class EmptyPlayer extends ACPlayer {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#removeCustomPower(java.lang.String)
 	 */
 	@Override
 	public void removeCustomPower(String power) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPlayerPowers()
+	 */
+	@Override
+	public Map<String, String> getPowers() {
+		return new HashMap<String, String>();
 	}
 
 }

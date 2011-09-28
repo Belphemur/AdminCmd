@@ -16,10 +16,15 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -41,6 +46,19 @@ public class ACBlockListener extends BlockListener {
 				if (parsed != null)
 					event.setLine(i, parsed);
 			}
+		}
+	}
+
+	@Override
+	public void onBlockDamage(BlockDamageEvent event) {
+		ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
+		ItemStack itemInHand = event.getItemInHand();
+		if (itemInHand != null
+				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
+				&& player.hasPower(Type.SUPER_BREAKER)) {
+			event.setInstaBreak(true);
+			if (Utils.logBlock != null)
+				Utils.logBlock.queueBlockBreak(player.getName(), event.getBlock().getState());
 		}
 	}
 

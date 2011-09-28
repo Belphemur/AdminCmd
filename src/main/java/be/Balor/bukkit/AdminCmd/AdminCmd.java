@@ -13,7 +13,6 @@ import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
-import be.Balor.Listeners.ACServerListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
@@ -77,9 +76,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
+		permissionLinker.addPermChild("admincmd.item.infinity");
 		for (int i = 0; i < 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
 
 	}
@@ -173,6 +174,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
+		CommandManager.getInstance().registerCommand(Whois.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -258,6 +260,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.WHITE + " removed.");
 		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "
 				+ ChatColor.DARK_GREEN + "home limit");
+		Utils.addLocale("itemLimit", ChatColor.RED + "You have exceeded your "
+				+ ChatColor.DARK_GREEN + "item limit" + ChatColor.RED + " of %limit items per command.");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
@@ -430,7 +434,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
+<<<<<<< HEAD
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
+=======
+				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
+		Utils.addLocale("elapsedTotalTime", "%d day(s) %h:%m:%s");
+>>>>>>> upstream/master
 		LocaleManager.getInstance().save();
 	}
 
@@ -453,6 +462,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.registerAllPermParent();
 		ACPlayerListener playerListener = new ACPlayerListener();
 		ACEntityListener entityListener = new ACEntityListener();
+		ACBlockListener blkListener = new ACBlockListener();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
@@ -474,10 +484,13 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
 			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
 		}
-		pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(), Priority.Normal, this);
+		// Some problem witht the bukkit API and server_command
+		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
+		// Priority.Normal, this);
 		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
-			pm.registerEvent(Event.Type.SIGN_CHANGE, new ACBlockListener(), Priority.Normal, this);
+			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 

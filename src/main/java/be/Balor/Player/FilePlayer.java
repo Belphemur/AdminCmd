@@ -19,6 +19,9 @@ package be.Balor.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -59,9 +62,9 @@ public class FilePlayer extends ACPlayer {
 				e.printStackTrace();
 			}
 		datas = new ExtendedConfiguration(pFile);
-		datas.load();		
+		datas.load();
 		informations = datas.createNode("infos");
-		homes = datas.createNode("home");		
+		homes = datas.createNode("home");
 		powers = datas.createNode("powers");
 		datas.save();
 	}
@@ -352,14 +355,29 @@ public class FilePlayer extends ACPlayer {
 		return !getCustomPower(power).isNull();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#removeCustomPower(java.lang.String)
 	 */
 	@Override
 	public void removeCustomPower(String power) {
 		powers.removeProperty(power);
 		writeFile();
-		
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPlayerPowers()
+	 */
+	@Override
+	public Map<String, String> getPowers() {
+		TreeMap<String, String> result = new TreeMap<String, String>();
+		for (Entry<String, Object> entry : powers.getAll().entrySet())
+			result.put(entry.getKey(), entry.getValue().toString());
+		return result;
 	}
 
 }

@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -31,12 +31,12 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Give extends CoreCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public Give() {
 		permNode = "admincmd.item.add";
@@ -46,7 +46,7 @@ public class Give extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -68,9 +68,16 @@ public class Give extends CoreCommand {
 		int cnt = 1;
 		Player target = null;
 		if (args.length >= 2) {
+
 			try {
 				cnt = args.getInt(1);
 			} catch (Exception e) {
+				return;
+			}
+			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")) {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("limit", String.valueOf(ACHelper.getInstance().getLimit(sender, "maxItemAmount")));
+				Utils.sI18n(sender, "itemLimit", replace);
 				return;
 			}
 			if (args.length >= 3) {
@@ -112,7 +119,7 @@ public class Give extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

@@ -235,7 +235,7 @@ acplayerfireball:
 
 acplayerip:
     command: ip [player]
-    description: Shows your IP/given [palyers] IP.
+    description: Shows your IP/given [player] IP.
     plugin: AdminCmd
     permissions: admincmd.player.ip
 
@@ -324,10 +324,16 @@ acplayerfakequit:
     permissions: admincmd.player.fakequit
     
 acplayergm:
-    command: gm
+    command: gm [player]
     description: "Switch the game mode for the selected player."
     plugin: AdminCmd
     permissions: admincmd.player.gamemode
+    
+acplayergm:
+    command: whois [-w | (player|world)]
+    description: "Get information about yourself or the player.\n [-w] to get information about the world."
+    plugin: AdminCmd
+    permissions: admincmd.player.whois
     
 acweatherclear:
     command: wclear

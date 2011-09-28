@@ -814,7 +814,7 @@ public class Utils {
 		return timeFormatted;
 	}
 
-	public static String replaceDateAndTimeFormat(Player player) {
+	public static String replaceDateAndTimeFormat(String player) {
 		String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
 		SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
@@ -823,6 +823,10 @@ public class Utils {
 		if (lastlogin == formater.format(new Date(1)))
 			return null;
 		return lastlogin;
+	}
+
+	public static String replaceDateAndTimeFormat(Player player) {
+		return replaceDateAndTimeFormat(player.getName());
 	}
 
 	/**
@@ -964,7 +968,8 @@ public class Utils {
 		Player player = (Player) sender;
 		int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
 		int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
-		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false) && pLvl != tLvl)
+		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
+				&& pLvl != tLvl)
 			return false;
 		if (pLvl >= tLvl)
 			return true;
@@ -987,11 +992,34 @@ public class Utils {
 	 */
 	public static boolean checkImmunity(CommandSender sender, CommandArgs args, int index) {
 		Player target = sender.getServer().getPlayer(args.getString(index));
-		if (checkImmunity(sender, target))
-			return true;
+		if (target != null)
+			if (checkImmunity(sender, target))
+				return true;
+			else {
+				sI18n(sender, "insufficientLvl");
+				return false;
+			}
 		else {
-			sI18n(sender, "insufficientLvl");
-			return false;
+			if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+				return true;
+			if (!isPlayer(sender, false))
+				return true;
+			Player player = (Player) sender;
+			int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl", "defaultImmunityLvl");
+			int tLvl = ACPlayer.getPlayer(args.getString(index)).getInformation("immunityLvl")
+					.getInt(0);
+			if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
+					&& pLvl != tLvl) {
+				sI18n(sender, "insufficientLvl");
+				return false;
+			}
+			if (pLvl >= tLvl)
+				return true;
+			else {
+				sI18n(sender, "insufficientLvl");
+				return false;
+			}
+
 		}
 	}
 
