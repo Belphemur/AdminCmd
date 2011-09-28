@@ -38,7 +38,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -76,9 +76,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
+		permissionLinker.addPermChild("admincmd.item.infinity");
 		for (int i = 0; i < 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
 
 	}
@@ -258,6 +260,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.WHITE + " removed.");
 		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "
 				+ ChatColor.DARK_GREEN + "home limit");
+		Utils.addLocale("itemLimit", ChatColor.RED + "You have exceeded your "
+				+ ChatColor.DARK_GREEN + "item limit" + ChatColor.RED + " of %limit items per command.");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
