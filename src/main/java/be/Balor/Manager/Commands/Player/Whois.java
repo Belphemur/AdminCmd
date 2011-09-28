@@ -35,7 +35,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Whois extends CoreCommand {
 	/**
@@ -48,7 +48,7 @@ public class Whois extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -116,7 +116,7 @@ public class Whois extends CoreCommand {
 		replace.put("h", time[1].toString());
 		replace.put("m", time[2].toString());
 		replace.put("s", time[3].toString());
-		String played = ChatColor.GOLD+"Time Played"+ChatColor.WHITE+" : ";
+		String played = ChatColor.GOLD + "Time Played" + ChatColor.WHITE + " : ";
 		int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(played);
 		played += ACMinecraftFontWidthCalculator.strPadLeftChat(
@@ -134,7 +134,12 @@ public class Whois extends CoreCommand {
 		}
 
 		// Immunity Level
-		int level = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
+		int level;
+		if (target != null)
+			level = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
+		else
+			level = actarget.getInformation("immunityLvl").getInt(
+					ACHelper.getInstance().getConfInt("defaultImmunityLvl"));
 		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);
@@ -145,7 +150,7 @@ public class Whois extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
