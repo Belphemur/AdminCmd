@@ -434,12 +434,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
-<<<<<<< HEAD
-				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-=======
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
 		Utils.addLocale("elapsedTotalTime", "%d day(s) %h:%m:%s");
->>>>>>> upstream/master
 		LocaleManager.getInstance().save();
 	}
 
