@@ -17,7 +17,6 @@
 package belgium.Balor.Workers;
 
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -36,8 +35,7 @@ import com.google.common.collect.MapMaker;
 final public class AFKWorker {
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().expiration(
-			kickTime + 60000, TimeUnit.MILLISECONDS).makeMap();
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
 	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
@@ -87,12 +85,7 @@ final public class AFKWorker {
 	 */
 	public void setAfkTime(int afkTime) {
 		if (afkTime > 0)
-		{
 			this.afkTime = afkTime * 1000;
-			if (this.afkTime > this.kickTime)
-				playerTimeStamp = new MapMaker()
-						.expiration(afkTime + 60000, TimeUnit.MILLISECONDS).makeMap();
-		}
 	}
 
 	/**
@@ -100,12 +93,9 @@ final public class AFKWorker {
 	 *            the kickTime to set
 	 */
 	public void setKickTime(int kickTime) {
-		if (afkTime > 0) {
+		if (afkTime > 0) 
 			this.kickTime = kickTime * 1000 * 60;
-			if (this.kickTime > this.afkTime)
-				playerTimeStamp = new MapMaker()
-						.expiration(kickTime + 60000, TimeUnit.MILLISECONDS).makeMap();
-		}
+		
 	}
 
 	/**
