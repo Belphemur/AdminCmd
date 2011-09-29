@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
@@ -28,6 +27,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -35,82 +35,96 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  */
 public class Kit extends CoreCommand {
 
-	/**
-	 * 
-	 */
-	public Kit() {
-		cmdName = "bal_kit";
-		other = true;
-	}
+    /**
+     * 
+     */
+    public Kit() {
+        cmdName = "bal_kit";
+        other = true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.CoreCommand#permissionCheck(org.bukkit.command.CommandSender
-	 * )
-	 */
-	@Override
-	public boolean permissionCheck(CommandSender sender) {
-		return true;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.CoreCommand#permissionCheck(org.bukkit.command.CommandSender
+     * )
+     */
+    @Override
+    public boolean permissionCheck(CommandSender sender) {
+        return true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		// which material?
-		Player target;
-		if (args.length == 0) {
-			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
-			return;
-		}
-		ArrayList<ItemStack> items = ACHelper.getInstance().getKit(args.getString(0));
-		if (items.isEmpty()) {
-			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
-			return;
-		}
-		target = Utils.getUser(sender, args, permNode, 1, true);
-		if (target == null) {
-			return;
-		}
-		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
-			return;
-		}
-		HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("kit", args.getString(0));
-		if (Utils.isPlayer(sender, false)) {
-			if (!target.equals(sender)) {
-				replace.put("sender", ((Player) sender).getName());
-				Utils.sI18n(target, "kitOtherPlayer", replace);
-				replace.remove("sender");
-				replace.put("target", target.getName());
-				Utils.sI18n(sender, "kitCommandSender", replace);
-			} else
-				Utils.sI18n(sender, "kitYourself", replace);
-		} else {
-			replace.put("sender", "Server Admin");
-			Utils.sI18n(target, "kitOtherPlayer", replace);
-			replace.remove("sender");
-			replace.put("target", target.getName());
-			Utils.sI18n(sender, "kitCommandSender", replace);
-		}
-		target.getInventory().addItem(items.toArray(new ItemStack[] {}));
+    /*
+     * (non-Javadoc)
+     * 
+     * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
+     * java.lang.String[])
+     */
+    @Override
+    public void execute(CommandSender sender, CommandArgs args) {
+        // which material?
+        Player target;
+        if (args.length == 0) {
+            Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
+            return;
+        }
+        KitInstance kit = ACHelper.getInstance().getKit(args.getString(0));
+        if (kit == null) {
+            Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
+            return;
+        }
+        long nextuse = kit.getLastUse(sender.getName()) + kit.getDelay() * 1000;
+        long now = System.currentTimeMillis();
+        if (now < nextuse) {
+            long diff = nextuse - now;
+            long d = TimeUnit.MILLISECONDS.toDays(diff);
+            long h = TimeUnit.MILLISECONDS.toHours(diff - TimeUnit.DAYS.toMillis(d));
+            long m = TimeUnit.MILLISECONDS.toMinutes(diff - TimeUnit.HOURS.toMillis(h));
+            long s = TimeUnit.MILLISECONDS.toSeconds(diff - TimeUnit.MINUTES.toMillis(m));
+            String timestamp = (d > 0 ? (d + "d ") : "") + (h > 0 ? (h + "h ") : "") + (m > 0 ? (m + "m ") : "") + (s > 0 ? (s + "s") : "");
+            Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
+            return;
+        }
+        kit.setLastUse(sender.getName(), now);
 
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null;
-	}
+        target = Utils.getUser(sender, args, permNode, 1, true);
+        if (target == null) {
+            return;
+        }
+        if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
+            return;
+        }
+        HashMap<String, String> replace = new HashMap<String, String>();
+        replace.put("kit", args.getString(0));
+        if (Utils.isPlayer(sender, false)) {
+            if (!target.equals(sender)) {
+                replace.put("sender", ((Player) sender).getName());
+                Utils.sI18n(target, "kitOtherPlayer", replace);
+                replace.remove("sender");
+                replace.put("target", target.getName());
+                Utils.sI18n(sender, "kitCommandSender", replace);
+            } else
+                Utils.sI18n(sender, "kitYourself", replace);
+        } else {
+            replace.put("sender", "Server Admin");
+            Utils.sI18n(target, "kitOtherPlayer", replace);
+            replace.remove("sender");
+            replace.put("target", target.getName());
+            Utils.sI18n(sender, "kitCommandSender", replace);
+        }
+        target.getInventory().addItem(kit.getItemStacks().toArray(new ItemStack[]{}));
 
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
+     */
+    @Override
+    public boolean argsCheck(String... args) {
+        return args != null;
+    }
 }
