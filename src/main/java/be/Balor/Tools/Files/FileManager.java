@@ -31,6 +31,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import au.com.bytecode.opencsv.CSVReader;
+import be.Balor.Manager.Commands.Items.KitInstance;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.TempBannedPlayer;
@@ -420,26 +421,51 @@ public class FileManager implements DataManager {
 	 * 
 	 * @return
 	 */
-	public Map<String, List<MaterialContainer>> loadKits() {
-		Map<String, List<MaterialContainer>> result = new HashMap<String, List<MaterialContainer>>();
+	public Map<String, KitInstance> loadKits() {
+		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		ExtendedConfiguration conf = getYml("kits");
-		if (conf.getKeys("kits") != null) {
-			ExtendedNode nodes = conf.getNode("kits");
-			for (String key : nodes.getKeys()) {
-				ExtendedNode itemsNode = nodes.getNode(key);
-				for (String item : itemsNode.getKeys()) {
-					MaterialContainer m = Utils.checkMaterial(item);
-					m.setAmount(itemsNode.getInt(item, 1));
-					if (!m.isNull())
-						items.add(m);
-				}
-				result.put(key, new ArrayList<MaterialContainer>(items));
-				items.clear();
+                
+		ExtendedNode kitNodes = conf.getNode("kits");
+		for (String kitName : kitNodes.getKeys()) {
+                        ExtendedNode kitNode = kitNodes.getNode(kitName);
+                        
+                        ExtendedNode kitItems = kitNode.getNode("items");
+                        for (String item : kitItems.getKeys()) {
+                                MaterialContainer m = Utils.checkMaterial(item);
+				m.setAmount(kitItems.getInt(item, 1));
+				if (!m.isNull())
+					items.add(m);
 			}
+                        int delay = kitNode.getInt("delay", 0);
+                        result.put(kitName, new KitInstance(kitName, delay, new ArrayList<MaterialContainer>(items)));
+			items.clear();
 		}
+                
+                ExtendedNode lastUsedNodes = conf.getNode("lastused");
+                for(String kitName: lastUsedNodes.getKeys()) {
+                        ExtendedNode kitNode = lastUsedNodes.getNode(kitName);
+                        
+                        Map<String, Long> playerLastUsed = new HashMap<String, Long>();
+                        for(String playerName: kitNode.getKeys()) {
+                                playerLastUsed.put(playerName, (long) kitNode.getInt(playerName, 0));
+                        }
+                        result.get(kitName).setDelays(playerLastUsed);
+                }
+		
 		return result;
 	}
+        
+        /**
+         * Update the lastused for a single player
+         * @param name Player name
+         * @param systemtime System.currentTimeMillis() formatted time
+         */
+        public void saveKitInstanceUse(String kitname, String playername, long systemtime) {
+            ExtendedConfiguration conf = getYml("kits");
+            conf.setProperty("lastused." + kitname + "." + playername, systemtime);
+            conf.save();
+        }
 
 	/*
 	 * (non-Javadoc)
