@@ -261,7 +261,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "
 				+ ChatColor.DARK_GREEN + "home limit");
 		Utils.addLocale("itemLimit", ChatColor.RED + "You have exceeded your "
-				+ ChatColor.DARK_GREEN + "item limit" + ChatColor.RED + " of %limit items per command.");
+				+ ChatColor.DARK_GREEN + "item limit" + ChatColor.RED
+				+ " of %limit items per command.");
 		Utils.addLocale("errorLocation", ChatColor.RED + "Location has to be formed by numbers");
 		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
 				+ " added.");
@@ -436,6 +437,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
 		Utils.addLocale("elapsedTotalTime", "%d day(s) %h:%m:%s");
+		Utils.addLocale("kitDelayNotUp", "§cYou cannot use that kit for another §f%delay");
 		LocaleManager.getInstance().save();
 	}
 

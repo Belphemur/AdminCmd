@@ -41,6 +41,7 @@ import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
+import be.Balor.Tools.Files.KitInstance;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Utils;
@@ -65,7 +66,7 @@ public class ACHelper {
 	private List<Integer> blacklist;
 	private AdminCmd coreInstance;
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
-	private HashMap<String, List<MaterialContainer>> kits = new HashMap<String, List<MaterialContainer>>();
+	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
@@ -209,25 +210,13 @@ public class ACHelper {
 	}
 
 	/**
-	 * Get ItemStacks for given kit
+	 * Get KitInstance for given kit
 	 *
 	 * @param kit
 	 * @return
 	 */
-	public ArrayList<ItemStack> getKit(String kit) {
-		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
-		try {
-			if (Utils.oddItem != null) {
-				result.addAll(Utils.oddItem.getItemGroup(kit, -1));
-				return result;
-			}
-		} catch (Throwable e) {
-		}
-		List<MaterialContainer> list = kits.get(kit);
-		if (list != null)
-			for (MaterialContainer mc : list)
-				result.add(mc.getItemStack());
-		return result;
+	public KitInstance getKit(String kit) {
+                return kits.get(kit);
 	}
 
 	/**
@@ -776,7 +765,7 @@ public class ACHelper {
 
 		alias.putAll(fManager.getAlias());
 
-		Map<String, List<MaterialContainer>> kitsLoaded = fManager.loadKits();
+		Map<String, KitInstance> kitsLoaded = fManager.loadKits();
 		for (String kit : kitsLoaded.keySet()) {
 			kits.put(kit, kitsLoaded.get(kit));
 			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);

@@ -1,9 +1,13 @@
 kits:
     Tools:
-        '276' : 1
-        '278' : 1
-        '277' : 1
-        'Diamond_Axe' : 1
+        delay: 0
+        items:
+            '276' : 1
+            '278' : 1
+            '277' : 1
+            'Diamond_Axe' : 1
     dirt:
-        'dirt': 64
-        'grass': 2
+        delay: 60
+        items:
+          'dirt': 64
+          'grass': 2

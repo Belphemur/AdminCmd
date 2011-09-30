@@ -52,6 +52,7 @@ public class FileManager implements DataManager {
 	private String lastFilename = "";
 	private File lastFile = null;
 	private ExtendedConfiguration lastLoadedConf = null;
+	private ExtendedConfiguration kits;
 
 	/**
 	 * @return the instance
@@ -420,25 +421,84 @@ public class FileManager implements DataManager {
 	 * 
 	 * @return
 	 */
-	public Map<String, List<MaterialContainer>> loadKits() {
-		Map<String, List<MaterialContainer>> result = new HashMap<String, List<MaterialContainer>>();
+	public Map<String, KitInstance> loadKits() {
+		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
-		ExtendedConfiguration conf = getYml("kits");
-		if (conf.getKeys("kits") != null) {
-			ExtendedNode nodes = conf.getNode("kits");
-			for (String key : nodes.getKeys()) {
-				ExtendedNode itemsNode = nodes.getNode(key);
-				for (String item : itemsNode.getKeys()) {
+		kits = getYml("kits");
+		boolean convert = false;
+
+		ExtendedNode kitNodes = kits.getNode("kits");
+		for (String kitName : kitNodes.getKeys()) {
+			int delay = 0;
+			ExtendedNode kitNode = kitNodes.getNode(kitName);
+			ExtendedNode kitItems = null;
+			try {
+				kitItems = kitNode.getNode("items");
+			} catch (NullPointerException e) {
+				continue;
+			}
+
+			if (kitItems != null) {
+				for (String item : kitItems.getKeys()) {
 					MaterialContainer m = Utils.checkMaterial(item);
-					m.setAmount(itemsNode.getInt(item, 1));
+					m.setAmount(kitItems.getInt(item, 1));
 					if (!m.isNull())
 						items.add(m);
 				}
-				result.put(key, new ArrayList<MaterialContainer>(items));
-				items.clear();
+				delay = kitNode.getInt("delay", 0);
+			} else {
+				kitItems = kitNode.createNode("items");
+				for (String item : kitNode.getKeys()) {
+					if (item.equals("items"))
+						continue;
+					MaterialContainer m = Utils.checkMaterial(item);
+					int amount = kitNode.getInt(item, 1);
+					m.setAmount(amount);
+					if (!m.isNull()) {
+						items.add(m);
+						kitItems.setProperty(item, amount);
+						kitNode.removeProperty(item);
+					}
+				}
+				kitNode.setProperty("delay", 0);
+				convert = true;
 			}
+
+			result.put(kitName, new KitInstance(kitName, delay, new ArrayList<MaterialContainer>(
+					items)));
+			items.clear();
 		}
+
+		ExtendedNode lastUsedNodes = kits.getNode("lastused");
+		if (lastUsedNodes != null)
+			for (String kitName : lastUsedNodes.getKeys()) {
+				ExtendedNode kitNode = lastUsedNodes.getNode(kitName);
+
+				Map<String, Long> playerLastUsed = new HashMap<String, Long>();
+				for (String playerName : kitNode.getKeys()) {
+					playerLastUsed.put(playerName,
+							new ObjectContainer(kitNode.getString(playerName)).getLong(0));
+				}
+				result.get(kitName).setDelays(playerLastUsed);
+			}
+		else
+			kits.createNode("lastused");
+		if (convert)
+			kits.save();
 		return result;
+	}
+
+	/**
+	 * Update the lastused for a single player
+	 * 
+	 * @param name
+	 *            Player name
+	 * @param systemtime
+	 *            System.currentTimeMillis() formatted time
+	 */
+	public void saveKitInstanceUse(String kitname, String playername, long systemtime) {
+		kits.setProperty("lastused." + kitname + "." + playername, systemtime);
+		kits.save();
 	}
 
 	/*
