@@ -42,6 +42,7 @@ import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.parser.ParserException;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
@@ -114,6 +115,9 @@ public class ExtendedConfiguration extends ExtendedNode {
 			ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
 					+ (e.getContextMark().getLine() + 1) + " DELETED");
 			load();
+		} catch (ParserException e) {
+			ACLogger.severe("File : " + file
+					+ "\n You have to correct the error manualy in the file.", e);
 		} finally {
 			try {
 				if (stream != null) {
