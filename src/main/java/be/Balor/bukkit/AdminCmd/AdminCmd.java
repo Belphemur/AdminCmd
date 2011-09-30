@@ -39,7 +39,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
  *
- * @authors Plague, Balor
+ * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	/**
@@ -57,13 +57,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
@@ -272,11 +273,15 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("strike", "%player was striked by Thor");
 		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
 				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
-		Utils.addLocale("addBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the Black List.");
+		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") added to the Command Black List for.");
+		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") added to the BlockPlace Black List for.");
 		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
 				+ ChatColor.GREEN + ") removed from the Black List.");
-		Utils.addLocale("inBlacklist", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
+		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
+				+ "%material" + ChatColor.DARK_RED + ") is black listed.");
+		Utils.addLocale("inBlacklistBlock", ChatColor.DARK_RED + "This block (" + ChatColor.WHITE
 				+ "%material" + ChatColor.DARK_RED + ") is black listed.");
 		Utils.addLocale("errorSpawn", ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE
 				+ " not set for this world.");
@@ -489,6 +494,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 

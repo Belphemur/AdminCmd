@@ -56,14 +56,15 @@ import com.google.common.collect.MapMaker;
 /**
  * Handle commands
  *
- * @authors Plague, Balor
+ * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
 
 	private HashMap<Material, String[]> materialsColors;
 	private List<Integer> listOfPossibleRepair;
 	private FileManager fManager;
-	private List<Integer> blacklist;
+	private List<Integer> itemBlacklist;
+	private List<Integer> blockBlacklist;
 	private AdminCmd coreInstance;
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
@@ -254,7 +255,8 @@ public class ACHelper {
 		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
 		alias.clear();
-		blacklist.clear();
+		itemBlacklist.clear();
+		blockBlacklist.clear();
 		undoQueue.clear();
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		pluginConfig.load();
@@ -538,7 +540,7 @@ public class ACHelper {
 	// teleports chosen player to another player
 
 	/**
-	 * Add an item to the BlackList
+	 * Add an item to the Command BlackList
 	 *
 	 * @param name
 	 * @return
@@ -547,23 +549,49 @@ public class ACHelper {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListed", null);
+			List<Integer> list = config.getIntList("BlackListedItems", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
 			list.add(m.getMaterial().getId());
-			config.setProperty("BlackListed", list);
+			config.setProperty("BlackListedItems", list);
 			config.save();
-			if (blacklist == null)
-				blacklist = new ArrayList<Integer>();
-			blacklist.add(m.getMaterial().getId());
+			if (itemBlacklist == null)
+				itemBlacklist = new ArrayList<Integer>();
+			itemBlacklist.add(m.getMaterial().getId());
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
-			Utils.sI18n(sender, "addBlacklist", replace);
+			Utils.sI18n(sender, "addBlacklistItem", replace);
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Add an item to the Command BlackList
+	 *
+	 * @param name
+	 * @return
+	 */
+	public boolean addBlackListedBlock(CommandSender sender, String name) {
+		MaterialContainer m = checkMaterial(sender, name);
+		if (!m.isNull()) {
+			ExtendedConfiguration config = fManager.getYml("blacklist");
+			List<Integer> list = config.getIntList("BlackListedBlocks", null);
+			if (list == null)
+				list = new ArrayList<Integer>();
+			list.add(m.getMaterial().getId());
+			config.setProperty("BlackListedBlocks", list);
+			config.save();
+			if (blockBlacklist == null)
+				blockBlacklist = new ArrayList<Integer>();
+			blockBlacklist.add(m.getMaterial().getId());
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", m.getMaterial().toString());
+			Utils.sI18n(sender, "addBlacklistBlock", replace);
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * Set the spawn point.
 	 */
@@ -600,15 +628,42 @@ public class ACHelper {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListed", new ArrayList<Integer>());
+			List<Integer> list = config.getIntList("BlackListedItems", new ArrayList<Integer>());
 			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
 				list.remove((Integer) m.getMaterial().getId());
-				config.setProperty("BlackListed", list);
+				config.setProperty("BlackListedItems", list);
 				config.save();
 			}
-			if (blacklist != null && !blacklist.isEmpty()
-					&& blacklist.contains(m.getMaterial().getId()))
-				blacklist.remove((Integer) m.getMaterial().getId());
+			if (itemBlacklist != null && !itemBlacklist.isEmpty()
+					&& itemBlacklist.contains(m.getMaterial().getId()))
+				itemBlacklist.remove((Integer) m.getMaterial().getId());
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("getMaterial()", m.getMaterial().toString());
+			Utils.sI18n(sender, "rmBlacklist", replace);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * remove a black listed block
+	 *
+	 * @param name
+	 * @return
+	 */
+	public boolean removeBlackListedBlock(CommandSender sender, String name) {
+		MaterialContainer m = checkMaterial(sender, name);
+		if (!m.isNull()) {
+			ExtendedConfiguration config = fManager.getYml("blacklist");
+			List<Integer> list = config.getIntList("BlackListedBlocks", new ArrayList<Integer>());
+			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
+				list.remove((Integer) m.getMaterial().getId());
+				config.setProperty("BlackListedBlocks", list);
+				config.save();
+			}
+			if (itemBlacklist != null && !itemBlacklist.isEmpty()
+					&& itemBlacklist.contains(m.getMaterial().getId()))
+				itemBlacklist.remove((Integer) m.getMaterial().getId());
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("getMaterial()", m.getMaterial().toString());
 			Utils.sI18n(sender, "rmBlacklist", replace);
@@ -623,9 +678,17 @@ public class ACHelper {
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
-		return fManager.getYml("blacklist").getIntList("BlackListed", new ArrayList<Integer>());
+		return fManager.getYml("blacklist").getIntList("BlackListedItems", new ArrayList<Integer>());
 	}
 
+	/**
+	 * Get the blacklisted blocks
+	 *
+	 * @return
+	 */
+	private List<Integer> getBlackListedBlocks() {
+		return fManager.getYml("blacklist").getIntList("BlackListedBlocks", new ArrayList<Integer>());
+	}
 	/**
 	 * Translate the id or name to a material
 	 *
@@ -738,30 +801,53 @@ public class ACHelper {
 		return true;
 	}
 
-	public boolean inBlackList(CommandSender sender, MaterialContainer mat) {
+	public boolean inBlackListItem(CommandSender sender, MaterialContainer mat) {
 		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
-				&& blacklist.contains(mat.getMaterial().getId())) {
+				&& itemBlacklist.contains(mat.getMaterial().getId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
-			Utils.sI18n(sender, "inBlacklist", replace);
+			Utils.sI18n(sender, "inBlacklistItem", replace);
 			return true;
 		}
 		return false;
 	}
 
-	public boolean inBlackList(CommandSender sender, ItemStack mat) {
+	public boolean inBlackListItem(CommandSender sender, ItemStack mat) {
 		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
-				&& blacklist.contains(mat.getTypeId())) {
+				&& itemBlacklist.contains(mat.getTypeId())) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
-			Utils.sI18n(sender, "inBlacklist", replace);
+			Utils.sI18n(sender, "inBlacklistItem", replace);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean inBlackListBlock(CommandSender sender, MaterialContainer mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+				&& blockBlacklist.contains(mat.getMaterial().getId())) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", mat.display());
+			Utils.sI18n(sender, "inBlacklistBlock", replace);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean inBlackListBlock(CommandSender sender, ItemStack mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+				&& blockBlacklist.contains(mat.getTypeId())) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", mat.getType().toString());
+			Utils.sI18n(sender, "inBlacklistBlock", replace);
 			return true;
 		}
 		return false;
 	}
 
 	public synchronized void loadInfos() {
-		blacklist = getBlackListedItems();
+		itemBlacklist = getBlackListedItems();
+		blockBlacklist = getBlackListedBlocks();
 
 		alias.putAll(fManager.getAlias());
 
@@ -797,7 +883,9 @@ public class ACHelper {
 
 		if (pluginConfig.getBoolean("verboseLog", true)) {
 			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + blacklist.size() + " blacklisted items loaded.");
+					"[AdminCmd] " + itemBlacklist.size() + " blacklisted items loaded.");
+			Logger.getLogger("Minecraft").info(
+					"[AdminCmd] " + blockBlacklist.size() + " blacklisted blocks loaded.");
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + alias.size() + " alias loaded.");
 			Logger.getLogger("Minecraft").info("[AdminCmd] " + kits.size() + " kits loaded.");
 			Logger.getLogger("Minecraft").info(

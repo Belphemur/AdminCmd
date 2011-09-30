@@ -58,7 +58,7 @@ public class Give extends CoreCommand {
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
 		if (mat.isNull())
 			return;
-		if (ACHelper.getInstance().inBlackList(sender, mat))
+		if (ACHelper.getInstance().inBlackListItem(sender, mat))
 			return;
 		if (mat.getMaterial().equals(Material.AIR)) {
 			Utils.sI18n(sender, "airForbidden");
@@ -74,7 +74,8 @@ public class Give extends CoreCommand {
 			} catch (Exception e) {
 				return;
 			}
-			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")) {
+			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")
+					&& !(sender.hasPermission("admincmd.item.infinity"))) {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("limit", String.valueOf(ACHelper.getInstance().getLimit(sender, "maxItemAmount")));
 				Utils.sI18n(sender, "itemLimit", replace);
