@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -779,21 +780,12 @@ public class Utils {
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
 	 */
-	public static Long[] transformToElapsedTime(long time) {
-		long diff = time;
-		long secondInMillis = 1000;
-		long minuteInMillis = secondInMillis * 60;
-		long hourInMillis = minuteInMillis * 60;
-		long dayInMillis = hourInMillis * 24;
-
-		long elapsedDays = diff / dayInMillis;
-		diff = diff % dayInMillis;
-		long elapsedHours = diff / hourInMillis;
-		diff = diff % hourInMillis;
-		long elapsedMinutes = diff / minuteInMillis;
-		diff = diff % minuteInMillis;
-		long elapsedSeconds = diff / secondInMillis;
-		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
+	public static Long[] transformToElapsedTime(final long time) {
+        long d = TimeUnit.MILLISECONDS.toDays(time);
+        long h = TimeUnit.MILLISECONDS.toHours(time - TimeUnit.DAYS.toMillis(d));
+        long m = TimeUnit.MILLISECONDS.toMinutes(time - TimeUnit.HOURS.toMillis(h));
+        long s = TimeUnit.MILLISECONDS.toSeconds(time - TimeUnit.MINUTES.toMillis(m));
+		return new Long[] { d, h, m, s };
 	}
 
 	/**
