@@ -74,7 +74,8 @@ public class Drop extends CoreCommand {
 			} catch (Exception e) {
 				return;
 			}
-			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")) {
+			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")
+					&& !(sender.hasPermission("admincmd.item.infinity"))) {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("limit", String.valueOf(ACHelper.getInstance().getLimit(sender, "maxItemAmount")));
 				Utils.sI18n(sender, "itemLimit", replace);
