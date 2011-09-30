@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -43,7 +43,8 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ * @author Lathanael (aka Philippe Leipold)
+ *
  */
 public class FileManager implements DataManager {
 	protected File pathFile;
@@ -85,7 +86,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the ExtendedConfiguration object
-	 * 
+	 *
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
@@ -109,7 +110,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the File object
-	 * 
+	 *
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
@@ -148,7 +149,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Write the alias in the yml file
-	 * 
+	 *
 	 * @param alias
 	 * @param mc
 	 */
@@ -172,7 +173,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Remove the alias from the yml fileF
-	 * 
+	 *
 	 * @param alias
 	 */
 	public void removeAlias(String alias) {
@@ -192,7 +193,7 @@ public class FileManager implements DataManager {
 	/**
 	 * Get a file in the jar, copy it in the choose directory inside the plugin
 	 * folder, open it and return it
-	 * 
+	 *
 	 * @param filename
 	 * @return
 	 */
@@ -274,7 +275,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Create a flat file with the location informations
-	 * 
+	 *
 	 * @param loc
 	 * @param filename
 	 * @param directory
@@ -293,7 +294,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Return the location after parsing the flat file
-	 * 
+	 *
 	 * @param property
 	 * @param filename
 	 * @param directory
@@ -323,7 +324,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Remove the given location from the file
-	 * 
+	 *
 	 * @param property
 	 * @param filename
 	 * @param directory
@@ -337,7 +338,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Return a string Set containing all locations names
-	 * 
+	 *
 	 * @param filename
 	 * @param directory
 	 * @return
@@ -353,7 +354,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Parse String to create a location
-	 * 
+	 *
 	 * @param property
 	 * @param conf
 	 * @return
@@ -386,7 +387,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load the map
-	 * 
+	 *
 	 * @param type
 	 * @param directory
 	 * @param filename
@@ -418,7 +419,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load all the kits
-	 * 
+	 *
 	 * @return
 	 */
 	public Map<String, KitInstance> loadKits() {
@@ -490,7 +491,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Update the lastused for a single player
-	 * 
+	 *
 	 * @param name
 	 *            Player name
 	 * @param systemtime
@@ -503,7 +504,7 @@ public class FileManager implements DataManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Tools.Files.DataManager#addBannedPlayer(be.Balor.Player.BannedPlayer
 	 * )
@@ -518,7 +519,7 @@ public class FileManager implements DataManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
 	 */
 	@Override

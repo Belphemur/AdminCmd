@@ -58,7 +58,7 @@ public class Drop extends CoreCommand {
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
 		if (mat.isNull())
 			return;
-		if (ACHelper.getInstance().inBlackList(sender, mat))
+		if (ACHelper.getInstance().inBlackListItem(sender, mat))
 			return;
 		if(mat.getMaterial().equals(Material.AIR))
 		{
