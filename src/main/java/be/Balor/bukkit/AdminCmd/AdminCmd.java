@@ -38,7 +38,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -57,13 +57,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
