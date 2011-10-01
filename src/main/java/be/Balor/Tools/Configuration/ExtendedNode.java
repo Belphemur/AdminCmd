@@ -85,5 +85,47 @@ public class ExtendedNode extends ConfigurationNode {
 		addProperty(path, new HashMap<String, Object>());
 		return getNode(path);
 	}
-	
+
+	/**
+	 * Gets a long at a location. This will either return an long or the default
+	 * value. If the object at the particular location is not actually a long,
+	 * the default value will be returned.
+	 * 
+	 * @param def
+	 *            default value
+	 * @return boolean or default
+	 */
+	public long getLong(String path, long def) {
+		Long o = castLong(getProperty(path));
+		if (o == null) {
+			setProperty(path, def);
+			return def;
+		}
+		return o;
+	}
+
+	/**
+	 * Casts a value to a long. May return null.
+	 * 
+	 * @param o
+	 * @return
+	 */
+	private static Long castLong(Object o) {
+		if (o == null) {
+			return null;
+		} else if (o instanceof Long) {
+			return (Long) o;
+		} else if (o instanceof Float) {
+			return Long.parseLong(((Float) o).toString());
+		} else if (o instanceof Double) {
+			return Long.parseLong(((Double) o).toString());
+		} else if (o instanceof Byte) {
+			return Long.parseLong(((Byte) o).toString());
+		} else if (o instanceof Integer) {
+			return Long.parseLong(((Integer) o).toString());
+		} else {
+			return null;
+		}
+	}
+
 }
