@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -74,21 +75,6 @@ public class Kit extends CoreCommand {
 			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
 			return;
 		}
-		long nextuse = kit.getLastUse(sender.getName()) + kit.getDelay() * 1000;
-		long now = System.currentTimeMillis();
-		if (now < nextuse) {
-			long diff = nextuse - now;
-			Long[] time = Utils.transformToElapsedTime(diff);
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("d", time[0].toString());
-			replace.put("h", time[1].toString());
-			replace.put("m", time[2].toString());
-			replace.put("s", time[3].toString());
-
-			String timestamp = Utils.I18n("elapsedTotalTime", replace);
-			Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
-			return;
-		}
 
 		target = Utils.getUser(sender, args, permNode, 1, true);
 		if (target == null) {
@@ -97,8 +83,29 @@ public class Kit extends CoreCommand {
 		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
 			return;
 		}
+		ACPlayer actarget = ACPlayer.getPlayer(target);
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.nodelay", false)) {
+			long nextuse = actarget.getLastKitUse(kit.getName()) + kit.getDelay() * 1000;
+			long now = System.currentTimeMillis();
+			if (now < nextuse) {
+				long diff = nextuse - now;
+				Long[] timeLeft = Utils.transformToElapsedTime(diff);
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("d", timeLeft[0].toString());
+				replace.put("h", timeLeft[1].toString());
+				replace.put("m", timeLeft[2].toString());
+				replace.put("s", timeLeft[3].toString());
+				String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d",
+						timeLeft[0].toString())) : "")
+						+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
+						+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
+						+ (timeLeft[3] > 0 ? (timeLeft[3] + "s") : "");
+				Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
+				return;
+			}
 
-		kit.setLastUse(sender.getName(), now);
+			actarget.updateLastKitUse(kit.getName());
+		}
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("kit", args.getString(0));
 		if (Utils.isPlayer(sender, false)) {
@@ -119,6 +126,17 @@ public class Kit extends CoreCommand {
 		}
 		target.getInventory().addItem(kit.getItemStacks().toArray(new ItemStack[] {}));
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay", bukkitDefault);
+		super.registerBukkitPerm();
 	}
 
 	/*

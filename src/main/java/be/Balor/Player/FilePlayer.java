@@ -44,6 +44,7 @@ public class FilePlayer extends ACPlayer {
 	private final ExtendedNode informations;
 	private final ExtendedNode homes;
 	private final ExtendedNode powers;
+	private final ExtendedNode kitsUse;
 	private int saveCount = 0;
 	private int SAVE_BEFORE_WRITE = 5;
 
@@ -66,6 +67,7 @@ public class FilePlayer extends ACPlayer {
 		informations = datas.createNode("infos");
 		homes = datas.createNode("home");
 		powers = datas.createNode("powers");
+		kitsUse = datas.createNode("kitsUse");
 		datas.save();
 	}
 
@@ -378,6 +380,23 @@ public class FilePlayer extends ACPlayer {
 		for (Entry<String, Object> entry : powers.getAll().entrySet())
 			result.put(entry.getKey(), entry.getValue().toString());
 		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
+	 */
+	@Override
+	public void updateLastKitUse(String kit) {
+		kitsUse.setProperty(kit, System.currentTimeMillis());
+		writeFile();
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
+	 */
+	@Override
+	public long getLastKitUse(String kit) {
+		return kitsUse.getLong(kit, 0L);
 	}
 
 }

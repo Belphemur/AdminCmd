@@ -188,7 +188,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%world");
 		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
 				+ "%material");
-		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players:");
+		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players: ");
 		Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");
 		Utils.addLocale(
 				"changedWorld",
@@ -338,13 +338,13 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "%d day(s) %h:%m:%s //n" + ChatColor.DARK_GREEN + "Your last login was: "
+				+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
 				+ ChatColor.AQUA + "%lastlogin");
 		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "%d day(s) %h:%m:%s");
+				+ "#elapsedTotalTime#");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
@@ -411,7 +411,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "Super Breaker mode enabled for %player");
 		Utils.addLocale("airForbidden", ChatColor.DARK_RED + "You can't give AIR item.");
 		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
-				+ "played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
+				+ "played " + ChatColor.AQUA + "#elapsedTotalTime#");
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
 		Utils.addLocale("serverLock", ChatColor.RED	+ "Server will be lock in 5 seconds," +
 				" you'll be kicked if you don't have the Permission to stay.");
@@ -441,8 +441,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("elapsedTotalTime", "%d day(s) %h:%m:%s");
+		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
 		Utils.addLocale("kitDelayNotUp", "§cYou cannot use that kit for another §f%delay");
+		Utils.addLocale("days", "%d day(s)");
 		LocaleManager.getInstance().save();
 	}
 
