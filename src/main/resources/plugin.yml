@@ -350,11 +350,15 @@ commands:
     description: Refills the Foodbar of the provided player or yours.
     aliases: [feed, pf]
     usage: /<command> <player>
-  bal_gamemode:    
+  bal_gamemode:
     description: Switch the game mode for yourself or the player.
     aliases: [gm, gswitch]
     usage: /<command> <player>
-  bal_whois:    
+  bal_whois:
     description: Get informations about the player.
     aliases: [whois, ws]
     usage: /<command> <player>
+  bal_changespawner:
+    description: Gets or sets the CreatureType or delay of the MobSpawner you are looking at. -d = sets Delay, -m = sets CreatueType to be spawned, -g = gets the Type and Delay of the MobSpawner.
+    aliases: [changems, cms, msc]
+    usage: /<command> <-falg> <CreatureType|Delay>
