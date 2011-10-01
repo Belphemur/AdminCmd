@@ -37,7 +37,7 @@
 					<include>kits.yml</include>
 					<include>items.csv</include>
 					<include>AdminCmd.yml</include>
-					<include>acmotd.yml</include>					
+					<include>acmotd.yml</include>
 				</includes>
 			</resource>
 		</resources>
@@ -277,10 +277,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.D3GN.MiracleM4n</groupId>
+			<groupId>net.D3GN</groupId>
 			<artifactId>mChat</artifactId>
-			<version>v1.7.10_5</version>
-			<scope>provided</scope>
+			<version>v1.8.2_2</version>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>
