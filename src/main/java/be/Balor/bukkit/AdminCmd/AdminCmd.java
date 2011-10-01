@@ -188,7 +188,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%world");
 		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
 				+ "%material");
-		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players:");
+		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players: ");
 		Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");
 		Utils.addLocale(
 				"changedWorld",
@@ -439,12 +439,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("elapsedTotalTime", "#days# #hour#:#minute#:#second#");
+		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
 		Utils.addLocale("kitDelayNotUp", "§cYou cannot use that kit for another §f%delay");
 		Utils.addLocale("days", "%d day(s)");
-		Utils.addLocale("hour", "%h");
-		Utils.addLocale("minute", "%m");
-		Utils.addLocale("second", "%s");
 		LocaleManager.getInstance().save();
 	}
 

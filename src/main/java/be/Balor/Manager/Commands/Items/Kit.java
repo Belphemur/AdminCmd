@@ -78,14 +78,17 @@ public class Kit extends CoreCommand {
 		long now = System.currentTimeMillis();
 		if (now < nextuse) {
 			long diff = nextuse - now;
-			Long[] time = Utils.transformToElapsedTime(diff);
+			Long[] timeLeft = Utils.transformToElapsedTime(diff);
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("d", time[0].toString());
-			replace.put("h", time[1].toString());
-			replace.put("m", time[2].toString());
-			replace.put("s", time[3].toString());
-
-			String timestamp = Utils.I18n("elapsedTotalTime", replace);
+			replace.put("d", timeLeft[0].toString());
+			replace.put("h", timeLeft[1].toString());
+			replace.put("m", timeLeft[2].toString());
+			replace.put("s", timeLeft[3].toString());
+			String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d", timeLeft[0].toString()))
+					: "")
+					+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
+					+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
+					+ (timeLeft[3] > 0 ? (timeLeft[3] + "s") : "");
 			Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
 			return;
 		}
