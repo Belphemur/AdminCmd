@@ -338,13 +338,13 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "%d day(s) %h:%m:%s //n" + ChatColor.DARK_GREEN + "Your last login was: "
+				+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
 				+ ChatColor.AQUA + "%lastlogin");
 		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
 				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "%d day(s) %h:%m:%s");
+				+ "#elapsedTotalTime#");
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
@@ -411,7 +411,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "Super Breaker mode enabled for %player");
 		Utils.addLocale("airForbidden", ChatColor.DARK_RED + "You can't give AIR item.");
 		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
-				+ "played " + ChatColor.AQUA + "%d day(s) %h:%m:%s");
+				+ "played " + ChatColor.AQUA + "#elapsedTotalTime#");
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
 		Utils.addLocale(
 				"serverLock",
@@ -439,8 +439,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("elapsedTotalTime", "%d day(s) %h:%m:%s");
+		Utils.addLocale("elapsedTotalTime", "#days# #hour#:#minute#:#second#");
 		Utils.addLocale("kitDelayNotUp", "§cYou cannot use that kit for another §f%delay");
+		Utils.addLocale("days", "%d day(s)");
+		Utils.addLocale("hour", "%h");
+		Utils.addLocale("minute", "%m");
+		Utils.addLocale("second", "%s");
 		LocaleManager.getInstance().save();
 	}
 

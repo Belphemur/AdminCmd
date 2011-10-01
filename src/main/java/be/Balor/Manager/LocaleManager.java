@@ -18,7 +18,11 @@ package be.Balor.Manager;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
+import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 
 /**
@@ -100,27 +104,55 @@ public class LocaleManager {
 			return null;
 		String locale = localeFile.getString(key);
 		if (locale != null && values != null)
-			for (String toReplace : values.keySet())
+			for (String toReplace : values.keySet()) {
+				locale = recursiveLocale(locale);
 				try {
 					locale = locale.replaceAll("%" + toReplace, values.get(toReplace));
-				} catch (StringIndexOutOfBoundsException  e) {
-					locale = locale.replaceAll("%" + toReplace, values.get(toReplace).replaceAll("\\W", ""));
+				} catch (StringIndexOutOfBoundsException e) {
+					locale = locale.replaceAll("%" + toReplace,
+							values.get(toReplace).replaceAll("\\W", ""));
 				}
-				
+
+			}
 		return locale;
+	}
+
+	private String recursiveLocale(String locale) {
+		String ResultString = null;
+		String result = locale;
+		try {
+			Pattern regex = Pattern.compile("#([\\w]+)#");
+			Matcher regexMatcher = regex.matcher(locale);
+			if (regexMatcher.find()) {
+				ResultString = regexMatcher.group(1);
+				ACLogger.info(ResultString);
+				String recLocale = localeFile.getString(ResultString);
+				if (recLocale != null)
+					result = regexMatcher.replaceFirst(recLocale);
+				else
+					result = regexMatcher.replaceFirst("");
+				regexMatcher = regex.matcher(result);
+			}
+		} catch (PatternSyntaxException ex) {
+			// Syntax error in the regular expression
+		}
+		return result;
 	}
 
 	public String get(String key, String alias, String replaceBy) {
 		if (noMsg)
 			return null;
 		String locale = localeFile.getString(key);
-		if (locale != null && alias != null)
+		if (locale != null && alias != null) {
+			locale = recursiveLocale(locale);
+
 			try {
 				locale = locale.replaceAll("%" + alias, replaceBy);
 			} catch (StringIndexOutOfBoundsException e) {
 				locale = locale.replaceAll("%" + alias, replaceBy.replaceAll("\\W", ""));
 			}
-			
+		}
+
 		return locale;
 	}
 
