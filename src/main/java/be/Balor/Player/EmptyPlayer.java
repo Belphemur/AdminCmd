@@ -257,4 +257,20 @@ public class EmptyPlayer extends ACPlayer {
 		return new HashMap<String, String>();
 	}
 
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
+	 */
+	@Override
+	public void updateLastKitUse(String kit) {
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
+	 */
+	@Override
+	public long getLastKitUse(String kit) {
+		return 0;
+	}
+
 }

@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -74,7 +75,16 @@ public class Kit extends CoreCommand {
 			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
 			return;
 		}
-		long nextuse = kit.getLastUse(sender.getName()) + kit.getDelay() * 1000;
+
+		target = Utils.getUser(sender, args, permNode, 1, true);
+		if (target == null) {
+			return;
+		}
+		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
+			return;
+		}
+		ACPlayer actarget = ACPlayer.getPlayer(target);
+		long nextuse = actarget.getLastKitUse(kit.getName()) + kit.getDelay() * 1000;
 		long now = System.currentTimeMillis();
 		if (now < nextuse) {
 			long diff = nextuse - now;
@@ -92,16 +102,7 @@ public class Kit extends CoreCommand {
 			Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
 			return;
 		}
-
-		target = Utils.getUser(sender, args, permNode, 1, true);
-		if (target == null) {
-			return;
-		}
-		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
-			return;
-		}
-
-		kit.setLastUse(sender.getName(), now);
+		actarget.updateLastKitUse(kit.getName());
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("kit", args.getString(0));
 		if (Utils.isPlayer(sender, false)) {

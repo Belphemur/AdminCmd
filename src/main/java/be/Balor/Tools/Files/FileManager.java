@@ -53,7 +53,6 @@ public class FileManager implements DataManager {
 	private String lastFilename = "";
 	private File lastFile = null;
 	private ExtendedConfiguration lastLoadedConf = null;
-	private ExtendedConfiguration kits;
 
 	/**
 	 * @return the instance
@@ -425,7 +424,7 @@ public class FileManager implements DataManager {
 	public Map<String, KitInstance> loadKits() {
 		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
-		kits = getYml("kits");
+		ExtendedConfiguration kits = getYml("kits");
 		boolean convert = false;
 
 		ExtendedNode kitNodes = kits.getNode("kits");
@@ -470,36 +469,9 @@ public class FileManager implements DataManager {
 			items.clear();
 		}
 
-		ExtendedNode lastUsedNodes = kits.getNode("lastused");
-		if (lastUsedNodes != null)
-			for (String kitName : lastUsedNodes.getKeys()) {
-				ExtendedNode kitNode = lastUsedNodes.getNode(kitName);
-
-				Map<String, Long> playerLastUsed = new HashMap<String, Long>();
-				for (String playerName : kitNode.getKeys()) {
-					playerLastUsed.put(playerName,
-							new ObjectContainer(kitNode.getString(playerName)).getLong(0));
-				}
-				result.get(kitName).setDelays(playerLastUsed);
-			}
-		else
-			kits.createNode("lastused");
 		if (convert)
 			kits.save();
 		return result;
-	}
-
-	/**
-	 * Update the lastused for a single player
-	 *
-	 * @param name
-	 *            Player name
-	 * @param systemtime
-	 *            System.currentTimeMillis() formatted time
-	 */
-	public void saveKitInstanceUse(String kitname, String playername, long systemtime) {
-		kits.setProperty("lastused." + kitname + "." + playername, systemtime);
-		kits.save();
 	}
 
 	/*

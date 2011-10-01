@@ -273,6 +273,23 @@ public abstract class ACPlayer {
 	public abstract void removeAllSuperPower();
 
 	/**
+	 * Update the timestamp representing the last use of the kit
+	 * 
+	 * @param kit
+	 *            name of the kit
+	 */
+	public abstract void updateLastKitUse(String kit);
+
+	/**
+	 * Get the last use of the kit
+	 * 
+	 * @param kit
+	 *            name of the kit
+	 * @return timestamp representing the last use of the kit
+	 */
+	public abstract long getLastKitUse(String kit);
+
+	/**
 	 * Force the save
 	 */
 	abstract void forceSave();
