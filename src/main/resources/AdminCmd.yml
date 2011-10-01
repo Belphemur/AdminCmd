@@ -30,14 +30,14 @@ acitemdrop:
     permissions: admincmd.item.drop
 
 acitemaddbl:
-    command: addblacklist [name|alias|item id]
-    description: Blacklist an [item].
+    command: addblacklist <-flags> [name|alias|item id]
+    description: "Blacklist an [item|block]. -b for block and -i for item."
     plugin: AdminCmd
     permissions: admincmd.item.blacklist
 
 acrmbl:
-    command: rmblacklist [name|alias|item id]
-    description: Remove the item from the blacklist.
+    command: rmblacklist <-flags> [name|alias|item id]
+    description: "Remove the item from the blacklist. -b for block and -i for item."
     plugin: AdminCmd
     permissions: admincmd.item.blacklist
 
@@ -322,19 +322,19 @@ acplayerfakequit:
     description: "En-/Disables FakeQuit mode. If enabled a\n quit message will be issued and you/the [player] will no longer\n be listed online."
     plugin: AdminCmd
     permissions: admincmd.player.fakequit
-    
+
 acplayergm:
     command: gm [player]
     description: "Switch the game mode for the selected player."
     plugin: AdminCmd
     permissions: admincmd.player.gamemode
-    
-acplayergm:
+
+acplayerwhois:
     command: whois [-w | (player|world)]
     description: "Get information about yourself or the player.\n [-w] to get information about the world."
     plugin: AdminCmd
     permissions: admincmd.player.whois
-    
+
 acweatherclear:
     command: wclear
     description: Clear the weather.
@@ -412,6 +412,12 @@ acmoblimit:
     description: "Set the mob spawn limit\n (none: no limit) for the chosen [world]."
     plugin: AdminCmd
     permissions: admincmd.mob.limit
+
+acmobspawner:
+    command: chamgems <-flags> <CreaturType|Delay>
+    description: "Set/Get the values of the Mob Spawner you are looking at. -g for get, -m for setting the Creature Type, -d for setting the delay"
+    plugin: AdminCmd
+    permissions: admincmd.mob.spawner
 
 acsetspawn:
     command: setspawn <radius>
