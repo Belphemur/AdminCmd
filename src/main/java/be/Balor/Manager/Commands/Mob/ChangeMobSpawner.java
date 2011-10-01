@@ -56,9 +56,11 @@ public class ChangeMobSpawner extends CoreCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			Player player = (Player) sender;
 			Block block = player.getTargetBlock(null, 100);
-			if (block.getType() != Material.MOB_SPAWNER)
+			if (block.getTypeId() != Material.MOB_SPAWNER.getId()) {
+				player.sendMessage("Not a Mob Spawner");
 				return;
-			CreatureSpawner spawner = (CreatureSpawner) block;
+			}
+			CreatureSpawner spawner = (CreatureSpawner) block.getState();
 			if (args.hasFlag('m')) {
 				String name = args.getString(0);
 				if (name == null) {
@@ -100,6 +102,6 @@ public class ChangeMobSpawner extends CoreCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
+		return args != null;
 	}
 }

@@ -176,6 +176,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
 		CommandManager.getInstance().registerCommand(Whois.class);
+		CommandManager.getInstance().registerCommand(ChangeMobSpawner.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -274,9 +275,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
 				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
 		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the Command Black List for.");
+				+ ChatColor.GREEN + ") added to the Command Black List for i, give and drop.");
 		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the BlockPlace Black List for.");
+				+ ChatColor.GREEN + ") added to the BlockPlace Black List.");
 		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
 				+ ChatColor.GREEN + ") removed from the Black List.");
 		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
@@ -445,8 +446,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerSetDelay",ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD + "%delay");
 		Utils.addLocale("spawnerSetType", ChatColor.GREEN + "CreatureType of the Mob Spawner changed to: "
 				+ ChatColor.GOLD + "%type");
-		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns" + ChatColor.GOLD + "%mob"
-				+ ChatColor.DARK_AQUA + "s with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
+		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
+				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
 		LocaleManager.getInstance().save();
 	}

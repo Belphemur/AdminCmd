@@ -49,11 +49,11 @@ commands:
   bal_addbl:
     description: BlackList an item
     aliases: [addblacklist,abl]
-    usage: /<command> (name|id)
+    usage: /<command> <-flag> (name|id)
   bal_rmbl:
     description: remove the item from the blackList
     aliases: [rmblacklist,rbl]
-    usage: /<command> (name|id)
+    usage: /<command> <-flag> (name|id)
   bal_itemcolor:
     description: Changes the color of a colorable item in hand.
     aliases: [c,color]
