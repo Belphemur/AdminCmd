@@ -84,7 +84,7 @@ public class Kit extends CoreCommand {
 			return;
 		}
 		ACPlayer actarget = ACPlayer.getPlayer(target);
-		if (!PermissionManager.hasPerm(sender, "admincmd.items.nodelay", false)) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.nodelay", false)) {
 			long nextuse = actarget.getLastKitUse(kit.getName()) + kit.getDelay() * 1000;
 			long now = System.currentTimeMillis();
 			if (now < nextuse) {
@@ -135,7 +135,7 @@ public class Kit extends CoreCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.items.nodelay");
+		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay", bukkitDefault);
 		super.registerBukkitPerm();
 	}
 
