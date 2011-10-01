@@ -127,10 +127,15 @@ public class LocaleManager {
 			regexMatcher = regex.matcher(result);
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group(1);
-				String recLocale = values.get(ResultString);
-				if (recLocale != null)
-					result = regexMatcher.replaceFirst(recLocale);
-				else
+				String replaceValue = values.get(ResultString);
+				if (replaceValue != null) {
+					try {
+						result = regexMatcher.replaceFirst(replaceValue);
+					} catch (StringIndexOutOfBoundsException e) {
+						result = regexMatcher.replaceFirst(replaceValue.replaceAll("\\W", ""));
+					}
+
+				} else
 					result = regexMatcher.replaceFirst("");
 				regexMatcher = regex.matcher(result);
 			}
