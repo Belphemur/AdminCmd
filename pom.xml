@@ -103,13 +103,9 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<artifactSet>
-								<excludes>
-									<exclude>org.bukkit*</exclude>
-									<exclude>junit:junit</exclude>
-									<exclude>org.apache.maven:lib:tests</exclude>
-								</excludes>
-							</artifactSet>
+							<shadedGroupFilter>
+								net.sf.opencsv
+							</shadedGroupFilter>
 						</configuration>
 					</execution>
 				</executions>
