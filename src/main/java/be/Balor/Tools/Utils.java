@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +71,10 @@ public class Utils {
 	public static Heroes heroes = null;
 	public static boolean signExtention = false;
 	public static boolean mChatInstalled = false;
+	private final static long secondInMillis = 1000;
+	private final static long minuteInMillis = secondInMillis * 60;
+	private final static long hourInMillis = minuteInMillis * 60;
+	private final static long dayInMillis = hourInMillis * 24;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -781,11 +784,17 @@ public class Utils {
 	 * @return Long[] containing days, hours, mins and sec.
 	 */
 	public static Long[] transformToElapsedTime(final long time) {
-        long d = TimeUnit.MILLISECONDS.toDays(time);
-        long h = TimeUnit.MILLISECONDS.toHours(time - TimeUnit.DAYS.toMillis(d));
-        long m = TimeUnit.MILLISECONDS.toMinutes(time - TimeUnit.HOURS.toMillis(h));
-        long s = TimeUnit.MILLISECONDS.toSeconds(time - TimeUnit.MINUTES.toMillis(m));
-		return new Long[] { d, h, m, s };
+		long diff = time;
+
+		long elapsedDays = diff / dayInMillis;
+		diff = diff % dayInMillis;
+		long elapsedHours = diff / hourInMillis;
+		diff = diff % hourInMillis;
+		long elapsedMinutes = diff / minuteInMillis;
+		diff = diff % minuteInMillis;
+		long elapsedSeconds = diff / secondInMillis;
+
+		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
 	}
 
 	/**
