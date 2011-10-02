@@ -442,11 +442,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
-<<<<<<< HEAD
-		Utils.addLocale("kitDelayNotUp", "§cYou cannot use that kit for another §f%delay");
-		Utils.addLocale("days", "%d day(s)");
-=======
 		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another " + ChatColor.WHITE + "%delay");
 		Utils.addLocale("days", "%d day(s)");
 		Utils.addLocale("spawnerSetDelay",ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD + "%delay");
@@ -455,7 +450,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
 				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
->>>>>>> upstream/master
 		LocaleManager.getInstance().save();
 	}
 
