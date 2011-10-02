@@ -176,6 +176,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
 		CommandManager.getInstance().registerCommand(Whois.class);
+		CommandManager.getInstance().registerCommand(ChangeMobSpawner.class);
 	}
 
 	protected void setDefaultLocale() {
@@ -274,9 +275,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
 				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
 		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the Command Black List for.");
+				+ ChatColor.GREEN + ") added to the Command Black List for i, give and drop.");
 		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the BlockPlace Black List for.");
+				+ ChatColor.GREEN + ") added to the BlockPlace Black List.");
 		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
 				+ ChatColor.GREEN + ") removed from the Black List.");
 		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
@@ -442,8 +443,19 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
 		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
+<<<<<<< HEAD
 		Utils.addLocale("kitDelayNotUp", "§cYou cannot use that kit for another §f%delay");
 		Utils.addLocale("days", "%d day(s)");
+=======
+		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another " + ChatColor.WHITE + "%delay");
+		Utils.addLocale("days", "%d day(s)");
+		Utils.addLocale("spawnerSetDelay",ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD + "%delay");
+		Utils.addLocale("spawnerSetType", ChatColor.GREEN + "CreatureType of the Mob Spawner changed to: "
+				+ ChatColor.GOLD + "%type");
+		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
+				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
+		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
+>>>>>>> upstream/master
 		LocaleManager.getInstance().save();
 	}
 

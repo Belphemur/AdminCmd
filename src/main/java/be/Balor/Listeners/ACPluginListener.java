@@ -79,7 +79,7 @@ public class ACPluginListener extends ServerListener {
 			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager().getPlugin("mChat");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				BukkitPermissions.setmChatapi(mChat.API);
-				Utils.mChatInstalled = true;
+				Utils.mChatApi = mChat.API;
 				ACLogger.info("Successfully linked with mChat");
 			}
 		}

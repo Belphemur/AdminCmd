@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.D3GN.MiracleM4n.mChat.mChatAPI;
 import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
 
@@ -69,8 +70,8 @@ public class Utils {
 	public static OddItem oddItem = null;
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
+	public static mChatAPI mChatApi = null;
 	public static boolean signExtention = false;
-	public static boolean mChatInstalled = false;
 	private final static long secondInMillis = 1000;
 	private final static long minuteInMillis = secondInMillis * 60;
 	private final static long hourInMillis = minuteInMillis * 60;
@@ -652,9 +653,9 @@ public class Utils {
 	 */
 	public static void broadcastFakeQuit(Player player) {
 		String name = player.getName();
-		if (mChatInstalled)
-			Utils.broadcastMessage(Utils.colorParser(PermissionManager.getPrefix(player)) + name
-					+ ChatColor.YELLOW + " has left the game.");
+		if (mChatApi != null)
+			Utils.broadcastMessage(mChatApi.ParseJoinName(player) + ChatColor.YELLOW
+					+ " has left the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 	}
@@ -667,9 +668,9 @@ public class Utils {
 	 */
 	public static void broadcastFakeJoin(Player player) {
 		String name = player.getName();
-		if (mChatInstalled)
-			Utils.broadcastMessage(Utils.colorParser(PermissionManager.getPrefix(player)) + name
-					+ ChatColor.YELLOW + " has joined the game.");
+		if (mChatApi != null)
+			Utils.broadcastMessage(mChatApi.ParseJoinName(player) + ChatColor.YELLOW
+					+ " has joined the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
 	}
