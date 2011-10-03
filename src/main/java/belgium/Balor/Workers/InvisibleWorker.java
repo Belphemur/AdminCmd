@@ -26,7 +26,6 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -114,10 +113,7 @@ final public class InvisibleWorker {
 								@Override
 								public void run() {
 									for (Player p : Utils.getOnlinePlayers())
-									{
-										ACLogger.info("Player : "+p.getName());
 										uninvisible(toReappear, p);
-									}
 								}
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
