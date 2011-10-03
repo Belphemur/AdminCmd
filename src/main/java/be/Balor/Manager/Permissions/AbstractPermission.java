@@ -25,22 +25,6 @@ import org.bukkit.permissions.Permission;
  * 
  */
 public abstract class AbstractPermission {
-	protected boolean haveInfoNode = false;
-
-	/**
-	 * Check the permissions
-	 * 
-	 * @param player
-	 * @param perm
-	 * @return boolean
-	 */
-	public boolean hasPerm(CommandSender player, String perm) {
-		return hasPerm(player, perm, true);
-	}
-
-	public boolean hasPerm(CommandSender player, Permission perm) {
-		return hasPerm(player, perm, true);
-	}
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
@@ -57,12 +41,4 @@ public abstract class AbstractPermission {
 	public abstract String getPermissionLimit(Player p, String limit);
 
 	public abstract String getPrefix(Player player);
-
-	/**
-	 * @return the haveInfoNode
-	 */
-	public boolean haveInfoNode() {
-		return haveInfoNode;
-	}
-
 }

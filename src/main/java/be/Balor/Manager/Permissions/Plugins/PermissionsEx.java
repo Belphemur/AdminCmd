@@ -38,7 +38,6 @@ public class PermissionsEx extends AbstractPermission {
 	 */
 	public PermissionsEx(PermissionManager PEX) {
 		this.PEX = PEX;
-		haveInfoNode = true;
 	}
 
 	/*

@@ -42,8 +42,7 @@ public class YetiPermissions extends AbstractPermission {
 	 * 
 	 */
 	public YetiPermissions(PermissionHandler perm) {
-		this.permission = perm;
-		haveInfoNode = true;		
+		this.permission = perm;	
 	}
 
 	/**

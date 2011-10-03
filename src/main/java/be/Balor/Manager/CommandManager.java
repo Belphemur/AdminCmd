@@ -26,7 +26,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
@@ -58,6 +57,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class CommandManager implements CommandExecutor {
 	private HashMap<Command, CoreCommand> registeredCommands = new HashMap<Command, CoreCommand>();
+	private final int MAX_REQUEST = 5;
 	private final int MAX_THREADS = 5;
 	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
 			MAX_THREADS);
@@ -70,6 +70,8 @@ public class CommandManager implements CommandExecutor {
 	private HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
 	private HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
 	private HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
+	private int execCount = 0;
+
 
 	/**
 	 * 
@@ -140,7 +142,6 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * @param plugin
@@ -333,8 +334,7 @@ public class CommandManager implements CommandExecutor {
 		if (cmd != null) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				ACLogger.info("Command " + cmdName + " intercepted.");
-			return executeCommand(sender, cmd,
-					Utils.Arrays_copyOfRange(split, 1, split.length));
+			return executeCommand(sender, cmd, Utils.Arrays_copyOfRange(split, 1, split.length));
 		}
 		return false;
 	}
@@ -348,9 +348,10 @@ public class CommandManager implements CommandExecutor {
 	 * @return
 	 */
 	private boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
+		ACCommandContainer container = null;
 		try {
 			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
-				ACCommandContainer container = new ACCommandContainer(sender, cmd, args);
+				container = new ACCommandContainer(sender, cmd, args);
 				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
 						|| cmd.getCmdName().equals("bal_extinguish"))
 					corePlugin.getServer().getScheduler()
@@ -372,16 +373,8 @@ public class CommandManager implements CommandExecutor {
 			} else
 				return false;
 		} catch (Throwable t) {
-			Logger.getLogger("Minecraft")
-					.severe("[AdminCmd] The command "
-							+ cmd.getCmdName()
-							+ " throw an Exception please report the log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-			sender.sendMessage("[AdminCmd]"
-					+ ChatColor.RED
-					+ " The command "
-					+ cmd.getCmdName()
-					+ " throw an Exception please report the server.log to this thread : http://forums.bukkit.org/threads/admincmd.10770");
-			t.printStackTrace();
+			ACLogger.severe(container.debug(), t);
+			Utils.broadcastMessage("[AdminCmd] " + container.debug());
 			if (cmdCount == 0)
 				threads.get(4).start();
 			else
@@ -407,16 +400,16 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 */
 	private class ExecutorThread extends Thread {
-		protected LinkedBlockingQueue<ACCommandContainer> commands;
-		protected final int MAX_REQUEST = 5;
-		boolean stop = false;
-		Semaphore sema;
-		Object threadSync = new Object();
+		private final LinkedBlockingQueue<ACCommandContainer> commands;
+		private boolean stop = false;
+		private Semaphore sema;
+		private Object threadSync = new Object();
 
 		/**
 		 * 
 		 */
 		public ExecutorThread() {
+			super("Executor " + execCount++);
 			commands = new LinkedBlockingQueue<ACCommandContainer>(MAX_REQUEST);
 			sema = new Semaphore(0);
 		}
