@@ -42,15 +42,6 @@ public class BukkitPermissions extends AbstractPermission {
 	public BukkitPermissions() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.Permissions.AbstractPermission#haveInfoNode()
-	 */
-	@Override
-	public boolean haveInfoNode() {
-		return mChatAPI != null;
-	}
 
 	/**
 	 * @param mChatAPI
