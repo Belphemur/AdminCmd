@@ -28,21 +28,6 @@ public abstract class AbstractPermission {
 	protected boolean haveInfoNode = false;
 
 	/**
-	 * Check the permissions
-	 * 
-	 * @param player
-	 * @param perm
-	 * @return boolean
-	 */
-	public boolean hasPerm(CommandSender player, String perm) {
-		return hasPerm(player, perm, true);
-	}
-
-	public boolean hasPerm(CommandSender player, Permission perm) {
-		return hasPerm(player, perm, true);
-	}
-
-	/**
 	 * Check the permission with the possibility to disable the error msg
 	 * 
 	 * @param player

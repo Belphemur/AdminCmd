@@ -98,44 +98,64 @@ public class PermissionManager {
 		permissionLinkers.put(name, new WeakReference<PermissionLinker>(perm));
 		return true;
 	}
-    PermissionLinker demandPermissionLinker(String name) {
-        PermissionLinker result = getPermissionLinker(name);
-        if (result == null) {
-            result = new PermissionLinker(name);
-            addPermissionLinker(result);
-            result = getPermissionLinker(name);
-        }
-        return result;
-      }
-	/**
-	 * Check the permissions
-	 * 
-	 * @param player
-	 * @param perm
-	 * @return boolean
-	 */
-	public static boolean hasPerm(CommandSender player, String perm) {
-		return permissionHandler.hasPerm(player, perm);
+
+	PermissionLinker demandPermissionLinker(String name) {
+		PermissionLinker result = getPermissionLinker(name);
+		if (result == null) {
+			result = new PermissionLinker(name);
+			addPermissionLinker(result);
+			result = getPermissionLinker(name);
+		}
+		return result;
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm) {
-		return permissionHandler.hasPerm(player, perm);
+	/**
+	 * Check the permission with an error message if the user don't have the
+	 * Permission
+	 * 
+	 * @param player
+	 *            player to check the permission
+	 * @param perm
+	 *            permission node
+	 * @return if the user have or not the permission
+	 * @throws NullPointerException
+	 *             when the permission node is null
+	 */
+	public static boolean hasPerm(CommandSender player, String perm) throws NullPointerException {
+		return hasPerm(player, perm, true);
+	}
+
+	public static boolean hasPerm(CommandSender player, Permission perm)
+			throws NullPointerException {
+		return hasPerm(player, perm, true);
 	}
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
 	 * 
 	 * @param player
+	 *            player to check the permission
 	 * @param perm
+	 *            permission node
 	 * @param errorMsg
-	 * @return
+	 *            send or not an error message to the user if he don't have the
+	 *            permission
+	 * @return if the user have or not the permission
+	 * @throws NullPointerException
+	 *             when the permission node is null
 	 */
-	public static boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+	public static boolean hasPerm(CommandSender player, String perm, boolean errorMsg)
+			throws NullPointerException {
+		if (perm == null)
+			throw new NullPointerException("The Permission Node can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg)
+			throws NullPointerException {
+		if (perm == null)
+			throw new NullPointerException("The Permission Node can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
@@ -146,10 +166,6 @@ public class PermissionManager {
 
 	public static String getPrefix(Player player) {
 		return permissionHandler.getPrefix(player);
-	}
-
-	public static boolean hasInfoNode() {
-		return permissionHandler.haveInfoNode();
 	}
 
 	/**
