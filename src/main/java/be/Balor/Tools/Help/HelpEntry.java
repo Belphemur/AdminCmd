@@ -31,14 +31,24 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * 
  */
 public class HelpEntry {
-	private String command;
-	private String description;
-	private List<String> permissions;
+	private final String command;
+	private final String description;
+	private final List<String> permissions;
+	private final String commandName;
 
-	public HelpEntry(String command, String description, List<String> permissions) {
+	/**
+	 * @param command
+	 * @param description
+	 * @param permissions
+	 * @param commandName
+	 */
+	public HelpEntry(String command, String description, List<String> permissions,
+			String commandName) {
+		super();
 		this.command = command;
 		this.description = description;
 		this.permissions = permissions;
+		this.commandName = commandName;
 	}
 
 	public boolean hasPerm(CommandSender p) {
@@ -117,5 +127,12 @@ public class HelpEntry {
 	 */
 	public String getCommand() {
 		return command;
+	}
+
+	/**
+	 * @return the commandName
+	 */
+	public String getCommandName() {
+		return commandName;
 	}
 }
