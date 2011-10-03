@@ -208,6 +208,23 @@ public class Utils {
 	}
 
 	/**
+	 * Get the complete player name with all prefix
+	 * 
+	 * @param player
+	 *            player to get the name
+	 * @param sender
+	 *            sender that want the name
+	 * @return the complete player name with prefix
+	 */
+	public static String getPlayerName(Player player, CommandSender sender) {
+		String prefix = colorParser(getPrefix(player, sender));
+		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+			return prefix + player.getDisplayName();
+
+		return prefix + player.getName();
+	}
+
+	/**
 	 * Get the user and check who launched the command.
 	 * 
 	 * @param sender
@@ -931,12 +948,13 @@ public class Utils {
 	 * @param player
 	 * @return
 	 */
-	public static String getPrefix(Player player, CommandSender sender) {
+	private static String getPrefix(Player player, CommandSender sender) {
 		boolean isInv = false;
 		String prefixstring;
 		String statusPrefix = "";
-		isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())
-				&& PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
+		if (sender != null)
+			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())
+					&& PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
 		if (isInv)
 			statusPrefix = Utils.I18n("invTitle");
 		if (AFKWorker.getInstance().isAfk(player))

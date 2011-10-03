@@ -27,6 +27,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -65,7 +66,7 @@ public class ListHomes extends CoreCommand {
 			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE + homes.size());
 			for (String name : homes) {
 				msg += name + ", ";
-				if (msg.length() >= 256) {
+				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
 					sender.sendMessage(msg);
 					msg = "";
 				}

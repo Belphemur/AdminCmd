@@ -147,6 +147,8 @@ public class PermissionManager {
 			throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
+		if (player == null)
+			throw new NullPointerException("The CommandSender can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
@@ -155,6 +157,8 @@ public class PermissionManager {
 			throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
+		if (player == null)
+			throw new NullPointerException("The CommandSender can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}

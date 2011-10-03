@@ -75,10 +75,7 @@ public class PrivateMessage extends CoreCommand {
 			if (Utils.isPlayer(sender, false)) {
 				Player pSender = (Player) sender;
 				senderName = pSender.getName();
-				String name = pSender.getName();
-				String prefixstring;
-				prefixstring = Utils.getPrefix(pSender, buddy);
-				senderPm = prefixstring + name + ChatColor.WHITE + " - ";
+				senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
 
 			} else
 				senderPm = "Server Admin" + " - ";

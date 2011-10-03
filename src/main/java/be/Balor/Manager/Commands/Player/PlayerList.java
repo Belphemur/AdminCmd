@@ -26,6 +26,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -64,8 +65,8 @@ public class PlayerList extends CoreCommand {
 					|| ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT))
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 				continue;
-			String name = Utils.getPrefix(p, sender) + p.getName();
-			if (buffer.length() + name.length() + 2 >= 256) {
+			String name = Utils.getPlayerName(p, sender);
+			if (buffer.length() + name.length() + 2 >= ACMinecraftFontWidthCalculator.chatwidth) {
 				sender.sendMessage(buffer);
 				buffer = "";
 			}
