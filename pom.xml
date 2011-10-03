@@ -213,6 +213,12 @@
 			<url>http://gestdown.info:8888/artifactory/libs-snapshot</url>
 		</repository>
 		<repository>
+			<snapshots />
+			<id>Gestdown-snap</id>
+			<name>Gestdown-snapshots</name>
+			<url>http://www.gestdown.info:8888/artifactory/BukkitPlugin-snapshot-local</url>
+		</repository>
+		<repository>
 			<id>Gestdown</id>
 			<name>Gestdown-releases</name>
 			<url>http://www.gestdown.info:8888/artifactory/BukkitPlugin-release-local</url>
@@ -275,7 +281,8 @@
 		<dependency>
 			<groupId>net.D3GN</groupId>
 			<artifactId>mChat</artifactId>
-			<version>v1.8.2_2</version>
+			<version>DEV-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>
