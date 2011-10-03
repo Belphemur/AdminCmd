@@ -49,7 +49,9 @@ public class ACCommandContainer {
 	 * @return
 	 */
 	public String debug() {
-		return "The command "
+		return "["
+				+ Thread.currentThread().getName()
+				+ "] The command "
 				+ cmd.getCmdName()
 				+ " "
 				+ args.toString()
