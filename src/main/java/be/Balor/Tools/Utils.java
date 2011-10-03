@@ -959,7 +959,10 @@ public class Utils {
 			statusPrefix = Utils.I18n("invTitle");
 		if (AFKWorker.getInstance().isAfk(player))
 			statusPrefix = Utils.I18n("afkTitle") + statusPrefix;
-		prefixstring = PermissionManager.getPrefix(player);
+		if (mChatApi != null)
+			prefixstring = mChatApi.getPrefix(player);
+		else
+			prefixstring = PermissionManager.getPrefix(player);
 		String result = statusPrefix;
 		if (prefixstring != null && prefixstring.length() > 1)
 			result += prefixstring;
