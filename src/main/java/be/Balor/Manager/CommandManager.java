@@ -202,6 +202,8 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (CommandDisabled e) {
 			unRegisterBukkitCommand(command.getPluginCommand());
+			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
+					command.getCmdName());
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
