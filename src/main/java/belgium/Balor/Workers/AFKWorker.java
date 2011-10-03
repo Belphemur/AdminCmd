@@ -93,9 +93,9 @@ final public class AFKWorker {
 	 *            the kickTime to set
 	 */
 	public void setKickTime(int kickTime) {
-		if (afkTime > 0) 
+		if (afkTime > 0)
 			this.kickTime = kickTime * 1000 * 60;
-		
+
 	}
 
 	/**
@@ -136,8 +136,7 @@ final public class AFKWorker {
 	public void setAfk(Player p, String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
-			String afkString = Utils.I18n("afk", "player",
-					Utils.colorParser(PermissionManager.getPrefix(p)) + p.getName());
+			String afkString = Utils.I18n("afk", "player", Utils.getPlayerName(p, null));
 			if (afkString != null) {
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
 				Utils.broadcastMessage(afkString);
@@ -162,7 +161,7 @@ final public class AFKWorker {
 			return;
 		Object obj = playersAfk.get(buddy);
 		if (obj != null) {
-			Utils.sI18n(sender, "noteAfk", "player", buddy.getName());
+			Utils.sI18n(sender, "noteAfk", "player", Utils.getPlayerName(buddy, sender));
 			if (obj instanceof String)
 				sender.sendMessage((String) obj);
 			else if (obj instanceof Long) {
@@ -181,8 +180,7 @@ final public class AFKWorker {
 	public void setOnline(Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
-			String online = Utils.I18n("online", "player",
-					Utils.colorParser(PermissionManager.getPrefix(p)) + p.getName());
+			String online = Utils.I18n("online", "player", Utils.getPlayerName(p, null));
 			if (online != null)
 				Utils.broadcastMessage(online);
 		}

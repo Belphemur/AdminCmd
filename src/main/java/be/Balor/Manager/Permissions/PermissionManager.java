@@ -18,7 +18,6 @@ package be.Balor.Manager.Permissions;
 
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
-import java.util.logging.Logger;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,6 +26,7 @@ import org.bukkit.permissions.Permission;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
+import be.Balor.Tools.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -39,7 +39,6 @@ public class PermissionManager {
 	private static PermissionManager instance = null;
 	private static boolean permissionsEx = false;
 	private static boolean yetiPermissions = false;
-	public static final Logger log = Logger.getLogger("Minecraft");
 	private static AbstractPermission permissionHandler;
 	private static boolean warningSend = false;
 	private Hashtable<String, WeakReference<PermissionLinker>> permissionLinkers = new Hashtable<String, WeakReference<PermissionLinker>>();
@@ -148,6 +147,8 @@ public class PermissionManager {
 			throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
+		if (player == null)
+			throw new NullPointerException("The CommandSender can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
@@ -156,6 +157,8 @@ public class PermissionManager {
 			throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
+		if (player == null)
+			throw new NullPointerException("The CommandSender can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
@@ -192,13 +195,11 @@ public class PermissionManager {
 				permissionsEx = true;
 				permissionHandler = new PermissionsEx(pEX);
 				if (!yetiPermissions)
-					System.out.println("[AdminCmd] Successfully linked with PermissionsEX");
+					ACLogger.info("Successfully linked with PermissionsEX");
 				else
-					System.out
-							.println("[AdminCmd] Use PermissionsEX instead of Yeti's Permissions.");
+					ACLogger.info("Use PermissionsEX instead of Yeti's Permissions.");
 			} else if (!warningSend) {
-				System.out
-						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System");
+				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
 				warningSend = true;
 			}
 			return true;
@@ -217,10 +218,9 @@ public class PermissionManager {
 			if (!ACHelper.getInstance().getConfBoolean("forceOfficialBukkitPerm")) {
 				yetiPermissions = true;
 				permissionHandler = new YetiPermissions(plugin);
-				System.out.println("[AdminCmd] Successfully linked with Yeti's Permissions.");
+				ACLogger.info("Successfully linked with Yeti's Permissions.");
 			} else if (!warningSend) {
-				System.out
-						.println("[AdminCmd] Plugin Forced to use Offical Bukkit Permission System");
+				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
 				warningSend = true;
 			}
 		} else {

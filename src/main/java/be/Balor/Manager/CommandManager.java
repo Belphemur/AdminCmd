@@ -46,6 +46,7 @@ import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
+import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
@@ -71,7 +72,6 @@ public class CommandManager implements CommandExecutor {
 	private HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
 	private HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
 	private int execCount = 0;
-
 
 	/**
 	 * 
@@ -202,6 +202,8 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (CommandDisabled e) {
 			unRegisterBukkitCommand(command.getPluginCommand());
+			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
+					command.getCmdName());
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		} catch (CommandAlreadyExist e) {
@@ -221,6 +223,8 @@ public class CommandManager implements CommandExecutor {
 				}
 			if (disableCommand) {
 				unRegisterBukkitCommand(command.getPluginCommand());
+				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
+						command.getCmdName());
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 			} else {

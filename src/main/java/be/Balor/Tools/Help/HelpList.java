@@ -49,9 +49,22 @@ public class HelpList {
 	}
 
 	public void addEntry(HelpEntry he) {
-		if(pluginHelp.contains(he))
+		if (pluginHelp.contains(he))
 			pluginHelp.remove(he);
 		pluginHelp.add(he);
+	}
+
+	public boolean removeEntry(String commandName) {
+		HelpEntry toRemove = null;
+		for (HelpEntry he : pluginHelp)
+			if (he.getCommandName().equals(commandName)) {
+				toRemove = he;
+				break;
+			}
+		if (toRemove != null)
+			return pluginHelp.remove(toRemove);
+		return false;
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,16 +87,15 @@ public class HelpList {
 					perms.add(value.get("permissions"));
 				String desc = value.get("description");
 				list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, new ArrayList<String>(
-						perms)));
+						perms), k.getKey()));
 				perms.clear();
 			}
 			this.pluginHelp = list;
 		} catch (Exception e) {
-			System.out.print("[AdminCmd] Problem with permissions of "+pluginName);
+			System.out.print("[AdminCmd] Problem with permissions of " + pluginName);
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryComparator());
 		}
 
-		
 	}
 
 	/**

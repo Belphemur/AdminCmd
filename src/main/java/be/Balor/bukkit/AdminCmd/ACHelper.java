@@ -447,6 +447,7 @@ public class ACHelper {
 		pluginConfig.addProperty("useImmunityLvl", false);
 		pluginConfig.addProperty("defaultImmunityLvl", 0);
 		pluginConfig.addProperty("maxItemAmount", 0);
+		pluginConfig.addProperty("useDisplayName", true);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {

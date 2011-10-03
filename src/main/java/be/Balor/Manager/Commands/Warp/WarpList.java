@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
 
 /**
@@ -57,7 +58,7 @@ public class WarpList extends CoreCommand {
 			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
 			for (String name : wp) {
 				msg += name + ", ";
-				if (msg.length() >= 256) {
+				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
 					sender.sendMessage(msg);
 					msg = "";
 				}

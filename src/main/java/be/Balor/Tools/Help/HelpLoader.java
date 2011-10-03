@@ -93,6 +93,8 @@ public class HelpLoader {
 						}
 						String command = helpNode.get("command").toString();
 						String description = helpNode.get("description").toString();
+						String commandName = helpNode.containsKey("cmdname") ? helpNode.get(
+								"cmdname").toString() : helpKey;
 						String plugin = helpNode.containsKey("plugin") ? helpNode.get("plugin")
 								.toString() : fileName;
 						ArrayList<String> permissions = new ArrayList<String>();
@@ -107,7 +109,7 @@ public class HelpLoader {
 							}
 						}
 						HelpLister.getInstance().addHelpEntry(command, description, plugin,
-								permissions);
+								permissions, commandName);
 						++num;
 						++count;
 					}

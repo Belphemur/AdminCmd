@@ -78,22 +78,31 @@ public class HelpLister {
 	 * add it in the database.
 	 * 
 	 * @param command
-	 *            name of the command
+	 *            command
 	 * @param description
 	 *            description of the command
 	 * @param plugin
 	 *            plugin that is attached to the command
 	 * @param permissions
 	 *            list of permissions to execute the command.
+	 * @param cmdName
+	 *            true name of the command
 	 */
 	public void addHelpEntry(String command, String description, String plugin,
-			List<String> permissions) {
+			List<String> permissions, String cmdName) {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
 			help = new HelpList(plugin);
 			plugins.put(plugin, help);
 		}
-		help.addEntry(new HelpEntry(command, description, permissions));
+		help.addEntry(new HelpEntry(command, description, permissions, cmdName));
+	}
+
+	public boolean removeHelpEntry(String plugin, String commandName) {
+		HelpList help = plugins.get(plugin);
+		if (help == null)
+			return false;
+		return help.removeEntry(commandName);
 	}
 
 	/**
