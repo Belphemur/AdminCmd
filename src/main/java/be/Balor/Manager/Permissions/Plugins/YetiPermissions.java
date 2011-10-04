@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -27,22 +27,22 @@ import com.nijiko.permissions.PermissionHandler;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class YetiPermissions extends AbstractPermission {
-	protected PermissionHandler permission = null;	
+	protected PermissionHandler permission = null;
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
 	 */
 	/**
-	 * 
+	 *
 	 */
 	public YetiPermissions(PermissionHandler perm) {
-		this.permission = perm;	
+		this.permission = perm;
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class YetiPermissions extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
@@ -87,7 +87,19 @@ public class YetiPermissions extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
+	 * org.java.lang.String, org.bukkit.entity.Player)
+	 */
+	@Override
+	public boolean isInGroup(String groupName, String worldName, Player player) {
+		return permission.inGroup(worldName, player.getName(), groupName);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)

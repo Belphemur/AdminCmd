@@ -1,19 +1,3 @@
-/************************************************************************
- * This file is part of AdminCmd.
- *
- * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AdminCmd is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
- ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.ArrayList;
@@ -28,32 +12,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import com.platymuus.bukkit.permissions.Group;
-import com.platymuus.bukkit.permissions.PermissionsPlugin;
+import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 import be.Balor.Manager.Permissions.AbstractPermission;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
-/**
- * @author Balor (aka Antoine Aflalo)
- *
- */
-public class BukkitPermissions extends AbstractPermission {
+public class bPermissions extends AbstractPermission {
+	protected WorldPermissionsManager worlPermManager;
 	private static mChatAPI mChatAPI = null;
-	protected PermissionsPlugin permBukkit = null;
 
 	/**
 	 *
 	 */
-	public BukkitPermissions() {
-	}
-
-	/**
-	 *
-	 */
-	public BukkitPermissions(PermissionsPlugin plugin) {
-		permBukkit = plugin;
+	public bPermissions(WorldPermissionsManager plugin) {
+		worlPermManager = plugin;
 	}
 
 	/**
@@ -61,8 +33,8 @@ public class BukkitPermissions extends AbstractPermission {
 	 *            the mChatAPI to set
 	 */
 	public static void setmChatapi(mChatAPI mChatAPI) {
-		if (BukkitPermissions.mChatAPI == null && mChatAPI != null)
-			BukkitPermissions.mChatAPI = mChatAPI;
+		if (bPermissions.mChatAPI == null && mChatAPI != null)
+			bPermissions.mChatAPI = mChatAPI;
 	}
 
 	/**
@@ -122,12 +94,10 @@ public class BukkitPermissions extends AbstractPermission {
 	 */
 	@Override
 	public boolean isInGroup(String groupName, String worldName, Player player) {
-		if (!PermissionManager.isPermissionsBukkitSet())
-			return false;
-		List<Group> groups = new ArrayList<Group>();
-		groups = permBukkit.getGroups(player.getName());
-		for (Group group : groups)
-			if (group.getName().equalsIgnoreCase(groupName))
+		List <String> groups = new ArrayList<String>();
+		groups = worlPermManager.getPermissionSet(worldName).getGroups(player);
+		for (String group : groups)
+			if (group.equalsIgnoreCase(groupName))
 				return true;
 		return false;
 	}
@@ -140,23 +110,23 @@ public class BukkitPermissions extends AbstractPermission {
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(Player p, String limit) {
-		String result = null;
-		if (mChatAPI != null)
-			result = mChatAPI.getInfo(p, "admincmd." + limit);
-		if (result == null || (result != null && result.isEmpty())) {
-			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-			for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
-				Matcher regexMatcher = regex.matcher(info.getPermission());
-				if (regexMatcher.find())
-					return info.getPermission().split("\\.")[2];
+	public String getPermissionLimit(Player p, String limit) {String result = null;
+	if (mChatAPI != null)
+		result = mChatAPI.getInfo(p, "admincmd." + limit);
+	if (result == null || (result != null && result.isEmpty())) {
+		Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
+		for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+			Matcher regexMatcher = regex.matcher(info.getPermission());
+			if (regexMatcher.find())
+				return info.getPermission().split("\\.")[2];
 
-			}
 		}
-		else
-			return result;
-		return null;
 	}
+	else
+		return result;
+	return null;
+	}
+
 
 	/*
 	 * (non-Javadoc)
