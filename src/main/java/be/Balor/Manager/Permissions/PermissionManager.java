@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
@@ -169,6 +170,15 @@ public class PermissionManager {
 			throw new NullPointerException("The CommandSender can't be NULL");
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
+	}
+
+	public static boolean isInGroup(String groupName, Player player) {
+		try {
+			return permissionHandler.isInGroup(groupName, player);
+		} catch (NoPermissionsPlugin e) {
+			ACLogger.info("[AdminCmd] No Permissions plugin installed.");
+			return false;
+		}
 	}
 
 	public static String getPermissionLimit(Player p, String limit) {
