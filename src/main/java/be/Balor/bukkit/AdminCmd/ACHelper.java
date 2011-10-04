@@ -447,7 +447,7 @@ public class ACHelper {
 		pluginConfig.addProperty("defaultImmunityLvl", 0);
 		pluginConfig.addProperty("maxItemAmount", 0);
 		pluginConfig.addProperty("useDisplayName", true);
-		pluginConfig.addProperty("globalRespawnSetting", "Spawn");
+		pluginConfig.addProperty("globalRespawnSetting", "globalSpawn");
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {

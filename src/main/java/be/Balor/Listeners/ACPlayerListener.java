@@ -33,7 +33,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.Vector;
 
 import be.Balor.Manager.CommandManager;
@@ -163,7 +162,7 @@ public class ACPlayerListener extends PlayerListener {
 		String spawn = ACHelper.getInstance().getConfString("globalRespawnSetting");
 		Location loc = null;
 		String worldName = player.getWorld().getName();
-		if (spawn.equalsIgnoreCase("") || spawn.equalsIgnoreCase("spawn")) {
+		if (spawn.equalsIgnoreCase("") || spawn.equalsIgnoreCase("globalspawn")) {
 			loc = ACWorld.getWorld(worldName).getSpawn();
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
