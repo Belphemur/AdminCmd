@@ -970,7 +970,7 @@ public class Utils {
 
 	}
 
-	private static Player getPlayer(String name) {
+	public static Player getPlayer(String name) {
 		Player[] players = ACPluginManager.getServer().getOnlinePlayers();
 
 		Player found = null;

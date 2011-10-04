@@ -509,10 +509,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);
 		}
+		ACPluginManager.getInstance().stopChildrenPlugins();		
 		CommandManager.getInstance().stopAllExecutorThreads();
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
+		ACPluginManager.killInstance();
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
