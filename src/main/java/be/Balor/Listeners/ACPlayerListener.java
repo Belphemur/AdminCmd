@@ -52,7 +52,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener extends PlayerListener {
 	@Override
@@ -84,7 +84,7 @@ public class ACPlayerListener extends PlayerListener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -159,10 +159,21 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
 		playerRespawnOrJoin(player);
-		if (ACHelper.getInstance().getConfBoolean("respawnAtSpawnPoint")) {
-			Location loc = null;
-			String worldName = player.getWorld().getName();
+		String spawn = ACHelper.getInstance().getConfString("globalRespawnSetting");
+		Location loc = null;
+		String worldName = player.getWorld().getName();
+		if (spawn.equalsIgnoreCase("") || spawn.equalsIgnoreCase("globalspawn")) {
 			loc = ACWorld.getWorld(worldName).getSpawn();
+			if (loc == null)
+				loc = player.getWorld().getSpawnLocation();
+			event.setRespawnLocation(loc);
+		} else if (spawn.equalsIgnoreCase("home")) {
+			loc = ACPlayer.getPlayer(player).getHome(worldName);
+			if (loc == null)
+				loc = player.getWorld().getSpawnLocation();
+			event.setRespawnLocation(loc);
+		} else if (spawn.equalsIgnoreCase("bed")) {
+			loc = player.getBedSpawnLocation();
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
 			event.setRespawnLocation(loc);
@@ -278,7 +289,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Tp at see mode
-	 * 
+	 *
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {

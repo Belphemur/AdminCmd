@@ -438,7 +438,6 @@ public class ACHelper {
 		pluginConfig.addProperty("help.wordWrapRight", false);
 		pluginConfig.addProperty("help.getHelpForAllPlugins", true);
 		pluginConfig.addProperty("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
-		pluginConfig.addProperty("respawnAtSpawnPoint", false);
 		pluginConfig.addProperty("DisplayNewsOnJoin", true);
 		pluginConfig.addProperty("DisplayRulesOnJoin", true);
 		pluginConfig.addProperty("DisplayRulesOnlyOnFirstJoin", false);
@@ -448,6 +447,7 @@ public class ACHelper {
 		pluginConfig.addProperty("defaultImmunityLvl", 0);
 		pluginConfig.addProperty("maxItemAmount", 0);
 		pluginConfig.addProperty("useDisplayName", true);
+		pluginConfig.addProperty("globalRespawnSetting", "globalSpawn");
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {
@@ -471,6 +471,8 @@ public class ACHelper {
 			pluginConfig.addProperty("gliding.YvelocityCheckToGlide", -0.2F);
 			pluginConfig.addProperty("gliding.newYvelocity", -0.5F);
 		}
+		if (pluginConfig.getProperty("respawnAtSpawnPoint") != null)
+			pluginConfig.removeProperty("respawnAtSpawnPoint");
 		pluginConfig.save();
 		ExtendedConfiguration commands = new ExtendedConfiguration("commands.yml", null);
 		commands.load();
