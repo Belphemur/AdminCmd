@@ -271,48 +271,6 @@ public class Utils {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
-	/**
-	 * Get the user and check who launched the command.
-	 *
-	 * @author Balor, Lathanael
-	 *
-	 * @param sender
-	 * @param name
-	 * @param permNode
-	 * @param errorMsg
-	 * @return
-	 */
-	public static Player getUser(CommandSender sender, String name, String permNode, boolean errorMsg) {
-		Player target = null;
-		target = sender.getServer().getPlayer(name);
-		if (target != null) {
-			if (target.equals(sender))
-				return target;
-			else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
-				if (checkImmunity(sender, target))
-					return target;
-				else {
-					Utils.sI18n(sender, "insufficientLvl");
-					return null;
-				}
-			} else
-				return null;
-		} else if (isPlayer(sender, false))
-			target = ((Player) sender);
-		else if (errorMsg) {
-			sender.sendMessage("You must type the player name");
-			return target;
-		}
-		if (target == null && errorMsg) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", name);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
-		}
-		return target;
-
-	}
-
 	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
 		sendMessage(sender, player, key, null);
 	}
