@@ -25,6 +25,7 @@ import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
+import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
 import be.Balor.Tools.ACLogger;
@@ -55,7 +56,7 @@ public class PermissionManager {
 	 */
 	private PermissionManager() {
 		if (permissionHandler == null)
-			permissionHandler = new BukkitPermissions();
+			permissionHandler = new SuperPermissions();
 	}
 
 	/**

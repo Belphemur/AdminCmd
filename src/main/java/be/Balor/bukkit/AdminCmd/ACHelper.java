@@ -448,6 +448,7 @@ public class ACHelper {
 		pluginConfig.addProperty("maxItemAmount", 0);
 		pluginConfig.addProperty("useDisplayName", true);
 		pluginConfig.addProperty("globalRespawnSetting", "globalSpawn");
+		pluginConfig.addProperty("bridgeUsed", false);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {

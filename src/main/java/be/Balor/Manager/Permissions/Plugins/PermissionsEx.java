@@ -85,12 +85,12 @@ public class PermissionsEx extends AbstractPermission {
 	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
-	 * org.java.lang.String, org.bukkit.entity.Player)
+	 * org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, String worldName, Player player) {
+	public boolean isInGroup(String groupName, Player player) {
 		PermissionGroup[] groups;
-		groups = PEX.getUser(player).getGroups(worldName);
+		groups = PEX.getUser(player).getGroups(player.getWorld().getName());
 		for (PermissionGroup group : groups)
 			if (group.getName().equalsIgnoreCase(groupName))
 				return true;

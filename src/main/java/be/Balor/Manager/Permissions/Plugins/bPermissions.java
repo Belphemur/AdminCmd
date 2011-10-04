@@ -1,3 +1,19 @@
+/************************************************************************
+ * This file is part of AdminCmd.
+ *
+ * AdminCmd is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
+ ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.ArrayList;
@@ -14,12 +30,14 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
-import be.Balor.Manager.Permissions.AbstractPermission;
 import be.Balor.Tools.Utils;
 
-public class bPermissions extends AbstractPermission {
+/**
+ * @author Lathanael (aka Philippe Leipold)
+ *
+ */
+public class bPermissions extends SuperPermissions {
 	protected WorldPermissionsManager worlPermManager;
-	private static mChatAPI mChatAPI = null;
 
 	/**
 	 *
@@ -32,9 +50,9 @@ public class bPermissions extends AbstractPermission {
 	 * @param mChatAPI
 	 *            the mChatAPI to set
 	 */
-	public static void setmChatapi(mChatAPI mChatAPI) {
-		if (bPermissions.mChatAPI == null && mChatAPI != null)
-			bPermissions.mChatAPI = mChatAPI;
+	public static void setmChatapi(mChatAPI instance) {
+		if (mChatAPI == null && mChatAPI != null)
+			mChatAPI = instance;
 	}
 
 	/**
@@ -90,12 +108,12 @@ public class bPermissions extends AbstractPermission {
 	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
-	 * org.java.lang.String, org.bukkit.entity.Player)
+	 * org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, String worldName, Player player) {
+	public boolean isInGroup(String groupName, Player player) {
 		List <String> groups = new ArrayList<String>();
-		groups = worlPermManager.getPermissionSet(worldName).getGroups(player);
+		groups = worlPermManager.getPermissionSet(player.getWorld().getName()).getGroups(player);
 		for (String group : groups)
 			if (group.equalsIgnoreCase(groupName))
 				return true;

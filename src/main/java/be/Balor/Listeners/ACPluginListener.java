@@ -53,7 +53,7 @@ public class ACPluginListener extends ServerListener {
 		if (event.getPlugin().getDescription().getName().equals("PermissionsEx"))
 			PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 
-		if (!PermissionManager.isPermissionsExSet()) {
+		if (!PermissionManager.isPermissionsExSet() && !ACHelper.getInstance().getConfBoolean("bridgeUsed")) {
 			Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsEx");
 			if (Permissions != null) {
@@ -61,7 +61,7 @@ public class ACPluginListener extends ServerListener {
 					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 			}
 		}
-		if (!PermissionManager.isYetiPermissionsSet()) {
+		if (!PermissionManager.isYetiPermissionsSet() && !ACHelper.getInstance().getConfBoolean("bridgeUsed")) {
 			Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("Permissions");
 			if (Permissions != null) {
@@ -69,7 +69,7 @@ public class ACPluginListener extends ServerListener {
 					PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
 			}
 		}
-		if (!PermissionManager.isbPermissionsSet()) {
+		if (!PermissionManager.isbPermissionsSet() && !ACHelper.getInstance().getConfBoolean("bridgeUsed")) {
 			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("bPermissions");
 			if (plugin != null) {
 				PermissionManager.setbPermissions(de.bananaco.permissions.Permissions.getWorldPermissionsManager());

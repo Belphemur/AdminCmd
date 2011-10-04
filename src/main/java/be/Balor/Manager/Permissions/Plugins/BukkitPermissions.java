@@ -31,7 +31,6 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-import be.Balor.Manager.Permissions.AbstractPermission;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
@@ -39,15 +38,8 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class BukkitPermissions extends AbstractPermission {
-	private static mChatAPI mChatAPI = null;
+public class BukkitPermissions extends SuperPermissions {
 	protected PermissionsPlugin permBukkit = null;
-
-	/**
-	 *
-	 */
-	public BukkitPermissions() {
-	}
 
 	/**
 	 *
@@ -60,9 +52,9 @@ public class BukkitPermissions extends AbstractPermission {
 	 * @param mChatAPI
 	 *            the mChatAPI to set
 	 */
-	public static void setmChatapi(mChatAPI mChatAPI) {
-		if (BukkitPermissions.mChatAPI == null && mChatAPI != null)
-			BukkitPermissions.mChatAPI = mChatAPI;
+	public static void setmChatapi(mChatAPI instance) {
+		if (mChatAPI == null && mChatAPI != null)
+			mChatAPI = instance;
 	}
 
 	/**
@@ -118,10 +110,10 @@ public class BukkitPermissions extends AbstractPermission {
 	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
-	 * org.java.lang.String, org.bukkit.entity.Player)
+	 * org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, String worldName, Player player) {
+	public boolean isInGroup(String groupName, Player player) {
 		if (!PermissionManager.isPermissionsBukkitSet())
 			return false;
 		List<Group> groups = new ArrayList<Group>();
