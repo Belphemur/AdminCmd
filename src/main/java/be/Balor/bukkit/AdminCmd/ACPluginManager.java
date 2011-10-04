@@ -16,12 +16,14 @@
  ************************************************************************/
 package be.Balor.bukkit.AdminCmd;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import com.google.common.collect.MapMaker;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
@@ -33,7 +35,7 @@ import be.Balor.Tools.ACLogger;
  */
 public class ACPluginManager {
 	private static ACPluginManager instance;
-	private HashMap<String, AbstractAdminCmdPlugin> pluginInstances = new HashMap<String, AbstractAdminCmdPlugin>();
+	private ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker().makeMap();
 	private static Server server = null;
 
 	private ACPluginManager() {
@@ -132,7 +134,8 @@ public class ACPluginManager {
 	void stopChildrenPlugins() {
 		ACLogger.info("Disabling all AdminCmd's plugins");
 		for (Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet())
-			server.getPluginManager().disablePlugin(plugin.getValue());
+			if (plugin.getValue().isEnabled())
+				server.getPluginManager().disablePlugin(plugin.getValue());
 	}
 
 	static void killInstance() {
