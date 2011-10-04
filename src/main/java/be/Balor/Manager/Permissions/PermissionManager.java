@@ -172,13 +172,8 @@ public class PermissionManager {
 
 	}
 
-	public static boolean isInGroup(String groupName, Player player) {
-		try {
+	public static boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin {
 			return permissionHandler.isInGroup(groupName, player);
-		} catch (NoPermissionsPlugin e) {
-			ACLogger.info("[AdminCmd] No Permissions plugin installed.");
-			return false;
-		}
 	}
 
 	public static String getPermissionLimit(Player p, String limit) {
