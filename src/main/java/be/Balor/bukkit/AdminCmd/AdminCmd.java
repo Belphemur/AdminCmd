@@ -370,14 +370,15 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("moreAll", ChatColor.AQUA
 				+ "All your items are now at their max stack size.");
 		Utils.addLocale("tpRequestTo", ChatColor.BLUE + "%player " + ChatColor.GOLD
-				+ "want to tp to you. " + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN
+				+ "wants to teleport to you. " + ChatColor.DARK_GREEN
+				+ "Type " + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN
 				+ "to accept.");
-		Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE + "You send a Tp request to "
-				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a " + ChatColor.AQUA
+		Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE + "You send a Teleport request to "
+				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a teleport " + ChatColor.AQUA
 				+ "%tp_type");
 		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player " + ChatColor.DARK_AQUA
-				+ "want to tp you at his/her location. " + ChatColor.GREEN + "/tpt yes "
-				+ ChatColor.DARK_GREEN + "to accept.");
+				+ "wants to teleport you to their location. " + ChatColor.DARK_GREEN
+				+ "Type " + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
 		Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN + "Tp Request system Disabled.");
 		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED + "Tp Request system Enabled.");
 		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN + "You Tp at see when you left click.");
@@ -449,6 +450,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
 				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
+		Utils.addLocale("tpTO", "to you.");
+		Utils.addLocale("tpHERE", "to them.");
+		Utils.addLocale("tpPLAYERSTO", "of another Player to you.");
+		Utils.addLocale("tpPLAYERSFROM", "you to another Player.");
 		LocaleManager.getInstance().save();
 	}
 
@@ -509,7 +514,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);
 		}
-		ACPluginManager.getInstance().stopChildrenPlugins();		
+		ACPluginManager.getInstance().stopChildrenPlugins();
 		CommandManager.getInstance().stopAllExecutorThreads();
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
