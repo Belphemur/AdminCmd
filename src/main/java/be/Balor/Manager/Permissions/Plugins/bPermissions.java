@@ -18,19 +18,13 @@ package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.D3GN.MiracleM4n.mChat.mChatAPI;
-
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
-import be.Balor.Tools.Utils;
-
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class bPermissions extends SuperPermissions {
 	protected WorldPermissionsManager worldPermManager;
@@ -39,80 +33,23 @@ public class bPermissions extends SuperPermissions {
 	/**
 	 * @param plugin
 	 * @param infoReader
-	 *
+	 * 
 	 */
 	public bPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
 		worldPermManager = plugin;
 		this.infoReader = infoReader;
 	}
 
-	/**
-	 * @param mChatAPI
-	 *            the mChatAPI to set
-	 */
-	public static void setmChatapi(mChatAPI instance) {
-		if (mChatAPI == null && mChatAPI != null)
-			mChatAPI = instance;
-	}
-
-	/**
-	 * @return the mChatAPI
-	 */
-	public static boolean isApiSet() {
-		return mChatAPI != null;
-	}
-
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
-	 * .CommandSender, java.lang.String, boolean)
-	 */
-	@Override
-	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
-		if (!(player instanceof Player))
-			return true;
-		if (player.hasPermission(perm))
-			return true;
-		else {
-			if (errorMsg)
-				Utils.sI18n(player, "errorNotPerm", "p", perm);
-
-			return false;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
-	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
-	 */
-	@Override
-	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
-		if (!(player instanceof Player))
-			return true;
-		if (player.hasPermission(perm))
-			return true;
-		else {
-			if (errorMsg)
-				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
-			return false;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
-	 * org.bukkit.entity.Player)
+	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
+	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
-		List <String> groups = new ArrayList<String>();
+		List<String> groups = new ArrayList<String>();
 		groups = worldPermManager.getPermissionSet(player.getWorld().getName()).getGroups(player);
 		if (groups.isEmpty())
 			return false;
@@ -124,7 +61,7 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -137,25 +74,22 @@ public class bPermissions extends SuperPermissions {
 		if (result == null || (result != null && result.isEmpty())) {
 			result = infoReader.getValue(p, limit);
 		}
-		else
-			return result;
-		return null;
+		return result;
 	}
-
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
 	 */
 	@Override
 	public String getPrefix(Player player) {
-		if (mChatAPI != null)
-			return mChatAPI.getPrefix(player);
-		else
-			return infoReader.getPrefix(player);
+		String prefix = super.getPrefix(player);
+		if (prefix == null || prefix.isEmpty())
+			prefix = infoReader.getPrefix(player);
+		return prefix;
 	}
 
 }
