@@ -18,7 +18,6 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -33,36 +32,37 @@ import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class PrivateMessage extends CoreCommand {
+public class Reply extends CoreCommand{
 
 	/**
 	 *
 	 */
-	public PrivateMessage() {
-		permNode = "admincmd.player.msg";
-		cmdName = "bal_playermsg";
+	public Reply() {
+		permNode = "admincmd.player.reply";
+		cmdName = "bal_reply";
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		if (!Utils.isPlayer(sender, true))
+			return;
+
 		if (Utils.isPlayer(sender, false)
 				&& ACPlayer.getPlayer(((Player) sender).getName()).hasPower(Type.MUTED)
 				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
-		Player buddy = sender.getServer().getPlayer(args.getString(0));
+		Player pSender = (Player) sender;
+		Player buddy = ACHelper.getInstance().getReplyPlayer(pSender);
 		if (buddy != null) {
+			if (!buddy.isOnline()) {
+				Utils.sI18n(sender, "offline");
+				ACHelper.getInstance().removeReplyPlayer(pSender);
+				return;
+			}
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
 				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
@@ -71,14 +71,9 @@ public class PrivateMessage extends CoreCommand {
 			String senderPm = "";
 			String msgPrefix = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
 			String msg = "";
-			String senderName = "Server Admin";
-			if (Utils.isPlayer(sender, false)) {
-				Player pSender = (Player) sender;
-				senderName = pSender.getName();
-				senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
-				ACHelper.getInstance().setReplyPlayer(buddy, pSender);
-			} else
-				senderPm = senderName + " - ";
+			String senderName = "";
+			senderName = pSender.getName();
+			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
 
 			for (int i = 1; i < args.length; ++i)
 				msg += args.getString(i) + " ";
@@ -87,6 +82,7 @@ public class PrivateMessage extends CoreCommand {
 			if (parsed == null)
 				parsed = msg;
 			buddy.sendMessage(msgPrefix + senderPm + parsed);
+			ACHelper.getInstance().setReplyPlayer(buddy, pSender);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
@@ -97,12 +93,10 @@ public class PrivateMessage extends CoreCommand {
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()) && p.getHandler() != null)
 					p.getHandler().sendMessage(spyMsg);
-			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages")
-					&& !(sender instanceof ConsoleCommandSender))
+			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages"))
 				ACLogger.info(spyMsg);
 		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
-
+			Utils.sI18n(sender, "noPlayerToReply");
 	}
 
 	/*
@@ -112,7 +106,7 @@ public class PrivateMessage extends CoreCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 2;
+		return args != null && args.length >= 1;
 	}
 
 }
