@@ -265,7 +265,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setbPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
-		if (!bPermissions && !permissionsEx && !yetiPermissions) {
+		if (!bPermissions && !permissionsEx) {
 			bPermissions = true;
 			permissionHandler = new bPermissions(plugin, infoReader);
 			ACLogger.info("Successfully linked with bPermissions.");
@@ -282,7 +282,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setPermissionsBukkit(PermissionsPlugin plugin) {
-		if (!permissionsBukkit && !bPermissions && !permissionsEx && !yetiPermissions) {
+		if (!permissionsBukkit && !bPermissions && !permissionsEx) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
 			ACLogger.info("Successfully linked with PermissionsBukkit.");
