@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.entity.Player;
 import de.bananaco.permissions.info.InfoReader;
@@ -49,8 +48,10 @@ public class bPermissions extends SuperPermissions {
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
-		List<String> groups = new ArrayList<String>();
-		groups = worldPermManager.getPermissionSet(player.getWorld().getName()).getGroups(player);
+		List<String> groups = worldPermManager.getPermissionSet(player.getWorld().getName())
+				.getGroups(player);
+		if (groups == null)
+			return false;
 		if (groups.isEmpty())
 			return false;
 		for (String group : groups)
