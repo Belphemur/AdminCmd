@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
+import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 import be.Balor.Tools.Utils;
@@ -37,13 +38,16 @@ import be.Balor.Tools.Utils;
  *
  */
 public class bPermissions extends SuperPermissions {
-	protected WorldPermissionsManager worlPermManager;
+	protected WorldPermissionsManager worldPermManager;
+	protected InfoReader infoReader;
 
 	/**
+	 * @param infoReader
 	 *
 	 */
-	public bPermissions(WorldPermissionsManager plugin) {
-		worlPermManager = plugin;
+	public bPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
+		worldPermManager = plugin;
+		this.infoReader = infoReader;
 	}
 
 	/**
@@ -113,7 +117,9 @@ public class bPermissions extends SuperPermissions {
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
 		List <String> groups = new ArrayList<String>();
-		groups = worlPermManager.getPermissionSet(player.getWorld().getName()).getGroups(player);
+		groups = worldPermManager.getPermissionSet(player.getWorld().getName()).getGroups(player);
+		if (groups.isEmpty())
+			return false;
 		for (String group : groups)
 			if (group.equalsIgnoreCase(groupName))
 				return true;
@@ -158,7 +164,7 @@ public class bPermissions extends SuperPermissions {
 		if (mChatAPI != null)
 			return mChatAPI.getPrefix(player);
 		else
-			return "";
+			return infoReader.getPrefix(player);
 	}
 
 }

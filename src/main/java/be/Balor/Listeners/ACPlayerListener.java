@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -36,6 +38,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 
 import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
@@ -123,6 +126,9 @@ public class ACPlayerListener extends PlayerListener {
 			player.setInformation("firstTime", false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
+			if (!ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint")
+					&& ACHelper.getInstance().getConfString("globalRespawnSetting").equalsIgnoreCase("group"))
+				ACHelper.getInstance().groupSpawn(p);
 			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
 				Utils.sParsedLocale(p, "Rules");
 			if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
@@ -176,6 +182,26 @@ public class ACPlayerListener extends PlayerListener {
 			loc = player.getBedSpawnLocation();
 			if (loc == null)
 				loc = player.getWorld().getSpawnLocation();
+			event.setRespawnLocation(loc);
+		} else if (spawn.equalsIgnoreCase("group")) {
+			List<String> groups = ACHelper.getInstance().getGroupList();
+			if (!groups.isEmpty()) {
+				for (String groupName : groups) {
+					try {
+						if (PermissionManager.isInGroup(groupName, player))
+							loc = ACWorld.getWorld(worldName).getWarp("spawn" + groupName.toLowerCase());
+						break;
+					} catch (NoPermissionsPlugin e) {
+						loc = ACWorld.getWorld(worldName).getSpawn();
+						break;
+					}
+				}
+			}
+			if (loc == null)
+				loc = player.getWorld().getSpawnLocation();
+			event.setRespawnLocation(loc);
+		} else {
+			loc = player.getWorld().getSpawnLocation();
 			event.setRespawnLocation(loc);
 		}
 

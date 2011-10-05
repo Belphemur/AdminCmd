@@ -36,6 +36,7 @@ import com.nijiko.permissions.PermissionHandler;
 
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
+import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 /**
@@ -260,12 +261,13 @@ public class PermissionManager {
 	 * Set bPermission Plugin
 	 *
 	 * @param plugin
+	 * @param infoReader
 	 * @return
 	 */
-	public static boolean setbPermissions(WorldPermissionsManager plugin) {
+	public static boolean setbPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
 		if (!bPermissions && !permissionsEx && !yetiPermissions) {
 			bPermissions = true;
-			permissionHandler = new bPermissions(plugin);
+			permissionHandler = new bPermissions(plugin, infoReader);
 			ACLogger.info("Successfully linked with bPermissions.");
 		} else {
 			return false;

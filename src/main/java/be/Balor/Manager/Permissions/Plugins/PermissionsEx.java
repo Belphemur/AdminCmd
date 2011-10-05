@@ -91,6 +91,8 @@ public class PermissionsEx extends AbstractPermission {
 	public boolean isInGroup(String groupName, Player player) {
 		PermissionGroup[] groups;
 		groups = PEX.getUser(player).getGroups(player.getWorld().getName());
+		if (groups.length == 0)
+			return false;
 		for (PermissionGroup group : groups)
 			if (group.getName().equalsIgnoreCase(groupName))
 				return true;

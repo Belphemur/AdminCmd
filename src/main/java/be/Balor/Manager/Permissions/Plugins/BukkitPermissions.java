@@ -31,7 +31,6 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 /**
@@ -114,10 +113,10 @@ public class BukkitPermissions extends SuperPermissions {
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
-		if (!PermissionManager.isPermissionsBukkitSet())
-			return false;
 		List<Group> groups = new ArrayList<Group>();
 		groups = permBukkit.getGroups(player.getName());
+		if (groups.isEmpty())
+			return false;
 		for (Group group : groups)
 			if (group.getName().equalsIgnoreCase(groupName))
 				return true;

@@ -450,6 +450,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
 				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
+		Utils.addLocale("addSpawnWarp", ChatColor.GREEN + "Spawnpoint for the group " + ChatColor.DARK_AQUA + " %name"
+				+ ChatColor.GREEN + " added.");
 		LocaleManager.getInstance().save();
 	}
 
