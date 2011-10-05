@@ -415,10 +415,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
 				+ "played " + ChatColor.AQUA + "#elapsedTotalTime#");
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
-		Utils.addLocale(
-				"serverLock",
-				ChatColor.RED
-						+ "Server will be lock in 5 seconds, you'll be kicked if you don't have the Permission to stay.");
+		Utils.addLocale("serverLock", ChatColor.RED	+ "Server will be lock in 5 seconds," +
+				" you'll be kicked if you don't have the Permission to stay.");
+		Utils.addLocale("Rules","1. Do not grief! //n" +
+						"2. Do not use strong language! //n" +
+						"3. Be friendly to other players!");
+		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
 		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
 				+ "3. Be friendly to other players!");
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
@@ -441,7 +443,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
 		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another " + ChatColor.WHITE + "%delay");
 		Utils.addLocale("days", "%d day(s)");
 		Utils.addLocale("spawnerSetDelay",ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD + "%delay");
@@ -450,6 +451,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
 				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
+		Utils.addLocale("addSpawnWarp", ChatColor.GREEN + "Spawnpoint for the group " + ChatColor.DARK_AQUA + " %name"
+				+ ChatColor.GREEN + " added.");
 		Utils.addLocale("tpTO", "to you.");
 		Utils.addLocale("tpHERE", "to them.");
 		Utils.addLocale("tpPLAYERSTO", "of %target to you.");

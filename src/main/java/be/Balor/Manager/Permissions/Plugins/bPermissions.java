@@ -28,23 +28,27 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import com.platymuus.bukkit.permissions.Group;
-import com.platymuus.bukkit.permissions.PermissionsPlugin;
+import de.bananaco.permissions.info.InfoReader;
+import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 import be.Balor.Tools.Utils;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class BukkitPermissions extends SuperPermissions {
-	protected PermissionsPlugin permBukkit = null;
+public class bPermissions extends SuperPermissions {
+	protected WorldPermissionsManager worldPermManager;
+	protected InfoReader infoReader;
 
 	/**
+	 * @param plugin
+	 * @param infoReader
 	 *
 	 */
-	public BukkitPermissions(PermissionsPlugin plugin) {
-		permBukkit = plugin;
+	public bPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
+		worldPermManager = plugin;
+		this.infoReader = infoReader;
 	}
 
 	/**
@@ -113,12 +117,12 @@ public class BukkitPermissions extends SuperPermissions {
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
-		List<Group> groups = new ArrayList<Group>();
-		groups = permBukkit.getGroups(player.getName());
+		List <String> groups = new ArrayList<String>();
+		groups = worldPermManager.getPermissionSet(player.getWorld().getName()).getGroups(player);
 		if (groups.isEmpty())
 			return false;
-		for (Group group : groups)
-			if (group.getName().equalsIgnoreCase(groupName))
+		for (String group : groups)
+			if (group.equalsIgnoreCase(groupName))
 				return true;
 		return false;
 	}
@@ -131,23 +135,23 @@ public class BukkitPermissions extends SuperPermissions {
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(Player p, String limit) {
-		String result = null;
-		if (mChatAPI != null)
-			result = mChatAPI.getInfo(p, "admincmd." + limit);
-		if (result == null || (result != null && result.isEmpty())) {
-			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-			for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
-				Matcher regexMatcher = regex.matcher(info.getPermission());
-				if (regexMatcher.find())
-					return info.getPermission().split("\\.")[2];
+	public String getPermissionLimit(Player p, String limit) {String result = null;
+	if (mChatAPI != null)
+		result = mChatAPI.getInfo(p, "admincmd." + limit);
+	if (result == null || (result != null && result.isEmpty())) {
+		Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
+		for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+			Matcher regexMatcher = regex.matcher(info.getPermission());
+			if (regexMatcher.find())
+				return info.getPermission().split("\\.")[2];
 
-			}
 		}
-		else
-			return result;
-		return null;
 	}
+	else
+		return result;
+	return null;
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -161,7 +165,7 @@ public class BukkitPermissions extends SuperPermissions {
 		if (mChatAPI != null)
 			return mChatAPI.getPrefix(player);
 		else
-			return "";
+			return infoReader.getPrefix(player);
 	}
 
 }

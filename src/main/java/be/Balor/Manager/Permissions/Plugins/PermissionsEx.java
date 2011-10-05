@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -28,13 +28,13 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class PermissionsEx extends AbstractPermission {
 	private PermissionManager PEX;
 
 	/**
-	 * 
+	 *
 	 */
 	public PermissionsEx(PermissionManager PEX) {
 		this.PEX = PEX;
@@ -42,7 +42,7 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
@@ -62,7 +62,7 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
@@ -82,7 +82,26 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
+	 * org.bukkit.entity.Player)
+	 */
+	@Override
+	public boolean isInGroup(String groupName, Player player) {
+		PermissionGroup[] groups;
+		groups = PEX.getUser(player).getGroups(player.getWorld().getName());
+		if (groups.length == 0)
+			return false;
+		for (PermissionGroup group : groups)
+			if (group.getName().equalsIgnoreCase(groupName))
+				return true;
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -94,10 +113,9 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
-	 * , java.lang.String)
+	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(org.bukkit.entity.Player)
 	 */
 	@Override
 	public String getPrefix(Player player) {

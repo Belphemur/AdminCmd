@@ -27,6 +27,7 @@ import org.bukkit.plugin.Plugin;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
@@ -65,6 +66,7 @@ public class ACHelper {
 	private FileManager fManager;
 	private List<Integer> itemBlacklist;
 	private List<Integer> blockBlacklist;
+	private List<String> groups;
 	private AdminCmd coreInstance;
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
@@ -257,6 +259,7 @@ public class ACHelper {
 		alias.clear();
 		itemBlacklist.clear();
 		blockBlacklist.clear();
+		groups.clear();
 		undoQueue.clear();
 		pluginConfig = new ExtendedConfiguration("config.yml", null);
 		pluginConfig.load();
@@ -448,6 +451,7 @@ public class ACHelper {
 		pluginConfig.addProperty("maxItemAmount", 0);
 		pluginConfig.addProperty("useDisplayName", true);
 		pluginConfig.addProperty("globalRespawnSetting", "globalSpawn");
+		pluginConfig.addProperty("groupNames", Arrays.asList("default", "mod", "admin"));
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.getProperty("disabledCommands") != null) {
@@ -522,6 +526,15 @@ public class ACHelper {
 	 */
 	public String getConfString(String path) {
 		return pluginConfig.getString(path, "");
+	}
+
+	/**
+	 * Get List<String> groups.
+	 *
+	 * @return
+	 */
+	public List<String> getGroupList() {
+		return groups;
 	}
 
 	/**
@@ -621,6 +634,37 @@ public class ACHelper {
 		}
 	}
 
+	public void groupSpawn(CommandSender sender) {
+		if (Utils.isPlayer(sender)) {
+			Player player = ((Player) sender);
+			Location loc = null;
+			String worldName = player.getWorld().getName();
+			if (groups.isEmpty()) {
+				loc = ACWorld.getWorld(worldName).getSpawn();
+				if (loc == null)
+					loc = player.getWorld().getSpawnLocation();
+				player.teleport(loc);
+				Utils.sI18n(sender, "spawn");
+				return;
+			}
+			for (String groupName : groups) {
+				try {
+					if (PermissionManager.isInGroup(groupName, player))
+						loc = ACWorld.getWorld(worldName).getWarp("spawn" + groupName.toLowerCase());
+					break;
+				} catch (NoPermissionsPlugin e) {
+					loc = ACWorld.getWorld(worldName).getSpawn();
+					break;
+				}
+			}
+
+			if (loc == null)
+				loc = player.getWorld().getSpawnLocation();
+			player.teleport(loc);
+			Utils.sI18n(sender, "spawn");
+		}
+	}
+
 	/**
 	 * remove a black listed item
 	 *
@@ -692,6 +736,16 @@ public class ACHelper {
 	private List<Integer> getBlackListedBlocks() {
 		return fManager.getYml("blacklist").getIntList("BlackListedBlocks", new ArrayList<Integer>());
 	}
+
+	/**
+	 * Get the Permission group names
+	 *
+	 * @return
+	 */
+	private List<String> getGroupNames() {
+		return fManager.getYml("config").getStringList("groupNames", new ArrayList<String>());
+	}
+
 	/**
 	 * Translate the id or name to a material
 	 *
@@ -851,6 +905,7 @@ public class ACHelper {
 	public synchronized void loadInfos() {
 		itemBlacklist = getBlackListedItems();
 		blockBlacklist = getBlackListedBlocks();
+		groups = getGroupNames();
 
 		alias.putAll(fManager.getAlias());
 

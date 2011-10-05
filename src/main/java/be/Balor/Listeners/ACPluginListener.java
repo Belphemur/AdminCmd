@@ -38,12 +38,13 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import com.herocraftonline.dev.heroes.Heroes;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
+import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
 import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPluginListener extends ServerListener {
 
@@ -66,6 +67,19 @@ public class ACPluginListener extends ServerListener {
 			if (Permissions != null) {
 				if (Permissions.isEnabled())
 					PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
+			}
+		}
+		if (!PermissionManager.isbPermissionsSet()) {
+			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("bPermissions");
+			if (plugin != null) {
+				PermissionManager.setbPermissions(de.bananaco.permissions.Permissions.getWorldPermissionsManager(),
+						de.bananaco.permissions.Permissions.getInfoReader());
+			}
+		}
+		if (!PermissionManager.isPermissionsBukkitSet()) {
+			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("PermissionsBukkit");
+			if (plugin != null) {
+				PermissionManager.setPermissionsBukkit((PermissionsPlugin) plugin);
 			}
 		}
 		if (Utils.oddItem == null) {

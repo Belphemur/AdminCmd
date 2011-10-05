@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,32 +26,31 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import com.platymuus.bukkit.permissions.Group;
-import com.platymuus.bukkit.permissions.PermissionsPlugin;
-
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+import be.Balor.Manager.Permissions.AbstractPermission;
 import be.Balor.Tools.Utils;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class BukkitPermissions extends SuperPermissions {
-	protected PermissionsPlugin permBukkit = null;
+public class SuperPermissions extends AbstractPermission {
+	protected static mChatAPI mChatAPI = null;
 
 	/**
 	 *
 	 */
-	public BukkitPermissions(PermissionsPlugin plugin) {
-		permBukkit = plugin;
+	public SuperPermissions() {
 	}
+
 
 	/**
 	 * @param mChatAPI
 	 *            the mChatAPI to set
 	 */
-	public static void setmChatapi(mChatAPI instance) {
-		if (mChatAPI == null && mChatAPI != null)
-			mChatAPI = instance;
+	public static void setmChatapi(mChatAPI mChatAPI) {
+		if (SuperPermissions.mChatAPI == null && mChatAPI != null)
+			SuperPermissions.mChatAPI = mChatAPI;
 	}
 
 	/**
@@ -112,15 +109,8 @@ public class BukkitPermissions extends SuperPermissions {
 	 * org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, Player player) {
-		List<Group> groups = new ArrayList<Group>();
-		groups = permBukkit.getGroups(player.getName());
-		if (groups.isEmpty())
-			return false;
-		for (Group group : groups)
-			if (group.getName().equalsIgnoreCase(groupName))
-				return true;
-		return false;
+	public boolean isInGroup(String group, Player player) throws NoPermissionsPlugin {
+		throw new NoPermissionsPlugin();
 	}
 
 	/*

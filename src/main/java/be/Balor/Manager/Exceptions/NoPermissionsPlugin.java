@@ -14,35 +14,44 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Permissions;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-
-import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+package be.Balor.Manager.Exceptions;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Lathanael (aka Philippe Leipold)
  *
  */
-public abstract class AbstractPermission {
+public class NoPermissionsPlugin extends Exception {
 
 	/**
-	 * Check the permission with the possibility to disable the error msg
 	 *
-	 * @param player
-	 * @param perm
-	 * @param errorMsg
-	 * @return
 	 */
-	public abstract boolean hasPerm(CommandSender player, String perm, boolean errorMsg);
+	private static final long serialVersionUID = 2193584431299840282L;
 
-	public abstract boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg);
+	/**
+	 *
+	 */
+	public NoPermissionsPlugin(){
+	}
 
-	public abstract boolean isInGroup(String group, Player player) throws NoPermissionsPlugin;
+	/**
+	 * @param s
+	 */
+	public NoPermissionsPlugin(String s) {
+		super(s);
+	}
 
-	public abstract String getPermissionLimit(Player p, String limit);
+	/**
+	 * @param cause
+	 */
+	public NoPermissionsPlugin(Throwable cause) {
+		super(cause);
+	}
 
-	public abstract String getPrefix(Player player);
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public NoPermissionsPlugin(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

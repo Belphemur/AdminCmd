@@ -20,7 +20,7 @@ public class KitInstance {
 
 	/**
 	 * Get ItemStacks for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
