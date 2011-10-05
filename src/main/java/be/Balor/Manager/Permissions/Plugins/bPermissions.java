@@ -18,16 +18,11 @@ package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import net.D3GN.MiracleM4n.mChat.mChatAPI;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -135,21 +130,16 @@ public class bPermissions extends SuperPermissions {
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(Player p, String limit) {String result = null;
-	if (mChatAPI != null)
-		result = mChatAPI.getInfo(p, "admincmd." + limit);
-	if (result == null || (result != null && result.isEmpty())) {
-		Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-		for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
-			Matcher regexMatcher = regex.matcher(info.getPermission());
-			if (regexMatcher.find())
-				return info.getPermission().split("\\.")[2];
-
+	public String getPermissionLimit(Player p, String limit) {
+		String result = null;
+		if (mChatAPI != null)
+			result = mChatAPI.getInfo(p, "admincmd." + limit);
+		if (result == null || (result != null && result.isEmpty())) {
+			result = infoReader.getValue(p, limit);
 		}
-	}
-	else
-		return result;
-	return null;
+		else
+			return result;
+		return null;
 	}
 
 
