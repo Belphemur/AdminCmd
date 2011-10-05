@@ -110,7 +110,7 @@ public class SuperPermissions extends AbstractPermission {
 	 */
 	@Override
 	public boolean isInGroup(String group, Player player) throws NoPermissionsPlugin {
-		throw new NoPermissionsPlugin();
+		throw new NoPermissionsPlugin("To use this functionality you need a Permission Plugin");
 	}
 
 	/*
