@@ -223,6 +223,11 @@
             <name>Gestdown-releases</name>
             <url>http://www.gestdown.info:8888/artifactory/BukkitPlugin-release-local</url>
         </repository>
+        <repository>
+            <snapshots />
+            <id>bperm-repo</id>
+            <url>http://star.aquitros.info:8080/plugin/repository/project/bPermissions/LastSuccessful/repository</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -295,6 +300,20 @@
             <artifactId>Heroes</artifactId>
             <version>366</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.platymuus.bukkit</groupId>
+            <artifactId>permissions</artifactId>
+            <version>1.2</version>
+            <scope>system</scope>
+            <systemPath>${env.USERPROFILE}/Git/PermissionsBukkit-1.2.jar</systemPath>
+        </dependency>
+        <dependency>
+        	<groupId>de.bananaco</groupId>
+        	<artifactId>bPermissions</artifactId>
+        	<version>1337-SNAPSHOT</version>
+        	<scope>system</scope>
+        	<systemPath>${env.USERPROFILE}/Git/bPermissions-1337-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
     <properties>
