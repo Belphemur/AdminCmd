@@ -423,8 +423,10 @@ public class Utils {
 				replace2.put("player", pTo.getName());
 				if (type.toString().equalsIgnoreCase("to"))
 					replace2.put("tp_type", "#tpTO#");
-				else if (type.toString().equalsIgnoreCase("players"))
+				else if (type.toString().equalsIgnoreCase("players")) {
 					replace2.put("tp_type", "#tpPLAYERSTO#");
+					replace2.put("target", pTo.getName());
+				}
 				else
 					replace2.put("tp_type", type.toString());
 				Utils.sI18n(pFrom, "tpRequestSend", replace2);
@@ -438,8 +440,10 @@ public class Utils {
 				replace2.put("player", pFrom.getName());
 				if (type.toString().equalsIgnoreCase("here"))
 					replace2.put("tp_type", "#tpHERE#");
-				else if (type.toString().equalsIgnoreCase("players"))
+				else if (type.toString().equalsIgnoreCase("players")) {
 					replace2.put("tp_type", "#tpPLAYERSFROM#");
+					replace2.put("target", pFrom.getName());
+				}
 				else
 					replace2.put("tp_type", type.toString());
 				Utils.sI18n(pTo, "tpRequestSend", replace2);

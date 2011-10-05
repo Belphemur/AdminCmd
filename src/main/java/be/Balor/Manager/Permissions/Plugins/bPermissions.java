@@ -42,6 +42,7 @@ public class bPermissions extends SuperPermissions {
 	protected InfoReader infoReader;
 
 	/**
+	 * @param plugin
 	 * @param infoReader
 	 *
 	 */

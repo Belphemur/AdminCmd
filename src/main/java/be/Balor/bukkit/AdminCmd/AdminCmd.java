@@ -455,8 +455,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.GREEN + " added.");
 		Utils.addLocale("tpTO", "to you.");
 		Utils.addLocale("tpHERE", "to them.");
-		Utils.addLocale("tpPLAYERSTO", "of another Player to you.");
-		Utils.addLocale("tpPLAYERSFROM", "you to another Player.");
+		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
+		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
 		LocaleManager.getInstance().save();
 	}
 
