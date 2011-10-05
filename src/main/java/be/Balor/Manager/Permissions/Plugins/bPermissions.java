@@ -69,11 +69,11 @@ public class bPermissions extends SuperPermissions {
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
 		String result = null;
-		if (mChatAPI != null)
-			result = mChatAPI.getInfo(p, "admincmd." + limit);
-		if (result == null || (result != null && result.isEmpty())) {
+		if (result == null || result.isEmpty()) {
 			result = infoReader.getValue(p, limit);
 		}
+		if (result == null || result.isEmpty())
+			result = super.getPermissionLimit(p, limit);
 		return result;
 	}
 
