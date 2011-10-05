@@ -28,7 +28,7 @@ import org.bukkit.plugin.Plugin;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
@@ -89,10 +89,10 @@ public class ACPluginListener extends ServerListener {
 				ACLogger.info("Successfully linked with OddItem");
 			}
 		}
-		if (!BukkitPermissions.isApiSet()) {
+		if (!SuperPermissions.isApiSet()) {
 			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager().getPlugin("mChat");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
-				BukkitPermissions.setmChatapi(mChat.API);
+				SuperPermissions.setmChatapi(mChat.API);
 				Utils.mChatApi = mChat.API;
 				ACLogger.info("Successfully linked with mChat");
 			}
