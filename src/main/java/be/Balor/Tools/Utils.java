@@ -238,7 +238,7 @@ public class Utils {
 			int index, boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
-			target = sender.getServer().getPlayer(args.getString(index));
+			target = getPlayer(args.getString(index));
 			if (target != null)
 				if (target.equals(sender))
 					return target;
@@ -269,48 +269,6 @@ public class Utils {
 
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
-	}
-
-	/**
-	 * Get the user and check who launched the command.
-	 *
-	 * @author Balor, Lathanael
-	 *
-	 * @param sender
-	 * @param name
-	 * @param permNode
-	 * @param errorMsg
-	 * @return
-	 */
-	public static Player getUser(CommandSender sender, String name, String permNode, boolean errorMsg) {
-		Player target = null;
-		target = sender.getServer().getPlayer(name);
-		if (target != null) {
-			if (target.equals(sender))
-				return target;
-			else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
-				if (checkImmunity(sender, target))
-					return target;
-				else {
-					Utils.sI18n(sender, "insufficientLvl");
-					return null;
-				}
-			} else
-				return null;
-		} else if (isPlayer(sender, false))
-			target = ((Player) sender);
-		else if (errorMsg) {
-			sender.sendMessage("You must type the player name");
-			return target;
-		}
-		if (target == null && errorMsg) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", name);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
-		}
-		return target;
-
 	}
 
 	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
@@ -463,7 +421,12 @@ public class Utils {
 				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pTo.getName());
-				replace2.put("tp_type", type.toString());
+				if (type.toString().equalsIgnoreCase("to"))
+					replace2.put("tp_type", "#tpTO#");
+				else if (type.toString().equalsIgnoreCase("players"))
+					replace2.put("tp_type", "#tpPLAYERSTO#");
+				else
+					replace2.put("tp_type", type.toString());
 				Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
 			} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
@@ -473,7 +436,12 @@ public class Utils {
 				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pFrom.getName());
-				replace2.put("tp_type", type.toString());
+				if (type.toString().equalsIgnoreCase("here"))
+					replace2.put("tp_type", "#tpHERE#");
+				else if (type.toString().equalsIgnoreCase("players"))
+					replace2.put("tp_type", "#tpPLAYERSFROM#");
+				else
+					replace2.put("tp_type", type.toString());
 				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 			} else {
@@ -1009,6 +977,33 @@ public class Utils {
 		if (prefixstring != null && prefixstring.length() > 1)
 			result += prefixstring;
 		return colorParser(result);
+
+	}
+
+	public static Player getPlayer(String name) {
+		Player[] players = ACPluginManager.getServer().getOnlinePlayers();
+
+		Player found = null;
+		String lowerName = name.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		for (Player player : players) {
+			if (player.getName().toLowerCase().startsWith(lowerName)) {
+				int curDelta = player.getName().length() - lowerName.length();
+				if (curDelta < delta) {
+					found = player;
+					delta = curDelta;
+				} else {
+					curDelta = player.getDisplayName().length() - lowerName.length();
+					if (curDelta < delta) {
+						found = player;
+						delta = curDelta;
+					}
+				}
+				if (curDelta == 0)
+					break;
+			}
+		}
+		return found;
 
 	}
 
