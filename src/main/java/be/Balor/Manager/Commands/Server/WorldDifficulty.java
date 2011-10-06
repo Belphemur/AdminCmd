@@ -33,12 +33,12 @@ import be.Balor.World.ACWorld;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class WroldDifficulty extends CoreCommand{
+public class WorldDifficulty extends CoreCommand {
 
 	/**
 	 *
 	 */
-	public WroldDifficulty() {
+	public WorldDifficulty() {
 		cmdName = "bal_difficulty";
 		permNode = "admincmd.server.difficulty";
 	}
