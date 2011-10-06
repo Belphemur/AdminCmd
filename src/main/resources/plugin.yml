@@ -366,3 +366,7 @@ commands:
     description: Send a private message to the last player who sent you a private message.
     aliases: [rep, r, reply]
     usage: /<command> [message]
+  bal_difficulty:
+    description: Sets (-s) or gets (-g) the Difficulty of a world.
+    aliases: [dif, difficulty]
+    usage: /<command> [-flag] (worldname) (difficulty)

@@ -628,3 +628,10 @@ acserverhelp:
     plugin: AdminCmd
     permissions: admincmd.server.help
     cmdname: bal_help
+
+acserverdifficulty:
+    command: difficulty [-g|-s] (worldName) (Difficulty)
+    description: "Sets (-s) or gets (-g) the Difficulty of a world. Difficulty-values: 0,1,2,3"
+    plugin: AdminCmd
+    permissions: admincmd.server.difficulty
+    cmdname: bal_difficulty

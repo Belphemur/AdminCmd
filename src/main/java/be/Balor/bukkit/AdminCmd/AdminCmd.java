@@ -191,9 +191,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%material");
 		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players: ");
 		Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");
-		Utils.addLocale(
-				"changedWorld",
-				ChatColor.DARK_RED
+		Utils.addLocale("changedWorld",	ChatColor.DARK_RED
 						+ "All your powers have been deactivated because you teleported to an another world");
 		Utils.addLocale("stillInv", ChatColor.RED + "You are still Invisible");
 		Utils.addLocale("errorNotPerm", ChatColor.RED
@@ -457,6 +455,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tpHERE", "to them.");
 		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
 		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
+		Utils.addLocale("mustBePlayer", "[AdminCmd] You must be a player to use this command.");
+		Utils.addLocale("errorInsufficientArguments", "You have to specify a %argument to use this command from the command line.");
+		Utils.addLocale("setDifficutly", ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD + "%world"
+				+ ChatColor.DARK_AQUA + " has been set to: " + ChatColor.GOLD +"%difficulty");
+		Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD + "%world"
+				+ ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD +"%difficulty");
 		LocaleManager.getInstance().save();
 	}
 
