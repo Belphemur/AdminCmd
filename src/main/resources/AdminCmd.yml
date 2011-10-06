@@ -391,13 +391,20 @@ acplayerwhois:
     permissions: admincmd.player.whois
     cmdname: bal_whois
 
+acplayerreply:
+    command: reply [message]
+    description: "Send a private message to the\n last player who sent you a private message."
+    plugin: AdminCmd
+    premissions: admincmd.player.reply
+    cmdname: bal_reply
+
 acweatherclear:
     command: wclear
     description: Clear the weather.
     plugin: AdminCmd
     permissions: admincmd.weather.clear
     cmdname: bal_wclear
-    
+
 acweatherrain:
     command: rain [minutes]
     description: "Set the weather to rain for [minutes].\n Defaults to 10 mins"
@@ -614,10 +621,17 @@ acserverlockdown:
     plugin: AdminCmd
     permissions: admincmd.server.lock
     cmdname: bal_lockdown
-    
+
 acserverhelp:
     command: help [page#]
     description: "Displays page [#] of the AdminCmd help or page 1."
     plugin: AdminCmd
     permissions: admincmd.server.help
     cmdname: bal_help
+
+acserverdifficulty:
+    command: difficulty [-g|-s] (worldName) (Difficulty)
+    description: "Sets (-s) or gets (-g) the Difficulty of a world. Difficulty-values: 0,1,2,3"
+    plugin: AdminCmd
+    permissions: admincmd.server.difficulty
+    cmdname: bal_difficulty

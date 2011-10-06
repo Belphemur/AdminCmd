@@ -361,4 +361,12 @@ commands:
   bal_changespawner:
     description: Gets or sets the CreatureType or delay of the MobSpawner you are looking at. -d = sets Delay, -m = sets CreatueType to be spawned, -g = gets the Type and Delay of the MobSpawner.
     aliases: [changems, cms, msc]
-    usage: /<command> <-falg> <CreatureType|Delay>
+    usage: /<command> <-falg> (reatureType|Delay)
+  bal_reply:
+    description: Send a private message to the last player who sent you a private message.
+    aliases: [rep, r, reply]
+    usage: /<command> [message]
+  bal_difficulty:
+    description: Sets (-s) or gets (-g) the Difficulty of a world.
+    aliases: [dif, difficulty]
+    usage: /<command> [-flag] (worldname) (difficulty)

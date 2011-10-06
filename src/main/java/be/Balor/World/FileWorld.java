@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -33,7 +34,7 @@ import be.Balor.Tools.Files.ObjectContainer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class FileWorld extends ACWorld {
 	private final ExtendedConfiguration datas;
@@ -64,7 +65,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#setSpawn(org.bukkit.Location)
 	 */
 	@Override
@@ -75,7 +76,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#getSpawn()
 	 */
 	@Override
@@ -89,9 +90,35 @@ public class FileWorld extends ACWorld {
 			return handler.getSpawnLocation();
 	}
 
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see be.Balor.World.ACWorld#getDifficulty()
+	 */
+	@Override
+	public Difficulty getDifficulty() throws WorldNotLoaded {
+		Difficulty dif;
+		dif = (Difficulty) informations.getProperty("difficulty");
+		if (dif == null)
+			return handler.getDifficulty();
+		return dif;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see be.Balor.World.ACWorld#setDifficulty(org.bukkit.Difficulty)
+	 */
+	@Override
+	public void setDifficulty(Difficulty dif) {
+		handler.setDifficulty(dif);
+		informations.setProperty("difficulty", dif);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see be.Balor.World.ACWorld#addWarp(java.lang.String,
 	 * org.bukkit.Location)
 	 */
@@ -103,7 +130,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
@@ -116,7 +143,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#getWarpList()
 	 */
 	@Override
@@ -126,7 +153,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#removeWarp(java.lang.String)
 	 */
 	@Override
@@ -137,7 +164,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#setInformation(java.lang.String,
 	 * java.lang.Object)
 	 */
@@ -149,7 +176,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#removeInformation(java.lang.String)
 	 */
 	@Override
@@ -160,7 +187,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#getInformation(java.lang.String)
 	 */
 	@Override
@@ -169,7 +196,7 @@ public class FileWorld extends ACWorld {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void writeFile() {
 		datas.save();
@@ -177,7 +204,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.World.ACWorld#forceSave()
 	 */
 	@Override

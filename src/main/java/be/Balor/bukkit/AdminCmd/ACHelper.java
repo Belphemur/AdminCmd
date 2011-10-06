@@ -78,6 +78,7 @@ public class ACHelper {
 	private ExtendedConfiguration pluginConfig;
 	private DataManager dataManager;
 	private boolean serverLocked = false;
+	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -765,6 +766,38 @@ public class ACHelper {
 
 	public MaterialContainer getAlias(String name) {
 		return alias.get(name);
+	}
+
+	/**
+	 * Put a player into the Map, so that the message reciever can use /reply
+	 *
+	 * @param key
+	 *             The Player to whom the message is send.
+	 * @param value
+	 *             The Player who sent the message.
+	 */
+	public void setReplyPlayer(Player key, Player value) {
+		playersForReplyMessage.put(key, value);
+	}
+
+	/**
+	 * Get the player to whom the reply message is sent to.
+	 *
+	 * @param key
+	 *             The player who wants to reply to a message.
+	 * @return
+	 */
+	public Player getReplyPlayer(Player key) {
+		return playersForReplyMessage.get(key);
+	}
+
+	/**
+	 * Remove the Key-Value pair from the Map
+	 *
+	 * @param key
+	 */
+	public void removeReplyPlayer(Player key) {
+		playersForReplyMessage.remove(key);
 	}
 
 	// ----- / item coloring section -----
