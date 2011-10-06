@@ -171,7 +171,7 @@ public class Utils {
 			return true;
 		else {
 			if (msg)
-				sender.sendMessage("[AdminCmd] You must be a player to use this command.");
+				Utils.sI18n(sender, "mustBePlayer");
 			return false;
 		}
 	}
