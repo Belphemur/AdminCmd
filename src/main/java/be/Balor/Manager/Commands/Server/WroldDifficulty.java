@@ -33,12 +33,12 @@ import be.Balor.World.ACWorld;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class ServerDifficulty extends CoreCommand{
+public class WroldDifficulty extends CoreCommand{
 
 	/**
 	 *
 	 */
-	public ServerDifficulty() {
+	public WroldDifficulty() {
 		cmdName = "bal_difficulty";
 		permNode = "admincmd.server.difficulty";
 	}
@@ -52,8 +52,15 @@ public class ServerDifficulty extends CoreCommand{
 	 */
 	public void execute(CommandSender sender, CommandArgs args) {
 		ACWorld world = null;
+		boolean worldGiven = false;
+		int difValue = -1;
 		try {
-			if (args.getString(0) != null)
+			try {
+				difValue = args.getInt(0);
+			} catch (NumberFormatException e) {
+				worldGiven = true;
+			}
+			if (args.length >= 1 && worldGiven)
 				world = ACWorld.getWorld(args.getString(0));
 			else
 				if (Utils.isPlayer(sender, false))
@@ -68,22 +75,21 @@ public class ServerDifficulty extends CoreCommand{
 			Utils.sI18n(sender, "worldNotFound");
 			return;
 		}
-		String dif;
+
 		Difficulty toSet = Difficulty.NORMAL;
 		Map<String, String> replace = new HashMap<String, String>();
 		if (args.hasFlag('g')) {
-				dif = world.getDifficulty().toString();
 				replace.put("world", world.getName());
-				replace.put("difficulty", dif);
+				replace.put("difficulty", world.getDifficulty().toString());
 				Utils.sI18n(sender, "getDifficulty", replace);
 		} else if (args.hasFlag('s')) {
 			if (args.length >= 2)
 				toSet = Difficulty.getByValue(args.getInt(1));
-			try {
-				toSet = Difficulty.getByValue(args.getInt(0));
-			} catch (NumberFormatException e) {
+			else if (difValue != -1)
+				toSet = Difficulty.getByValue(difValue);
+
+			if (toSet == null)
 				toSet = Difficulty.NORMAL;
-			}
 
 			replace.put("world", world.getName());
 			replace.put("difficulty", toSet.toString());
