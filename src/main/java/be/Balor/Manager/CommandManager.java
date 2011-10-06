@@ -194,7 +194,7 @@ public class CommandManager implements CommandExecutor {
 			command.initializeCommand();
 			checkCommand(command);
 			command.registerBukkitPerm();
-			command.getPluginCommand().setExecutor(this);
+			command.getPluginCommand().setExecutor(instance);
 			registeredCommands.put(command.getPluginCommand(), command);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
