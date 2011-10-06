@@ -17,6 +17,7 @@
 package be.Balor.Tools;
 
 import info.somethingodd.bukkit.OddItem.OddItem;
+import info.somethingodd.bukkit.OddItem.OddItemBase;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -67,7 +68,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  *
  */
 public class Utils {
-	public static OddItem oddItem = null;
+	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
 	public static mChatAPI mChatApi = null;
@@ -92,7 +93,7 @@ public class Utils {
 		MaterialContainer mc = new MaterialContainer();
 		try {
 			if (oddItem != null) {
-				ItemStack is = oddItem.getItemStack(mat);
+				ItemStack is = OddItem.getItemStack(mat);
 				if (is != null) {
 					return new MaterialContainer(is);
 				}

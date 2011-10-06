@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import info.somethingodd.bukkit.OddItem.OddItem;
+import info.somethingodd.bukkit.OddItem.OddItemBase;
 
 import net.D3GN.MiracleM4n.mChat.mChat;
 
@@ -85,7 +85,7 @@ public class ACPluginListener extends ServerListener {
 		if (Utils.oddItem == null) {
 			Plugin items = ACPluginManager.getServer().getPluginManager().getPlugin("OddItem");
 			if (items != null && items.isEnabled()) {
-				Utils.oddItem = (OddItem) items;
+				Utils.oddItem = (OddItemBase) items;
 				ACLogger.info("Successfully linked with OddItem");
 			}
 		}
