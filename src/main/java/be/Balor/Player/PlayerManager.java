@@ -181,6 +181,8 @@ public class PlayerManager {
 	}
 
 	ACPlayer demandACPlayer(String name) {
+		if (name == null)
+			return getPlayer("serverConsole");
 		ACPlayer result = getPlayer(name);
 		if (result == null) {
 			result = playerFactory.createPlayer(name);

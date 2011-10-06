@@ -213,12 +213,10 @@
             <url>http://gestdown.info:8888/artifactory/libs-snapshot</url>
         </repository>
         <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <snapshots />
             <id>Bukkit-dev</id>
             <name>Bukkit-Dev</name>
-            <url>http://www.gestdown.info:8888/artifactory/Bukkit-dev/</url>
+            <url>http://www.gestdown.info:8888/artifactory/Bukkit-dev</url>
         </repository>
     </repositories>
     <pluginRepositories>
