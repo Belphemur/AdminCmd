@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -19,6 +19,7 @@ package be.Balor.World;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -27,7 +28,7 @@ import be.Balor.Tools.Files.ObjectContainer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public abstract class ACWorld {
 	private final String name;
@@ -35,7 +36,7 @@ public abstract class ACWorld {
 	private final int hashCode;
 
 	/**
-	 * 
+	 *
 	 */
 	public ACWorld(World world) {
 		final int prime = 37;
@@ -63,7 +64,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the wanted world
-	 * 
+	 *
 	 * @param name
 	 *            name of the wanted world
 	 * @return the ACWorld
@@ -76,7 +77,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Set the spawn location
-	 * 
+	 *
 	 * @param loc
 	 *            location of the spawn
 	 */
@@ -84,14 +85,28 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the spawn location
-	 * 
+	 *
 	 * @return the spawn location
 	 */
 	public abstract Location getSpawn();
 
 	/**
+	 * Get the worlds difficulty
+	 *
+	 * @return The difficulty
+	 */
+	public abstract Difficulty getDifficulty() throws WorldNotLoaded;
+
+	/**
+	 * Set the difficulty of the world.
+	 *
+	 * @param dif The difficulty to set.
+	 */
+	public abstract void setDifficulty(Difficulty dif);
+
+	/**
 	 * Add a warp point
-	 * 
+	 *
 	 * @param name
 	 *            name of the warp
 	 * @param loc
@@ -101,7 +116,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the location of the Warp
-	 * 
+	 *
 	 * @param name
 	 *            name of the Warp
 	 * @return location of the Warp
@@ -112,14 +127,14 @@ public abstract class ACWorld {
 
 	/**
 	 * List of the warps' name
-	 * 
+	 *
 	 * @return a List containing the name of each warp of the World
 	 */
 	public abstract List<String> getWarpList();
 
 	/**
 	 * Remove the warp
-	 * 
+	 *
 	 * @param name
 	 *            name of the warp to remove
 	 */
@@ -127,7 +142,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Set player information
-	 * 
+	 *
 	 * @param info
 	 *            key of the information
 	 * @param value
@@ -137,7 +152,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Remove the information
-	 * 
+	 *
 	 * @param info
 	 *            key of the information
 	 */
@@ -145,7 +160,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the information
-	 * 
+	 *
 	 * @param info
 	 *            key of the information
 	 */
@@ -153,7 +168,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get all informations about the world
-	 * 
+	 *
 	 * @return
 	 */
 	public abstract Map<String, String> getInformations();
@@ -165,7 +180,7 @@ public abstract class ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -175,7 +190,7 @@ public abstract class ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
