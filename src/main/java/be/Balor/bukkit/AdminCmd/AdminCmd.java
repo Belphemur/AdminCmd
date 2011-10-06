@@ -457,6 +457,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tpHERE", "to them.");
 		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
 		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
+		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
+		Utils.addLocale("noPlayerToReply", ChatColor.RED + "You can't reply to a message if noone did send you a private message.");
 		LocaleManager.getInstance().save();
 	}
 
