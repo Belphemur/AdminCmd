@@ -79,6 +79,12 @@ public class ServerDifficulty extends CoreCommand{
 		} else if (args.hasFlag('s')) {
 			if (args.length >= 2)
 				toSet = Difficulty.getByValue(args.getInt(1));
+			try {
+				toSet = Difficulty.getByValue(args.getInt(0));
+			} catch (NumberFormatException e) {
+				toSet = Difficulty.NORMAL;
+			}
+
 			replace.put("world", world.getName());
 			replace.put("difficulty", toSet.toString());
 			world.setDifficulty(toSet);
