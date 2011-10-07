@@ -187,8 +187,10 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/artifactory/repo</url>
+			<snapshots />
+			<id>Bukkit-dev</id>
+			<name>Bukkit-Dev</name>
+			<url>http://www.gestdown.info:8888/artifactory/Bukkit-dev</url>
 		</repository>
 		<repository>
 			<snapshots>
@@ -197,26 +199,6 @@
 			<id>central</id>
 			<name>Maven Repository Switchboard</name>
 			<url>http://repo1.maven.org/maven2</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>lib</id>
-			<name>libs-release</name>
-			<url>http://gestdown.info:8888/artifactory/libs-release</url>
-		</repository>
-		<repository>
-			<snapshots />
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>http://gestdown.info:8888/artifactory/libs-snapshot</url>
-		</repository>
-		<repository>
-			<snapshots />
-			<id>Bukkit-dev</id>
-			<name>Bukkit-Dev</name>
-			<url>http://www.gestdown.info:8888/artifactory/Bukkit-dev</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -270,7 +252,7 @@
 		<dependency>
 			<groupId>info.somethingodd.bukkit</groupId>
 			<artifactId>OddItem</artifactId>
-			<version>0.7.1</version>
+			<version>0.8</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
