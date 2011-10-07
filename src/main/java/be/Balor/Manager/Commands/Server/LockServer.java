@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -29,12 +29,12 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class LockServer extends CoreCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public LockServer() {
 		super("bal_lockdown", "admincmd.server.lock");
@@ -42,7 +42,7 @@ public class LockServer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -55,16 +55,16 @@ public class LockServer extends CoreCommand {
 			String bcast = Utils.I18n("serverLock");
 			if (bcast != null) {
 				Utils.broadcastMessage(bcast);
-				ACLogger.info(bcast);			
+				ACLogger.info(bcast);
 			}
 			ACHelper.getInstance().setServerLocked(true);
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(), new Runnable() {
 				@Override
-				public void run() {				
+				public void run() {
 					for (Player p : Utils.getOnlinePlayers()) {
 						if (PermissionManager.hasPerm(p, "admincmd.server.lockdown"))
 							continue;
-						p.kickPlayer("Server is Locked");
+						p.kickPlayer(Utils.I18n("serverLockMessage"));
 					}
 				}
 			}, 100);
@@ -74,7 +74,7 @@ public class LockServer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
