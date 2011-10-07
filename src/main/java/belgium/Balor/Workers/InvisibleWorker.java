@@ -20,11 +20,9 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentMap;
 
 import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
 
-import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -93,7 +91,7 @@ final public class InvisibleWorker {
 	public LinkedList<Player> getAllInvisiblePlayers() {
 		LinkedList<Player> result = new LinkedList<Player>();
 		for (String p : invisblesWithTaskIds.keySet())
-			result.add(ACPluginManager.getServer().getPlayer(p));
+			result.add(ACPluginManager.getServer().getPlayerExact(p));
 		return result;
 	}
 
@@ -121,10 +119,7 @@ final public class InvisibleWorker {
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 				Utils.broadcastFakeJoin(toReappear);
-			else
-				((CraftServer) toReappear.getServer()).getHandle().sendAll(
-						new Packet201PlayerInfo(((CraftPlayer) toReappear).getHandle().listName, true,
-								1000));
+			Utils.addPlayerInOnlineList(toReappear);
 		}
 
 	}
@@ -208,10 +203,8 @@ final public class InvisibleWorker {
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 			Utils.broadcastFakeQuit(toVanish);
-		else
-			((CraftServer) toVanish.getServer()).getHandle().sendAll(
-					new Packet201PlayerInfo(((CraftPlayer) toVanish).getHandle().listName, false,
-							9999));
+
+		Utils.removePlayerFromOnlineList(toVanish);
 
 	}
 

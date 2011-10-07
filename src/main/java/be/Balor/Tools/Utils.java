@@ -690,8 +690,39 @@ public class Utils {
 					+ " has left the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+
+	}
+
+	/**
+	 * Remove the player from the online list (TAB key)
+	 * 
+	 * @param player
+	 *            player to remove
+	 */
+	public static void removePlayerFromOnlineList(Player player) {
 		((CraftServer) player.getServer()).getHandle().sendAll(
 				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, false, 9999));
+	}
+
+	public static void removePlayerFromOnlineList(Player toRemove, Player fromPlayer) {
+		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
+				((CraftPlayer) toRemove).getHandle().listName, false, 9999));
+	}
+
+	/**
+	 * Add the player in the online list (TAB key)
+	 * 
+	 * @param player
+	 *            player to remove
+	 */
+	public static void addPlayerInOnlineList(Player player) {
+		((CraftServer) player.getServer()).getHandle().sendAll(
+				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, true, 1000));
+	}
+
+	public static void addPlayerInOnlineList(Player toAdd, Player fromPlayer) {
+		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
+				((CraftPlayer) toAdd).getHandle().listName, true, 1000));
 	}
 
 	/**
@@ -707,8 +738,7 @@ public class Utils {
 					+ " has joined the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
-		((CraftServer) player.getServer()).getHandle().sendAll(
-				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, true, 1000));
+
 	}
 
 	/**
