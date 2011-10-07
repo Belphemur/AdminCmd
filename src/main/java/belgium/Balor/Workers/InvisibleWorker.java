@@ -19,6 +19,7 @@ package belgium.Balor.Workers;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentMap;
 
+import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
 
@@ -90,7 +91,7 @@ final public class InvisibleWorker {
 	public LinkedList<Player> getAllInvisiblePlayers() {
 		LinkedList<Player> result = new LinkedList<Player>();
 		for (String p : invisblesWithTaskIds.keySet())
-			result.add(ACPluginManager.getServer().getPlayer(p));
+			result.add(ACPluginManager.getServer().getPlayerExact(p));
 		return result;
 	}
 
@@ -118,6 +119,7 @@ final public class InvisibleWorker {
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 				Utils.broadcastFakeJoin(toReappear);
+			Utils.addPlayerInOnlineList(toReappear);
 		}
 
 	}
@@ -142,9 +144,9 @@ final public class InvisibleWorker {
 
 		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
 			return;
+		EntityPlayer craftFrom = ((CraftPlayer) hideFrom).getHandle();
+		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(hide.getEntityId()));
 
-		((CraftPlayer) hideFrom).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(
-				hide.getEntityId()));
 	}
 
 	/**
@@ -162,11 +164,10 @@ final public class InvisibleWorker {
 
 		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false))
 			return;
-
-		((CraftPlayer) unHideFrom).getHandle().netServerHandler
-				.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
-		((CraftPlayer) unHideFrom).getHandle().netServerHandler
-				.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) unHide).getHandle()));
+		EntityPlayer craftFrom = ((CraftPlayer) unHideFrom).getHandle();
+		EntityPlayer UnHidePlayer = ((CraftPlayer) unHide).getHandle();
+		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
+		craftFrom.netServerHandler.sendPacket(new Packet20NamedEntitySpawn(UnHidePlayer));
 	}
 
 	/**
@@ -202,6 +203,8 @@ final public class InvisibleWorker {
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 			Utils.broadcastFakeQuit(toVanish);
+
+		Utils.removePlayerFromOnlineList(toVanish);
 
 	}
 
