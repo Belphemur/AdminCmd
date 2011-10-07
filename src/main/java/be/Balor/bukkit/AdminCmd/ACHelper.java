@@ -1,5 +1,7 @@
 package be.Balor.bukkit.AdminCmd;
 
+import info.somethingodd.bukkit.OddItem.OddItem;
+
 import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -234,7 +236,7 @@ public class ACHelper {
 		try {
 			list.addAll(kits.keySet());
 			if (Utils.oddItem != null) {
-				list.addAll(Utils.oddItem.getGroups());
+				list.addAll(OddItem.getGroups());
 			}
 
 		} catch (Throwable e) {
