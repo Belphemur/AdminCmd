@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.D3GN.MiracleM4n.mChat.mChatAPI;
+import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
 
@@ -42,6 +43,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -65,7 +67,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static OddItemBase oddItem = null;
@@ -80,12 +82,12 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -117,7 +119,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -160,7 +162,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -179,7 +181,7 @@ public class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -210,7 +212,7 @@ public class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -227,7 +229,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -427,8 +429,7 @@ public class Utils {
 				else if (type.toString().equalsIgnoreCase("players")) {
 					replace2.put("tp_type", "#tpPLAYERSTO#");
 					replace2.put("target", pTo.getName());
-				}
-				else
+				} else
 					replace2.put("tp_type", type.toString());
 				Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
@@ -444,8 +445,7 @@ public class Utils {
 				else if (type.toString().equalsIgnoreCase("players")) {
 					replace2.put("tp_type", "#tpPLAYERSFROM#");
 					replace2.put("target", pFrom.getName());
-				}
-				else
+				} else
 					replace2.put("tp_type", type.toString());
 				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
@@ -556,7 +556,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -635,7 +635,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -679,7 +679,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -690,11 +690,13 @@ public class Utils {
 					+ " has left the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+		((CraftServer) player.getServer()).getHandle().sendAll(
+				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, false, 9999));
 	}
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
@@ -705,11 +707,13 @@ public class Utils {
 					+ " has joined the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
+		((CraftServer) player.getServer()).getHandle().sendAll(
+				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, true, 1000));
 	}
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -801,7 +805,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -811,7 +815,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -833,7 +837,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -865,7 +869,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -882,7 +886,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -896,7 +900,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -921,7 +925,7 @@ public class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -959,7 +963,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -1015,7 +1019,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -1045,7 +1049,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -1111,7 +1115,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override

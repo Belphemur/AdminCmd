@@ -19,9 +19,12 @@ package belgium.Balor.Workers;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentMap;
 
+import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
 
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -118,6 +121,10 @@ final public class InvisibleWorker {
 							});
 			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 				Utils.broadcastFakeJoin(toReappear);
+			else
+				((CraftServer) toReappear.getServer()).getHandle().sendAll(
+						new Packet201PlayerInfo(((CraftPlayer) toReappear).getHandle().listName, true,
+								1000));
 		}
 
 	}
@@ -142,9 +149,9 @@ final public class InvisibleWorker {
 
 		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
 			return;
+		EntityPlayer craftFrom = ((CraftPlayer) hideFrom).getHandle();
+		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(hide.getEntityId()));
 
-		((CraftPlayer) hideFrom).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(
-				hide.getEntityId()));
 	}
 
 	/**
@@ -162,11 +169,10 @@ final public class InvisibleWorker {
 
 		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false))
 			return;
-
-		((CraftPlayer) unHideFrom).getHandle().netServerHandler
-				.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
-		((CraftPlayer) unHideFrom).getHandle().netServerHandler
-				.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) unHide).getHandle()));
+		EntityPlayer craftFrom = ((CraftPlayer) unHideFrom).getHandle();
+		EntityPlayer UnHidePlayer = ((CraftPlayer) unHide).getHandle();
+		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
+		craftFrom.netServerHandler.sendPacket(new Packet20NamedEntitySpawn(UnHidePlayer));
 	}
 
 	/**
@@ -202,6 +208,10 @@ final public class InvisibleWorker {
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
 			Utils.broadcastFakeQuit(toVanish);
+		else
+			((CraftServer) toVanish.getServer()).getHandle().sendAll(
+					new Packet201PlayerInfo(((CraftPlayer) toVanish).getHandle().listName, false,
+							9999));
 
 	}
 
