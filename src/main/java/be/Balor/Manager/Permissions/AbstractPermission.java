@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -40,7 +42,9 @@ public abstract class AbstractPermission {
 
 	public abstract boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg);
 
-	public abstract boolean isInGroup(String group, Player player) throws NoPermissionsPlugin;
+	public abstract boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin;
+
+	public abstract List<Player> getUsers(String groupName) throws NoPermissionsPlugin;
 
 	public abstract String getPermissionLimit(Player p, String limit);
 

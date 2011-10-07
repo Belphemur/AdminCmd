@@ -16,18 +16,24 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
+import ru.tehkode.permissions.PermissionUser;
 
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @authors Balor, Lathanael
  *
  */
 public class PermissionsEx extends AbstractPermission {
@@ -97,6 +103,31 @@ public class PermissionsEx extends AbstractPermission {
 			if (group.getName().equalsIgnoreCase(groupName))
 				return true;
 		return false;
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 */
+	@Override
+	public List<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+		PermissionUser[] users = null;
+		users = PEX.getUsers(groupName);
+		List<Player> players = new ArrayList<Player>();
+		if (users != null) {
+			Player player = null;
+			for (PermissionUser user : users) {
+				player = ACPlayer.getPlayer(user.getName()).getHandler();
+				if (player == null)
+					continue;
+				players.add(player);
+			}
+			return players;
+		}
+		return null;
 	}
 
 	/*

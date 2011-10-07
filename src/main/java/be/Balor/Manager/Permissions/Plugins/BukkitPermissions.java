@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+
+import be.Balor.Player.ACPlayer;
+
 import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
@@ -55,4 +58,23 @@ public class BukkitPermissions extends SuperPermissions {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 */
+	@Override
+	public List<Player> getUsers(String groupName) {
+		List<Player> players = new ArrayList<Player>();
+		List<String> playersString = null;
+		playersString = permBukkit.getGroup(groupName).getPlayers();
+		if (playersString != null) {
+			for (String player : playersString) {
+				players.add(ACPlayer.getPlayer(player).getHandler());
+			}
+			return players;
+		}
+		return null;
+	}
 }
