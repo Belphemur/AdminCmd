@@ -41,7 +41,7 @@ import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PermissionManager {
 	private static PermissionManager instance = null;
@@ -121,7 +121,7 @@ public class PermissionManager {
 	/**
 	 * Check the permission with an error message if the user don't have the
 	 * Permission
-	 *
+	 * 
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -141,7 +141,7 @@ public class PermissionManager {
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
-	 *
+	 * 
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -174,7 +174,7 @@ public class PermissionManager {
 	}
 
 	public static boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin {
-			return permissionHandler.isInGroup(groupName, player);
+		return permissionHandler.isInGroup(groupName, player);
 	}
 
 	public static String getPermissionLimit(Player p, String limit) {
@@ -237,7 +237,7 @@ public class PermissionManager {
 
 	/**
 	 * Set Permission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
@@ -259,7 +259,7 @@ public class PermissionManager {
 
 	/**
 	 * Set bPermission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @param infoReader
 	 * @return
@@ -268,7 +268,10 @@ public class PermissionManager {
 		if (!bPermissions && !permissionsEx) {
 			bPermissions = true;
 			permissionHandler = new bPermissions(plugin, infoReader);
-			ACLogger.info("Successfully linked with bPermissions.");
+			if (!yetiPermissions)
+				ACLogger.info("Successfully linked with bPermissions.");
+			else
+				ACLogger.info("Successfully linked with bPermissions overpassing the Permission Bridge.");
 		} else {
 			return false;
 		}
@@ -277,7 +280,7 @@ public class PermissionManager {
 
 	/**
 	 * Set PermissionsBukkit Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
@@ -285,7 +288,10 @@ public class PermissionManager {
 		if (!permissionsBukkit && !bPermissions && !permissionsEx) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
-			ACLogger.info("Successfully linked with PermissionsBukkit.");
+			if (!yetiPermissions)
+				ACLogger.info("Successfully linked with PermissionsBukkit.");
+			else
+				ACLogger.info("Successfully linked with PermissionsBukkit overpassing the Permission Bridge.");
 		} else {
 			return false;
 		}
