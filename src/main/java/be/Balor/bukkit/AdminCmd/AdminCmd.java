@@ -465,6 +465,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.DARK_AQUA + " has been set to: " + ChatColor.GOLD +"%difficulty");
 		Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD + "%world"
 				+ ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD +"%difficulty");
+		Utils.addLocale("serverLockMessage", "The server is locked!");
 		LocaleManager.getInstance().save();
 	}
 
