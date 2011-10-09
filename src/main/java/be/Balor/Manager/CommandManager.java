@@ -457,6 +457,7 @@ public class CommandManager implements CommandExecutor {
 
 		public synchronized void addCommand(final ACCommandContainer cmd)
 				throws InterruptedException {
+			cmd.processArguments();
 			commands.put(cmd);
 			sema.release();
 		}
