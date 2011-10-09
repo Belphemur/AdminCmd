@@ -33,9 +33,9 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
-public class Reply extends CoreCommand{
+public class Reply extends CoreCommand {
 
 	/**
 	 *
@@ -44,6 +44,7 @@ public class Reply extends CoreCommand{
 		permNode = "admincmd.player.reply";
 		cmdName = "bal_reply";
 	}
+
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (!Utils.isPlayer(sender, true))
@@ -75,8 +76,8 @@ public class Reply extends CoreCommand{
 			senderName = pSender.getName();
 			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
 
-			for (int i = 0; i < args.length; ++i)
-				msg += args.getString(i) + " ";
+			for (String arg : args)
+				msg += arg + " ";
 			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);
 			if (parsed == null)
@@ -101,7 +102,7 @@ public class Reply extends CoreCommand{
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
