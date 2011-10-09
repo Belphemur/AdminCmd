@@ -17,7 +17,9 @@
 package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 
@@ -67,8 +69,8 @@ public class BukkitPermissions extends SuperPermissions {
 	 * .String)
 	 */
 	@Override
-	public List<Player> getUsers(String groupName) {
-		List<Player> players = new ArrayList<Player>();
+	public Set<Player> getUsers(String groupName) {
+		Set<Player> players = new HashSet<Player>();
 		List<String> playersString = permBukkit.getGroup(groupName).getPlayers();
 		if (playersString != null) {
 			for (String player : playersString) {

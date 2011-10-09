@@ -16,17 +16,20 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-
+import be.Balor.Tools.Utils;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class bPermissions extends SuperPermissions {
 	protected WorldPermissionsManager worldPermManager;
@@ -35,7 +38,7 @@ public class bPermissions extends SuperPermissions {
 	/**
 	 * @param plugin
 	 * @param infoReader
-	 *
+	 * 
 	 */
 	public bPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
 		worldPermManager = plugin;
@@ -44,7 +47,7 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
@@ -57,26 +60,37 @@ public class bPermissions extends SuperPermissions {
 			return false;
 		if (groups.isEmpty())
 			return false;
-		for (String group : groups)
-			if (group.equalsIgnoreCase(groupName))
-				return true;
+		if (groups.contains(groupName))
+			return true;
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
+	 * .String)
 	 */
 	@Override
-	public List<Player> getUsers(String groupName) throws NoPermissionsPlugin {
-		throw new NoPermissionsPlugin("To use this functionality you need a newer Permissions plugin!");
+	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+		Set<Player> players = new HashSet<Player>();
+		for (Player player : Utils.getOnlinePlayers()) {
+			for (String group : worldPermManager.getPermissionSet(player.getWorld().getName())
+					.getGroups(player)) {
+				if (!group.equals(groupName))
+					continue;
+				players.add(player);
+
+			}
+
+		}
+		return players;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -94,7 +108,7 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)

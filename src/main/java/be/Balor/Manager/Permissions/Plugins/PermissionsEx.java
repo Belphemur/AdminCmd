@@ -16,8 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -113,10 +113,10 @@ public class PermissionsEx extends AbstractPermission {
 	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
 	 */
 	@Override
-	public List<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
 		PermissionUser[] users = null;
 		users = PEX.getUsers(groupName);
-		List<Player> players = new ArrayList<Player>();
+		Set<Player> players = new HashSet<Player>();
 		if (users != null) {
 			Player player = null;
 			for (PermissionUser user : users) {
