@@ -170,7 +170,7 @@ public class ACPlayerListener extends PlayerListener {
 		String spawn = ACHelper.getInstance().getConfString("globalRespawnSetting");
 		Location loc = null;
 		String worldName = player.getWorld().getName();
-		if (spawn.equalsIgnoreCase("") || spawn.equalsIgnoreCase("globalspawn")) {
+		if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
 			loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("home")) {
@@ -312,7 +312,8 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
-				&& !PermissionManager.hasPerm(player.getHandler(), "admincmd.player.noreset", false)) {
+				&& !PermissionManager
+						.hasPerm(player.getHandler(), "admincmd.player.noreset", false)) {
 			player.removeAllSuperPower();
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
 				InvisibleWorker.getInstance().reappear(event.getPlayer());
