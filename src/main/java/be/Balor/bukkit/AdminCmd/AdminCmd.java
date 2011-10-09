@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
+import be.Balor.Listeners.ACPlayerListenerCompatibility;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
@@ -38,7 +39,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -193,7 +194,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%material");
 		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players: ");
 		Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");
-		Utils.addLocale("changedWorld",	ChatColor.DARK_RED
+		Utils.addLocale(
+				"changedWorld",
+				ChatColor.DARK_RED
 						+ "All your powers have been deactivated because you teleported to an another world");
 		Utils.addLocale("stillInv", ChatColor.RED + "You are still Invisible");
 		Utils.addLocale("errorNotPerm", ChatColor.RED
@@ -274,10 +277,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("strike", "%player was striked by Thor");
 		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
 				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
-		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the Command Black List for i, give and drop.");
-		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") added to the BlockPlace Black List.");
+		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE
+				+ "%material" + ChatColor.GREEN
+				+ ") added to the Command Black List for i, give and drop.");
+		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE
+				+ "%material" + ChatColor.GREEN + ") added to the BlockPlace Black List.");
 		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
 				+ ChatColor.GREEN + ") removed from the Black List.");
 		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
@@ -370,15 +374,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("moreAll", ChatColor.AQUA
 				+ "All your items are now at their max stack size.");
 		Utils.addLocale("tpRequestTo", ChatColor.BLUE + "%player " + ChatColor.GOLD
-				+ "wants to teleport to you. " + ChatColor.DARK_GREEN
-				+ "Type " + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN
-				+ "to accept.");
+				+ "wants to teleport to you. " + ChatColor.DARK_GREEN + "Type " + ChatColor.GREEN
+				+ "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
 		Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE + "You send a Teleport request to "
-				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a teleport " + ChatColor.AQUA
-				+ "%tp_type");
+				+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE + " for a teleport "
+				+ ChatColor.AQUA + "%tp_type");
 		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player " + ChatColor.DARK_AQUA
-				+ "wants to teleport you to their location. " + ChatColor.DARK_GREEN
-				+ "Type " + ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
+				+ "wants to teleport you to their location. " + ChatColor.DARK_GREEN + "Type "
+				+ ChatColor.GREEN + "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
 		Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN + "Tp Request system Disabled.");
 		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED + "Tp Request system Enabled.");
 		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN + "You Tp at see when you left click.");
@@ -415,12 +418,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE
 				+ "played " + ChatColor.AQUA + "#elapsedTotalTime#");
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
-		Utils.addLocale("serverLock", ChatColor.RED	+ "Server will be lock in 5 seconds," +
-				" you'll be kicked if you don't have the Permission to stay.");
-		Utils.addLocale("Rules","1. Do not grief! //n" +
-						"2. Do not use strong language! //n" +
-						"3. Be friendly to other players!");
-		Utils.addLocale("RulesSet","The new rules are://n" + "%rules");
+		Utils.addLocale("serverLock", ChatColor.RED + "Server will be lock in 5 seconds,"
+				+ " you'll be kicked if you don't have the Permission to stay.");
+		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
+				+ "3. Be friendly to other players!");
+		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
 				+ "3. Be friendly to other players!");
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
@@ -443,28 +445,35 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You don't have the sufficient lvl to do that.");
 		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
 				+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another " + ChatColor.WHITE + "%delay");
+		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another "
+				+ ChatColor.WHITE + "%delay");
 		Utils.addLocale("days", "%d day(s)");
-		Utils.addLocale("spawnerSetDelay",ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD + "%delay");
-		Utils.addLocale("spawnerSetType", ChatColor.GREEN + "CreatureType of the Mob Spawner changed to: "
-				+ ChatColor.GOLD + "%type");
-		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob"
-				+ "s" + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD +"%delay" + ChatColor.DARK_AQUA + ".");
+		Utils.addLocale("spawnerSetDelay", ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD
+				+ "%delay");
+		Utils.addLocale("spawnerSetType", ChatColor.GREEN
+				+ "CreatureType of the Mob Spawner changed to: " + ChatColor.GOLD + "%type");
+		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA + "This Mob Spawner spawns "
+				+ ChatColor.GOLD + "%mob" + "s" + ChatColor.DARK_AQUA + " with a delay of "
+				+ ChatColor.GOLD + "%delay" + ChatColor.DARK_AQUA + ".");
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
-		Utils.addLocale("addSpawnWarp", ChatColor.GREEN + "Spawnpoint for the group " + ChatColor.DARK_AQUA + " %name"
-				+ ChatColor.GREEN + " added.");
+		Utils.addLocale("addSpawnWarp", ChatColor.GREEN + "Spawnpoint for the group "
+				+ ChatColor.DARK_AQUA + " %name" + ChatColor.GREEN + " added.");
 		Utils.addLocale("tpTO", "to you.");
 		Utils.addLocale("tpHERE", "to them.");
 		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
 		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
 		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
-		Utils.addLocale("noPlayerToReply", ChatColor.RED + "You can't reply to a message if noone did send you a private message.");
+		Utils.addLocale("noPlayerToReply", ChatColor.RED
+				+ "You can't reply to a message if noone did send you a private message.");
 		Utils.addLocale("mustBePlayer", "[AdminCmd] You must be a player to use this command.");
-		Utils.addLocale("errorInsufficientArguments", "You have to specify a %argument to use this command from the command line.");
-		Utils.addLocale("setDifficutly", ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD + "%world"
-				+ ChatColor.DARK_AQUA + " has been set to: " + ChatColor.GOLD +"%difficulty");
-		Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD + "%world"
-				+ ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD +"%difficulty");
+		Utils.addLocale("errorInsufficientArguments",
+				"You have to specify a %argument to use this command from the command line.");
+		Utils.addLocale("setDifficutly", ChatColor.DARK_AQUA + "The Difficulty of "
+				+ ChatColor.GOLD + "%world" + ChatColor.DARK_AQUA + " has been set to: "
+				+ ChatColor.GOLD + "%difficulty");
+		Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA + "The Difficulty of "
+				+ ChatColor.GOLD + "%world" + ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD
+				+ "%difficulty");
 		Utils.addLocale("serverLockMessage", "The server is locked!");
 		LocaleManager.getInstance().save();
 	}
@@ -492,12 +501,19 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
+		//Compatibility with older then #1240
+		try {
+			pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
+			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
+		} catch (NoSuchFieldError e) {
+			pm.registerEvent(Event.Type.PLAYER_TELEPORT, new ACPlayerListenerCompatibility(),
+					Priority.Normal, this);
+		}
+
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
 		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
 				this);
 		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
