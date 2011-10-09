@@ -23,6 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -225,15 +226,6 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 			return;
 		}
-		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld") && !otherWorld
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
-			player.removeAllSuperPower();
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
-				InvisibleWorker.getInstance().reappear(event.getPlayer());
-				Utils.sI18n(event.getPlayer(), "changedWorld");
-			}
-
-		}
 		playerRespawnOrJoin(event.getPlayer());
 	}
 
@@ -266,7 +258,7 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	private boolean playerRespawnOrJoin(Player newPlayer) {
-		if(ACPlayer.getPlayer(newPlayer).hasPower(Type.FAKEQUIT))
+		if (ACPlayer.getPlayer(newPlayer).hasPower(Type.FAKEQUIT))
 			ACHelper.getInstance().addFakeQuit(newPlayer);
 		ACPluginManager
 				.getServer()
@@ -315,6 +307,19 @@ public class ACPlayerListener extends PlayerListener {
 				.processCommandString(event.getPlayer(), event.getMessage())) {
 			event.setCancelled(true);
 			event.setMessage("/AdminCmd took the control of that command.");
+		}
+	}
+
+	@Override
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
+				&& !PermissionManager.hasPerm(player.getHandler(), "admincmd.player.noreset", false)) {
+			player.removeAllSuperPower();
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
+				InvisibleWorker.getInstance().reappear(event.getPlayer());
+			}
+			Utils.sI18n(event.getPlayer(), "changedWorld");
 		}
 	}
 
