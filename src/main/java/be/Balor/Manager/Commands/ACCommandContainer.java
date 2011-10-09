@@ -37,15 +37,18 @@ public class ACCommandContainer {
 		this.argsStrings = args;
 	}
 
-	public void processArguments()
-	{
+	/**
+	 * Parse the arguments, flags, etc ... by creating the CommandArgs
+	 */
+	public void processArguments() {
 		args = new CommandArgs(argsStrings);
 	}
+
 	/**
 	 * Execute the command
 	 */
 	public void execute() {
-		
+
 		cmd.execute(sender, args);
 	}
 
