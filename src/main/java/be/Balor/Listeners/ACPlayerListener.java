@@ -172,18 +172,16 @@ public class ACPlayerListener extends PlayerListener {
 		String worldName = player.getWorld().getName();
 		if (spawn.equalsIgnoreCase("") || spawn.equalsIgnoreCase("globalspawn")) {
 			loc = ACWorld.getWorld(worldName).getSpawn();
-			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("home")) {
 			loc = ACPlayer.getPlayer(player).getHome(worldName);
 			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
+				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("bed")) {
 			loc = player.getBedSpawnLocation();
 			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
+				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("group")) {
 			List<String> groups = ACHelper.getInstance().getGroupList();
@@ -201,10 +199,10 @@ public class ACPlayerListener extends PlayerListener {
 				}
 			}
 			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
+				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else {
-			loc = player.getWorld().getSpawnLocation();
+			loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		}
 
