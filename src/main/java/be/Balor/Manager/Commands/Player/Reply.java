@@ -75,7 +75,7 @@ public class Reply extends CoreCommand{
 			senderName = pSender.getName();
 			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
 
-			for (int i = 1; i < args.length; ++i)
+			for (int i = 0; i < args.length; ++i)
 				msg += args.getString(i) + " ";
 			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);

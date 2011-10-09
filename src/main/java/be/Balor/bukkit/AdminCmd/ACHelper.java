@@ -83,7 +83,7 @@ public class ACHelper {
 	private ExtendedConfiguration pluginConfig;
 	private DataManager dataManager;
 	private boolean serverLocked = false;
-	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().weakKeys().weakValues().makeMap();
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
