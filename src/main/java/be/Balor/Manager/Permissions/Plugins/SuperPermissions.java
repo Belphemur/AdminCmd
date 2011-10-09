@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -121,7 +121,7 @@ public class SuperPermissions extends AbstractPermission {
 	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
 	 */
 	@Override
-	public List<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
 		throw new NoPermissionsPlugin("To use this functionality you need a Permission Plugin");
 	}
 

@@ -84,7 +84,7 @@ acitemcolor:
     cmdname: bal_itemcolor
 
 acaddalias:
-    command: aa [alias] [item id|name|alias
+    command: aa [alias] [item id|name|alias]
     description: "Add an [alias] for the item\n [item id|name|alias]."
     plugin: AdminCmd
     permissions: admincmd.item.alias
