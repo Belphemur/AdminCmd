@@ -27,6 +27,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -61,6 +62,8 @@ public class FakeQuit extends CoreCommand {
 			if (acp.hasPower(Type.FAKEQUIT)) {
 				acp.removePower(Type.FAKEQUIT);
 				Utils.broadcastFakeJoin(player);
+				Utils.addPlayerInOnlineList(player);
+				ACHelper.getInstance().removeFakeQuit(player);
 				Utils.sI18n(player, "fakeQuitDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fakeQuitDisabledTarget", replace);
@@ -68,6 +71,8 @@ public class FakeQuit extends CoreCommand {
 				acp.setPower(Type.FAKEQUIT);
 				Utils.sI18n(player, "fakeQuitEnabled");
 				Utils.broadcastFakeQuit(player);
+				ACHelper.getInstance().addFakeQuit(player);
+				Utils.removePlayerFromOnlineList(player);
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "fakeQuitEnabledTarget", replace);
 			}

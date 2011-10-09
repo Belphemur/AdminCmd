@@ -16,10 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.AbstractPermission;
 import be.Balor.Tools.Utils;
 
@@ -96,6 +99,16 @@ public class YetiPermissions extends AbstractPermission {
 		return permission.inGroup(player.getWorld().getName(), player.getName(), groupName);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 */
+	@Override
+	public List<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+		throw new NoPermissionsPlugin("To use this functionality you need a newer Permissions plugin!");
+	}
 	/*
 	 * (non-Javadoc)
 	 *

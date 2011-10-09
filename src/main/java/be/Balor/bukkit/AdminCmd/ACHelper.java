@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
@@ -58,7 +59,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -73,6 +74,8 @@ public class ACHelper {
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakKeys().weakValues()
+			.makeMap();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -80,7 +83,7 @@ public class ACHelper {
 	private ExtendedConfiguration pluginConfig;
 	private DataManager dataManager;
 	private boolean serverLocked = false;
-	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().weakKeys().weakValues().makeMap();
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -120,7 +123,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 *
+	 * 
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -144,7 +147,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 *
+	 * 
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -154,7 +157,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -164,7 +167,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 *
+	 * 
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -174,7 +177,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 *
+	 * 
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -217,17 +220,17 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
 	public KitInstance getKit(String kit) {
-                return kits.get(kit);
+		return kits.get(kit);
 	}
 
 	/**
 	 * Get the list of kit.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -251,6 +254,18 @@ public class ACHelper {
 				kitList = kitList.substring(0, kitList.lastIndexOf(","));
 		}
 		return kitList.trim();
+	}
+
+	public void addFakeQuit(Player p) {
+		fakeQuitPlayers.put(p, new Object());
+	}
+
+	public void removeFakeQuit(Player p) {
+		fakeQuitPlayers.remove(p);
+	}
+
+	public Set<Player> getFakeQuitPlayers() {
+		return fakeQuitPlayers.keySet();
 	}
 
 	/**
@@ -493,7 +508,7 @@ public class ACHelper {
 
 	/**
 	 * Get boolean from config
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -503,7 +518,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -513,7 +528,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -523,7 +538,7 @@ public class ACHelper {
 
 	/**
 	 * Get String parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -533,7 +548,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -560,7 +575,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -587,7 +602,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -611,6 +626,7 @@ public class ACHelper {
 		}
 		return false;
 	}
+
 	/**
 	 * Set the spawn point.
 	 */
@@ -653,7 +669,8 @@ public class ACHelper {
 			for (String groupName : groups) {
 				try {
 					if (PermissionManager.isInGroup(groupName, player))
-						loc = ACWorld.getWorld(worldName).getWarp("spawn" + groupName.toLowerCase());
+						loc = ACWorld.getWorld(worldName)
+								.getWarp("spawn" + groupName.toLowerCase());
 					break;
 				} catch (NoPermissionsPlugin e) {
 					loc = ACWorld.getWorld(worldName).getSpawn();
@@ -670,7 +687,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -697,7 +714,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -724,25 +741,27 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 *
+	 * 
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
-		return fManager.getYml("blacklist").getIntList("BlackListedItems", new ArrayList<Integer>());
+		return fManager.getYml("blacklist")
+				.getIntList("BlackListedItems", new ArrayList<Integer>());
 	}
 
 	/**
 	 * Get the blacklisted blocks
-	 *
+	 * 
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
-		return fManager.getYml("blacklist").getIntList("BlackListedBlocks", new ArrayList<Integer>());
+		return fManager.getYml("blacklist").getIntList("BlackListedBlocks",
+				new ArrayList<Integer>());
 	}
 
 	/**
 	 * Get the Permission group names
-	 *
+	 * 
 	 * @return
 	 */
 	private List<String> getGroupNames() {
@@ -751,7 +770,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -772,11 +791,11 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 *
+	 * 
 	 * @param key
-	 *             The Player to whom the message is send.
+	 *            The Player to whom the message is send.
 	 * @param value
-	 *             The Player who sent the message.
+	 *            The Player who sent the message.
 	 */
 	public void setReplyPlayer(Player key, Player value) {
 		playersForReplyMessage.put(key, value);
@@ -784,9 +803,9 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 *
+	 * 
 	 * @param key
-	 *             The player who wants to reply to a message.
+	 *            The player who wants to reply to a message.
 	 * @return
 	 */
 	public Player getReplyPlayer(Player key) {
@@ -795,7 +814,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 *
+	 * 
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {

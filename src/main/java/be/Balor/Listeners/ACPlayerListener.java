@@ -23,6 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -55,7 +56,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPlayerListener extends PlayerListener {
 	@Override
@@ -67,7 +68,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		if (ACHelper.getInstance().isServerLocked()
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
-			event.disallow(Result.KICK_OTHER, "Server is Locked.");
+			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
 			return;
 		}
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
@@ -87,7 +88,7 @@ public class ACPlayerListener extends PlayerListener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 *
+			 * 
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -127,7 +128,8 @@ public class ACPlayerListener extends PlayerListener {
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
 				ACHelper.getInstance().spawn(p);
 			if (!ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint")
-					&& ACHelper.getInstance().getConfString("globalRespawnSetting").equalsIgnoreCase("group"))
+					&& ACHelper.getInstance().getConfString("globalRespawnSetting")
+							.equalsIgnoreCase("group"))
 				ACHelper.getInstance().groupSpawn(p);
 			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
 				Utils.sParsedLocale(p, "Rules");
@@ -158,7 +160,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
-			AFKWorker.getInstance().removePlayer(p);
+		AFKWorker.getInstance().removePlayer(p);
 	}
 
 	@Override
@@ -168,20 +170,18 @@ public class ACPlayerListener extends PlayerListener {
 		String spawn = ACHelper.getInstance().getConfString("globalRespawnSetting");
 		Location loc = null;
 		String worldName = player.getWorld().getName();
-		if (spawn.equalsIgnoreCase("") || spawn.equalsIgnoreCase("globalspawn")) {
+		if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
 			loc = ACWorld.getWorld(worldName).getSpawn();
-			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("home")) {
 			loc = ACPlayer.getPlayer(player).getHome(worldName);
 			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
+				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("bed")) {
 			loc = player.getBedSpawnLocation();
 			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
+				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("group")) {
 			List<String> groups = ACHelper.getInstance().getGroupList();
@@ -189,7 +189,8 @@ public class ACPlayerListener extends PlayerListener {
 				for (String groupName : groups) {
 					try {
 						if (PermissionManager.isInGroup(groupName, player))
-							loc = ACWorld.getWorld(worldName).getWarp("spawn" + groupName.toLowerCase());
+							loc = ACWorld.getWorld(worldName).getWarp(
+									"spawn" + groupName.toLowerCase());
 						break;
 					} catch (NoPermissionsPlugin e) {
 						loc = ACWorld.getWorld(worldName).getSpawn();
@@ -198,10 +199,10 @@ public class ACPlayerListener extends PlayerListener {
 				}
 			}
 			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
+				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else {
-			loc = player.getWorld().getSpawnLocation();
+			loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		}
 
@@ -222,15 +223,6 @@ public class ACPlayerListener extends PlayerListener {
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
-		}
-		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld") && !otherWorld
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
-			player.removeAllSuperPower();
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(playername)) {
-				InvisibleWorker.getInstance().reappear(event.getPlayer());
-				Utils.sI18n(event.getPlayer(), "changedWorld");
-			}
-
 		}
 		playerRespawnOrJoin(event.getPlayer());
 	}
@@ -264,6 +256,8 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	private boolean playerRespawnOrJoin(Player newPlayer) {
+		if (ACPlayer.getPlayer(newPlayer).hasPower(Type.FAKEQUIT))
+			ACHelper.getInstance().addFakeQuit(newPlayer);
 		ACPluginManager
 				.getServer()
 				.getScheduler()
@@ -275,6 +269,7 @@ public class ACPlayerListener extends PlayerListener {
 					.getScheduler()
 					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
 							new UpdateInvisible(newPlayer), 15);
+			Utils.removePlayerFromOnlineList(newPlayer);
 			return true;
 		}
 		return false;
@@ -313,9 +308,23 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
+	@Override
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
+				&& !PermissionManager
+						.hasPerm(player.getHandler(), "admincmd.player.noreset", false)) {
+			player.removeAllSuperPower();
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
+				InvisibleWorker.getInstance().reappear(event.getPlayer());
+			}
+			Utils.sI18n(event.getPlayer(), "changedWorld");
+		}
+	}
+
 	/**
 	 * Tp at see mode
-	 *
+	 * 
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {
@@ -349,8 +358,12 @@ public class ACPlayerListener extends PlayerListener {
 
 		@Override
 		public void run() {
-			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers())
+			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
+				Utils.removePlayerFromOnlineList(toVanish, newPlayer);
+			}
+			for (Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
+				Utils.removePlayerFromOnlineList(toFq, newPlayer);
 		}
 	}
 

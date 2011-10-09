@@ -465,6 +465,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.DARK_AQUA + " has been set to: " + ChatColor.GOLD +"%difficulty");
 		Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD + "%world"
 				+ ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD +"%difficulty");
+		Utils.addLocale("serverLockMessage", "The server is locked!");
 		LocaleManager.getInstance().save();
 	}
 
@@ -493,9 +494,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Low, this);
+		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
 		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
 				this);
 		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);

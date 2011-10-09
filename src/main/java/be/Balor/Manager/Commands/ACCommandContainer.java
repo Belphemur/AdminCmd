@@ -23,9 +23,10 @@ import org.bukkit.command.CommandSender;
  * 
  */
 public class ACCommandContainer {
-	private CommandSender sender;
-	private CoreCommand cmd;
+	private final CommandSender sender;
+	private final CoreCommand cmd;
 	private CommandArgs args;
+	private final String[] argsStrings;
 
 	/**
  * 
@@ -33,13 +34,21 @@ public class ACCommandContainer {
 	public ACCommandContainer(CommandSender sender, CoreCommand cmd, String[] args) {
 		this.sender = sender;
 		this.cmd = cmd;
-		this.args = new CommandArgs(args);
+		this.argsStrings = args;
+	}
+
+	/**
+	 * Parse the arguments, flags, etc ... by creating the CommandArgs
+	 */
+	public void processArguments() {
+		args = new CommandArgs(argsStrings);
 	}
 
 	/**
 	 * Execute the command
 	 */
 	public void execute() {
+
 		cmd.execute(sender, args);
 	}
 

@@ -18,12 +18,15 @@ package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.List;
 import org.bukkit.entity.Player;
+
+import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class bPermissions extends SuperPermissions {
 	protected WorldPermissionsManager worldPermManager;
@@ -32,7 +35,7 @@ public class bPermissions extends SuperPermissions {
 	/**
 	 * @param plugin
 	 * @param infoReader
-	 * 
+	 *
 	 */
 	public bPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
 		worldPermManager = plugin;
@@ -41,7 +44,7 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
@@ -62,7 +65,18 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 */
+	@Override
+	public List<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+		throw new NoPermissionsPlugin("To use this functionality you need a newer Permissions plugin!");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -80,7 +94,7 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
