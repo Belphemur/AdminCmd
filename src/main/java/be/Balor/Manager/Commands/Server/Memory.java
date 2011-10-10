@@ -23,6 +23,7 @@ import java.util.concurrent.Semaphore;
 
 import net.minecraft.server.Entity;
 import net.minecraft.server.EntityHuman;
+import net.minecraft.server.EntityPainting;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -84,7 +85,7 @@ public class Memory extends CoreCommand {
 				} catch (InterruptedException e) {
 				}
 				for (Entity entity : entityList.get(w.getName())) {
-					if (entity instanceof EntityHuman)
+					if (entity instanceof EntityHuman || entity instanceof EntityPainting)
 						continue;
 					entity.die();
 					count++;
