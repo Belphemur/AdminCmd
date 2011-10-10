@@ -512,7 +512,7 @@ acspawn:
 
 acservermemory:
     command: memory [-f]
-    description: "List all the worlds, the memory used, the memory \n max, number of chuncks and entities by worlds.\n Use -f to kill all entities but players."
+    description: "List all the worlds, the memory used, the memory \n max, number of chuncks and entities by worlds.\n Use -f to kill all entities but players.\n Also lists the current TPS of your server."
     plugin: AdminCmd
     permissions: admincmd.server.memory
     cmdname: bal_memory
