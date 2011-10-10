@@ -67,7 +67,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static OddItemBase oddItem = null;
@@ -82,12 +82,12 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -119,7 +119,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -162,7 +162,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -181,7 +181,7 @@ public class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -216,7 +216,7 @@ public class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -242,7 +242,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -569,7 +569,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -648,7 +648,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -692,7 +692,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -708,7 +708,7 @@ public class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -724,7 +724,7 @@ public class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -740,7 +740,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
@@ -756,7 +756,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -848,7 +848,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -858,7 +858,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -880,7 +880,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -912,7 +912,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -929,7 +929,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -943,7 +943,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -967,8 +967,20 @@ public class Utils {
 	}
 
 	/**
+	 * Method to write a debug message in the log IF the debug mode is activated
+	 * in the configuration
+	 * 
+	 * @param message
+	 *            message to log in the server.log
+	 */
+	static public void debug(String message) {
+		if (ACHelper.getInstance().getConfBoolean("debug"))
+			ACLogger.info("[DEBUG] " + message);
+	}
+
+	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -1006,7 +1018,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -1062,7 +1074,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -1092,7 +1104,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -1158,7 +1170,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override

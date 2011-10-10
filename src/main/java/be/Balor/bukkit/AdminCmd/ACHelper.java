@@ -468,6 +468,7 @@ public class ACHelper {
 		pluginConfig.addProperty("defaultImmunityLvl", 0);
 		pluginConfig.addProperty("maxItemAmount", 0);
 		pluginConfig.addProperty("useDisplayName", true);
+		pluginConfig.addProperty("debug", false);
 		pluginConfig.addProperty("globalRespawnSetting", "globalSpawn");
 		pluginConfig.addProperty("groupNames", Arrays.asList("default", "mod", "admin"));
 		List<String> disabled = new ArrayList<String>();
