@@ -38,7 +38,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Memory extends CoreCommand {
 
@@ -52,7 +52,7 @@ public class Memory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -116,23 +116,24 @@ public class Memory extends CoreCommand {
 		long delay = 20L;
 		if (args.length >= 1)
 			try {
-				delay = args.getInt(0);
+				delay = args.getLong(0);
 			} catch (NumberFormatException e) {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("number", args.getString(0));
 				Utils.sI18n(sender, "NaN", replace);
+				return;
 			}
-
+		if (delay < 20L)
+			delay = 20L;
 		World world = ACPluginManager.getServer().getWorlds().get(0);
-		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACHelper
-				.getInstance().getCoreInstance(),
-				new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender),
-				delay);
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(),
+				new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender), delay);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -159,7 +160,7 @@ public class Memory extends CoreCommand {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -167,8 +168,8 @@ public class Memory extends CoreCommand {
 			elapsedNanoTime = System.nanoTime() - oldNanoTime;
 			elapsedTicks = world.getFullTime() - start;
 			ticksPerSecond = ((double) elapsedTicks * 1000000000.0) / (double) elapsedNanoTime;
-			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: " + elapsedTicks
-					+ " | Nano Time:" + elapsedNanoTime);
+			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: "
+					+ elapsedTicks + " | Nano Time:" + elapsedNanoTime);
 		}
 	}
 
