@@ -168,7 +168,7 @@ public class HelpList {
 
 		@Override
 		public int compare(HelpEntry o1, HelpEntry o2) {
-			return o1.getCommand().compareTo(o2.getCommand()) * (descending ? 1 : -1);
+			return o1.getCommandName().compareTo(o2.getCommandName()) * (descending ? 1 : -1);
 		}
 	}
 }
