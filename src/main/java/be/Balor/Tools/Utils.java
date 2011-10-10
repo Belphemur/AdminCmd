@@ -210,6 +210,10 @@ public class Utils {
 		return true;
 	}
 
+	public static String getPlayerName(Player player, CommandSender sender) {
+		return getPlayerName(player, sender, true);
+	}
+
 	/**
 	 * Get the complete player name with all prefix
 	 * 
@@ -217,14 +221,23 @@ public class Utils {
 	 *            player to get the name
 	 * @param sender
 	 *            sender that want the name
+	 * @param withPrefix
+	 *            return the name with or without prefixes (e.g [INV])
 	 * @return the complete player name with prefix
 	 */
-	public static String getPlayerName(Player player, CommandSender sender) {
-		String prefix = colorParser(getPrefix(player, sender));
-		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
-			return prefix + player.getDisplayName();
+	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
+		if (withPrefix) {
+			String prefix = colorParser(getPrefix(player, sender));
+			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+				return prefix + player.getDisplayName();
 
-		return prefix + player.getName();
+			return prefix + player.getName();
+		}
+
+		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+			return player.getDisplayName();
+
+		return player.getName();
 	}
 
 	/**
@@ -951,6 +964,18 @@ public class Utils {
 			throw new IllegalArgumentException();
 		}
 		throw new ArrayIndexOutOfBoundsException();
+	}
+
+	/**
+	 * Method to write a debug message in the log IF the debug mode is activated
+	 * in the configuration
+	 * 
+	 * @param message
+	 *            message to log in the server.log
+	 */
+	static public void debug(String message) {
+		if (ACHelper.getInstance().getConfBoolean("debug"))
+			ACLogger.info("[DEBUG] " + message);
 	}
 
 	/**

@@ -97,7 +97,9 @@ public class CommandArgs implements Iterable<String> {
 	public double getDouble(int index) throws NumberFormatException {
 		return Double.parseDouble(getString(index));
 	}
-
+	public long getLong(int index) throws NumberFormatException {
+		return Long.parseLong(getString(index));
+	}
 	public boolean hasFlag(char ch) {
 		return booleanFlags.contains(ch);
 	}

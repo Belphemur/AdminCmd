@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -32,6 +32,8 @@ import org.bukkit.craftbukkit.CraftWorld;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -41,7 +43,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class Memory extends CoreCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public Memory() {
 		permNode = "admincmd.server.memory";
@@ -74,7 +76,7 @@ public class Memory extends CoreCommand {
 							entityList.put(w.getName(), new ArrayList<Entity>(cWorld.entityList));
 							sema.release();
 						}
-						
+
 					}
 				}
 			});
@@ -109,6 +111,24 @@ public class Memory extends CoreCommand {
 					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
 					+ " entities");
 		}
+
+		// Code for TPS from here on
+		long delay = 20L;
+		if (args.length >= 1)
+			try {
+				delay = args.getLong(0);
+			} catch (NumberFormatException e) {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("number", args.getString(0));
+				Utils.sI18n(sender, "NaN", replace);
+				return;
+			}
+		if (delay < 20L)
+			delay = 20L;
+		World world = ACPluginManager.getServer().getWorlds().get(0);
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(),
+				new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender), delay);
 	}
 
 	/*
@@ -119,6 +139,38 @@ public class Memory extends CoreCommand {
 	@Override
 	public boolean argsCheck(String... args) {
 		return true;
+	}
+
+	private class CheckTicks implements Runnable {
+
+		protected long oldNanoTime;
+		protected long elapsedNanoTime;
+		protected World world;
+		protected long start;
+		protected double ticksPerSecond;
+		protected long elapsedTicks;
+		protected CommandSender sender;
+
+		public CheckTicks(long oldNanoTime, World world, long start, CommandSender sender) {
+			this.oldNanoTime = oldNanoTime;
+			this.world = world;
+			this.start = start;
+			this.sender = sender;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			elapsedNanoTime = System.nanoTime() - oldNanoTime;
+			elapsedTicks = world.getFullTime() - start;
+			ticksPerSecond = ((double) elapsedTicks * 1000000000.0) / (double) elapsedNanoTime;
+			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: "
+					+ elapsedTicks + " | Nano Time:" + elapsedNanoTime);
+		}
 	}
 
 }

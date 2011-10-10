@@ -190,6 +190,7 @@ public class CommandManager implements CommandExecutor {
 	public void registerCommand(Class<? extends CoreCommand> clazz) {
 		CoreCommand command = null;
 		try {
+			Utils.debug("Begin registering Command " + clazz.getName());
 			command = (CoreCommand) clazz.newInstance();
 			command.initializeCommand();
 			checkCommand(command);
@@ -205,7 +206,7 @@ public class CommandManager implements CommandExecutor {
 			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
 					command.getCmdName());
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
-				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+				ACLogger.info(e.getMessage());
 		} catch (CommandAlreadyExist e) {
 			boolean disableCommand = true;
 			HashMap<String, Command> commands = pluginCommands.get(command.getPlugin());
@@ -226,16 +227,19 @@ public class CommandManager implements CommandExecutor {
 				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
 						command.getCmdName());
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
-					Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+					ACLogger.info(e.getMessage());
+				Utils.debug("Command Disabled");
 			} else {
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				registeredCommands.put(command.getPluginCommand(), command);
+				Utils.debug("Command Prioritized but already exists");
 			}
 		} catch (CommandException e) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
+		Utils.debug("End registering Command " + clazz.getName());
 	}
 
 	/**
@@ -354,28 +358,28 @@ public class CommandManager implements CommandExecutor {
 	private boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
 		ACCommandContainer container = null;
 		try {
-			if (cmd.permissionCheck(sender) && cmd.argsCheck(args)) {
-				container = new ACCommandContainer(sender, cmd, args);
-				if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
-						|| cmd.getCmdName().equals("bal_extinguish"))
-					corePlugin.getServer().getScheduler()
-							.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
-				else {
-					threads.get(cmdCount).addCommand(container);
-					cmdCount++;
-					if (cmdCount == MAX_THREADS)
-						cmdCount = 0;
-				}
-				if (!cmd.getCmdName().equals("bal_repeat")) {
-					if (Utils.isPlayer(sender, false))
-						ACPlayer.getPlayer(((Player) sender).getName()).setLastCmd(container);
-					else
-						ACPlayer.getPlayer("serverConsole").setLastCmd(container);
-				}
-
+			if (!cmd.permissionCheck(sender))
 				return true;
-			} else
+			if (!cmd.argsCheck(args))
 				return false;
+			container = new ACCommandContainer(sender, cmd, args);
+			if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
+					|| cmd.getCmdName().equals("bal_extinguish"))
+				corePlugin.getServer().getScheduler()
+						.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
+			else {
+				threads.get(cmdCount).addCommand(container);
+				cmdCount++;
+				if (cmdCount == MAX_THREADS)
+					cmdCount = 0;
+			}
+			if (!cmd.getCmdName().equals("bal_repeat")) {
+				if (Utils.isPlayer(sender, false))
+					ACPlayer.getPlayer(((Player) sender).getName()).setLastCmd(container);
+				else
+					ACPlayer.getPlayer("serverConsole").setLastCmd(container);
+			}
+			return true;
 		} catch (Throwable t) {
 			ACLogger.severe(container.debug(), t);
 			Utils.broadcastMessage("[AdminCmd] " + container.debug());
