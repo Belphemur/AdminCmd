@@ -970,15 +970,14 @@ public class Utils {
 	}
 
 	/**
-	 * Method to write a debug message in the log IF the debug mode is activated
-	 * in the configuration
+	 * Write the message to the debug log if enabled in the configuration
 	 * 
 	 * @param message
-	 *            message to log in the server.log
+	 *            message to write.
 	 */
-	static public void debug(String message) {
+	public static void debug(String message) {
 		if (ACHelper.getInstance().getConfBoolean("debug"))
-			DebugLog.info(message);
+			DebugLog.INSTANCE.info(message);
 	}
 
 	/**
