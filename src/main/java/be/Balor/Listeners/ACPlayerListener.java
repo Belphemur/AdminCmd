@@ -160,7 +160,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
-		AFKWorker.getInstance().removePlayer(p);
+		ACHelper.getInstance().removeDeconnectedPlayer(p);
 	}
 
 	@Override

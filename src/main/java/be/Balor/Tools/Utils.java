@@ -718,6 +718,8 @@ public class Utils {
 	}
 
 	public static void removePlayerFromOnlineList(Player toRemove, Player fromPlayer) {
+		if (toRemove == null || fromPlayer == null)
+			return;
 		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
 				((CraftPlayer) toRemove).getHandle().listName, false, 9999));
 	}
