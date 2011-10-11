@@ -100,10 +100,10 @@ public class Give extends CoreCommand {
 		replace.put("material", mat.getMaterial().toString());
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
-				replace.put("sender", ((Player) sender).getName());
+				replace.put("sender", Utils.getPlayerName((Player) sender));
 				Utils.sI18n(target, "giveItemOtherPlayer", replace);
 				replace.remove("sender");
-				replace.put("target", target.getName());
+				replace.put("target", Utils.getPlayerName(target));
 				Utils.sI18n(sender, "giveItemCommandSender", replace);
 			} else
 				Utils.sI18n(sender, "giveItemYourself", replace);
@@ -111,7 +111,7 @@ public class Give extends CoreCommand {
 			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "giveItemOtherPlayer", replace);
 			replace.remove("sender");
-			replace.put("target", target.getName());
+			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "giveItemCommandSender", replace);
 		}
 		target.getInventory().addItem(stack);
