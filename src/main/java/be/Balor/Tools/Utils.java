@@ -59,6 +59,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -977,7 +978,7 @@ public class Utils {
 	 */
 	static public void debug(String message) {
 		if (ACHelper.getInstance().getConfBoolean("debug"))
-			ACLogger.info("[DEBUG] " + message);
+			DebugLog.info(message);
 	}
 
 	/**

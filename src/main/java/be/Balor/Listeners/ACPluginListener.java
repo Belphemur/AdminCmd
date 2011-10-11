@@ -29,8 +29,8 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
-import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;

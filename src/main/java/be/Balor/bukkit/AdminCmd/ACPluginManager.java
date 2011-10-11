@@ -27,7 +27,7 @@ import com.google.common.collect.MapMaker;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Tools.ACLogger;
+import be.Balor.Tools.Debug.ACLogger;
 
 /**
  * @author Balor (aka Antoine Aflalo)

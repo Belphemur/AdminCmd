@@ -48,8 +48,8 @@ import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.scanner.ScannerException;
 
-import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.TpRequest;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
