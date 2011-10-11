@@ -358,10 +358,12 @@ public class ACPlayerListener extends PlayerListener {
 
 		@Override
 		public void run() {
+			Utils.debug("Begin UpdateInvisibleOnJoin (Invisible) for "+newPlayer.getName());
 			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
 				Utils.removePlayerFromOnlineList(toVanish, newPlayer);
 			}
+			Utils.debug("Begin UpdateInvisibleOnJoin (FakeQuit) for "+newPlayer.getName());
 			for (Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
 				Utils.removePlayerFromOnlineList(toFq, newPlayer);
 		}
