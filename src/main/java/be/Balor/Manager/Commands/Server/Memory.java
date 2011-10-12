@@ -38,7 +38,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Memory extends CoreCommand {
 
@@ -52,7 +52,7 @@ public class Memory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -113,7 +113,7 @@ public class Memory extends CoreCommand {
 		}
 
 		// Code for TPS from here on
-		long delay = 20L;
+		long delay = 40L;
 		if (args.length >= 1)
 			try {
 				delay = args.getLong(0);
@@ -133,7 +133,7 @@ public class Memory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -160,7 +160,7 @@ public class Memory extends CoreCommand {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
