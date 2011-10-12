@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -32,12 +32,12 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Kit extends CoreCommand {
 
 	/**
-     * 
+     *
      */
 	public Kit() {
 		cmdName = "bal_kit";
@@ -46,7 +46,7 @@ public class Kit extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.CoreCommand#permissionCheck(org.bukkit.command.CommandSender
 	 * )
@@ -58,7 +58,7 @@ public class Kit extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
@@ -110,10 +110,10 @@ public class Kit extends CoreCommand {
 		replace.put("kit", args.getString(0));
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
-				replace.put("sender", ((Player) sender).getName());
+				replace.put("sender", Utils.getPlayerName((Player) sender));
 				Utils.sI18n(target, "kitOtherPlayer", replace);
 				replace.remove("sender");
-				replace.put("target", target.getName());
+				replace.put("target", Utils.getPlayerName(target));
 				Utils.sI18n(sender, "kitCommandSender", replace);
 			} else
 				Utils.sI18n(sender, "kitYourself", replace);
@@ -121,7 +121,7 @@ public class Kit extends CoreCommand {
 			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "kitOtherPlayer", replace);
 			replace.remove("sender");
-			replace.put("target", target.getName());
+			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "kitCommandSender", replace);
 		}
 		target.getInventory().addItem(kit.getItemStacks().toArray(new ItemStack[] {}));
@@ -130,7 +130,7 @@ public class Kit extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
@@ -141,7 +141,7 @@ public class Kit extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

@@ -41,7 +41,7 @@ public class Eternal extends CoreCommand {
 			player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", player.getName());
+			replace.put("player", Utils.getPlayerName(player));
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.ETERNAL)) {
 				player.setFoodLevel(acp.getPower(Type.ETERNAL).getInt(20));

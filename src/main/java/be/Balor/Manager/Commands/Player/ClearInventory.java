@@ -95,7 +95,7 @@ public class ClearInventory extends CoreCommand {
 		}
 		if (!sender.equals(target)) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", target.getName());
+			replace.put("player", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "clearTarget", replace);
 		}
 		Utils.sI18n(target, "clear");

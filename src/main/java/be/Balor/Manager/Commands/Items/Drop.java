@@ -100,10 +100,10 @@ public class Drop extends CoreCommand {
 		replace.put("material", mat.getMaterial().toString());
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
-				replace.put("sender", ((Player) sender).getName());
+				replace.put("sender", Utils.getPlayerName((Player) sender));
 				Utils.sI18n(target, "dropItemOtherPlayer", replace);
 				replace.remove("sender");
-				replace.put("target", target.getName());
+				replace.put("target", Utils.getPlayerName(target));
 				Utils.sI18n(sender, "dropItemCommandSender", replace);
 			} else
 				Utils.sI18n(sender, "dropItemYourself", replace);
@@ -111,7 +111,7 @@ public class Drop extends CoreCommand {
 			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "dropItemOtherPlayer", replace);
 			replace.remove("sender");
-			replace.put("target", target.getName());
+			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "dropItemCommandSender", replace);
 		}
 		target.getWorld().dropItem(target.getLocation(), stack);
