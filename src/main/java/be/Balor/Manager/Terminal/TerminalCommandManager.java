@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.config.Configuration;
 
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionLinker;
 import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
 import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
+import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
@@ -61,7 +61,7 @@ public class TerminalCommandManager {
 		this.perm = plugin.getPermissionLinker();
 		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
-		Configuration conf = new Configuration(scripts);
+		ExtendedConfiguration conf = new ExtendedConfiguration(scripts);
 		conf.load();
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
@@ -96,7 +96,7 @@ public class TerminalCommandManager {
 	public void reloadScripts() {
 		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
-		Configuration conf = new Configuration(scripts);
+		ExtendedConfiguration conf = new ExtendedConfiguration(scripts);
 		conf.load();
 		commands.clear();
 		TerminalCommand toAdd;
@@ -135,7 +135,7 @@ public class TerminalCommandManager {
 		if (cmd == null || reload) {
 			File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 			File workingDir = scripts.getParentFile();
-			Configuration conf = new Configuration(scripts);
+			ExtendedConfiguration conf = new ExtendedConfiguration(scripts);
 			conf.load();
 			if (conf.getProperty(cmdName) == null)
 				throw new CommandNotFound(cmdName + " is not registered");
