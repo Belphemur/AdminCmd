@@ -31,7 +31,6 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.ConfigurationNode;
@@ -46,6 +45,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.FileManager;
+import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
@@ -166,8 +166,9 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void registerACPlugin(AbstractAdminCmdPlugin plugin) {
 		HashMap<String, Command> commands = new HashMap<String, Command>();
-		for (Command cmd : PluginCommandYamlParser.parse(plugin))
+		for (Command cmd : PluginCommandUtil.parse(plugin))
 			commands.put(cmd.getName(), cmd);
+
 		pluginCommands.put(plugin, new HashMap<String, Command>(commands));
 	}
 
