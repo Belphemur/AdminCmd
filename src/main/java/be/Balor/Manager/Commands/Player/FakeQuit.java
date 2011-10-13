@@ -57,7 +57,7 @@ public class FakeQuit extends CoreCommand {
 		Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", player.getName());
+			replace.put("player", Utils.getPlayerName(player));
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.FAKEQUIT)) {
 				acp.removePower(Type.FAKEQUIT);

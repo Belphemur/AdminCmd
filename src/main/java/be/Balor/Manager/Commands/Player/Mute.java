@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -31,12 +31,12 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Mute extends CoreCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public Mute() {
 		permNode = "admincmd.player.mute";
@@ -45,7 +45,7 @@ public class Mute extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -55,7 +55,7 @@ public class Mute extends CoreCommand {
 		Player player = sender.getServer().getPlayer(args.getString(0));
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", player.getName());
+			replace.put("player", Utils.getPlayerName(player));
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp instanceof EmptyPlayer) {
 				Utils.sI18n(sender, "playerNotFound", replace);
@@ -68,7 +68,7 @@ public class Mute extends CoreCommand {
 			if (!acp.hasPower(Type.MUTED)) {
 				String msg = "Server Admin";
 				if (Utils.isPlayer(sender, false))
-					msg = ((Player) sender).getName();
+					msg = Utils.getPlayerName((Player) sender);
 				acp.setPower(Type.MUTED, "Muted by " + msg);
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "muteEnabledTarget", replace);
@@ -105,7 +105,7 @@ public class Mute extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

@@ -41,17 +41,15 @@ public class Eternal extends CoreCommand {
 			player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", player.getName());
+			replace.put("player", Utils.getPlayerName(player));
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.ETERNAL)) {
-				acp.removePower(Type.ETERNAL);
 				player.setFoodLevel(acp.getPower(Type.ETERNAL).getInt(20));
+				acp.removePower(Type.ETERNAL);
 				Utils.sI18n(player, "eternalDisabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "eternalDisabledTarget", replace);
 			} else {
-				acp.setPower(Type.ETERNAL);
-				Utils.sI18n(player, "vulcanEnabled");
 				acp.setPower(Type.ETERNAL, player.getFoodLevel());
 				player.setFoodLevel(20);
 				Utils.sI18n(player, "eternalEnabled");

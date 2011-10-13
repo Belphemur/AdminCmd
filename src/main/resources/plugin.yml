@@ -364,7 +364,7 @@ commands:
     usage: /<command> <-falg> (reatureType|Delay)
   bal_reply:
     description: Send a private message to the last player who sent you a private message.
-    aliases: [rep, r, reply]
+    aliases: [r, reply]
     usage: /<command> [message]
   bal_difficulty:
     description: Sets (-s) or gets (-g) the Difficulty of a world.
