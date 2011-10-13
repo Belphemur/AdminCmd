@@ -60,7 +60,7 @@ public class SetHome extends CoreCommand {
 			ACPlayer player = ACPlayer.getPlayer(home.player);
 			List<String> tmp = player.getHomeList();
 			Location loc = p.getLocation();
-			if (!PermissionManager.hasPerm(p, "admincmd.admin.home", false) && !tmp.contains(home)
+			if (!tmp.contains(home.home) && !PermissionManager.hasPerm(p, "admincmd.admin.home", false)
 					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {
 				Utils.sI18n(sender, "homeLimit");
 				return;
