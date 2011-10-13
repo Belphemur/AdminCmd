@@ -121,8 +121,12 @@ public class ACPlayerListener extends PlayerListener {
 		}
 		ACPlayer player = ACPlayer.getPlayer(p.getName());
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
-		if (player.hasPower(Type.FAKEQUIT))
+		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setJoinMessage(null);
+			ACHelper.getInstance().addFakeQuit(p);
+		}
+		if (player.hasPower(Type.SPYMSG))
+			ACHelper.getInstance().addSpy(p);
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
 			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
@@ -160,7 +164,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
-		AFKWorker.getInstance().removePlayer(p);
+		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
 
 	@Override
@@ -256,8 +260,6 @@ public class ACPlayerListener extends PlayerListener {
 	}
 
 	private boolean playerRespawnOrJoin(Player newPlayer) {
-		if (ACPlayer.getPlayer(newPlayer).hasPower(Type.FAKEQUIT))
-			ACHelper.getInstance().addFakeQuit(newPlayer);
 		ACPluginManager
 				.getServer()
 				.getScheduler()
@@ -358,10 +360,12 @@ public class ACPlayerListener extends PlayerListener {
 
 		@Override
 		public void run() {
+			Utils.debug("Begin UpdateInvisibleOnJoin (Invisible) for " + newPlayer.getName());
 			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
 				Utils.removePlayerFromOnlineList(toVanish, newPlayer);
 			}
+			Utils.debug("Begin UpdateInvisibleOnJoin (FakeQuit) for " + newPlayer.getName());
 			for (Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
 				Utils.removePlayerFromOnlineList(toFq, newPlayer);
 		}

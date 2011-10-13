@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Debug;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +27,9 @@ import org.bukkit.ChatColor;
  */
 public class ACLogger {
 
-	public static final Logger logger = Logger.getLogger("Minecraft");
+	protected static final Logger logger = Logger.getLogger("Minecraft");
 	protected static String prefix = "[AdminCmd] ";
+
 
 	public static void severe(String string, Throwable ex) {
 		logger.log(Level.SEVERE, prefix + ChatColor.stripColor(ChatColor.stripColor(string)), ex);
@@ -55,14 +56,16 @@ public class ACLogger {
 	}
 
 	public static void Log(Level loglevel, String txt, boolean sendReport) {
-		logger.log(loglevel, String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)));
+		logger.log(loglevel,
+				String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)));
 	}
 
 	public static void Log(Level loglevel, String txt, Throwable params) {
 		if (txt == null) {
 			Log(loglevel, params);
 		} else {
-			logger.log(loglevel, String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)),
+			logger.log(loglevel,
+					String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)),
 					params);
 		}
 	}

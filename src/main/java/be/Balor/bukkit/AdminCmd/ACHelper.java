@@ -74,7 +74,9 @@ public class ACHelper {
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakKeys().weakValues()
+	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues()
+			.makeMap();
+	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues()
 			.makeMap();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
@@ -83,7 +85,7 @@ public class ACHelper {
 	private ExtendedConfiguration pluginConfig;
 	private DataManager dataManager;
 	private boolean serverLocked = false;
-	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().weakKeys().weakValues().makeMap();
+	private ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
 
 	private ACHelper() {
 		materialsColors = new HashMap<Material, String[]>();
@@ -173,6 +175,14 @@ public class ACHelper {
 	public void unBanPlayer(String player) {
 		bannedPlayers.remove(player);
 		dataManager.unBanPlayer(player);
+	}
+
+	public void removeDisconnectedPlayer(Player player) {
+		AFKWorker.getInstance().removePlayer(player);
+		fakeQuitPlayers.remove(player);
+		playersForReplyMessage.remove(player);
+		spyPlayers.remove(player);
+
 	}
 
 	/**
@@ -266,6 +276,17 @@ public class ACHelper {
 
 	public Set<Player> getFakeQuitPlayers() {
 		return fakeQuitPlayers.keySet();
+	}
+	public void addSpy(Player p) {
+		spyPlayers.put(p, new Object());
+	}
+
+	public void removeSpy(Player p) {
+		spyPlayers.remove(p);
+	}
+
+	public Set<Player> getSpyPlayers() {
+		return spyPlayers.keySet();
 	}
 
 	/**

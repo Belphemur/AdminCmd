@@ -29,7 +29,7 @@ import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
-import be.Balor.Tools.ACLogger;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 import com.nijiko.permissions.PermissionHandler;

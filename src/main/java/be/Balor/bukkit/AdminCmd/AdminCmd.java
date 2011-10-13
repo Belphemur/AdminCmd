@@ -31,15 +31,16 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.ACLogger;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -485,7 +486,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public void onEnable() {
 		ACPluginManager.setServer(getServer());
-
+		DebugLog.setFile(getDataFolder().getPath());
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -506,7 +507,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		//Compatibility with older then #1240
+		// Compatibility with older then #1240
 		try {
 			pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
 			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
@@ -558,6 +559,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
 		HelpLister.killInstance();
+		DebugLog.stopLogging();
 		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");
