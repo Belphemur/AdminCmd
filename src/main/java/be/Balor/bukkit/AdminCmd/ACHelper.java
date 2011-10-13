@@ -76,6 +76,8 @@ public class ACHelper {
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues()
 			.makeMap();
+	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues()
+			.makeMap();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -175,10 +177,11 @@ public class ACHelper {
 		dataManager.unBanPlayer(player);
 	}
 
-	public void removeDeconnectedPlayer(Player player) {
+	public void removeDisconnectedPlayer(Player player) {
 		AFKWorker.getInstance().removePlayer(player);
 		fakeQuitPlayers.remove(player);
 		playersForReplyMessage.remove(player);
+		spyPlayers.remove(player);
 
 	}
 
@@ -273,6 +276,17 @@ public class ACHelper {
 
 	public Set<Player> getFakeQuitPlayers() {
 		return fakeQuitPlayers.keySet();
+	}
+	public void addSpy(Player p) {
+		spyPlayers.put(p, new Object());
+	}
+
+	public void removeSpy(Player p) {
+		spyPlayers.remove(p);
+	}
+
+	public Set<Player> getSpyPlayers() {
+		return spyPlayers.keySet();
 	}
 
 	/**

@@ -24,6 +24,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -52,9 +53,11 @@ public class SpyMsg extends CoreCommand {
 			ACPlayer acp = ACPlayer.getPlayer(((Player) sender).getName());
 			if (acp.hasPower(Type.SPYMSG)) {
 				acp.removePower(Type.SPYMSG);
+				ACHelper.getInstance().removeSpy(acp.getHandler());
 				Utils.sI18n(sender, "spymsgDisabled");
 			} else {
 				acp.setPower(Type.SPYMSG);
+				ACHelper.getInstance().addSpy(acp.getHandler());
 				Utils.sI18n(sender, "spymsgEnabled");
 			}
 

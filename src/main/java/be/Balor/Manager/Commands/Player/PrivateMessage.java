@@ -34,7 +34,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PrivateMessage extends CoreCommand {
 
@@ -48,7 +48,7 @@ public class PrivateMessage extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -93,10 +93,10 @@ public class PrivateMessage extends CoreCommand {
 				sender.sendMessage(msgPrefix + senderPm + parsed);
 			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
 					+ "-" + buddy.getName() + ": " + parsed;
-			for (ACPlayer p : ACPlayer.getPlayers(Type.SPYMSG))
+			for (Player p : ACHelper.getInstance().getSpyPlayers())
 				if (p != null && !p.getName().equals(senderName)
-						&& !p.getName().equals(buddy.getName()) && p.getHandler() != null)
-					p.getHandler().sendMessage(spyMsg);
+						&& !p.getName().equals(buddy.getName()))
+					p.sendMessage(spyMsg);
 			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages")
 					&& !(sender instanceof ConsoleCommandSender))
 				ACLogger.info(spyMsg);
@@ -107,7 +107,7 @@ public class PrivateMessage extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
