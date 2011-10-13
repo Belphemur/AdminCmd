@@ -38,7 +38,7 @@ public class RepairAll extends CoreCommand {
 	 *
 	 */
 	public RepairAll() {
-		permNode = "admincmd.item.repair";
+		permNode = "admincmd.item.repairall";
 		cmdName = "bal_repairall";
 		other = true;
 	}
