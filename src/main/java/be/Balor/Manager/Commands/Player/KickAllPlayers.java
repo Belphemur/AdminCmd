@@ -34,7 +34,7 @@ public class KickAllPlayers extends CoreCommand {
 	 *
 	 */
 	public KickAllPlayers() {
-		permNode = "admincmd.player.kick";
+		permNode = "admincmd.player.kickall";
 		cmdName = "bal_kickall";
 	}
 

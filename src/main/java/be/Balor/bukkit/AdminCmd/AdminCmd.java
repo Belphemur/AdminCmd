@@ -40,7 +40,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -224,6 +224,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("repairAllTarget", "All your items have been repaired.");
 		Utils.addLocale("errorMob", ChatColor.RED + "No such creature: " + ChatColor.WHITE + "%mob");
 		Utils.addLocale("spawnMob", ChatColor.BLUE + "Spawned " + ChatColor.WHITE + "%nb %mob");
+		Utils.addLocale("spawnMobOther", ChatColor.GOLD + "%player " + ChatColor.BLUE + "spawned "
+				+ ChatColor.WHITE + "%nb %mob (s)" + ChatColor.BLUE + " at your location.");
 		Utils.addLocale("clear", ChatColor.RED + "Your inventory has been cleared");
 		Utils.addLocale("clearTarget", ChatColor.RED + "Inventory of " + ChatColor.WHITE
 				+ "%player" + ChatColor.RED + " cleared");
