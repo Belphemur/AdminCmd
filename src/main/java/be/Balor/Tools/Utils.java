@@ -586,10 +586,28 @@ public class Utils {
 					return true;
 				}
 				weatherChange(sender, w, type, duration);
+			} else if (type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR)) {
+				World w = sender.getServer().getWorld(duration.getString(0));
+				if (w == null) {
+					HashMap<String, String> replace = new HashMap<String, String>();
+					replace.put("world", duration.getString(2));
+					Utils.sI18n(sender, "worldNotFound", replace);
+					return true;
+				}
+				weatherChange(sender, w, type, duration);
 			} else
 				weatherChange(sender, ((Player) sender).getWorld(), type, duration);
 		} else if (duration.length >= 2) {
 			World w = sender.getServer().getWorld(duration.getString(2));
+			if (w == null) {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("world", duration.getString(2));
+				Utils.sI18n(sender, "worldNotFound", replace);
+				return true;
+			}
+			weatherChange(sender, w, type, duration);
+		} else if (type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR)) {
+			World w = sender.getServer().getWorld(duration.getString(0));
 			if (w == null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("world", duration.getString(2));
