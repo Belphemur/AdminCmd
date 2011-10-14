@@ -590,7 +590,7 @@ public class Utils {
 				World w = sender.getServer().getWorld(duration.getString(0));
 				if (w == null) {
 					HashMap<String, String> replace = new HashMap<String, String>();
-					replace.put("world", duration.getString(2));
+					replace.put("world", duration.getString(0));
 					Utils.sI18n(sender, "worldNotFound", replace);
 					return true;
 				}
@@ -601,7 +601,7 @@ public class Utils {
 			World w = sender.getServer().getWorld(duration.getString(2));
 			if (w == null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("world", duration.getString(2));
+				replace.put("world", duration.getString(0));
 				Utils.sI18n(sender, "worldNotFound", replace);
 				return true;
 			}
@@ -610,7 +610,7 @@ public class Utils {
 			World w = sender.getServer().getWorld(duration.getString(0));
 			if (w == null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("world", duration.getString(2));
+				replace.put("world", duration.getString(0));
 				Utils.sI18n(sender, "worldNotFound", replace);
 				return true;
 			}
