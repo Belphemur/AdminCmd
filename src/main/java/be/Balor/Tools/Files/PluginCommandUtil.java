@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -32,7 +33,7 @@ public class PluginCommandUtil {
 	@SuppressWarnings("unchecked")
 	public static List<Command> parse(Plugin plugin) {
 		try {
-			return org.bukkit.command.PluginCommandUtil.parse(plugin);
+			return PluginCommandYamlParser.parse(plugin);
 		} catch (NoClassDefFoundError e) {
 			List<Command> pluginCmds = new ArrayList<Command>();
 			Object object = plugin.getDescription().getCommands();
