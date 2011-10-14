@@ -577,7 +577,26 @@ public class Utils {
 
 	public static boolean weather(CommandSender sender, Type.Weather type, CommandArgs duration) {
 		if (isPlayer(sender, false)) {
-			weatherChange(sender, ((Player) sender).getWorld(), type, duration);
+			if (duration.length >= 2) {
+				World w = sender.getServer().getWorld(duration.getString(2));
+				if (w == null) {
+					HashMap<String, String> replace = new HashMap<String, String>();
+					replace.put("world", duration.getString(2));
+					Utils.sI18n(sender, "worldNotFound", replace);
+					return true;
+				}
+				weatherChange(sender, w, type, duration);
+			} else
+				weatherChange(sender, ((Player) sender).getWorld(), type, duration);
+		} else if (duration.length >= 2) {
+			World w = sender.getServer().getWorld(duration.getString(2));
+			if (w == null) {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("world", duration.getString(2));
+				Utils.sI18n(sender, "worldNotFound", replace);
+				return true;
+			}
+			weatherChange(sender, w, type, duration);
 		} else
 			for (World w : sender.getServer().getWorlds())
 				weatherChange(sender, w, type, duration);
