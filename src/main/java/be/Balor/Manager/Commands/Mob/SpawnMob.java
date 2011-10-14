@@ -70,12 +70,9 @@ public class SpawnMob extends CoreCommand {
 				distance = 0;
 			}
 
-			Player temp;
-			try {
-				temp = Utils.getUser(sender, args, permNode, 3, false);
-			} catch (Exception e) {
+			Player temp = Utils.getUser(sender, args, permNode, 3, false);
+			if (temp == null)
 				temp = ((Player) sender);
-			}
 
 			final Player player = temp;
 			Location loc;
