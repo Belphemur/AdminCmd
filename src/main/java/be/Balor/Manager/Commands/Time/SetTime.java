@@ -52,7 +52,7 @@ public class SetTime extends CoreCommand {
 				&& !(PermissionManager.hasPerm(sender, "admincmd.time.pause")))
 			return;
 
-		Utils.timeSet(sender, args.getString(0));
+			Utils.timeSet(sender, args.getString(0), args.getString(1));
 	}
 
 	/*

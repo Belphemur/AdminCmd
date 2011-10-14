@@ -385,16 +385,29 @@ public class Utils {
 	// false then means to show the default handle
 	// ! make sure the player variable IS a player!
 	// set world time to a new value
-	public static boolean timeSet(CommandSender sender, String arg) {
-		if (isPlayer(sender, false)) {
+	public static boolean timeSet(CommandSender sender, String time, String world) {
+		if (isPlayer(sender, false) && world == null) {
 			Player p = (Player) sender;
-			setTime(sender, p.getWorld(), arg);
+			setTime(sender, p.getWorld(), time);
+		} else if (world != null) {
+			World w = sender.getServer().getWorld(world);
+			if (w == null) {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("world", world);
+				Utils.sI18n(sender, "worldNotFound", replace);
+				return true;
+			}
+			setTime(sender, w, time);
 		} else {
 			for (World w : sender.getServer().getWorlds())
-				setTime(sender, w, arg);
+				setTime(sender, w, time);
 		}
 		return true;
 
+	}
+
+	public static boolean timeSet(CommandSender sender, String time) {
+		return timeSet(sender, time, null);
 	}
 
 	public static void tpP2P(CommandSender sender, String nFrom, String nTo, Type.Tp type) {
