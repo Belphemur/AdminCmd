@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -31,21 +31,22 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class SpawnMob extends CoreCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public SpawnMob() {
 		permNode = "admincmd.mob.spawn";
 		cmdName = "bal_mob";
+		other = true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -69,11 +70,27 @@ public class SpawnMob extends CoreCommand {
 				distance = 0;
 			}
 
-			final Player player = ((Player) sender);
+			Player temp;
+			try {
+				temp = Utils.getUser(sender, args, permNode, 3, false);
+			} catch (Exception e) {
+				temp = ((Player) sender);
+			}
+
+			final Player player = temp;
 			Location loc;
-			if (distance == 0)
+			if (distance == 0 && player.equals(sender))
 				loc = player.getTargetBlock(null, 100).getLocation().add(0, 1, 0);
-			else {
+			else if (distance == 0) {
+				Location playerLoc = player.getLocation();
+				loc = playerLoc.add(
+						playerLoc
+								.getDirection()
+								.normalize()
+								.multiply(2)
+								.toLocation(player.getWorld(), playerLoc.getYaw(),
+										playerLoc.getPitch())).add(0, 1D, 0);
+			} else {
 				Location playerLoc = player.getLocation();
 				loc = playerLoc.add(
 						playerLoc
@@ -101,7 +118,7 @@ public class SpawnMob extends CoreCommand {
 				ACPluginManager.getServer()
 						.getScheduler()
 						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new PassengerMob(loc, nbTaped, ct, ct2, player));
+								new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
 			} else {
 				ct = CreatureType.fromName(name);
 				if (ct == null) {
@@ -112,7 +129,7 @@ public class SpawnMob extends CoreCommand {
 				ACPluginManager.getServer()
 						.getScheduler()
 						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new NormalMob(loc, nbTaped, ct, player));
+								new NormalMob(loc, nbTaped, ct, player, sender));
 			}
 		}
 
@@ -120,7 +137,7 @@ public class SpawnMob extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -133,15 +150,17 @@ public class SpawnMob extends CoreCommand {
 		protected int nb;
 		protected CreatureType ct;
 		protected Player player;
+		protected CommandSender sender;
 
 		/**
-		 * 
+		 *
 		 */
-		public NormalMob(Location loc, int nb, CreatureType ct, Player player) {
+		public NormalMob(Location loc, int nb, CreatureType ct, Player player, CommandSender sender) {
 			this.loc = loc;
 			this.nb = nb;
 			this.ct = ct;
 			this.player = player;
+			this.sender = sender;
 		}
 
 		@Override
@@ -157,7 +176,12 @@ public class SpawnMob extends CoreCommand {
 				}
 			}
 			replace.put("nb", String.valueOf(nb));
-			Utils.sI18n(player, "spawnMob", replace);
+			if (player.equals(sender))
+				Utils.sI18n(player, "spawnMob", replace);
+			else {
+				replace.put("player", Utils.getPlayerName((Player) sender));
+				Utils.sI18n(player, "spawnMobOther", replace);
+			}
 		}
 	}
 
@@ -171,8 +195,8 @@ public class SpawnMob extends CoreCommand {
 		 * @param player
 		 */
 		public PassengerMob(Location loc, int nb, CreatureType mount, CreatureType passenger,
-				Player player) {
-			super(loc, nb, mount, player);
+				Player player, CommandSender sender) {
+			super(loc, nb, mount, player, sender);
 			this.passenger = passenger;
 		}
 
@@ -190,7 +214,12 @@ public class SpawnMob extends CoreCommand {
 				}
 			}
 			replace.put("nb", String.valueOf(nb));
-			Utils.sI18n(player, "spawnMob", replace);
+			if (player.equals(sender))
+				Utils.sI18n(player, "spawnMob", replace);
+			else {
+				replace.put("player", Utils.getPlayerName((Player) sender));
+				Utils.sI18n(player, "spawnMobOther", replace);
+			}
 		}
 
 	}
