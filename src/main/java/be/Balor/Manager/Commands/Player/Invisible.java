@@ -24,7 +24,10 @@ import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -52,19 +55,38 @@ public class Invisible extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode);
+		boolean noPickUp = ACHelper.getInstance().getConfBoolean("InvisAndNoPickup");
 		if (target != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));
+			ACPlayer acp = ACPlayer.getPlayer(target.getName());
 			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
 				InvisibleWorker.getInstance().vanish(target);
 				Utils.sI18n(target, "invisibleEnabled");
-				if (!target.equals(sender))
+				if (noPickUp && !acp.hasPower(Type.NO_PICKUP)) {
+					acp.setPower(Type.NO_PICKUP);
+					Utils.sI18n(target, "npEnabled");
+				}
+				if (!target.equals(sender)) {
 					Utils.sI18n(sender, "invisibleEnabledTarget", replace);
+					if (noPickUp && acp.hasPower(Type.NO_PICKUP)) {
+						Utils.sI18n(sender, "npEnabledTarget", replace);
+					}
+				}
 			} else {
 				InvisibleWorker.getInstance().reappear(target);
 				Utils.sI18n(target, "invisibleDisabled");
-				if (!target.equals(sender))
+				if (noPickUp && acp.hasPower(Type.NO_PICKUP)) {
+					acp.removePower(Type.NO_PICKUP);
+					Utils.sI18n(target, "npDisabled");
+				}
+				if (!target.equals(sender)) {
 					Utils.sI18n(sender, "invisibleDisabledTarget", replace);
+					if (noPickUp && !acp.hasPower(Type.NO_PICKUP)) {
+						Utils.sI18n(sender, "npDisabledTarget", replace);
+					}
+
+				}
 			}
 		}
 	}
