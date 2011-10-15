@@ -578,7 +578,7 @@ public class Utils {
 	public static boolean weather(CommandSender sender, Type.Weather type, CommandArgs duration) {
 		if (isPlayer(sender, false)) {
 			if (duration.length >= 2) {
-				World w = sender.getServer().getWorld(duration.getString(2));
+				World w = sender.getServer().getWorld(duration.getString(1));
 				if (w == null) {
 					HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("world", duration.getString(2));
@@ -586,7 +586,7 @@ public class Utils {
 					return true;
 				}
 				weatherChange(sender, w, type, duration);
-			} else if (type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR)) {
+			} else if ((type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR)) && duration.getString(0) != null) {
 				World w = sender.getServer().getWorld(duration.getString(0));
 				if (w == null) {
 					HashMap<String, String> replace = new HashMap<String, String>();
@@ -598,7 +598,7 @@ public class Utils {
 			} else
 				weatherChange(sender, ((Player) sender).getWorld(), type, duration);
 		} else if (duration.length >= 2) {
-			World w = sender.getServer().getWorld(duration.getString(2));
+			World w = sender.getServer().getWorld(duration.getString(1));
 			if (w == null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("world", duration.getString(0));
@@ -606,7 +606,7 @@ public class Utils {
 				return true;
 			}
 			weatherChange(sender, w, type, duration);
-		} else if (type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR)) {
+		} else if ((type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR)) && duration.getString(0) != null) {
 			World w = sender.getServer().getWorld(duration.getString(0));
 			if (w == null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
