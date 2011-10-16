@@ -32,6 +32,7 @@ import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.Tools.Files.ObjectContainer;
+import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -101,7 +102,14 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getHome(String home) {
-		return getLocation("home." + home);
+		Location loc = getLocation("home." + home);
+		if (loc == null) {
+			String name = Str.matchString(homes.getKeys(), home);
+			if (name == null)
+				return null;
+			loc = getLocation("home." + name);
+		}
+		return loc;
 	}
 
 	/*
@@ -382,7 +390,9 @@ public class FilePlayer extends ACPlayer {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
 	 */
 	@Override
@@ -391,7 +401,9 @@ public class FilePlayer extends ACPlayer {
 		writeFile();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
 	 */
 	@Override

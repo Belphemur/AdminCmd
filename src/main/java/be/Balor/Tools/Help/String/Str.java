@@ -9,6 +9,7 @@ package be.Balor.Tools.Help.String;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * @author jacob
@@ -294,6 +295,32 @@ public class Str extends OutputStream {
 		System.arraycopy(B, 0, C, A.length, B.length);
 
 		return C;
+	}
+
+	/**
+	 * Search for the given string in the list and return it.
+	 * 
+	 * @param container
+	 * @param search
+	 * @return
+	 */
+	public static String matchString(List<String> container, String search) {
+		String found = null;
+		String lowerSearch = search.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		for (String str : container) {
+			if (str.toLowerCase().startsWith(lowerSearch)) {
+				int curDelta = str.length() - lowerSearch.length();
+				if (curDelta < delta) {
+					found = str;
+					delta = curDelta;
+				}
+				if (curDelta == 0)
+					break;
+			}
+		}
+		return found;
+
 	}
 
 } // end class Str

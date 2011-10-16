@@ -31,10 +31,11 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 import be.Balor.Tools.Configuration.ExtendedNode;
 import be.Balor.Tools.Files.ObjectContainer;
+import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class FileWorld extends ACWorld {
 	private final ExtendedConfiguration datas;
@@ -65,7 +66,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#setSpawn(org.bukkit.Location)
 	 */
 	@Override
@@ -76,7 +77,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#getSpawn()
 	 */
 	@Override
@@ -90,10 +91,9 @@ public class FileWorld extends ACWorld {
 			return handler.getSpawnLocation();
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#getDifficulty()
 	 */
 	@Override
@@ -107,7 +107,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#setDifficulty(org.bukkit.Difficulty)
 	 */
 	@Override
@@ -118,7 +118,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#addWarp(java.lang.String,
 	 * org.bukkit.Location)
 	 */
@@ -130,20 +130,25 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
 	public Location getWarp(String name) throws WorldNotLoaded {
 		Object warp = warps.getProperty(name);
-		if (warp == null)
-			return null;
+		if (warp == null) {
+			String warpName = Str.matchString(warps.getKeys(), name);
+			if (warpName == null)
+				return null;
+			warp = warps.getProperty(warpName);
+		}
+
 		return ((SimpleLocation) warp).getLocation();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#getWarpList()
 	 */
 	@Override
@@ -153,7 +158,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#removeWarp(java.lang.String)
 	 */
 	@Override
@@ -164,7 +169,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#setInformation(java.lang.String,
 	 * java.lang.Object)
 	 */
@@ -176,7 +181,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#removeInformation(java.lang.String)
 	 */
 	@Override
@@ -187,7 +192,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#getInformation(java.lang.String)
 	 */
 	@Override
@@ -204,7 +209,7 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.World.ACWorld#forceSave()
 	 */
 	@Override
@@ -212,7 +217,9 @@ public class FileWorld extends ACWorld {
 		datas.save();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.World.ACWorld#getInformations()
 	 */
 	@Override
