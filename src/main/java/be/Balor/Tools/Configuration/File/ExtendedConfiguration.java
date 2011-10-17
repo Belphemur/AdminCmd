@@ -41,7 +41,6 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.AbstractConstruct;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.CollectionNode;
@@ -71,8 +70,9 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
 	private static Representer yamlRepresenter = new ExtendedRepresenter();
-	protected final static Yaml yaml = new Yaml(new SafeConstructor(), yamlRepresenter, yamlOptions);
 	protected final static MyYamlConstructor ymlConstructor = new MyYamlConstructor();
+	protected final static Yaml yaml = new Yaml(ymlConstructor, yamlRepresenter, yamlOptions);
+	
 
 	/**
 	 * Creates a new {@link ExtendedConfiguration}, loading from the given file.
