@@ -28,15 +28,12 @@ import be.Balor.Tools.TpRequest;
  */
 public class ObjectContainer {
 	private final Object obj;
-	private static int objContainerCount = 0;
-	private final int objId;
 
 	/**
  * 
  */
 	public ObjectContainer(Object obj) {
 		this.obj = obj;
-		this.objId = objContainerCount++;
 	}
 
 	/**
@@ -431,42 +428,5 @@ public class ObjectContainer {
 		return obj.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((obj == null) ? 0 : obj.hashCode());
-		result = prime * result + objId;
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof ObjectContainer))
-			return false;
-		ObjectContainer other = (ObjectContainer) obj;
-		if (this.obj == null) {
-			if (other.obj != null)
-				return false;
-		} else if (!this.obj.equals(other.obj))
-			return false;
-		if (objId != other.objId)
-			return false;
-		return true;
-	}
 
 }

@@ -9,7 +9,7 @@ package be.Balor.Tools.Help.String;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author jacob
@@ -304,7 +304,7 @@ public class Str extends OutputStream {
 	 * @param search
 	 * @return
 	 */
-	public static String matchString(List<String> container, String search) {
+	public static String matchString(Collection<String> container, String search) {
 		String found = null;
 		String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;

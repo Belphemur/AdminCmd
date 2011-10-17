@@ -16,8 +16,8 @@
  ************************************************************************/
 package be.Balor.World;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -130,7 +130,7 @@ public abstract class ACWorld {
 	 *
 	 * @return a List containing the name of each warp of the World
 	 */
-	public abstract List<String> getWarpList();
+	public abstract Set<String> getWarpList();
 
 	/**
 	 * Remove the warp

@@ -16,7 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Warp;
 
-import java.util.List;
+import java.util.Set;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -54,7 +55,7 @@ public class WarpList extends CoreCommand {
 			Player p = (Player) sender;
 			
 			String msg = "";
-			List<String> wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
+			Set<String> wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
 			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
 			for (String name : wp) {
 				msg += name + ", ";

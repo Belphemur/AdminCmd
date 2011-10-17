@@ -3,6 +3,8 @@ package be.Balor.bukkit.AdminCmd;
 import info.somethingodd.bukkit.OddItem.OddItem;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +25,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -41,14 +45,14 @@ import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Configuration.ExtendedConfiguration;
-import be.Balor.Tools.Configuration.ExtendedNode;
+import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
-import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Help.HelpLister;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.World.ACWorld;
 import be.Balor.World.ACWorldFactory;
 import be.Balor.World.WorldManager;
@@ -59,7 +63,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -74,10 +78,8 @@ public class ACHelper {
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues()
-			.makeMap();
-	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues()
-			.makeMap();
+	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues().makeMap();
+	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues().makeMap();
 	private static ACHelper instance = null;
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -125,7 +127,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 *
+	 * 
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -149,7 +151,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 *
+	 * 
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -159,7 +161,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -169,7 +171,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 *
+	 * 
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -187,7 +189,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 *
+	 * 
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -230,7 +232,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
@@ -240,7 +242,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -277,6 +279,7 @@ public class ACHelper {
 	public Set<Player> getFakeQuitPlayers() {
 		return fakeQuitPlayers.keySet();
 	}
+
 	public void addSpy(Player p) {
 		spyPlayers.put(p, new Object());
 	}
@@ -300,8 +303,15 @@ public class ACHelper {
 		blockBlacklist.clear();
 		groups.clear();
 		undoQueue.clear();
-		pluginConfig = new ExtendedConfiguration("config.yml", null);
-		pluginConfig.load();
+		try {
+			pluginConfig.reload();
+		} catch (FileNotFoundException e) {
+			ACLogger.severe("Config Reload Problem :", e);
+		} catch (IOException e) {
+			ACLogger.severe("Config Reload Problem :", e);
+		} catch (InvalidConfigurationException e) {
+			ACLogger.severe("Config Reload Problem :", e);
+		}
 		bannedPlayers.clear();
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
@@ -350,14 +360,18 @@ public class ACHelper {
 				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
 		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().setLocaleFile(
-				pluginConfig.getString("locale", "en_US") + ".yml");
+				new File(coreInstance.getDataFolder(), "locales" + File.separator
+						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		CommandManager.getInstance().setCorePlugin(coreInstance);
 		HelpLoader.load(coreInstance.getDataFolder());
-		if (pluginConfig.getProperty("pluginStarted") != null) {
+		if (pluginConfig.get("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
-			pluginConfig.removeProperty("pluginStarted");
-			pluginConfig.save();
+			pluginConfig.remove("pluginStarted");
+			try {
+				pluginConfig.save();
+			} catch (IOException e) {
+			}
 		} else
 			pluginStarted = System.currentTimeMillis();
 
@@ -397,11 +411,10 @@ public class ACHelper {
 	private void convertSpawnWarp() {
 		File spawnFile = fManager.getFile("spawn", "spawnLocations.yml", false);
 		if (spawnFile.exists()) {
-			ExtendedConfiguration spawn = new ExtendedConfiguration(spawnFile);
-			spawn.load();
-			ExtendedNode spawnPoints = spawn.getNode("spawn");
+			ExtendedConfiguration spawn = ExtendedConfiguration.loadConfiguration(spawnFile);
+			ConfigurationSection spawnPoints = spawn.getConfigurationSection("spawn");
 			if (spawnPoints != null)
-				for (String key : spawnPoints.getKeys())
+				for (String key : spawnPoints.getKeys(false))
 					try {
 						ACWorld.getWorld(key).setSpawn(
 								fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
@@ -429,6 +442,7 @@ public class ACHelper {
 	 * @param pluginInstance
 	 *            the pluginInstance to set
 	 */
+	@SuppressWarnings("unchecked")
 	public void setCoreInstance(AdminCmd pluginInstance) {
 		this.coreInstance = pluginInstance;
 		fManager = FileManager.getInstance();
@@ -446,92 +460,97 @@ public class ACHelper {
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
-		pluginConfig = new ExtendedConfiguration("config.yml", null);
-		pluginConfig.load();
-		pluginConfig.addProperty("resetPowerWhenTpAnotherWorld", true);
-		pluginConfig.addProperty("noMessage", false);
-		pluginConfig.addProperty("locale", "en_US");
-		pluginConfig.addProperty("statutCheckInSec", 20);
-		pluginConfig.addProperty("invisibleRangeInBlock", 320);
-		pluginConfig.addProperty("autoAfk", true);
-		pluginConfig.addProperty("afkTimeInSecond", 60);
-		pluginConfig.addProperty("autoKickAfkPlayer", false);
-		pluginConfig.addProperty("afkKickInMinutes", 3);
-		pluginConfig.addProperty("glideWhenFallingInFlyMode", true);
-		pluginConfig.addProperty("maxHomeByUser", 0);
-		pluginConfig.addProperty("fakeQuitWhenInvisible", true);
-		pluginConfig.addProperty("forceOfficialBukkitPerm", false);
-		pluginConfig.addProperty("MessageOfTheDay", false);
-		pluginConfig.addProperty("ColoredSign", true);
-		pluginConfig.addProperty("DefaultFlyPower", 1.75F);
-		pluginConfig.addProperty("DefaultFireBallPower", 1.0F);
-		pluginConfig.addProperty("DefaultVulcanPower", 4.0F);
-		pluginConfig.addProperty("firstConnectionToSpawnPoint", false);
-		pluginConfig.addProperty("mutedPlayerCantPm", false);
-		pluginConfig.addProperty("maxRangeForTpAtSee", 400);
-		pluginConfig.addProperty("tpRequestTimeOutInMinutes", 5);
-		pluginConfig.addProperty("verboseLog", true);
-		pluginConfig.addProperty("tpRequestActivatedByDefault", false);
-		pluginConfig.addProperty("logPrivateMessages", false);
-		pluginConfig.addProperty("broadcastServerReload", true);
-		pluginConfig.addProperty("help.entryPerPage", 9);
-		pluginConfig.addProperty("help.shortenEntries", false);
-		pluginConfig.addProperty("help.useWordWrap", false);
-		pluginConfig.addProperty("help.wordWrapRight", false);
-		pluginConfig.addProperty("help.getHelpForAllPlugins", true);
-		pluginConfig.addProperty("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
-		pluginConfig.addProperty("DisplayNewsOnJoin", true);
-		pluginConfig.addProperty("DisplayRulesOnJoin", true);
-		pluginConfig.addProperty("DisplayRulesOnlyOnFirstJoin", false);
-		pluginConfig.addProperty("DateAndTime.Format", "E, dd/MM/yy '-' HH:mm:ss");
-		pluginConfig.addProperty("DateAndTime.GMToffset", "+00:00");
-		pluginConfig.addProperty("useImmunityLvl", false);
-		pluginConfig.addProperty("defaultImmunityLvl", 0);
-		pluginConfig.addProperty("maxItemAmount", 0);
-		pluginConfig.addProperty("useDisplayName", true);
-		pluginConfig.addProperty("debug", false);
-		pluginConfig.addProperty("globalRespawnSetting", "globalSpawn");
-		pluginConfig.addProperty("groupNames", Arrays.asList("default", "mod", "admin"));
-		pluginConfig.addProperty("InvisAndNoPickup", false);
+		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(coreInstance
+				.getDataFolder(), "config.yml"));
+		pluginConfig.add("resetPowerWhenTpAnotherWorld", true);
+		pluginConfig.add("noMessage", false);
+		pluginConfig.add("locale", "en_US");
+		pluginConfig.add("statutCheckInSec", 20);
+		pluginConfig.add("invisibleRangeInBlock", 320);
+		pluginConfig.add("autoAfk", true);
+		pluginConfig.add("afkTimeInSecond", 60);
+		pluginConfig.add("autoKickAfkPlayer", false);
+		pluginConfig.add("afkKickInMinutes", 3);
+		pluginConfig.add("glideWhenFallingInFlyMode", true);
+		pluginConfig.add("maxHomeByUser", 0);
+		pluginConfig.add("fakeQuitWhenInvisible", true);
+		pluginConfig.add("forceOfficialBukkitPerm", false);
+		pluginConfig.add("MessageOfTheDay", false);
+		pluginConfig.add("ColoredSign", true);
+		pluginConfig.add("DefaultFlyPower", 1.75F);
+		pluginConfig.add("DefaultFireBallPower", 1.0F);
+		pluginConfig.add("DefaultVulcanPower", 4.0F);
+		pluginConfig.add("firstConnectionToSpawnPoint", false);
+		pluginConfig.add("mutedPlayerCantPm", false);
+		pluginConfig.add("maxRangeForTpAtSee", 400);
+		pluginConfig.add("tpRequestTimeOutInMinutes", 5);
+		pluginConfig.add("verboseLog", true);
+		pluginConfig.add("tpRequestActivatedByDefault", false);
+		pluginConfig.add("logPrivateMessages", false);
+		pluginConfig.add("broadcastServerReload", true);
+		pluginConfig.add("help.entryPerPage", 9);
+		pluginConfig.add("help.shortenEntries", false);
+		pluginConfig.add("help.useWordWrap", false);
+		pluginConfig.add("help.wordWrapRight", false);
+		pluginConfig.add("help.getHelpForAllPlugins", true);
+		pluginConfig.add("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
+		pluginConfig.add("DisplayNewsOnJoin", true);
+		pluginConfig.add("DisplayRulesOnJoin", true);
+		pluginConfig.add("DisplayRulesOnlyOnFirstJoin", false);
+		pluginConfig.add("DateAndTime.Format", "E, dd/MM/yy '-' HH:mm:ss");
+		pluginConfig.add("DateAndTime.GMToffset", "+00:00");
+		pluginConfig.add("useImmunityLvl", false);
+		pluginConfig.add("defaultImmunityLvl", 0);
+		pluginConfig.add("maxItemAmount", 0);
+		pluginConfig.add("useDisplayName", true);
+		pluginConfig.add("debug", false);
+		pluginConfig.add("globalRespawnSetting", "globalSpawn");
+		pluginConfig.add("groupNames", Arrays.asList("default", "mod", "admin"));
+		pluginConfig.add("InvisAndNoPickup", false);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
-		if (pluginConfig.getProperty("disabledCommands") != null) {
-			disabled = pluginConfig.getStringList("disabledCommands", disabled);
-			pluginConfig.removeProperty("disabledCommands");
+		if (pluginConfig.get("disabledCommands") != null) {
+			disabled = pluginConfig.getList("disabledCommands", disabled);
+			pluginConfig.remove("disabledCommands");
 		}
-		if (pluginConfig.getProperty("prioritizedCommands") != null) {
-			priority = pluginConfig.getStringList("prioritizedCommands", priority);
-			pluginConfig.removeProperty("prioritizedCommands");
+		if (pluginConfig.get("prioritizedCommands") != null) {
+			priority = pluginConfig.getList("prioritizedCommands", priority);
+			pluginConfig.remove("prioritizedCommands");
 		}
-		if (pluginConfig.getProperty("glinding") != null) {
-			pluginConfig.addProperty("gliding.multiplicator",
-					getConfFloat("glinding.multiplicator"));
-			pluginConfig.addProperty("gliding.YvelocityCheckToGlide",
+		if (pluginConfig.get("glinding") != null) {
+			pluginConfig.add("gliding.multiplicator", getConfFloat("glinding.multiplicator"));
+			pluginConfig.add("gliding.YvelocityCheckToGlide",
 					getConfFloat("glinding.YvelocityCheckToGlide"));
-			pluginConfig.addProperty("gliding.newYvelocity", getConfFloat("glinding.newYvelocity"));
-			pluginConfig.removeProperty("glinding");
+			pluginConfig.add("gliding.newYvelocity", getConfFloat("glinding.newYvelocity"));
+			pluginConfig.remove("glinding");
 
 		} else {
-			pluginConfig.addProperty("gliding.multiplicator", 0.1F);
-			pluginConfig.addProperty("gliding.YvelocityCheckToGlide", -0.2F);
-			pluginConfig.addProperty("gliding.newYvelocity", -0.5F);
+			pluginConfig.add("gliding.multiplicator", 0.1F);
+			pluginConfig.add("gliding.YvelocityCheckToGlide", -0.2F);
+			pluginConfig.add("gliding.newYvelocity", -0.5F);
 		}
-		if (pluginConfig.getProperty("respawnAtSpawnPoint") != null)
-			pluginConfig.removeProperty("respawnAtSpawnPoint");
-		pluginConfig.save();
-		ExtendedConfiguration commands = new ExtendedConfiguration("commands.yml", null);
-		commands.load();
-		commands.addProperty("disabledCommands", disabled);
-		commands.addProperty("prioritizedCommands",
-				priority.isEmpty() ? Arrays.asList("reload", "/") : priority);
-		commands.addProperty("alias.god", Arrays.asList("gg", "gd"));
-		commands.save();
+		if (pluginConfig.get("respawnAtSpawnPoint") != null)
+			pluginConfig.remove("respawnAtSpawnPoint");
+		try {
+			pluginConfig.save();
+		} catch (IOException e) {
+		}
+		ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
+				coreInstance.getDataFolder(), "commands.yml"));
+		commands.add("disabledCommands", disabled);
+		commands.add("prioritizedCommands", priority.isEmpty() ? Arrays.asList("reload", "/")
+				: priority);
+		commands.add("alias.god", Arrays.asList("gg", "gd"));
+		try {
+			commands.save();
+		} catch (IOException e) {
+		}
 		init();
 	}
 
 	/**
 	 * Get boolean from config
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -541,7 +560,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -551,7 +570,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -561,7 +580,7 @@ public class ACHelper {
 
 	/**
 	 * Get String parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -571,7 +590,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -582,9 +601,11 @@ public class ACHelper {
 	 * Save elapsed time when reload
 	 */
 	public void saveElapsedTime() {
-		pluginConfig.load();
-		pluginConfig.setProperty("pluginStarted", pluginStarted);
-		pluginConfig.save();
+		pluginConfig.set("pluginStarted", pluginStarted);
+		try {
+			pluginConfig.save();
+		} catch (IOException e) {
+		}
 	}
 
 	/**
@@ -598,20 +619,24 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean addBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListedItems", null);
+			List<Integer> list = config.getList("BlackListedItems", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
 			list.add(m.getMaterial().getId());
-			config.setProperty("BlackListedItems", list);
-			config.save();
+			config.set("BlackListedItems", list);
+			try {
+				config.save();
+			} catch (IOException e) {
+			}
 			if (itemBlacklist == null)
 				itemBlacklist = new ArrayList<Integer>();
 			itemBlacklist.add(m.getMaterial().getId());
@@ -625,20 +650,24 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean addBlackListedBlock(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListedBlocks", null);
+			List<Integer> list = config.getList("BlackListedBlocks", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
 			list.add(m.getMaterial().getId());
-			config.setProperty("BlackListedBlocks", list);
-			config.save();
+			config.set("BlackListedBlocks", list);
+			try {
+				config.save();
+			} catch (IOException e) {
+			}
 			if (blockBlacklist == null)
 				blockBlacklist = new ArrayList<Integer>();
 			blockBlacklist.add(m.getMaterial().getId());
@@ -710,19 +739,23 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean removeBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListedItems", new ArrayList<Integer>());
+			List<Integer> list = config.getList("BlackListedItems", new ArrayList<Integer>());
 			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
 				list.remove((Integer) m.getMaterial().getId());
-				config.setProperty("BlackListedItems", list);
-				config.save();
+				config.set("BlackListedItems", list);
+				try {
+					config.save();
+				} catch (IOException e) {
+				}
 			}
 			if (itemBlacklist != null && !itemBlacklist.isEmpty()
 					&& itemBlacklist.contains(m.getMaterial().getId()))
@@ -737,19 +770,23 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean removeBlackListedBlock(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListedBlocks", new ArrayList<Integer>());
+			List<Integer> list = config.getList("BlackListedBlocks", new ArrayList<Integer>());
 			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
 				list.remove((Integer) m.getMaterial().getId());
-				config.setProperty("BlackListedBlocks", list);
-				config.save();
+				config.set("BlackListedBlocks", list);
+				try {
+					config.save();
+				} catch (IOException e) {
+				}
 			}
 			if (itemBlacklist != null && !itemBlacklist.isEmpty()
 					&& itemBlacklist.contains(m.getMaterial().getId()))
@@ -764,36 +801,37 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 *
+	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private List<Integer> getBlackListedItems() {
-		return fManager.getYml("blacklist")
-				.getIntList("BlackListedItems", new ArrayList<Integer>());
+		return fManager.getYml("blacklist").getList("BlackListedItems", new ArrayList<Integer>());
 	}
 
 	/**
 	 * Get the blacklisted blocks
-	 *
+	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private List<Integer> getBlackListedBlocks() {
-		return fManager.getYml("blacklist").getIntList("BlackListedBlocks",
-				new ArrayList<Integer>());
+		return fManager.getYml("blacklist").getList("BlackListedBlocks", new ArrayList<Integer>());
 	}
 
 	/**
 	 * Get the Permission group names
-	 *
+	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private List<String> getGroupNames() {
-		return fManager.getYml("config").getStringList("groupNames", new ArrayList<String>());
+		return fManager.getYml("config").getList("groupNames", new ArrayList<String>());
 	}
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -814,7 +852,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 *
+	 * 
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -826,7 +864,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 *
+	 * 
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -837,7 +875,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 *
+	 * 
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {

@@ -16,10 +16,10 @@
  ************************************************************************/
 package be.Balor.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -88,8 +88,8 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getHomeList()
 	 */
 	@Override
-	public List<String> getHomeList() {
-		return new ArrayList<String>();
+	public Set<String> getHomeList() {
+		return new HashSet<String>();
 	}
 
 	/*

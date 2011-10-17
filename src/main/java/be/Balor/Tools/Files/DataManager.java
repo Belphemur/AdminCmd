@@ -16,8 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Files;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Location;
 
@@ -57,7 +57,7 @@ public interface DataManager {
 	 * @param table
 	 * @return
 	 */
-	public List<String> getKeys(String info, String user, String table);
+	public Set<String> getKeys(String info, String user, String table);
 
 	/**
 	 * Remove the given location
