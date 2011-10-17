@@ -118,6 +118,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 */
 	public static void registerClass(Class<? extends Object> c) {
 		ymlConstructor.addClassInfo(c);
+		exNaturalClass.add(c);
 	}
 
 	/**
@@ -352,18 +353,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.bukkit.configuration.MemorySection#isNaturallyStorable(java.lang.
-	 * Object)
-	 */
-	@Override
-	protected boolean isNaturallyStorable(Object input) {
-		return super.isNaturallyStorable(input)
-				|| ymlConstructor.isClassRegistered(input.getClass());
-	}
 
 	@SuppressWarnings("unchecked")
 	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
