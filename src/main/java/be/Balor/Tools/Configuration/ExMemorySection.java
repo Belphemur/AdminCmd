@@ -126,4 +126,14 @@ public class ExMemorySection extends MemorySection {
 			return section.createSection(key);
 		}
 	}
+	@Override
+    public String getString(String path, String def) {
+        if (path == null) {
+            throw new IllegalArgumentException("Path cannot be null");
+        }
+        Object val = get(path, def);
+        if(val == null)
+        	return def;
+        return (val instanceof String) ? (String)val : val.toString();
+    }
 }
