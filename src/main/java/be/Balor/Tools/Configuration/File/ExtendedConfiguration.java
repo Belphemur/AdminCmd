@@ -72,7 +72,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	private static Representer yamlRepresenter = new ExtendedRepresenter();
 	protected final static MyYamlConstructor ymlConstructor = new MyYamlConstructor();
 	protected final static Yaml yaml = new Yaml(ymlConstructor, yamlRepresenter, yamlOptions);
-	
 
 	/**
 	 * Creates a new {@link ExtendedConfiguration}, loading from the given file.
@@ -353,6 +352,19 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.bukkit.configuration.MemorySection#isNaturallyStorable(java.lang.
+	 * Object)
+	 */
+	@Override
+	protected boolean isNaturallyStorable(Object input) {
+		return super.isNaturallyStorable(input)
+				|| ymlConstructor.isClassRegistered(input.getClass());
+	}
+
 	@SuppressWarnings("unchecked")
 	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
 			throws InvalidConfigurationException {
@@ -527,5 +539,15 @@ class MyYamlConstructor extends Constructor {
 			return super.getClassForName(name);
 		else
 			return cl;
+	}
+
+	/**
+	 * Check if the class is registered
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public boolean isClassRegistered(Class<? extends Object> c) {
+		return classMap.containsKey(c.getName());
 	}
 }
