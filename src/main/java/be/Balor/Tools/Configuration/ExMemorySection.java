@@ -26,8 +26,9 @@ import org.bukkit.configuration.MemorySection;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExMemorySection extends MemorySection {
+public class ExMemorySection extends MemorySection implements ExConfigurationSection {
 	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
+
 	/**
 	 * 
 	 */
@@ -43,29 +44,14 @@ public class ExMemorySection extends MemorySection {
 		super(exMemorySection, key);
 	}
 
-	/**
-	 * Create a {@link ConfigurationSection} if it not existing else return the
-	 * existing one.
-	 * 
-	 * @param path
-	 *            Path to create/get the section at.
-	 * @return the ConfigurationSection
-	 */
-	public ConfigurationSection addSection(String path) {
-		ConfigurationSection result = getConfigurationSection(path);
+	public ExConfigurationSection addSection(String path) {
+		ExConfigurationSection result = getConfigurationSection(path);
 		if (result == null) {
 			result = createSection(path);
 		}
 		return result;
 	}
 
-	/**
-	 * Create an entry in the {@link ConfigurationSection} if it not existing
-	 * else return the existing one.
-	 * 
-	 * @param path
-	 *            Path to create/get the entry at.
-	 */
 	public void add(String path, Object value) {
 		if (isSet(path))
 			return;
@@ -81,13 +67,29 @@ public class ExMemorySection extends MemorySection {
 	public void remove(String path) {
 		set(path, null);
 	}
-	/* (non-Javadoc)
-	 * @see org.bukkit.configuration.MemorySection#isNaturallyStorable(java.lang.Object)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.bukkit.configuration.MemorySection#isNaturallyStorable(java.lang.
+	 * Object)
 	 */
 	@Override
 	protected boolean isNaturallyStorable(Object input) {
 		return super.isNaturallyStorable(input) || exNaturalClass.contains(input.getClass());
 	}
+
+	@Override
+	public ExConfigurationSection getConfigurationSection(String path) {
+		if (path == null) {
+			throw new IllegalArgumentException("Path cannot be null");
+		}
+
+		Object val = get(path, getDefault(path));
+		return (val instanceof ExConfigurationSection) ? (ExConfigurationSection) val : null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -95,7 +97,7 @@ public class ExMemorySection extends MemorySection {
 	 * org.bukkit.configuration.MemorySection#createSection(java.lang.String)
 	 */
 	@Override
-	public ConfigurationSection createSection(String path) {
+	public ExConfigurationSection createSection(String path) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		} else if (path.length() == 0) {
@@ -104,10 +106,10 @@ public class ExMemorySection extends MemorySection {
 
 		String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
 				.pathSeparator())));
-		ConfigurationSection section = this;
+		ExConfigurationSection section = this;
 
 		for (int i = 0; i < split.length - 1; i++) {
-			ConfigurationSection last = section;
+			ExConfigurationSection last = section;
 
 			section = getConfigurationSection(split[i]);
 
@@ -119,21 +121,22 @@ public class ExMemorySection extends MemorySection {
 		String key = split[split.length - 1];
 
 		if (section == this) {
-			ConfigurationSection result = new ExMemorySection(this, key);
+			ExConfigurationSection result = new ExMemorySection(this, key);
 			map.put(key, result);
 			return result;
 		} else {
 			return section.createSection(key);
 		}
 	}
+
 	@Override
-    public String getString(String path, String def) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-        Object val = get(path, def);
-        if(val == null)
-        	return def;
-        return (val instanceof String) ? (String)val : val.toString();
-    }
+	public String getString(String path, String def) {
+		if (path == null) {
+			throw new IllegalArgumentException("Path cannot be null");
+		}
+		Object val = get(path, def);
+		if (val == null)
+			return def;
+		return (val instanceof String) ? (String) val : val.toString();
+	}
 }
