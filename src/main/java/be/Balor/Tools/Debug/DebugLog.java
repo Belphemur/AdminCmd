@@ -23,6 +23,8 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.common.io.Files;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -37,6 +39,9 @@ public class DebugLog {
 			File file = new File(path + File.separator + "debug.log");
 			if (file.exists())
 				file.delete();
+			else
+				Files.createParentDirs(file);
+			
 			fh = new FileHandler(file.getPath(), true);
 			INSTANCE.addHandler(fh);
 			INSTANCE.setUseParentHandlers(false);
