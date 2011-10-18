@@ -87,4 +87,19 @@ public class TpToWarp extends CoreCommand {
 		return args != null && args.length >= 1;
 	}
 
+	private class DelayTeleport implements Runnable {
+
+		protected boolean checkLocation = false;
+		protected Location locBefore, locNow, teleportToLoc;
+
+		public DelayTeleport() {
+
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+
+		}
+	}
 }
