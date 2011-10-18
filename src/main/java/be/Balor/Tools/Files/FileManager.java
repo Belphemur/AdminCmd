@@ -24,11 +24,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -37,14 +40,13 @@ import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Configuration.ExtendedConfiguration;
-import be.Balor.Tools.Configuration.ExtendedNode;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class FileManager implements DataManager {
 	protected File pathFile;
@@ -53,6 +55,10 @@ public class FileManager implements DataManager {
 	private String lastFilename = "";
 	private File lastFile = null;
 	private ExtendedConfiguration lastLoadedConf = null;
+	static {
+		ExtendedConfiguration.registerClass(BannedPlayer.class);
+		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
+	}
 
 	/**
 	 * @return the instance
@@ -85,7 +91,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the ExtendedConfiguration object
-	 *
+	 * 
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
@@ -94,11 +100,8 @@ public class FileManager implements DataManager {
 		if (lastLoadedConf != null && lastDirectory.equals(directory == null ? "" : directory)
 				&& lastFilename.equals(filename))
 			return lastLoadedConf;
-		ExtendedConfiguration config = new ExtendedConfiguration(getFile(directory, filename
-				+ ".yml"));
-		config.registerClass(BannedPlayer.class);
-		config.registerClass(TempBannedPlayer.class);
-		config.load();
+		ExtendedConfiguration config = ExtendedConfiguration.loadConfiguration(getFile(directory,
+				filename + ".yml"));
 		lastLoadedConf = config;
 		return config;
 	}
@@ -109,7 +112,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the File object
-	 *
+	 * 
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
@@ -148,16 +151,17 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Write the alias in the yml file
-	 *
+	 * 
 	 * @param alias
 	 * @param mc
 	 */
+	@SuppressWarnings("unchecked")
 	public void addAlias(String alias, MaterialContainer mc) {
 		ExtendedConfiguration conf = getYml("Alias");
-		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
+
+		ArrayList<String> aliasList = (ArrayList<String>) conf.getList("alias",
 				new ArrayList<String>());
-		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
-				new ArrayList<String>());
+		ArrayList<String> idList = (ArrayList<String>) conf.getList("ids", new ArrayList<String>());
 		if (aliasList.contains(alias)) {
 			int index = aliasList.indexOf(alias);
 			aliasList.remove(index);
@@ -165,34 +169,40 @@ public class FileManager implements DataManager {
 		}
 		aliasList.add(alias);
 		idList.add(mc.toString());
-		conf.setProperty("alias", aliasList);
-		conf.setProperty("ids", idList);
-		conf.save();
+		conf.set("alias", aliasList);
+		conf.set("ids", idList);
+		try {
+			conf.save();
+		} catch (IOException e) {
+		}
 	}
 
 	/**
 	 * Remove the alias from the yml fileF
-	 *
+	 * 
 	 * @param alias
 	 */
+	@SuppressWarnings("unchecked")
 	public void removeAlias(String alias) {
 		ExtendedConfiguration conf = getYml("Alias");
-		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
+		ArrayList<String> aliasList = (ArrayList<String>) conf.getList("alias",
 				new ArrayList<String>());
-		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
-				new ArrayList<String>());
+		ArrayList<String> idList = (ArrayList<String>) conf.getList("ids", new ArrayList<String>());
 		int index = aliasList.indexOf(alias);
 		aliasList.remove(index);
 		idList.remove(index);
-		conf.setProperty("alias", aliasList);
-		conf.setProperty("ids", idList);
-		conf.save();
+		conf.set("alias", aliasList);
+		conf.set("ids", idList);
+		try {
+			conf.save();
+		} catch (IOException e) {
+		}
 	}
 
 	/**
 	 * Get a file in the jar, copy it in the choose directory inside the plugin
 	 * folder, open it and return it
-	 *
+	 * 
 	 * @param filename
 	 * @return
 	 */
@@ -240,12 +250,13 @@ public class FileManager implements DataManager {
 		return file;
 	}
 
+	@SuppressWarnings("unchecked")
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		ExtendedConfiguration conf = getYml("Alias");
-		ArrayList<String> aliasList = (ArrayList<String>) conf.getStringList("alias",
+		ArrayList<String> aliasList = (ArrayList<String>) conf.getList("alias",
 				new ArrayList<String>());
-		ArrayList<String> idList = (ArrayList<String>) conf.getStringList("ids",
+		ArrayList<String> idList = (ArrayList<String>) conf.getList("ids",
 				new ArrayList<String>());
 		int i = 0;
 		try {
@@ -274,7 +285,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Create a flat file with the location informations
-	 *
+	 * 
 	 * @param loc
 	 * @param filename
 	 * @param directory
@@ -282,18 +293,21 @@ public class FileManager implements DataManager {
 	@Override
 	public void writeLocation(Location loc, String name, String filename, String directory) {
 		ExtendedConfiguration conf = getYml(filename, directory);
-		conf.setProperty(name + ".world", loc.getWorld().getName());
-		conf.setProperty(name + ".x", loc.getX());
-		conf.setProperty(name + ".y", loc.getY());
-		conf.setProperty(name + ".z", loc.getZ());
-		conf.setProperty(name + ".yaw", loc.getYaw());
-		conf.setProperty(name + ".pitch", loc.getPitch());
-		conf.save();
+		conf.set(name + ".world", loc.getWorld().getName());
+		conf.set(name + ".x", loc.getX());
+		conf.set(name + ".y", loc.getY());
+		conf.set(name + ".z", loc.getZ());
+		conf.set(name + ".yaw", loc.getYaw());
+		conf.set(name + ".pitch", loc.getPitch());
+		try {
+			conf.save();
+		} catch (IOException e) {
+		}
 	}
 
 	/**
 	 * Return the location after parsing the flat file
-	 *
+	 * 
 	 * @param property
 	 * @param filename
 	 * @param directory
@@ -303,7 +317,7 @@ public class FileManager implements DataManager {
 	public Location getLocation(String property, String filename, String directory)
 			throws WorldNotLoaded {
 		ExtendedConfiguration conf = getYml(filename, directory);
-		if (conf.getProperty(property + ".world") == null) {
+		if (conf.get(property + ".world") == null) {
 			Location loc = parseLocation(property, conf);
 			if (loc != null)
 				writeLocation(loc, property, filename, directory);
@@ -323,7 +337,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Remove the given location from the file
-	 *
+	 * 
 	 * @param property
 	 * @param filename
 	 * @param directory
@@ -331,29 +345,32 @@ public class FileManager implements DataManager {
 	@Override
 	public void removeKey(String property, String filename, String directory) {
 		ExtendedConfiguration conf = getYml(filename, directory);
-		conf.removeProperty(property);
-		conf.save();
+		conf.set(property, null);
+		try {
+			conf.save();
+		} catch (IOException e) {
+		}
 	}
 
 	/**
 	 * Return a string Set containing all locations names
-	 *
+	 * 
 	 * @param filename
 	 * @param directory
 	 * @return
 	 */
 	@Override
-	public List<String> getKeys(String info, String filename, String directory) {
-		List<String> keys = getYml(filename, directory).getKeys(info);
+	public Set<String> getKeys(String info, String filename, String directory) {
+		Set<String> keys = getYml(filename, directory).getConfigurationSection(info).getKeys(false);
 		if (keys == null)
-			return new ArrayList<String>();
+			return new HashSet<String>();
 		else
 			return keys;
 	}
 
 	/**
 	 * Parse String to create a location
-	 *
+	 * 
 	 * @param property
 	 * @param conf
 	 * @return
@@ -386,7 +403,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load the map
-	 *
+	 * 
 	 * @param type
 	 * @param directory
 	 * @param filename
@@ -395,10 +412,10 @@ public class FileManager implements DataManager {
 	public Map<String, Object> loadMap(Type type, String directory, String filename) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		ExtendedConfiguration conf = getYml(filename, directory);
-		if (conf.getKeys(type.toString()) != null) {
-			ExtendedNode node = conf.getNode(type.toString());
-			for (String key : node.getKeys())
-				result.put(key, node.getProperty(key));
+		ConfigurationSection confSection = conf.getConfigurationSection(type.toString());
+		if (confSection != null) {
+			for (String key : confSection.getKeys(false))
+				result.put(key, confSection.get(key));
 		}
 		return result;
 	}
@@ -407,10 +424,10 @@ public class FileManager implements DataManager {
 	public Map<String, BannedPlayer> loadBan() {
 		Map<String, BannedPlayer> result = new HashMap<String, BannedPlayer>();
 		ExtendedConfiguration conf = getYml("banned");
-		if (conf.getProperty("bans") != null) {
-			ExtendedNode node = conf.getNode("bans");
-			for (String key : node.getKeys())
-				result.put(key, (BannedPlayer) node.getProperty(key));
+		if (conf.get("bans") != null) {
+			ConfigurationSection node = conf.getConfigurationSection("bans");
+			for (String key : node.getKeys(false))
+				result.put(key, (BannedPlayer) node.get(key));
 
 		}
 		return result;
@@ -418,7 +435,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load all the kits
-	 *
+	 * 
 	 * @return
 	 */
 	public Map<String, KitInstance> loadKits() {
@@ -427,19 +444,19 @@ public class FileManager implements DataManager {
 		ExtendedConfiguration kits = getYml("kits");
 		boolean convert = false;
 
-		ExtendedNode kitNodes = kits.getNode("kits");
-		for (String kitName : kitNodes.getKeys()) {
+		ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
+		for (String kitName : kitNodes.getKeys(false)) {
 			int delay = 0;
-			ExtendedNode kitNode = kitNodes.getNode(kitName);
-			ExtendedNode kitItems = null;
+			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
+			ConfigurationSection kitItems = null;
 			try {
-				kitItems = kitNode.getNode("items");
+				kitItems = kitNode.getConfigurationSection("items");
 			} catch (NullPointerException e) {
 				continue;
 			}
 
 			if (kitItems != null) {
-				for (String item : kitItems.getKeys()) {
+				for (String item : kitItems.getKeys(false)) {
 					MaterialContainer m = Utils.checkMaterial(item);
 					m.setAmount(kitItems.getInt(item, 1));
 					if (!m.isNull())
@@ -447,8 +464,9 @@ public class FileManager implements DataManager {
 				}
 				delay = kitNode.getInt("delay", 0);
 			} else {
-				kitItems = kitNode.createNode("items");
-				for (String item : kitNode.getKeys()) {
+				kitNode.addDefault("items", new HashMap<String, Object>());
+				kitItems = kitNode.getConfigurationSection("items");
+				for (String item : kitNode.getKeys(false)) {
 					if (item.equals("items"))
 						continue;
 					MaterialContainer m = Utils.checkMaterial(item);
@@ -456,11 +474,11 @@ public class FileManager implements DataManager {
 					m.setAmount(amount);
 					if (!m.isNull()) {
 						items.add(m);
-						kitItems.setProperty(item, amount);
-						kitNode.removeProperty(item);
+						kitItems.set(item, amount);
+						kitNode.set(item, null);
 					}
 				}
-				kitNode.setProperty("delay", 0);
+				kitNode.set("delay", 0);
 				convert = true;
 			}
 
@@ -470,13 +488,16 @@ public class FileManager implements DataManager {
 		}
 
 		if (convert)
-			kits.save();
+			try {
+				kits.save();
+			} catch (IOException e) {
+			}
 		return result;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Tools.Files.DataManager#addBannedPlayer(be.Balor.Player.BannedPlayer
 	 * )
@@ -484,22 +505,28 @@ public class FileManager implements DataManager {
 	@Override
 	public void addBannedPlayer(BannedPlayer player) {
 		ExtendedConfiguration banFile = getYml("banned");
-		ExtendedNode bans = banFile.createNode("bans");
-		bans.setProperty(player.getPlayer(), player);
-		banFile.save();
+		ConfigurationSection bans = banFile.addSection("bans");
+		bans.set(player.getPlayer(), player);
+		try {
+			banFile.save();
+		} catch (IOException e) {
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
 	 */
 	@Override
 	public void unBanPlayer(String player) {
 		ExtendedConfiguration banFile = getYml("banned");
-		ExtendedNode bans = banFile.createNode("bans");
-		bans.removeProperty(player);
-		banFile.save();
+		ConfigurationSection bans = banFile.addSection("bans");
+		bans.set(player, null);
+		try {
+			banFile.save();
+		} catch (IOException e) {
+		}
 
 	}
 

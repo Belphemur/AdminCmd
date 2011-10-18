@@ -32,8 +32,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.ConfigurationNode;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Commands.CoreCommand;
@@ -42,15 +42,15 @@ import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -147,15 +147,16 @@ public class CommandManager implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin to set
 	 */
+	@SuppressWarnings("unchecked")
 	public void setCorePlugin(AdminCmd plugin) {
 		this.corePlugin = plugin;
 		ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
-		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
-		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
-		ConfigurationNode alias = cmds.getNode("alias");
-		for (String cmd : alias.getKeys())
+		disabledCommands = cmds.getList("disabledCommands", new LinkedList<String>());
+		prioritizedCommands = cmds.getList("prioritizedCommands", new LinkedList<String>());
+		ConfigurationSection alias = cmds.getConfigurationSection("alias");
+		for (String cmd : alias.getKeys(false))
 			aliasCommands.put(cmd,
-					new ArrayList<String>(alias.getStringList(cmd, new ArrayList<String>())));
+					new ArrayList<String>(alias.getList(cmd, new ArrayList<String>())));
 		startThreads();
 	}
 

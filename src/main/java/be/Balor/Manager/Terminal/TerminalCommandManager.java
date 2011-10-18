@@ -26,7 +26,7 @@ import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionLinker;
 import be.Balor.Manager.Terminal.Commands.UnixTerminalCommand;
 import be.Balor.Manager.Terminal.Commands.WindowsTerminalCommand;
-import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
@@ -61,11 +61,10 @@ public class TerminalCommandManager {
 		this.perm = plugin.getPermissionLinker();
 		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
-		ExtendedConfiguration conf = new ExtendedConfiguration(scripts);
-		conf.load();
+		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
-			for (String cmdName : conf.getKeys()) {
+			for (String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addPermChild(
@@ -76,7 +75,7 @@ public class TerminalCommandManager {
 
 		else
 
-			for (String cmdName : conf.getKeys()) {
+			for (String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addPermChild(
@@ -96,12 +95,11 @@ public class TerminalCommandManager {
 	public void reloadScripts() {
 		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 		File workingDir = scripts.getParentFile();
-		ExtendedConfiguration conf = new ExtendedConfiguration(scripts);
-		conf.load();
+		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 		commands.clear();
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
-			for (String cmdName : conf.getKeys()) {
+			for (String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addOnTheFly(
@@ -112,7 +110,7 @@ public class TerminalCommandManager {
 
 		else
 
-			for (String cmdName : conf.getKeys()) {
+			for (String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addOnTheFly(
@@ -135,9 +133,8 @@ public class TerminalCommandManager {
 		if (cmd == null || reload) {
 			File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
 			File workingDir = scripts.getParentFile();
-			ExtendedConfiguration conf = new ExtendedConfiguration(scripts);
-			conf.load();
-			if (conf.getProperty(cmdName) == null)
+			ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+			if (conf.get(cmdName) == null)
 				throw new CommandNotFound(cmdName + " is not registered");
 			if (System.getProperty("os.name").contains("Windows")) {
 				commands.put(

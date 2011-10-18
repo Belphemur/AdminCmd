@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Home;
 
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -58,7 +58,7 @@ public class SetHome extends CoreCommand {
 			if (home == null)
 				return;
 			ACPlayer player = ACPlayer.getPlayer(home.player);
-			List<String> tmp = player.getHomeList();
+			Set<String> tmp = player.getHomeList();
 			Location loc = p.getLocation();
 			if (!tmp.contains(home.home) && !PermissionManager.hasPerm(p, "admincmd.admin.home", false)
 					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {

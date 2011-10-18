@@ -16,14 +16,20 @@
  ************************************************************************/
 package be.Balor.Manager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
+
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -56,16 +62,20 @@ public class LocaleManager {
 	 * 
 	 * @param fileName
 	 */
-	public void setLocaleFile(String fileName) {
-		localeFile = new ExtendedConfiguration(fileName, "locales");
-		localeFile.load();
+	public void setLocaleFile(File file) {
+		localeFile = ExtendedConfiguration.loadConfiguration(file);
 	}
 
 	/**
 	 * Save all the change made to the locale.
 	 */
 	public void save() {
-		localeFile.save();
+		try {
+			localeFile.save();
+		} catch (Exception e) {
+			ACLogger.severe("Problem while saving locale file", e);
+		}
+
 	}
 
 	/**
@@ -75,11 +85,14 @@ public class LocaleManager {
 	 * @param value
 	 */
 	public void addLocale(String key, String value) {
-		localeFile.addProperty(key, value);
+		addLocale(key, value, false);
 	}
 
 	public void addLocale(String key, String value, boolean override) {
-		localeFile.addProperty(key, value, override);
+		if (override)
+			localeFile.set(key, value);
+		else
+			localeFile.add(key, value);
 	}
 
 	/**
@@ -163,14 +176,22 @@ public class LocaleManager {
 	 * 
 	 * @return
 	 */
-	public List<String> getKeys() {
-		return localeFile.getKeys();
+	public Set<String> getKeys() {
+		return localeFile.getKeys(false);
 	}
 
 	/**
 	 * Reload the locale file
 	 */
 	public void reload() {
-		localeFile.load();
+		try {
+			localeFile.reload();
+		} catch (FileNotFoundException e) {
+			ACLogger.severe("Locale Reload Problem :", e);
+		} catch (IOException e) {
+			ACLogger.severe("Locale Reload Problem :", e);
+		} catch (InvalidConfigurationException e) {
+			ACLogger.severe("Locale Reload Problem :", e);
+		}
 	}
 }

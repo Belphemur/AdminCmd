@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Home;
 
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -62,7 +62,7 @@ public class ListHomes extends CoreCommand {
 					return;
 				player = args.getString(0);
 			}			
-			List<String> homes = ACPlayer.getPlayer(player).getHomeList();
+			Set<String> homes = ACPlayer.getPlayer(player).getHomeList();
 			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE + homes.size());
 			for (String name : homes) {
 				msg += name + ", ";

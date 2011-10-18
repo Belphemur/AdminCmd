@@ -18,6 +18,7 @@ package be.Balor.Player;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -143,7 +144,7 @@ public abstract class ACPlayer {
 	 * 
 	 * @return list containing homes of the user
 	 */
-	public abstract List<String> getHomeList();
+	public abstract Set<String> getHomeList();
 
 	/**
 	 * Set player information
