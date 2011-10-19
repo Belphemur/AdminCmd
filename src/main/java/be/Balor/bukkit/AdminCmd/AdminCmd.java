@@ -12,7 +12,6 @@ import org.bukkit.plugin.PluginManager;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
-import be.Balor.Listeners.ACPlayerListenerCompatibility;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
@@ -40,7 +39,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -55,6 +54,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
+	@Override
 	protected void registerPermParents() {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
@@ -88,6 +88,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	}
 
+	@Override
 	public void registerCmds() {
 
 		CommandManager.getInstance().registerCommand(Day.class);
@@ -183,6 +184,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 	}
 
+	@Override
 	protected void setDefaultLocale() {
 		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: " + ChatColor.WHITE
 				+ "%player");
@@ -481,6 +483,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		LocaleManager.getInstance().save();
 	}
 
+	@Override
 	public void onEnable() {
 		ACPluginManager.setServer(getServer());
 		DebugLog.setFile(getDataFolder().getPath());
@@ -504,14 +507,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		// Compatibility with older then #1240
-		try {
-			pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
-			pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
-		} catch (NoSuchFieldError e) {
-			pm.registerEvent(Event.Type.PLAYER_TELEPORT, new ACPlayerListenerCompatibility(),
-					Priority.Normal, this);
-		}
+		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
 
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
@@ -541,6 +538,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
 	}
 
+	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
