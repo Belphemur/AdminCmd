@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import com.google.common.io.Files;
 
@@ -44,19 +45,29 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class FilePlayer extends ACPlayer {
 
-	private final ExtendedConfiguration datas;
-	private final ConfigurationSection informations;
-	private final ConfigurationSection homes;
-	private final ConfigurationSection powers;
-	private final ConfigurationSection kitsUse;
+	private ExtendedConfiguration datas;
+	private ConfigurationSection informations;
+	private ConfigurationSection homes;
+	private ConfigurationSection powers;
+	private ConfigurationSection kitsUse;
 	private int saveCount = 0;
-	private int SAVE_BEFORE_WRITE = 5;
+	private final static int SAVE_BEFORE_WRITE = 5;
 
 	/**
  * 
  */
 	public FilePlayer(String directory, String name) {
 		super(name);
+		initFile(directory, name);
+
+	}
+	public FilePlayer(String directory, Player player) {
+		super(player);
+		initFile(directory, name);
+
+	}
+
+	private void initFile(String directory, String name) {
 		File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
@@ -315,7 +326,7 @@ public class FilePlayer extends ACPlayer {
 		try {
 			datas.save();
 		} catch (IOException e) {
-			ACLogger.severe("Problem while saving Player file of "+getName(), e);
+			ACLogger.severe("Problem while saving Player file of " + getName(), e);
 		}
 	}
 

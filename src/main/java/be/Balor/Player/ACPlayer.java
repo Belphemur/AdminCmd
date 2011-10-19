@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
+import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -33,11 +34,12 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public abstract class ACPlayer {
-	private final String name;
+	protected final String name;
 	private final int hashCode;
 	protected boolean isOnline = false;
 	protected ACCommandContainer lastCmd = null;
 	protected Player handler = null;
+	protected TpRequest tpRequest = null;
 
 	/**
 	 *
@@ -49,6 +51,15 @@ public abstract class ACPlayer {
 		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
 		handler = ACPluginManager.getServer().getPlayer(this.name);
+	}
+
+	protected ACPlayer(Player p) {
+		this.name = p.getName();
+		final int prime = 41;
+		int result = 7;
+		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+		hashCode = result;
+		handler = p;
 	}
 
 	/**
@@ -70,7 +81,7 @@ public abstract class ACPlayer {
 	 * @return
 	 */
 	public static ACPlayer getPlayer(Player player) {
-		return PlayerManager.getInstance().demandACPlayer(player.getName());
+		return PlayerManager.getInstance().demandACPlayer(player);
 	}
 
 	/**
@@ -325,8 +336,6 @@ public abstract class ACPlayer {
 	 */
 	void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
-		if (!this.isOnline)
-			handler = null;
 	}
 
 	/**
@@ -347,6 +356,25 @@ public abstract class ACPlayer {
 		if (this.lastCmd == null)
 			throw new NullPointerException();
 		this.lastCmd.execute();
+	}
+
+	/**
+	 * @param tpRequest
+	 *            the tpRequest to set
+	 */
+	public void setTpRequest(TpRequest tpRequest) {
+		this.tpRequest = tpRequest;
+	}
+
+	/**
+	 * @return the tpRequest
+	 */
+	public TpRequest getTpRequest() {
+		return tpRequest;
+	}
+
+	public void removeTpRequest() {
+		tpRequest = null;
 	}
 
 	/*

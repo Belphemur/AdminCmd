@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.entity.Player;
+
 import be.Balor.Tools.Files.YmlFilter;
 
 /**
@@ -51,6 +53,14 @@ public class ACPlayerFactory {
 			return new EmptyPlayer(playername);
 		else if (directory != null)
 			return new FilePlayer(directory, playername);
+		else
+			return null;
+	}
+	ACPlayer createPlayer(Player player) {
+		if (!existingPlayers.contains(player.getName()))
+			return new EmptyPlayer(player);
+		else if (directory != null)
+			return new FilePlayer(directory, player);
 		else
 			return null;
 	}
