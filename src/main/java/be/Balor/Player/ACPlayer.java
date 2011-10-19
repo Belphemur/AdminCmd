@@ -373,6 +373,10 @@ public abstract class ACPlayer {
 		return tpRequest;
 	}
 
+	public void removeTpRequest() {
+		tpRequest = null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -58,7 +58,7 @@ public class TpToggle extends CoreCommand {
 				TpRequest request = acp.getTpRequest();
 				if (request != null) {
 					request.teleport(player);
-					acp.setPower(Type.TP_REQUEST);
+					acp.removeTpRequest();
 				} else
 					Utils.sI18n(sender, "noTpRequest");
 			} else {
