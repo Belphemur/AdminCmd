@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public abstract class ACPlayer {
-	private final String name;
+	protected final String name;
 	private final int hashCode;
 	protected boolean isOnline = false;
 	protected ACCommandContainer lastCmd = null;
@@ -49,6 +49,15 @@ public abstract class ACPlayer {
 		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
 		handler = ACPluginManager.getServer().getPlayer(this.name);
+	}
+
+	protected ACPlayer(Player p) {
+		this.name = p.getName();
+		final int prime = 41;
+		int result = 7;
+		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+		hashCode = result;
+		handler = p;
 	}
 
 	/**
@@ -70,7 +79,7 @@ public abstract class ACPlayer {
 	 * @return
 	 */
 	public static ACPlayer getPlayer(Player player) {
-		return PlayerManager.getInstance().demandACPlayer(player.getName());
+		return PlayerManager.getInstance().demandACPlayer(player);
 	}
 
 	/**
@@ -325,8 +334,6 @@ public abstract class ACPlayer {
 	 */
 	void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
-		if (!this.isOnline)
-			handler = null;
 	}
 
 	/**
