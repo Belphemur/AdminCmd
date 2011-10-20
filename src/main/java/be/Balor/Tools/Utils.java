@@ -455,9 +455,9 @@ public class Utils {
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pTo.getName());
 				if (type.toString().equalsIgnoreCase("to"))
-					replace2.put("tp_type", "#tpTO#");
+					replace2.put("tp_type", Utils.I18n("tpTO"));
 				else if (type.toString().equalsIgnoreCase("players")) {
-					replace2.put("tp_type", "#tpPLAYERSTO#");
+					replace2.put("tp_type", Utils.I18n("tpPLAYERSTO"));
 					replace2.put("target", pTo.getName());
 				} else
 					replace2.put("tp_type", type.toString());
@@ -470,9 +470,9 @@ public class Utils {
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pFrom.getName());
 				if (type.toString().equalsIgnoreCase("here"))
-					replace2.put("tp_type", "#tpHERE#");
+					replace2.put("tp_type", Utils.I18n("tpHERE"));
 				else if (type.toString().equalsIgnoreCase("players")) {
-					replace2.put("tp_type", "#tpPLAYERSFROM#");
+					replace2.put("tp_type", Utils.I18n("tpPLAYERSFROM"));
 					replace2.put("target", pFrom.getName());
 				} else
 					replace2.put("tp_type", type.toString());
