@@ -201,4 +201,26 @@ public class PlayerManager {
 		return result;
 	}
 
+	ACPlayer demandACPlayer(Player player) {
+		if (player == null)
+			return getPlayer("serverConsole");
+		String playerName = player.getName();
+		ACPlayer result = getPlayer(playerName);
+		if (result == null) {
+			result = playerFactory.createPlayer(player);
+			addPlayer(result);
+			result = getPlayer(playerName);
+		} else if (result instanceof EmptyPlayer) {
+			ACPlayer tmp = playerFactory.createPlayer(player);
+			if (tmp.equals(result))
+				return result;
+			result = tmp;
+			players.remove(playerName);
+			addPlayer(result);
+			result = getPlayer(playerName);
+		}
+
+		return result;
+	}
+
 }

@@ -490,7 +490,7 @@ acmoblimit:
     cmdname: bal_moblimit
 
 acmobspawner:
-    command: chamgems <-flags> <CreaturType|Delay>
+    command: changems <-flags> <CreaturType|Delay>
     description: "Set/Get the values of the Mob Spawner you are looking at. -g for get, -m for setting the Creature Type, -d for setting the delay"
     plugin: AdminCmd
     permissions: admincmd.mob.spawner

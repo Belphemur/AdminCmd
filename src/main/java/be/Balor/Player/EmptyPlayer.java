@@ -39,7 +39,12 @@ public class EmptyPlayer extends ACPlayer {
 	protected EmptyPlayer(String name) {
 		super(name);
 	}
-
+	/**
+	 * @param name
+	 */
+	protected EmptyPlayer(Player name) {
+		super(name);
+	}
 	/*
 	 * (non-Javadoc)
 	 * 

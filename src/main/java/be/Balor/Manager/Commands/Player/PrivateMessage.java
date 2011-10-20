@@ -69,7 +69,7 @@ public class PrivateMessage extends CoreCommand {
 				return;
 			}
 			String senderPm = "";
-			String msgPrefix = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
+			String msgPrefix = Utils.I18n("privateTitle");
 			String msg = "";
 			String senderName = "Server Admin";
 			if (Utils.isPlayer(sender, false)) {

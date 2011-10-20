@@ -55,10 +55,10 @@ public class TpToggle extends CoreCommand {
 					&& acp.hasPower(Type.TP_REQUEST) && args.getString(0).equalsIgnoreCase("yes")) {
 				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow"))
 					return;
-				TpRequest request = acp.getPower(Type.TP_REQUEST).getTpRequest();
+				TpRequest request = acp.getTpRequest();
 				if (request != null) {
 					request.teleport(player);
-					acp.setPower(Type.TP_REQUEST);
+					acp.removeTpRequest();
 				} else
 					Utils.sI18n(sender, "noTpRequest");
 			} else {

@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -28,16 +28,18 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import static be.Balor.Tools.Utils.sendMessage;
 
 /**
- * @author Balor (aka Antoine Aflalo)
- * 
+ * @authors Balor, Lathanael
+ *
  */
 public class TpToWarp extends CoreCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public TpToWarp() {
 		permNode = "admincmd.warp.tp";
@@ -47,7 +49,7 @@ public class TpToWarp extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -65,12 +67,15 @@ public class TpToWarp extends CoreCommand {
 					loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
 				} catch (WorldNotLoaded e) {
 				}
-				if (loc == null)
+				if (loc == null) {
 					Utils.sI18n(sender, "errorWarp", replace);
+					return;
+				}
 				else {
-					ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
-					target.teleport(loc);
-					sendMessage(sender, target, "tpWarp", replace);
+					ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+							ACHelper.getInstance().getCoreInstance(),
+							new DelayedTeleport(target.getLocation(), loc, target, replace, sender),
+							ACHelper.getInstance().getConfLong("teleportDelay"));
 				}
 			}
 		}
@@ -79,7 +84,7 @@ public class TpToWarp extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -87,19 +92,37 @@ public class TpToWarp extends CoreCommand {
 		return args != null && args.length >= 1;
 	}
 
-	private class DelayTeleport implements Runnable {
+	private class DelayedTeleport implements Runnable {
 
-		protected boolean checkLocation = false;
-		protected Location locBefore, locNow, teleportToLoc;
+		protected Location locBefore, teleportToLoc;
+		protected Player target;
+		protected HashMap<String, String> replace;
+		protected CommandSender sender;
 
-		public DelayTeleport() {
-
+		public DelayedTeleport(Location locBefore, Location teleportLoc, Player target,
+				HashMap<String, String> replace, CommandSender sender) {
+			this.target = target;
+			this.locBefore= locBefore;
+			this.teleportToLoc = teleportLoc;
+			this.replace = replace;
+			this.sender = sender;
 		}
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
-
+			if (locBefore.equals(target.getLocation()) && ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+				target.teleport(teleportToLoc);
+				sendMessage(sender, target, "tpWarp", replace);
+			} else if (!ACHelper.getInstance().getConfBoolean("teleportDelay")) {
+				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+				target.teleport(teleportToLoc);
+				sendMessage(sender, target, "tpWarp", replace);
+			} else {
+				replace.clear();
+				replace.put("cmdname", "Warp");
+				sendMessage(sender, target, "errorMoved", replace);
+			}
 		}
 	}
 }
