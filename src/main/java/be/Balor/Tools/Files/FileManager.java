@@ -250,13 +250,12 @@ public class FileManager implements DataManager {
 		return file;
 	}
 
-	@SuppressWarnings("unchecked")
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		ExtendedConfiguration conf = getYml("Alias");
-		ArrayList<String> aliasList = (ArrayList<String>) conf.getList("alias",
+		List<String> aliasList = conf.getStringList("alias",
 				new ArrayList<String>());
-		ArrayList<String> idList = (ArrayList<String>) conf.getList("ids",
+		List<String> idList =  conf.getStringList("ids",
 				new ArrayList<String>());
 		int i = 0;
 		try {

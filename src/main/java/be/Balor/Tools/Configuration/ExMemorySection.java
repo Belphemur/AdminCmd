@@ -17,6 +17,7 @@
 package be.Balor.Tools.Configuration;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -139,4 +140,63 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 			return def;
 		return (val instanceof String) ? (String) val : val.toString();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Configuration.ExConfigurationSection#getDoubleList(java
+	 * .lang.String, java.util.List)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Double> getDoubleList(String path, List<Double> def) {
+
+		List<Double> list = getList(path, def);
+		return list;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Configuration.ExConfigurationSection#getBooleanList(java
+	 * .lang.String, java.util.List)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Boolean> getBooleanList(String path, List<Boolean> def) {
+		List<Boolean> list = getList(path, def);
+		return list;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Configuration.ExConfigurationSection#getStringList(java
+	 * .lang.String, java.util.List)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<String> getStringList(String path, List<String> def) {
+		List<String> list = getList(path, def);
+		return list;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Configuration.ExConfigurationSection#getIntList(java.lang
+	 * .String, java.util.List)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Integer> getIntList(String path, List<Integer> def) {
+		List<Integer> list = getList(path, def);
+		return list;
+	}
+
 }
