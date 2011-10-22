@@ -1,7 +1,7 @@
 package be.Balor.Tools.Files;
 
+import be.Balor.Manager.Permissions.PermissionLinker;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,7 @@ public class KitInstance {
 		this.name = name;
 		this.delay = delay;
 		this.items = items;
-		ACPluginManager.getPluginInstance("Core").getPermissionLinker()
-				.addOnTheFly("admincmd.kit." + name, "admincmd.kit.*");
+		PermissionLinker.addOnTheFly("admincmd.kit." + name, "admincmd.kit.*");
 	}
 
 	/**

@@ -102,7 +102,7 @@ public class TerminalCommandManager {
 			for (String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(perm.addOnTheFly(
+				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly(
 						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 				commands.put(cmdName, toAdd);
 
@@ -113,7 +113,7 @@ public class TerminalCommandManager {
 			for (String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(perm.addOnTheFly(
+				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly(
 						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 				commands.put(cmdName, toAdd);
 			}
@@ -142,7 +142,7 @@ public class TerminalCommandManager {
 						new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
 								.getString(cmdName + ".args"), workingDir));
 				cmd = commands.get(cmdName);
-				cmd.setBukkitPerm(perm.addOnTheFly(
+				cmd.setBukkitPerm(PermissionLinker.addOnTheFly(
 						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 			} else {
 				commands.put(
@@ -150,7 +150,7 @@ public class TerminalCommandManager {
 						new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
 								.getString(cmdName + ".args"), workingDir));
 				cmd = commands.get(cmdName);
-				cmd.setBukkitPerm(perm.addOnTheFly(
+				cmd.setBukkitPerm(PermissionLinker.addOnTheFly(
 						"admincmd.server.exec." + cmdName, "admincmd.server.exec.*"));
 			}
 		}

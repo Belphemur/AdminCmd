@@ -116,7 +116,7 @@ public class PermissionLinker {
 	 * @param parentNode
 	 * @return
 	 */
-	public Permission addOnTheFly(String permNode, String parentNode) {
+	public static Permission addOnTheFly(String permNode, String parentNode) {
 		Permission child;
 		if ((child = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
 			Permission parent = ACPluginManager.getServer()
