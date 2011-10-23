@@ -34,7 +34,7 @@ import be.Balor.Tools.Debug.ACLogger;
  * 
  */
 public class ACPluginManager {
-	private static ACPluginManager instance = new ACPluginManager();
+	private final static ACPluginManager instance = new ACPluginManager();
 	private ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker().makeMap();
 	private static Server server = null;
 
@@ -135,7 +135,4 @@ public class ACPluginManager {
 				server.getPluginManager().disablePlugin(plugin.getValue());
 	}
 
-	static void killInstance() {
-		instance = null;
-	}
 }

@@ -552,7 +552,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		worker = null;
 		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
-		ACPluginManager.killInstance();
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
