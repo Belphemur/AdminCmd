@@ -35,8 +35,8 @@ import com.google.common.collect.MapMaker;
 final public class AFKWorker {
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private ConcurrentMap<String, Long> playerTimeStamp = new MapMaker().makeMap();
-	private ConcurrentMap<String, Object> playersAfk = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
 	private static AFKWorker instance = new AFKWorker();
@@ -103,7 +103,7 @@ final public class AFKWorker {
 	 * @param timestamp
 	 */
 	public void updateTimeStamp(Player player) {
-		playerTimeStamp.put(player.getName(), System.currentTimeMillis());
+		playerTimeStamp.put(player, System.currentTimeMillis());
 	}
 
 	/**
@@ -112,8 +112,8 @@ final public class AFKWorker {
 	 * @param player
 	 */
 	public void removePlayer(Player player) {
-		playerTimeStamp.remove(player.getName());
-		playersAfk.remove(player.getName());
+		playerTimeStamp.remove(player);
+		playersAfk.remove(player);
 	}
 
 	/**
@@ -141,9 +141,9 @@ final public class AFKWorker {
 			}
 		}
 		if (msg == null || (msg != null && msg.isEmpty()))
-			playersAfk.put(p.getName(), Long.valueOf(System.currentTimeMillis()));
+			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
 		else
-			playersAfk.put(p.getName(), msg);
+			playersAfk.put(p, msg);
 		p.setSleepingIgnored(true);
 	}
 
@@ -192,7 +192,7 @@ final public class AFKWorker {
 	 * @return if the player is afk
 	 */
 	public boolean isAfk(Player p) {
-		return playersAfk.containsKey(p.getName());
+		return playersAfk.containsKey(p);
 	}
 
 	private class AfkChecker implements Runnable {
@@ -225,14 +225,13 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			for (String player : playersAfk.keySet()) {
-				Long timeStamp = playerTimeStamp.get(player);
-				Player p = ACPlayer.getPlayer(player).getHandler();
-				if (p != null && timeStamp != null && (now - timeStamp >= kickTime)
+			for (Player p : playersAfk.keySet()) {
+				Long timeStamp = playerTimeStamp.get(p);
+				if (timeStamp != null && (now - timeStamp >= kickTime)
 						&& !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
 					p.kickPlayer(Utils.I18n("afkKick"));
-					playersAfk.remove(player);
-					playerTimeStamp.remove(player);
+					playersAfk.remove(p);
+					playerTimeStamp.remove(p);
 				}
 			}
 
