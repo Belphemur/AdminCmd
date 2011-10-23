@@ -56,6 +56,12 @@ final public class AFKWorker {
 		return instance;
 	}
 
+	public static AFKWorker createInstance() {
+		if (instance == null)
+			instance = new AFKWorker();
+		return instance;
+	}
+
 	/**
 	 * destroy the instance.
 	 */
@@ -111,7 +117,7 @@ final public class AFKWorker {
 	 * 
 	 * @param player
 	 */
-	public void removePlayer(Player player) {		
+	public void removePlayer(Player player) {
 		playersAfk.remove(player);
 		playerTimeStamp.remove(player);
 	}

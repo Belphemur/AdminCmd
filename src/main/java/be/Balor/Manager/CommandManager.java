@@ -94,6 +94,12 @@ public class CommandManager implements CommandExecutor {
 		instance = null;
 	}
 
+	public static CommandManager createInstance() {
+		if (instance == null)
+			instance = new CommandManager();
+		return instance;
+	}
+
 	/**
 	 * Getting the private field of a another class;
 	 * 

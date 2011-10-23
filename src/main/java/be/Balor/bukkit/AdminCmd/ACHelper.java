@@ -337,7 +337,7 @@ public class ACHelper {
 	 */
 	private void init() {
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.createInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
 			this.coreInstance
@@ -354,14 +354,14 @@ public class ACHelper {
 								AFKWorker.getInstance().getKickChecker(), 0,
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
-		InvisibleWorker.getInstance()
+		InvisibleWorker.createInstance()
 				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
 		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().setLocaleFile(
 				new File(coreInstance.getDataFolder(), "locales" + File.separator
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		CommandManager.getInstance().setCorePlugin(coreInstance);
+		CommandManager.createInstance().setCorePlugin(coreInstance);
 		HelpLoader.load(coreInstance.getDataFolder());
 		if (pluginConfig.get("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
