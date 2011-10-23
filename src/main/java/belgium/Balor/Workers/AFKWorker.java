@@ -35,8 +35,8 @@ import com.google.common.collect.MapMaker;
 final public class AFKWorker {
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().weakKeys().makeMap();
+	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().weakKeys().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
 	private static AFKWorker instance = new AFKWorker();
@@ -111,9 +111,9 @@ final public class AFKWorker {
 	 * 
 	 * @param player
 	 */
-	public void removePlayer(Player player) {
-		playerTimeStamp.remove(player);
+	public void removePlayer(Player player) {		
 		playersAfk.remove(player);
+		playerTimeStamp.remove(player);
 	}
 
 	/**
