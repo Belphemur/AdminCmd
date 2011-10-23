@@ -114,7 +114,7 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
-		PlayerManager.getInstance().setOnline(p.getName());
+		PlayerManager.getInstance().setOnline(p);
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");

@@ -177,8 +177,9 @@ public class PlayerManager {
 		return onlinePlayers.remove(player) != null;
 	}
 
-	public void setOnline(String player) {
-		playerFactory.addExistingPlayer(player);
+	public void setOnline(Player player) {
+		playerFactory.addExistingPlayer(player.getName());
+		onlinePlayers.put(demandACPlayer(player), true);
 	}
 
 	ACPlayer demandACPlayer(String name) {

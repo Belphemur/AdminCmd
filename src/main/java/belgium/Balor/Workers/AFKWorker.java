@@ -139,12 +139,12 @@ final public class AFKWorker {
 	 */
 	public void setAfk(Player p, String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
+				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
 			String afkString = Utils.I18n("afk", "player", Utils.getPlayerName(p, null));
-			if (afkString != null) {
+			if (afkString != null)
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
-				Utils.broadcastMessage(afkString);
-			}
+			Utils.broadcastMessage(afkString);
+
 		}
 		if (msg == null || (msg != null && msg.isEmpty()))
 			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
