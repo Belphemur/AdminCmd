@@ -77,10 +77,6 @@ public class PlayerManager {
 		if (ref != null)
 			return false;
 		players.put(name, player);
-		if (player.getHandler() != null) {
-			onlinePlayers.put(player, true);
-			player.setOnline(true);
-		}
 		return true;
 	}
 
