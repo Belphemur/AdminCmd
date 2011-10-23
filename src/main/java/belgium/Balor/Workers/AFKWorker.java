@@ -39,7 +39,7 @@ final public class AFKWorker {
 	private ConcurrentMap<String, Object> playersAfk = new MapMaker().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
-	private static AFKWorker instance;
+	private static AFKWorker instance = new AFKWorker();
 
 	/**
 	 * 
@@ -53,8 +53,6 @@ final public class AFKWorker {
 	 * @return the instance
 	 */
 	public static AFKWorker getInstance() {
-		if (instance == null)
-			instance = new AFKWorker();
 		return instance;
 	}
 

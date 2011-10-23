@@ -63,7 +63,7 @@ public class CommandManager implements CommandExecutor {
 	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
 			MAX_THREADS);
 	private int cmdCount = 0;
-	private static CommandManager instance = null;
+	private static CommandManager instance = new CommandManager();
 	private AbstractAdminCmdPlugin corePlugin;
 	private boolean threadsStarted = false;
 	private List<String> disabledCommands;
@@ -76,7 +76,7 @@ public class CommandManager implements CommandExecutor {
 	/**
 	 * 
 	 */
-	protected CommandManager() {
+	private CommandManager() {
 
 	}
 
@@ -84,8 +84,6 @@ public class CommandManager implements CommandExecutor {
 	 * @return the instance
 	 */
 	public static CommandManager getInstance() {
-		if (instance == null)
-			instance = new CommandManager();
 		return instance;
 	}
 

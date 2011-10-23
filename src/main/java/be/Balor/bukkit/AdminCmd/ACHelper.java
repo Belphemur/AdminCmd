@@ -80,7 +80,7 @@ public class ACHelper {
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues().makeMap();
 	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues().makeMap();
-	private static ACHelper instance = null;
+	private static ACHelper instance = new ACHelper();
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private static long pluginStarted;
@@ -116,8 +116,6 @@ public class ACHelper {
 	}
 
 	public static ACHelper getInstance() {
-		if (instance == null)
-			instance = new ACHelper();
 		return instance;
 	}
 
