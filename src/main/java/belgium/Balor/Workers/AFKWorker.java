@@ -192,7 +192,7 @@ final public class AFKWorker {
 	 * @return if the player is afk
 	 */
 	public boolean isAfk(Player p) {
-		return playersAfk.containsKey(p);
+		return playersAfk.containsKey(p.getName());
 	}
 
 	private class AfkChecker implements Runnable {
