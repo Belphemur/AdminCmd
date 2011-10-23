@@ -35,7 +35,7 @@ public class PlayerManager {
 			.weakValues().makeMap();
 	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
 			.weakValues().makeMap();
-	private static PlayerManager instance = null;
+	private final static PlayerManager instance = new PlayerManager();
 	private ACPlayerFactory playerFactory;
 
 	/**
@@ -51,8 +51,6 @@ public class PlayerManager {
 	 * @return the instance
 	 */
 	public static PlayerManager getInstance() {
-		if (instance == null)
-			instance = new PlayerManager();
 		return instance;
 	}
 
@@ -158,7 +156,10 @@ public class PlayerManager {
 	 * @return the ACPlayer if found, else null
 	 */
 	private synchronized ACPlayer getPlayer(String name) {
-		return players.get(name);
+		ACPlayer result = players.get(name);
+		if (result != null)
+			result.reloadHandler();
+		return result;
 	}
 
 	/**
@@ -197,7 +198,6 @@ public class PlayerManager {
 			addPlayer(result);
 			result = getPlayer(name);
 		}
-
 		return result;
 	}
 
@@ -219,7 +219,6 @@ public class PlayerManager {
 			addPlayer(result);
 			result = getPlayer(playerName);
 		}
-
 		return result;
 	}
 

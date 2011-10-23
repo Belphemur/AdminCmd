@@ -58,16 +58,16 @@ public class FilePlayer extends ACPlayer {
  */
 	public FilePlayer(String directory, String name) {
 		super(name);
-		initFile(directory, name);
+		initFile(directory);
 
 	}
 	public FilePlayer(String directory, Player player) {
 		super(player);
-		initFile(directory, name);
+		initFile(directory);
 
 	}
 
-	private void initFile(String directory, String name) {
+	private void initFile(String directory) {
 		File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
