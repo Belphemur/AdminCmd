@@ -35,8 +35,8 @@ import com.google.common.collect.MapMaker;
 final public class AFKWorker {
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
+	private ConcurrentMap<String, Long> playerTimeStamp = new MapMaker().makeMap();
+	private ConcurrentMap<String, Object> playersAfk = new MapMaker().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
 	private static AFKWorker instance;
@@ -105,7 +105,7 @@ final public class AFKWorker {
 	 * @param timestamp
 	 */
 	public void updateTimeStamp(Player player) {
-		playerTimeStamp.put(player, System.currentTimeMillis());
+		playerTimeStamp.put(player.getName(), System.currentTimeMillis());
 	}
 
 	/**
@@ -114,8 +114,8 @@ final public class AFKWorker {
 	 * @param player
 	 */
 	public void removePlayer(Player player) {
-		playerTimeStamp.remove(player);
-		playersAfk.remove(player);
+		playerTimeStamp.remove(player.getName());
+		playersAfk.remove(player.getName());
 	}
 
 	/**
@@ -143,9 +143,9 @@ final public class AFKWorker {
 			}
 		}
 		if (msg == null || (msg != null && msg.isEmpty()))
-			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
+			playersAfk.put(p.getName(), Long.valueOf(System.currentTimeMillis()));
 		else
-			playersAfk.put(p, msg);
+			playersAfk.put(p.getName(), msg);
 		p.setSleepingIgnored(true);
 	}
 
@@ -227,13 +227,14 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			for (Player p : playersAfk.keySet()) {
-				Long timeStamp = playerTimeStamp.get(p);
-				if (timeStamp != null && (now - timeStamp >= kickTime)
+			for (String player : playersAfk.keySet()) {
+				Long timeStamp = playerTimeStamp.get(player);
+				Player p = ACPlayer.getPlayer(player).getHandler();
+				if (p != null && timeStamp != null && (now - timeStamp >= kickTime)
 						&& !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
 					p.kickPlayer(Utils.I18n("afkKick"));
-					playersAfk.remove(p);
-					playerTimeStamp.remove(p);
+					playersAfk.remove(player);
+					playerTimeStamp.remove(player);
 				}
 			}
 
