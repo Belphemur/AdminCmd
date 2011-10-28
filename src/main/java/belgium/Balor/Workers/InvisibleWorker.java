@@ -60,6 +60,12 @@ final public class InvisibleWorker {
 		return instance;
 	}
 
+	public static InvisibleWorker createInstance() {
+		if (instance == null)
+			instance = new InvisibleWorker();
+		return instance;
+	}
+
 	/**
 	 * Destroy the instance
 	 */

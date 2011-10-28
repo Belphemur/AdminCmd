@@ -36,7 +36,7 @@ import be.Balor.Tools.Debug.ACLogger;
  * 
  */
 public class LocaleManager {
-	private static LocaleManager instance = null;
+	private static LocaleManager instance = new LocaleManager();
 	private ExtendedConfiguration localeFile;
 	private boolean noMsg = false;
 
@@ -44,8 +44,6 @@ public class LocaleManager {
 	 * @return the instance
 	 */
 	public static LocaleManager getInstance() {
-		if (instance == null)
-			instance = new LocaleManager();
 		return instance;
 	}
 

@@ -35,11 +35,11 @@ import com.google.common.collect.MapMaker;
 final public class AFKWorker {
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().weakKeys().makeMap();
+	private ConcurrentMap<Player, Object> playersAfk = new MapMaker().weakKeys().makeMap();
 	private AfkChecker afkChecker;
 	private KickChecker kickChecker;
-	private static AFKWorker instance;
+	private static AFKWorker instance = new AFKWorker();
 
 	/**
 	 * 
@@ -53,6 +53,10 @@ final public class AFKWorker {
 	 * @return the instance
 	 */
 	public static AFKWorker getInstance() {
+		return instance;
+	}
+
+	public static AFKWorker createInstance() {
 		if (instance == null)
 			instance = new AFKWorker();
 		return instance;
@@ -114,8 +118,8 @@ final public class AFKWorker {
 	 * @param player
 	 */
 	public void removePlayer(Player player) {
-		playerTimeStamp.remove(player);
 		playersAfk.remove(player);
+		playerTimeStamp.remove(player);
 	}
 
 	/**
@@ -135,12 +139,12 @@ final public class AFKWorker {
 	 */
 	public void setAfk(Player p, String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
+				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
 			String afkString = Utils.I18n("afk", "player", Utils.getPlayerName(p, null));
-			if (afkString != null) {
+			if (afkString != null)
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
-				Utils.broadcastMessage(afkString);
-			}
+			Utils.broadcastMessage(afkString);
+
 		}
 		if (msg == null || (msg != null && msg.isEmpty()))
 			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));

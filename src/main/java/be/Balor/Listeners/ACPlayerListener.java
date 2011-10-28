@@ -114,12 +114,14 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
-		PlayerManager.getInstance().setOnline(p.getName());
+		PlayerManager.getInstance().setOnline(p);
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
 		}
-		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (ACHelper.getInstance().getConfBoolean("autoAfk"))
+			AFKWorker.getInstance().updateTimeStamp(p);
+		ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
 		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setJoinMessage(null);
@@ -157,13 +159,13 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
-		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
-		PlayerManager.getInstance().setOffline(ACPlayer.getPlayer(p.getName()));
 		if (player.hasPower(Type.FAKEQUIT))
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
 			event.setQuitMessage(null);
+		PlayerManager.getInstance().setOffline(player);
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
 

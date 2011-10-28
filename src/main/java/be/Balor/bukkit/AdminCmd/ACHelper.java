@@ -63,7 +63,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -80,7 +80,7 @@ public class ACHelper {
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues().makeMap();
 	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues().makeMap();
-	private static ACHelper instance = null;
+	private static ACHelper instance = new ACHelper();
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private static long pluginStarted;
@@ -116,8 +116,6 @@ public class ACHelper {
 	}
 
 	public static ACHelper getInstance() {
-		if (instance == null)
-			instance = new ACHelper();
 		return instance;
 	}
 
@@ -127,7 +125,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 *
+	 * 
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -151,7 +149,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 *
+	 * 
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -161,7 +159,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -171,7 +169,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 *
+	 * 
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -189,7 +187,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 *
+	 * 
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -232,7 +230,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
@@ -242,7 +240,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -339,7 +337,7 @@ public class ACHelper {
 	 */
 	private void init() {
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.createInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
 			this.coreInstance
@@ -356,14 +354,14 @@ public class ACHelper {
 								AFKWorker.getInstance().getKickChecker(), 0,
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
-		InvisibleWorker.getInstance()
-				.setMaxRange(pluginConfig.getInt("invisibleRangeInBlock", 512));
+		InvisibleWorker.createInstance().setMaxRange(
+				pluginConfig.getInt("invisibleRangeInBlock", 512));
 		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().setLocaleFile(
 				new File(coreInstance.getDataFolder(), "locales" + File.separator
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		CommandManager.getInstance().setCorePlugin(coreInstance);
+		CommandManager.createInstance().setCorePlugin(coreInstance);
 		HelpLoader.load(coreInstance.getDataFolder());
 		if (pluginConfig.get("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
@@ -390,23 +388,18 @@ public class ACHelper {
 		}
 	}
 
-	private void convertBannedMuted() {
-		Map<String, Object> map = fManager.loadMap(Type.BANNED, null, Type.BANNED.toString());
-		if (!map.isEmpty()) {
-			fManager.getFile(null, "banned.yml", false).delete();
-			for (String key : map.keySet())
-				dataManager.addBannedPlayer(new BannedPlayer(key, String.valueOf(map.get(key))));
-		}
-		File muted = fManager.getFile(null, "muted.yml", false);
-		if (muted.exists()) {
-			map = fManager.loadMap(Type.MUTED, null, Type.MUTED.toString());
-			for (String key : map.keySet()) {
-				PlayerManager.getInstance().setOnline(key);
-				ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key));
-			}
-			muted.delete();
-		}
-	}
+	/*
+	 * private void convertBannedMuted() { Map<String, Object> map =
+	 * fManager.loadMap(Type.BANNED, null, Type.BANNED.toString()); if
+	 * (!map.isEmpty()) { fManager.getFile(null, "banned.yml", false).delete();
+	 * for (String key : map.keySet()) dataManager.addBannedPlayer(new
+	 * BannedPlayer(key, String.valueOf(map.get(key)))); } File muted =
+	 * fManager.getFile(null, "muted.yml", false); if (muted.exists()) { map =
+	 * fManager.loadMap(Type.MUTED, null, Type.MUTED.toString()); for (String
+	 * key : map.keySet()) { PlayerManager.getInstance().setOnline(key);
+	 * ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key)); }
+	 * muted.delete(); } }
+	 */
 
 	private void convertSpawnWarp() {
 		File spawnFile = fManager.getFile("spawn", "spawnLocations.yml", false);
@@ -454,7 +447,7 @@ public class ACHelper {
 		WorldManager.getInstance().setWorldFactory(
 				new ACWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "worldData"));
-		convertBannedMuted();
+		// convertBannedMuted();
 		convertSpawnWarp();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
@@ -552,7 +545,7 @@ public class ACHelper {
 
 	/**
 	 * Get boolean from config
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -562,7 +555,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -572,7 +565,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -582,7 +575,7 @@ public class ACHelper {
 
 	/**
 	 * Get Long parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -592,7 +585,7 @@ public class ACHelper {
 
 	/**
 	 * Get String parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -602,7 +595,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -631,7 +624,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -662,7 +655,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -705,13 +698,13 @@ public class ACHelper {
 	}
 
 	public void spawn(Player player) {
-			Location loc = null;
-			String worldName = player.getWorld().getName();
-			loc = ACWorld.getWorld(worldName).getSpawn();
-			if (loc == null)
-				loc = player.getWorld().getSpawnLocation();
-			player.teleport(loc);
-			Utils.sI18n(player, "spawn");
+		Location loc = null;
+		String worldName = player.getWorld().getName();
+		loc = ACWorld.getWorld(worldName).getSpawn();
+		if (loc == null)
+			loc = player.getWorld().getSpawnLocation();
+		player.teleport(loc);
+		Utils.sI18n(player, "spawn");
 	}
 
 	public void groupSpawn(CommandSender sender) {
@@ -748,7 +741,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -779,7 +772,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -810,7 +803,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 *
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -820,7 +813,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 *
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -830,7 +823,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 *
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -840,7 +833,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -861,7 +854,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 *
+	 * 
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -873,7 +866,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 *
+	 * 
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -884,7 +877,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 *
+	 * 
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {

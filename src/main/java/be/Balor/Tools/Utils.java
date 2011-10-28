@@ -1081,7 +1081,7 @@ public class Utils {
 	 */
 	private static String getPrefix(Player player, CommandSender sender) {
 		boolean isInv = false;
-		String prefixstring;
+		String prefixstring = "";
 		String statusPrefix = "";
 		if (sender != null)
 			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())
@@ -1092,10 +1092,9 @@ public class Utils {
 			statusPrefix = Utils.I18n("afkTitle") + statusPrefix;
 		if (mChatApi != null)
 			prefixstring = mChatApi.getPrefix(player);
-		else
-			prefixstring = PermissionManager.getPrefix(player);
+		prefixstring += PermissionManager.getPrefix(player);
 		String result = statusPrefix;
-		if (prefixstring != null && prefixstring.length() > 1)
+		if (prefixstring.length() > 1)
 			result += prefixstring;
 		return colorParser(result);
 
