@@ -101,7 +101,7 @@ acitemkit:
     command: kit [kit] <player>
     description: "Add the wanted [kit] to the given <players>\n inventory."
     plugin: AdminCmd
-    permissions: admincmd.item.add
+    permissions: admincmd.item.kit.help
     cmdname: bal_kit
 
 actpto:

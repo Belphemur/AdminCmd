@@ -136,6 +136,7 @@ public class Kit extends CoreCommand {
 	@Override
 	public void registerBukkitPerm() {
 		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay", bukkitDefault);
+		plugin.getPermissionLinker().addPermChild("admincmd.item.kit.help", bukkitDefault);
 		super.registerBukkitPerm();
 	}
 
