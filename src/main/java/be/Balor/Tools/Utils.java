@@ -754,7 +754,7 @@ public class Utils {
 	public static void broadcastFakeQuit(Player player) {
 		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseJoinName(player) + ChatColor.YELLOW
+			Utils.broadcastMessage(mChatApi.ParseEventName(player) + ChatColor.YELLOW
 					+ " has left the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
@@ -804,7 +804,7 @@ public class Utils {
 	public static void broadcastFakeJoin(Player player) {
 		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseJoinName(player) + ChatColor.YELLOW
+			Utils.broadcastMessage(mChatApi.ParseEventName(player) + ChatColor.YELLOW
 					+ " has joined the game.");
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
