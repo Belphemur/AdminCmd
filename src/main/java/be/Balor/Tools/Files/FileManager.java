@@ -250,13 +250,12 @@ public class FileManager implements DataManager {
 		return file;
 	}
 
+	@SuppressWarnings("unchecked")
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias",
-				new ArrayList<String>());
-		List<String> idList =  conf.getStringList("ids",
-				new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias");
+		List<String> idList =  conf.getStringList("ids");
 		int i = 0;
 		try {
 			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv")));

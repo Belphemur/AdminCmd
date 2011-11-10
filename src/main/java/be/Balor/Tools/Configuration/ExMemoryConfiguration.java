@@ -26,6 +26,7 @@ import org.bukkit.configuration.MemoryConfiguration;
  * @author Balor (aka Antoine Aflalo)
  *
  */
+@SuppressWarnings("unchecked")
 public class ExMemoryConfiguration extends ExMemorySection implements Configuration {
     protected Configuration defaults;
     protected ExMemoryConfigurationOption options;
@@ -59,7 +60,8 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         defaults.set(path, value);
     }
 
-    public void addDefaults(Map<String, Object> defaults) {
+    @Override
+	public void addDefaults(Map<String, Object> defaults) {
         if (defaults == null) {
             throw new IllegalArgumentException("Defaults may not be null");
         }
@@ -69,7 +71,8 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         }
     }
 
-    public void addDefaults(Configuration defaults) {
+    @Override
+	public void addDefaults(Configuration defaults) {
         if (defaults == null) {
             throw new IllegalArgumentException("Defaults may not be null");
         }
@@ -77,7 +80,8 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         addDefaults(defaults.getValues(true));
     }
 
-    public void setDefaults(Configuration defaults) {
+    @Override
+	public void setDefaults(Configuration defaults) {
         if (defaults == null) {
             throw new IllegalArgumentException("Defaults may not be null");
         }
@@ -85,7 +89,8 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         this.defaults = defaults;
     }
 
-    public Configuration getDefaults() {
+    @Override
+	public Configuration getDefaults() {
         return defaults;
     }
 
@@ -94,7 +99,8 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         return null;
     }
 
-    public ExMemoryConfigurationOption options() {
+    @Override
+	public ExMemoryConfigurationOption options() {
         if (options == null) {
             options = new ExMemoryConfigurationOption(this);
         }
