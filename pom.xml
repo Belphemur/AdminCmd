@@ -219,6 +219,18 @@
 	</pluginRepositories>
 	<dependencies>
 		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>craftbukkit</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.nijikokun.bukkit</groupId>
 			<artifactId>Permissions</artifactId>
 			<version>3.1.6</version>
@@ -272,16 +284,6 @@
 			<artifactId>bPermissions</artifactId>
 			<version>1337-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
-			<version>1.8.1-R5-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.8.1-R5-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<properties>

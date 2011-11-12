@@ -19,7 +19,6 @@ import org.bukkit.configuration.Configuration;
  * This is a base class for all File based implementations of
  * {@link Configuration}
  */
-@SuppressWarnings("unchecked")
 public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	protected File file;
 
