@@ -64,6 +64,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
+@SuppressWarnings("unchecked")
 public class ExtendedConfiguration extends ExFileConfiguration {
 	protected final Lock lock = new ReentrantLock();
 	protected static final String COMMENT_PREFIX = "# ";
@@ -232,7 +233,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 * org.bukkit.configuration.file.FileConfiguration#loadFromString(java.lang
 	 * .String)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void loadFromString(String contents) throws InvalidConfigurationException {
 		lock.lock();
@@ -354,7 +354,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	}
 
 
-	@SuppressWarnings("unchecked")
 	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
 			throws InvalidConfigurationException {
 		if (input == null) {

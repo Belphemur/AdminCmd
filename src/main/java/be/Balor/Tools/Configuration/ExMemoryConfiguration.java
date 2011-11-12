@@ -26,6 +26,7 @@ import org.bukkit.configuration.MemoryConfiguration;
  * @author Balor (aka Antoine Aflalo)
  *
  */
+@SuppressWarnings("unchecked")
 public class ExMemoryConfiguration extends ExMemorySection implements Configuration {
     protected Configuration defaults;
     protected ExMemoryConfigurationOption options;

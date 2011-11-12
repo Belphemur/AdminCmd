@@ -27,6 +27,7 @@ import org.bukkit.configuration.MemorySection;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
+@SuppressWarnings("unchecked")
 public class ExMemorySection extends MemorySection implements ExConfigurationSection {
 	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
 
@@ -149,7 +150,6 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .lang.String, java.util.List)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Double> getDoubleList(String path, List<Double> def) {
 
 		List<Double> list = getList(path, def);
@@ -164,7 +164,6 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * be.Balor.Tools.Configuration.ExConfigurationSection#getBooleanList(java
 	 * .lang.String, java.util.List)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Boolean> getBooleanList(String path, List<Boolean> def) {
 		List<Boolean> list = getList(path, def);
@@ -179,7 +178,6 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .lang.String, java.util.List)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<String> getStringList(String path, List<String> def) {
 		List<String> list = getList(path, def);
 		return list;
@@ -193,7 +191,6 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .String, java.util.List)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Integer> getIntList(String path, List<Integer> def) {
 		List<Integer> list = getList(path, def);
 		return list;
