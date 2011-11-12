@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Configuration;
 
+import java.util.List;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -49,6 +51,67 @@ public interface ExConfigurationSection extends ConfigurationSection {
 	 *            Path to remove the entry at.
 	 */
 	public void remove(String path);
+
+	/**
+	 * Gets a list of doubles. Non-valid entries will not be in the list. There
+	 * will be no null slots. If the list is not defined, the default will be
+	 * returned. 'null' can be passed for the default and an empty list will be
+	 * returned instead. The node must be an actual list and cannot be just a
+	 * double.
+	 * 
+	 * @param path
+	 *            path to node (dot notation)
+	 * @param def
+	 *            default value or null for an empty list as default
+	 * @return list of integers
+	 */
+	public List<Double> getDoubleList(String path, List<Double> def);
+
+	/**
+	 * Gets a list of booleans. Non-valid entries will not be in the list. There
+	 * will be no null slots. If the list is not defined, the default will be
+	 * returned. 'null' can be passed for the default and an empty list will be
+	 * returned instead. The node must be an actual list and cannot be just a
+	 * boolean,
+	 * 
+	 * @param path
+	 *            path to node (dot notation)
+	 * @param def
+	 *            default value or null for an empty list as default
+	 * @return list of integers
+	 */
+	public List<Boolean> getBooleanList(String path, List<Boolean> def);
+
+	/**
+	 * Gets a list of strings. Non-valid entries will not be in the list. There
+	 * will be no null slots. If the list is not defined, the default will be
+	 * returned. 'null' can be passed for the default and an empty list will be
+	 * returned instead. If an item in the list is not a string, it will be
+	 * converted to a string. The node must be an actual list and not just a
+	 * string.
+	 * 
+	 * @param path
+	 *            path to node (dot notation)
+	 * @param def
+	 *            default value or null for an empty list as default
+	 * @return list of strings
+	 */
+	public List<String> getStringList(String path, List<String> def);
+
+	/**
+	 * Gets a list of integers. Non-valid entries will not be in the list. There
+	 * will be no null slots. If the list is not defined, the default will be
+	 * returned. 'null' can be passed for the default and an empty list will be
+	 * returned instead. The node must be an actual list and not just an
+	 * integer.
+	 * 
+	 * @param path
+	 *            path to node (dot notation)
+	 * @param def
+	 *            default value or null for an empty list as default
+	 * @return list of integers
+	 */
+	public List<Integer> getIntList(String path, List<Integer> def);
 
 	@Override
 	public ExConfigurationSection createSection(String path);

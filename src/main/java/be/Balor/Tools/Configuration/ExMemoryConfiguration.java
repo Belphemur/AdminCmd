@@ -60,8 +60,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         defaults.set(path, value);
     }
 
-    @Override
-	public void addDefaults(Map<String, Object> defaults) {
+    public void addDefaults(Map<String, Object> defaults) {
         if (defaults == null) {
             throw new IllegalArgumentException("Defaults may not be null");
         }
@@ -71,8 +70,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         }
     }
 
-    @Override
-	public void addDefaults(Configuration defaults) {
+    public void addDefaults(Configuration defaults) {
         if (defaults == null) {
             throw new IllegalArgumentException("Defaults may not be null");
         }
@@ -80,8 +78,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         addDefaults(defaults.getValues(true));
     }
 
-    @Override
-	public void setDefaults(Configuration defaults) {
+    public void setDefaults(Configuration defaults) {
         if (defaults == null) {
             throw new IllegalArgumentException("Defaults may not be null");
         }
@@ -89,8 +86,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         this.defaults = defaults;
     }
 
-    @Override
-	public Configuration getDefaults() {
+    public Configuration getDefaults() {
         return defaults;
     }
 
@@ -99,8 +95,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
         return null;
     }
 
-    @Override
-	public ExMemoryConfigurationOption options() {
+    public ExMemoryConfigurationOption options() {
         if (options == null) {
             options = new ExMemoryConfigurationOption(this);
         }
