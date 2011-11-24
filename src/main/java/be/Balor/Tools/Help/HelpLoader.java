@@ -92,7 +92,12 @@ public class HelpLoader {
 							continue;
 						}
 						String command = helpNode.get("command").toString();
-						String description = helpNode.get("description").toString();
+						String description = "";
+						try {
+							description = helpNode.get("description").toString();
+						} catch (NullPointerException e) {
+
+						}
 						String commandName = helpNode.containsKey("cmdname") ? helpNode.get(
 								"cmdname").toString() : helpKey;
 						String plugin = helpNode.containsKey("plugin") ? helpNode.get("plugin")
