@@ -274,17 +274,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
-			<version>1.8.1-R5-SNAPSHOT</version>
+			<artifactId>bukkit</artifactId>
+			<version>1.0.0-R1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.8.1-R5-SNAPSHOT</version>
+			<artifactId>craftbukkit</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>5.10.0-SNAPSHOT</version>
+	<version>5.10.0</version>
 </project>
