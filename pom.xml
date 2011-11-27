@@ -287,5 +287,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>5.10.0</version>
+	<version>5.10.1-SNAPSHOT</version>
 </project>
