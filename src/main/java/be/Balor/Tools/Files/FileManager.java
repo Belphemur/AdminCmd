@@ -43,6 +43,7 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -230,6 +231,7 @@ public class FileManager implements DataManager {
 			file = new File(pathFile, filename);
 		if (file.exists() && replace) {
 			BufferedReader reader = null;
+
 			try {
 				reader = new BufferedReader(new FileReader(file));
 			} catch (FileNotFoundException e) {
@@ -237,17 +239,21 @@ public class FileManager implements DataManager {
 			try {
 				String version = reader.readLine();
 				final String versioncheck = version.substring(10);
-				if (!versioncheck.equals(gitVersion.get("git.commit.id")))
+				if (!versioncheck.equals(gitVersion.get("git.commit.id"))) {
+					reader.close();
 					file.delete();
-				else
+					ACLogger.info("delete file : " + file);
+				} else
 					return file;
 			} catch (IOException e) {
 				file.delete();
 			}
+
 			try {
 				reader.close();
 			} catch (IOException e) {
 			}
+
 		}
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
@@ -290,7 +296,11 @@ public class FileManager implements DataManager {
 				try {
 					result.put(alias[0], new MaterialContainer(alias[1], alias[2]));
 				} catch (ArrayIndexOutOfBoundsException e) {
-					result.put(alias[0], new MaterialContainer(alias[1]));
+					try {
+						result.put(alias[0], new MaterialContainer(alias[1]));
+					} catch (ArrayIndexOutOfBoundsException e2) {
+					}
+					
 				}
 
 			}
