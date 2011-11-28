@@ -44,6 +44,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
@@ -196,7 +197,7 @@ public class CommandManager implements CommandExecutor {
 	public void registerCommand(Class<? extends CoreCommand> clazz) {
 		CoreCommand command = null;
 		try {
-			Utils.debug("Begin registering Command " + clazz.getName());
+			DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
 			command = (CoreCommand) clazz.newInstance();
 			command.initializeCommand();
 			checkCommand(command);
@@ -234,18 +235,18 @@ public class CommandManager implements CommandExecutor {
 						command.getCmdName());
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					ACLogger.info(e.getMessage());
-				Utils.debug("Command Disabled");
+				DebugLog.INSTANCE.info("Command Disabled");
 			} else {
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				registeredCommands.put(command.getPluginCommand(), command);
-				Utils.debug("Command Prioritized but already exists");
+				DebugLog.INSTANCE.info("Command Prioritized but already exists");
 			}
 		} catch (CommandException e) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 		}
-		Utils.debug("End registering Command " + clazz.getName());
+		DebugLog.INSTANCE.info("End registering Command " + clazz.getName());
 	}
 
 	/**

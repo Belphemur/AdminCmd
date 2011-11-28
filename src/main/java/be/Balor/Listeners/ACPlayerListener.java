@@ -48,6 +48,7 @@ import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -367,12 +368,12 @@ public class ACPlayerListener extends PlayerListener {
 
 		@Override
 		public void run() {
-			Utils.debug("Begin UpdateInvisibleOnJoin (Invisible) for " + newPlayer.getName());
+			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (Invisible) for " + newPlayer.getName());
 			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
 				Utils.removePlayerFromOnlineList(toVanish, newPlayer);
 			}
-			Utils.debug("Begin UpdateInvisibleOnJoin (FakeQuit) for " + newPlayer.getName());
+			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for " + newPlayer.getName());
 			for (Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
 				Utils.removePlayerFromOnlineList(toFq, newPlayer);
 		}

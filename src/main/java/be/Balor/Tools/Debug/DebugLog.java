@@ -31,6 +31,11 @@ import com.google.common.io.Files;
  */
 public class DebugLog {
 	public static final Logger INSTANCE = Logger.getLogger("AdminCmd");
+	static
+	{
+		INSTANCE.setUseParentHandlers(false);
+		INSTANCE.setLevel(Level.ALL);
+	}
 
 	public static void setFile(String path) {
 		FileHandler fh;
@@ -43,9 +48,7 @@ public class DebugLog {
 				Files.createParentDirs(file);
 			
 			fh = new FileHandler(file.getPath(), true);
-			INSTANCE.addHandler(fh);
-			INSTANCE.setUseParentHandlers(false);
-			INSTANCE.setLevel(Level.ALL);
+			INSTANCE.addHandler(fh);			
 			fh.setFormatter(new LogFormatter());
 
 			// the following statement is used to log any messages

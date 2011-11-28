@@ -59,7 +59,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -1021,18 +1020,6 @@ public class Utils {
 			throw new IllegalArgumentException();
 		}
 		throw new ArrayIndexOutOfBoundsException();
-	}
-
-	/**
-	 * Method to write a debug message in the log IF the debug mode is activated
-	 * in the configuration
-	 *
-	 * @param message
-	 *            message to write.
-	 */
-	public static void debug(String message) {
-		if (ACHelper.getInstance().getConfBoolean("debug"))
-			DebugLog.INSTANCE.info(message);
 	}
 
 	/**
