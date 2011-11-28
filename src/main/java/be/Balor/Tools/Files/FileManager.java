@@ -35,6 +35,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
+import com.google.common.io.Files;
+
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.BannedPlayer;
@@ -88,7 +90,12 @@ public class FileManager implements DataManager {
 	public void setPath(String path) {
 		pathFile = new File(path);
 		if (!pathFile.exists()) {
-			pathFile.mkdir();
+			try {
+				Files.createParentDirs(pathFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		File spawn = getFile(null, "spawnLocations.yml", false);
 		File homeDir = new File(this.pathFile, "home");
