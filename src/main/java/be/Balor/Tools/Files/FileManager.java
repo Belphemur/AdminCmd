@@ -58,12 +58,15 @@ public class FileManager implements DataManager {
 	private String lastFilename = "";
 	private File lastFile = null;
 	private ExtendedConfiguration lastLoadedConf = null;
-	private final static Properties gitVersion = new Properties();
+	private static String fileVersion = null;
 	static {
 		ExtendedConfiguration.registerClass(BannedPlayer.class);
 		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
 		try {
+			Properties gitVersion = new Properties();
 			gitVersion.load(FileManager.class.getResourceAsStream("/git.properties"));
+			fileVersion = (String) gitVersion.get("git.commit.id");
+			DebugLog.INSTANCE.info("Git Version : " + fileVersion);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -239,7 +242,7 @@ public class FileManager implements DataManager {
 			try {
 				String version = reader.readLine();
 				final String versioncheck = version.substring(10);
-				if (!versioncheck.equals(gitVersion.get("git.commit.id"))) {
+				if (!versioncheck.equals(fileVersion)) {
 					reader.close();
 					file.delete();
 					DebugLog.INSTANCE.info("Delete file : " + file);
@@ -300,7 +303,7 @@ public class FileManager implements DataManager {
 						result.put(alias[0], new MaterialContainer(alias[1]));
 					} catch (ArrayIndexOutOfBoundsException e2) {
 					}
-					
+
 				}
 
 			}
