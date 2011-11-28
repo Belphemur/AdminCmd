@@ -43,7 +43,7 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
-import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -242,7 +242,7 @@ public class FileManager implements DataManager {
 				if (!versioncheck.equals(gitVersion.get("git.commit.id"))) {
 					reader.close();
 					file.delete();
-					ACLogger.info("delete file : " + file);
+					DebugLog.INSTANCE.info("Delete file : " + file);
 				} else
 					return file;
 			} catch (IOException e) {
