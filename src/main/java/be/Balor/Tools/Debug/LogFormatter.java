@@ -49,7 +49,7 @@ import java.util.logging.LogRecord;
  * @author Samuel Halliday
  */
 public class LogFormatter extends Formatter {
-	private static final String DEFAULT_FORMAT = "%t [%L] *%M* : %m [%T]";
+	private static final String DEFAULT_FORMAT = "%t [%L] *%C.%M* : %m [%T]";
 
 	private final MessageFormat messageFormat;
 
