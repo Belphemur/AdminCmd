@@ -185,9 +185,14 @@ public class ACPlayerListener extends PlayerListener {
 				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("bed")) {
-			loc = player.getBedSpawnLocation();
-			if (loc == null)
+			try {
+				loc = player.getBedSpawnLocation();
+				if (loc == null)
+					loc = ACWorld.getWorld(worldName).getSpawn();
+			} catch (NullPointerException e) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
+			}
+
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("group")) {
 			List<String> groups = ACHelper.getInstance().getGroupList();

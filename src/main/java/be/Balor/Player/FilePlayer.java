@@ -33,6 +33,7 @@ import com.google.common.io.Files;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.Category;
+import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.ObjectContainer;
@@ -46,10 +47,10 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class FilePlayer extends ACPlayer {
 
 	private ExtendedConfiguration datas;
-	private ConfigurationSection informations;
-	private ConfigurationSection homes;
-	private ConfigurationSection powers;
-	private ConfigurationSection kitsUse;
+	private ExConfigurationSection informations;
+	private ExConfigurationSection homes;
+	private ExConfigurationSection powers;
+	private ExConfigurationSection kitsUse;
 	private int saveCount = 0;
 	private final static int SAVE_BEFORE_WRITE = 5;
 

@@ -479,6 +479,7 @@ public class CommandManager implements CommandExecutor {
 
 		public SyncCommand(ACCommandContainer acc) {
 			this.acc = acc;
+			acc.processArguments();
 		}
 
 		/*
