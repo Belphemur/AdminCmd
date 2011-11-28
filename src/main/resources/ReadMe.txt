@@ -1,3 +1,4 @@
+#version: ${git.commit.id}
 Admin Command 
 =============
 Version : ${project.version} (BUILD ${git.build.time})

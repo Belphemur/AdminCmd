@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools.Files;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.bukkit.Location;
@@ -55,9 +57,15 @@ public class FileManager implements DataManager {
 	private String lastFilename = "";
 	private File lastFile = null;
 	private ExtendedConfiguration lastLoadedConf = null;
+	private final static Properties gitVersion = new Properties();
 	static {
 		ExtendedConfiguration.registerClass(BannedPlayer.class);
 		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
+		try {
+			gitVersion.load(FileManager.class.getResourceAsStream("/git.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -220,8 +228,23 @@ public class FileManager implements DataManager {
 			file = new File(directoryFile, filename);
 		} else
 			file = new File(pathFile, filename);
-		if (file.exists() && replace)
-			file.delete();
+		if (file.exists() && replace) {
+			BufferedReader reader = null;
+			try {
+				reader = new BufferedReader(new FileReader(file));
+			} catch (FileNotFoundException e) {
+			}
+			try {
+				String version = reader.readLine();
+				final String versioncheck = version.substring(10);
+				if (!versioncheck.equals(gitVersion.get("git.commit.id")))
+					file.delete();
+				else
+					return file;
+			} catch (IOException e) {
+				file.delete();
+			}
+		}
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
 			FileWriter tx = null;
@@ -253,13 +276,11 @@ public class FileManager implements DataManager {
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias",
-				new ArrayList<String>());
-		List<String> idList =  conf.getStringList("ids",
-				new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		int i = 0;
 		try {
-			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv")));
+			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv", null, true)));
 			String[] alias;
 			while ((alias = csv.readNext()) != null) {
 				try {
