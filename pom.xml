@@ -258,7 +258,7 @@
 		<dependency>
 			<groupId>Heroes</groupId>
 			<artifactId>Heroes</artifactId>
-			<version>366</version>
+			<version>1.3.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
