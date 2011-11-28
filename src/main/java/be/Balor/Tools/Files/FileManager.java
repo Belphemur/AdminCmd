@@ -244,6 +244,10 @@ public class FileManager implements DataManager {
 			} catch (IOException e) {
 				file.delete();
 			}
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
 		}
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
