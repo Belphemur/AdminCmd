@@ -17,6 +17,7 @@
 package be.Balor.Tools.Help;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -36,10 +38,10 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * 
  */
 public class HelpList {
-	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryComparator());
+	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 	private String pluginName;
 	private CommandSender lastCommandSender;
-	private TreeSet<HelpEntry> lastHelpEntries;
+	private List<HelpEntry> lastHelpEntries;
 
 	/**
 	 * 
@@ -55,6 +57,7 @@ public class HelpList {
 	}
 
 	public boolean removeEntry(String commandName) {
+		DebugLog.INSTANCE.info("Remove " + commandName + " help from plugin : " + pluginName);
 		HelpEntry toRemove = null;
 		for (HelpEntry he : pluginHelp)
 			if (he.getCommandName().equals(commandName)) {
@@ -69,7 +72,7 @@ public class HelpList {
 
 	@SuppressWarnings("unchecked")
 	public HelpList(Plugin plugin) throws IllegalArgumentException {
-		TreeSet<HelpEntry> list = new TreeSet<HelpEntry>(new EntryComparator());
+		TreeSet<HelpEntry> list = new TreeSet<HelpEntry>(new EntryNameComparator());
 		final HashMap<String, HashMap<String, String>> cmds = (HashMap<String, HashMap<String, String>>) plugin
 				.getDescription().getCommands();
 		this.pluginName = plugin.getDescription().getName();
@@ -93,7 +96,7 @@ public class HelpList {
 			this.pluginHelp = list;
 		} catch (Exception e) {
 			System.out.print("[AdminCmd] Problem with permissions of " + pluginName);
-			this.pluginHelp = new TreeSet<HelpEntry>(new EntryComparator());
+			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
 
 	}
@@ -114,11 +117,12 @@ public class HelpList {
 	private void checkPermissions(CommandSender sender) {
 		if (lastCommandSender != null && sender.equals(lastCommandSender))
 			return;
-		lastHelpEntries = new TreeSet<HelpEntry>(new EntryComparator());
+		lastHelpEntries = new ArrayList<HelpEntry>();
 		lastCommandSender = sender;
 		for (HelpEntry he : pluginHelp)
 			if (he.hasPerm(sender))
 				lastHelpEntries.add(he);
+		Collections.sort(lastHelpEntries, new EntryCommandComparator());
 	}
 
 	/**
@@ -159,16 +163,20 @@ public class HelpList {
 
 	}
 
-	private static class EntryComparator implements Comparator<HelpEntry> {
+	private static class EntryNameComparator implements Comparator<HelpEntry> {
 
 		boolean descending = true;
-
-		public EntryComparator() {
-		}
-
 		@Override
 		public int compare(HelpEntry o1, HelpEntry o2) {
 			return o1.getCommandName().compareTo(o2.getCommandName()) * (descending ? 1 : -1);
+		}
+	}
+	private static class EntryCommandComparator implements Comparator<HelpEntry> {
+
+		boolean descending = true;
+		@Override
+		public int compare(HelpEntry o1, HelpEntry o2) {
+			return o1.getCommand().compareTo(o2.getCommand()) * (descending ? 1 : -1);
 		}
 	}
 }

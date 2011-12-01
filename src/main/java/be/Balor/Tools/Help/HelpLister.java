@@ -24,6 +24,8 @@ import java.util.Set;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import be.Balor.Tools.Debug.DebugLog;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -101,7 +103,10 @@ public class HelpLister {
 	public boolean removeHelpEntry(String plugin, String commandName) {
 		HelpList help = plugins.get(plugin);
 		if (help == null)
+		{
+			DebugLog.INSTANCE.severe("Plugin "+plugin+" not found.");
 			return false;
+		}
 		return help.removeEntry(commandName);
 	}
 

@@ -362,8 +362,8 @@ public class ACHelper {
 				new File(coreInstance.getDataFolder(), "locales" + File.separator
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		CommandManager.createInstance().setCorePlugin(coreInstance);
 		HelpLoader.load(coreInstance.getDataFolder());
+		CommandManager.createInstance().setCorePlugin(coreInstance);		
 		if (pluginConfig.get("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.remove("pluginStarted");

@@ -210,7 +210,7 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 		} catch (CommandDisabled e) {
 			unRegisterBukkitCommand(command.getPluginCommand());
-			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
+			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 					command.getCmdName());
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				ACLogger.info(e.getMessage());
@@ -231,7 +231,7 @@ public class CommandManager implements CommandExecutor {
 				}
 			if (disableCommand) {
 				unRegisterBukkitCommand(command.getPluginCommand());
-				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getName(),
+				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 						command.getCmdName());
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					ACLogger.info(e.getMessage());
