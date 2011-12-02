@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -77,7 +78,8 @@ public class Home extends CoreCommand {
 
 	private class DelayedTeleport implements Runnable {
 
-		protected Location locBefore, teleportToLoc;
+		protected SimplifiedLocation locBefore;
+		protected Location teleportToLoc;
 		protected Player target;
 		protected be.Balor.Tools.Home home;
 		protected CommandSender sender;
@@ -85,7 +87,7 @@ public class Home extends CoreCommand {
 		public DelayedTeleport(Location teleportLoc, Player target,
 				be.Balor.Tools.Home home, CommandSender sender) {
 			this.target = target;
-			this.locBefore = target.getLocation().clone();
+			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.teleportToLoc = teleportLoc;
 			this.home = home;
 			this.sender = sender;

@@ -36,6 +36,10 @@ public class SimplifiedLocation extends Location {
 		super(world, x, y, z);
 	}
 
+	public SimplifiedLocation(Location loc) {
+		super(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
+	}
+
 	/**
 	 * @param visited
 	 *            the visited to set
@@ -58,10 +62,10 @@ public class SimplifiedLocation extends Location {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof SimplifiedLocation)) {
+		if (!(obj instanceof Location)) {
 			return false;
 		}
-		SimplifiedLocation other = (SimplifiedLocation) obj;
+		Location other = (Location) obj;
 		return other.getX() == this.getX() && other.getY() == this.getY()
 				&& other.getZ() == this.getZ();
 	}

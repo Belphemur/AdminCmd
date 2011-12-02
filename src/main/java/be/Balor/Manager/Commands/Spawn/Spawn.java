@@ -20,13 +20,13 @@ import static be.Balor.Tools.Utils.sendMessage;
 
 import java.util.HashMap;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -75,14 +75,14 @@ public class Spawn extends CoreCommand {
 
 	private class DelayedTeleport implements Runnable {
 
-		protected Location locBefore;
+		protected SimplifiedLocation locBefore;
 		protected Player target;
 		protected HashMap<String, String> replace;
 		protected CommandSender sender;
 
-		public DelayedTeleport( Player target, CommandSender sender) {
+		public DelayedTeleport(Player target, CommandSender sender) {
 			this.target = target;
-			this.locBefore = target.getLocation().clone();
+			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.sender = sender;
 		}
 
