@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class Home extends CoreCommand {
 	public Home() {
@@ -39,7 +39,7 @@ public class Home extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -56,8 +56,7 @@ public class Home extends CoreCommand {
 			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
-			}
-			else {
+			} else {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 						ACHelper.getInstance().getCoreInstance(),
 						new DelayedTeleport(player.getLocation(), loc, player, home, sender),
@@ -68,7 +67,7 @@ public class Home extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -86,7 +85,7 @@ public class Home extends CoreCommand {
 		public DelayedTeleport(Location locBefore, Location teleportLoc, Player target,
 				be.Balor.Tools.Home home, CommandSender sender) {
 			this.target = target;
-			this.locBefore= locBefore;
+			this.locBefore = locBefore;
 			this.teleportToLoc = teleportLoc;
 			this.home = home;
 			this.sender = sender;
@@ -94,7 +93,8 @@ public class Home extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (locBefore.equals(target.getLocation()) && ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+			if (ACHelper.getInstance().getConfBoolean("checkTeleportLocation")
+					&& locBefore.equals(target.getLocation())) {				
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);

@@ -60,6 +60,32 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		set(path, value);
 	}
 
+	@Override
+	public long getLong(String path, long def) {
+		if (path == null) {
+			throw new IllegalArgumentException("Path cannot be null");
+		}
+
+		Object val = get(path, def);
+		long returnVal;
+		try {
+			returnVal = castToLong(val);
+		} catch (NumberFormatException e) {
+			returnVal = def;
+		}
+		return returnVal;
+	}
+
+	private long castToLong(Object value) throws NumberFormatException {
+		if (value instanceof Long)
+			return (Long) value;
+		else if (value instanceof String)
+			return Long.parseLong((String) value);
+		else if (value instanceof Integer)
+			return Long.valueOf(((Integer) value));
+		throw new NumberFormatException();
+	}
+
 	/**
 	 * Shortcut to remove an item by setting it null
 	 * 
