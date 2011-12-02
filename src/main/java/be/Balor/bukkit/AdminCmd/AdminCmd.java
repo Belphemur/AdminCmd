@@ -482,7 +482,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%difficulty");
 		Utils.addLocale("serverLockMessage", "The server is locked!");
 		Utils.addLocale("errorMoved", ChatColor.RED
-				+ "You have moved since you issued the %cmdname command, teleportation abroted!");
+				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
 		LocaleManager.getInstance().save();
 	}
