@@ -240,9 +240,9 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			throw new IllegalArgumentException("Contents cannot be null");
 		}
 
-		Map<String, Object> input = null;
+		Map<Object, Object> input = null;
 		try {
-			input = (Map<String, Object>) yaml.load(contents);
+			input = (Map<Object, Object>) yaml.load(contents);
 		} catch (ScannerException e) {
 			if (e.getContextMark() == null) {
 				ACLogger.severe("File : " + file
@@ -266,13 +266,22 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 					"Specified contents is not a valid Configuration", ex);
 		}
 
+		int size = (input == null) ? 0 : input.size();
+		Map<String, Object> result = new LinkedHashMap<String, Object>(size);
+
+		if (size > 0) {
+			for (Map.Entry<Object, Object> entry : input.entrySet()) {
+				result.put(entry.getKey().toString(), entry.getValue());
+			}
+		}
+
 		String header = parseHeader(contents);
 
 		if (header.length() > 0) {
 			options().header(header);
 		}
 
-		deserializeValues(input, this);
+		deserializeValues(result, this);
 		lock.unlock();
 
 	}
@@ -352,7 +361,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			}
 		}
 	}
-
 
 	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
 			throws InvalidConfigurationException {
