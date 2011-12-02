@@ -453,6 +453,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another "
 				+ ChatColor.WHITE + "%delay");
 		Utils.addLocale("days", "%d day(s)");
+		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
 		Utils.addLocale("spawnerSetDelay", ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD
 				+ "%delay");
 		Utils.addLocale("spawnerSetType", ChatColor.GREEN
