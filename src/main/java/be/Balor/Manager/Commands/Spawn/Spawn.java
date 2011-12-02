@@ -24,7 +24,6 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
@@ -34,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class Spawn extends CoreCommand {
 
@@ -48,7 +47,7 @@ public class Spawn extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -59,14 +58,14 @@ public class Spawn extends CoreCommand {
 			Player target = (Player) sender;
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 					ACHelper.getInstance().getCoreInstance(),
-					new DelayedTeleport(target.getLocation(), target, sender),
+					new DelayedTeleport(target, sender),
 					ACHelper.getInstance().getConfLong("teleportDelay"));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -81,26 +80,29 @@ public class Spawn extends CoreCommand {
 		protected HashMap<String, String> replace;
 		protected CommandSender sender;
 
-		public DelayedTeleport(Location locBefore, Player target, CommandSender sender) {
+		public DelayedTeleport( Player target, CommandSender sender) {
 			this.target = target;
-			this.locBefore= locBefore;
+			this.locBefore = target.getLocation().clone();
 			this.sender = sender;
 		}
 
 		@Override
 		public void run() {
-				if (locBefore.equals(target.getLocation()) && ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
-					ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
-					ACHelper.getInstance().spawn((Player) sender);
-					sendMessage(sender, target, "spawn");
-				} else if (!ACHelper.getInstance().getConfBoolean("teleportDelay")) {
-					ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
-					ACHelper.getInstance().spawn((Player) sender);
-					sendMessage(sender, target, "spawn");
-				} else {
-					replace.put("cmdname", "Warp");
-					sendMessage(sender, target, "errorMoved", replace);
-				}
+			if (!ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
+				ACHelper.getInstance().spawn((Player) sender);
+				sendMessage(sender, target, "spawn");
+				return;
+			}
+
+			if (locBefore.equals(target.getLocation())) {
+				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
+				ACHelper.getInstance().spawn((Player) sender);
+				sendMessage(sender, target, "spawn");
+			} else {
+				replace.put("cmdname", "Warp");
+				sendMessage(sender, target, "errorMoved", replace);
+			}
 		}
 	}
 }

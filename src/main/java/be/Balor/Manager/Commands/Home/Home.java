@@ -59,7 +59,7 @@ public class Home extends CoreCommand {
 			} else {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 						ACHelper.getInstance().getCoreInstance(),
-						new DelayedTeleport(player.getLocation(), loc, player, home, sender),
+						new DelayedTeleport(loc, player, home, sender),
 						ACHelper.getInstance().getConfLong("teleportDelay"));
 			}
 		}
@@ -82,10 +82,10 @@ public class Home extends CoreCommand {
 		protected be.Balor.Tools.Home home;
 		protected CommandSender sender;
 
-		public DelayedTeleport(Location locBefore, Location teleportLoc, Player target,
+		public DelayedTeleport(Location teleportLoc, Player target,
 				be.Balor.Tools.Home home, CommandSender sender) {
 			this.target = target;
-			this.locBefore = locBefore;
+			this.locBefore = target.getLocation().clone();
 			this.teleportToLoc = teleportLoc;
 			this.home = home;
 			this.sender = sender;
@@ -93,13 +93,14 @@ public class Home extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (ACHelper.getInstance().getConfBoolean("checkTeleportLocation")
-					&& locBefore.equals(target.getLocation())) {				
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+			if (!ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
-			} else if (!ACHelper.getInstance().getConfBoolean("teleportDelay")) {
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+				return;
+			}
+			if (locBefore.equals(target.getLocation())) {
+				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
 			} else {
