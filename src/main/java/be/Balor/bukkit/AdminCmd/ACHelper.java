@@ -503,6 +503,7 @@ public class ACHelper {
 		pluginConfig.add("InvisAndNoPickup", false);
 		pluginConfig.add("checkTeleportLocation", false);
 		pluginConfig.add("teleportDelay", 0L);
+		pluginConfig.add("logAllCmd", false);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
