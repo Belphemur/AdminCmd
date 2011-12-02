@@ -753,7 +753,8 @@ public class Utils {
 	public static void broadcastFakeQuit(Player player) {
 		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player)  + mChatApi.getEventMessage("quit"));
+			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
+					+ mChatApi.getEventMessage("quit"));
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 
@@ -802,7 +803,7 @@ public class Utils {
 	public static void broadcastFakeJoin(Player player) {
 		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player)
+			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
 					+ mChatApi.getEventMessage("join"));
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");

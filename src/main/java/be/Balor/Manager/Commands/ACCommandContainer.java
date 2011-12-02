@@ -56,8 +56,7 @@ public class ACCommandContainer {
 			String name = "Console";
 			if (sender instanceof Player)
 				name = ((Player) sender).getName();
-			ACLogger.info(name + " issued the command : " + cmd.getCmdName() + " "
-					+ args.toString());
+			ACLogger.info(name + " [CMD: " + cmd.getCmdName() + "] (ARGS:" + args.toString() + ")");
 		}
 		cmd.execute(sender, args);
 	}
