@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 public class ACCommandContainer {
 	private final CommandSender sender;
 	private final CoreCommand cmd;
-	private CommandArgs args;
+	private CommandArgs args = null;
 	private final String[] argsStrings;
 
 	/**
@@ -45,7 +45,8 @@ public class ACCommandContainer {
 	 * Parse the arguments, flags, etc ... by creating the CommandArgs
 	 */
 	public void processArguments() {
-		args = new CommandArgs(argsStrings);
+		if (args == null) 
+			args = new CommandArgs(argsStrings);		
 	}
 
 	/**

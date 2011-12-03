@@ -23,7 +23,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
@@ -59,11 +60,7 @@ import be.Balor.bukkit.AdminCmd.AdminCmd;
  */
 public class CommandManager implements CommandExecutor {
 	private HashMap<Command, CoreCommand> registeredCommands = new HashMap<Command, CoreCommand>();
-	private final int MAX_REQUEST = 5;
-	private final int MAX_THREADS = 5;
-	private ArrayList<ExecutorThread> threads = new ArrayList<CommandManager.ExecutorThread>(
-			MAX_THREADS);
-	private int cmdCount = 0;
+	private final int MAX_THREADS = 8;
 	private static CommandManager instance = new CommandManager();
 	private AbstractAdminCmdPlugin corePlugin;
 	private boolean threadsStarted = false;
@@ -71,8 +68,9 @@ public class CommandManager implements CommandExecutor {
 	private List<String> prioritizedCommands;
 	private HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
 	private HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
+	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(1, MAX_THREADS, 1, TimeUnit.MINUTES,
+			new LinkedBlockingQueue<Runnable>());
 	private HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
-	private int execCount = 0;
 
 	/**
 	 * 
@@ -180,11 +178,7 @@ public class CommandManager implements CommandExecutor {
 
 	public void startThreads() {
 		if (!threadsStarted) {
-			threads.clear();
-			for (int i = 0; i < MAX_THREADS; i++) {
-				threads.add(new ExecutorThread());
-				threads.get(i).start();
-			}
+			threads.purge();
 		}
 		threadsStarted = true;
 	}
@@ -334,9 +328,6 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	public void stopAllExecutorThreads() {
-		for (ExecutorThread t : threads) {
-			t.stopThread();
-		}
 		threadsStarted = false;
 	}
 
@@ -375,14 +366,11 @@ public class CommandManager implements CommandExecutor {
 				corePlugin.getServer().getScheduler()
 						.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
 			else {
-				threads.get(cmdCount).addCommand(container);
-				cmdCount++;
-				if (cmdCount == MAX_THREADS)
-					cmdCount = 0;
+				threads.execute(new NormalCommand(container));
 			}
 			if (!cmd.getCmdName().equals("bal_repeat")) {
 				if (Utils.isPlayer(sender, false))
-					ACPlayer.getPlayer(((Player) sender).getName()).setLastCmd(container);
+					ACPlayer.getPlayer(((Player) sender)).setLastCmd(container);
 				else
 					ACPlayer.getPlayer("serverConsole").setLastCmd(container);
 			}
@@ -390,10 +378,6 @@ public class CommandManager implements CommandExecutor {
 		} catch (Throwable t) {
 			ACLogger.severe(container.debug(), t);
 			Utils.broadcastMessage("[AdminCmd] " + container.debug());
-			if (cmdCount == 0)
-				threads.get(4).start();
-			else
-				threads.get(cmdCount - 1).start();
 			return false;
 		}
 	}
@@ -410,77 +394,11 @@ public class CommandManager implements CommandExecutor {
 			return false;
 	}
 
-	/**
-	 * @author Balor (aka Antoine Aflalo)
-	 * 
-	 */
-	private class ExecutorThread extends Thread {
-		private final LinkedBlockingQueue<ACCommandContainer> commands;
-		private boolean stop = false;
-		private Semaphore sema;
-		private Object threadSync = new Object();
-
-		/**
-		 * 
-		 */
-		public ExecutorThread() {
-			super("Executor " + execCount++);
-			commands = new LinkedBlockingQueue<ACCommandContainer>(MAX_REQUEST);
-			sema = new Semaphore(0);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Thread#run()
-		 */
-		@Override
-		public void run() {
-			ACCommandContainer current = null;
-			while (true) {
-				try {
-					sema.acquire();
-					synchronized (threadSync) {
-						if (this.stop)
-							break;
-					}
-					current = commands.poll();
-					current.execute();
-				} catch (InterruptedException e) {
-				} catch (ConcurrentModificationException cme) {
-					ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
-							new SyncCommand(current));
-				} catch (WorldNotLoaded e) {
-					ACLogger.severe("World not Loaded", e);
-					Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
-				} catch (Throwable t) {
-					ACLogger.severe(current.debug(), t);
-					Utils.broadcastMessage("[AdminCmd] " + current.debug());
-				}
-
-			}
-		}
-
-		public synchronized void stopThread() {
-			stop = true;
-			sema.release();
-		}
-
-		public synchronized void addCommand(final ACCommandContainer cmd)
-				throws InterruptedException {
-			cmd.processArguments();
-			commands.put(cmd);
-			sema.release();
-		}
-
-	}
-
-	private class SyncCommand implements Runnable {
+	private class NormalCommand implements Runnable {
 		private ACCommandContainer acc = null;
 
-		public SyncCommand(ACCommandContainer acc) {
+		public NormalCommand(ACCommandContainer acc) {
 			this.acc = acc;
-			acc.processArguments();
 		}
 
 		/*
@@ -491,6 +409,38 @@ public class CommandManager implements CommandExecutor {
 		@Override
 		public void run() {
 			try {
+				acc.processArguments();
+				acc.execute();
+			} catch (ConcurrentModificationException cme) {
+				ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
+						new SyncCommand(acc));
+			} catch (WorldNotLoaded e) {
+				ACLogger.severe("World not Loaded", e);
+				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
+			} catch (Throwable t) {
+				ACLogger.severe(acc.debug(), t);
+				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
+			}
+		}
+
+	}
+
+	private class SyncCommand implements Runnable {
+		private ACCommandContainer acc = null;
+
+		public SyncCommand(ACCommandContainer acc) {
+			this.acc = acc;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			try {
+				acc.processArguments();
 				acc.execute();
 			} catch (WorldNotLoaded e) {
 				ACLogger.severe("World not Loaded", e);
@@ -502,4 +452,5 @@ public class CommandManager implements CommandExecutor {
 		}
 
 	}
+
 }
