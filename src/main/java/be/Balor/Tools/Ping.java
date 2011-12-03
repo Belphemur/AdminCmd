@@ -25,7 +25,6 @@ website. Please do not modify this file without verification of the author.
  ************************************************************************/
 package be.Balor.Tools;
 
-import org.apache.commons.codec.binary.Hex;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -34,7 +33,6 @@ import be.Balor.Tools.Debug.LogFormatter;
 import java.io.File;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
 import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -63,17 +61,11 @@ public class Ping {
 	private static Boolean configExists() {
 		config.addDefault("opt-out", false);
 		config.addDefault("guid", UUID.randomUUID().toString());
-		if (!configFile.exists() || config.get("hash", null) == null) {
+		if (!configFile.exists() || config.get("guid", null) == null) {
 			System.out
 					.println("PluginStats is initializing for the first time. To opt-out for any reason check plugins/PluginStats/config.yml");
 			try {
 				config.options().copyDefaults(true);
-
-				MessageDigest cript = MessageDigest.getInstance("SHA-1");
-				cript.reset();
-				cript.update(UUID.randomUUID().toString().getBytes("utf8"));
-				String hash = new String(Hex.encodeHex(cript.digest()));
-				config.set("hash", hash);
 				config.save(configFile);
 			} catch (Exception ex) {
 				System.out.println("Error creating PluginStats configuration file.");
