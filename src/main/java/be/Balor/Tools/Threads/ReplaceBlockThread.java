@@ -30,7 +30,7 @@ public class ReplaceBlockThread extends Thread {
 	private Object threadSync = new Object();
 	private boolean stop = false;
 	private Monitor monitor = new Monitor();
-	private final static int MAX_BLOCKS = 10;
+	private final static int MAX_BLOCKS = 20;
 	protected Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 	private Monitor.Guard guard = new Monitor.Guard(monitor) {
 
