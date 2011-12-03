@@ -79,6 +79,7 @@ public class Utils {
 	private final static long minuteInMillis = secondInMillis * 60;
 	private final static long hourInMillis = minuteInMillis * 60;
 	private final static long dayInMillis = hourInMillis * 24;
+	public final static ReplaceBlockThread replaceBlock = new ReplaceBlockThread();
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -716,6 +717,8 @@ public class Utils {
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
+		if(!replaceBlock.isAlive())
+			replaceBlock.start();
 		if (logBlock == null)
 			for (int y = block.getY() - radius; y <= limitY; y++) {
 				for (int x = block.getX() - radius; x <= limitX; x++)
@@ -724,7 +727,7 @@ public class Utils {
 						if (mat.contains(current.getType())) {
 							br = new BlockRemanence(current.getLocation());
 							blocks.push(br);
-							br.setBlockType(0);
+							replaceBlock.addBlockRemanence(br);
 						}
 					}
 			}
@@ -737,10 +740,11 @@ public class Utils {
 							br = new BlockRemanence(current.getLocation());
 							logBlock.queueBlockBreak(playername, current.getState());
 							blocks.push(br);
-							br.setBlockType(0);
+							replaceBlock.addBlockRemanence(br);
 						}
 					}
 			}
+		replaceBlock.flushBlocks();
 		return blocks;
 	}
 
