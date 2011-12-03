@@ -65,9 +65,10 @@ public class SimplifiedLocation extends Location {
 		if (!(obj instanceof Location)) {
 			return false;
 		}
+
 		Location other = (Location) obj;
-		return other.getX() == this.getX() && other.getY() == this.getY()
-				&& other.getZ() == this.getZ();
+		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
+				&& other.getBlockZ() == this.getBlockZ();
 	}
 
 }
