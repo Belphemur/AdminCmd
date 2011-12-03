@@ -337,8 +337,9 @@ public class ACHelper {
 	 * Same code used when reload and onEnable
 	 */
 	private void init() {
+		AFKWorker.createInstance();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.createInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
 			this.coreInstance
