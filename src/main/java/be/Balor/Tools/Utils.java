@@ -59,6 +59,11 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Blocks.BlockRemanence;
+import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
+import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
+import be.Balor.Tools.Threads.ReplaceBlockThread;
+import be.Balor.Tools.Threads.UndoBlockThreads;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -80,6 +85,7 @@ public class Utils {
 	private final static long hourInMillis = minuteInMillis * 60;
 	private final static long dayInMillis = hourInMillis * 24;
 	public final static ReplaceBlockThread replaceBlock = new ReplaceBlockThread();
+	public final static ReplaceBlockThread undoBlock = new UndoBlockThreads();
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -116,6 +122,15 @@ public class Utils {
 		}
 		return mc;
 
+	}
+
+	/**
+	 * @param logBlock
+	 *            the logBlock to set
+	 */
+	public static void setLogBlock(Consumer logBlock) {
+		Utils.logBlock = logBlock;
+		IBlockRemanenceFactory.FACTORY = new LogBlockRemanenceFactory();
 	}
 
 	/**
@@ -688,6 +703,7 @@ public class Utils {
 
 			}
 			String playername = ((Player) sender).getName();
+			IBlockRemanenceFactory.FACTORY.setPlayerName(playername);
 			Stack<BlockRemanence> blocks;
 			Block block = ((Player) sender).getLocation().getBlock();
 			if (mat.contains(Material.LAVA) || mat.contains(Material.WATER))
@@ -695,7 +711,7 @@ public class Utils {
 			else
 				blocks = replaceInCuboid(playername, mat, block, radius);
 			if (!blocks.isEmpty())
-				ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
+				ACHelper.getInstance().addInUndoQueue(playername, blocks);
 			return blocks.size();
 		}
 		return null;
@@ -717,33 +733,21 @@ public class Utils {
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		if(!replaceBlock.isAlive())
+		if (!replaceBlock.isAlive())
 			replaceBlock.start();
-		if (logBlock == null)
-			for (int y = block.getY() - radius; y <= limitY; y++) {
-				for (int x = block.getX() - radius; x <= limitX; x++)
-					for (int z = block.getZ() - radius; z <= limitZ; z++) {
-						current = block.getWorld().getBlockAt(x, y, z);
-						if (mat.contains(current.getType())) {
-							br = new BlockRemanence(current.getLocation());
-							blocks.push(br);
-							replaceBlock.addBlockRemanence(br);
-						}
+		for (int y = block.getY() - radius; y <= limitY; y++) {
+			for (int x = block.getX() - radius; x <= limitX; x++)
+				for (int z = block.getZ() - radius; z <= limitZ; z++) {
+					current = block.getWorld().getBlockAt(x, y, z);
+					if (mat.contains(current.getType())) {
+						br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(current
+								.getLocation());
+						blocks.push(br);
+						replaceBlock.addBlockRemanence(br);
 					}
-			}
-		else
-			for (int y = block.getY() - radius; y <= limitY; y++) {
-				for (int x = block.getX() - radius; x <= limitX; x++)
-					for (int z = block.getZ() - radius; z <= limitZ; z++) {
-						current = block.getWorld().getBlockAt(x, y, z);
-						if (mat.contains(current.getType())) {
-							br = new BlockRemanence(current.getLocation());
-							logBlock.queueBlockBreak(playername, current.getState());
-							blocks.push(br);
-							replaceBlock.addBlockRemanence(br);
-						}
-					}
-			}
+				}
+		}
+
 		replaceBlock.flushBlocks();
 		return blocks;
 	}
@@ -827,78 +831,38 @@ public class Utils {
 		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
-		if (logBlock == null) {
-			for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
-				for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
-					for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
+
+		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
+			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
+				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
+					SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+					if (isFluid(newPos) && !newPos.isVisited()) {
+						newPos.setVisited();
+						processQueue.push(newPos);
+						current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
+						blocks.push(current);
+						current.setBlockType(0);
+					}
+
+				}
+			}
+		}
+		while (!processQueue.isEmpty()) {
+			SimplifiedLocation loc = processQueue.pop();
+			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
+				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
+					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
 						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-						if (isFluid(newPos) && !newPos.isVisited()) {
-							newPos.setVisited();
+						if (!newPos.isVisited() && isFluid(newPos)
+								&& start.distance(newPos) < radius) {
 							processQueue.push(newPos);
-							current = new BlockRemanence(newPos);
+							current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 							blocks.push(current);
 							current.setBlockType(0);
-						}
-
-					}
-				}
-			}
-			while (!processQueue.isEmpty()) {
-				SimplifiedLocation loc = processQueue.pop();
-				for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
-					for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
-						for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
-							SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-							if (!newPos.isVisited() && isFluid(newPos)
-									&& start.distance(newPos) < radius) {
-								processQueue.push(newPos);
-								current = new BlockRemanence(newPos);
-								blocks.push(current);
-								current.setBlockType(0);
-								newPos.setVisited();
-							}
-						}
-
-					}
-				}
-			}
-		} else {
-			for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
-				for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
-					for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
-						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-						if (isFluid(newPos) && !newPos.isVisited()) {
 							newPos.setVisited();
-							processQueue.push(newPos);
-							current = new BlockRemanence(newPos);
-							logBlock.queueBlockBreak(playername, newPos, current.getOldType(),
-									current.getData());
-							blocks.push(current);
-							current.setBlockType(0);
 						}
-
 					}
-				}
-			}
-			while (!processQueue.isEmpty()) {
-				SimplifiedLocation loc = processQueue.pop();
-				for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
-					for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
-						for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
-							SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-							if (!newPos.isVisited() && isFluid(newPos)
-									&& start.distance(newPos) < radius) {
-								processQueue.push(newPos);
-								current = new BlockRemanence(newPos);
-								logBlock.queueBlockBreak(playername, newPos, current.getOldType(),
-										current.getData());
-								blocks.push(current);
-								current.setBlockType(0);
-								newPos.setVisited();
-							}
-						}
 
-					}
 				}
 			}
 		}

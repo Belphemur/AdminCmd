@@ -42,10 +42,10 @@ import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Player.TempBannedPlayer;
-import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -210,21 +210,21 @@ public class ACHelper {
 			throw new EmptyStackException();
 		Stack<BlockRemanence> undo = blockQueue.pop();
 		int i = 0;
+		if(!Utils.undoBlock.isAlive())
+			Utils.undoBlock.start();
 		try {
-			if (Utils.logBlock == null)
 				while (!undo.isEmpty()) {
-					undo.pop().returnToThePast();
+					Utils.undoBlock.addBlockRemanence(undo.pop());
 					i++;
 				}
-			else
-				while (!undo.isEmpty()) {
-					BlockRemanence br = undo.pop();
-					Utils.logBlock.queueBlockPlace(player, br.returnToThePast().getState());
-					i++;
-				}
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			ACLogger.severe(e.getMessage(), e);
 			return i;
+		}
+		finally
+		{
+			Utils.undoBlock.flushBlocks();
 		}
 		return i;
 	}
@@ -364,7 +364,7 @@ public class ACHelper {
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		HelpLoader.load(coreInstance.getDataFolder());
-		CommandManager.createInstance().setCorePlugin(coreInstance);		
+		CommandManager.createInstance().setCorePlugin(coreInstance);
 		if (pluginConfig.get("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.remove("pluginStarted");

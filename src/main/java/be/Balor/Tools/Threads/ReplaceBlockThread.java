@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Threads;
 
 import java.util.Stack;
+
+import be.Balor.Tools.Blocks.BlockRemanence;
 
 import com.google.common.util.concurrent.Monitor;
 
@@ -28,8 +30,8 @@ public class ReplaceBlockThread extends Thread {
 	private Object threadSync = new Object();
 	private boolean stop = false;
 	private Monitor monitor = new Monitor();
-	private final static int MAX_BLOCKS = 5;
-	private Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
+	private final static int MAX_BLOCKS = 10;
+	protected Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 	private Monitor.Guard guard = new Monitor.Guard(monitor) {
 
 		public boolean isSatisfied() {
