@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -831,17 +832,17 @@ public class Utils {
 		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
-
+		HashSet<SimplifiedLocation> visited = new HashSet<SimplifiedLocation>();
 		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
 			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
 				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
 					SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-					if (isFluid(newPos) && !newPos.isVisited()) {
-						newPos.setVisited();
+					if (isFluid(newPos) && !visited.contains(newPos)) {
+						visited.add(newPos);
 						processQueue.push(newPos);
 						current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 						blocks.push(current);
-						current.setBlockType(0);
+						replaceBlock.addBlockRemanence(current);
 					}
 
 				}
@@ -853,13 +854,13 @@ public class Utils {
 				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
 					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
 						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-						if (!newPos.isVisited() && isFluid(newPos)
+						if (!visited.contains(newPos) && isFluid(newPos)
 								&& start.distance(newPos) < radius) {
 							processQueue.push(newPos);
 							current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 							blocks.push(current);
-							current.setBlockType(0);
-							newPos.setVisited();
+							replaceBlock.addBlockRemanence(current);
+							visited.add(newPos);
 						}
 					}
 

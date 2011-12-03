@@ -24,7 +24,6 @@ import org.bukkit.World;
  * 
  */
 public class SimplifiedLocation extends Location {
-	boolean visited = false;
 
 	/**
 	 * @param world
@@ -38,21 +37,6 @@ public class SimplifiedLocation extends Location {
 
 	public SimplifiedLocation(Location loc) {
 		super(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
-	}
-
-	/**
-	 * @param visited
-	 *            the visited to set
-	 */
-	public void setVisited() {
-		this.visited = true;
-	}
-
-	/**
-	 * @return the visited
-	 */
-	public boolean isVisited() {
-		return visited;
 	}
 
 	/*
@@ -70,5 +54,6 @@ public class SimplifiedLocation extends Location {
 		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
 				&& other.getBlockZ() == this.getBlockZ();
 	}
+	
 
 }
