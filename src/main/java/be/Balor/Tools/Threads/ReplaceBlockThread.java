@@ -42,6 +42,17 @@ public class ReplaceBlockThread extends Thread {
 		}
 	};
 
+	/**
+	 * 
+	 */
+	public ReplaceBlockThread() {
+		this("ReplaceBlockThread");
+	}
+
+	public ReplaceBlockThread(String name) {
+		super(name);
+	}
+
 	public synchronized void stopThread() {
 		stop = true;
 	}
@@ -49,8 +60,8 @@ public class ReplaceBlockThread extends Thread {
 	public synchronized void addBlockRemanence(BlockRemanence blk) {
 		blocks.add(blk);
 	}
-	public synchronized void flushBlocks()
-	{
+
+	public synchronized void flushBlocks() {
 		while (!blocks.empty())
 			blocks.pop().setBlockType(0);
 	}

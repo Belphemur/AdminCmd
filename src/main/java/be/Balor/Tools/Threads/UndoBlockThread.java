@@ -20,10 +20,16 @@ package be.Balor.Tools.Threads;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class UndoBlockThreads extends ReplaceBlockThread {
+public class UndoBlockThread extends ReplaceBlockThread {
 	/* (non-Javadoc)
 	 * @see be.Balor.Tools.Threads.ReplaceBlockThread#flushBlocks()
 	 */
+	/**
+	 * 
+	 */
+	public UndoBlockThread() {
+		super("UndoBlockThread");
+	}
 	@Override
 	public synchronized void flushBlocks() {
 		while (!blocks.empty())

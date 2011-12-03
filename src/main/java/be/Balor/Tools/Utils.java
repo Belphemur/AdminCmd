@@ -63,7 +63,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Threads.ReplaceBlockThread;
-import be.Balor.Tools.Threads.UndoBlockThreads;
+import be.Balor.Tools.Threads.UndoBlockThread;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -85,7 +85,7 @@ public class Utils {
 	private final static long hourInMillis = minuteInMillis * 60;
 	private final static long dayInMillis = hourInMillis * 24;
 	public final static ReplaceBlockThread replaceBlock = new ReplaceBlockThread();
-	public final static ReplaceBlockThread undoBlock = new UndoBlockThreads();
+	public final static ReplaceBlockThread undoBlock = new UndoBlockThread();
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
