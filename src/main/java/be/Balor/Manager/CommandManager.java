@@ -328,6 +328,7 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	public void stopAllExecutorThreads() {
+		threads.shutdown();
 		threadsStarted = false;
 	}
 
