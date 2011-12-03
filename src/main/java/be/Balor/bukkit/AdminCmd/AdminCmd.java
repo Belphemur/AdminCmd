@@ -30,6 +30,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Ping;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -540,6 +541,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
+		//get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
+		Ping.init(this);
 	}
 
 	@Override
