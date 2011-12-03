@@ -22,16 +22,19 @@ THE SOFTWARE.
 NOTE: The modification of this code could result in improper tracking of
 statistics, stability of the server running your plugins or the statistics
 website. Please do not modify this file without verification of the author.
-************************************************************************/
+ ************************************************************************/
 package be.Balor.Tools;
 
-import org.bukkit.Bukkit;
+import org.apache.commons.codec.binary.Hex;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+
+import be.Balor.Tools.Debug.LogFormatter;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
 import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -43,14 +46,13 @@ public class Ping {
 	private static final String logFile = "plugins/PluginStats/log.txt";
 	private static final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 	private static Logger logger = null;
+	private static Pinger pinger;
 
-	public static void init(Plugin plugin) {
+	public static void init(Plugin plugin) {	
 		if (configExists() && logExists() && !config.getBoolean("opt-out")) {
-			plugin.getServer()
-					.getScheduler()
-					.scheduleAsyncRepeatingTask(plugin,
-							new Pinger(plugin, config.getString("guid"), logger), 10L,
-							20L * 60L * 60 * 24);
+			pinger = new Pinger(plugin, config.getString("guid"), logger);
+			plugin.getServer().getScheduler()
+					.scheduleAsyncRepeatingTask(plugin, pinger, 10L, 20L * 60L * 60 * 24);
 			System.out
 					.println("["
 							+ plugin.getDescription().getName()
@@ -66,6 +68,12 @@ public class Ping {
 					.println("PluginStats is initializing for the first time. To opt-out for any reason check plugins/PluginStats/config.yml");
 			try {
 				config.options().copyDefaults(true);
+
+				MessageDigest cript = MessageDigest.getInstance("SHA-1");
+				cript.reset();
+				cript.update(UUID.randomUUID().toString().getBytes("utf8"));
+				String hash = new String(Hex.encodeHex(cript.digest()));
+				config.set("hash", hash);
 				config.save(configFile);
 			} catch (Exception ex) {
 				System.out.println("Error creating PluginStats configuration file.");
@@ -81,6 +89,7 @@ public class Ping {
 			FileHandler handler = new FileHandler(logFile, true);
 			logger = Logger.getLogger("com.randomappdev");
 			logger.setUseParentHandlers(false);
+			handler.setFormatter(new LogFormatter());
 			logger.addHandler(handler);
 		} catch (Exception ex) {
 			System.out.println("Error creating PluginStats log file.");
@@ -92,50 +101,49 @@ public class Ping {
 }
 
 class Pinger implements Runnable {
-	private Plugin plugin;
-	private String guid;
-	private Logger logger;
+	private final Plugin plugin;
+	private String guid, serverName, version, name, main, author, website, pversion;
+	private final Logger logger;
 
 	public Pinger(Plugin plugin, String guid, Logger theLogger) {
 		this.plugin = plugin;
 		this.guid = guid;
 		this.logger = theLogger;
-	}
-
-	public void run() {
-		pingServer();
-	}
-
-	private void pingServer() {
-
-		String authors = "";
-
 		try {
-
+			serverName = URLEncoder.encode(plugin.getServer().getServerName(), "UTF-8");
+			version = URLEncoder.encode(plugin.getServer().getVersion(), "UTF-8");
+			name = URLEncoder.encode(plugin.getDescription().getName(), "UTF-8");
+			main = URLEncoder.encode(plugin.getDescription().getMain(), "UTF-8");
+			website = URLEncoder.encode(plugin.getDescription().getWebsite() == null ? "" : plugin
+					.getDescription().getWebsite(), "UTF-8");
+			pversion = URLEncoder.encode(plugin.getDescription().getVersion(), "UTF-8");
+			String authors = "";
 			for (String auth : plugin.getDescription().getAuthors()) {
 				authors = authors + " " + auth;
 			}
 			authors = authors.trim();
+			author = URLEncoder.encode(authors, "UTF-8");
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+	}
+
+	public void run() {
+		try {
 
 			String url = String
 					.format("http://pluginstats.randomappdev.com/ping.aspx?snam=%s&sprt=%s&shsh=%s&sver=%s&spcnt=%s&pnam=%s&pmcla=%s&paut=%s&pweb=%s&pver=%s",
-							URLEncoder.encode(plugin.getServer().getServerName(), "UTF-8"), plugin
-									.getServer().getPort(), guid, URLEncoder.encode(
-									Bukkit.getVersion(), "UTF-8"), plugin.getServer()
-									.getOnlinePlayers().length, URLEncoder.encode(plugin
-									.getDescription().getName(), "UTF-8"), URLEncoder.encode(plugin
-									.getDescription().getMain(), "UTF-8"), URLEncoder.encode(
-									authors, "UTF-8"), URLEncoder.encode(plugin.getDescription()
-									.getWebsite(), "UTF-8"), URLEncoder.encode(plugin
-									.getDescription().getVersion(), "UTF-8"));
+							serverName, plugin.getServer().getPort(), guid, version, plugin
+									.getServer().getOnlinePlayers().length, name, main, author,
+							website, pversion);
 
 			new URL(url).openConnection().getInputStream();
 			logger.log(Level.INFO, "PluginStats pinged the central server.");
 
 		} catch (Exception ex) {
 			// Fail Silently to avoid console spam.
-			logger.log(Level.SEVERE, ex.getStackTrace().toString());
+			logger.log(Level.SEVERE, ex.getMessage(), ex);
 		}
-
 	}
+
 }
