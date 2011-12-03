@@ -833,6 +833,8 @@ public class Utils {
 		World w = block.getWorld();
 		Location start = block.getLocation();
 		HashSet<SimplifiedLocation> visited = new HashSet<SimplifiedLocation>();
+		if (!replaceBlock.isAlive())
+			replaceBlock.start();
 		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
 			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
 				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
@@ -867,7 +869,7 @@ public class Utils {
 				}
 			}
 		}
-
+		replaceBlock.flushBlocks();
 		return blocks;
 	}
 
