@@ -51,7 +51,7 @@ public class Reply extends CoreCommand {
 			return;
 
 		if (Utils.isPlayer(sender, false)
-				&& ACPlayer.getPlayer(((Player) sender).getName()).hasPower(Type.MUTED)
+				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
 				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
@@ -70,7 +70,7 @@ public class Reply extends CoreCommand {
 				return;
 			}
 			String senderPm = "";
-			String msgPrefix = "[" + ChatColor.RED + "private" + ChatColor.WHITE + "] ";
+			String msgPrefix = Utils.I18n("privateTitle");
 			String msg = "";
 			String senderName = "";
 			senderName = pSender.getName();
@@ -90,10 +90,10 @@ public class Reply extends CoreCommand {
 				sender.sendMessage(msgPrefix + senderPm + parsed);
 			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
 					+ "-" + buddy.getName() + ": " + parsed;
-			for (ACPlayer p : ACPlayer.getPlayers(Type.SPYMSG))
+			for (Player p : ACHelper.getInstance().getSpyPlayers())
 				if (p != null && !p.getName().equals(senderName)
-						&& !p.getName().equals(buddy.getName()) && p.getHandler() != null)
-					p.getHandler().sendMessage(spyMsg);
+						&& !p.getName().equals(buddy.getName()))
+					p.sendMessage(spyMsg);
 			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages"))
 				ACLogger.info(spyMsg);
 		} else
