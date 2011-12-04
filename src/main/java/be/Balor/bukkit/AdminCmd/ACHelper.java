@@ -79,8 +79,8 @@ public class ACHelper {
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues().makeMap();
-	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues().makeMap();
+	private ConcurrentMap<String, Object> fakeQuitPlayers = new MapMaker().weakValues().makeMap();
+	private ConcurrentMap<String, Object> spyPlayers = new MapMaker().weakValues().makeMap();
 	private static ACHelper instance = new ACHelper();
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -210,20 +210,18 @@ public class ACHelper {
 			throw new EmptyStackException();
 		Stack<BlockRemanence> undo = blockQueue.pop();
 		int i = 0;
-		if(!Utils.undoBlock.isAlive())
+		if (!Utils.undoBlock.isAlive())
 			Utils.undoBlock.start();
 		try {
-				while (!undo.isEmpty()) {
-					Utils.undoBlock.addBlockRemanence(undo.pop());
-					i++;
-				}
-			
+			while (!undo.isEmpty()) {
+				Utils.undoBlock.addBlockRemanence(undo.pop());
+				i++;
+			}
+
 		} catch (Exception e) {
 			ACLogger.severe(e.getMessage(), e);
 			return i;
-		}
-		finally
-		{
+		} finally {
 			Utils.undoBlock.flushBlocks();
 		}
 		return i;
@@ -268,27 +266,43 @@ public class ACHelper {
 	}
 
 	public void addFakeQuit(Player p) {
-		fakeQuitPlayers.put(p, new Object());
+		fakeQuitPlayers.put(p.getName(), new Object());
 	}
 
 	public void removeFakeQuit(Player p) {
-		fakeQuitPlayers.remove(p);
+		fakeQuitPlayers.remove(p.getName());
 	}
 
 	public Set<Player> getFakeQuitPlayers() {
-		return fakeQuitPlayers.keySet();
+		Set<Player> players = new HashSet<Player>();
+		for (String pName : fakeQuitPlayers.keySet()) {
+			Player p = coreInstance.getServer().getPlayerExact(pName);
+			if (p != null)
+				players.add(p);
+			else
+				fakeQuitPlayers.remove(pName);
+		}
+		return players;
 	}
 
 	public void addSpy(Player p) {
-		spyPlayers.put(p, new Object());
+		spyPlayers.put(p.getName(), new Object());
 	}
 
 	public void removeSpy(Player p) {
-		spyPlayers.remove(p);
+		spyPlayers.remove(p.getName());
 	}
 
 	public Set<Player> getSpyPlayers() {
-		return spyPlayers.keySet();
+		Set<Player> players = new HashSet<Player>();
+		for (String pName : spyPlayers.keySet()) {
+			Player p = coreInstance.getServer().getPlayerExact(pName);
+			if (p != null)
+				players.add(p);
+			else
+				spyPlayers.remove(pName);
+		}
+		return players;
 	}
 
 	/**
