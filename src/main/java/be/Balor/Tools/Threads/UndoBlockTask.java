@@ -16,21 +16,29 @@
  ************************************************************************/
 package be.Balor.Tools.Threads;
 
-import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import java.util.Stack;
+
+import be.Balor.Tools.Blocks.BlockRemanence;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class UndoBlockThread extends ReplaceBlockThread {
-	public UndoBlockThread() {
-		super("UndoBlockThread");
+public class UndoBlockTask extends ReplaceBlockTask {
+
+	/**
+	 * @param blocks
+	 */
+	public UndoBlockTask(Stack<BlockRemanence> blocks) {
+		super(blocks);
+	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Tools.Threads.ReplaceBlockTask#run()
+	 */
+	@Override
+	public void run() {
+		while (!blocks.empty())
+			blocks.pop().returnToThePast();
 	}
 
-	@Override
-	public synchronized void flushBlocks() {
-		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(), new UndoBlockTask(blocks), 2);
-	}
 }

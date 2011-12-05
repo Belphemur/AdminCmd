@@ -65,7 +65,7 @@ public class ReplaceBlockThread extends Thread {
 
 	public synchronized void flushBlocks() {
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocks), 1);
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocks), 2);
 	}
 
 	/*
