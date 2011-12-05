@@ -63,7 +63,7 @@ public class ACBlockListener extends BlockListener {
 				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
 				&& player.hasPower(Type.SUPER_BREAKER)) {
 			event.setInstaBreak(true);
-			itemInHand.setDurability((short) (itemInHand.getDurability() + 1));
+			itemInHand.setDurability((short) 0);
 		}
 	}
 
