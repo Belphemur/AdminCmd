@@ -68,8 +68,8 @@ public class CommandManager implements CommandExecutor {
 	private List<String> prioritizedCommands;
 	private HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
 	private HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
-	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(1, MAX_THREADS, 1, TimeUnit.MINUTES,
-			new LinkedBlockingQueue<Runnable>());
+	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2, MAX_THREADS, 30,
+			TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	private HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
 
 	/**
@@ -362,13 +362,7 @@ public class CommandManager implements CommandExecutor {
 			if (!cmd.argsCheck(args))
 				return false;
 			container = new ACCommandContainer(sender, cmd, args);
-			if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_undo")
-					|| cmd.getCmdName().equals("bal_extinguish"))
-				corePlugin.getServer().getScheduler()
-						.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
-			else {
-				threads.execute(new NormalCommand(container));
-			}
+			threads.execute(new NormalCommand(container));
 			if (!cmd.getCmdName().equals("bal_repeat")) {
 				if (Utils.isPlayer(sender, false))
 					ACPlayer.getPlayer(((Player) sender)).setLastCmd(container);
