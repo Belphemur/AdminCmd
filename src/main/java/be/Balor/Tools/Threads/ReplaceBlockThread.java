@@ -19,6 +19,8 @@ package be.Balor.Tools.Threads;
 import java.util.Stack;
 
 import be.Balor.Tools.Blocks.BlockRemanence;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.util.concurrent.Monitor;
 
@@ -62,8 +64,8 @@ public class ReplaceBlockThread extends Thread {
 	}
 
 	public synchronized void flushBlocks() {
-		while (!blocks.empty())
-			blocks.pop().setBlockType(0);
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocks), 1);
 	}
 
 	/*
