@@ -24,7 +24,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class ReplaceBlockTask implements Runnable {
+class ReplaceBlockTask implements Runnable {
 	protected Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 	
 	/**

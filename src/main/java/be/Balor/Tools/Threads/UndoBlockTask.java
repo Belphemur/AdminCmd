@@ -24,7 +24,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class UndoBlockTask extends ReplaceBlockTask {
+class UndoBlockTask extends ReplaceBlockTask {
 
 	/**
 	 * @param blocks
