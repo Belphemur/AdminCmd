@@ -38,7 +38,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
-		permissionLinker = PermissionLinker.getPermissionLinker(name);		
+		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		final int prime = 31;
 		int result = 5;
 		result = prime * result + this.name.hashCode();
@@ -74,6 +74,15 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		return name;
 	}
 
+	/**
+	 * Return the name of the plugin in the plugin.yml
+	 * 
+	 * @return the bukkit name of the plugin
+	 */
+	public String getPluginName() {
+		return getDescription().getName();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -89,7 +98,9 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		setDefaultLocale();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -97,7 +108,9 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		return hashCode;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -116,6 +129,5 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 			return false;
 		return true;
 	}
-
 
 }

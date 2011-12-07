@@ -61,8 +61,6 @@ public class ACBlockListener extends BlockListener {
 				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
 				&& player.hasPower(Type.SUPER_BREAKER)) {
 			event.setInstaBreak(true);
-			if (Utils.logBlock != null)
-				Utils.logBlock.queueBlockBreak(player.getName(), event.getBlock().getState());
 		}
 	}
 

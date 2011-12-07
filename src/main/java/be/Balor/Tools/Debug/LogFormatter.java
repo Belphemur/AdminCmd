@@ -42,6 +42,7 @@ import java.util.logging.LogRecord;
  * <li>{@code %c} - source class name (if available, otherwise "?")</li>
  * <li>{@code %C} - source simple class name (if available, otherwise "?")</li>
  * <li>{@code %T} - thread ID</li>
+ * <li>{@code %S} - StackTrace if exeption thrown</li>
  * </ul>
  * The default format is {@value #DEFAULT_FORMAT}. Curly brace characters are
  * not allowed.
@@ -49,7 +50,7 @@ import java.util.logging.LogRecord;
  * @author Samuel Halliday
  */
 public class LogFormatter extends Formatter {
-	private static final String DEFAULT_FORMAT = "%t [%L] %m [%T]";
+	private static final String DEFAULT_FORMAT = "%t [%L] *%C.%M* : %m [%T] %S";
 
 	private final MessageFormat messageFormat;
 
@@ -70,7 +71,7 @@ public class LogFormatter extends Formatter {
 		// convert it into the MessageFormat form
 		format = format.replace("%L", "{0}").replace("%m", "{1}").replace("%M", "{2}")
 				.replace("%t", "{3}").replace("%c", "{4}").replace("%T", "{5}")
-				.replace("%n", "{6}").replace("%C", "{7}")
+				.replace("%n", "{6}").replace("%C", "{7}").replace("%S", "{8}")
 				+ "\n";
 
 		messageFormat = new MessageFormat(format);
@@ -78,7 +79,7 @@ public class LogFormatter extends Formatter {
 
 	@Override
 	public String format(LogRecord record) {
-		String[] arguments = new String[8];
+		String[] arguments = new String[9];
 		// %L
 		arguments[0] = record.getLevel().toString();
 		arguments[1] = record.getMessage();
@@ -119,7 +120,20 @@ public class LogFormatter extends Formatter {
 		} else {
 			arguments[7] = arguments[4];
 		}
-
+		// %S
+		if (record.getThrown() == null)
+			arguments[8] = "";
+		else {
+			if (record.getMessage() != null)
+				arguments[1] += " " + record.getThrown().toString();
+			else
+				arguments[1] = record.getThrown().toString();
+			String stackTrace = "\n";
+			for (StackTraceElement st : record.getThrown().getStackTrace()) {
+				stackTrace += "\t" + st.toString() + "\n";
+			}
+			arguments[8] = stackTrace;
+		}
 		synchronized (messageFormat) {
 			return messageFormat.format(arguments);
 		}

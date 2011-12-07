@@ -14,46 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Blocks;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class SimplifiedLocation extends Location {
-
+public abstract class IBlockRemanenceFactory {
+	public static IBlockRemanenceFactory FACTORY = new BlockRemanenceFactory();
 	/**
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
+	 * Create a block Remanence
+	 * @param loc
 	 */
-	public SimplifiedLocation(World world, double x, double y, double z) {
-		super(world, x, y, z);
-	}
-
-	public SimplifiedLocation(Location loc) {
-		super(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.Location#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Location)) {
-			return false;
-		}
-
-		Location other = (Location) obj;
-		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
-				&& other.getBlockZ() == this.getBlockZ();
-	}
-	
-
+	public abstract BlockRemanence createBlockRemanence(Location loc);
+	public abstract void setPlayerName(String playerName);
 }

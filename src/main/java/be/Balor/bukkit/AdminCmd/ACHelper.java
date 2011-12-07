@@ -42,12 +42,13 @@ import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Player.TempBannedPlayer;
-import be.Balor.Tools.BlockRemanence;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
@@ -63,7 +64,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -78,8 +79,8 @@ public class ACHelper {
 	private ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
-	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().weakValues().makeMap();
-	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().weakValues().makeMap();
+	private ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
+	private ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
 	private static ACHelper instance = new ACHelper();
 	private ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -125,7 +126,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 *
+	 * 
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -149,7 +150,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 *
+	 * 
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -159,7 +160,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -169,7 +170,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 *
+	 * 
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -187,7 +188,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 *
+	 * 
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -209,28 +210,28 @@ public class ACHelper {
 			throw new EmptyStackException();
 		Stack<BlockRemanence> undo = blockQueue.pop();
 		int i = 0;
+		if(!Utils.undoBlock.isAlive())
+			Utils.undoBlock.start();
 		try {
-			if (Utils.logBlock == null)
 				while (!undo.isEmpty()) {
-					undo.pop().returnToThePast();
+					Utils.undoBlock.addBlockRemanence(undo.pop());
 					i++;
 				}
-			else
-				while (!undo.isEmpty()) {
-					BlockRemanence br = undo.pop();
-					Utils.logBlock.queueBlockPlace(player, br.returnToThePast().getState());
-					i++;
-				}
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			ACLogger.severe(e.getMessage(), e);
 			return i;
+		}
+		finally
+		{
+			Utils.undoBlock.flushBlocks();
 		}
 		return i;
 	}
 
 	/**
 	 * Get KitInstance for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
@@ -240,7 +241,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -336,8 +337,9 @@ public class ACHelper {
 	 * Same code used when reload and onEnable
 	 */
 	private void init() {
+		AFKWorker.createInstance();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.createInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
 			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
 			this.coreInstance
@@ -361,8 +363,8 @@ public class ACHelper {
 				new File(coreInstance.getDataFolder(), "locales" + File.separator
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
-		CommandManager.createInstance().setCorePlugin(coreInstance);
 		HelpLoader.load(coreInstance.getDataFolder());
+		CommandManager.createInstance().setCorePlugin(coreInstance);
 		if (pluginConfig.get("pluginStarted") != null) {
 			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.remove("pluginStarted");
@@ -502,6 +504,7 @@ public class ACHelper {
 		pluginConfig.add("InvisAndNoPickup", false);
 		pluginConfig.add("checkTeleportLocation", false);
 		pluginConfig.add("teleportDelay", 0L);
+		pluginConfig.add("logAllCmd", false);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
@@ -530,6 +533,8 @@ public class ACHelper {
 			pluginConfig.save();
 		} catch (IOException e) {
 		}
+		if (!pluginConfig.getBoolean("debug"))
+			DebugLog.stopLogging();
 		ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
 				coreInstance.getDataFolder(), "commands.yml"));
 		commands.add("disabledCommands", disabled);
@@ -545,7 +550,7 @@ public class ACHelper {
 
 	/**
 	 * Get boolean from config
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -555,7 +560,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -565,7 +570,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -575,7 +580,7 @@ public class ACHelper {
 
 	/**
 	 * Get Long parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -585,7 +590,7 @@ public class ACHelper {
 
 	/**
 	 * Get String parameter from config.
-	 *
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -595,7 +600,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -624,7 +629,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -655,7 +660,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -740,7 +745,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -771,7 +776,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -802,7 +807,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 *
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -812,7 +817,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 *
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -822,7 +827,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 *
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -832,7 +837,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -853,7 +858,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 *
+	 * 
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -865,7 +870,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 *
+	 * 
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -876,7 +881,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 *
+	 * 
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {

@@ -53,11 +53,11 @@ public class SpyMsg extends CoreCommand {
 			ACPlayer acp = ACPlayer.getPlayer(((Player) sender).getName());
 			if (acp.hasPower(Type.SPYMSG)) {
 				acp.removePower(Type.SPYMSG);
-				ACHelper.getInstance().removeSpy(acp.getHandler());
+				ACHelper.getInstance().removeSpy((Player) sender);
 				Utils.sI18n(sender, "spymsgDisabled");
 			} else {
 				acp.setPower(Type.SPYMSG);
-				ACHelper.getInstance().addSpy(acp.getHandler());
+				ACHelper.getInstance().addSpy((Player) sender);
 				Utils.sI18n(sender, "spymsgEnabled");
 			}
 

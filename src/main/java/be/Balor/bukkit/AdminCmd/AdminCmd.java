@@ -30,6 +30,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Ping;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -453,6 +454,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("kitDelayNotUp", ChatColor.RED + "You cannot use that kit for another "
 				+ ChatColor.WHITE + "%delay");
 		Utils.addLocale("days", "%d day(s)");
+		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
 		Utils.addLocale("spawnerSetDelay", ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD
 				+ "%delay");
 		Utils.addLocale("spawnerSetType", ChatColor.GREEN
@@ -486,7 +488,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%difficulty");
 		Utils.addLocale("serverLockMessage", "The server is locked!");
 		Utils.addLocale("errorMoved", ChatColor.RED
-				+ "You have moved since you issued the %cmdname command, teleportation abroted!");
+				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
 		LocaleManager.getInstance().save();
 	}
@@ -544,6 +546,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
+		//get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
+		Ping.init(this);
 	}
 
 	@Override
@@ -562,6 +566,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.killInstance();
 		HelpLister.killInstance();
 		DebugLog.stopLogging();
+		Utils.replaceBlock.stopThread();
+		Utils.undoBlock.stopThread();
 		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");

@@ -14,46 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Threads;
 
-import org.bukkit.Location;
-import org.bukkit.World;
+import java.util.Stack;
+
+import be.Balor.Tools.Blocks.BlockRemanence;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class SimplifiedLocation extends Location {
-
+class ReplaceBlockTask implements Runnable {
+	protected Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
+	
 	/**
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param blocks
 	 */
-	public SimplifiedLocation(World world, double x, double y, double z) {
-		super(world, x, y, z);
+	public ReplaceBlockTask(Stack<BlockRemanence> blocks) {
+		super();
+		while(!blocks.empty())
+			this.blocks.add(blocks.pop());
 	}
 
-	public SimplifiedLocation(Location loc) {
-		super(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.Location#equals(java.lang.Object)
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Location)) {
-			return false;
-		}
-
-		Location other = (Location) obj;
-		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
-				&& other.getBlockZ() == this.getBlockZ();
+	public void run() {
+		while (!blocks.empty())
+			blocks.pop().setBlockType(0);
 	}
-	
 
 }

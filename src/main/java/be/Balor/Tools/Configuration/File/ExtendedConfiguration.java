@@ -240,9 +240,9 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			throw new IllegalArgumentException("Contents cannot be null");
 		}
 
-		Map<String, Object> input = null;
+		Map<Object, Object> input = null;
 		try {
-			input = (Map<String, Object>) yaml.load(contents);
+			input = (Map<Object, Object>) yaml.load(contents);
 		} catch (ScannerException e) {
 			if (e.getContextMark() == null) {
 				ACLogger.severe("File : " + file
@@ -266,58 +266,62 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 					"Specified contents is not a valid Configuration", ex);
 		}
 
+		int size = (input == null) ? 0 : input.size();
+		Map<String, Object> result = new LinkedHashMap<String, Object>(size);
+
+		if (size > 0) {
+			for (Map.Entry<Object, Object> entry : input.entrySet()) {
+				result.put(entry.getKey().toString(), entry.getValue());
+			}
+		}
+
 		String header = parseHeader(contents);
 
 		if (header.length() > 0) {
 			options().header(header);
 		}
 
-		deserializeValues(input, this);
+		deserializeValues(result, this);
 		lock.unlock();
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.configuration.file.FileConfiguration#buildHeader()
-	 */
-	@Override
-	protected String buildHeader() {
-		String header = options().header();
+	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
+			throws InvalidConfigurationException {
+		if (input == null) {
+			return;
+		}
 
-		if (options().copyHeader()) {
-			Configuration def = getDefaults();
+		for (Map.Entry<String, Object> entry : input.entrySet()) {
+			Object value = entry.getValue();
 
-			if ((def != null) && (def instanceof ExtendedConfiguration)) {
-				ExtendedConfiguration filedefaults = (ExtendedConfiguration) def;
-				String defaultsHeader = filedefaults.buildHeader();
+			if (value instanceof Map) {
+				Map<Object, Object> subinput = (Map<Object, Object>) value;
+				int size = (subinput == null) ? 0 : subinput.size();
+				Map<String, Object> subvalues = new LinkedHashMap<String, Object>(size);
 
-				if ((defaultsHeader != null) && (defaultsHeader.length() > 0)) {
-					return defaultsHeader;
+				if (size > 0) {
+					for (Map.Entry<Object, Object> subentry : subinput.entrySet()) {
+						subvalues.put(subentry.getKey().toString(), subentry.getValue());
+					}
 				}
+
+				if (subvalues.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
+					try {
+						ConfigurationSerializable serializable = ConfigurationSerialization
+								.deserializeObject(subvalues);
+						section.set(entry.getKey(), serializable);
+					} catch (IllegalArgumentException ex) {
+						throw new InvalidConfigurationException("Could not deserialize object", ex);
+					}
+				} else {
+					ConfigurationSection subsection = section.createSection(entry.getKey());
+					deserializeValues(subvalues, subsection);
+				}
+			} else {
+				section.set(entry.getKey(), entry.getValue());
 			}
 		}
-
-		if (header == null) {
-			return "";
-		}
-
-		StringBuilder builder = new StringBuilder();
-		String[] lines = header.split("\r?\n", -1);
-		boolean startedHeader = false;
-
-		for (int i = lines.length - 1; i >= 0; i--) {
-			builder.insert(0, "\n");
-
-			if ((startedHeader) || (lines[i].length() != 0)) {
-				builder.insert(0, lines[i]);
-				builder.insert(0, COMMENT_PREFIX);
-				startedHeader = true;
-			}
-		}
-
-		return builder.toString();
 	}
 
 	protected void serializeValues(Map<String, Object> output, Map<String, Object> input) {
@@ -353,44 +357,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		}
 	}
 
-
-	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
-			throws InvalidConfigurationException {
-		if (input == null) {
-			return;
-		}
-
-		for (Map.Entry<String, Object> entry : input.entrySet()) {
-			Object value = entry.getValue();
-
-			if (value instanceof Map) {
-				Map<String, Object> subvalues;
-
-				try {
-					subvalues = (Map<String, Object>) value;
-				} catch (ClassCastException ex) {
-					throw new InvalidConfigurationException(
-							"Map found where type is not <String, Object>", ex);
-				}
-
-				if (subvalues.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
-					try {
-						ConfigurationSerializable serializable = ConfigurationSerialization
-								.deserializeObject(subvalues);
-						section.set(entry.getKey(), serializable);
-					} catch (IllegalArgumentException ex) {
-						throw new InvalidConfigurationException("Could not deserialize object", ex);
-					}
-				} else {
-					ConfigurationSection subsection = section.createSection(entry.getKey());
-					deserializeValues(subvalues, subsection);
-				}
-			} else {
-				section.set(entry.getKey(), entry.getValue());
-			}
-		}
-	}
-
 	protected String parseHeader(String input) {
 		String[] lines = input.split("\r?\n", -1);
 		StringBuilder result = new StringBuilder();
@@ -415,6 +381,43 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		}
 
 		return result.toString();
+	}
+
+	protected String buildHeader() {
+		String header = options().header();
+
+		if (options().copyHeader()) {
+			Configuration def = getDefaults();
+
+			if ((def != null) && (def instanceof ExFileConfiguration)) {
+				ExFileConfiguration filedefaults = (ExFileConfiguration) def;
+				String defaultsHeader = filedefaults.buildHeader();
+
+				if ((defaultsHeader != null) && (defaultsHeader.length() > 0)) {
+					return defaultsHeader;
+				}
+			}
+		}
+
+		if (header == null) {
+			return "";
+		}
+
+		StringBuilder builder = new StringBuilder();
+		String[] lines = header.split("\r?\n", -1);
+		boolean startedHeader = false;
+
+		for (int i = lines.length - 1; i >= 0; i--) {
+			builder.insert(0, "\n");
+
+			if ((startedHeader) || (lines[i].length() != 0)) {
+				builder.insert(0, lines[i]);
+				builder.insert(0, COMMENT_PREFIX);
+				startedHeader = true;
+			}
+		}
+
+		return builder.toString();
 	}
 
 	@Override

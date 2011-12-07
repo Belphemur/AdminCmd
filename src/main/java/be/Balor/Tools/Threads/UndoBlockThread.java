@@ -14,46 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Threads;
 
-import org.bukkit.Location;
-import org.bukkit.World;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SimplifiedLocation extends Location {
-
-	/**
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
-	public SimplifiedLocation(World world, double x, double y, double z) {
-		super(world, x, y, z);
+public class UndoBlockThread extends ReplaceBlockThread {
+	public UndoBlockThread() {
+		super("UndoBlockThread");
 	}
 
-	public SimplifiedLocation(Location loc) {
-		super(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.Location#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Location)) {
-			return false;
-		}
-
-		Location other = (Location) obj;
-		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
-				&& other.getBlockZ() == this.getBlockZ();
+	public synchronized void flushBlocks() {
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(), new UndoBlockTask(blocks), 2);
 	}
-	
-
 }

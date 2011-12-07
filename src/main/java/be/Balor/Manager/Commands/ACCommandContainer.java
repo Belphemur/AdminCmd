@@ -17,6 +17,10 @@
 package be.Balor.Manager.Commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -25,7 +29,7 @@ import org.bukkit.command.CommandSender;
 public class ACCommandContainer {
 	private final CommandSender sender;
 	private final CoreCommand cmd;
-	private CommandArgs args;
+	private CommandArgs args = null;
 	private final String[] argsStrings;
 
 	/**
@@ -41,14 +45,20 @@ public class ACCommandContainer {
 	 * Parse the arguments, flags, etc ... by creating the CommandArgs
 	 */
 	public void processArguments() {
-		args = new CommandArgs(argsStrings);
+		if (args == null) 
+			args = new CommandArgs(argsStrings);		
 	}
 
 	/**
 	 * Execute the command
 	 */
 	public void execute() {
-
+		if (ACHelper.getInstance().getConfBoolean("logAllCmd")) {
+			String name = "Console";
+			if (sender instanceof Player)
+				name = ((Player) sender).getName();
+			ACLogger.info(name + " [CMD: " + cmd.getCmdName() + "] (ARGS:" + args.toString() + ")");
+		}
 		cmd.execute(sender, args);
 	}
 

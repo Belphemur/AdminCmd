@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools.Files;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,11 +28,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+
+import com.google.common.io.Files;
 
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -41,6 +45,7 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -55,9 +60,18 @@ public class FileManager implements DataManager {
 	private String lastFilename = "";
 	private File lastFile = null;
 	private ExtendedConfiguration lastLoadedConf = null;
+	private static String fileVersion = null;
 	static {
 		ExtendedConfiguration.registerClass(BannedPlayer.class);
 		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
+		try {
+			Properties gitVersion = new Properties();
+			gitVersion.load(FileManager.class.getResourceAsStream("/git.properties"));
+			fileVersion = (String) gitVersion.get("git.commit.id");
+			DebugLog.INSTANCE.info("Git Version : " + fileVersion);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -76,7 +90,12 @@ public class FileManager implements DataManager {
 	public void setPath(String path) {
 		pathFile = new File(path);
 		if (!pathFile.exists()) {
-			pathFile.mkdir();
+			try {
+				Files.createParentDirs(pathFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		File spawn = getFile(null, "spawnLocations.yml", false);
 		File homeDir = new File(this.pathFile, "home");
@@ -220,8 +239,32 @@ public class FileManager implements DataManager {
 			file = new File(directoryFile, filename);
 		} else
 			file = new File(pathFile, filename);
-		if (file.exists() && replace)
-			file.delete();
+		if (file.exists() && replace) {
+			BufferedReader reader = null;
+
+			try {
+				reader = new BufferedReader(new FileReader(file));
+			} catch (FileNotFoundException e) {
+			}
+			try {
+				String version = reader.readLine();
+				final String versioncheck = version.substring(10);
+				if (!versioncheck.equals(fileVersion)) {
+					reader.close();
+					file.delete();
+					DebugLog.INSTANCE.info("Delete file : " + file);
+				} else
+					return file;
+			} catch (IOException e) {
+				file.delete();
+			}
+
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
+
+		}
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
 			FileWriter tx = null;
@@ -253,19 +296,21 @@ public class FileManager implements DataManager {
 	public HashMap<String, MaterialContainer> getAlias() {
 		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
 		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias",
-				new ArrayList<String>());
-		List<String> idList =  conf.getStringList("ids",
-				new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		int i = 0;
 		try {
-			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv")));
+			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv", null, true)));
 			String[] alias;
 			while ((alias = csv.readNext()) != null) {
 				try {
 					result.put(alias[0], new MaterialContainer(alias[1], alias[2]));
 				} catch (ArrayIndexOutOfBoundsException e) {
-					result.put(alias[0], new MaterialContainer(alias[1]));
+					try {
+						result.put(alias[0], new MaterialContainer(alias[1]));
+					} catch (ArrayIndexOutOfBoundsException e2) {
+					}
+
 				}
 
 			}

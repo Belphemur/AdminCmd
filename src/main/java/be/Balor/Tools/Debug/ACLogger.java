@@ -28,7 +28,7 @@ import org.bukkit.ChatColor;
 public class ACLogger {
 
 	protected static final Logger logger = Logger.getLogger("Minecraft");
-	protected static String prefix = "[AdminCmd] ";
+	protected static final String prefix = "[AdminCmd] ";
 
 
 	public static void severe(String string, Throwable ex) {

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Tools.Blocks;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -24,7 +24,7 @@ import org.bukkit.block.Block;
  * 
  */
 public class BlockRemanence {
-	private Location loc;
+	protected Location loc;
 	private int oldType;
 	private byte data = 0;
 	private boolean useData;

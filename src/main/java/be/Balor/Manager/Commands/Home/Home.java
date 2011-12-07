@@ -23,13 +23,14 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class Home extends CoreCommand {
 	public Home() {
@@ -39,7 +40,7 @@ public class Home extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -56,11 +57,10 @@ public class Home extends CoreCommand {
 			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
-			}
-			else {
+			} else {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 						ACHelper.getInstance().getCoreInstance(),
-						new DelayedTeleport(player.getLocation(), loc, player, home, sender),
+						new DelayedTeleport(loc, player, home, sender),
 						ACHelper.getInstance().getConfLong("teleportDelay"));
 			}
 		}
@@ -68,7 +68,7 @@ public class Home extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -78,15 +78,16 @@ public class Home extends CoreCommand {
 
 	private class DelayedTeleport implements Runnable {
 
-		protected Location locBefore, teleportToLoc;
+		protected SimplifiedLocation locBefore;
+		protected Location teleportToLoc;
 		protected Player target;
 		protected be.Balor.Tools.Home home;
 		protected CommandSender sender;
 
-		public DelayedTeleport(Location locBefore, Location teleportLoc, Player target,
+		public DelayedTeleport(Location teleportLoc, Player target,
 				be.Balor.Tools.Home home, CommandSender sender) {
 			this.target = target;
-			this.locBefore= locBefore;
+			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.teleportToLoc = teleportLoc;
 			this.home = home;
 			this.sender = sender;
@@ -94,12 +95,14 @@ public class Home extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (locBefore.equals(target.getLocation()) && ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+			if (!ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
-			} else if (!ACHelper.getInstance().getConfBoolean("teleportDelay")) {
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
+				return;
+			}
+			if (locBefore.equals(target.getLocation())) {
+				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
 			} else {

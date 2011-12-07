@@ -44,7 +44,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPluginListener extends ServerListener {
 
@@ -70,14 +70,17 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (!PermissionManager.isbPermissionsSet()) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("bPermissions");
+			Plugin plugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("bPermissions");
 			if (plugin != null) {
-				PermissionManager.setbPermissions(de.bananaco.permissions.Permissions.getWorldPermissionsManager(),
+				PermissionManager.setbPermissions(
+						de.bananaco.permissions.Permissions.getWorldPermissionsManager(),
 						de.bananaco.permissions.Permissions.getInfoReader());
 			}
 		}
 		if (!PermissionManager.isPermissionsBukkitSet()) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("PermissionsBukkit");
+			Plugin plugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("PermissionsBukkit");
 			if (plugin != null) {
 				PermissionManager.setPermissionsBukkit((PermissionsPlugin) plugin);
 			}
@@ -100,7 +103,7 @@ public class ACPluginListener extends ServerListener {
 		if (Utils.logBlock == null) {
 			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("LogBlock");
 			if (plugin != null && plugin.isEnabled()) {
-				Utils.logBlock = ((LogBlock) plugin).getConsumer();
+				Utils.setLogBlock(((LogBlock) plugin).getConsumer());
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}

@@ -1,3 +1,4 @@
+#version: ${git.commit.id}
 #Made by Lathanael
 AdminCmd:
     command: help AdminCmd

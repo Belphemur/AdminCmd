@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -59,7 +60,11 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Blocks.BlockRemanence;
+import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
+import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
+import be.Balor.Tools.Threads.ReplaceBlockThread;
+import be.Balor.Tools.Threads.UndoBlockThread;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -68,7 +73,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static OddItemBase oddItem = null;
@@ -80,15 +85,17 @@ public class Utils {
 	private final static long minuteInMillis = secondInMillis * 60;
 	private final static long hourInMillis = minuteInMillis * 60;
 	private final static long dayInMillis = hourInMillis * 24;
+	public final static ReplaceBlockThread replaceBlock = new ReplaceBlockThread();
+	public final static ReplaceBlockThread undoBlock = new UndoBlockThread();
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -119,8 +126,17 @@ public class Utils {
 	}
 
 	/**
+	 * @param logBlock
+	 *            the logBlock to set
+	 */
+	public static void setLogBlock(Consumer logBlock) {
+		Utils.logBlock = logBlock;
+		IBlockRemanenceFactory.FACTORY = new LogBlockRemanenceFactory();
+	}
+
+	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -163,7 +179,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -182,7 +198,7 @@ public class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -221,7 +237,7 @@ public class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -247,7 +263,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -624,7 +640,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -688,6 +704,7 @@ public class Utils {
 
 			}
 			String playername = ((Player) sender).getName();
+			IBlockRemanenceFactory.FACTORY.setPlayerName(playername);
 			Stack<BlockRemanence> blocks;
 			Block block = ((Player) sender).getLocation().getBlock();
 			if (mat.contains(Material.LAVA) || mat.contains(Material.WATER))
@@ -695,7 +712,7 @@ public class Utils {
 			else
 				blocks = replaceInCuboid(playername, mat, block, radius);
 			if (!blocks.isEmpty())
-				ACHelper.getInstance().addInUndoQueue(((Player) sender).getName(), blocks);
+				ACHelper.getInstance().addInUndoQueue(playername, blocks);
 			return blocks.size();
 		}
 		return null;
@@ -703,7 +720,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -717,45 +734,36 @@ public class Utils {
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		if (logBlock == null)
-			for (int y = block.getY() - radius; y <= limitY; y++) {
-				for (int x = block.getX() - radius; x <= limitX; x++)
-					for (int z = block.getZ() - radius; z <= limitZ; z++) {
-						current = block.getWorld().getBlockAt(x, y, z);
-						if (mat.contains(current.getType())) {
-							br = new BlockRemanence(current.getLocation());
-							blocks.push(br);
-							br.setBlockType(0);
-						}
+		if (!replaceBlock.isAlive())
+			replaceBlock.start();
+		for (int y = block.getY() - radius; y <= limitY; y++) {
+			for (int x = block.getX() - radius; x <= limitX; x++)
+				for (int z = block.getZ() - radius; z <= limitZ; z++) {
+					current = block.getWorld().getBlockAt(x, y, z);
+					if (mat.contains(current.getType())) {
+						br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(current
+								.getLocation());
+						blocks.push(br);
+						replaceBlock.addBlockRemanence(br);
 					}
-			}
-		else
-			for (int y = block.getY() - radius; y <= limitY; y++) {
-				for (int x = block.getX() - radius; x <= limitX; x++)
-					for (int z = block.getZ() - radius; z <= limitZ; z++) {
-						current = block.getWorld().getBlockAt(x, y, z);
-						if (mat.contains(current.getType())) {
-							br = new BlockRemanence(current.getLocation());
-							logBlock.queueBlockBreak(playername, current.getState());
-							blocks.push(br);
-							br.setBlockType(0);
-						}
-					}
-			}
+				}
+		}
+
+		replaceBlock.flushBlocks();
 		return blocks;
 	}
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
 	public static void broadcastFakeQuit(Player player) {
 		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player) + ChatColor.YELLOW
-					+ " has left the game.");
+			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
+					+ mChatApi.getEventMessage("quit"));
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
 
@@ -763,7 +771,7 @@ public class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -781,7 +789,7 @@ public class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -797,15 +805,15 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
 	public static void broadcastFakeJoin(Player player) {
 		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player) + ChatColor.YELLOW
-					+ " has joined the game.");
+			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
+					+ mChatApi.getEventMessage("join"));
 		else
 			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
 
@@ -813,7 +821,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -824,88 +832,50 @@ public class Utils {
 		BlockRemanence current = null;
 		World w = block.getWorld();
 		Location start = block.getLocation();
-		if (logBlock == null) {
-			for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
-				for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
-					for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
-						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-						if (isFluid(newPos) && !newPos.isVisited()) {
-							newPos.setVisited();
-							processQueue.push(newPos);
-							current = new BlockRemanence(newPos);
-							blocks.push(current);
-							current.setBlockType(0);
-						}
-
+		HashSet<SimplifiedLocation> visited = new HashSet<SimplifiedLocation>();
+		if (!replaceBlock.isAlive())
+			replaceBlock.start();
+		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
+			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
+				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
+					SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+					if (isFluid(newPos) && !visited.contains(newPos)) {
+						visited.add(newPos);
+						processQueue.push(newPos);
+						current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
+						blocks.push(current);
+						replaceBlock.addBlockRemanence(current);
 					}
-				}
-			}
-			while (!processQueue.isEmpty()) {
-				SimplifiedLocation loc = processQueue.pop();
-				for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
-					for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
-						for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
-							SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-							if (!newPos.isVisited() && isFluid(newPos)
-									&& start.distance(newPos) < radius) {
-								processQueue.push(newPos);
-								current = new BlockRemanence(newPos);
-								blocks.push(current);
-								current.setBlockType(0);
-								newPos.setVisited();
-							}
-						}
 
-					}
-				}
-			}
-		} else {
-			for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
-				for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
-					for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
-						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-						if (isFluid(newPos) && !newPos.isVisited()) {
-							newPos.setVisited();
-							processQueue.push(newPos);
-							current = new BlockRemanence(newPos);
-							logBlock.queueBlockBreak(playername, newPos, current.getOldType(),
-									current.getData());
-							blocks.push(current);
-							current.setBlockType(0);
-						}
-
-					}
-				}
-			}
-			while (!processQueue.isEmpty()) {
-				SimplifiedLocation loc = processQueue.pop();
-				for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
-					for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
-						for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
-							SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
-							if (!newPos.isVisited() && isFluid(newPos)
-									&& start.distance(newPos) < radius) {
-								processQueue.push(newPos);
-								current = new BlockRemanence(newPos);
-								logBlock.queueBlockBreak(playername, newPos, current.getOldType(),
-										current.getData());
-								blocks.push(current);
-								current.setBlockType(0);
-								newPos.setVisited();
-							}
-						}
-
-					}
 				}
 			}
 		}
+		while (!processQueue.isEmpty()) {
+			SimplifiedLocation loc = processQueue.pop();
+			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
+				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
+					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
+						SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+						if (!visited.contains(newPos) && isFluid(newPos)
+								&& start.distance(newPos) < radius) {
+							processQueue.push(newPos);
+							current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
+							blocks.push(current);
+							replaceBlock.addBlockRemanence(current);
+							visited.add(newPos);
+						}
+					}
 
+				}
+			}
+		}
+		replaceBlock.flushBlocks();
 		return blocks;
 	}
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -915,7 +885,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -937,7 +907,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -969,7 +939,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -986,7 +956,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -1000,7 +970,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -1024,20 +994,8 @@ public class Utils {
 	}
 
 	/**
-	 * Method to write a debug message in the log IF the debug mode is activated
-	 * in the configuration
-	 *
-	 * @param message
-	 *            message to write.
-	 */
-	public static void debug(String message) {
-		if (ACHelper.getInstance().getConfBoolean("debug"))
-			DebugLog.INSTANCE.info(message);
-	}
-
-	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -1075,7 +1033,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -1128,7 +1086,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -1158,7 +1116,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -1224,7 +1182,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
