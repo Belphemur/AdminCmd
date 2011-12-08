@@ -39,6 +39,9 @@ public class LocaleManager {
 	private static LocaleManager instance = new LocaleManager();
 	private ExtendedConfiguration localeFile;
 	private boolean noMsg = false;
+	private final Pattern recursiveLocale = Pattern.compile("#([\\w]+)#");
+	private final Pattern replaceLocale = Pattern.compile("%([\\w]+)");
+	private final Pattern buggedLocale = Pattern.compile("\\?(\\w)");
 
 	/**
 	 * @return the instance
@@ -123,8 +126,7 @@ public class LocaleManager {
 		String ResultString = null;
 		String result = locale;
 		try {
-			Pattern regex = Pattern.compile("#([\\w]+)#");
-			Matcher regexMatcher = regex.matcher(locale);
+			Matcher regexMatcher = recursiveLocale.matcher(locale);
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group(1);
 				String recLocale = localeFile.getString(ResultString);
@@ -132,10 +134,9 @@ public class LocaleManager {
 					result = regexMatcher.replaceFirst(recLocale);
 				else
 					result = regexMatcher.replaceFirst("");
-				regexMatcher = regex.matcher(result);
+				regexMatcher = recursiveLocale.matcher(result);
 			}
-			regex = Pattern.compile("%([\\w]+)");
-			regexMatcher = regex.matcher(result);
+			regexMatcher = replaceLocale.matcher(result);
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group(1);
 				String replaceValue = values.get(ResultString);
@@ -148,7 +149,7 @@ public class LocaleManager {
 
 				} else
 					result = regexMatcher.replaceFirst("");
-				regexMatcher = regex.matcher(result);
+				regexMatcher = replaceLocale.matcher(result);
 			}
 		} catch (PatternSyntaxException ex) {
 			// Syntax error in the regular expression
@@ -165,13 +166,12 @@ public class LocaleManager {
 			replace.put(alias, replaceBy);
 			locale = recursiveReplaceLocale(locale, replace);
 			// To correct interrogation point (?) problem in the locale file.
-			Pattern regex = Pattern.compile("\\?(\\w)");
-			Matcher regexMatcher = regex.matcher(locale);
+			Matcher regexMatcher = buggedLocale.matcher(locale);
 			String ResultString = null;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group(1);
 				locale = regexMatcher.replaceFirst("§" + ResultString);
-				regexMatcher = regex.matcher(locale);
+				regexMatcher = buggedLocale.matcher(locale);
 			}
 		}
 
