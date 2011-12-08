@@ -164,6 +164,15 @@ public class LocaleManager {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put(alias, replaceBy);
 			locale = recursiveReplaceLocale(locale, replace);
+			// To correct interrogation point (?) problem in the locale file.
+			Pattern regex = Pattern.compile("\\?(\\w)");
+			Matcher regexMatcher = regex.matcher(locale);
+			String ResultString = null;
+			while (regexMatcher.find()) {
+				ResultString = regexMatcher.group(1);
+				locale = regexMatcher.replaceFirst("§" + ResultString);
+				regexMatcher = regex.matcher(locale);
+			}
 		}
 
 		return locale;
