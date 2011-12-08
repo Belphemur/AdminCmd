@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -41,6 +42,7 @@ import org.bukkit.util.Vector;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
@@ -57,7 +59,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener extends PlayerListener {
 	@Override
@@ -89,7 +91,7 @@ public class ACPlayerListener extends PlayerListener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -116,6 +118,11 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
 		PlayerManager.getInstance().setOnline(p);
+		if (!SuperPermissions.isApiSet()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", Utils.getPlayerName(p));
+			event.setJoinMessage(Utils.I18n("joinMessage", replace));
+		}
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
@@ -162,6 +169,11 @@ public class ACPlayerListener extends PlayerListener {
 		Player p = event.getPlayer();
 		ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
+		if (!SuperPermissions.isApiSet()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", Utils.getPlayerName(p));
+			event.setQuitMessage(Utils.I18n("joinMessage", replace));
+		}
 		if (player.hasPower(Type.FAKEQUIT))
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
@@ -334,7 +346,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Tp at see mode
-	 * 
+	 *
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {
