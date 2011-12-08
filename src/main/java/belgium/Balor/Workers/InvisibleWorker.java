@@ -123,9 +123,10 @@ final public class InvisibleWorker {
 										uninvisible(toReappear, p);
 								}
 							});
-			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
+			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible")) {
 				Utils.broadcastFakeJoin(toReappear);
-			Utils.addPlayerInOnlineList(toReappear);
+				Utils.addPlayerInOnlineList(toReappear);
+			}
 		}
 
 	}
@@ -207,10 +208,10 @@ final public class InvisibleWorker {
 							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
 									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
 		}
-		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
+		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible")) {
 			Utils.broadcastFakeQuit(toVanish);
-
-		Utils.removePlayerFromOnlineList(toVanish);
+			Utils.removePlayerFromOnlineList(toVanish);
+		}
 
 	}
 
