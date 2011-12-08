@@ -154,6 +154,14 @@ public class LocaleManager {
 		} catch (PatternSyntaxException ex) {
 			// Syntax error in the regular expression
 		}
+		// To correct interrogation point (?) problem in the locale file.
+		Matcher regexMatcher = buggedLocale.matcher(result);
+		ResultString = null;
+		while (regexMatcher.find()) {
+			ResultString = regexMatcher.group(1);
+			result = regexMatcher.replaceFirst("§" + ResultString);
+			regexMatcher = buggedLocale.matcher(result);
+		}
 		return result;
 	}
 
@@ -165,14 +173,6 @@ public class LocaleManager {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put(alias, replaceBy);
 			locale = recursiveReplaceLocale(locale, replace);
-			// To correct interrogation point (?) problem in the locale file.
-			Matcher regexMatcher = buggedLocale.matcher(locale);
-			String ResultString = null;
-			while (regexMatcher.find()) {
-				ResultString = regexMatcher.group(1);
-				locale = regexMatcher.replaceFirst("§" + ResultString);
-				regexMatcher = buggedLocale.matcher(locale);
-			}
 		}
 
 		return locale;
