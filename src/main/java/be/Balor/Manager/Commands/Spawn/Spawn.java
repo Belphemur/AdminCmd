@@ -100,6 +100,7 @@ public class Spawn extends CoreCommand {
 				ACHelper.getInstance().spawn((Player) sender);
 				sendMessage(sender, target, "spawn");
 			} else {
+				replace = new HashMap<String, String>();
 				replace.put("cmdname", "Warp");
 				sendMessage(sender, target, "errorMoved", replace);
 			}
