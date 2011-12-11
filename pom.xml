@@ -22,7 +22,7 @@
 		<snapshotRepository>
 			<id>bukkit-plugin-snapshot</id>
 			<name>Bukkit Plugins Snapshot</name>
-			<url>http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-snapshot/</url>
+			<url>dav:http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
