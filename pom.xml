@@ -10,6 +10,21 @@
 		<url>scm:git:git@github.com:Belphemur/AdminCmd.git</url>
 		<developerConnection>scm:git:git@github.com:Belphemur/AdminCmd.git</developerConnection>
 	</scm>
+	<distributionManagement>
+		<!-- Publish the versioned releases here -->
+		<repository>
+			<id>bukkit-plugin-release</id>
+			<name>Bukkit Plugins Release</name>
+			<url>dav:http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-release/</url>
+		</repository>
+
+		<!-- Publish the versioned releases here -->
+		<snapshotRepository>
+			<id>bukkit-plugin-snapshot</id>
+			<name>Bukkit Plugins Snapshot</name>
+			<url>http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-snapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 
 		<defaultGoal>clean install</defaultGoal>
@@ -188,33 +203,17 @@
 	<repositories>
 		<repository>
 			<snapshots />
-			<id>Bukkit-dev</id>
-			<name>Bukkit-Dev</name>
-			<url>http://www.gestdown.info:8888/artifactory/Bukkit-dev</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Repository Switchboard</name>
-			<url>http://repo1.maven.org/maven2</url>
+			<id>BukkitDev</id>
+			<name>BukkitDev</name>
+			<url>http://www.gestdown.info:8888/nexus/content/groups/BukkitDev/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>plugins-release</name>
-			<url>http://gestdown.info:8888/artifactory/plugins-release</url>
-		</pluginRepository>
-		<pluginRepository>
 			<snapshots />
-			<id>snapshots</id>
-			<name>plugins-snapshot</name>
-			<url>http://gestdown.info:8888/artifactory/plugins-snapshot</url>
+			<id>BukkitDev</id>
+			<name>BukkitDev</name>
+			<url>http://www.gestdown.info:8888/nexus/content/groups/BukkitDev/</url>
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
@@ -246,7 +245,7 @@
 		<dependency>
 			<groupId>net.D3GN</groupId>
 			<artifactId>mChat</artifactId>
-			<version>DEV-SNAPSHOT</version>
+			<version>1.8.8</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -270,8 +269,7 @@
 		<dependency>
 			<groupId>de.bananaco</groupId>
 			<artifactId>bPermissions</artifactId>
-			<version>1337-SNAPSHOT</version>
-			<scope>provided</scope>
+			<version>1337</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
