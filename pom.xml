@@ -15,14 +15,14 @@
 		<repository>
 			<id>bukkit-plugin-release</id>
 			<name>Bukkit Plugins Release</name>
-			<url>dav:http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-release/</url>
+			<url>http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-release/</url>
 		</repository>
 
 		<!-- Publish the versioned releases here -->
 		<snapshotRepository>
 			<id>bukkit-plugin-snapshot</id>
 			<name>Bukkit Plugins Snapshot</name>
-			<url>dav:http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-snapshot/</url>
+			<url>http://www.gestdown.info:8888/nexus/content/repositories/bukkit-plugin-snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
