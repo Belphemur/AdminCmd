@@ -172,7 +172,7 @@ public class ACPlayerListener extends PlayerListener {
 		if (!SuperPermissions.isApiSet()) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p));
-			event.setQuitMessage(Utils.I18n("joinMessage", replace));
+			event.setQuitMessage(Utils.I18n("quitMessage", replace));
 		}
 		if (player.hasPower(Type.FAKEQUIT))
 			event.setQuitMessage(null);
