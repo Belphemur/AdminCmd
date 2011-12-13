@@ -26,12 +26,14 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -95,7 +97,7 @@ public class Whois extends CoreCommand {
 			if (!Utils.checkImmunity(sender, args, 0))
 				return;
 		} else
-			actarget = ACPlayer.getPlayer(target.getName());
+			actarget = ACPlayer.getPlayer(target);
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
 						+ actarget.getName() + " " + ChatColor.AQUA, '='));
@@ -132,13 +134,19 @@ public class Whois extends CoreCommand {
 					ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');
 			sender.sendMessage(line);
 		}
+		// Invisible
+		String line = ChatColor.GOLD + "invisible" + ChatColor.WHITE + " : ";
+		int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(line);
+		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN
+						+ String.valueOf((InvisibleWorker.getInstance().hasInvisiblePowers(
+								target.getName()) && PermissionManager.hasPerm(sender,
+								"admincmd.invisible.cansee", false))), sizeRemaining, ' ');
+		sender.sendMessage(line);
 
 		// Immunity Level
-		int level;
-		if (target != null)
-			level = ACHelper.getInstance().getLimit(target, "immunityLvl", "defaultImmunityLvl");
-		else
-			level = actarget.getInformation("immunityLvl").getInt(
+		int level = actarget.getInformation("immunityLvl").getInt(
 					ACHelper.getInstance().getConfInt("defaultImmunityLvl"));
 		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth

@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -41,6 +42,7 @@ import org.bukkit.util.Vector;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
@@ -116,6 +118,11 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
 		PlayerManager.getInstance().setOnline(p);
+		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", Utils.getPlayerName(p));
+			event.setJoinMessage(Utils.I18n("joinMessage", replace));
+		}
 		if (playerRespawnOrJoin(event.getPlayer())) {
 			event.setJoinMessage(null);
 			Utils.sI18n(event.getPlayer(), "stillInv");
@@ -162,6 +169,11 @@ public class ACPlayerListener extends PlayerListener {
 		Player p = event.getPlayer();
 		ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
+		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", Utils.getPlayerName(p));
+			event.setQuitMessage(Utils.I18n("quitMessage", replace));
+		}
 		if (player.hasPower(Type.FAKEQUIT))
 			event.setQuitMessage(null);
 		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
@@ -368,12 +380,14 @@ public class ACPlayerListener extends PlayerListener {
 
 		@Override
 		public void run() {
-			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (Invisible) for " + newPlayer.getName());
+			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (Invisible) for "
+					+ newPlayer.getName());
 			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
 				Utils.removePlayerFromOnlineList(toVanish, newPlayer);
 			}
-			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for " + newPlayer.getName());
+			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for "
+					+ newPlayer.getName());
 			for (Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
 				Utils.removePlayerFromOnlineList(toFq, newPlayer);
 		}

@@ -32,7 +32,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACBlockListener extends BlockListener {
 	@Override
@@ -55,18 +55,21 @@ public class ACBlockListener extends BlockListener {
 
 	@Override
 	public void onBlockDamage(BlockDamageEvent event) {
+		if (event.isCancelled())
+			return;
 		ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
 		ItemStack itemInHand = event.getItemInHand();
 		if (itemInHand != null
 				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
 				&& player.hasPower(Type.SUPER_BREAKER)) {
 			event.setInstaBreak(true);
+			itemInHand.setDurability((short) 0);
 		}
 	}
 
 	/**
 	 * @author Lathanael (aka Philippe Leipold)
-	 *
+	 * 
 	 */
 	@Override
 	public void onBlockPlace(BlockPlaceEvent event) {
@@ -74,7 +77,8 @@ public class ACBlockListener extends BlockListener {
 			return;
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-		MaterialContainer mat = ACHelper.getInstance().checkMaterial(player, String.valueOf(block.getTypeId()));
+		MaterialContainer mat = ACHelper.getInstance().checkMaterial(player,
+				String.valueOf(block.getTypeId()));
 		if (!ACHelper.getInstance().inBlackListBlock(player, mat))
 			return;
 		event.setCancelled(true);

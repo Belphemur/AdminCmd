@@ -39,7 +39,7 @@ public class Drop extends CoreCommand {
 	 *
 	 */
 	public Drop() {
-		permNode = "admincmd.item.add";
+		permNode = "admincmd.item.drop";
 		cmdName = "bal_drop";
 		other = true;
 	}

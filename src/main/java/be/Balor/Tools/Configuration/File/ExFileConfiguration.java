@@ -9,17 +9,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
 import org.bukkit.configuration.Configuration;
 
 /**
  * This is a base class for all File based implementations of
  * {@link Configuration}
  */
-@SuppressWarnings("unchecked")
 public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	protected File file;
 
@@ -62,10 +64,12 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		}
 
 		Files.createParentDirs(file);
+		if (!file.exists())
+			file.createNewFile();
 
 		String data = saveToString();
 
-		FileWriter writer = new FileWriter(file);
+		Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 
 		try {
 			writer.write(data);
@@ -160,7 +164,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 			throw new IllegalArgumentException("Stream cannot be null");
 		}
 
-		InputStreamReader reader = new InputStreamReader(stream);
+		InputStreamReader reader = new InputStreamReader(stream, "UTF8");
 		StringBuilder builder = new StringBuilder();
 		BufferedReader input = new BufferedReader(reader);
 
