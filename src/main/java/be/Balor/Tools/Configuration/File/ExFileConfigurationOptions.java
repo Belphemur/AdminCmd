@@ -9,8 +9,8 @@ import be.Balor.Tools.Configuration.ExMemoryConfigurationOption;
 public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
     private String header = null;
     private boolean copyHeader = true;
-    
-    protected ExFileConfigurationOptions(ExMemoryConfiguration configuration) {
+
+    public ExFileConfigurationOptions(ExMemoryConfiguration configuration) {
         super(configuration);
     }
 
@@ -30,7 +30,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
         super.pathSeparator(value);
         return this;
     }
-    
+
     /**
      * Gets the header that will be applied to the top of the saved output.
      * <p>
@@ -41,13 +41,13 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
      * <p>
      * Null is a valid value which will indicate that no header is to be applied.
      * The default value is null.
-     * 
+     *
      * @return Header
      */
     public String header() {
         return header;
     }
-    
+
     /**
      * Sets the header that will be applied to the top of the saved output.
      * <p>
@@ -58,7 +58,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
      * <p>
      * Null is a valid value which will indicate that no header is to be applied.
      * The default value is null.
-     * 
+     *
      * @param value New header
      * @return This object, for chaining
      */
@@ -66,7 +66,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
         this.header = value;
         return this;
     }
-    
+
     /**
      * Gets whether or not the header should be copied from a default source.
      * <p>
@@ -79,13 +79,13 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
      * specified in this configuration will be used.
      * <p>
      * Defaults to true.
-     * 
+     *
      * @return Whether or not to copy the header
      */
     public boolean copyHeader() {
         return copyHeader;
     }
-    
+
     /**
      * Sets whether or not the header should be copied from a default source.
      * <p>
@@ -98,13 +98,13 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
      * specified in this configuration will be used.
      * <p>
      * Defaults to true.
-     * 
+     *
      * @param value Whether or not to copy the header
      * @return This object, for chaining
      */
     public ExFileConfigurationOptions copyHeader(boolean value) {
         copyHeader = value;
-        
+
         return this;
     }
 }

@@ -1,6 +1,7 @@
 package be.Balor.Tools.Configuration.File;
 
 import be.Balor.Tools.Configuration.ExMemoryConfiguration;
+import be.Balor.Tools.Configuration.File.ExFileConfigurationOptions;
 import be.Balor.Tools.Debug.ACLogger;
 
 import com.google.common.io.Files;
