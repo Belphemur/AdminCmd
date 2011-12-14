@@ -34,7 +34,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class PermissionsEx extends AbstractPermission {
 	private PermissionManager PEX;
@@ -48,7 +48,7 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
@@ -68,7 +68,7 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
@@ -88,10 +88,10 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
-	 * org.bukkit.entity.Player)
+	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
+	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
@@ -105,12 +105,12 @@ public class PermissionsEx extends AbstractPermission {
 		return false;
 	}
 
-
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
+	 * .String)
 	 */
 	@Override
 	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
@@ -132,7 +132,7 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -144,12 +144,17 @@ public class PermissionsEx extends AbstractPermission {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(org.bukkit.entity.Player)
+	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(org.bukkit.
+	 * entity.Player)
 	 */
 	@Override
 	public String getPrefix(Player player) {
+		PermissionUser user = PEX.getUser(player);
+		if (user != null)
+			return user.getPrefix() == null ? "" : user.getPrefix();
+
 		String prefix = "";
 		for (PermissionGroup group : PEX.getUser(player).getGroups())
 			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty())
