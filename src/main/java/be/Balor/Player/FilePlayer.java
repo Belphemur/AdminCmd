@@ -38,6 +38,8 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.Tools.Threads.IOSaveTask;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -53,6 +55,11 @@ public class FilePlayer extends ACPlayer {
 	private ExConfigurationSection kitsUse;
 	private int saveCount = 0;
 	private final static int SAVE_BEFORE_WRITE = 8;
+	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
+	static {
+		ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * 60 * 2);
+	}
 
 	/**
  * 
@@ -62,6 +69,7 @@ public class FilePlayer extends ACPlayer {
 		initFile(directory);
 
 	}
+
 	public FilePlayer(String directory, Player player) {
 		super(player);
 		initFile(directory);
@@ -309,7 +317,7 @@ public class FilePlayer extends ACPlayer {
 
 	private void writeFile() {
 		if (saveCount == SAVE_BEFORE_WRITE || !isOnline) {
-			forceSave();
+			IOSAVET_TASK.addConfigurationToSave(datas);
 			saveCount = 0;
 		} else
 			saveCount++;
@@ -323,6 +331,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	void forceSave() {
 		try {
+			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
 		} catch (IOException e) {
 			ACLogger.severe("Problem while saving Player file of " + getName(), e);
