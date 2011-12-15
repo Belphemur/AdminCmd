@@ -120,7 +120,7 @@ public class ACPlayerListener extends PlayerListener {
 		PlayerManager.getInstance().setOnline(p);
 		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", Utils.getPlayerName(p));
+			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setJoinMessage(Utils.I18n("joinMessage", replace));
 		}
 		if (playerRespawnOrJoin(event.getPlayer())) {
@@ -171,7 +171,7 @@ public class ACPlayerListener extends PlayerListener {
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
 		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", Utils.getPlayerName(p));
+			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setQuitMessage(Utils.I18n("quitMessage", replace));
 		}
 		if (player.hasPower(Type.FAKEQUIT))
