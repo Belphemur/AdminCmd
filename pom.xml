@@ -292,5 +292,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>5.10.2</version>
+	<version>5.11-SNAPSHOT</version>
 </project>

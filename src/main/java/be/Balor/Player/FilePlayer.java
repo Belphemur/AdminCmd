@@ -52,7 +52,7 @@ public class FilePlayer extends ACPlayer {
 	private ExConfigurationSection powers;
 	private ExConfigurationSection kitsUse;
 	private int saveCount = 0;
-	private final static int SAVE_BEFORE_WRITE = 5;
+	private final static int SAVE_BEFORE_WRITE = 8;
 
 	/**
  * 
@@ -74,13 +74,11 @@ public class FilePlayer extends ACPlayer {
 			Files.createParentDirs(pFile);
 		} catch (IOException e) {
 		}
-
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
 		homes = datas.addSection("home");
 		powers = datas.addSection("powers");
 		kitsUse = datas.addSection("kitsUse");
-		forceSave();
 	}
 
 	@Override
