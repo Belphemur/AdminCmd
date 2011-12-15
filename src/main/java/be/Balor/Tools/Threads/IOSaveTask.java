@@ -37,7 +37,8 @@ public class IOSaveTask implements Runnable {
 	 * @param ex
 	 */
 	public void addConfigurationToSave(ExtendedConfiguration ex) {
-		configurations.add(ex);
+		if (!configurations.contains(ex))
+			configurations.add(ex);
 	}
 
 	/**

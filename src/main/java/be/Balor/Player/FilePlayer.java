@@ -53,8 +53,6 @@ public class FilePlayer extends ACPlayer {
 	private ExConfigurationSection homes;
 	private ExConfigurationSection powers;
 	private ExConfigurationSection kitsUse;
-	private int saveCount = 0;
-	private final static int SAVE_BEFORE_WRITE = 8;
 	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
 	static {
 		ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
@@ -316,11 +314,7 @@ public class FilePlayer extends ACPlayer {
 	}
 
 	private void writeFile() {
-		if (saveCount == SAVE_BEFORE_WRITE || !isOnline) {
 			IOSAVET_TASK.addConfigurationToSave(datas);
-			saveCount = 0;
-		} else
-			saveCount++;
 	}
 
 	/*
