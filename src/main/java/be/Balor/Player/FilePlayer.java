@@ -36,6 +36,7 @@ import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.IOSaveTask;
@@ -57,6 +58,7 @@ public class FilePlayer extends ACPlayer {
 	static {
 		ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * 60 * 2);
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created.");
 	}
 
 	/**

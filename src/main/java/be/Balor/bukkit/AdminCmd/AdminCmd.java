@@ -550,13 +550,13 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
+		getServer().getScheduler().cancelTasks(this);
 		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);
 		}
 		ACPluginManager.getInstance().stopChildrenPlugins();
 		CommandManager.getInstance().stopAllExecutorThreads();
 		worker = null;
-		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
