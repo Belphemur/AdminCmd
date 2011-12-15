@@ -57,7 +57,7 @@ public class FilePlayer extends ACPlayer {
 	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
 	static {
 		ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * 60 * 2);
+				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created.");
 	}
 

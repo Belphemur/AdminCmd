@@ -506,6 +506,7 @@ public class ACHelper {
 		pluginConfig.add("teleportDelay", 0L);
 		pluginConfig.add("logAllCmd", false);
 		pluginConfig.add("useJoinQuitMsg", true);
+		pluginConfig.add("delayBeforeWriteUserFileInSec", 2*60);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
