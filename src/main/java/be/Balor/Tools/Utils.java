@@ -250,6 +250,8 @@ public class Utils {
 	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
 		if (withPrefix) {
 			String prefix = colorParser(getPrefix(player, sender));
+			if (prefix.isEmpty())
+				prefix = ChatColor.WHITE.toString();
 			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
 				return prefix + player.getDisplayName() + ChatColor.YELLOW;
 

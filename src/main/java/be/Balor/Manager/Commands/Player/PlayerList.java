@@ -62,7 +62,7 @@ public class PlayerList extends CoreCommand {
 		for (int i = 0; i < online.length; ++i) {
 			Player p = online[i];
 			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-					|| ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT))
+					|| ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT))
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 				continue;
 			String name = Utils.getPlayerName(p, sender);
