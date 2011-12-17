@@ -157,11 +157,8 @@ public class LocaleManager {
 		// To correct interrogation point (?) problem in the locale file.
 		Matcher regexMatcher = buggedLocale.matcher(result);
 		ResultString = null;
-		while (regexMatcher.find()) {
-			ResultString = regexMatcher.group(1);
-			result = regexMatcher.replaceFirst("§" + ResultString);
-			regexMatcher = buggedLocale.matcher(result);
-		}
+		if(regexMatcher.find())
+			result = regexMatcher.replaceAll("§$1");
 		return result;
 	}
 
