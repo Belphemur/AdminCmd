@@ -763,7 +763,8 @@ public class Utils {
 	 */
 	public static void broadcastFakeQuit(Player player) {
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseMessage(player.getName(), getPlayerName(player, null, true), mChatPlugin.leaveMessage));
+			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
+					+ mChatApi.ParseMessage(player.getName(), "", mChatPlugin.leaveMessage));
 		else
 			Utils.broadcastMessage(I18n("quitMessage", "player", getPlayerName(player, null, true)));
 
@@ -811,7 +812,8 @@ public class Utils {
 	 */
 	public static void broadcastFakeJoin(Player player) {
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseMessage(player.getName(),  getPlayerName(player, null, true), mChatPlugin.joinMessage));
+			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
+					+ mChatApi.ParseMessage(player.getName(), "", mChatPlugin.joinMessage));
 		else
 			Utils.broadcastMessage(I18n("joinMessage", "player", getPlayerName(player, null, true)));
 
