@@ -251,15 +251,15 @@ public class Utils {
 		if (withPrefix) {
 			String prefix = colorParser(getPrefix(player, sender));
 			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
-				return prefix + player.getDisplayName() + "§e";
+				return prefix + player.getDisplayName() + ChatColor.YELLOW;
 
-			return prefix + player.getName() + "§e";
+			return prefix + player.getName() + ChatColor.YELLOW;
 		}
 
 		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
-			return player.getDisplayName();
+			return ChatColor.WHITE + player.getDisplayName();
 
-		return player.getName();
+		return ChatColor.WHITE + player.getName();
 	}
 
 	/**
