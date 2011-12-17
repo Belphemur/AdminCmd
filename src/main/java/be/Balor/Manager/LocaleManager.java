@@ -127,17 +127,19 @@ public class LocaleManager {
 		String result = locale;
 		try {
 			Matcher regexMatcher = recursiveLocale.matcher(locale);
-			while (regexMatcher.find()) {
+			boolean found = regexMatcher.find();
+			while (found) {
 				ResultString = regexMatcher.group(1);
 				String recLocale = localeFile.getString(ResultString);
 				if (recLocale != null)
 					result = regexMatcher.replaceFirst(recLocale);
 				else
 					result = regexMatcher.replaceFirst("");
-				regexMatcher = recursiveLocale.matcher(result);
+				found = regexMatcher.find();
 			}
 			regexMatcher = replaceLocale.matcher(result);
-			while (regexMatcher.find()) {
+			found = regexMatcher.find();
+			while (found) {
 				ResultString = regexMatcher.group(1);
 				String replaceValue = values.get(ResultString);
 				if (replaceValue != null) {
@@ -149,7 +151,7 @@ public class LocaleManager {
 
 				} else
 					result = regexMatcher.replaceFirst("");
-				regexMatcher = replaceLocale.matcher(result);
+				found = regexMatcher.find();
 			}
 		} catch (PatternSyntaxException ex) {
 			// Syntax error in the regular expression
@@ -157,11 +159,8 @@ public class LocaleManager {
 		// To correct interrogation point (?) problem in the locale file.
 		Matcher regexMatcher = buggedLocale.matcher(result);
 		ResultString = null;
-		while (regexMatcher.find()) {
-			ResultString = regexMatcher.group(1);
-			result = regexMatcher.replaceFirst("§" + ResultString);
-			regexMatcher = buggedLocale.matcher(result);
-		}
+		if(regexMatcher.find())
+			result = regexMatcher.replaceAll("§$1");
 		return result;
 	}
 
