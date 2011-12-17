@@ -225,10 +225,10 @@ public class ACPlayerListener extends PlayerListener {
 			if (loc == null)
 				loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
-		} else {
-			loc = ACWorld.getWorld(worldName).getSpawn();
-			event.setRespawnLocation(loc);
-		}
+		} /*
+		 * else { loc = ACWorld.getWorld(worldName).getSpawn();
+		 * event.setRespawnLocation(loc); }
+		 */
 
 	}
 
