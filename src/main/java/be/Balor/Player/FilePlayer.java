@@ -57,7 +57,8 @@ public class FilePlayer extends ACPlayer {
 	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
 	static {
 		ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
+				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60,
+				20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created.");
 	}
 
@@ -316,7 +317,7 @@ public class FilePlayer extends ACPlayer {
 	}
 
 	private void writeFile() {
-			IOSAVET_TASK.addConfigurationToSave(datas);
+		IOSAVET_TASK.addConfigurationToSave(datas);
 	}
 
 	/*
@@ -427,6 +428,27 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public long getLastKitUse(String kit) {
 		return kitsUse.getLong(kit, 0L);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#setPresentation(java.lang.String)
+	 */
+	@Override
+	public void setPresentation(String presentation) {
+		informations.set("presentation", presentation);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPresentation()
+	 */
+	@Override
+	public String getPresentation() {
+		return informations.getString("presentation", "");
 	}
 
 }
