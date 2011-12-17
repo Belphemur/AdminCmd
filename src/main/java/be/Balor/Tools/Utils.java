@@ -54,6 +54,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
@@ -302,6 +303,37 @@ public class Utils {
 		}
 		return target;
 
+	}
+
+	/**
+	 * Get the ACPlayer, useful when working with only the AC user informations
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param args
+	 *            args in the command
+	 * @param permNode
+	 *            permission node to execute the command
+	 * @return null if the ACPlayer can't be get else the ACPlayer
+	 */
+	public static ACPlayer getACPlayer(CommandSender sender, CommandArgs args, String permNode) {
+		Player target = Utils.getUser(sender, args, permNode, 0, !Utils.isPlayer(sender, false));
+		ACPlayer actarget;
+		if (target == null) {
+			if (args.length == 0) {
+				sender.sendMessage("You must type the player name");
+				return null;
+			}
+			actarget = ACPlayer.getPlayer(args.getString(0));
+			if (actarget instanceof EmptyPlayer) {
+				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());
+				return null;
+			}
+			if (!Utils.checkImmunity(sender, args, 0))
+				return null;
+		} else
+			actarget = ACPlayer.getPlayer(target);
+		return actarget;
 	}
 
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {

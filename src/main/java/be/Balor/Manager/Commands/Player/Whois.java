@@ -28,7 +28,6 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
@@ -82,22 +81,9 @@ public class Whois extends CoreCommand {
 			}
 			return;
 		}
-		Player target = Utils.getUser(sender, args, permNode, 0, !Utils.isPlayer(sender, false));
-		ACPlayer actarget;
-		if (target == null) {
-			if (args.length == 0) {
-				sender.sendMessage("You must type the player name");
-				return;
-			}
-			actarget = ACPlayer.getPlayer(args.getString(0));
-			if (actarget instanceof EmptyPlayer) {
-				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());
-				return;
-			}
-			if (!Utils.checkImmunity(sender, args, 0))
-				return;
-		} else
-			actarget = ACPlayer.getPlayer(target);
+		ACPlayer actarget = Utils.getACPlayer(sender, args, permNode);
+		if (actarget == null)
+			return;
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
 						+ actarget.getName() + " " + ChatColor.AQUA, '='));
@@ -141,13 +127,13 @@ public class Whois extends CoreCommand {
 		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN
 						+ String.valueOf((InvisibleWorker.getInstance().hasInvisiblePowers(
-								target.getName()) && PermissionManager.hasPerm(sender,
+								actarget.getName()) && PermissionManager.hasPerm(sender,
 								"admincmd.invisible.cansee", false))), sizeRemaining, ' ');
 		sender.sendMessage(line);
 
 		// Immunity Level
 		int level = actarget.getInformation("immunityLvl").getInt(
-					ACHelper.getInstance().getConfInt("defaultImmunityLvl"));
+				ACHelper.getInstance().getConfInt("defaultImmunityLvl"));
 		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);
