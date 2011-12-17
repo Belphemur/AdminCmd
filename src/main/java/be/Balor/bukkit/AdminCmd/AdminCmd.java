@@ -29,6 +29,7 @@ import be.Balor.Manager.Commands.Warp.*;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Ping;
 import be.Balor.Tools.Utils;
@@ -487,6 +488,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
 		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
 		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
+		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
+				+ " %player" + ChatColor.YELLOW + " set to : " + ChatColor.GOLD + "%pres");
 		LocaleManager.getInstance().save();
 	}
 
@@ -551,6 +554,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getServer().getScheduler().cancelTasks(this);
+		FilePlayer.forceSaveList();
 		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);
 		}

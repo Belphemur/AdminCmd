@@ -51,7 +51,7 @@ public class IOSaveTask implements Runnable {
 		return configurations.remove(ex);
 	}
 
-	public void run() {
+	synchronized public void run() {
 		DebugLog.INSTANCE.info("Begin Configuration save with " + configurations.size()
 				+ " file(s)");
 		while (!configurations.isEmpty())

@@ -77,6 +77,14 @@ public class FilePlayer extends ACPlayer {
 
 	}
 
+	/**
+	 * To be sure that all file waiting to be write, will be write when this is
+	 * called
+	 */
+	public static void forceSaveList() {
+		IOSAVET_TASK.run();
+	}
+
 	private void initFile(String directory) {
 		File pFile = new File(directory, name + ".yml");
 		try {
