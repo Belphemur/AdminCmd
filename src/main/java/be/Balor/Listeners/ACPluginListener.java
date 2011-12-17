@@ -16,9 +16,8 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
-
-import net.D3GN.MiracleM4n.mChat.mChat;
 
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
@@ -26,7 +25,6 @@ import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
 import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Tools.Utils;
@@ -36,7 +34,6 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.herocraftonline.dev.heroes.Heroes;
-
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
@@ -93,11 +90,13 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (!SuperPermissions.isApiSet()) {
-			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager().getPlugin("mChat");
+			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("mChatSuite");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
-				SuperPermissions.setmChatapi(mChat.API);
-				Utils.mChatApi = mChat.API;
-				ACLogger.info("Successfully linked with mChat");
+				SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
+				Utils.mChatPlugin = (mChatSuite) mChatPlugin;
+				Utils.mChatApi = ((mChatSuite) mChatPlugin).getAPI();
+				ACLogger.info("Successfully linked with mChatSuite");
 			}
 		}
 		if (Utils.logBlock == null) {

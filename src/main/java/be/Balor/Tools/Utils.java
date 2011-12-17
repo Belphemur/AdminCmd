@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import in.mDev.MiracleM4n.mChatSuite.mChatAPI;
+import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
@@ -33,7 +35,6 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.D3GN.MiracleM4n.mChat.mChatAPI;
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
@@ -80,6 +81,7 @@ public class Utils {
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
 	public static mChatAPI mChatApi = null;
+	public static mChatSuite mChatPlugin = null;
 	public static boolean signExtention = false;
 	private final static long secondInMillis = 1000;
 	private final static long minuteInMillis = secondInMillis * 60;
@@ -760,12 +762,10 @@ public class Utils {
 	 *            that fake quit.
 	 */
 	public static void broadcastFakeQuit(Player player) {
-		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
-					+ mChatApi.getEventMessage("quit"));
+			Utils.broadcastMessage(mChatApi.ParseMessage(player.getName(), "", mChatPlugin.leaveMessage));
 		else
-			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+			Utils.broadcastMessage(I18n("quitMessage", "player", Utils.getPlayerName(player, null, true)));
 
 	}
 
@@ -810,12 +810,10 @@ public class Utils {
 	 *            that fake join.
 	 */
 	public static void broadcastFakeJoin(Player player) {
-		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
-					+ mChatApi.getEventMessage("join"));
+			Utils.broadcastMessage(mChatApi.ParseMessage(player.getName(), "", mChatPlugin.joinMessage));
 		else
-			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
+			Utils.broadcastMessage(I18n("joinMessage", "player", Utils.getPlayerName(player, null, true)));
 
 	}
 
