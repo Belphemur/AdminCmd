@@ -446,7 +446,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public void setPresentation(String presentation) {
 		informations.set("presentation", presentation);
-
+		writeFile();
 	}
 
 	/*
