@@ -96,6 +96,14 @@ public class Whois extends CoreCommand {
 				logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
 
+		// Presentation
+		String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE + " : ";
+		int presSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(presentation);
+		presentation += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + actarget.getPresentation(), presSizeRemaining, ' ');
+		sender.sendMessage(presentation);
+		
 		// Played
 		long total = actarget.getCurrentPlayedTime();
 		Long[] time = Utils.transformToElapsedTime(total);
