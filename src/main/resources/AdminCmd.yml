@@ -636,3 +636,11 @@ acserverdifficulty:
     plugin: AdminCmd
     permissions: admincmd.server.difficulty
     cmdname: bal_difficulty
+    
+acserverdifficulty:
+    command: pres [-p player] ["presentation"]
+    description: "Set the your presentation message or the one of other player (-p)"
+    plugin: AdminCmd
+    permissions: admincmd.player.pres
+    cmdname: bal_pres
+    

@@ -370,3 +370,7 @@ commands:
     description: Sets (-s) or gets (-g) the Difficulty of a world.
     aliases: [dif, difficulty]
     usage: /<command> [-flag] (worldname) (difficulty)
+  bal_pres:
+    description: Set the your presentation message or the one of other player (-p)
+    aliases: [pres, presentation]
+    usage: /<command> <-p player> ["presentation"]

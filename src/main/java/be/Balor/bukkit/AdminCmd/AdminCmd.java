@@ -184,6 +184,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(ChangeMobSpawner.class);
 		CommandManager.getInstance().registerCommand(Reply.class);
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
+		CommandManager.getInstance().registerCommand(Presentation.class);
 	}
 
 	@Override
