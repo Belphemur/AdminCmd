@@ -40,7 +40,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -485,8 +485,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("errorMoved", ChatColor.RED
 				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
-		Utils.addLocale("joinMessage", ChatColor.YELLOW + "%name joined the game!");
-		Utils.addLocale("quitMessage", ChatColor.YELLOW + "%name left the game!");
+		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
+		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
 		LocaleManager.getInstance().save();
 	}
 
@@ -543,7 +543,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
-		//get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
+		// get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
 		Ping.init(this);
 	}
 

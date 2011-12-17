@@ -766,7 +766,7 @@ public class Utils {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ mChatApi.ParseMessage(player.getName(), "", mChatPlugin.leaveMessage));
 		else
-			Utils.broadcastMessage(I18n("quitMessage", "player", getPlayerName(player, null, true)));
+			Utils.broadcastMessage(I18n("quitMessage", "name", getPlayerName(player, null, true)));
 
 	}
 
@@ -815,7 +815,7 @@ public class Utils {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ mChatApi.ParseMessage(player.getName(), "", mChatPlugin.joinMessage));
 		else
-			Utils.broadcastMessage(I18n("joinMessage", "player", getPlayerName(player, null, true)));
+			Utils.broadcastMessage(I18n("joinMessage", "name", getPlayerName(player, null, true)));
 
 	}
 
