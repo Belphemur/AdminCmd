@@ -94,8 +94,7 @@ public class ACPluginListener extends ServerListener {
 					.getPlugin("mChatSuite");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
-				Utils.mChatPlugin = (mChatSuite) mChatPlugin;
-				Utils.mChatApi = ((mChatSuite) mChatPlugin).getAPI();
+				Utils.mChatApi = ((mChatSuite) mChatPlugin).getInfoReader();
 				ACLogger.info("Successfully linked with mChatSuite");
 			}
 		}

@@ -16,8 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import in.mDev.MiracleM4n.mChatSuite.mChatAPI;
-import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
+import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
@@ -51,11 +50,6 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.herocraftonline.dev.heroes.Heroes;
-import com.herocraftonline.dev.heroes.hero.Hero;
-
-import de.diddiz.LogBlock.Consumer;
-
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -72,6 +66,11 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
+import com.herocraftonline.dev.heroes.Heroes;
+import com.herocraftonline.dev.heroes.hero.Hero;
+
+import de.diddiz.LogBlock.Consumer;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -80,8 +79,7 @@ public class Utils {
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
-	public static mChatAPI mChatApi = null;
-	public static mChatSuite mChatPlugin = null;
+	public static MInfoReader mChatApi = null;
 	public static boolean signExtention = false;
 	private final static long secondInMillis = 1000;
 	private final static long minuteInMillis = secondInMillis * 60;
@@ -764,7 +762,7 @@ public class Utils {
 	public static void broadcastFakeQuit(Player player) {
 		if (mChatApi != null)
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
-					+ mChatApi.ParseMessage(player.getName(), "", mChatPlugin.leaveMessage));
+					+ mChatApi.getEventMessage("Quit"));
 		else
 			Utils.broadcastMessage(I18n("quitMessage", "name", getPlayerName(player, null, true)));
 
@@ -813,7 +811,7 @@ public class Utils {
 	public static void broadcastFakeJoin(Player player) {
 		if (mChatApi != null)
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
-					+ mChatApi.ParseMessage(player.getName(), "", mChatPlugin.joinMessage));
+					+ mChatApi.getEventMessage("Join"));
 		else
 			Utils.broadcastMessage(I18n("joinMessage", "name", getPlayerName(player, null, true)));
 
