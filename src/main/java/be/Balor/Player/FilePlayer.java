@@ -55,11 +55,9 @@ public class FilePlayer extends ACPlayer {
 	private ExConfigurationSection powers;
 	private ExConfigurationSection kitsUse;
 	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
+	private static int ioStackTaskId = -1;
 	static {
-		ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60,
-				20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
-		DebugLog.INSTANCE.info("IO Save RepeatingTask created.");
+		scheduleAsyncSave();
 	}
 
 	/**
@@ -83,6 +81,19 @@ public class FilePlayer extends ACPlayer {
 	 */
 	public static void forceSaveList() {
 		IOSAVET_TASK.run();
+	}
+
+	/**
+	 * To Schedule the Async task
+	 */
+	public static void scheduleAsyncSave() {
+		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
+				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
+			return;
+		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60,
+				20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "+ioStackTaskId);
 	}
 
 	private void initFile(String directory) {

@@ -40,6 +40,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
@@ -297,6 +298,7 @@ public class ACHelper {
 	public synchronized void reload() {
 		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
+		FilePlayer.forceSaveList();		
 		alias.clear();
 		itemBlacklist.clear();
 		blockBlacklist.clear();
@@ -312,6 +314,9 @@ public class ACHelper {
 			ACLogger.severe("Config Reload Problem :", e);
 		}
 		bannedPlayers.clear();
+		//TODO : Don't forget to check if the admin use a MySQL database or the file system 
+		FilePlayer.scheduleAsyncSave();
+		
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
