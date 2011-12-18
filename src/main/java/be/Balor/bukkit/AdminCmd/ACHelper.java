@@ -314,8 +314,6 @@ public class ACHelper {
 			ACLogger.severe("Config Reload Problem :", e);
 		}
 		bannedPlayers.clear();
-		//TODO : Don't forget to check if the admin use a MySQL database or the file system 
-		FilePlayer.scheduleAsyncSave();
 		
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
@@ -379,10 +377,11 @@ public class ACHelper {
 			}
 		} else
 			pluginStarted = System.currentTimeMillis();
-
+		//TODO : Don't forget to check if the admin use a MySQL database or the file system 
+		FilePlayer.scheduleAsyncSave();
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (Player p : coreInstance.getServer().getOnlinePlayers())
-				ACPlayer.getPlayer(p.getName()).setPower(Type.TP_REQUEST);
+				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
 		}
 		for (World w : coreInstance.getServer().getWorlds()) {
 			ACWorld world = ACWorld.getWorld(w.getName());

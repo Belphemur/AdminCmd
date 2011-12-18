@@ -56,9 +56,6 @@ public class FilePlayer extends ACPlayer {
 	private ExConfigurationSection kitsUse;
 	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
 	private static int ioStackTaskId = -1;
-	static {
-		scheduleAsyncSave();
-	}
 
 	/**
  * 
