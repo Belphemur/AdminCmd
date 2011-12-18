@@ -58,6 +58,7 @@ import org.yaml.snakeyaml.scanner.ScannerException;
 
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -133,6 +134,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 */
 	public void save() throws IOException {
 		save(file);
+		DebugLog.INSTANCE.info("Saving file : " + file);
 	}
 
 	/**
