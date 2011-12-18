@@ -277,5 +277,19 @@ public class EmptyPlayer extends ACPlayer {
 	public long getLastKitUse(String kit) {
 		return 0;
 	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#setPresentation(java.lang.String)
+	 */
+	@Override
+	public void setPresentation(String presentation) {
+		
+	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#getPresentation()
+	 */
+	@Override
+	public String getPresentation() {
+		return "";
+	}
 
 }

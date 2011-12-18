@@ -36,8 +36,11 @@ import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.Tools.Threads.IOSaveTask;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -51,8 +54,8 @@ public class FilePlayer extends ACPlayer {
 	private ExConfigurationSection homes;
 	private ExConfigurationSection powers;
 	private ExConfigurationSection kitsUse;
-	private int saveCount = 0;
-	private final static int SAVE_BEFORE_WRITE = 5;
+	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
+	private static int ioStackTaskId = -1;
 
 	/**
  * 
@@ -62,10 +65,32 @@ public class FilePlayer extends ACPlayer {
 		initFile(directory);
 
 	}
+
 	public FilePlayer(String directory, Player player) {
 		super(player);
 		initFile(directory);
 
+	}
+
+	/**
+	 * To be sure that all file waiting to be write, will be write when this is
+	 * called
+	 */
+	public static void forceSaveList() {
+		IOSAVET_TASK.run();
+	}
+
+	/**
+	 * To Schedule the Async task
+	 */
+	public static void scheduleAsyncSave() {
+		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
+				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
+			return;
+		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60,
+				20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "+ioStackTaskId);
 	}
 
 	private void initFile(String directory) {
@@ -74,13 +99,11 @@ public class FilePlayer extends ACPlayer {
 			Files.createParentDirs(pFile);
 		} catch (IOException e) {
 		}
-
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
 		homes = datas.addSection("home");
 		powers = datas.addSection("powers");
 		kitsUse = datas.addSection("kitsUse");
-		forceSave();
 	}
 
 	@Override
@@ -310,11 +333,7 @@ public class FilePlayer extends ACPlayer {
 	}
 
 	private void writeFile() {
-		if (saveCount == SAVE_BEFORE_WRITE || !isOnline) {
-			forceSave();
-			saveCount = 0;
-		} else
-			saveCount++;
+		IOSAVET_TASK.addConfigurationToSave(datas);
 	}
 
 	/*
@@ -325,6 +344,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	void forceSave() {
 		try {
+			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
 		} catch (IOException e) {
 			ACLogger.severe("Problem while saving Player file of " + getName(), e);
@@ -424,6 +444,27 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public long getLastKitUse(String kit) {
 		return kitsUse.getLong(kit, 0L);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#setPresentation(java.lang.String)
+	 */
+	@Override
+	public void setPresentation(String presentation) {
+		informations.set("presentation", presentation);
+		writeFile();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPresentation()
+	 */
+	@Override
+	public String getPresentation() {
+		return informations.getString("presentation", "");
 	}
 
 }

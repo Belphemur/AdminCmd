@@ -16,11 +16,12 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
+import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
+
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.D3GN.MiracleM4n.mChat.mChatAPI;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +37,7 @@ import be.Balor.Tools.Utils;
  *
  */
 public class SuperPermissions extends AbstractPermission {
-	protected static mChatAPI mChatAPI = null;
+	protected static MInfoReader mChatInfo = null;
 
 	/**
 	 *
@@ -46,19 +47,19 @@ public class SuperPermissions extends AbstractPermission {
 
 
 	/**
-	 * @param mChatAPI
+	 * @param mChatSuite
 	 *            the mChatAPI to set
 	 */
-	public static void setmChatapi(mChatAPI mChatAPI) {
-		if (SuperPermissions.mChatAPI == null && mChatAPI != null)
-			SuperPermissions.mChatAPI = mChatAPI;
+	public static void setmChatapi(mChatSuite mChatSuite) {
+		if (SuperPermissions.mChatInfo == null && mChatSuite != null)
+			mChatInfo = mChatSuite.getInfoReader();	
 	}
 
 	/**
 	 * @return the mChatAPI
 	 */
 	public static boolean isApiSet() {
-		return mChatAPI != null;
+		return mChatInfo != null;
 	}
 
 	/*
@@ -135,8 +136,8 @@ public class SuperPermissions extends AbstractPermission {
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
 		String result = null;
-		if (mChatAPI != null)
-			result = mChatAPI.getInfo(p, "admincmd." + limit);
+		if (mChatInfo != null)
+			result = mChatInfo.getInfo(p, "admincmd." + limit);
 		if (result == null || (result != null && result.isEmpty())) {
 			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
 			for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
@@ -160,8 +161,8 @@ public class SuperPermissions extends AbstractPermission {
 	 */
 	@Override
 	public String getPrefix(Player player) {
-		if (mChatAPI != null)
-			return mChatAPI.getPrefix(player);
+		if (mChatInfo != null)
+			return mChatInfo.getPrefix(player);
 		else
 			return "";
 	}

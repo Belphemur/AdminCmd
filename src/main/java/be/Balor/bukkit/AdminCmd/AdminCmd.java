@@ -29,6 +29,7 @@ import be.Balor.Manager.Commands.Warp.*;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Ping;
 import be.Balor.Tools.Utils;
@@ -40,7 +41,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -183,6 +184,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(ChangeMobSpawner.class);
 		CommandManager.getInstance().registerCommand(Reply.class);
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
+		CommandManager.getInstance().registerCommand(Presentation.class);
 	}
 
 	@Override
@@ -490,8 +492,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("errorMoved", ChatColor.RED
 				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
-		Utils.addLocale("joinMessage", ChatColor.YELLOW + "%name joined the game!");
-		Utils.addLocale("quitMessage", ChatColor.YELLOW + "%name left the game!");
+		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
+		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
+		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
+				+ " %player" + ChatColor.YELLOW + " set to : " + ChatColor.GOLD + "%pres");
 		LocaleManager.getInstance().save();
 	}
 
@@ -548,20 +552,21 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
-		//get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
+		// get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
 		Ping.init(this);
 	}
 
 	@Override
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
+		getServer().getScheduler().cancelTasks(this);
+		FilePlayer.forceSaveList();
 		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);
 		}
 		ACPluginManager.getInstance().stopChildrenPlugins();
 		CommandManager.getInstance().stopAllExecutorThreads();
 		worker = null;
-		getServer().getScheduler().cancelTasks(this);
 		ACHelper.killInstance();
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();

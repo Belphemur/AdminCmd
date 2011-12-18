@@ -331,6 +331,21 @@ public abstract class ACPlayer {
 	}
 
 	/**
+	 * Set the player presentation
+	 * 
+	 * @param presentation
+	 *            a little text to present the player
+	 */
+	public abstract void setPresentation(String presentation);
+
+	/**
+	 * Get the presentation of the player
+	 * 
+	 * @return text to present the player
+	 */
+	public abstract String getPresentation();
+
+	/**
 	 * @param isOnline
 	 *            the isOnline to set
 	 */

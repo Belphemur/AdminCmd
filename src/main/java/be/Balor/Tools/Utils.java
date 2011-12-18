@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
@@ -33,7 +34,6 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.D3GN.MiracleM4n.mChat.mChatAPI;
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
@@ -50,15 +50,11 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.herocraftonline.dev.heroes.Heroes;
-import com.herocraftonline.dev.heroes.hero.Hero;
-
-import de.diddiz.LogBlock.Consumer;
-
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
@@ -71,6 +67,11 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
+import com.herocraftonline.dev.heroes.Heroes;
+import com.herocraftonline.dev.heroes.hero.Hero;
+
+import de.diddiz.LogBlock.Consumer;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -79,7 +80,7 @@ public class Utils {
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
-	public static mChatAPI mChatApi = null;
+	public static MInfoReader mChatApi = null;
 	public static boolean signExtention = false;
 	private final static long secondInMillis = 1000;
 	private final static long minuteInMillis = secondInMillis * 60;
@@ -249,16 +250,18 @@ public class Utils {
 	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
 		if (withPrefix) {
 			String prefix = colorParser(getPrefix(player, sender));
+			if (prefix.isEmpty())
+				prefix = ChatColor.WHITE.toString();
 			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
-				return prefix + player.getDisplayName();
+				return prefix + player.getDisplayName() + ChatColor.YELLOW;
 
-			return prefix + player.getName();
+			return prefix + player.getName() + ChatColor.YELLOW;
 		}
 
 		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
-			return player.getDisplayName();
+			return ChatColor.WHITE + player.getDisplayName();
 
-		return player.getName();
+		return ChatColor.WHITE + player.getName();
 	}
 
 	/**
@@ -302,6 +305,37 @@ public class Utils {
 		}
 		return target;
 
+	}
+
+	/**
+	 * Get the ACPlayer, useful when working with only the AC user informations
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param args
+	 *            args in the command
+	 * @param permNode
+	 *            permission node to execute the command
+	 * @return null if the ACPlayer can't be get else the ACPlayer
+	 */
+	public static ACPlayer getACPlayer(CommandSender sender, CommandArgs args, String permNode) {
+		Player target = Utils.getUser(sender, args, permNode, 0, !Utils.isPlayer(sender, false));
+		ACPlayer actarget;
+		if (target == null) {
+			if (args.length == 0) {
+				sender.sendMessage("You must type the player name");
+				return null;
+			}
+			actarget = ACPlayer.getPlayer(args.getString(0));
+			if (actarget instanceof EmptyPlayer) {
+				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());
+				return null;
+			}
+			if (!Utils.checkImmunity(sender, args, 0))
+				return null;
+		} else
+			actarget = ACPlayer.getPlayer(target);
+		return actarget;
 	}
 
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
@@ -760,12 +794,11 @@ public class Utils {
 	 *            that fake quit.
 	 */
 	public static void broadcastFakeQuit(Player player) {
-		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
-					+ mChatApi.getEventMessage("quit"));
+			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
+					+ mChatApi.getEventMessage("Quit"));
 		else
-			Utils.broadcastMessage(ChatColor.YELLOW + name + " left the game.");
+			Utils.broadcastMessage(I18n("quitMessage", "name", getPlayerName(player, null, true)));
 
 	}
 
@@ -810,12 +843,11 @@ public class Utils {
 	 *            that fake join.
 	 */
 	public static void broadcastFakeJoin(Player player) {
-		String name = player.getName();
 		if (mChatApi != null)
-			Utils.broadcastMessage(mChatApi.ParseEventName(player) + " "
-					+ mChatApi.getEventMessage("join"));
+			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
+					+ mChatApi.getEventMessage("Join"));
 		else
-			Utils.broadcastMessage(ChatColor.YELLOW + name + " joined the game.");
+			Utils.broadcastMessage(I18n("joinMessage", "name", getPlayerName(player, null, true)));
 
 	}
 

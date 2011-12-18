@@ -241,10 +241,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.D3GN</groupId>
-			<artifactId>mChat</artifactId>
-			<version>1.8.8</version>
-			<scope>provided</scope>
+			<groupId>in.mDev</groupId>
+			<artifactId>mChatSuite</artifactId>
+			<version>DEV</version>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>
@@ -290,5 +289,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>5.10.2</version>
+	<version>5.11-SNAPSHOT</version>
 </project>

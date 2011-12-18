@@ -40,6 +40,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
@@ -297,6 +298,7 @@ public class ACHelper {
 	public synchronized void reload() {
 		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
+		FilePlayer.forceSaveList();		
 		alias.clear();
 		itemBlacklist.clear();
 		blockBlacklist.clear();
@@ -312,6 +314,7 @@ public class ACHelper {
 			ACLogger.severe("Config Reload Problem :", e);
 		}
 		bannedPlayers.clear();
+		
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
@@ -374,10 +377,11 @@ public class ACHelper {
 			}
 		} else
 			pluginStarted = System.currentTimeMillis();
-
+		//TODO : Don't forget to check if the admin use a MySQL database or the file system 
+		FilePlayer.scheduleAsyncSave();
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (Player p : coreInstance.getServer().getOnlinePlayers())
-				ACPlayer.getPlayer(p.getName()).setPower(Type.TP_REQUEST);
+				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
 		}
 		for (World w : coreInstance.getServer().getWorlds()) {
 			ACWorld world = ACWorld.getWorld(w.getName());
@@ -506,6 +510,7 @@ public class ACHelper {
 		pluginConfig.add("teleportDelay", 0L);
 		pluginConfig.add("logAllCmd", false);
 		pluginConfig.add("useJoinQuitMsg", true);
+		pluginConfig.add("delayBeforeWriteUserFileInSec", 2*60);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {

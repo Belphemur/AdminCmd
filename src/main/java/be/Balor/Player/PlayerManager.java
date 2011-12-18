@@ -33,8 +33,7 @@ import com.google.common.collect.MapMaker;
 public class PlayerManager {
 	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
 			.weakValues().makeMap();
-	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
-			.weakValues().makeMap();
+	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8).makeMap();
 	private final static PlayerManager instance = new PlayerManager();
 	private ACPlayerFactory playerFactory;
 
