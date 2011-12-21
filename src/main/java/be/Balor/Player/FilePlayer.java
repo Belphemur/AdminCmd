@@ -18,6 +18,7 @@ package be.Balor.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -38,7 +39,6 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
-import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.IOSaveTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -49,11 +49,12 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class FilePlayer extends ACPlayer {
 
-	private ExtendedConfiguration datas;
-	private ExConfigurationSection informations;
-	private ExConfigurationSection homes;
-	private ExConfigurationSection powers;
-	private ExConfigurationSection kitsUse;
+	private final ExtendedConfiguration datas;
+	private final ExConfigurationSection informations;
+	private final ExConfigurationSection homes;
+	private final ExConfigurationSection powers;
+	private final ExConfigurationSection kitsUse;
+	private final ExConfigurationSection lastLoc;
 	private final static IOSaveTask IOSAVET_TASK = new IOSaveTask();
 	private static int ioStackTaskId = -1;
 
@@ -62,13 +63,33 @@ public class FilePlayer extends ACPlayer {
  */
 	public FilePlayer(String directory, String name) {
 		super(name);
-		initFile(directory);
+		File pFile = new File(directory, name + ".yml");
+		try {
+			Files.createParentDirs(pFile);
+		} catch (IOException e) {
+		}
+		datas = ExtendedConfiguration.loadConfiguration(pFile);
+		informations = datas.addSection("infos");
+		homes = datas.addSection("home");
+		powers = datas.addSection("powers");
+		kitsUse = datas.addSection("kitsUse");
+		lastLoc = informations.addSection("lastLoc");
 
 	}
 
 	public FilePlayer(String directory, Player player) {
 		super(player);
-		initFile(directory);
+		File pFile = new File(directory, name + ".yml");
+		try {
+			Files.createParentDirs(pFile);
+		} catch (IOException e) {
+		}
+		datas = ExtendedConfiguration.loadConfiguration(pFile);
+		informations = datas.addSection("infos");
+		homes = datas.addSection("home");
+		powers = datas.addSection("powers");
+		kitsUse = datas.addSection("kitsUse");
+		lastLoc = informations.addSection("lastLoc");
 
 	}
 
@@ -87,34 +108,28 @@ public class FilePlayer extends ACPlayer {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
-		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60,
-				20 * ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec"));
-		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "+ioStackTaskId);
-	}
-
-	private void initFile(String directory) {
-		File pFile = new File(directory, name + ".yml");
-		try {
-			Files.createParentDirs(pFile);
-		} catch (IOException e) {
-		}
-		datas = ExtendedConfiguration.loadConfiguration(pFile);
-		informations = datas.addSection("infos");
-		homes = datas.addSection("home");
-		powers = datas.addSection("powers");
-		kitsUse = datas.addSection("kitsUse");
+		ioStackTaskId = ACPluginManager.getScheduler()
+				.scheduleAsyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(),
+						IOSAVET_TASK,
+						20 * 60,
+						20 * ACHelper.getInstance().getConfInt(
+								"delayBeforeWriteUserFileInSec"));
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
+				+ ioStackTaskId);
 	}
 
 	@Override
 	public void setHome(String home, Location loc) {
-		ConfigurationSection homeToSet = homes.createSection(home);
-		homeToSet.set("world", loc.getWorld().getName());
-		homeToSet.set("x", loc.getX());
-		homeToSet.set("y", loc.getY());
-		homeToSet.set("z", loc.getZ());
-		homeToSet.set("yaw", loc.getYaw());
-		homeToSet.set("pitch", loc.getPitch());
+		synchronized (homes) {
+			ConfigurationSection homeToSet = homes.createSection(home);
+			homeToSet.set("world", loc.getWorld().getName());
+			homeToSet.set("x", loc.getX());
+			homeToSet.set("y", loc.getY());
+			homeToSet.set("z", loc.getZ());
+			homeToSet.set("yaw", loc.getYaw());
+			homeToSet.set("pitch", loc.getPitch());
+		}
 		writeFile();
 	}
 
@@ -125,7 +140,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeHome(String home) {
-		homes.set(home, null);
+		synchronized (homes) {
+			homes.set(home, null);
+		}
 		writeFile();
 	}
 
@@ -136,14 +153,14 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getHome(String home) {
-		Location loc = getLocation("home." + home);
-		if (loc == null) {
-			String name = Str.matchString(homes.getKeys(false), home);
-			if (name == null)
+		synchronized (homes) {
+			ConfigurationSection homeSection = homes
+					.getConfigurationSection(home);
+			if (homeSection == null)
 				return null;
-			loc = getLocation("home." + name);
+			else
+				return getLocation(homeSection);
 		}
-		return loc;
 	}
 
 	/*
@@ -155,7 +172,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setInformation(String info, Object value) {
-		informations.set(info, value);
+		synchronized (informations) {
+			informations.set(info, value);
+		}
 		writeFile();
 	}
 
@@ -168,7 +187,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeInformation(String info) {
-		informations.set(info, null);
+		synchronized (informations) {
+			informations.remove(info);
+		}
 		writeFile();
 	}
 
@@ -180,7 +201,11 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public ObjectContainer getInformation(String info) {
-		return new ObjectContainer(informations.get(info));
+		Object infoObject;
+		synchronized (informations) {
+			infoObject = informations.get(info);
+		}
+		return new ObjectContainer(infoObject);
 	}
 
 	/*
@@ -193,9 +218,8 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public void setLastLocation(Location loc) {
 		if (loc == null)
-			datas.set("lastLoc", null);
-		else {
-			ConfigurationSection lastLoc = datas.createSection("lastLoc");
+			return;
+		synchronized (lastLoc) {
 			lastLoc.set("world", loc.getWorld().getName());
 			lastLoc.set("x", loc.getX());
 			lastLoc.set("y", loc.getY());
@@ -203,9 +227,7 @@ public class FilePlayer extends ACPlayer {
 			lastLoc.set("yaw", loc.getYaw());
 			lastLoc.set("pitch", loc.getPitch());
 		}
-
 		writeFile();
-
 	}
 
 	/*
@@ -216,61 +238,23 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public Location getLastLocation() {
-		return getLocation("lastLoc");
-	}
-
-	private Location getLocation(String location) throws WorldNotLoaded {
-		ConfigurationSection node = datas.getConfigurationSection(location);
-		if (node == null)
-			return null;
-		if (node.get("world") == null) {
-			Location loc = parseLocation(location);
-			if (loc != null)
-				setHome(location, loc);
-			return loc;
-		} else {
-			World w = ACPluginManager.getServer().getWorld(node.getString("world"));
-			if (w != null)
-				return new Location(w, node.getDouble("x", 0), node.getDouble("y", 0),
-						node.getDouble("z", 0), Float.parseFloat(node.getString("yaw")),
-						Float.parseFloat(node.getString("pitch")));
-			else
-				throw new WorldNotLoaded(node.getString("world"));
-
+		Location loc;
+		synchronized (lastLoc) {
+			loc = getLocation(lastLoc);
 		}
+		return loc;
 	}
 
-	/**
-	 * Parse String to create a location
-	 * 
-	 * @param property
-	 * @param conf
-	 * @return
-	 */
-	private Location parseLocation(String home) {
-		String toParse = datas.getString("home." + home);
-		if (toParse == null)
-			return null;
-		if (toParse.isEmpty())
-			return null;
-		String infos[] = new String[5];
-		Double coords[] = new Double[3];
-		Float direction[] = new Float[2];
-		infos = toParse.split(";");
-		for (int i = 0; i < coords.length; i++)
-			try {
-				coords[i] = Double.parseDouble(infos[i]);
-			} catch (NumberFormatException e) {
-				return null;
-			}
-		for (int i = 3; i < infos.length - 1; i++)
-			try {
-				direction[i - 3] = Float.parseFloat(infos[i]);
-			} catch (NumberFormatException e) {
-				return null;
-			}
-		return new Location(ACPluginManager.getServer().getWorld(infos[5]), coords[0], coords[1],
-				coords[2], direction[0], direction[1]);
+	private Location getLocation(ConfigurationSection node)
+			throws WorldNotLoaded {
+		World w = ACPluginManager.getServer().getWorld(node.getString("world"));
+		if (w != null)
+			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
+					0), node.getDouble("z", 0), Float.parseFloat(node
+					.getString("yaw")), Float.parseFloat(node
+					.getString("pitch")));
+		else
+			throw new WorldNotLoaded(node.getString("world"));
 	}
 
 	/*
@@ -282,7 +266,9 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public void setPower(Type power, Object value) {
-		powers.set(power.toString(), value);
+		synchronized (powers) {
+			powers.set(power.toString(), value);
+		}
 		writeFile();
 
 	}
@@ -295,7 +281,11 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public ObjectContainer getPower(Type power) {
-		return new ObjectContainer(powers.get(power.toString()));
+		Object result;
+		synchronized (powers) {
+			result = powers.get(power.toString());
+		}
+		return new ObjectContainer(result);
 	}
 
 	/*
@@ -305,7 +295,11 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public boolean hasPower(Type power) {
-		return powers.contains(power.toString());
+		boolean contain = false;
+		synchronized (powers) {
+			contain = powers.contains(power.toString());
+		}
+		return contain;
 	}
 
 	/*
@@ -317,7 +311,9 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public void removePower(Type power) {
-		powers.set(power.toString(), null);
+		synchronized (powers) {
+			powers.set(power.toString(), null);
+		}
 		writeFile();
 	}
 
@@ -329,7 +325,11 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public Set<String> getHomeList() {
-		return homes.getKeys(false);
+		Set<String> result = new HashSet<String>();
+		synchronized (homes) {
+			result = homes.getKeys(false);
+		}
+		return result;
 	}
 
 	private void writeFile() {
@@ -347,7 +347,8 @@ public class FilePlayer extends ACPlayer {
 			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
 		} catch (IOException e) {
-			ACLogger.severe("Problem while saving Player file of " + getName(), e);
+			ACLogger.severe("Problem while saving Player file of " + getName(),
+					e);
 		}
 	}
 
@@ -358,10 +359,13 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeAllSuperPower() {
-		for (String power : powers.getKeys(false)) {
-			Type matched = Type.matchType(power);
-			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
-				powers.set(power, null);
+		synchronized (powers) {
+			for (String power : powers.getKeys(false)) {
+				Type matched = Type.matchType(power);
+				if (matched != null
+						&& matched.getCategory().equals(Category.SUPER_POWER))
+					powers.set(power, null);
+			}
 		}
 		writeFile();
 
@@ -375,8 +379,10 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setCustomPower(String power, Object value) {
-		Type.addCustomPower(power);
-		powers.set(power, value);
+		synchronized (powers) {
+			Type.addCustomPower(power);
+			powers.set(power, value);
+		}
 		writeFile();
 	}
 
@@ -387,7 +393,11 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public ObjectContainer getCustomPower(String power) {
-		return new ObjectContainer(powers.get(power));
+		Object powerObject;
+		synchronized (powers) {
+			powerObject = powers.get(power);
+		}
+		return new ObjectContainer(powerObject);
 	}
 
 	/*
@@ -407,7 +417,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeCustomPower(String power) {
-		powers.set(power, null);
+		synchronized (powers) {
+			powers.set(power, null);
+		}
 		writeFile();
 
 	}
@@ -420,8 +432,11 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<String, String> getPowers() {
 		TreeMap<String, String> result = new TreeMap<String, String>();
-		for (Entry<String, Object> entry : powers.getValues(false).entrySet())
-			result.put(entry.getKey(), entry.getValue().toString());
+		synchronized (powers) {
+			for (Entry<String, Object> entry : powers.getValues(false)
+					.entrySet())
+				result.put(entry.getKey(), entry.getValue().toString());
+		}
 		return result;
 	}
 
@@ -432,7 +447,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void updateLastKitUse(String kit) {
-		kitsUse.set(kit, System.currentTimeMillis());
+		synchronized (kitsUse) {
+			kitsUse.set(kit, System.currentTimeMillis());
+		}
 		writeFile();
 	}
 
@@ -443,7 +460,11 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public long getLastKitUse(String kit) {
-		return kitsUse.getLong(kit, 0L);
+		long use = 0L;
+		synchronized (kitsUse) {
+			use = kitsUse.getLong(kit, 0L);
+		}
+		return use;
 	}
 
 	/*
@@ -453,7 +474,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setPresentation(String presentation) {
-		informations.set("presentation", presentation);
+		synchronized (informations) {
+			informations.set("presentation", presentation);
+		}
 		writeFile();
 	}
 
@@ -464,7 +487,11 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public String getPresentation() {
-		return informations.getString("presentation", "");
+		String pres = "";
+		synchronized (informations) {
+			pres = informations.getString("presentation", "");
+		}
+		return pres;
 	}
 
 }

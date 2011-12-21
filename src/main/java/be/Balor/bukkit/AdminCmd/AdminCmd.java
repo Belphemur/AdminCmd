@@ -41,7 +41,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -185,6 +185,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Reply.class);
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
+		CommandManager.getInstance().registerCommand(Experience.class);
 	}
 
 	@Override
@@ -496,6 +497,25 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
 		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
 				+ " %player" + ChatColor.YELLOW + " set to : " + ChatColor.GOLD + "%pres");
+		Utils.addLocale("expAdded", ChatColor.GOLD + "%amount " + ChatColor.DARK_AQUA
+				+ "has been added to your experience.");
+		Utils.addLocale("expLevelSet", ChatColor.DARK_AQUA
+				+ "Your current level has been set to " + ChatColor.GOLD + "%amount");
+		Utils.addLocale("expProgressionSet", ChatColor.DARK_AQUA + "Your current level progression has been set to "
+				+ ChatColor.GOLD + "%amount");
+		Utils.addLocale("expDropped", ChatColor.DARK_AQUA + "An experience orb has been dropped near your location!");
+		Utils.addLocale("expTotal", ChatColor.DARK_AQUA + "Your total experience is: "
+				+ ChatColor.GOLD + "%exp");
+		Utils.addLocale("expAddedTarget", ChatColor.GREEN + "You have added" + ChatColor.GOLD
+				+ " %amount " + ChatColor.GREEN + "to %target" + "s total experience.");
+		Utils.addLocale("expLevelSetTarget", ChatColor.GREEN + "%target" + "s level now is:"
+				+ ChatColor.GOLD+ " %amount");
+		Utils.addLocale("expProgressionSetTarget", ChatColor.GREEN + "You have set %target" + "s current "
+				+ "progression to " + ChatColor.GOLD + "%amount");
+		Utils.addLocale("expDroppedTarget", ChatColor.GREEN + "You have dropped an experience"
+				+ " orb at %target" + "s location.");
+		Utils.addLocale("expTotalTarget", ChatColor.DARK_AQUA + "%target" + "s total experience is: "
+				+ ChatColor.GOLD + "%exp");
 		LocaleManager.getInstance().save();
 	}
 
@@ -573,8 +593,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.killInstance();
 		HelpLister.killInstance();
 		DebugLog.stopLogging();
-		Utils.replaceBlock.stopThread();
-		Utils.undoBlock.stopThread();
 		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");

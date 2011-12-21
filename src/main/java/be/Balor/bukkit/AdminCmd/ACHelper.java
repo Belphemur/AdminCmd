@@ -55,6 +55,7 @@ import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
+import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.World.ACWorldFactory;
 import be.Balor.World.WorldManager;
@@ -184,6 +185,7 @@ public class ACHelper {
 		fakeQuitPlayers.remove(player);
 		playersForReplyMessage.remove(player);
 		spyPlayers.remove(player);
+		InvisibleWorker.getInstance().onQuitEvent(player);
 
 	}
 
@@ -210,22 +212,23 @@ public class ACHelper {
 		if (blockQueue.isEmpty())
 			throw new EmptyStackException();
 		Stack<BlockRemanence> undo = blockQueue.pop();
+		Stack<BlockRemanence> undoCache = new Stack<BlockRemanence>();
 		int i = 0;
-		if(!Utils.undoBlock.isAlive())
-			Utils.undoBlock.start();
 		try {
-				while (!undo.isEmpty()) {
-					Utils.undoBlock.addBlockRemanence(undo.pop());
-					i++;
-				}
-			
+			while (!undo.isEmpty()) {
+				undoCache.push(undo.pop());
+				if (undoCache.size() == Utils.MAX_BLOCKS)
+					ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
+							new UndoBlockTask(undoCache), 1);
+				i++;
+			}
+
 		} catch (Exception e) {
 			ACLogger.severe(e.getMessage(), e);
 			return i;
-		}
-		finally
-		{
-			Utils.undoBlock.flushBlocks();
+		} finally {
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
+					new UndoBlockTask(undoCache), 1);
 		}
 		return i;
 	}
@@ -298,7 +301,7 @@ public class ACHelper {
 	public synchronized void reload() {
 		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
-		FilePlayer.forceSaveList();		
+		FilePlayer.forceSaveList();
 		alias.clear();
 		itemBlacklist.clear();
 		blockBlacklist.clear();
@@ -314,7 +317,7 @@ public class ACHelper {
 			ACLogger.severe("Config Reload Problem :", e);
 		}
 		bannedPlayers.clear();
-		
+
 		loadInfos();
 		for (Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
@@ -377,7 +380,8 @@ public class ACHelper {
 			}
 		} else
 			pluginStarted = System.currentTimeMillis();
-		//TODO : Don't forget to check if the admin use a MySQL database or the file system 
+		// TODO : Don't forget to check if the admin use a MySQL database or the
+		// file system
 		FilePlayer.scheduleAsyncSave();
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (Player p : coreInstance.getServer().getOnlinePlayers())
@@ -510,7 +514,7 @@ public class ACHelper {
 		pluginConfig.add("teleportDelay", 0L);
 		pluginConfig.add("logAllCmd", false);
 		pluginConfig.add("useJoinQuitMsg", true);
-		pluginConfig.add("delayBeforeWriteUserFileInSec", 2*60);
+		pluginConfig.add("delayBeforeWriteUserFileInSec", 2 * 60);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
