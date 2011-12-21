@@ -765,15 +765,15 @@ public class Utils {
 		int limitX = block.getX() + radius;
 		int limitY = block.getY() + radius;
 		int limitZ = block.getZ() + radius;
-		Block current;
 		BlockRemanence br = null;
 		for (int y = block.getY() - radius; y <= limitY; y++) {
 			for (int x = block.getX() - radius; x <= limitX; x++)
 				for (int z = block.getZ() - radius; z <= limitZ; z++) {
-					current = block.getWorld().getBlockAt(x, y, z);
-					if (mat.contains(current.getType())) {
-						br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(current
-								.getLocation());
+					if (mat.contains(Material.getMaterial(block.getWorld()
+							.getBlockTypeIdAt(x, y, z)))) {
+						br = IBlockRemanenceFactory.FACTORY
+								.createBlockRemanence(new SimplifiedLocation(block.getWorld(), x,
+										y, z));
 						blocks.push(br);
 						blocksCache.push(br);
 						if (blocksCache.size() == MAX_BLOCKS)
