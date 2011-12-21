@@ -22,10 +22,11 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Player.ACPlayer;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TpRequest {
 	private Player from, to;
@@ -38,7 +39,8 @@ public class TpRequest {
 		this.from = from;
 		this.to = to;
 		timeOut = System.currentTimeMillis()
-				+ (ACHelper.getInstance().getConfInt("tpRequestTimeOutInMinutes") * 60000);
+				+ (ACHelper.getInstance().getConfInt(
+						"tpRequestTimeOutInMinutes") * 60000);
 	}
 
 	public void teleport(Player sender) {
@@ -47,13 +49,25 @@ public class TpRequest {
 			return;
 		}
 		if (from != null && to != null) {
-			ACPlayer.getPlayer(from.getName()).setLastLocation(from.getLocation());
-			from.teleport(to);
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("fromPlayer", Utils.getPlayerName(from));
-			replace.put("toPlayer", Utils.getPlayerName(to));
-			Utils.sI18n(to, "tp", replace);
-			Utils.sI18n(from, "tp", replace);
+			final String fromName =  Utils.getPlayerName(from);
+			final String toName = Utils.getPlayerName(to);
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+					ACHelper.getInstance().getCoreInstance(), new Runnable() {
+
+						@Override
+						public void run() {
+							ACPlayer.getPlayer(from).setLastLocation(
+									from.getLocation());
+							from.teleport(to);
+							HashMap<String, String> replace = new HashMap<String, String>();
+							replace.put("fromPlayer", fromName);
+							replace.put("toPlayer", toName);
+							Utils.sI18n(to, "tp", replace);
+							Utils.sI18n(from, "tp", replace);
+
+						}
+					});
+
 		}
 	}
 
@@ -73,11 +87,12 @@ public class TpRequest {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return from == null || to == null ? "false" : from.getName() + ":" + to.getName();
+		return from == null || to == null ? "false" : from.getName() + ":"
+				+ to.getName();
 	}
 }
