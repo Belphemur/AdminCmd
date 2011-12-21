@@ -59,8 +59,7 @@ import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
-import be.Balor.Tools.Threads.ReplaceBlockThread;
-import be.Balor.Tools.Threads.UndoBlockThread;
+import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -86,8 +85,7 @@ public class Utils {
 	private final static long minuteInMillis = secondInMillis * 60;
 	private final static long hourInMillis = minuteInMillis * 60;
 	private final static long dayInMillis = hourInMillis * 24;
-	public final static ReplaceBlockThread replaceBlock = new ReplaceBlockThread();
-	public final static ReplaceBlockThread undoBlock = new UndoBlockThread();
+	public final static int MAX_BLOCKS = 512;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -763,13 +761,12 @@ public class Utils {
 	private static Stack<BlockRemanence> replaceInCuboid(String playername, List<Material> mat,
 			Block block, int radius) {
 		Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
+		Stack<BlockRemanence> blocksCache = new Stack<BlockRemanence>();
 		int limitX = block.getX() + radius;
 		int limitY = block.getY() + radius;
 		int limitZ = block.getZ() + radius;
 		Block current;
 		BlockRemanence br = null;
-		if (!replaceBlock.isAlive())
-			replaceBlock.start();
 		for (int y = block.getY() - radius; y <= limitY; y++) {
 			for (int x = block.getX() - radius; x <= limitX; x++)
 				for (int z = block.getZ() - radius; z <= limitZ; z++) {
@@ -778,12 +775,17 @@ public class Utils {
 						br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(current
 								.getLocation());
 						blocks.push(br);
-						replaceBlock.addBlockRemanence(br);
+						blocksCache.push(br);
+						if (blocksCache.size() == MAX_BLOCKS)
+							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+									ACHelper.getInstance().getCoreInstance(),
+									new ReplaceBlockTask(blocksCache), 1);
+
 					}
 				}
 		}
-
-		replaceBlock.flushBlocks();
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
 		return blocks;
 	}
 
@@ -865,8 +867,7 @@ public class Utils {
 		World w = block.getWorld();
 		Location start = block.getLocation();
 		HashSet<SimplifiedLocation> visited = new HashSet<SimplifiedLocation>();
-		if (!replaceBlock.isAlive())
-			replaceBlock.start();
+		Stack<BlockRemanence> blocksCache = new Stack<BlockRemanence>();
 		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
 			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
 				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
@@ -876,7 +877,11 @@ public class Utils {
 						processQueue.push(newPos);
 						current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 						blocks.push(current);
-						replaceBlock.addBlockRemanence(current);
+						blocksCache.push(current);
+						if (blocksCache.size() == MAX_BLOCKS)
+							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+									ACHelper.getInstance().getCoreInstance(),
+									new ReplaceBlockTask(blocksCache), 1);
 					}
 
 				}
@@ -893,7 +898,11 @@ public class Utils {
 							processQueue.push(newPos);
 							current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 							blocks.push(current);
-							replaceBlock.addBlockRemanence(current);
+							blocksCache.push(current);
+							if (blocksCache.size() == MAX_BLOCKS)
+								ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+										ACHelper.getInstance().getCoreInstance(),
+										new ReplaceBlockTask(blocksCache), 1);
 							visited.add(newPos);
 						}
 					}
@@ -901,7 +910,9 @@ public class Utils {
 				}
 			}
 		}
-		replaceBlock.flushBlocks();
+		if (blocksCache.size() == MAX_BLOCKS)
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+					ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
 		return blocks;
 	}
 

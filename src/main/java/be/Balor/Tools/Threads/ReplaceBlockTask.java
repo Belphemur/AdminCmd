@@ -22,21 +22,23 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-class ReplaceBlockTask implements Runnable {
+public class ReplaceBlockTask implements Runnable {
 	protected Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
-	
+
 	/**
 	 * @param blocks
 	 */
 	public ReplaceBlockTask(Stack<BlockRemanence> blocks) {
 		super();
-		while(!blocks.empty())
+		while (!blocks.empty())
 			this.blocks.add(blocks.pop());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -44,5 +46,4 @@ class ReplaceBlockTask implements Runnable {
 		while (!blocks.empty())
 			blocks.pop().setBlockType(0);
 	}
-
 }
