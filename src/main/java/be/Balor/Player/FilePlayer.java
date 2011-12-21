@@ -39,7 +39,6 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
-import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.IOSaveTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
