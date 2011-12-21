@@ -59,7 +59,7 @@ public class Invisible extends CoreCommand {
 		if (target != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));
-			ACPlayer acp = ACPlayer.getPlayer(target.getName());
+			ACPlayer acp = ACPlayer.getPlayer(target);
 			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
 				InvisibleWorker.getInstance().vanish(target);
 				Utils.sI18n(target, "invisibleEnabled");
@@ -73,6 +73,7 @@ public class Invisible extends CoreCommand {
 						Utils.sI18n(sender, "npEnabledTarget", replace);
 					}
 				}
+				acp.setPower(Type.INVISIBLE);
 			} else {
 				InvisibleWorker.getInstance().reappear(target);
 				Utils.sI18n(target, "invisibleDisabled");
@@ -87,6 +88,7 @@ public class Invisible extends CoreCommand {
 					}
 
 				}
+				acp.removePower(Type.INVISIBLE);
 			}
 		}
 	}

@@ -40,7 +40,8 @@ import com.google.common.collect.MapMaker;
  */
 final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
-	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
+	private ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker()
+			.makeMap();
 	private long maxRange = 262144;
 	private int tickCheck = 400;
 
@@ -102,6 +103,42 @@ final public class InvisibleWorker {
 	}
 
 	/**
+	 * Adding a player when joining the server after checked if the player have
+	 * the invisible power
+	 * 
+	 * @param toVanish
+	 *            player to vanish.
+	 */
+	public void onJoinEvent(Player toVanish) {
+		String name = toVanish.getName();
+		if (!invisblesWithTaskIds.containsKey(name)) {
+			invisblesWithTaskIds.put(
+					name,
+					ACPluginManager
+							.getServer()
+							.getScheduler()
+							.scheduleAsyncRepeatingTask(
+									ACHelper.getInstance().getCoreInstance(),
+									new UpdateInvisible(toVanish),
+									tickCheck / 2, tickCheck));
+		}
+	}
+
+	/**
+	 * Stop the task that try to make the player invisible when he disconnect
+	 * 
+	 * @param toReappear
+	 */
+	public void onQuitEvent(Player toReappear) {
+		String name = toReappear.getName();
+		if (invisblesWithTaskIds.containsKey(name)) {
+			ACPluginManager.getServer().getScheduler()
+					.cancelTask(invisblesWithTaskIds.get(name));
+			invisblesWithTaskIds.remove(name);
+		}
+	}
+
+	/**
 	 * Make the player reappear
 	 * 
 	 * @param toReappear
@@ -109,13 +146,15 @@ final public class InvisibleWorker {
 	public void reappear(final Player toReappear) {
 		String name = toReappear.getName();
 		if (invisblesWithTaskIds.containsKey(name)) {
-			ACPluginManager.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
+			ACPluginManager.getServer().getScheduler()
+					.cancelTask(invisblesWithTaskIds.get(name));
 			invisblesWithTaskIds.remove(name);
 
 			ACPluginManager
 					.getServer()
 					.getScheduler()
-					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
+					.scheduleSyncDelayedTask(
+							ACHelper.getInstance().getCoreInstance(),
 							new Runnable() {
 								@Override
 								public void run() {
@@ -144,7 +183,8 @@ final public class InvisibleWorker {
 		if (hideFrom == null) {
 			return;
 		}
-		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false))
+		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee",
+				false))
 			return;
 		if (hide.getName().equals(hideFrom.getName()))
 			return;
@@ -152,7 +192,8 @@ final public class InvisibleWorker {
 		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
 			return;
 		EntityPlayer craftFrom = ((CraftPlayer) hideFrom).getHandle();
-		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(hide.getEntityId()));
+		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(hide
+				.getEntityId()));
 
 	}
 
@@ -169,12 +210,15 @@ final public class InvisibleWorker {
 		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange)
 			return;
 
-		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false))
+		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee",
+				false))
 			return;
 		EntityPlayer craftFrom = ((CraftPlayer) unHideFrom).getHandle();
 		EntityPlayer UnHidePlayer = ((CraftPlayer) unHide).getHandle();
-		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
-		craftFrom.netServerHandler.sendPacket(new Packet20NamedEntitySpawn(UnHidePlayer));
+		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(unHide
+				.getEntityId()));
+		craftFrom.netServerHandler.sendPacket(new Packet20NamedEntitySpawn(
+				UnHidePlayer));
 	}
 
 	/**
@@ -197,7 +241,8 @@ final public class InvisibleWorker {
 		ACPluginManager
 				.getServer()
 				.getScheduler()
-				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
+				.scheduleSyncDelayedTask(
+						ACHelper.getInstance().getCoreInstance(),
 						new UpdateInvisible(toVanish));
 		if (!invisblesWithTaskIds.containsKey(name)) {
 			invisblesWithTaskIds.put(
@@ -205,8 +250,10 @@ final public class InvisibleWorker {
 					ACPluginManager
 							.getServer()
 							.getScheduler()
-							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
-									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
+							.scheduleAsyncRepeatingTask(
+									ACHelper.getInstance().getCoreInstance(),
+									new UpdateInvisible(toVanish),
+									tickCheck / 2, tickCheck));
 		}
 		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible")) {
 			Utils.broadcastFakeQuit(toVanish);

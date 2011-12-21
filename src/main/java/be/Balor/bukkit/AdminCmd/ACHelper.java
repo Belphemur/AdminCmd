@@ -184,6 +184,7 @@ public class ACHelper {
 		fakeQuitPlayers.remove(player);
 		playersForReplyMessage.remove(player);
 		spyPlayers.remove(player);
+		InvisibleWorker.getInstance().onQuitEvent(player);
 
 	}
 
