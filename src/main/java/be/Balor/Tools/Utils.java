@@ -881,7 +881,7 @@ public class Utils {
 						if (blocksCache.size() == MAX_BLOCKS)
 							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 									ACHelper.getInstance().getCoreInstance(),
-									new ReplaceBlockTask(blocksCache), 1);
+									new ReplaceBlockTask(blocksCache));
 					}
 
 				}
@@ -902,7 +902,7 @@ public class Utils {
 							if (blocksCache.size() == MAX_BLOCKS)
 								ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 										ACHelper.getInstance().getCoreInstance(),
-										new ReplaceBlockTask(blocksCache), 1);
+										new ReplaceBlockTask(blocksCache));
 							visited.add(newPos);
 						}
 					}
@@ -912,7 +912,7 @@ public class Utils {
 		}
 		if (blocksCache.size() == MAX_BLOCKS)
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
+					ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
 		return blocks;
 	}
 
