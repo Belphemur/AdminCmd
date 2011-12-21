@@ -588,8 +588,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.killInstance();
 		HelpLister.killInstance();
 		DebugLog.stopLogging();
-		Utils.replaceBlock.stopThread();
-		Utils.undoBlock.stopThread();
 		System.gc();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");

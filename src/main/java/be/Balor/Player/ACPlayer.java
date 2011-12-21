@@ -69,7 +69,7 @@ public abstract class ACPlayer {
 	 *            name of the player
 	 * @return
 	 */
-	public static ACPlayer getPlayer(String name) {
+	public static synchronized ACPlayer getPlayer(String name) {
 		return PlayerManager.getInstance().demandACPlayer(name);
 	}
 
@@ -80,7 +80,7 @@ public abstract class ACPlayer {
 	 *            instance of bukkit player
 	 * @return
 	 */
-	public static ACPlayer getPlayer(Player player) {
+	public static synchronized ACPlayer getPlayer(Player player) {
 		return PlayerManager.getInstance().demandACPlayer(player);
 	}
 
