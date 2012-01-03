@@ -546,11 +546,11 @@ public class ACHelper {
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
-			disabled = pluginConfig.getList("disabledCommands", disabled);
+			disabled = pluginConfig.getStringList("disabledCommands", disabled);
 			pluginConfig.remove("disabledCommands");
 		}
 		if (pluginConfig.get("prioritizedCommands") != null) {
-			priority = pluginConfig.getList("prioritizedCommands", priority);
+			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.remove("prioritizedCommands");
 		}
 		if (pluginConfig.get("glinding") != null) {
@@ -674,12 +674,11 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean addBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getList("BlackListedItems", null);
+			List<Integer> list = config.getIntList("BlackListedItems", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
 			list.add(m.getMaterial().getId());
@@ -710,7 +709,7 @@ public class ACHelper {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getList("BlackListedBlocks", null);
+			List<Integer> list = config.getIntList("BlackListedBlocks", null);
 			if (list == null)
 				list = new ArrayList<Integer>();
 			list.add(m.getMaterial().getId());
@@ -802,7 +801,7 @@ public class ACHelper {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getList("BlackListedItems",
+			List<Integer> list = config.getIntList("BlackListedItems",
 					new ArrayList<Integer>());
 			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
 				list.remove((Integer) m.getMaterial().getId());
@@ -834,7 +833,7 @@ public class ACHelper {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getList("BlackListedBlocks",
+			List<Integer> list = config.getIntList("BlackListedBlocks",
 					new ArrayList<Integer>());
 			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
 				list.remove((Integer) m.getMaterial().getId());
@@ -860,9 +859,8 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	private List<Integer> getBlackListedItems() {
-		return fManager.getYml("blacklist").getList("BlackListedItems",
+		return fManager.getYml("blacklist").getIntList("BlackListedItems",
 				new ArrayList<Integer>());
 	}
 
@@ -871,9 +869,8 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	private List<Integer> getBlackListedBlocks() {
-		return fManager.getYml("blacklist").getList("BlackListedBlocks",
+		return fManager.getYml("blacklist").getIntList("BlackListedBlocks",
 				new ArrayList<Integer>());
 	}
 
@@ -882,9 +879,8 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	private List<String> getGroupNames() {
-		return fManager.getYml("config").getList("groupNames",
+		return fManager.getYml("config").getStringList("groupNames",
 				new ArrayList<String>());
 	}
 

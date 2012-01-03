@@ -174,13 +174,12 @@ public class FileManager implements DataManager {
 	 * @param alias
 	 * @param mc
 	 */
-	@SuppressWarnings("unchecked")
 	public void addAlias(String alias, MaterialContainer mc) {
 		ExtendedConfiguration conf = getYml("Alias");
 
-		ArrayList<String> aliasList = (ArrayList<String>) conf.getList("alias",
+		List<String> aliasList =  conf.getStringList("alias",
 				new ArrayList<String>());
-		ArrayList<String> idList = (ArrayList<String>) conf.getList("ids", new ArrayList<String>());
+		List<String> idList =  conf.getStringList("ids", new ArrayList<String>());
 		if (aliasList.contains(alias)) {
 			int index = aliasList.indexOf(alias);
 			aliasList.remove(index);
@@ -201,12 +200,11 @@ public class FileManager implements DataManager {
 	 * 
 	 * @param alias
 	 */
-	@SuppressWarnings("unchecked")
 	public void removeAlias(String alias) {
 		ExtendedConfiguration conf = getYml("Alias");
-		ArrayList<String> aliasList = (ArrayList<String>) conf.getList("alias",
+		List<String> aliasList = conf.getStringList("alias",
 				new ArrayList<String>());
-		ArrayList<String> idList = (ArrayList<String>) conf.getList("ids", new ArrayList<String>());
+		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		int index = aliasList.indexOf(alias);
 		aliasList.remove(index);
 		idList.remove(index);

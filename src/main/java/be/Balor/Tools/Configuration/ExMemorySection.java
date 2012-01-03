@@ -28,7 +28,8 @@ import org.bukkit.configuration.MemorySection;
  * 
  */
 @SuppressWarnings("unchecked")
-public class ExMemorySection extends MemorySection implements ExConfigurationSection {
+public class ExMemorySection extends MemorySection implements
+		ExConfigurationSection {
 	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
 
 	/**
@@ -105,7 +106,8 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 */
 	@Override
 	protected boolean isNaturallyStorable(Object input) {
-		return super.isNaturallyStorable(input) || exNaturalClass.contains(input.getClass());
+		return super.isNaturallyStorable(input)
+				|| exNaturalClass.contains(input.getClass());
 	}
 
 	@Override
@@ -115,7 +117,8 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		}
 
 		Object val = get(path, getDefault(path));
-		return (val instanceof ExConfigurationSection) ? (ExConfigurationSection) val : null;
+		return (val instanceof ExConfigurationSection) ? (ExConfigurationSection) val
+				: null;
 	}
 
 	/*
@@ -129,11 +132,12 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		} else if (path.length() == 0) {
-			throw new IllegalArgumentException("Cannot create section at empty path");
+			throw new IllegalArgumentException(
+					"Cannot create section at empty path");
 		}
 
-		String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
-				.pathSeparator())));
+		String[] split = path.split(Pattern.quote(Character.toString(getRoot()
+				.options().pathSeparator())));
 		ExConfigurationSection section = this;
 
 		for (int i = 0; i < split.length - 1; i++) {
@@ -177,10 +181,10 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 */
 	@Override
 	public List<Double> getDoubleList(String path, List<Double> def) {
-
-		List<Double> list = getList(path, def);
-		return list;
-
+		List<Double> result = super.getDoubleList(path);
+		if (result == null || (result != null && result.isEmpty()))
+			return def;
+		return result;
 	}
 
 	/*
@@ -192,8 +196,10 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 */
 	@Override
 	public List<Boolean> getBooleanList(String path, List<Boolean> def) {
-		List<Boolean> list = getList(path, def);
-		return list;
+		List<Boolean> result = super.getBooleanList(path);
+		if (result == null || (result != null && result.isEmpty()))
+			return def;
+		return result;
 	}
 
 	/*
@@ -205,8 +211,10 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 */
 	@Override
 	public List<String> getStringList(String path, List<String> def) {
-		List<String> list = getList(path, def);
-		return list;
+		List<String> result = super.getStringList(path);
+		if (result == null || (result != null && result.isEmpty()))
+			return def;
+		return result;
 	}
 
 	/*
@@ -216,10 +224,11 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * be.Balor.Tools.Configuration.ExConfigurationSection#getIntList(java.lang
 	 * .String, java.util.List)
 	 */
-	@Override
 	public List<Integer> getIntList(String path, List<Integer> def) {
-		List<Integer> list = getList(path, def);
-		return list;
+		List<Integer> result = getIntegerList(path);
+		if (result == null || (result != null && result.isEmpty()))
+			return def;
+		return result;
 	}
 
 }
