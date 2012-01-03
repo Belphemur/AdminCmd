@@ -22,6 +22,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -48,7 +49,12 @@ public class ReloadAll extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		ACHelper.getInstance().saveElapsedTime();
 		boolean bcast = ACHelper.getInstance().getConfBoolean("broadcastServerReload");
-		sender.getServer().reload();
+		ACPluginManager.scheduleSyncTask(new Runnable() {			
+			@Override
+			public void run() {
+				ACPluginManager.getServer().reload();				
+			}
+		});
 		if (bcast)
 			Utils.broadcastMessage(Utils.I18n("serverReload"));
 		else

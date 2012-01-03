@@ -35,6 +35,7 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -112,8 +113,14 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#setDifficulty(org.bukkit.Difficulty)
 	 */
 	@Override
-	public void setDifficulty(Difficulty dif) {
-		handler.setDifficulty(dif);
+	public void setDifficulty(final Difficulty dif) {
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				handler.setDifficulty(dif);
+			}
+		});
+		
 		informations.set("difficulty", dif);
 	}
 
