@@ -24,6 +24,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,10 +50,15 @@ public class MoreAll extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player p = ((Player) sender);
-			for (ItemStack is : p.getInventory().getContents())
-				if (is != null && !ACHelper.getInstance().inBlackListItem(sender, is))
-					is.setAmount(is.getMaxStackSize());
+			final Player p = ((Player) sender);
+			ACPluginManager.scheduleSyncTask(new Runnable() {				
+				@Override
+				public void run() {
+					for (ItemStack is : p.getInventory().getContents())
+						if (is != null && !ACHelper.getInstance().inBlackListItem(p, is))
+							is.setAmount(is.getMaxStackSize());					
+				}
+			});
 			Utils.sI18n(sender, "moreAll");
 		}
 

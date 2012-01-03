@@ -27,10 +27,11 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class More extends CoreCommand {
 
@@ -44,7 +45,7 @@ public class More extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -60,7 +61,7 @@ public class More extends CoreCommand {
 			if (ACHelper.getInstance().inBlackListItem(sender, hand))
 				return;
 			if (args.length == 0)
-				hand.setAmount(64);
+				ACPluginManager.scheduleSyncTask(new HandSetAmount(hand, 64));
 			else {
 				int toAdd;
 				try {
@@ -69,28 +70,58 @@ public class More extends CoreCommand {
 					return;
 				}
 				if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {
-					int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
-					hand.setAmount(hand.getMaxStackSize());
+					int inInventory = (hand.getAmount() + toAdd)
+							- hand.getMaxStackSize();
+					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand,
+							hand.getMaxStackSize()));
 					((Player) sender).getInventory().addItem(
-							new ItemStack(hand.getType(), inInventory, hand.getDurability()));
+							new ItemStack(hand.getType(), inInventory, hand
+									.getDurability()));
 					HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("amount", String.valueOf(inInventory));
 					Utils.sI18n(sender, "moreTooMuch", replace);
 
 				} else
-					hand.setAmount(hand.getAmount() + toAdd);
+					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand,
+							hand.getAmount() + toAdd));
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null;
+	}
+
+	private class HandSetAmount implements Runnable {
+		private final ItemStack hand;
+		private final int amount;
+
+		/**
+		 * @param hand
+		 * @param amount
+		 */
+		public HandSetAmount(ItemStack hand, int amount) {
+			super();
+			this.hand = hand;
+			this.amount = amount;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			hand.setAmount(amount);
+		}
+
 	}
 
 }

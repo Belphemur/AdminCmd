@@ -22,15 +22,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class RepairAll extends CoreCommand {
 
@@ -45,22 +45,30 @@ public class RepairAll extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player player = Utils.getUser(sender, args, permNode);
+		final Player player = Utils.getUser(sender, args, permNode);
 		if (player == null)
 			return;
-		for (ItemStack item : player.getInventory().getContents())
-			if (item != null && ACHelper.getInstance().reparable(item.getTypeId()))
-				item.setDurability((short) 0);
-		for (ItemStack item : player.getInventory().getArmorContents())
-			if (item != null)
-				item.setDurability((short) 0);
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				for (ItemStack item : player.getInventory().getContents())
+					if (item != null
+							&& ACHelper.getInstance().reparable(
+									item.getTypeId()))
+						item.setDurability((short) 0);
+				for (ItemStack item : player.getInventory().getArmorContents())
+					if (item != null)
+						item.setDurability((short) 0);
+			}
+		});
+
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
 		if (!sender.equals(player))
@@ -71,7 +79,7 @@ public class RepairAll extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

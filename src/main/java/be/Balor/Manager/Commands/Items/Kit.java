@@ -29,10 +29,11 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Kit extends CoreCommand {
 
@@ -46,7 +47,7 @@ public class Kit extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.CoreCommand#permissionCheck(org.bukkit.command.CommandSender
 	 * )
@@ -58,7 +59,7 @@ public class Kit extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
@@ -67,7 +68,8 @@ public class Kit extends CoreCommand {
 		// which material?
 		Player target;
 		if (args.length == 0) {
-			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
+			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance()
+					.getKitList(sender));
 			return;
 		}
 		KitInstance kit = ACHelper.getInstance().getKit(args.getString(0));
@@ -80,12 +82,14 @@ public class Kit extends CoreCommand {
 		if (target == null) {
 			return;
 		}
-		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
+		if (!PermissionManager.hasPerm(sender,
+				"admincmd.kit." + args.getString(0))) {
 			return;
 		}
 		ACPlayer actarget = ACPlayer.getPlayer(target);
 		if (!PermissionManager.hasPerm(sender, "admincmd.item.nodelay", false)) {
-			long nextuse = actarget.getLastKitUse(kit.getName()) + kit.getDelay() * 1000;
+			long nextuse = actarget.getLastKitUse(kit.getName())
+					+ kit.getDelay() * 1000;
 			long now = System.currentTimeMillis();
 			if (now < nextuse) {
 				long diff = nextuse - now;
@@ -124,25 +128,36 @@ public class Kit extends CoreCommand {
 			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "kitCommandSender", replace);
 		}
-		target.getInventory().addItem(kit.getItemStacks().toArray(new ItemStack[] {}));
+		final ItemStack[] items = kit.getItemStacks().toArray(
+				new ItemStack[] {});
+		final Player taskTarget = target;
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				taskTarget.getInventory().addItem(items);
+
+			}
+		});
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay", bukkitDefault);
-		plugin.getPermissionLinker().addPermChild("admincmd.item.kithelp", bukkitDefault);
+		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay",
+				bukkitDefault);
+		plugin.getPermissionLinker().addPermChild("admincmd.item.kithelp",
+				bukkitDefault);
 		super.registerBukkitPerm();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
