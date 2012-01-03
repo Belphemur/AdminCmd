@@ -26,10 +26,11 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Experience extends CoreCommand {
 
@@ -41,7 +42,7 @@ public class Experience extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -82,10 +83,20 @@ public class Experience extends CoreCommand {
 			return;
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(amount));
+		final Player taskTarget = target;
+		final float amountXp = amount;
 		if (args.hasFlag('d')) {
-			Location loc = target.getLocation();
-			loc.setX(loc.getX() +2);
-			target.getLocation().getWorld().spawn(loc, ExperienceOrb.class).setExperience((int)amount);
+			final Location loc = target.getLocation();
+			loc.setX(loc.getX() + 2);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					taskTarget.getLocation().getWorld()
+							.spawn(loc, ExperienceOrb.class)
+							.setExperience((int) amountXp);
+				}
+			});
+
 			if (self) {
 				target.sendMessage(Utils.I18n("expDropped", replace));
 			} else {
@@ -94,7 +105,13 @@ public class Experience extends CoreCommand {
 				sender.sendMessage(Utils.I18n("expDroppedTarget", replace));
 			}
 		} else if (args.hasFlag('a')) {
-			target.giveExp((int)amount);
+			
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					taskTarget.giveExp((int) amountXp);
+				}
+			});
 			if (self) {
 				target.sendMessage(Utils.I18n("expAdded", replace));
 			} else {
@@ -103,18 +120,29 @@ public class Experience extends CoreCommand {
 				target.sendMessage(Utils.I18n("expAdded", replace));
 			}
 		} else if (args.hasFlag('p')) {
-			float exp = (amount > 1 ? 1: amount);
-			target.setExp(exp);
-			replace.put("amount", String.valueOf(exp*100.0F));
+			final float exp = (amount > 1 ? 1 : amount);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					taskTarget.setExp(exp);
+				}
+			});
+			replace.put("amount", String.valueOf(exp * 100.0F));
 			if (self) {
 				target.sendMessage(Utils.I18n("expProgressionSet", replace));
 			} else {
 				replace.put("target", Utils.getPlayerName(target));
 				target.sendMessage(Utils.I18n("expProgressionSet", replace));
-				sender.sendMessage(Utils.I18n("expProgressionSetTarget", replace));
+				sender.sendMessage(Utils.I18n("expProgressionSetTarget",
+						replace));
 			}
 		} else if (args.hasFlag('l')) {
-			target.setLevel((int)amount);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					taskTarget.setLevel((int) amountXp);
+				}
+			});
 			if (self) {
 				target.sendMessage(Utils.I18n("expLevelSet", replace));
 			} else {
@@ -135,7 +163,7 @@ public class Experience extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

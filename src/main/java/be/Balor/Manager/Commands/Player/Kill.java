@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -46,8 +47,15 @@ public class Kill extends CoreCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Utils.setPlayerHealth(sender, args, "kill");
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+
+			@Override
+			public void run() {
+				Utils.setPlayerHealth(sender, args, "kill");
+			}
+		});
+		
 	}
 
 	/*
