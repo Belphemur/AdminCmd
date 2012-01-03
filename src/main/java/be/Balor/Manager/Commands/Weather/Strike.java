@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,10 +50,16 @@ public class Strike extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player p = Utils.getUser(sender, args, permNode);
+		final Player p = Utils.getUser(sender, args, permNode);
 		if (p != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			p.getWorld().strikeLightning(p.getLocation());
+			ACPluginManager.scheduleSyncTask(new Runnable() {				
+				@Override
+				public void run() {
+					p.getWorld().strikeLightning(p.getLocation());
+					
+				}
+			});
 			replace.put("player", Utils.getPlayerName(p));
 			Utils.sI18n(sender, "strike", replace);
 		}
