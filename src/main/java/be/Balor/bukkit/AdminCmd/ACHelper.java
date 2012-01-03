@@ -733,12 +733,18 @@ public class ACHelper {
 	/**
 	 * Set the spawn point.
 	 */
-	public void setSpawn(CommandSender sender) {
+	public void setSpawn(final CommandSender sender) {
 		if (Utils.isPlayer(sender)) {
-			Location loc = ((Player) sender).getLocation();
-			World w = ((Player) sender).getWorld();
-			w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-					loc.getBlockZ());
+			final Location loc = ((Player) sender).getLocation();
+			final World w = loc.getWorld();
+			ACPluginManager.scheduleSyncTask(new Runnable() {				
+				@Override
+				public void run() {
+					w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
+							loc.getBlockZ());					
+				}
+			});		
+			
 			ACWorld.getWorld(w.getName()).setSpawn(loc);
 			Utils.sI18n(sender, "setSpawn");
 		}
