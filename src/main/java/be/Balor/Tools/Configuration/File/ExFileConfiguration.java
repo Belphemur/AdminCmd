@@ -1,10 +1,5 @@
 package be.Balor.Tools.Configuration.File;
 
-import be.Balor.Tools.Configuration.ExMemoryConfiguration;
-import be.Balor.Tools.Debug.ACLogger;
-
-import com.google.common.io.Files;
-import org.bukkit.configuration.InvalidConfigurationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +12,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.InvalidConfigurationException;
+
+import be.Balor.Tools.Configuration.ExMemoryConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
+
+import com.google.common.io.Files;
 
 /**
  * This is a base class for all File based implementations of

@@ -385,6 +385,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return result.toString();
 	}
 
+	@Override
 	protected String buildHeader() {
 		String header = options().header();
 

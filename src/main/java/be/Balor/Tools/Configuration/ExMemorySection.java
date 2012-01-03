@@ -27,7 +27,6 @@ import org.bukkit.configuration.MemorySection;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-@SuppressWarnings("unchecked")
 public class ExMemorySection extends MemorySection implements
 		ExConfigurationSection {
 	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
@@ -47,6 +46,7 @@ public class ExMemorySection extends MemorySection implements
 		super(exMemorySection, key);
 	}
 
+	@Override
 	public ExConfigurationSection addSection(String path) {
 		ExConfigurationSection result = getConfigurationSection(path);
 		if (result == null) {
@@ -55,6 +55,7 @@ public class ExMemorySection extends MemorySection implements
 		return result;
 	}
 
+	@Override
 	public void add(String path, Object value) {
 		if (isSet(path))
 			return;
@@ -93,6 +94,7 @@ public class ExMemorySection extends MemorySection implements
 	 * @param path
 	 *            Path to remove the entry at.
 	 */
+	@Override
 	public void remove(String path) {
 		set(path, null);
 	}
@@ -224,6 +226,7 @@ public class ExMemorySection extends MemorySection implements
 	 * be.Balor.Tools.Configuration.ExConfigurationSection#getIntList(java.lang
 	 * .String, java.util.List)
 	 */
+	@Override
 	public List<Integer> getIntList(String path, List<Integer> def) {
 		List<Integer> result = getIntegerList(path);
 		if (result == null || (result != null && result.isEmpty()))

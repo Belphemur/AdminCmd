@@ -24,7 +24,6 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -992,7 +991,7 @@ public class Utils {
 	public static Date getServerRealTime(String gmt) {
 		Date serverTime;
 		TimeZone tz = TimeZone.getTimeZone(gmt);
-		Calendar cal = GregorianCalendar.getInstance(tz);
+		Calendar cal = Calendar.getInstance(tz);
 		cal.setTime(new Date());
 		serverTime = cal.getTime();
 		return serverTime;

@@ -19,7 +19,6 @@ package be.Balor.World;
 import java.util.concurrent.ConcurrentMap;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.World.ACWorld;
 
 import com.google.common.collect.MapMaker;
 

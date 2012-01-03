@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Warp;
 
+import static be.Balor.Tools.Utils.sendMessage;
+
 import java.util.HashMap;
 
 import org.bukkit.Location;
@@ -30,7 +32,6 @@ import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
-import static be.Balor.Tools.Utils.sendMessage;
 
 /**
  * @authors Balor, Lathanael

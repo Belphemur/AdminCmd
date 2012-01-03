@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**

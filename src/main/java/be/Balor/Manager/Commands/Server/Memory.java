@@ -167,7 +167,7 @@ public class Memory extends CoreCommand {
 		public void run() {
 			elapsedNanoTime = System.nanoTime() - oldNanoTime;
 			elapsedTicks = world.getFullTime() - start;
-			ticksPerSecond = ((double) elapsedTicks * 1000000000.0) / (double) elapsedNanoTime;
+			ticksPerSecond = (elapsedTicks * 1000000000.0) / elapsedNanoTime;
 			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: "
 					+ elapsedTicks + " | Nano Time:" + elapsedNanoTime);
 		}

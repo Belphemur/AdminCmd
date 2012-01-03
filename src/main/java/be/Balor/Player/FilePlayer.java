@@ -29,8 +29,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import com.google.common.io.Files;
-
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.Category;
@@ -42,6 +40,8 @@ import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Threads.IOSaveTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+
+import com.google.common.io.Files;
 
 /**
  * @author Balor (aka Antoine Aflalo)

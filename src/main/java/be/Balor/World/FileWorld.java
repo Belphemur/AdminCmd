@@ -19,16 +19,14 @@ package be.Balor.World;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-
-import com.google.common.io.Files;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -36,6 +34,8 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+
+import com.google.common.io.Files;
 
 /**
  * @author Balor (aka Antoine Aflalo)

@@ -470,7 +470,6 @@ public class ACHelper {
 	 * @param pluginInstance
 	 *            the pluginInstance to set
 	 */
-	@SuppressWarnings("unchecked")
 	public void setCoreInstance(AdminCmd pluginInstance) {
 		this.coreInstance = pluginInstance;
 		fManager = FileManager.getInstance();
@@ -704,7 +703,6 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean addBlackListedBlock(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
@@ -796,7 +794,6 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean removeBlackListedItem(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
@@ -828,7 +825,6 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean removeBlackListedBlock(CommandSender sender, String name) {
 		MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {

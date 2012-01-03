@@ -23,11 +23,11 @@ import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.google.common.collect.MapMaker;
-
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Debug.ACLogger;
+
+import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)

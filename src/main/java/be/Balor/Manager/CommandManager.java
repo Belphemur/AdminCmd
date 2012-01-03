@@ -33,7 +33,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
@@ -192,7 +191,7 @@ public class CommandManager implements CommandExecutor {
 		CoreCommand command = null;
 		try {
 			DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
-			command = (CoreCommand) clazz.newInstance();
+			command = clazz.newInstance();
 			command.initializeCommand();
 			checkCommand(command);
 			command.registerBukkitPerm();
@@ -255,7 +254,7 @@ public class CommandManager implements CommandExecutor {
 	public boolean unRegisterCommand(Class<? extends CoreCommand> clazz,
 			AbstractAdminCmdPlugin plugin) {
 		try {
-			CoreCommand command = (CoreCommand) clazz.newInstance();
+			CoreCommand command = clazz.newInstance();
 			if (plugin.equals(command.getPlugin())) {
 				try {
 					command.initializeCommand();

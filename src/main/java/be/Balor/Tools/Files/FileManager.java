@@ -35,8 +35,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
-import com.google.common.io.Files;
-
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.BannedPlayer;
@@ -47,6 +45,8 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+
+import com.google.common.io.Files;
 
 /**
  * @author Balor (aka Antoine Aflalo)

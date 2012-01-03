@@ -24,8 +24,8 @@ import org.bukkit.permissions.PermissionDefault;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)

@@ -1,5 +1,7 @@
 package be.Balor.Tools.Configuration.File;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 
 /**
  * Various settings for controlling the input and output of a {@link YamlConfiguration}
