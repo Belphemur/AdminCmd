@@ -112,10 +112,7 @@ public class SpawnMob extends CoreCommand {
 				}
 				if (ct == null || ct2 == null)
 					return;
-				ACPluginManager.getServer()
-						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
+				ACPluginManager.scheduleSyncTask(new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
 			} else {
 				ct = CreatureType.fromName(name);
 				if (ct == null) {
@@ -123,10 +120,7 @@ public class SpawnMob extends CoreCommand {
 					return;
 				}
 
-				ACPluginManager.getServer()
-						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new NormalMob(loc, nbTaped, ct, player, sender));
+				ACPluginManager.scheduleSyncTask(new NormalMob(loc, nbTaped, ct, player, sender));
 			}
 		}
 
