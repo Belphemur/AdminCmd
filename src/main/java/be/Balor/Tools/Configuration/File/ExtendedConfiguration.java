@@ -67,7 +67,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 @SuppressWarnings("unchecked")
 public class ExtendedConfiguration extends ExFileConfiguration {
-	protected final Lock lock = new ReentrantLock();
+	
 	protected static final String COMMENT_PREFIX = "# ";
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();

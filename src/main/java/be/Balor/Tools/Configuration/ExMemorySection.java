@@ -18,6 +18,8 @@ package be.Balor.Tools.Configuration;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,9 +29,9 @@ import org.bukkit.configuration.MemorySection;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExMemorySection extends MemorySection implements
-		ExConfigurationSection {
+public class ExMemorySection extends MemorySection implements ExConfigurationSection {
 	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
+	protected final Lock lock = new ReentrantLock();
 
 	/**
 	 * 
@@ -53,6 +55,33 @@ public class ExMemorySection extends MemorySection implements
 			result = createSection(path);
 		}
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.bukkit.configuration.MemorySection#set(java.lang.String,
+	 * java.lang.Object)
+	 */
+	@Override
+	public void set(String path, Object value) {
+		lock.lock();
+		super.set(path, value);
+		lock.unlock();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.bukkit.configuration.MemorySection#get(java.lang.String,
+	 * java.lang.Object)
+	 */
+	@Override
+	public Object get(String path, Object def) {
+		lock.lock();
+		Object info = super.get(path, def);
+		lock.unlock();
+		return info;
 	}
 
 	@Override
@@ -108,8 +137,7 @@ public class ExMemorySection extends MemorySection implements
 	 */
 	@Override
 	protected boolean isNaturallyStorable(Object input) {
-		return super.isNaturallyStorable(input)
-				|| exNaturalClass.contains(input.getClass());
+		return super.isNaturallyStorable(input) || exNaturalClass.contains(input.getClass());
 	}
 
 	@Override
@@ -119,8 +147,7 @@ public class ExMemorySection extends MemorySection implements
 		}
 
 		Object val = get(path, getDefault(path));
-		return (val instanceof ExConfigurationSection) ? (ExConfigurationSection) val
-				: null;
+		return (val instanceof ExConfigurationSection) ? (ExConfigurationSection) val : null;
 	}
 
 	/*
@@ -134,12 +161,11 @@ public class ExMemorySection extends MemorySection implements
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		} else if (path.length() == 0) {
-			throw new IllegalArgumentException(
-					"Cannot create section at empty path");
+			throw new IllegalArgumentException("Cannot create section at empty path");
 		}
 
-		String[] split = path.split(Pattern.quote(Character.toString(getRoot()
-				.options().pathSeparator())));
+		String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
+				.pathSeparator())));
 		ExConfigurationSection section = this;
 
 		for (int i = 0; i < split.length - 1; i++) {

@@ -117,15 +117,13 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public void setHome(String home, Location loc) {
-		synchronized (homes) {
-			ConfigurationSection homeToSet = homes.createSection(home);
-			homeToSet.set("world", loc.getWorld().getName());
-			homeToSet.set("x", loc.getX());
-			homeToSet.set("y", loc.getY());
-			homeToSet.set("z", loc.getZ());
-			homeToSet.set("yaw", loc.getYaw());
-			homeToSet.set("pitch", loc.getPitch());
-		}
+		ConfigurationSection homeToSet = homes.createSection(home);
+		homeToSet.set("world", loc.getWorld().getName());
+		homeToSet.set("x", loc.getX());
+		homeToSet.set("y", loc.getY());
+		homeToSet.set("z", loc.getZ());
+		homeToSet.set("yaw", loc.getYaw());
+		homeToSet.set("pitch", loc.getPitch());
 		writeFile();
 	}
 
@@ -136,9 +134,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeHome(String home) {
-		synchronized (homes) {
-			homes.set(home, null);
-		}
+		homes.set(home, null);
 		writeFile();
 	}
 
@@ -149,13 +145,11 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getHome(String home) {
-		synchronized (homes) {
-			ConfigurationSection homeSection = homes.getConfigurationSection(home);
-			if (homeSection == null)
-				return null;
-			else
-				return getLocation(homeSection);
-		}
+		ConfigurationSection homeSection = homes.getConfigurationSection(home);
+		if (homeSection == null)
+			return null;
+		else
+			return getLocation(homeSection);
 	}
 
 	/*
@@ -167,9 +161,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setInformation(String info, Object value) {
-		synchronized (informations) {
-			informations.set(info, value);
-		}
+		informations.set(info, value);
 		writeFile();
 	}
 
@@ -182,9 +174,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeInformation(String info) {
-		synchronized (informations) {
-			informations.remove(info);
-		}
+		informations.remove(info);
 		writeFile();
 	}
 
@@ -197,9 +187,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public ObjectContainer getInformation(String info) {
 		Object infoObject;
-		synchronized (informations) {
-			infoObject = informations.get(info);
-		}
+		infoObject = informations.get(info);
 		return new ObjectContainer(infoObject);
 	}
 
@@ -214,14 +202,12 @@ public class FilePlayer extends ACPlayer {
 	public void setLastLocation(Location loc) {
 		if (loc == null)
 			return;
-		synchronized (lastLoc) {
-			lastLoc.set("world", loc.getWorld().getName());
-			lastLoc.set("x", loc.getX());
-			lastLoc.set("y", loc.getY());
-			lastLoc.set("z", loc.getZ());
-			lastLoc.set("yaw", loc.getYaw());
-			lastLoc.set("pitch", loc.getPitch());
-		}
+		lastLoc.set("world", loc.getWorld().getName());
+		lastLoc.set("x", loc.getX());
+		lastLoc.set("y", loc.getY());
+		lastLoc.set("z", loc.getZ());
+		lastLoc.set("yaw", loc.getYaw());
+		lastLoc.set("pitch", loc.getPitch());
 		writeFile();
 	}
 
@@ -234,9 +220,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Location getLastLocation() {
 		Location loc;
-		synchronized (lastLoc) {
-			loc = getLocation(lastLoc);
-		}
+		loc = getLocation(lastLoc);
 		return loc;
 	}
 
@@ -259,9 +243,7 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public void setPower(Type power, Object value) {
-		synchronized (powers) {
-			powers.set(power.toString(), value);
-		}
+		powers.set(power.toString(), value);
 		writeFile();
 
 	}
@@ -275,9 +257,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public ObjectContainer getPower(Type power) {
 		Object result;
-		synchronized (powers) {
-			result = powers.get(power.toString());
-		}
+		result = powers.get(power.toString());
 		return new ObjectContainer(result);
 	}
 
@@ -289,9 +269,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public boolean hasPower(Type power) {
 		boolean contain = false;
-		synchronized (powers) {
-			contain = powers.contains(power.toString());
-		}
+		contain = powers.contains(power.toString());
 		return contain;
 	}
 
@@ -304,9 +282,7 @@ public class FilePlayer extends ACPlayer {
 
 	@Override
 	public void removePower(Type power) {
-		synchronized (powers) {
-			powers.set(power.toString(), null);
-		}
+		powers.set(power.toString(), null);
 		writeFile();
 	}
 
@@ -319,9 +295,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Set<String> getHomeList() {
 		Set<String> result = new HashSet<String>();
-		synchronized (homes) {
-			result = homes.getKeys(false);
-		}
+		result = homes.getKeys(false);
 		return result;
 	}
 
@@ -351,12 +325,10 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeAllSuperPower() {
-		synchronized (powers) {
-			for (String power : powers.getKeys(false)) {
-				Type matched = Type.matchType(power);
-				if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
-					powers.set(power, null);
-			}
+		for (String power : powers.getKeys(false)) {
+			Type matched = Type.matchType(power);
+			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
+				powers.set(power, null);
 		}
 		writeFile();
 
@@ -370,10 +342,8 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setCustomPower(String power, Object value) {
-		synchronized (powers) {
-			Type.addCustomPower(power);
-			powers.set(power, value);
-		}
+		Type.addCustomPower(power);
+		powers.set(power, value);
 		writeFile();
 	}
 
@@ -385,9 +355,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public ObjectContainer getCustomPower(String power) {
 		Object powerObject;
-		synchronized (powers) {
-			powerObject = powers.get(power);
-		}
+		powerObject = powers.get(power);
 		return new ObjectContainer(powerObject);
 	}
 
@@ -408,9 +376,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeCustomPower(String power) {
-		synchronized (powers) {
-			powers.set(power, null);
-		}
+		powers.set(power, null);
 		writeFile();
 
 	}
@@ -423,10 +389,8 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<String, String> getPowers() {
 		TreeMap<String, String> result = new TreeMap<String, String>();
-		synchronized (powers) {
-			for (Entry<String, Object> entry : powers.getValues(false).entrySet())
-				result.put(entry.getKey(), entry.getValue().toString());
-		}
+		for (Entry<String, Object> entry : powers.getValues(false).entrySet())
+			result.put(entry.getKey(), entry.getValue().toString());
 		return result;
 	}
 
@@ -437,9 +401,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void updateLastKitUse(String kit) {
-		synchronized (kitsUse) {
-			kitsUse.set(kit, System.currentTimeMillis());
-		}
+		kitsUse.set(kit, System.currentTimeMillis());
 		writeFile();
 	}
 
@@ -451,9 +413,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public long getLastKitUse(String kit) {
 		long use = 0L;
-		synchronized (kitsUse) {
-			use = kitsUse.getLong(kit, 0L);
-		}
+		use = kitsUse.getLong(kit, 0L);
 		return use;
 	}
 
@@ -464,9 +424,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setPresentation(String presentation) {
-		synchronized (informations) {
-			informations.set("presentation", presentation);
-		}
+		informations.set("presentation", presentation);
 		writeFile();
 	}
 
@@ -478,9 +436,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public String getPresentation() {
 		String pres = "";
-		synchronized (informations) {
-			pres = informations.getString("presentation", "");
-		}
+		pres = informations.getString("presentation", "");
 		return pres;
 	}
 
