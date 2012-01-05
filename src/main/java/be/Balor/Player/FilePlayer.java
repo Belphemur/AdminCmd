@@ -108,15 +108,11 @@ public class FilePlayer extends ACPlayer {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
-		ioStackTaskId = ACPluginManager.getScheduler()
-				.scheduleAsyncRepeatingTask(
-						ACHelper.getInstance().getCoreInstance(),
-						IOSAVET_TASK,
-						20 * 60,
-						20 * ACHelper.getInstance().getConfInt(
-								"delayBeforeWriteUserFileInSec"));
-		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
-				+ ioStackTaskId);
+		int delay = ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec") >= 30 ? ACHelper
+				.getInstance().getConfInt("delayBeforeWriteUserFileInSec") : 120;
+		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
 	}
 
 	@Override
@@ -154,8 +150,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Location getHome(String home) {
 		synchronized (homes) {
-			ConfigurationSection homeSection = homes
-					.getConfigurationSection(home);
+			ConfigurationSection homeSection = homes.getConfigurationSection(home);
 			if (homeSection == null)
 				return null;
 			else
@@ -245,13 +240,11 @@ public class FilePlayer extends ACPlayer {
 		return loc;
 	}
 
-	private Location getLocation(ConfigurationSection node)
-			throws WorldNotLoaded {
+	private Location getLocation(ConfigurationSection node) throws WorldNotLoaded {
 		World w = ACPluginManager.getServer().getWorld(node.getString("world"));
 		if (w != null)
-			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
-					0), node.getDouble("z", 0), Float.parseFloat(node
-					.getString("yaw")), Float.parseFloat(node
+			return new Location(w, node.getDouble("x", 0), node.getDouble("y", 0), node.getDouble(
+					"z", 0), Float.parseFloat(node.getString("yaw")), Float.parseFloat(node
 					.getString("pitch")));
 		else
 			throw new WorldNotLoaded(node.getString("world"));
@@ -347,8 +340,7 @@ public class FilePlayer extends ACPlayer {
 			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
 		} catch (IOException e) {
-			ACLogger.severe("Problem while saving Player file of " + getName(),
-					e);
+			ACLogger.severe("Problem while saving Player file of " + getName(), e);
 		}
 	}
 
@@ -362,8 +354,7 @@ public class FilePlayer extends ACPlayer {
 		synchronized (powers) {
 			for (String power : powers.getKeys(false)) {
 				Type matched = Type.matchType(power);
-				if (matched != null
-						&& matched.getCategory().equals(Category.SUPER_POWER))
+				if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
 					powers.set(power, null);
 			}
 		}
@@ -433,8 +424,7 @@ public class FilePlayer extends ACPlayer {
 	public Map<String, String> getPowers() {
 		TreeMap<String, String> result = new TreeMap<String, String>();
 		synchronized (powers) {
-			for (Entry<String, Object> entry : powers.getValues(false)
-					.entrySet())
+			for (Entry<String, Object> entry : powers.getValues(false).entrySet())
 				result.put(entry.getKey(), entry.getValue().toString());
 		}
 		return result;

@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 
 /**
@@ -38,12 +39,14 @@ public class EmptyPlayer extends ACPlayer {
 	 */
 	protected EmptyPlayer(String name) {
 		super(name);
+		DebugLog.INSTANCE.severe("Empty Player instancied with name : "+name);
 	}
 	/**
 	 * @param name
 	 */
 	protected EmptyPlayer(Player name) {
 		super(name);
+		DebugLog.INSTANCE.severe("Empty Player instancied with name : "+name.getName());
 	}
 	/*
 	 * (non-Javadoc)
