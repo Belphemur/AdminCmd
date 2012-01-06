@@ -66,8 +66,11 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	@Override
 	public void set(String path, Object value) {
 		lock.lock();
-		super.set(path, value);
-		lock.unlock();
+		try {
+			super.set(path, value);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	/*
@@ -79,8 +82,12 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	@Override
 	public Object get(String path, Object def) {
 		lock.lock();
-		Object info = super.get(path, def);
-		lock.unlock();
+		Object info;
+		try {
+			info = super.get(path, def);
+		} finally {
+			lock.unlock();
+		}
 		return info;
 	}
 
