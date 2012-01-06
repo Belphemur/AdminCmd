@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Debug.DebugLog;
 
 import com.google.common.collect.MapMaker;
 
@@ -33,7 +34,8 @@ import com.google.common.collect.MapMaker;
 public class PlayerManager {
 	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
 			.weakValues().makeMap();
-	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8).makeMap();
+	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
+			.makeMap();
 	private final static PlayerManager instance = new PlayerManager();
 	private ACPlayerFactory playerFactory;
 
@@ -175,6 +177,7 @@ public class PlayerManager {
 	public void setOnline(Player player) {
 		playerFactory.addExistingPlayer(player.getName());
 		onlinePlayers.put(demandACPlayer(player), true);
+		DebugLog.INSTANCE.info(player.getName() + " is put online.");
 	}
 
 	ACPlayer demandACPlayer(String name) {
