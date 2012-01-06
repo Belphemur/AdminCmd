@@ -31,7 +31,7 @@ import org.bukkit.configuration.MemorySection;
  */
 public class ExMemorySection extends MemorySection implements ExConfigurationSection {
 	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
-	protected final Lock lock = new ReentrantLock();
+	protected final Lock lock = new ReentrantLock(true);
 
 	/**
 	 * 
