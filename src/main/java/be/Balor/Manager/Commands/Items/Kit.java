@@ -92,7 +92,10 @@ public class Kit extends CoreCommand {
 				if (kitLastUse == 0)
 					actarget.updateLastKitUse(kit.getName());
 				else
+				{
 					Utils.sI18n(sender, "kitOnce", "kit", kit.getName());
+					return;
+				}
 			} else {
 				long nextuse = kitLastUse + kitDelay * 1000L;
 				long now = System.currentTimeMillis();
