@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -112,10 +111,7 @@ public class SpawnMob extends CoreCommand {
 				}
 				if (ct == null || ct2 == null)
 					return;
-				ACPluginManager.getServer()
-						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
+				ACPluginManager.scheduleSyncTask(new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
 			} else {
 				ct = CreatureType.fromName(name);
 				if (ct == null) {
@@ -123,10 +119,7 @@ public class SpawnMob extends CoreCommand {
 					return;
 				}
 
-				ACPluginManager.getServer()
-						.getScheduler()
-						.scheduleAsyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-								new NormalMob(loc, nbTaped, ct, player, sender));
+				ACPluginManager.scheduleSyncTask(new NormalMob(loc, nbTaped, ct, player, sender));
 			}
 		}
 

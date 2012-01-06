@@ -22,11 +22,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,11 +51,17 @@ public class Repair extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			ItemStack item = ((Player) sender).getItemInHand();
+			final ItemStack item = ((Player) sender).getItemInHand();
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
-			if (item != null && ACHelper.getInstance().reparable(item.getTypeId())) {
-				item.setDurability((short) 0);
+			if (item != null
+					&& ACHelper.getInstance().reparable(item.getTypeId())) {
+				ACPluginManager.scheduleSyncTask(new Runnable() {
+					@Override
+					public void run() {
+						item.setDurability((short) 0);
+					}
+				});
 				Utils.sI18n(sender, "repair", replace);
 			} else
 				Utils.sI18n(sender, "errorRepair", replace);

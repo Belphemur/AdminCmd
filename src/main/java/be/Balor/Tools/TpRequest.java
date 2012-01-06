@@ -49,24 +49,22 @@ public class TpRequest {
 			return;
 		}
 		if (from != null && to != null) {
-			final String fromName =  Utils.getPlayerName(from);
+			final String fromName = Utils.getPlayerName(from);
 			final String toName = Utils.getPlayerName(to);
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(), new Runnable() {
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					ACPlayer.getPlayer(from)
+							.setLastLocation(from.getLocation());
+					from.teleport(to);
+					HashMap<String, String> replace = new HashMap<String, String>();
+					replace.put("fromPlayer", fromName);
+					replace.put("toPlayer", toName);
+					Utils.sI18n(to, "tp", replace);
+					Utils.sI18n(from, "tp", replace);
 
-						@Override
-						public void run() {
-							ACPlayer.getPlayer(from).setLastLocation(
-									from.getLocation());
-							from.teleport(to);
-							HashMap<String, String> replace = new HashMap<String, String>();
-							replace.put("fromPlayer", fromName);
-							replace.put("toPlayer", toName);
-							Utils.sI18n(to, "tp", replace);
-							Utils.sI18n(from, "tp", replace);
-
-						}
-					});
+				}
+			});
 
 		}
 	}

@@ -25,11 +25,6 @@ website. Please do not modify this file without verification of the author.
  ************************************************************************/
 package be.Balor.Tools;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-
-import be.Balor.Tools.Debug.LogFormatter;
-
 import java.io.File;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -37,6 +32,11 @@ import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
+import be.Balor.Tools.Debug.LogFormatter;
 
 public class Ping {
 
@@ -120,6 +120,7 @@ class Pinger implements Runnable {
 		}
 	}
 
+	@Override
 	public void run() {
 		try {
 

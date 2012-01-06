@@ -1,11 +1,5 @@
 package be.Balor.Tools.Configuration.File;
 
-import be.Balor.Tools.Configuration.ExMemoryConfiguration;
-import be.Balor.Tools.Configuration.File.ExFileConfigurationOptions;
-import be.Balor.Tools.Debug.ACLogger;
-
-import com.google.common.io.Files;
-import org.bukkit.configuration.InvalidConfigurationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +12,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.InvalidConfigurationException;
+
+import be.Balor.Tools.Configuration.ExMemoryConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
+
+import com.google.common.io.Files;
 
 /**
  * This is a base class for all File based implementations of
@@ -281,5 +281,13 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		} else if (!file.equals(other.file))
 			return false;
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ExFileConfiguration [file=" + file + "]";
 	}
 }

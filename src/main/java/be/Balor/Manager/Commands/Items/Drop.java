@@ -23,12 +23,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -94,7 +94,7 @@ public class Drop extends CoreCommand {
 			else
 				return;
 		}
-		ItemStack stack = mat.getItemStack(cnt);
+		final ItemStack stack = mat.getItemStack(cnt);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(cnt));
 		replace.put("material", mat.getMaterial().toString());
@@ -114,7 +114,14 @@ public class Drop extends CoreCommand {
 			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "dropItemCommandSender", replace);
 		}
-		target.getWorld().dropItem(target.getLocation(), stack);
+		final Player taskTarget = target;
+		ACPluginManager.scheduleSyncTask(new Runnable() {			
+			@Override
+			public void run() {
+				taskTarget.getWorld().dropItem(taskTarget.getLocation(), stack);
+			}
+		});
+	
 
 	}
 

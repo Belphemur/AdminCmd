@@ -18,6 +18,8 @@ package be.Balor.Tools.Threads;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -30,6 +32,7 @@ import be.Balor.Tools.Debug.DebugLog;
  */
 public class IOSaveTask implements Runnable {
 	private LinkedBlockingQueue<ExtendedConfiguration> configurations = new LinkedBlockingQueue<ExtendedConfiguration>();
+	private final Lock lock = new ReentrantLock(true);
 
 	/**
 	 * Add an ExtendedConfiguration to save
@@ -37,8 +40,16 @@ public class IOSaveTask implements Runnable {
 	 * @param ex
 	 */
 	public void addConfigurationToSave(ExtendedConfiguration ex) {
-		if (!configurations.contains(ex))
-			configurations.add(ex);
+		lock.lock();
+		try {
+			if (!configurations.contains(ex)) {
+				configurations.add(ex);
+				DebugLog.INSTANCE.fine("Added ExtendedConfiguration : " + ex);
+			} else
+				DebugLog.INSTANCE.info("ALREADY IN ExtendedConfiguration : " + ex);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	/**
@@ -48,19 +59,32 @@ public class IOSaveTask implements Runnable {
 	 * @return
 	 */
 	public boolean removeConfiguration(ExtendedConfiguration ex) {
-		return configurations.remove(ex);
+		boolean remove = false;
+		lock.lock();
+		try {
+			remove = configurations.remove(ex);
+		} finally {
+			lock.unlock();
+		}
+		return remove;
 	}
 
-	synchronized public void run() {
-		DebugLog.INSTANCE.info("Begin Configuration save with " + configurations.size()
-				+ " file(s)");
-		while (!configurations.isEmpty())
-			try {
-				configurations.poll().save();
-			} catch (IOException e) {
-				ACLogger.severe("Problem while saving ExtendedConfiguration file", e);
-				DebugLog.INSTANCE.log(Level.SEVERE, "Problem while saving config files", e);
-			}
-		DebugLog.INSTANCE.info("All Configuration File saved.");
+	@Override
+	public void run() {
+		lock.lock();
+		try {
+			DebugLog.INSTANCE.info("Begin Configuration save with " + configurations.size()
+					+ " file(s)");
+			while (!configurations.isEmpty())
+				try {
+					configurations.poll().save();
+				} catch (IOException e) {
+					ACLogger.severe("Problem while saving ExtendedConfiguration file", e);
+					DebugLog.INSTANCE.log(Level.SEVERE, "Problem while saving config files", e);
+				}
+			DebugLog.INSTANCE.info("All Configuration File saved.");
+		} finally {
+			lock.unlock();
+		}
 	}
 }

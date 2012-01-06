@@ -28,10 +28,11 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class ChangeMobSpawner extends CoreCommand {
 
@@ -45,7 +46,7 @@ public class ChangeMobSpawner extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -60,18 +61,25 @@ public class ChangeMobSpawner extends CoreCommand {
 				player.sendMessage("Not a Mob Spawner");
 				return;
 			}
-			CreatureSpawner spawner = (CreatureSpawner) block.getState();
+			final CreatureSpawner spawner = (CreatureSpawner) block.getState();
 			if (args.hasFlag('m')) {
 				String name = args.getString(0);
 				if (name == null) {
 					return;
 				}
-				CreatureType type = CreatureType.fromName(name);
+				final CreatureType type = CreatureType.fromName(name);
 				if (type == null) {
 					replace.put("mob", args.getString(0));
 					Utils.sI18n(sender, "errorMob", replace);
 				}
-				spawner.setCreatureType(type);
+
+				ACPluginManager.scheduleSyncTask(new Runnable() {
+					@Override
+					public void run() {
+						spawner.setCreatureType(type);
+
+					}
+				});
 				replace.put("type", args.getString(0));
 				Utils.sI18n(sender, "spawnerSetType", replace);
 			} else if (args.hasFlag('d')) {
@@ -82,7 +90,15 @@ public class ChangeMobSpawner extends CoreCommand {
 					Utils.sI18n(sender, "spawnerNaN");
 					return;
 				}
-				spawner.setDelay(delay);
+				final int fDelay = delay;
+				ACPluginManager.scheduleSyncTask(new Runnable() {
+					@Override
+					public void run() {
+						spawner.setDelay(fDelay);
+
+					}
+				});
+
 				replace.put("delay", String.valueOf(args.getInt(0)));
 				Utils.sI18n(sender, "spawnerSetDelay", replace);
 			} else if (args.hasFlag('g')) {
@@ -97,7 +113,7 @@ public class ChangeMobSpawner extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

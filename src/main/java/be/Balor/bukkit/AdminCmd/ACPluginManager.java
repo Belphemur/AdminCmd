@@ -23,11 +23,11 @@ import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.google.common.collect.MapMaker;
-
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Debug.ACLogger;
+
+import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -35,7 +35,8 @@ import be.Balor.Tools.Debug.ACLogger;
  */
 public class ACPluginManager {
 	private final static ACPluginManager instance = new ACPluginManager();
-	private ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker().makeMap();
+	private ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker()
+			.makeMap();
 	private static Server server = null;
 
 	private ACPluginManager() {
@@ -83,11 +84,13 @@ public class ACPluginManager {
 	 * 
 	 * @param addon
 	 */
-	protected void registerPlugin(AbstractAdminCmdPlugin addon) throws IllegalArgumentException {
+	protected void registerPlugin(AbstractAdminCmdPlugin addon)
+			throws IllegalArgumentException {
 		if (!pluginInstances.containsKey(addon.getName()))
 			pluginInstances.put(addon.getName(), addon);
 		else
-			throw new IllegalArgumentException("Plugin " + addon.getName() + " Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getName()
+					+ " Already registered.");
 	}
 
 	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
@@ -119,6 +122,17 @@ public class ACPluginManager {
 	}
 
 	/**
+	 * Schedule a SyncTask
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public static int scheduleSyncTask(Runnable task) {
+		return server.getScheduler().scheduleSyncDelayedTask(
+				instance.getPlugin("Core"), task);
+	}
+
+	/**
 	 * Register a Plugin Command
 	 * 
 	 * @param clazz
@@ -130,7 +144,8 @@ public class ACPluginManager {
 
 	void stopChildrenPlugins() {
 		ACLogger.info("Disabling all AdminCmd's plugins");
-		for (Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet())
+		for (Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances
+				.entrySet())
 			if (plugin.getValue().isEnabled())
 				server.getPluginManager().disablePlugin(plugin.getValue());
 	}

@@ -1,12 +1,13 @@
 package be.Balor.Tools.Files;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.inventory.ItemStack;
+
 import be.Balor.Manager.Permissions.PermissionLinker;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.bukkit.inventory.ItemStack;
 
 public class KitInstance {
 
@@ -25,7 +26,7 @@ public class KitInstance {
 
 	/**
 	 * Get ItemStacks for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */

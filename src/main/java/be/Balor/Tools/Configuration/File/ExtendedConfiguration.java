@@ -27,8 +27,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -67,7 +65,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 @SuppressWarnings("unchecked")
 public class ExtendedConfiguration extends ExFileConfiguration {
-	protected final Lock lock = new ReentrantLock();
+
 	protected static final String COMMENT_PREFIX = "# ";
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
@@ -210,21 +208,26 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	@Override
 	public String saveToString() {
 		lock.lock();
-		Map<String, Object> output = new LinkedHashMap<String, Object>();
+		String header = "";
+		String dump = "";
+		try {
+			Map<String, Object> output = new LinkedHashMap<String, Object>();
 
-		yamlOptions.setIndent(options().indent());
-		yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-		yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			yamlOptions.setIndent(options().indent());
+			yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-		serializeValues(output, getValues(false));
+			serializeValues(output, getValues(false));
 
-		String header = buildHeader();
-		String dump = yaml.dump(output);
+			header = buildHeader();
+			dump = yaml.dump(output);
 
-		if (dump.equals(BLANK_CONFIG)) {
-			dump = "";
+			if (dump.equals(BLANK_CONFIG)) {
+				dump = "";
+			}
+		} finally {
+			lock.unlock();
 		}
-		lock.unlock();
 		return header + dump;
 	}
 
@@ -238,53 +241,57 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	@Override
 	public void loadFromString(String contents) throws InvalidConfigurationException {
 		lock.lock();
-		if (contents == null) {
-			throw new IllegalArgumentException("Contents cannot be null");
-		}
-
-		Map<Object, Object> input = null;
 		try {
-			input = (Map<Object, Object>) yaml.load(contents);
-		} catch (ScannerException e) {
-			if (e.getContextMark() == null) {
+
+			if (contents == null) {
+				throw new IllegalArgumentException("Contents cannot be null");
+			}
+
+			Map<Object, Object> input = null;
+			try {
+				input = (Map<Object, Object>) yaml.load(contents);
+			} catch (ScannerException e) {
+				if (e.getContextMark() == null) {
+					ACLogger.severe("File : " + file
+							+ "\n You have to correct the error manualy in the file.", e);
+					return;
+				}
+				removeLineFromFile(e.getContextMark().getLine());
+				ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
+						+ (e.getContextMark().getLine() + 1) + " DELETED");
+				try {
+					load(file);
+				} catch (FileNotFoundException e1) {
+				} catch (IOException e1) {
+				}
+			} catch (ParserException e) {
 				ACLogger.severe("File : " + file
 						+ "\n You have to correct the error manualy in the file.", e);
-				return;
+
+			} catch (Throwable ex) {
+				throw new InvalidConfigurationException(
+						"Specified contents is not a valid Configuration", ex);
 			}
-			removeLineFromFile(e.getContextMark().getLine());
-			ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
-					+ (e.getContextMark().getLine() + 1) + " DELETED");
-			try {
-				load(file);
-			} catch (FileNotFoundException e1) {
-			} catch (IOException e1) {
+
+			int size = (input == null) ? 0 : input.size();
+			Map<String, Object> result = new LinkedHashMap<String, Object>(size);
+
+			if (size > 0) {
+				for (Map.Entry<Object, Object> entry : input.entrySet()) {
+					result.put(entry.getKey().toString(), entry.getValue());
+				}
 			}
-		} catch (ParserException e) {
-			ACLogger.severe("File : " + file
-					+ "\n You have to correct the error manualy in the file.", e);
 
-		} catch (Throwable ex) {
-			throw new InvalidConfigurationException(
-					"Specified contents is not a valid Configuration", ex);
-		}
+			String header = parseHeader(contents);
 
-		int size = (input == null) ? 0 : input.size();
-		Map<String, Object> result = new LinkedHashMap<String, Object>(size);
-
-		if (size > 0) {
-			for (Map.Entry<Object, Object> entry : input.entrySet()) {
-				result.put(entry.getKey().toString(), entry.getValue());
+			if (header.length() > 0) {
+				options().header(header);
 			}
+
+			deserializeValues(result, this);
+		} finally {
+			lock.unlock();
 		}
-
-		String header = parseHeader(contents);
-
-		if (header.length() > 0) {
-			options().header(header);
-		}
-
-		deserializeValues(result, this);
-		lock.unlock();
 
 	}
 
@@ -385,6 +392,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return result.toString();
 	}
 
+	@Override
 	protected String buildHeader() {
 		String header = options().header();
 

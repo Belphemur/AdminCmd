@@ -27,11 +27,11 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -82,14 +82,12 @@ public class KillMob extends CoreCommand {
 		}
 		final String finalType = type;
 		final CommandSender finalSender = sender;
-		pluginCommand.getPlugin().getServer().getScheduler()
-				.scheduleAsyncDelayedTask(pluginCommand.getPlugin(), new Runnable() {
-
-					@Override
-					public void run() {
-						killMobs(mobs, finalType,finalSender);
-					}
-				});
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				killMobs(mobs, finalType, finalSender);
+			}
+		});
 
 	}
 
@@ -103,14 +101,16 @@ public class KillMob extends CoreCommand {
 		return args != null;
 	}
 
-	private void killMobs(List<LivingEntity> mobs, String type, CommandSender sender) {
+	private void killMobs(List<LivingEntity> mobs, String type,
+			CommandSender sender) {
 		int mobKilled = 0;
 		for (Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
 			LivingEntity m = (LivingEntity) iterator.next();
 			if (m instanceof HumanEntity) {
-				continue;				
+				continue;
 			}
-			if (type.equalsIgnoreCase("all") && (MobCheck.isAnimal(m) || MobCheck.isMonster(m))) {
+			if (type.equalsIgnoreCase("all")
+					&& (MobCheck.isAnimal(m) || MobCheck.isMonster(m))) {
 				m.setHealth(0);
 				mobKilled++;
 				continue;

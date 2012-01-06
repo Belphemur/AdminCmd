@@ -28,10 +28,11 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ClearInventory extends CoreCommand {
 
@@ -46,52 +47,77 @@ public class ClearInventory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode);
+		final Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;
 		if (args.length == 2) {
-			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args.getString(1));
+			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
+					sender, args.getString(1));
 			if (mc.isNull())
 				return;
-			target.getInventory().remove(mc.getMaterial());
-		} else if (args.length >=3) {
-			HashMap<Integer, ? extends ItemStack> stacks;
-			int amount = args.getInt(2);
-			int current = 0;
-			int tempSlot = 0;
-			ItemStack tempStack;
-			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args.getString(1));
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					target.getInventory().remove(mc.getMaterial());
+
+				}
+			});
+
+		} else if (args.length >= 3) {
+			final HashMap<Integer, ? extends ItemStack> stacks;
+			final int startAmount = args.getInt(2);
+
+			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
+					args.getString(1));
 			if (mc.isNull())
 				return;
 			stacks = target.getInventory().all(mc.getMaterial());
-			for (Map.Entry<Integer, ? extends ItemStack> stacksEntry : stacks.entrySet()){
-				current = stacksEntry.getValue().getAmount();
-				tempSlot = stacksEntry.getKey();
-				if (amount < current){
-					tempStack = target.getInventory().getItem(tempSlot);
-					tempStack.setAmount(current - amount);
-					break;
-				} else if (amount == current) {
-					target.getInventory().clear(tempSlot);
-					break;
-				} else {
-					target.getInventory().clear(tempSlot);
-					amount = amount - current;
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					int current = 0;
+					int tempSlot = 0;
+					int amount = startAmount;
+					ItemStack tempStack;
+					for (Map.Entry<Integer, ? extends ItemStack> stacksEntry : stacks
+							.entrySet()) {
+						current = stacksEntry.getValue().getAmount();
+						tempSlot = stacksEntry.getKey();
+						if (amount < current) {
+							tempStack = target.getInventory().getItem(tempSlot);
+							tempStack.setAmount(current - amount);
+							break;
+						} else if (amount == current) {
+							target.getInventory().clear(tempSlot);
+							break;
+						} else {
+							target.getInventory().clear(tempSlot);
+							amount = amount - current;
+						}
+					}
 				}
-			}
+			});
 		} else {
-			target.getInventory().clear();
-			target.getInventory().setHelmet(null);
-			target.getInventory().setChestplate(null);
-			target.getInventory().setLeggings(null);
-			target.getInventory().setBoots(null);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					target.getInventory().clear();
+					target.getInventory().setHelmet(null);
+					target.getInventory().setChestplate(null);
+					target.getInventory().setLeggings(null);
+					target.getInventory().setBoots(null);
+				}
+			});
 		}
 		if (!sender.equals(target)) {
 			HashMap<String, String> replace = new HashMap<String, String>();
@@ -104,7 +130,7 @@ public class ClearInventory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

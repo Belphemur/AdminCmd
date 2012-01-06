@@ -41,6 +41,7 @@ public class LogBlockRemanenceFactory extends IBlockRemanenceFactory {
 	 * @param playerName
 	 *            the playerName to set
 	 */
+	@Override
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}

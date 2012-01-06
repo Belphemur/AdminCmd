@@ -33,7 +33,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
@@ -43,6 +42,7 @@ import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -150,16 +150,15 @@ public class CommandManager implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin to set
 	 */
-	@SuppressWarnings("unchecked")
 	public void setCorePlugin(AdminCmd plugin) {
 		this.corePlugin = plugin;
 		ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
-		disabledCommands = cmds.getList("disabledCommands", new LinkedList<String>());
-		prioritizedCommands = cmds.getList("prioritizedCommands", new LinkedList<String>());
-		ConfigurationSection alias = cmds.getConfigurationSection("alias");
+		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
+		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
+		ExConfigurationSection alias = cmds.getConfigurationSection("alias");
 		for (String cmd : alias.getKeys(false))
 			aliasCommands.put(cmd,
-					new ArrayList<String>(alias.getList(cmd, new ArrayList<String>())));
+					new ArrayList<String>(alias.getStringList(cmd, new ArrayList<String>())));
 		startThreads();
 	}
 
@@ -192,7 +191,7 @@ public class CommandManager implements CommandExecutor {
 		CoreCommand command = null;
 		try {
 			DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
-			command = (CoreCommand) clazz.newInstance();
+			command = clazz.newInstance();
 			command.initializeCommand();
 			checkCommand(command);
 			command.registerBukkitPerm();
@@ -255,7 +254,7 @@ public class CommandManager implements CommandExecutor {
 	public boolean unRegisterCommand(Class<? extends CoreCommand> clazz,
 			AbstractAdminCmdPlugin plugin) {
 		try {
-			CoreCommand command = (CoreCommand) clazz.newInstance();
+			CoreCommand command = clazz.newInstance();
 			if (plugin.equals(command.getPlugin())) {
 				try {
 					command.initializeCommand();

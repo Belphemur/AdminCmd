@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.YmlFilter;
 
 /**
@@ -38,10 +39,13 @@ public class ACPlayerFactory {
 	public ACPlayerFactory(String directory) {
 		this.directory = directory;
 		File[] players = YmlFilter.listRecursively(new File(directory), 1);
+		StringBuffer files = new StringBuffer();
 		for (File player : players) {
 			String name = player.getName();
 			existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
+			files.append(name + " ");
 		}
+		DebugLog.INSTANCE.info("User's file found : " + files.toString().trim());
 	}
 
 	void addExistingPlayer(String player) {
@@ -56,6 +60,7 @@ public class ACPlayerFactory {
 		else
 			return null;
 	}
+
 	ACPlayer createPlayer(Player player) {
 		if (!existingPlayers.contains(player.getName()))
 			return new EmptyPlayer(player);
@@ -64,6 +69,7 @@ public class ACPlayerFactory {
 		else
 			return null;
 	}
+
 	/**
 	 * @return the existingPlayers
 	 */

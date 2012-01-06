@@ -50,6 +50,7 @@ public class WorldDifficulty extends CoreCommand {
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
+	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		ACWorld world = null;
 		boolean worldGiven = false;
@@ -104,6 +105,7 @@ public class WorldDifficulty extends CoreCommand {
 	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
+	@Override
 	public boolean argsCheck(String... args) {
 		return args != null && args.length >= 1;
 	}

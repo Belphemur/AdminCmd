@@ -16,16 +16,99 @@ import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
-import be.Balor.Manager.Commands.Home.*;
-import be.Balor.Manager.Commands.Items.*;
-import be.Balor.Manager.Commands.Mob.*;
-import be.Balor.Manager.Commands.Player.*;
-import be.Balor.Manager.Commands.Server.*;
-import be.Balor.Manager.Commands.Spawn.*;
-import be.Balor.Manager.Commands.Time.*;
-import be.Balor.Manager.Commands.Tp.*;
-import be.Balor.Manager.Commands.Weather.*;
-import be.Balor.Manager.Commands.Warp.*;
+import be.Balor.Manager.Commands.Home.DeleteHome;
+import be.Balor.Manager.Commands.Home.Home;
+import be.Balor.Manager.Commands.Home.ListHomes;
+import be.Balor.Manager.Commands.Home.SetHome;
+import be.Balor.Manager.Commands.Items.AddAlias;
+import be.Balor.Manager.Commands.Items.AddBlackList;
+import be.Balor.Manager.Commands.Items.Coloring;
+import be.Balor.Manager.Commands.Items.Drop;
+import be.Balor.Manager.Commands.Items.Give;
+import be.Balor.Manager.Commands.Items.Kit;
+import be.Balor.Manager.Commands.Items.More;
+import be.Balor.Manager.Commands.Items.MoreAll;
+import be.Balor.Manager.Commands.Items.RemoveAlias;
+import be.Balor.Manager.Commands.Items.RemoveBlackList;
+import be.Balor.Manager.Commands.Items.Repair;
+import be.Balor.Manager.Commands.Items.RepairAll;
+import be.Balor.Manager.Commands.Mob.ChangeMobSpawner;
+import be.Balor.Manager.Commands.Mob.KillMob;
+import be.Balor.Manager.Commands.Mob.MobLimit;
+import be.Balor.Manager.Commands.Mob.SpawnMob;
+import be.Balor.Manager.Commands.Player.Afk;
+import be.Balor.Manager.Commands.Player.BanPlayer;
+import be.Balor.Manager.Commands.Player.ClearInventory;
+import be.Balor.Manager.Commands.Player.Eternal;
+import be.Balor.Manager.Commands.Player.Experience;
+import be.Balor.Manager.Commands.Player.FakeQuit;
+import be.Balor.Manager.Commands.Player.Feed;
+import be.Balor.Manager.Commands.Player.Fireball;
+import be.Balor.Manager.Commands.Player.Fly;
+import be.Balor.Manager.Commands.Player.Freeze;
+import be.Balor.Manager.Commands.Player.GameModeSwitch;
+import be.Balor.Manager.Commands.Player.God;
+import be.Balor.Manager.Commands.Player.Heal;
+import be.Balor.Manager.Commands.Player.Invisible;
+import be.Balor.Manager.Commands.Player.Ip;
+import be.Balor.Manager.Commands.Player.KickAllPlayers;
+import be.Balor.Manager.Commands.Player.KickPlayer;
+import be.Balor.Manager.Commands.Player.Kill;
+import be.Balor.Manager.Commands.Player.Mute;
+import be.Balor.Manager.Commands.Player.NoPickup;
+import be.Balor.Manager.Commands.Player.Played;
+import be.Balor.Manager.Commands.Player.PlayerList;
+import be.Balor.Manager.Commands.Player.PlayerLocation;
+import be.Balor.Manager.Commands.Player.Presentation;
+import be.Balor.Manager.Commands.Player.PrivateMessage;
+import be.Balor.Manager.Commands.Player.Reply;
+import be.Balor.Manager.Commands.Player.Roll;
+import be.Balor.Manager.Commands.Player.SpyMsg;
+import be.Balor.Manager.Commands.Player.SuperBreaker;
+import be.Balor.Manager.Commands.Player.UnBan;
+import be.Balor.Manager.Commands.Player.UnMute;
+import be.Balor.Manager.Commands.Player.Vulcan;
+import be.Balor.Manager.Commands.Player.Whois;
+import be.Balor.Manager.Commands.Server.BanConvert;
+import be.Balor.Manager.Commands.Server.Execution;
+import be.Balor.Manager.Commands.Server.Extinguish;
+import be.Balor.Manager.Commands.Server.Help;
+import be.Balor.Manager.Commands.Server.ListValues;
+import be.Balor.Manager.Commands.Server.LockServer;
+import be.Balor.Manager.Commands.Server.MOTD;
+import be.Balor.Manager.Commands.Server.Memory;
+import be.Balor.Manager.Commands.Server.News;
+import be.Balor.Manager.Commands.Server.Reload;
+import be.Balor.Manager.Commands.Server.ReloadAll;
+import be.Balor.Manager.Commands.Server.RepeatCmd;
+import be.Balor.Manager.Commands.Server.ReplaceBlock;
+import be.Balor.Manager.Commands.Server.Rules;
+import be.Balor.Manager.Commands.Server.Set;
+import be.Balor.Manager.Commands.Server.Undo;
+import be.Balor.Manager.Commands.Server.Uptime;
+import be.Balor.Manager.Commands.Server.Version;
+import be.Balor.Manager.Commands.Server.WorldDifficulty;
+import be.Balor.Manager.Commands.Spawn.SetSpawn;
+import be.Balor.Manager.Commands.Spawn.Spawn;
+import be.Balor.Manager.Commands.Time.Day;
+import be.Balor.Manager.Commands.Time.SetTime;
+import be.Balor.Manager.Commands.Tp.LastLocation;
+import be.Balor.Manager.Commands.Tp.TpAtSee;
+import be.Balor.Manager.Commands.Tp.TpHere;
+import be.Balor.Manager.Commands.Tp.TpLoc;
+import be.Balor.Manager.Commands.Tp.TpPlayerToPlayer;
+import be.Balor.Manager.Commands.Tp.TpTo;
+import be.Balor.Manager.Commands.Tp.TpToggle;
+import be.Balor.Manager.Commands.Warp.AddWarp;
+import be.Balor.Manager.Commands.Warp.RemoveWarp;
+import be.Balor.Manager.Commands.Warp.TpToWarp;
+import be.Balor.Manager.Commands.Warp.WarpList;
+import be.Balor.Manager.Commands.Weather.ClearSky;
+import be.Balor.Manager.Commands.Weather.FreezeWeather;
+import be.Balor.Manager.Commands.Weather.Rain;
+import be.Balor.Manager.Commands.Weather.Storm;
+import be.Balor.Manager.Commands.Weather.Strike;
+import be.Balor.Manager.Commands.Weather.Thor;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
@@ -41,7 +124,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -499,23 +582,26 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ " %player" + ChatColor.YELLOW + " set to : " + ChatColor.GOLD + "%pres");
 		Utils.addLocale("expAdded", ChatColor.GOLD + "%amount " + ChatColor.DARK_AQUA
 				+ "has been added to your experience.");
-		Utils.addLocale("expLevelSet", ChatColor.DARK_AQUA
-				+ "Your current level has been set to " + ChatColor.GOLD + "%amount");
-		Utils.addLocale("expProgressionSet", ChatColor.DARK_AQUA + "Your current level progression has been set to "
+		Utils.addLocale("expLevelSet", ChatColor.DARK_AQUA + "Your current level has been set to "
 				+ ChatColor.GOLD + "%amount");
-		Utils.addLocale("expDropped", ChatColor.DARK_AQUA + "An experience orb has been dropped near your location!");
+		Utils.addLocale("expProgressionSet", ChatColor.DARK_AQUA
+				+ "Your current level progression has been set to " + ChatColor.GOLD + "%amount");
+		Utils.addLocale("expDropped", ChatColor.DARK_AQUA
+				+ "An experience orb has been dropped near your location!");
 		Utils.addLocale("expTotal", ChatColor.DARK_AQUA + "Your total experience is: "
 				+ ChatColor.GOLD + "%exp");
 		Utils.addLocale("expAddedTarget", ChatColor.GREEN + "You have added" + ChatColor.GOLD
 				+ " %amount " + ChatColor.GREEN + "to %target" + "s total experience.");
 		Utils.addLocale("expLevelSetTarget", ChatColor.GREEN + "%target" + "s level now is:"
-				+ ChatColor.GOLD+ " %amount");
-		Utils.addLocale("expProgressionSetTarget", ChatColor.GREEN + "You have set %target" + "s current "
-				+ "progression to " + ChatColor.GOLD + "%amount");
+				+ ChatColor.GOLD + " %amount");
+		Utils.addLocale("expProgressionSetTarget", ChatColor.GREEN + "You have set %target"
+				+ "s current " + "progression to " + ChatColor.GOLD + "%amount");
 		Utils.addLocale("expDroppedTarget", ChatColor.GREEN + "You have dropped an experience"
 				+ " orb at %target" + "s location.");
-		Utils.addLocale("expTotalTarget", ChatColor.DARK_AQUA + "%target" + "s total experience is: "
-				+ ChatColor.GOLD + "%exp");
+		Utils.addLocale("expTotalTarget", ChatColor.DARK_AQUA + "%target"
+				+ "s total experience is: " + ChatColor.GOLD + "%exp");
+		Utils.addLocale("kitOnce", ChatColor.RED + "The kit " + ChatColor.GOLD + "%kit"
+				+ ChatColor.RED + " can be only used once.");
 		LocaleManager.getInstance().save();
 	}
 
@@ -523,9 +609,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onEnable() {
 		ACPluginManager.setServer(getServer());
 		DebugLog.setFile(getDataFolder().getPath());
+		PluginDescriptionFile pdfFile = this.getDescription();
+		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		PluginManager pm = getServer().getPluginManager();
 		ACPluginListener pL = new ACPluginListener();
-		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
 				+ pdfFile.getVersion() + ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);

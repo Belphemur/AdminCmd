@@ -24,7 +24,6 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +59,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
+import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -491,14 +491,14 @@ public class Utils {
 				return;
 			}
 			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-				ACPlayer.getPlayer(nFrom).setLastLocation(pFrom.getLocation());
-				pFrom.teleport(pTo);
+				ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
+				ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
 				Utils.sI18n(sender, "tp", replace);
 			} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
 					&& ACPlayer.getPlayer(pTo.getName()).hasPower(Type.TP_REQUEST)) {
-				ACPlayer.getPlayer(pTo.getName()).setTpRequest(new TpRequest(pFrom, pTo));
+				ACPlayer.getPlayer(pTo).setTpRequest(new TpRequest(pFrom, pTo));
 				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pTo.getName());
@@ -513,7 +513,7 @@ public class Utils {
 
 			} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
 					&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
-				ACPlayer.getPlayer(pFrom.getName()).setTpRequest(new TpRequest(pFrom, pTo));
+				ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
 				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 				HashMap<String, String> replace2 = new HashMap<String, String>();
 				replace2.put("player", pFrom.getName());
@@ -527,8 +527,8 @@ public class Utils {
 				Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 			} else {
-				ACPlayer.getPlayer(nFrom).setLastLocation(pFrom.getLocation());
-				pFrom.teleport(pTo);
+				ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
+				ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
 				replace.put("fromPlayer", pFrom.getName());
 				replace.put("toPlayer", pTo.getName());
 				Utils.sI18n(sender, "tp", replace);
@@ -991,7 +991,7 @@ public class Utils {
 	public static Date getServerRealTime(String gmt) {
 		Date serverTime;
 		TimeZone tz = TimeZone.getTimeZone(gmt);
-		Calendar cal = GregorianCalendar.getInstance(tz);
+		Calendar cal = Calendar.getInstance(tz);
 		cal.setTime(new Date());
 		serverTime = cal.getTime();
 		return serverTime;

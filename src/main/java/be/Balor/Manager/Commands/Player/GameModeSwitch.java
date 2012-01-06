@@ -25,10 +25,11 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class GameModeSwitch extends CoreCommand {
 
@@ -42,23 +43,35 @@ public class GameModeSwitch extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode);
+		final Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(target));
 		if (target.getGameMode() == GameMode.CREATIVE) {
-			target.setGameMode(GameMode.SURVIVAL);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					target.setGameMode(GameMode.SURVIVAL);
+				}
+			});
+
 			replace.put("gamemode", GameMode.SURVIVAL.toString());
 			Utils.sendMessage(sender, target, "gmSwitch", replace);
 		} else {
-			target.setGameMode(GameMode.CREATIVE);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					target.setGameMode(GameMode.CREATIVE);
+				}
+			});
 			replace.put("gamemode", GameMode.CREATIVE.toString());
 			Utils.sendMessage(sender, target, "gmSwitch", replace);
 		}
@@ -66,7 +79,7 @@ public class GameModeSwitch extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
