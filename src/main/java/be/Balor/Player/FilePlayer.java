@@ -109,7 +109,7 @@ public class FilePlayer extends ACPlayer {
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
 		int delay = ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec") >= 30 ? ACHelper
-				.getInstance().getConfInt("delayBeforeWriteUserFileInSec") : 120;
+				.getInstance().getConfInt("delayBeforeWriteUserFileInSec") : 30;
 		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
