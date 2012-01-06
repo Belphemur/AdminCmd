@@ -595,6 +595,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ " orb at %target" + "s location.");
 		Utils.addLocale("expTotalTarget", ChatColor.DARK_AQUA + "%target"
 				+ "s total experience is: " + ChatColor.GOLD + "%exp");
+		Utils.addLocale("kitOnce", ChatColor.RED + "The kit " + ChatColor.GOLD + "%kit"
+				+ ChatColor.RED + " can be only used once.");
 		LocaleManager.getInstance().save();
 	}
 

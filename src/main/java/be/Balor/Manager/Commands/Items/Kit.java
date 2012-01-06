@@ -68,8 +68,7 @@ public class Kit extends CoreCommand {
 		// which material?
 		Player target;
 		if (args.length == 0) {
-			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance()
-					.getKitList(sender));
+			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
 			return;
 		}
 		KitInstance kit = ACHelper.getInstance().getKit(args.getString(0));
@@ -82,33 +81,40 @@ public class Kit extends CoreCommand {
 		if (target == null) {
 			return;
 		}
-		if (!PermissionManager.hasPerm(sender,
-				"admincmd.kit." + args.getString(0))) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
 			return;
 		}
 		ACPlayer actarget = ACPlayer.getPlayer(target);
 		if (!PermissionManager.hasPerm(sender, "admincmd.item.nodelay", false)) {
-			long nextuse = actarget.getLastKitUse(kit.getName())
-					+ kit.getDelay() * 1000;
-			long now = System.currentTimeMillis();
-			if (now < nextuse) {
-				long diff = nextuse - now;
-				Long[] timeLeft = Utils.transformToElapsedTime(diff);
-				HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("d", timeLeft[0].toString());
-				replace.put("h", timeLeft[1].toString());
-				replace.put("m", timeLeft[2].toString());
-				replace.put("s", timeLeft[3].toString());
-				String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d",
-						timeLeft[0].toString())) : "")
-						+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
-						+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
-						+ (timeLeft[3] > 0 ? (timeLeft[3] + "s") : "");
-				Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
-				return;
-			}
+			int kitDelay = kit.getDelay();
+			long kitLastUse = actarget.getLastKitUse(kit.getName());
+			if (kitDelay == -1) {
+				if (kitLastUse == 0)
+					actarget.updateLastKitUse(kit.getName());
+				else
+					Utils.sI18n(sender, "kitOnce", "kit", kit.getName());
+			} else {
+				long nextuse = kitLastUse + kitDelay * 1000L;
+				long now = System.currentTimeMillis();
+				if (now < nextuse) {
+					long diff = nextuse - now;
+					Long[] timeLeft = Utils.transformToElapsedTime(diff);
+					HashMap<String, String> replace = new HashMap<String, String>();
+					replace.put("d", timeLeft[0].toString());
+					replace.put("h", timeLeft[1].toString());
+					replace.put("m", timeLeft[2].toString());
+					replace.put("s", timeLeft[3].toString());
+					String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d",
+							timeLeft[0].toString())) : "")
+							+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
+							+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
+							+ (timeLeft[3] > 0 ? (timeLeft[3] + "s") : "");
+					Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
+					return;
+				}
 
-			actarget.updateLastKitUse(kit.getName());
+				actarget.updateLastKitUse(kit.getName());
+			}
 		}
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("kit", args.getString(0));
@@ -128,8 +134,7 @@ public class Kit extends CoreCommand {
 			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "kitCommandSender", replace);
 		}
-		final ItemStack[] items = kit.getItemStacks().toArray(
-				new ItemStack[] {});
+		final ItemStack[] items = kit.getItemStacks().toArray(new ItemStack[] {});
 		final Player taskTarget = target;
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
@@ -148,10 +153,8 @@ public class Kit extends CoreCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay",
-				bukkitDefault);
-		plugin.getPermissionLinker().addPermChild("admincmd.item.kithelp",
-				bukkitDefault);
+		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay", bukkitDefault);
+		plugin.getPermissionLinker().addPermChild("admincmd.item.kithelp", bukkitDefault);
 		super.registerBukkitPerm();
 	}
 
