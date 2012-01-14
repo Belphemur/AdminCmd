@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
@@ -181,6 +182,17 @@ public class ACPlayerListener extends PlayerListener {
 			event.setQuitMessage(null);
 		PlayerManager.getInstance().setOffline(player);
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
+	}
+
+	@Override
+	public void onPlayerKick(PlayerKickEvent event) {
+		if (event.isCancelled())
+			return;
+		Player p = event.getPlayer();
+		if ((event.getReason().toLowerCase().contains("flying") ||
+				event.getReason().toLowerCase().contains("floating")) &&
+				PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
+			event.setCancelled(true);
 	}
 
 	@Override
