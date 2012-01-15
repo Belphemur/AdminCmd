@@ -169,7 +169,7 @@ public class ACPlayerListener extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
 		ACPlayer player = ACPlayer.getPlayer(p);
-		player.setInformation("lastDosconnect", System.currentTimeMillis());
+		player.setInformation("lastDisconnect", System.currentTimeMillis());
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
 		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
 			HashMap<String, String> replace = new HashMap<String, String>();
