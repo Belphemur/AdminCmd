@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -61,10 +62,19 @@ public class KickPlayer extends CoreCommand {
 			else
 				message += Utils.getPlayerName((Player) sender);
 		}
-		message = message.trim();
+		
 		if (toKick != null) {
+			final String  finalmsg = message.trim();
+			final Player finalToKick = toKick;
 			replace.put("player", Utils.getPlayerName(toKick));
-			toKick.kickPlayer(message);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					finalToKick.kickPlayer(finalmsg);
+					
+				}
+			});
 		} else
 			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 

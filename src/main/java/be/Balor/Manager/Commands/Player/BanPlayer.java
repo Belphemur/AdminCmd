@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BanPlayer extends CoreCommand {
 
@@ -45,7 +45,7 @@ public class BanPlayer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -97,8 +97,17 @@ public class BanPlayer extends CoreCommand {
 		}
 		message = message.trim();
 		replace.put("player", banPlayerString);
-		if (toBan != null)
-			toBan.kickPlayer(message);
+		if (toBan != null) {
+			final String finalmsg = message.trim();
+			final Player finalToKick = toBan;
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					finalToKick.kickPlayer(finalmsg);
+				}
+			});
+		}
 		if (tmpBan != null)
 			ACHelper.getInstance().addBannedPlayer(
 					new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
@@ -110,7 +119,7 @@ public class BanPlayer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
