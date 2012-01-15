@@ -160,4 +160,26 @@ public class YetiPermissions implements IPermissionPlugin {
 		return prefixstring;
 	}
 
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity.Player)
+	 */
+	@Override
+	@SuppressWarnings("deprecation")
+	public String getSuffix(Player player) {
+		String world = player.getWorld().getName();
+		String pName = player.getName();
+		String prefixstring= null;
+		try {
+			prefixstring = permission.safeGetUser(world, pName)
+					.getSuffix();
+		} catch (Exception e) {
+			String group = permission.getGroup(world, pName);
+			prefixstring = permission.getGroupSuffix(world, group);
+		} catch (NoSuchMethodError e) {
+			String group = permission.getGroup(world, pName);
+			prefixstring = permission.getGroupSuffix(world, group);
+		}
+		return prefixstring;
+	}
+
 }

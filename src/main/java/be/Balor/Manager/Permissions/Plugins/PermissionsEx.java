@@ -161,4 +161,24 @@ public class PermissionsEx implements IPermissionPlugin {
 		return prefix;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
+	 * .Player)
+	 */
+	@Override
+	public String getSuffix(Player player) {
+		PermissionUser user = PEX.getUser(player);
+		if (user != null)
+			return user.getSuffix() == null ? "" : user.getSuffix();
+
+		String suffix = "";
+		for (PermissionGroup group : PEX.getUser(player).getGroups())
+			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty())
+				break;
+		return suffix;
+	}
+
 }

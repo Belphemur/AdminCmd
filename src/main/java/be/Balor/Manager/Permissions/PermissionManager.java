@@ -184,6 +184,9 @@ public class PermissionManager {
 		return permissionHandler.getPrefix(player);
 	}
 
+	public static String getSuffix(Player player) {
+		return permissionHandler.getSuffix(player);
+	}
 	/**
 	 * @return the permissionsEx
 	 */

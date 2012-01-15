@@ -167,4 +167,16 @@ public class SuperPermissions implements IPermissionPlugin {
 			return "";
 	}
 
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity.Player)
+	 */
+	@Override
+	public String getSuffix(Player player) {
+			if (mChatInfo != null)
+				return mChatInfo.getSuffix(player);
+			else
+				return "";
+	}
+
 }
