@@ -946,10 +946,10 @@ public class ACHelper {
 					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
 					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
-					+ ChatColor.AQUA + "%lastlogin");
+					+ ChatColor.AQUA + "%lastlogin", true);
 		} else {
 			ACLogger.info("motd.txt loaded");
-			Utils.addLocale("MOTD", locale);
+			Utils.addLocale("MOTD", locale, true);
 		}
 		locale = Utils.getTextFile("motdNewUser.txt");
 		if (locale == null) {
@@ -958,27 +958,27 @@ public class ACHelper {
 					+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
 					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
 					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime#");
+					+ "#elapsedTotalTime#", true);
 		} else {
 			ACLogger.info("motdNewUser.txt loaded");
-			Utils.addLocale("MOTDNewUser", locale);
+			Utils.addLocale("MOTDNewUser", locale, true);
 		}
 		locale = Utils.getTextFile("news.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read news.txt. Using default values for the MotD!");
-			Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
+			Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed", true);
 		} else {
 			ACLogger.info("news.txt loaded");
-			Utils.addLocale("NEWS", locale);
+			Utils.addLocale("NEWS", locale, true);
 		}
 		locale = Utils.getTextFile("rules.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
 			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
-					+ "3. Be friendly to other players!");
+					+ "3. Be friendly to other players!", true);
 		} else {
 			ACLogger.info("rules.txt loaded");
-			Utils.addLocale("Rules", locale);
+			Utils.addLocale("Rules", locale, true);
 		}
 		LocaleManager.getInstance().save();
 	}

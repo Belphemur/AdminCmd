@@ -74,7 +74,6 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.avaje.ebean.LogLevel;
 import com.herocraftonline.dev.heroes.Heroes;
 import com.herocraftonline.dev.heroes.hero.Hero;
 
@@ -395,6 +394,10 @@ public class Utils {
 
 	public static void addLocale(String key, String value) {
 		LocaleManager.getInstance().addLocale(key, value);
+	}
+
+	public static void addLocale(String key, String value, boolean override) {
+		LocaleManager.getInstance().addLocale(key, value, true);
 	}
 
 	private static void setTime(CommandSender sender, World w, String arg) {
