@@ -242,18 +242,19 @@ public class Utils {
 	 * @param sender
 	 *            sender that want the name
 	 * @param withPrefix
-	 *            return the name with or without prefixes (e.g [INV])
+	 *            return the name with or without prefixes/suffix (e.g [INV])
 	 * @return the complete player name with prefix
 	 */
 	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
 		if (withPrefix) {
 			String prefix = colorParser(getPrefix(player, sender));
+			String suffix = colorParser(PermissionManager.getSuffix(player));
 			if (prefix.isEmpty())
 				prefix = ChatColor.WHITE.toString();
 			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
-				return prefix + player.getDisplayName() + ChatColor.YELLOW;
+				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 
-			return prefix + player.getName() + ChatColor.YELLOW;
+			return prefix + player.getName() + suffix + ChatColor.YELLOW;
 		}
 
 		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
