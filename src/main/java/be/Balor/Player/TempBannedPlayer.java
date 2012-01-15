@@ -56,4 +56,39 @@ public class TempBannedPlayer extends BannedPlayer {
 		this.endBan = endBan;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((endBan == null) ? 0 : endBan.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof TempBannedPlayer))
+			return false;
+		TempBannedPlayer other = (TempBannedPlayer) obj;
+		if (endBan == null) {
+			if (other.endBan != null)
+				return false;
+		} else if (!endBan.equals(other.endBan))
+			return false;
+		return true;
+	}
+
 }

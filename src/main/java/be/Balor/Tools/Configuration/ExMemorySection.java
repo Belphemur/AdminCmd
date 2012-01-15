@@ -90,10 +90,11 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	}
 
 	@Override
-	public void add(String path, Object value) {
+	public boolean add(String path, Object value) {
 		if (isSet(path))
-			return;
+			return false;
 		set(path, value);
+		return true;
 	}
 
 	@Override
@@ -132,7 +133,6 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	public void remove(String path) {
 		set(path, null);
 	}
-
 
 	@Override
 	public ExConfigurationSection getConfigurationSection(String path) {

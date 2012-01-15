@@ -41,8 +41,9 @@ public interface ExConfigurationSection extends ConfigurationSection {
 	 * 
 	 * @param path
 	 *            Path to create/get the entry at.
+	 * @return false if the path already exists, true if it's not set.
 	 */
-	public void add(String path, Object value);
+	public boolean add(String path, Object value);
 
 	/**
 	 * Shortcut to remove an item by setting it null
