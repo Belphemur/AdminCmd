@@ -48,7 +48,7 @@ public class PermissionManager {
 	private static boolean yetiPermissions = false;
 	private static boolean bPermissions = false;
 	private static boolean permissionsBukkit = false;
-	private static AbstractPermission permissionHandler;
+	private static IPermissionPlugin permissionHandler;
 	private static boolean warningSend = false;
 	private Hashtable<String, WeakReference<PermissionLinker>> permissionLinkers = new Hashtable<String, WeakReference<PermissionLinker>>();
 

@@ -27,7 +27,7 @@ import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
@@ -35,7 +35,7 @@ import be.Balor.Tools.Utils;
  * @authors Balor, Lathanael
  * 
  */
-public class PermissionsEx extends AbstractPermission {
+public class PermissionsEx implements IPermissionPlugin {
 	private PermissionManager PEX;
 
 	/**

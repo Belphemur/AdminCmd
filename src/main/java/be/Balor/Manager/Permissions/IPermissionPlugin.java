@@ -28,7 +28,7 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public abstract class AbstractPermission {
+public interface IPermissionPlugin {
 
 	/**
 	 * Check the permission with the possibility to disable the error msg

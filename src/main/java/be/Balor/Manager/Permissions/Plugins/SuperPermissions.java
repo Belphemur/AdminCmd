@@ -29,14 +29,14 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class SuperPermissions extends AbstractPermission {
+public class SuperPermissions implements IPermissionPlugin {
 	protected static MInfoReader mChatInfo = null;
 
 	/**

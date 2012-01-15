@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Tools.Utils;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -32,7 +32,7 @@ import com.nijiko.permissions.PermissionHandler;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class YetiPermissions extends AbstractPermission {
+public class YetiPermissions implements IPermissionPlugin {
 	protected PermissionHandler permission = null;
 	/*
 	 * (non-Javadoc)
