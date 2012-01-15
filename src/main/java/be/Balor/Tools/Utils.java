@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +65,7 @@ import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
@@ -72,6 +74,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
+import com.avaje.ebean.LogLevel;
 import com.herocraftonline.dev.heroes.Heroes;
 import com.herocraftonline.dev.heroes.hero.Hero;
 
@@ -1232,15 +1235,15 @@ public class Utils {
 		}
 		catch (UnsupportedEncodingException e) {
 			//TODO: Better debug code here
-			System.out.println(e.getMessage());
+			ACLogger.Log(Level.SEVERE, e.getMessage());
 		}
 		catch (IOException e) {
 			//TODO: Better debug code here
-			System.out.println(e.getMessage());
+			ACLogger.Log(Level.SEVERE, e.getMessage());
 		}
 		catch (Exception e) {
 			//TODO: Better debug code here
-			System.out.println(e.getMessage());
+			ACLogger.Log(Level.SEVERE, e.getMessage());
 		}
 		if (result.isEmpty())
 			return null;

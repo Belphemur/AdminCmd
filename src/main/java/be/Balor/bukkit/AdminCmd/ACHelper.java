@@ -948,6 +948,7 @@ public class ACHelper {
 					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
 					+ ChatColor.AQUA + "%lastlogin");
 		} else {
+			ACLogger.info("motd.txt loaded");
 			Utils.addLocale("MOTD", locale);
 		}
 		locale = Utils.getTextFile("motdNewUser.txt");
@@ -959,6 +960,7 @@ public class ACHelper {
 					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
 					+ "#elapsedTotalTime#");
 		} else {
+			ACLogger.info("motdNewUser.txt loaded");
 			Utils.addLocale("MOTDNewUser", locale);
 		}
 		locale = Utils.getTextFile("news.txt");
@@ -966,6 +968,7 @@ public class ACHelper {
 			ACLogger.info("Could not read news.txt. Using default values for the MotD!");
 			Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
 		} else {
+			ACLogger.info("news.txt loaded");
 			Utils.addLocale("NEWS", locale);
 		}
 		locale = Utils.getTextFile("rules.txt");
@@ -974,6 +977,7 @@ public class ACHelper {
 			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
 					+ "3. Be friendly to other players!");
 		} else {
+			ACLogger.info("rules.txt loaded");
 			Utils.addLocale("Rules", locale);
 		}
 		LocaleManager.getInstance().save();
