@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Tools.Configuration;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,7 +29,6 @@ import org.bukkit.configuration.MemorySection;
  * 
  */
 public class ExMemorySection extends MemorySection implements ExConfigurationSection {
-	protected static final HashSet<Class<? extends Object>> exNaturalClass = new HashSet<Class<? extends Object>>();
 	protected final Lock lock = new ReentrantLock(true);
 
 	/**

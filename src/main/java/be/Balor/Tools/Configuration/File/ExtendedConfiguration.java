@@ -102,7 +102,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 */
 	public static void registerClass(Class<? extends Object> c) {
 		ymlConstructor.addClassInfo(c);
-		exNaturalClass.add(c);
 	}
 
 	/**
