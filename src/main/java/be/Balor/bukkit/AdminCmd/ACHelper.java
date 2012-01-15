@@ -66,7 +66,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -136,7 +136,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -160,7 +160,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -170,7 +170,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -180,7 +180,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 * 
+	 *
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
@@ -199,7 +199,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 * 
+	 *
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -243,7 +243,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
@@ -253,7 +253,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -485,6 +485,10 @@ public class ACHelper {
 		convertSpawnWarp();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
+		fManager.getInnerFile("rules.txt");
+		fManager.getInnerFile("news.txt");
+		fManager.getInnerFile("motd.txt");
+		fManager.getInnerFile("motdNewUser.txt");
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
 				+ "AdminCmd", true);
 		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator
@@ -590,7 +594,7 @@ public class ACHelper {
 
 	/**
 	 * Get boolean from config
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -600,7 +604,7 @@ public class ACHelper {
 
 	/**
 	 * Get float parameter of config file.
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -610,7 +614,7 @@ public class ACHelper {
 
 	/**
 	 * Get Integer parameter from config.
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -620,7 +624,7 @@ public class ACHelper {
 
 	/**
 	 * Get Long parameter from config.
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -630,7 +634,7 @@ public class ACHelper {
 
 	/**
 	 * Get String parameter from config.
-	 * 
+	 *
 	 * @param path
 	 * @return
 	 */
@@ -640,7 +644,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -669,7 +673,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -699,7 +703,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -734,14 +738,14 @@ public class ACHelper {
 		if (Utils.isPlayer(sender)) {
 			final Location loc = ((Player) sender).getLocation();
 			final World w = loc.getWorld();
-			ACPluginManager.scheduleSyncTask(new Runnable() {				
+			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
 					w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-							loc.getBlockZ());					
+							loc.getBlockZ());
 				}
-			});		
-			
+			});
+
 			ACWorld.getWorld(w.getName()).setSpawn(loc);
 			Utils.sI18n(sender, "setSpawn");
 		}
@@ -790,7 +794,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -821,7 +825,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -852,7 +856,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
@@ -862,7 +866,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
@@ -872,7 +876,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 * 
+	 *
 	 * @return
 	 */
 	private List<String> getGroupNames() {
@@ -882,7 +886,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -903,7 +907,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 * 
+	 *
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -915,7 +919,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 * 
+	 *
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -926,7 +930,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 * 
+	 *
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {
