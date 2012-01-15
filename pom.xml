@@ -245,7 +245,7 @@
 		<dependency>
 			<groupId>in.mDev</groupId>
 			<artifactId>mChatSuite</artifactId>
-			<version>DEV</version>
+			<version>86</version>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>

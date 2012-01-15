@@ -34,7 +34,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class SuperPermissions implements IPermissionPlugin {
 	protected static MInfoReader mChatInfo = null;
@@ -45,14 +45,13 @@ public class SuperPermissions implements IPermissionPlugin {
 	public SuperPermissions() {
 	}
 
-
 	/**
 	 * @param mChatSuite
 	 *            the mChatAPI to set
 	 */
 	public static void setmChatapi(mChatSuite mChatSuite) {
 		if (SuperPermissions.mChatInfo == null && mChatSuite != null)
-			mChatInfo = mChatSuite.getInfoReader();	
+			mChatInfo = mChatSuite.getInfoReader();
 	}
 
 	/**
@@ -64,7 +63,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
@@ -85,7 +84,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
@@ -105,10 +104,10 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String,
-	 * org.bukkit.entity.Player)
+	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
+	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
 	public boolean isInGroup(String group, Player player) throws NoPermissionsPlugin {
@@ -117,9 +116,10 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
+	 * .String)
 	 */
 	@Override
 	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
@@ -128,7 +128,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -137,7 +137,7 @@ public class SuperPermissions implements IPermissionPlugin {
 	public String getPermissionLimit(Player p, String limit) {
 		String result = null;
 		if (mChatInfo != null)
-			result = mChatInfo.getInfo(p, "admincmd." + limit);
+			result = mChatInfo.getInfo(p, p.getWorld(), "admincmd." + limit);
 		if (result == null || (result != null && result.isEmpty())) {
 			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
 			for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
@@ -146,15 +146,14 @@ public class SuperPermissions implements IPermissionPlugin {
 					return info.getPermission().split("\\.")[2];
 
 			}
-		}
-		else
+		} else
 			return result;
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
@@ -162,21 +161,24 @@ public class SuperPermissions implements IPermissionPlugin {
 	@Override
 	public String getPrefix(Player player) {
 		if (mChatInfo != null)
-			return mChatInfo.getPrefix(player);
+			return mChatInfo.getPrefix(player, player.getWorld());
 		else
 			return "";
 	}
 
-
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity.Player)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
+	 * .Player)
 	 */
 	@Override
 	public String getSuffix(Player player) {
-			if (mChatInfo != null)
-				return mChatInfo.getSuffix(player);
-			else
-				return "";
+		if (mChatInfo != null)
+			return mChatInfo.getSuffix(player, player.getWorld());
+		else
+			return "";
 	}
 
 }
