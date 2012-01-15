@@ -1,5 +1,7 @@
 package be.Balor.bukkit.AdminCmd;
 
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -114,7 +116,7 @@ import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Ping;
+import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -124,7 +126,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -656,8 +658,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
-		// get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
-		Ping.init(this);
+		try {
+			// create a new metrics object
+			Metrics metrics = new Metrics();
+			// 'this' in this context is the Plugin object
+			metrics.beginMeasuringPlugin(this);
+		} catch (IOException e) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
+		}
 	}
 
 	@Override
