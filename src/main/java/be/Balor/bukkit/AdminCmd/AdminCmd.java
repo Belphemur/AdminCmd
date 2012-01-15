@@ -583,45 +583,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
-
-		String locale = Utils.getTextFile("motd.txt");
-		if (locale == null) {
-			ACLogger.info("Could not read motd.txt. Using default values for the MotD!");
-			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
-					+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
-					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
-					+ ChatColor.AQUA + "%lastlogin");
-		} else {
-			Utils.addLocale("MOTD", locale);
-		}
-		locale = Utils.getTextFile("motdNewUser.txt");
-		if (locale == null) {
-			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotDNewUser!");
-			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
-					+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
-					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime#");
-		} else {
-			Utils.addLocale("MOTDNewUser", locale);
-		}
-		locale = Utils.getTextFile("news.txt");
-		if (locale == null) {
-			ACLogger.info("Could not read news.txt. Using default values for the MotD!");
-			Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
-		} else {
-			Utils.addLocale("NEWS", locale);
-		}
-		locale = Utils.getTextFile("rules.txt");
-		if (locale == null) {
-			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
-			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
-					+ "3. Be friendly to other players!");
-		} else {
-			Utils.addLocale("Rules", locale);
-		}
 		LocaleManager.getInstance().save();
 	}
 
