@@ -135,17 +135,6 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		set(path, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.bukkit.configuration.MemorySection#isNaturallyStorable(java.lang.
-	 * Object)
-	 */
-	@Override
-	protected boolean isNaturallyStorable(Object input) {
-		return super.isNaturallyStorable(input) || exNaturalClass.contains(input.getClass());
-	}
 
 	@Override
 	public ExConfigurationSection getConfigurationSection(String path) {

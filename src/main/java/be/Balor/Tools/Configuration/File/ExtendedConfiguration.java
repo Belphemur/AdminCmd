@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -33,31 +32,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.AbstractConstruct;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.CollectionNode;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.parser.ParserException;
 import org.yaml.snakeyaml.reader.UnicodeReader;
-import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.scanner.ScannerException;
 
-import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -70,7 +54,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
 	private static Representer yamlRepresenter = new ExtendedRepresenter();
-	protected final static MyYamlConstructor ymlConstructor = new MyYamlConstructor();
+	protected final static YamlConstructor ymlConstructor = new YamlConstructor();
 	protected final static Yaml yaml = new Yaml(ymlConstructor, yamlRepresenter, yamlOptions);
 
 	/**
@@ -211,16 +195,12 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		String header = "";
 		String dump = "";
 		try {
-			Map<String, Object> output = new LinkedHashMap<String, Object>();
-
 			yamlOptions.setIndent(options().indent());
 			yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 			yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-			serializeValues(output, getValues(false));
-
 			header = buildHeader();
-			dump = yaml.dump(output);
+			dump = yaml.dump(getValues(false));
 
 			if (dump.equals(BLANK_CONFIG)) {
 				dump = "";
@@ -283,85 +263,28 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			}
 
 			String header = parseHeader(contents);
-
 			if (header.length() > 0) {
 				options().header(header);
 			}
 
-			deserializeValues(result, this);
+			if (input != null) {
+				convertMapsToSections(input, this);
+			}
 		} finally {
 			lock.unlock();
 		}
 
 	}
 
-	protected void deserializeValues(Map<String, Object> input, ConfigurationSection section)
-			throws InvalidConfigurationException {
-		if (input == null) {
-			return;
-		}
-
-		for (Map.Entry<String, Object> entry : input.entrySet()) {
+	protected void convertMapsToSections(Map<Object, Object> input, ConfigurationSection section) {
+		for (Map.Entry<Object, Object> entry : input.entrySet()) {
+			String key = entry.getKey().toString();
 			Object value = entry.getValue();
 
-			if (value instanceof Map) {
-				Map<Object, Object> subinput = (Map<Object, Object>) value;
-				int size = (subinput == null) ? 0 : subinput.size();
-				Map<String, Object> subvalues = new LinkedHashMap<String, Object>(size);
-
-				if (size > 0) {
-					for (Map.Entry<Object, Object> subentry : subinput.entrySet()) {
-						subvalues.put(subentry.getKey().toString(), subentry.getValue());
-					}
-				}
-
-				if (subvalues.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
-					try {
-						ConfigurationSerializable serializable = ConfigurationSerialization
-								.deserializeObject(subvalues);
-						section.set(entry.getKey(), serializable);
-					} catch (IllegalArgumentException ex) {
-						throw new InvalidConfigurationException("Could not deserialize object", ex);
-					}
-				} else {
-					ConfigurationSection subsection = section.createSection(entry.getKey());
-					deserializeValues(subvalues, subsection);
-				}
+			if (value instanceof Map<?, ?>) {
+				convertMapsToSections((Map<Object, Object>) value, section.createSection(key));
 			} else {
-				section.set(entry.getKey(), entry.getValue());
-			}
-		}
-	}
-
-	protected void serializeValues(Map<String, Object> output, Map<String, Object> input) {
-		if (input == null) {
-			return;
-		}
-
-		for (Map.Entry<String, Object> entry : input.entrySet()) {
-			Object value = entry.getValue();
-
-			if (value instanceof ConfigurationSection) {
-				ConfigurationSection subsection = (ConfigurationSection) entry.getValue();
-				Map<String, Object> subvalues = new LinkedHashMap<String, Object>();
-
-				serializeValues(subvalues, subsection.getValues(false));
-				value = subvalues;
-			} else if (value instanceof ConfigurationSerializable) {
-				ConfigurationSerializable serializable = (ConfigurationSerializable) value;
-				Map<String, Object> subvalues = new LinkedHashMap<String, Object>();
-				subvalues.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY,
-						ConfigurationSerialization.getAlias(serializable.getClass()));
-
-				serializeValues(subvalues, serializable.serialize());
-				value = subvalues;
-			} else if ((!isPrimitiveWrapper(value)) && (!isNaturallyStorable(value))) {
-				throw new IllegalStateException(
-						"Configuration contains non-serializable values, cannot process");
-			}
-
-			if (value != null) {
-				output.put(entry.getKey(), value);
+				section.set(key, value);
 			}
 		}
 	}
@@ -439,116 +362,4 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return (ExtendedConfigurationOptions) options;
 	}
 
-}
-
-class ExtendedRepresenter extends Representer {
-
-	public ExtendedRepresenter() {
-		super();
-		this.nullRepresenter = new EmptyRepresentNull();
-		this.representers.put(TpRequest.class, new RepresentTpRequest());
-	}
-
-	protected class EmptyRepresentNull implements Represent {
-		@Override
-		public Node representData(Object data) {
-			return representScalar(Tag.NULL, ""); // Changed "null" to "" so as
-													// to avoid writing nulls
-		}
-	}
-
-	private class RepresentTpRequest implements Represent {
-		@Override
-		public Node representData(Object data) {
-			TpRequest tpRequest = (TpRequest) data;
-			String value = tpRequest.getFrom() + ";" + tpRequest.getTo();
-			return representScalar(new Tag("!tpRequest"), value);
-		}
-	}
-
-	// Code borrowed from snakeyaml
-	// (http://code.google.com/p/snakeyaml/source/browse/src/test/java/org/yaml/snakeyaml/issues/issue60/SkipBeanTest.java)
-	@Override
-	protected NodeTuple representJavaBeanProperty(Object javaBean, Property property,
-			Object propertyValue, Tag customTag) {
-		NodeTuple tuple = super.representJavaBeanProperty(javaBean, property, propertyValue,
-				customTag);
-		Node valueNode = tuple.getValueNode();
-		if (valueNode instanceof CollectionNode) {
-			// Removed null check
-			if (Tag.SEQ.equals(valueNode.getTag())) {
-				SequenceNode seq = (SequenceNode) valueNode;
-				if (seq.getValue().isEmpty()) {
-					return null; // skip empty lists
-				}
-			}
-			if (Tag.MAP.equals(valueNode.getTag())) {
-				MappingNode seq = (MappingNode) valueNode;
-				if (seq.getValue().isEmpty()) {
-					return null; // skip empty maps
-				}
-			}
-		}
-		return tuple;
-	}
-
-}
-
-class MyYamlConstructor extends Constructor {
-	private HashMap<String, Class<?>> classMap = new HashMap<String, Class<?>>();
-
-	public MyYamlConstructor(Class<? extends Object> theRoot) {
-		super(theRoot);
-	}
-
-	/**
-	 * 
-	 */
-	public MyYamlConstructor() {
-		super();
-		this.yamlConstructors.put(new Tag("!tpRequest"), new ConstructTpRequest());
-	}
-
-	private class ConstructTpRequest extends AbstractConstruct {
-		@Override
-		public Object construct(Node node) {
-			String val = (String) constructScalar((ScalarNode) node);
-			String[] split = val.split(";");
-			return new TpRequest(ACPluginManager.getServer().getPlayer(split[0]), ACPluginManager
-					.getServer().getPlayer(split[1]));
-		}
-	}
-
-	public void addClassInfo(Class<? extends Object> c) {
-		classMap.put(c.getName(), c);
-	}
-
-	/*
-	 * This is a modified version of the Constructor. Rather than using a class
-	 * loader to get external classes, they are already predefined above. This
-	 * approach works similar to the typeTags structure in the original
-	 * constructor, except that class information is pre-populated during
-	 * initialization rather than runtime.
-	 * 
-	 * @see org.yaml.snakeyaml.constructor.Constructor#getClassForName(org.yaml
-	 * .snakeyaml.nodes.Node)
-	 */
-	@Override
-	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-		Class<?> cl = classMap.get(name);
-		if (cl == null)
-			return super.getClassForName(name);
-		else
-			return cl;
-	}
-
-	/**
-	 * Check if the class is registered
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public boolean isClassRegistered(Class<? extends Object> c) {
-		return classMap.containsKey(c.getName());
-	}
 }
