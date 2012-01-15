@@ -135,4 +135,14 @@ public class BannedPlayer {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "BannedPlayer [player=" + player + ", reason=" + reason + ", date=" + date + "]";
+	}
+
 }

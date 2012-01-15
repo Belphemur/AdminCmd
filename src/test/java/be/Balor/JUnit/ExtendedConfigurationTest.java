@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 
@@ -36,7 +37,7 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
  */
 public class ExtendedConfigurationTest {
 	private File file;
-	private final TempBannedPlayer tempBan = new TempBannedPlayer("Test", "testing", 1234567890);
+	private final BannedPlayer banPlayer = new BannedPlayer("Test", "testing");
 
 	/**
 	 * @throws java.lang.Exception
@@ -76,13 +77,13 @@ public class ExtendedConfigurationTest {
 	@Test
 	public void serializeAdminCmdTest() throws IOException {		
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
-		conf.set("serial.tempBan", tempBan);
+		conf.set("serial.banPlayer", banPlayer);
 		conf.save();
 	}
 	@Test
 	public void deserializeAdminCmdTest() {
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
-		assertEquals(tempBan, conf.get("serial.tempBan"));
+		assertEquals(banPlayer, conf.get("serial.banPlayer"));
 	}
 	@After
 	public void tearDown() throws Exception {
