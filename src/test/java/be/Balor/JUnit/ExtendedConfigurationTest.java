@@ -37,7 +37,6 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
  */
 public class ExtendedConfigurationTest {
 	private File file;
-	private final BannedPlayer banPlayer = new BannedPlayer("Test", "testing");
 
 	/**
 	 * @throws java.lang.Exception
@@ -77,13 +76,13 @@ public class ExtendedConfigurationTest {
 	@Test
 	public void serializeAdminCmdTest() throws IOException {		
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
-		conf.set("serial.banPlayer", banPlayer);
+		conf.set("serial.banPlayer", new BannedPlayer("Test", "testing"));
 		conf.save();
 	}
 	@Test
 	public void deserializeAdminCmdTest() {
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
-		assertEquals(banPlayer, conf.get("serial.banPlayer"));
+		assertEquals("Test", ((BannedPlayer)conf.get("serial.banPlayer")).getPlayer());
 	}
 	@After
 	public void tearDown() throws Exception {
