@@ -98,7 +98,7 @@ public class BanPlayer extends CoreCommand {
 		message = message.trim();
 		replace.put("player", banPlayerString);
 		if (toBan != null) {
-			final String finalmsg = message.trim();
+			final String finalmsg = message;
 			final Player finalToKick = toBan;
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 
