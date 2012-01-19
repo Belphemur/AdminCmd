@@ -153,7 +153,7 @@ public class LocaleManager {
 	 * @return
 	 */
 	private String getLocale(String file, String key) {
-		ExtendedConfiguration ex = localesFiles.get(PRIMARY_LOCALE);
+		ExtendedConfiguration ex = localesFiles.get(file);
 		if (ex == null)
 			return null;
 		return ex.getString(key);
