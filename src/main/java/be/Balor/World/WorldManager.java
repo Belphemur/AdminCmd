@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.World;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -80,6 +82,20 @@ public class WorldManager {
 			result = worlds.get(name);
 		}
 		return result;
+	}
+
+	/**
+	 * Getting all the WarpsName using the world name as prefix
+	 * 
+	 * @return
+	 */
+	public Set<String> getAllWarpList() {
+		Set<String> warps = new HashSet<String>();
+		for (ACWorld world : worlds.values())
+			for (String warp : world.getWarpList())
+				warps.add(world.getName() + ":" + warp);
+		return warps;
+
 	}
 
 }

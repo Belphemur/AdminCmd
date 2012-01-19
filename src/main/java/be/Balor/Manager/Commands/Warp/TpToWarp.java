@@ -92,6 +92,14 @@ public class TpToWarp extends CoreCommand {
 	public boolean argsCheck(String... args) {
 		return args != null && args.length >= 1;
 	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command.CommandSender)
+	 */
+	@Override
+	public boolean permissionCheck(CommandSender sender) {
+		plugin.getPermissionLinker().addPermChild("admincmd.warp.tp.all");
+		return super.permissionCheck(sender);
+	}
 
 	private class DelayedTeleport implements Runnable {
 
