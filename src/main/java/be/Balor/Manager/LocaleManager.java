@@ -40,7 +40,7 @@ import be.Balor.Tools.Debug.ACLogger;
 public class LocaleManager {
 	private static LocaleManager instance = new LocaleManager();
 	private final Map<String, ExtendedConfiguration> localesFiles = new HashMap<String, ExtendedConfiguration>();
-	public static final String DEFAULT_FILE = "default";
+	public static final String PRIMARY_LOCALE = "primary";
 	private boolean noMsg = false;
 	private final Pattern recursiveLocale = Pattern.compile("#([\\w]+)#");
 	private final Pattern replaceLocale = Pattern.compile("%([\\w]+)");
@@ -97,9 +97,9 @@ public class LocaleManager {
 
 	public void addLocale(String key, String value, boolean override) {
 		if (override)
-			localesFiles.get(DEFAULT_FILE).set(key, value);
+			localesFiles.get(PRIMARY_LOCALE).set(key, value);
 		else
-			localesFiles.get(DEFAULT_FILE).add(key, value);
+			localesFiles.get(PRIMARY_LOCALE).add(key, value);
 	}
 
 	/**
@@ -128,11 +128,18 @@ public class LocaleManager {
 		return locale;
 	}
 
+	/**
+	 * Looking in every locale file for the locale asked, begin by the
+	 * principalLocale;
+	 * 
+	 * @param key
+	 * @return
+	 */
 	private String getLocale(String key) {
-		String result = localesFiles.get(DEFAULT_FILE).getString(key);
+		String result = localesFiles.get(PRIMARY_LOCALE).getString(key);
 		if (result == null || (result != null && result.isEmpty()))
 			for (Entry<String, ExtendedConfiguration> e : localesFiles.entrySet()) {
-				if (e.getKey().equals(DEFAULT_FILE))
+				if (e.getKey().equals(PRIMARY_LOCALE))
 					continue;
 				result = e.getValue().getString(key);
 				if (result != null && !result.isEmpty())
