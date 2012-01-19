@@ -534,8 +534,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
 		Utils.addLocale("addSpawnWarp", ChatColor.GREEN + "Spawnpoint for the group "
 				+ ChatColor.DARK_AQUA + " %name" + ChatColor.GREEN + " added.");
-		Utils.addLocale("tpTO", "to you.");
-		Utils.addLocale("tpHERE", "to them.");
+		Utils.addLocale("tpTO", "to them.");
+		Utils.addLocale("tpHERE", "to you.");
 		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
 		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
 		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
