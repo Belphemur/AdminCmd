@@ -1,4 +1,3 @@
-// $Id$
 /*
  * Copyright (C) 2010 sk89q <http://www.sk89q.com>
  *
@@ -17,22 +16,25 @@
  */
 package be.Balor.Manager.Commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class CommandArgs implements Iterable<String> {
-	protected static final String QUOTE_CHARS = "\'\"";
-	protected final List<String> args;
+	protected final List<String> parsedArgs;
+	protected final Map<Character, String> valueFlags = new HashMap<Character, String>();
 	protected final Set<Character> booleanFlags = new HashSet<Character>();
+	protected final List<Integer> originalArgIndices;
+	protected final String[] originalArgs;
 	public final int length;
 
 	public CommandArgs(String args) {
@@ -43,43 +45,99 @@ public class CommandArgs implements Iterable<String> {
 		 * 
 		 */
 	public CommandArgs(String[] args) {
-		char quotedChar;
-		for (int i = 0; i < args.length; ++i) {
-			if (args[i].length() == 0) {
-				args = Str.removeCaseOfArray(args, i);
-			} else if (QUOTE_CHARS.indexOf(String.valueOf(args[i].charAt(0))) != -1) {
-				StringBuilder build = new StringBuilder();
-				quotedChar = args[i].charAt(0);
-				int endIndex = i;
-				for (; endIndex < args.length; endIndex++) {
-					if (args[endIndex].charAt(args[endIndex].length() - 1) == quotedChar) {
+		originalArgs = args;
+		List<Integer> argIndexList = new ArrayList<Integer>(args.length);
+		List<String> argList = new ArrayList<String>(args.length);
+		for (int i = 1; i < args.length; ++i) {
+			String arg = args[i];
+			if (arg.length() == 0) {
+				continue;
+			}
+
+			argIndexList.add(i);
+
+			switch (arg.charAt(0)) {
+			case '\'':
+			case '"':
+				final StringBuilder build = new StringBuilder();
+				final char quotedChar = arg.charAt(0);
+
+				int endIndex;
+				for (endIndex = i; endIndex < args.length; ++endIndex) {
+					final String arg2 = args[endIndex];
+					if (arg2.charAt(arg2.length() - 1) == quotedChar) {
 						if (endIndex != i)
-							build.append(" ");
-						build.append(args[endIndex].substring(endIndex == i ? 1 : 0,
-								args[endIndex].length() - 1));
+							build.append(' ');
+						build.append(arg2.substring(endIndex == i ? 1 : 0, arg2.length() - 1));
 						break;
 					} else if (endIndex == i) {
-						build.append(args[endIndex].substring(1));
+						build.append(arg2.substring(1));
 					} else {
-						build.append(" ").append(args[endIndex]);
+						build.append(' ').append(arg2);
 					}
 				}
-				args = Str.removePortionOfArray(args, i, endIndex, build.toString());
-			} else if (args[i].charAt(0) == '-' && args[i].matches("^-[a-zA-Z]+$")) {
-				for (int k = 1; k < args[i].length(); ++k) {
-					booleanFlags.add(args[i].charAt(k));
+
+				if (endIndex < args.length) {
+					arg = build.toString();
+					i = endIndex;
 				}
-				args = Str.removeCaseOfArray(args, i);			
-				i--;
+
+				// In case there is an empty quoted string
+				if (arg.length() == 0) {
+					continue;
+				}
+				// else raise exception about hanging quotes?
+			}
+			argList.add(arg);
+		}
+
+		// Then flags
+
+		this.originalArgIndices = new ArrayList<Integer>(argIndexList.size());
+		this.parsedArgs = new ArrayList<String>(argList.size());
+
+		for (int nextArg = 0; nextArg < argList.size();) {
+			// Fetch argument
+			String arg = argList.get(nextArg++);
+
+			// Not a flag?
+			if (arg.charAt(0) != '-' || arg.length() == 1 || !arg.matches("^-[a-zA-Z]+$")) {
+				originalArgIndices.add(argIndexList.get(nextArg - 1));
+				parsedArgs.add(arg);
+				continue;
+			}
+
+			// Handle flag parsing terminator --
+			if (arg.equals("--")) {
+				while (nextArg < argList.size()) {
+					originalArgIndices.add(argIndexList.get(nextArg));
+					parsedArgs.add(argList.get(nextArg++));
+				}
+				break;
+			}
+
+			// Go through the flag characters
+			for (int i = 1; i < arg.length(); ++i) {
+				char flagName = arg.charAt(i);
+				if (this.valueFlags.containsKey(flagName)) {
+					continue;
+				}
+
+				if (nextArg >= argList.size()) {
+					this.booleanFlags.add(flagName);
+				}
+
+				// If it is a value flag, read another argument and add it
+				this.valueFlags.put(flagName, argList.get(nextArg++));
+
 			}
 		}
-		this.args = Arrays.asList(args);
-		this.length = args.length;
+		this.length = parsedArgs.size();
 	}
 
 	public String getString(int index) {
 		try {
-			return args.get(index);
+			return parsedArgs.get(index);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;
 		}
@@ -97,11 +155,17 @@ public class CommandArgs implements Iterable<String> {
 	public double getDouble(int index) throws NumberFormatException {
 		return Double.parseDouble(getString(index));
 	}
+
 	public long getLong(int index) throws NumberFormatException {
 		return Long.parseLong(getString(index));
 	}
+
 	public boolean hasFlag(char ch) {
-		return booleanFlags.contains(ch);
+		return booleanFlags.contains(ch) || valueFlags.containsKey(ch);
+	}
+
+	public String getValueFlag(char ch) {
+		return valueFlags.get(ch);
 	}
 
 	/*
@@ -111,7 +175,7 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(args.toArray(new String[] {})) + " Flags : "
+		return Arrays.toString(parsedArgs.toArray(new String[] {})) + " Flags : "
 				+ Arrays.toString(booleanFlags.toArray(new Character[] {}));
 	}
 
@@ -122,6 +186,6 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	@Override
 	public Iterator<String> iterator() {
-		return args.iterator();
+		return parsedArgs.iterator();
 	}
 }
