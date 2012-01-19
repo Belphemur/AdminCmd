@@ -460,10 +460,6 @@ public class ACHelper {
 		convertSpawnWarp();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
-		fManager.getInnerFile("rules.txt");
-		fManager.getInnerFile("news.txt");
-		fManager.getInnerFile("motd.txt");
-		fManager.getInnerFile("motdNewUser.txt");
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(coreInstance
