@@ -56,6 +56,15 @@ public class TempBannedPlayer extends BannedPlayer {
 		this.endBan = endBan;
 	}
 
+	/**
+	 * Get the time left before unBan
+	 * 
+	 * @return
+	 */
+	public long timeLeft() {
+		return endBan.getTime() - System.currentTimeMillis();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

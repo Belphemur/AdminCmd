@@ -47,6 +47,7 @@ import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.UpdateInvisible;
@@ -60,14 +61,31 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
+		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
 		if (player != null) {
-			event.disallow(Result.KICK_BANNED, player.getReason());
+			if (player instanceof TempBannedPlayer) {
+				Long timeLeft = ((TempBannedPlayer) player).timeLeft();
+				if (timeLeft <= 0)
+					ACHelper.getInstance().unBanPlayer(player.getPlayer());
+				else {
+					event.disallow(Result.KICK_BANNED, player.getReason());
+					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+							ACHelper.getInstance().getCoreInstance(), new Runnable() {
+
+								@Override
+								public void run() {
+									ACHelper.getInstance().unBanPlayer(player.getPlayer());
+
+								}
+							}, timeLeft * 1000 * 20);
+				}
+			} else
+				event.disallow(Result.KICK_BANNED, player.getReason());
 			return;
 		}
 		if (ACHelper.getInstance().isServerLocked()
@@ -92,7 +110,7 @@ public class ACPlayerListener extends PlayerListener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 *
+			 * 
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -189,9 +207,9 @@ public class ACPlayerListener extends PlayerListener {
 		if (event.isCancelled())
 			return;
 		Player p = event.getPlayer();
-		if ((event.getReason().toLowerCase().contains("flying") ||
-				event.getReason().toLowerCase().contains("floating")) &&
-				PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
+		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
+				.contains("floating"))
+				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
 			event.setCancelled(true);
 	}
 
@@ -357,7 +375,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	/**
 	 * Tp at see mode
-	 *
+	 * 
 	 * @param p
 	 */
 	private void tpAtSee(ACPlayer player) {
