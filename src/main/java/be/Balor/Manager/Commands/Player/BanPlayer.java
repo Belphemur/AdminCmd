@@ -70,13 +70,16 @@ public class BanPlayer extends CoreCommand {
 			if (args.hasFlag('m'))
 				message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
 						"player", banPlayerString);
-			if (message == null || (message != null && message.isEmpty()))
+			if (message == null || (message != null && message.isEmpty())) {
+				message = "";
 				for (int i = 1; i < args.length - 1; i++)
 					message += args.getString(i) + " ";
+			}
 			try {
 				tmpBan = args.getInt(args.length - 1);
 			} catch (Exception e) {
-				message += args.getString(args.length - 1);
+				if (!args.hasFlag('m'))
+					message += args.getString(args.length - 1);
 			}
 			if (tmpBan != null) {
 				message += "(Banned for " + tmpBan + " minutes)";
