@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
@@ -35,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class TpToWarp extends CoreCommand {
 
@@ -50,7 +51,7 @@ public class TpToWarp extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -60,23 +61,40 @@ public class TpToWarp extends CoreCommand {
 		Player target = Utils.getUser(sender, args, permNode, 1, true);
 		if (Utils.isPlayer(sender)) {
 			Player p = (Player) sender;
+			Location loc = null;
 			if (target != null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("name", args.getString(0));
-				Location loc = null;
-				try {
-					loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
-				} catch (WorldNotLoaded e) {
+				if (args.getString(0).contains(":")) {
+					if (!PermissionManager.hasPerm(sender, "admincmd.warp.tp.all"))
+						return;
+					String[] split = args.getString(0).split(":");
+					String world = split[0];
+					String warp = split[1];
+					replace.put("name", world + ":" + warp);
+					try {
+						loc = ACWorld.getWorld(world).getWarp(warp);
+					} catch (WorldNotLoaded e) {
+						Utils.sI18n(sender, "worldNotFound", "world", world);
+						return;
+					}
+				} else {
+					replace.put("name", args.getString(0));
+
+					try {
+						loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
+					} catch (WorldNotLoaded e) {
+					}
 				}
 				if (loc == null) {
 					Utils.sI18n(sender, "errorWarp", replace);
 					return;
-				}
-				else {
-					ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-							ACHelper.getInstance().getCoreInstance(),
-							new DelayedTeleport(target.getLocation(), loc, target, replace, sender),
-							ACHelper.getInstance().getConfLong("teleportDelay"));
+				} else {
+					ACPluginManager.getScheduler()
+							.scheduleSyncDelayedTask(
+									ACHelper.getInstance().getCoreInstance(),
+									new DelayedTeleport(target.getLocation(), loc, target, replace,
+											sender),
+									ACHelper.getInstance().getConfLong("teleportDelay"));
 				}
 			}
 		}
@@ -85,15 +103,20 @@ public class TpToWarp extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
 		return args != null && args.length >= 1;
 	}
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command.CommandSender)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
+	 * .CommandSender)
 	 */
 	@Override
 	public boolean permissionCheck(CommandSender sender) {
@@ -111,7 +134,7 @@ public class TpToWarp extends CoreCommand {
 		public DelayedTeleport(Location locBefore, Location teleportLoc, Player target,
 				HashMap<String, String> replace, CommandSender sender) {
 			this.target = target;
-			this.locBefore= locBefore;
+			this.locBefore = locBefore;
 			this.teleportToLoc = teleportLoc;
 			this.replace = replace;
 			this.sender = sender;
@@ -119,7 +142,8 @@ public class TpToWarp extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (locBefore.equals(target.getLocation()) && ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+			if (locBefore.equals(target.getLocation())
+					&& ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
