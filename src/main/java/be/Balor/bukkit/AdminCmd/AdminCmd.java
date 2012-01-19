@@ -126,7 +126,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -434,20 +434,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("wFrozen", "Weather is frozen in world :");
 		Utils.addLocale("wUnFrozen", "Weather can change in world :");
 		Utils.addLocale("invTitle", "[INV]");
-		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
-				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
-				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
-				+ ChatColor.AQUA + "%lastlogin");
-		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
-				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
-				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "#elapsedTotalTime#");
-		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
-		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
-		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
 		Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] " + ChatColor.WHITE + "rolled a "
 				+ ChatColor.GOLD + "%face dice : " + ChatColor.YELLOW + "%result");
 		Utils.addLocale("extinguish", ChatColor.AQUA + "%nb blocks" + ChatColor.DARK_AQUA
@@ -515,12 +501,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
 		Utils.addLocale("serverLock", ChatColor.RED + "Server will be lock in 5 seconds,"
 				+ " you'll be kicked if you don't have the Permission to stay.");
-		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
-				+ "3. Be friendly to other players!");
-		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
-		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
-				+ "3. Be friendly to other players!");
-		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("eternalDisabled", ChatColor.DARK_RED + "ETERNAL mode disabled.");
 		Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode disabled for %player");
@@ -600,6 +580,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "s total experience is: " + ChatColor.GOLD + "%exp");
 		Utils.addLocale("kitOnce", ChatColor.RED + "The kit " + ChatColor.GOLD + "%kit"
 				+ ChatColor.RED + " can be only used once.");
+		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
+		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
+		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		LocaleManager.getInstance().save();
 	}
 

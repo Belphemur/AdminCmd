@@ -44,6 +44,10 @@
 					<include>items.csv</include>
 					<include>AdminCmd.yml</include>
 					<include>acmotd.yml</include>
+					<include>rules.txt</include>
+					<include>news.txt</include>
+					<include>motd.txt</include>
+					<include>motdNewUser.txt</include>
 				</includes>
 			</resource>
 			<resource>
@@ -141,25 +145,25 @@
 					<!-- that's the default value -->
 					<dateFormat>dd.MM.yyyy '@' HH:mm:ss</dateFormat>
 
-					<!-- false is default here, it prints some more information during the 
+					<!-- false is default here, it prints some more information during the
 						build -->
 					<verbose>true</verbose>
 
-					<!-- If you'd like to tell the plugin where your .git directory is, 
-						use this setting, otherwise we'll perform a search trying to figure out the 
+					<!-- If you'd like to tell the plugin where your .git directory is,
+						use this setting, otherwise we'll perform a search trying to figure out the
 						right directory. It's better to add it explicite IMHO. -->
 					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
 
 					<!-- ALTERNATE SETUP - GENERATE FILE -->
-					<!-- If you want to keep git information, even in your WAR file etc, 
-						use this mode, which will generate a properties file (with filled out values) 
+					<!-- If you want to keep git information, even in your WAR file etc,
+						use this mode, which will generate a properties file (with filled out values)
 						which you can then normally read using new Properties().load(/**/) -->
 
-					<!-- this is false by default, forces the plugin to generate the git.properties 
+					<!-- this is false by default, forces the plugin to generate the git.properties
 						file -->
 					<generateGitPropertiesFile>false</generateGitPropertiesFile>
 
-					<!-- The path for the to be generated properties file, it's relative 
+					<!-- The path for the to be generated properties file, it's relative
 						to ${project.basedir} -->
 					<generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
 				</configuration>
@@ -169,7 +173,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>

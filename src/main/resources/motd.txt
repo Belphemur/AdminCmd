@@ -1,0 +1,4 @@
+&6Welcome &f%player &6there is currently &4%nb players connected://n
+&6%connected//n
+&2You've played so far: &b#elapsedTotalTime#//n
+&2Your last login was: &b%lastlogin
