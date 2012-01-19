@@ -148,7 +148,7 @@ public class FilePlayer extends ACPlayer {
 		ConfigurationSection homeSection = homes.getConfigurationSection(home);
 		if (homeSection == null) {
 			String found = null;
-			String lowerName = name.toLowerCase();
+			String lowerName = home.toLowerCase();
 			int delta = Integer.MAX_VALUE;
 			for (String homeLookup : homes.getValues(false).keySet()) {
 				if (homeLookup.toLowerCase().startsWith(lowerName)) {
