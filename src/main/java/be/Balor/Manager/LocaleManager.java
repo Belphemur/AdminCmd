@@ -129,6 +129,37 @@ public class LocaleManager {
 	}
 
 	/**
+	 * Get the locale in the particular file, replace the keyword by the given
+	 * strings
+	 * 
+	 * @param key
+	 * @param values
+	 * @return
+	 */
+	public String get(String file, String key, Map<String, String> values) {
+		if (noMsg)
+			return null;
+		String locale = getLocale(file, key);
+		if (locale != null && values != null)
+			locale = recursiveReplaceLocale(locale, values);
+		return locale;
+	}
+
+	/**
+	 * Get the locale in the wanted file.
+	 * 
+	 * @param file
+	 * @param key
+	 * @return
+	 */
+	private String getLocale(String file, String key) {
+		ExtendedConfiguration ex = localesFiles.get(PRIMARY_LOCALE);
+		if (ex == null)
+			return null;
+		return ex.getString(key);
+	}
+
+	/**
 	 * Looking in every locale file for the locale asked, begin by the
 	 * principalLocale;
 	 * 
@@ -192,6 +223,19 @@ public class LocaleManager {
 		if (noMsg)
 			return null;
 		String locale = getLocale(key);
+		if (locale != null && alias != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put(alias, replaceBy);
+			locale = recursiveReplaceLocale(locale, replace);
+		}
+
+		return locale;
+	}
+
+	public String get(String file, String key, String alias, String replaceBy) {
+		if (noMsg)
+			return null;
+		String locale = getLocale(file, key);
 		if (locale != null && alias != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put(alias, replaceBy);
