@@ -138,7 +138,7 @@ public class CommandArgs implements Iterable<String> {
 	public String getString(int index) {
 		try {
 			return parsedArgs.get(index);
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
 
