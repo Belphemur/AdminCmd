@@ -1224,30 +1224,30 @@ public class Utils {
 	 * @return The content of the file
 	 */
 	public static String getTextFile(String fileName) {
-		String result = "";
+		StringBuffer result = new StringBuffer();
 		try {
 			File fileDir = FileManager.getInstance().getInnerFile(fileName);
 			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
 					fileDir), "UTF8"));
 			String temp;
 			while ((temp = in.readLine()) != null) {
-				result = result + temp + " ";
+				result.append(temp + "\n");
 			}
 			in.close();
 		} catch (UnsupportedEncodingException e) {
 			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage());
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
 			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage());
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
 		} catch (Exception e) {
 			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage());
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
 		}
-		if (result.isEmpty())
+		if (result.length() == 0)
 			return null;
 		else
-			return result;
+			return result.toString().trim();
 	}
 
 	public static class SetTime implements Runnable {
