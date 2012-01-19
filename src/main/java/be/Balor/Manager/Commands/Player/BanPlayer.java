@@ -21,6 +21,7 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.BannedPlayer;
@@ -66,8 +67,12 @@ public class BanPlayer extends CoreCommand {
 			banPlayerString = args.getString(0);
 		Integer tmpBan = null;
 		if (args.length >= 2) {
-			for (int i = 1; i < args.length - 1; i++)
-				message += args.getString(i) + " ";
+			if (args.hasFlag('m'))
+				message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
+						"player", banPlayerString);
+			if (message == null || (message != null && message.isEmpty()))
+				for (int i = 1; i < args.length - 1; i++)
+					message += args.getString(i) + " ";
 			try {
 				tmpBan = args.getInt(args.length - 1);
 			} catch (Exception e) {
