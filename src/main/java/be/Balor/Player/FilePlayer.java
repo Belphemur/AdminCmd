@@ -37,6 +37,7 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
+import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.IOSaveTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -147,20 +148,7 @@ public class FilePlayer extends ACPlayer {
 	public Location getHome(String home) {
 		ConfigurationSection homeSection = homes.getConfigurationSection(home);
 		if (homeSection == null) {
-			String found = null;
-			String lowerName = home.toLowerCase();
-			int delta = Integer.MAX_VALUE;
-			for (String homeLookup : homes.getValues(false).keySet()) {
-				if (homeLookup.toLowerCase().startsWith(lowerName)) {
-					int curDelta = homeLookup.length() - lowerName.length();
-					if (curDelta < delta) {
-						found = homeLookup;
-						delta = curDelta;
-					}
-					if (curDelta == 0)
-						break;
-				}
-			}
+			String found = Str.matchString(homes.getKeys(false), home);
 			if (found == null)
 				return null;
 			return getLocation(homes.getConfigurationSection(found));
