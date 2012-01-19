@@ -146,9 +146,25 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Location getHome(String home) {
 		ConfigurationSection homeSection = homes.getConfigurationSection(home);
-		if (homeSection == null)
-			return null;
-		else
+		if (homeSection == null) {
+			String found = null;
+			String lowerName = name.toLowerCase();
+			int delta = Integer.MAX_VALUE;
+			for (String homeLookup : homes.getValues(false).keySet()) {
+				if (homeLookup.toLowerCase().startsWith(lowerName)) {
+					int curDelta = homeLookup.length() - lowerName.length();
+					if (curDelta < delta) {
+						found = homeLookup;
+						delta = curDelta;
+					}
+					if (curDelta == 0)
+						break;
+				}
+			}
+			if (found == null)
+				return null;
+			return getLocation(homes.getConfigurationSection(found));
+		} else
 			return getLocation(homeSection);
 	}
 
