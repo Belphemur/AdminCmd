@@ -1,2 +1,2 @@
-default: &5%player has been kicked.
-griefer: &5%player has been kicked for griefing.
+default: '&5%player has been kicked.'
+griefer: '&5%player has been kicked for griefing.'
