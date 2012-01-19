@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -33,8 +34,6 @@ public class CommandArgs implements Iterable<String> {
 	protected final List<String> parsedArgs;
 	protected final Map<Character, String> valueFlags = new HashMap<Character, String>();
 	protected final Set<Character> booleanFlags = new HashSet<Character>();
-	protected final List<Integer> originalArgIndices;
-	protected final String[] originalArgs;
 	public final int length;
 
 	public CommandArgs(String args) {
@@ -45,10 +44,9 @@ public class CommandArgs implements Iterable<String> {
 		 * 
 		 */
 	public CommandArgs(String[] args) {
-		originalArgs = args;
 		List<Integer> argIndexList = new ArrayList<Integer>(args.length);
 		List<String> argList = new ArrayList<String>(args.length);
-		for (int i = 1; i < args.length; ++i) {
+		for (int i = 0; i < args.length; ++i) {
 			String arg = args[i];
 			if (arg.length() == 0) {
 				continue;
@@ -90,47 +88,33 @@ public class CommandArgs implements Iterable<String> {
 			}
 			argList.add(arg);
 		}
-
 		// Then flags
 
-		this.originalArgIndices = new ArrayList<Integer>(argIndexList.size());
+		List<Integer> originalArgIndices = new ArrayList<Integer>(argIndexList.size());
 		this.parsedArgs = new ArrayList<String>(argList.size());
 
 		for (int nextArg = 0; nextArg < argList.size();) {
 			// Fetch argument
 			String arg = argList.get(nextArg++);
 
-			// Not a flag?
-			if (arg.charAt(0) != '-' || arg.length() == 1 || !arg.matches("^-[a-zA-Z]+$")) {
-				originalArgIndices.add(argIndexList.get(nextArg - 1));
-				parsedArgs.add(arg);
+			if (arg.charAt(0) == '-' && arg.length() > 1 && arg.matches("^-[a-zA-Z]+$")) {
+				for (int i = 1; i < arg.length(); ++i) {
+					char flagName = arg.charAt(i);
+					if (this.valueFlags.containsKey(flagName)) {
+						continue;
+					}
+
+					if (nextArg >= argList.size())
+						this.booleanFlags.add(flagName);
+					else
+						this.valueFlags.put(flagName, argList.get(nextArg));
+
+				}
 				continue;
 			}
+			originalArgIndices.add(argIndexList.get(nextArg - 1));
+			parsedArgs.add(arg);
 
-			// Handle flag parsing terminator --
-			if (arg.equals("--")) {
-				while (nextArg < argList.size()) {
-					originalArgIndices.add(argIndexList.get(nextArg));
-					parsedArgs.add(argList.get(nextArg++));
-				}
-				break;
-			}
-
-			// Go through the flag characters
-			for (int i = 1; i < arg.length(); ++i) {
-				char flagName = arg.charAt(i);
-				if (this.valueFlags.containsKey(flagName)) {
-					continue;
-				}
-
-				if (nextArg >= argList.size()) {
-					this.booleanFlags.add(flagName);
-				}
-
-				// If it is a value flag, read another argument and add it
-				this.valueFlags.put(flagName, argList.get(nextArg++));
-
-			}
 		}
 		this.length = parsedArgs.size();
 	}
@@ -175,8 +159,18 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(parsedArgs.toArray(new String[] {})) + " Flags : "
-				+ Arrays.toString(booleanFlags.toArray(new Character[] {}));
+		return Arrays.toString(parsedArgs.toArray(new String[] {})) + " BoolFlags : "
+				+ Arrays.toString(booleanFlags.toArray(new Character[] {})) + " ValFlags : "
+				+ (valueFlags.isEmpty() ? "[]" : "[" + valueFlagsToString() + "]");
+	}
+
+	private String valueFlagsToString() {
+		StringBuffer buffer = new StringBuffer();
+		for (Entry<Character, String> entry : valueFlags.entrySet()) {
+			buffer.append(entry.getKey()).append("->").append(entry.getValue()).append(", ");
+		}
+		buffer.deleteCharAt(buffer.length() - 1).deleteCharAt(buffer.length() - 1);
+		return buffer.toString();
 	}
 
 	/*
