@@ -370,7 +370,7 @@ public class ACHelper {
 				new File(coreInstance.getDataFolder(), "locales" + File.separator
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().addLocaleFile("kickMessage",
-				fManager.getInnerFile("kickMessage.yml", "locales", false));
+				fManager.getInnerFile("kickMessages.yml", "locales", false));
 		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		HelpLoader.load(coreInstance.getDataFolder());
 		CommandManager.createInstance().setCorePlugin(coreInstance);

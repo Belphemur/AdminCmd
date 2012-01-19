@@ -48,6 +48,7 @@
 					<include>news.txt</include>
 					<include>motd.txt</include>
 					<include>motdNewUser.txt</include>
+					<include>kickMessages.yml</include>
 				</includes>
 			</resource>
 			<resource>
