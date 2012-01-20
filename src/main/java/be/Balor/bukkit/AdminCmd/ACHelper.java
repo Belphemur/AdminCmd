@@ -1108,7 +1108,7 @@ public class ACHelper {
 		}
 		Map<String, BannedPlayer> bans = dataManager.loadBan();
 		for (Entry<String, BannedPlayer> ban : bans.entrySet()) {
-			if (Utils.checkBan(ban.getValue()))
+			if (checkBan(ban.getValue()))
 				bannedPlayers.put(ban.getKey(), ban.getValue());
 		}
 
@@ -1122,6 +1122,35 @@ public class ACHelper {
 			Logger.getLogger("Minecraft").info(
 					"[AdminCmd] " + bannedPlayers.size() + " banned players loaded.");
 		}
+	}
+
+	/**
+	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
+	 * unBan the player or unban him if his time out.
+	 * 
+	 * @param player
+	 * @return true if the ban is valid, false if invalid (expired)
+	 */
+	private boolean checkBan(final BannedPlayer player) {
+		if (player instanceof TempBannedPlayer) {
+			Long timeLeft = ((TempBannedPlayer) player).timeLeft();
+			if (timeLeft <= 0) {
+				unBanPlayer(player.getPlayer());
+				return false;
+			} else {
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACHelper.getInstance().getCoreInstance(), new Runnable() {
+
+							@Override
+							public void run() {
+								unBanPlayer(player.getPlayer());
+
+							}
+						}, timeLeft * Utils.secondInMillis * 20);
+				return true;
+			}
+		} else
+			return true;
 	}
 
 	public int getLimit(Player player, String type) {
