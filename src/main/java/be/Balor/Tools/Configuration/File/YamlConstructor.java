@@ -36,11 +36,49 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 class YamlConstructor extends Constructor {
-	private HashMap<String, Class<?>> classMap = new HashMap<String, Class<?>>();
+	private class ConstructCustomObject extends ConstructYamlMap {
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object construct(Node node) {
+			if (node.isTwoStepsConstruction()) {
+				throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
+			}
 
-	public YamlConstructor(Class<? extends Object> theRoot) {
-		super(theRoot);
+			final Map<Object, Object> raw = (Map<Object, Object>) super.construct(node);
+
+			if (raw.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
+				final Map<String, Object> typed = new LinkedHashMap<String, Object>(raw.size());
+				for (final Map.Entry<Object, Object> entry : raw.entrySet()) {
+					typed.put(entry.getKey().toString(), entry.getValue());
+				}
+
+				try {
+					return ConfigurationSerialization.deserializeObject(typed);
+				} catch (final IllegalArgumentException ex) {
+					throw new YAMLException("Could not deserialize object", ex);
+				}
+			}
+
+			return raw;
+		}
+
+		@Override
+		public void construct2ndStep(Node node, Object object) {
+			throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
+		}
 	}
+
+	private class ConstructTpRequest extends AbstractConstruct {
+		@Override
+		public Object construct(Node node) {
+			final String val = (String) constructScalar((ScalarNode) node);
+			final String[] split = val.split(";");
+			return new TpRequest(ACPluginManager.getServer().getPlayer(split[0]), ACPluginManager
+					.getServer().getPlayer(split[1]));
+		}
+	}
+
+	private final HashMap<String, Class<?>> classMap = new HashMap<String, Class<?>>();
 
 	/**
 	 * 
@@ -49,6 +87,10 @@ class YamlConstructor extends Constructor {
 		super();
 		this.yamlConstructors.put(new Tag("!tpRequest"), new ConstructTpRequest());
 		this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());
+	}
+
+	public YamlConstructor(Class<? extends Object> theRoot) {
+		super(theRoot);
 	}
 
 	public void addClassInfo(Class<? extends Object> c) {
@@ -67,7 +109,7 @@ class YamlConstructor extends Constructor {
 	 */
 	@Override
 	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-		Class<?> cl = classMap.get(name);
+		final Class<?> cl = classMap.get(name);
 		if (cl == null)
 			return super.getClassForName(name);
 		else
@@ -82,47 +124,5 @@ class YamlConstructor extends Constructor {
 	 */
 	public boolean isClassRegistered(Class<? extends Object> c) {
 		return classMap.containsKey(c.getName());
-	}
-
-	private class ConstructTpRequest extends AbstractConstruct {
-		@Override
-		public Object construct(Node node) {
-			String val = (String) constructScalar((ScalarNode) node);
-			String[] split = val.split(";");
-			return new TpRequest(ACPluginManager.getServer().getPlayer(split[0]), ACPluginManager
-					.getServer().getPlayer(split[1]));
-		}
-	}
-
-	private class ConstructCustomObject extends ConstructYamlMap {
-		@SuppressWarnings("unchecked")
-		@Override
-		public Object construct(Node node) {
-			if (node.isTwoStepsConstruction()) {
-				throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
-			}
-
-			Map<Object, Object> raw = (Map<Object, Object>) super.construct(node);
-
-			if (raw.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
-				Map<String, Object> typed = new LinkedHashMap<String, Object>(raw.size());
-				for (Map.Entry<Object, Object> entry : raw.entrySet()) {
-					typed.put(entry.getKey().toString(), entry.getValue());
-				}
-
-				try {
-					return ConfigurationSerialization.deserializeObject(typed);
-				} catch (IllegalArgumentException ex) {
-					throw new YAMLException("Could not deserialize object", ex);
-				}
-			}
-
-			return raw;
-		}
-
-		@Override
-		public void construct2ndStep(Node node, Object object) {
-			throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
-		}
 	}
 }

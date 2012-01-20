@@ -20,29 +20,29 @@ import org.bukkit.configuration.ConfigurationOptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class ExMemoryConfigurationOption extends ConfigurationOptions  {
+public class ExMemoryConfigurationOption extends ConfigurationOptions {
 
-    protected ExMemoryConfigurationOption(ExMemoryConfiguration configuration) {
-        super(configuration);
-    }
+	protected ExMemoryConfigurationOption(ExMemoryConfiguration configuration) {
+		super(configuration);
+	}
 
-    @Override
-    public ExMemoryConfiguration configuration() {
-        return (ExMemoryConfiguration)super.configuration();
-    }
+	@Override
+	public ExMemoryConfiguration configuration() {
+		return (ExMemoryConfiguration) super.configuration();
+	}
 
-    @Override
-    public ExMemoryConfigurationOption copyDefaults(boolean value) {
-        super.copyDefaults(value);
-        return this;
-    }
+	@Override
+	public ExMemoryConfigurationOption copyDefaults(boolean value) {
+		super.copyDefaults(value);
+		return this;
+	}
 
-    @Override
-    public ExMemoryConfigurationOption pathSeparator(char value) {
-        super.pathSeparator(value);
-        return this;
-    }
+	@Override
+	public ExMemoryConfigurationOption pathSeparator(char value) {
+		super.pathSeparator(value);
+		return this;
+	}
 
 }

@@ -75,14 +75,14 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			throw new IllegalArgumentException("File cannot be null");
 		}
 
-		ExtendedConfiguration config = new ExtendedConfiguration();
+		final ExtendedConfiguration config = new ExtendedConfiguration();
 
 		try {
 			config.load(file);
-		} catch (FileNotFoundException ex) {
-		} catch (IOException ex) {
+		} catch (final FileNotFoundException ex) {
+		} catch (final IOException ex) {
 			Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
-		} catch (InvalidConfigurationException ex) {
+		} catch (final InvalidConfigurationException ex) {
 			if (ex.getCause() instanceof YAMLException) {
 				ACLogger.severe("Config file " + file + " isn't valid! " + ex.getCause());
 			} else if ((ex.getCause() == null) || (ex.getCause() instanceof ClassCastException)) {
@@ -104,18 +104,155 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		ymlConstructor.addClassInfo(c);
 	}
 
-	/**
-	 * Saves this {@link ExtendedConfiguration}.
+	@Override
+	protected String buildHeader() {
+		final String header = options().header();
+
+		if (options().copyHeader()) {
+			final Configuration def = getDefaults();
+
+			if ((def != null) && (def instanceof ExFileConfiguration)) {
+				final ExFileConfiguration filedefaults = (ExFileConfiguration) def;
+				final String defaultsHeader = filedefaults.buildHeader();
+
+				if ((defaultsHeader != null) && (defaultsHeader.length() > 0)) {
+					return defaultsHeader;
+				}
+			}
+		}
+
+		if (header == null) {
+			return "";
+		}
+
+		final StringBuilder builder = new StringBuilder();
+		final String[] lines = header.split("\r?\n", -1);
+		boolean startedHeader = false;
+
+		for (int i = lines.length - 1; i >= 0; i--) {
+			builder.insert(0, "\n");
+
+			if ((startedHeader) || (lines[i].length() != 0)) {
+				builder.insert(0, lines[i]);
+				builder.insert(0, COMMENT_PREFIX);
+				startedHeader = true;
+			}
+		}
+
+		return builder.toString();
+	}
+
+	protected void convertMapsToSections(Map<Object, Object> input, ConfigurationSection section) {
+		for (final Map.Entry<Object, Object> entry : input.entrySet()) {
+			final String key = entry.getKey().toString();
+			final Object value = entry.getValue();
+
+			if (value instanceof Map<?, ?>) {
+				convertMapsToSections((Map<Object, Object>) value, section.createSection(key));
+			} else {
+				section.set(key, value);
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @throws IOException
-	 *             Thrown when the given file cannot be written to for any
-	 *             reason.
-	 * @throws IllegalArgumentException
-	 *             Thrown when file is null.
+	 * @see
+	 * org.bukkit.configuration.file.FileConfiguration#loadFromString(java.lang
+	 * .String)
 	 */
-	public void save() throws IOException {
-		save(file);
-		DebugLog.INSTANCE.info("Saving file : " + file);
+	@Override
+	public void loadFromString(String contents) throws InvalidConfigurationException {
+		lock.lock();
+		try {
+
+			if (contents == null) {
+				throw new IllegalArgumentException("Contents cannot be null");
+			}
+
+			Map<Object, Object> input = null;
+			try {
+				input = (Map<Object, Object>) yaml.load(contents);
+			} catch (final ScannerException e) {
+				if (e.getContextMark() == null) {
+					ACLogger.severe("File : " + file
+							+ "\n You have to correct the error manualy in the file.", e);
+					return;
+				}
+				removeLineFromFile(e.getContextMark().getLine());
+				ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
+						+ (e.getContextMark().getLine() + 1) + " DELETED");
+				try {
+					load(file);
+				} catch (final FileNotFoundException e1) {
+				} catch (final IOException e1) {
+				}
+			} catch (final ParserException e) {
+				ACLogger.severe("File : " + file
+						+ "\n You have to correct the error manualy in the file.", e);
+
+			} catch (final Throwable ex) {
+				throw new InvalidConfigurationException(
+						"Specified contents is not a valid Configuration", ex);
+			}
+
+			final int size = (input == null) ? 0 : input.size();
+			final Map<String, Object> result = new LinkedHashMap<String, Object>(size);
+
+			if (size > 0) {
+				for (final Map.Entry<Object, Object> entry : input.entrySet()) {
+					result.put(entry.getKey().toString(), entry.getValue());
+				}
+			}
+
+			final String header = parseHeader(contents);
+			if (header.length() > 0) {
+				options().header(header);
+			}
+
+			if (input != null) {
+				convertMapsToSections(input, this);
+			}
+		} finally {
+			lock.unlock();
+		}
+
+	}
+
+	@Override
+	public ExtendedConfigurationOptions options() {
+		if (options == null) {
+			options = new ExtendedConfigurationOptions(this);
+		}
+
+		return (ExtendedConfigurationOptions) options;
+	}
+
+	protected String parseHeader(String input) {
+		final String[] lines = input.split("\r?\n", -1);
+		final StringBuilder result = new StringBuilder();
+		boolean readingHeader = true;
+
+		for (int i = 0; (i < lines.length) && (readingHeader); i++) {
+			final String line = lines[i];
+
+			if (line.startsWith(COMMENT_PREFIX)) {
+				if (i > 0) {
+					result.append("\n");
+				}
+
+				if (line.length() > COMMENT_PREFIX.length()) {
+					result.append(line.substring(COMMENT_PREFIX.length()));
+				}
+			} else if (line.length() == 0) {
+				result.append("\n");
+			} else {
+				readingHeader = false;
+			}
+		}
+
+		return result.toString();
 	}
 
 	/**
@@ -134,10 +271,10 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		PrintWriter pw = null;
 		try {
 
-			File inFile = file;
+			final File inFile = file;
 			// Construct the new file that will later be renamed to the original
 			// filename.
-			File tempFile = File.createTempFile(file.getName(), null);
+			final File tempFile = File.createTempFile(file.getName(), null);
 			br = new BufferedReader(new UnicodeReader(new FileInputStream(file)));
 			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8"));
 
@@ -168,9 +305,9 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			if (!tempFile.renameTo(inFile))
 				System.out.println("Could not rename file");
 
-		} catch (FileNotFoundException ex) {
+		} catch (final FileNotFoundException ex) {
 			ex.printStackTrace();
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			ex.printStackTrace();
 		} finally {
 			if (pw != null)
@@ -178,9 +315,23 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			try {
 				if (br != null)
 					br.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 		}
+	}
+
+	/**
+	 * Saves this {@link ExtendedConfiguration}.
+	 * 
+	 * @throws IOException
+	 *             Thrown when the given file cannot be written to for any
+	 *             reason.
+	 * @throws IllegalArgumentException
+	 *             Thrown when file is null.
+	 */
+	public void save() throws IOException {
+		save(file);
+		DebugLog.INSTANCE.info("Saving file : " + file);
 	}
 
 	/*
@@ -208,157 +359,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			lock.unlock();
 		}
 		return header + dump;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.bukkit.configuration.file.FileConfiguration#loadFromString(java.lang
-	 * .String)
-	 */
-	@Override
-	public void loadFromString(String contents) throws InvalidConfigurationException {
-		lock.lock();
-		try {
-
-			if (contents == null) {
-				throw new IllegalArgumentException("Contents cannot be null");
-			}
-
-			Map<Object, Object> input = null;
-			try {
-				input = (Map<Object, Object>) yaml.load(contents);
-			} catch (ScannerException e) {
-				if (e.getContextMark() == null) {
-					ACLogger.severe("File : " + file
-							+ "\n You have to correct the error manualy in the file.", e);
-					return;
-				}
-				removeLineFromFile(e.getContextMark().getLine());
-				ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
-						+ (e.getContextMark().getLine() + 1) + " DELETED");
-				try {
-					load(file);
-				} catch (FileNotFoundException e1) {
-				} catch (IOException e1) {
-				}
-			} catch (ParserException e) {
-				ACLogger.severe("File : " + file
-						+ "\n You have to correct the error manualy in the file.", e);
-
-			} catch (Throwable ex) {
-				throw new InvalidConfigurationException(
-						"Specified contents is not a valid Configuration", ex);
-			}
-
-			int size = (input == null) ? 0 : input.size();
-			Map<String, Object> result = new LinkedHashMap<String, Object>(size);
-
-			if (size > 0) {
-				for (Map.Entry<Object, Object> entry : input.entrySet()) {
-					result.put(entry.getKey().toString(), entry.getValue());
-				}
-			}
-
-			String header = parseHeader(contents);
-			if (header.length() > 0) {
-				options().header(header);
-			}
-
-			if (input != null) {
-				convertMapsToSections(input, this);
-			}
-		} finally {
-			lock.unlock();
-		}
-
-	}
-
-	protected void convertMapsToSections(Map<Object, Object> input, ConfigurationSection section) {
-		for (Map.Entry<Object, Object> entry : input.entrySet()) {
-			String key = entry.getKey().toString();
-			Object value = entry.getValue();
-
-			if (value instanceof Map<?, ?>) {
-				convertMapsToSections((Map<Object, Object>) value, section.createSection(key));
-			} else {
-				section.set(key, value);
-			}
-		}
-	}
-
-	protected String parseHeader(String input) {
-		String[] lines = input.split("\r?\n", -1);
-		StringBuilder result = new StringBuilder();
-		boolean readingHeader = true;
-
-		for (int i = 0; (i < lines.length) && (readingHeader); i++) {
-			String line = lines[i];
-
-			if (line.startsWith(COMMENT_PREFIX)) {
-				if (i > 0) {
-					result.append("\n");
-				}
-
-				if (line.length() > COMMENT_PREFIX.length()) {
-					result.append(line.substring(COMMENT_PREFIX.length()));
-				}
-			} else if (line.length() == 0) {
-				result.append("\n");
-			} else {
-				readingHeader = false;
-			}
-		}
-
-		return result.toString();
-	}
-
-	@Override
-	protected String buildHeader() {
-		String header = options().header();
-
-		if (options().copyHeader()) {
-			Configuration def = getDefaults();
-
-			if ((def != null) && (def instanceof ExFileConfiguration)) {
-				ExFileConfiguration filedefaults = (ExFileConfiguration) def;
-				String defaultsHeader = filedefaults.buildHeader();
-
-				if ((defaultsHeader != null) && (defaultsHeader.length() > 0)) {
-					return defaultsHeader;
-				}
-			}
-		}
-
-		if (header == null) {
-			return "";
-		}
-
-		StringBuilder builder = new StringBuilder();
-		String[] lines = header.split("\r?\n", -1);
-		boolean startedHeader = false;
-
-		for (int i = lines.length - 1; i >= 0; i--) {
-			builder.insert(0, "\n");
-
-			if ((startedHeader) || (lines[i].length() != 0)) {
-				builder.insert(0, lines[i]);
-				builder.insert(0, COMMENT_PREFIX);
-				startedHeader = true;
-			}
-		}
-
-		return builder.toString();
-	}
-
-	@Override
-	public ExtendedConfigurationOptions options() {
-		if (options == null) {
-			options = new ExtendedConfigurationOptions(this);
-		}
-
-		return (ExtendedConfigurationOptions) options;
 	}
 
 }

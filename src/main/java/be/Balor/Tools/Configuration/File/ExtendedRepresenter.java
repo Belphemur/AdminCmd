@@ -40,29 +40,11 @@ import be.Balor.Tools.TpRequest;
  */
 class ExtendedRepresenter extends Representer {
 
-	public ExtendedRepresenter() {
-		super();
-		this.nullRepresenter = new EmptyRepresentNull();
-		this.representers.put(TpRequest.class, new RepresentTpRequest());
-		this.multiRepresenters.put(ConfigurationSection.class, new RepresentConfigurationSection());
-		this.multiRepresenters.put(ConfigurationSerializable.class,
-				new RepresentConfigurationSerializable());
-	}
-
 	protected class EmptyRepresentNull implements Represent {
 		@Override
 		public Node representData(Object data) {
 			return representScalar(Tag.NULL, ""); // Changed "null" to "" so as
 													// to avoid writing nulls
-		}
-	}
-
-	private class RepresentTpRequest implements Represent {
-		@Override
-		public Node representData(Object data) {
-			TpRequest tpRequest = (TpRequest) data;
-			String value = tpRequest.getFrom() + ";" + tpRequest.getTo();
-			return representScalar(new Tag("!tpRequest"), value);
 		}
 	}
 
@@ -76,8 +58,8 @@ class ExtendedRepresenter extends Representer {
 	private class RepresentConfigurationSerializable extends RepresentMap {
 		@Override
 		public Node representData(Object data) {
-			ConfigurationSerializable serializable = (ConfigurationSerializable) data;
-			Map<String, Object> values = new LinkedHashMap<String, Object>();
+			final ConfigurationSerializable serializable = (ConfigurationSerializable) data;
+			final Map<String, Object> values = new LinkedHashMap<String, Object>();
 			values.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY,
 					ConfigurationSerialization.getAlias(serializable.getClass()));
 			values.putAll(serializable.serialize());
@@ -86,24 +68,42 @@ class ExtendedRepresenter extends Representer {
 		}
 	}
 
+	private class RepresentTpRequest implements Represent {
+		@Override
+		public Node representData(Object data) {
+			final TpRequest tpRequest = (TpRequest) data;
+			final String value = tpRequest.getFrom() + ";" + tpRequest.getTo();
+			return representScalar(new Tag("!tpRequest"), value);
+		}
+	}
+
+	public ExtendedRepresenter() {
+		super();
+		this.nullRepresenter = new EmptyRepresentNull();
+		this.representers.put(TpRequest.class, new RepresentTpRequest());
+		this.multiRepresenters.put(ConfigurationSection.class, new RepresentConfigurationSection());
+		this.multiRepresenters.put(ConfigurationSerializable.class,
+				new RepresentConfigurationSerializable());
+	}
+
 	// Code borrowed from snakeyaml
 	// (http://code.google.com/p/snakeyaml/source/browse/src/test/java/org/yaml/snakeyaml/issues/issue60/SkipBeanTest.java)
 	@Override
 	protected NodeTuple representJavaBeanProperty(Object javaBean, Property property,
 			Object propertyValue, Tag customTag) {
-		NodeTuple tuple = super.representJavaBeanProperty(javaBean, property, propertyValue,
+		final NodeTuple tuple = super.representJavaBeanProperty(javaBean, property, propertyValue,
 				customTag);
-		Node valueNode = tuple.getValueNode();
+		final Node valueNode = tuple.getValueNode();
 		if (valueNode instanceof CollectionNode) {
 			// Removed null check
 			if (Tag.SEQ.equals(valueNode.getTag())) {
-				SequenceNode seq = (SequenceNode) valueNode;
+				final SequenceNode seq = (SequenceNode) valueNode;
 				if (seq.getValue().isEmpty()) {
 					return null; // skip empty lists
 				}
 			}
 			if (Tag.MAP.equals(valueNode.getTag())) {
-				MappingNode seq = (MappingNode) valueNode;
+				final MappingNode seq = (MappingNode) valueNode;
 				if (seq.getValue().isEmpty()) {
 					return null; // skip empty maps
 				}

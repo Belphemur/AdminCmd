@@ -45,69 +45,51 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	}
 
 	/**
-	 * Saves this {@link ExFileConfiguration} to the specified location.
+	 * Compiles the header for this {@link ExFileConfiguration} and returns the
+	 * result.
 	 * <p>
-	 * If the file does not exist, it will be created. If already exists, it
-	 * will be overwritten. If it cannot be overwritten or created, an exception
-	 * will be thrown.
+	 * This will use the header from {@link #options()} ->
+	 * {@link ExFileConfigurationOptions#header()}, respecting the rules of
+	 * {@link ExFileConfigurationOptions#copyHeader()} if set.
 	 * 
-	 * @param file
-	 *            File to save to.
-	 * @throws IOException
-	 *             Thrown when the given file cannot be written to for any
-	 *             reason.
-	 * @throws IllegalArgumentException
-	 *             Thrown when file is null.
+	 * @return Compiled header
 	 */
-	public void save(File file) throws IOException {
+	protected abstract String buildHeader();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ExFileConfiguration))
+			return false;
+		final ExFileConfiguration other = (ExFileConfiguration) obj;
 		if (file == null) {
-			throw new IllegalArgumentException("File cannot be null");
-		}
-
-		Files.createParentDirs(file);
-		if (!file.exists())
-			file.createNewFile();
-
-		String data = saveToString();
-
-		Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-
-		try {
-			writer.write(data);
-		} finally {
-			writer.close();
-		}
+			if (other.file != null)
+				return false;
+		} else if (!file.equals(other.file))
+			return false;
+		return true;
 	}
 
-	/**
-	 * Saves this {@link ExFileConfiguration} to the specified location.
-	 * <p>
-	 * If the file does not exist, it will be created. If already exists, it
-	 * will be overwritten. If it cannot be overwritten or created, an exception
-	 * will be thrown.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param file
-	 *            File to save to.
-	 * @throws IOException
-	 *             Thrown when the given file cannot be written to for any
-	 *             reason.
-	 * @throws IllegalArgumentException
-	 *             Thrown when file is null.
+	 * @see java.lang.Object#hashCode()
 	 */
-	public void save(String file) throws IOException {
-		if (file == null) {
-			throw new IllegalArgumentException("File cannot be null");
-		}
-
-		save(new File(file));
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		return result;
 	}
-
-	/**
-	 * Saves this {@link ExFileConfiguration} to a string, and returns it.
-	 * 
-	 * @return String containing this configuration.
-	 */
-	public abstract String saveToString();
 
 	/**
 	 * Loads this {@link ExFileConfiguration} from the specified location.
@@ -137,7 +119,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		this.file = file;
 		try {
 			load(new FileInputStream(file));
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			ACLogger.severe("Problem with File : " + this.file);
 			ACLogger.severe(e.getLocalizedMessage(), e);
 		}
@@ -165,9 +147,9 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 			throw new IllegalArgumentException("Stream cannot be null");
 		}
 
-		InputStreamReader reader = new InputStreamReader(stream, "UTF8");
-		StringBuilder builder = new StringBuilder();
-		BufferedReader input = new BufferedReader(reader);
+		final InputStreamReader reader = new InputStreamReader(stream, "UTF8");
+		final StringBuilder builder = new StringBuilder();
+		final BufferedReader input = new BufferedReader(reader);
 
 		try {
 			String line;
@@ -231,18 +213,6 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 */
 	public abstract void loadFromString(String contents) throws InvalidConfigurationException;
 
-	/**
-	 * Compiles the header for this {@link ExFileConfiguration} and returns the
-	 * result.
-	 * <p>
-	 * This will use the header from {@link #options()} ->
-	 * {@link ExFileConfigurationOptions#header()}, respecting the rules of
-	 * {@link ExFileConfigurationOptions#copyHeader()} if set.
-	 * 
-	 * @return Compiled header
-	 */
-	protected abstract String buildHeader();
-
 	@Override
 	public ExFileConfigurationOptions options() {
 		if (options == null) {
@@ -252,38 +222,74 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		return (ExFileConfigurationOptions) options;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * Saves this {@link ExFileConfiguration} to the specified location.
+	 * <p>
+	 * If the file does not exist, it will be created. If already exists, it
+	 * will be overwritten. If it cannot be overwritten or created, an exception
+	 * will be thrown.
+	 * 
+	 * @param file
+	 *            File to save to.
+	 * @throws IOException
+	 *             Thrown when the given file cannot be written to for any
+	 *             reason.
+	 * @throws IllegalArgumentException
+	 *             Thrown when file is null.
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((file == null) ? 0 : file.hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof ExFileConfiguration))
-			return false;
-		ExFileConfiguration other = (ExFileConfiguration) obj;
+	public void save(File file) throws IOException {
 		if (file == null) {
-			if (other.file != null)
-				return false;
-		} else if (!file.equals(other.file))
-			return false;
-		return true;
+			throw new IllegalArgumentException("File cannot be null");
+		}
+
+		Files.createParentDirs(file);
+		if (!file.exists())
+			file.createNewFile();
+
+		final String data = saveToString();
+
+		final Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+
+		try {
+			writer.write(data);
+		} finally {
+			writer.close();
+		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Saves this {@link ExFileConfiguration} to the specified location.
+	 * <p>
+	 * If the file does not exist, it will be created. If already exists, it
+	 * will be overwritten. If it cannot be overwritten or created, an exception
+	 * will be thrown.
+	 * 
+	 * @param file
+	 *            File to save to.
+	 * @throws IOException
+	 *             Thrown when the given file cannot be written to for any
+	 *             reason.
+	 * @throws IllegalArgumentException
+	 *             Thrown when file is null.
+	 */
+	public void save(String file) throws IOException {
+		if (file == null) {
+			throw new IllegalArgumentException("File cannot be null");
+		}
+
+		save(new File(file));
+	}
+
+	/**
+	 * Saves this {@link ExFileConfiguration} to a string, and returns it.
+	 * 
+	 * @return String containing this configuration.
+	 */
+	public abstract String saveToString();
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
