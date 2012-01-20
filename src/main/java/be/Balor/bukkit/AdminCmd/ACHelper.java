@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentMap;
@@ -1106,28 +1107,9 @@ public class ACHelper {
 			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);
 		}
 		Map<String, BannedPlayer> bans = dataManager.loadBan();
-		Date current = new Date(System.currentTimeMillis());
-		for (final String key : bans.keySet()) {
-			BannedPlayer player = bans.get(key);
-			if (player instanceof TempBannedPlayer) {
-				TempBannedPlayer temp = (TempBannedPlayer) player;
-				if (temp.getEndBan().after(current)) {
-					bannedPlayers.put(key, bans.get(key));
-					int tickLeft = (int) ((temp.getEndBan().getTime() - System.currentTimeMillis()) / 1000) * 20;
-					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance,
-							new Runnable() {
-
-								@Override
-								public void run() {
-									unBanPlayer(key);
-								}
-							}, tickLeft);
-
-				} else {
-					dataManager.unBanPlayer(key);
-				}
-			} else
-				bannedPlayers.put(key, bans.get(key));
+		for (Entry<String, BannedPlayer> ban : bans.entrySet()) {
+			if (Utils.checkBan(ban.getValue()))
+				bannedPlayers.put(ban.getKey(), ban.getValue());
 		}
 
 		if (pluginConfig.getBoolean("verboseLog", true)) {

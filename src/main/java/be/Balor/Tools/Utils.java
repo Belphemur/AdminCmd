@@ -54,14 +54,17 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
@@ -1248,6 +1251,35 @@ public class Utils {
 			return null;
 		else
 			return result.toString().trim();
+	}
+
+	/**
+	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
+	 * unBan the player or unban him if his time out.
+	 * 
+	 * @param player
+	 * @return true if the ban is valid, false if invalid (expired)
+	 */
+	public static boolean checkBan(final BannedPlayer player) {
+		if (player instanceof TempBannedPlayer) {
+			Long timeLeft = ((TempBannedPlayer) player).timeLeft();
+			if (timeLeft <= 0) {
+				ACHelper.getInstance().unBanPlayer(player.getPlayer());
+				return false;
+			} else {
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACHelper.getInstance().getCoreInstance(), new Runnable() {
+
+							@Override
+							public void run() {
+								ACHelper.getInstance().unBanPlayer(player.getPlayer());
+
+							}
+						}, timeLeft * Utils.secondInMillis * 20);
+				return true;
+			}
+		} else
+			return true;
 	}
 
 	public static class SetTime implements Runnable {

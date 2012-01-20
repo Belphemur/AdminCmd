@@ -67,24 +67,7 @@ public class ACPlayerListener extends PlayerListener {
 	@Override
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
-		if (player != null) {
-			if (player instanceof TempBannedPlayer) {
-				Long timeLeft = ((TempBannedPlayer) player).timeLeft();
-				if (timeLeft <= 0)
-					ACHelper.getInstance().unBanPlayer(player.getPlayer());
-				else {
-					event.disallow(Result.KICK_BANNED, player.getReason());
-					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-							ACHelper.getInstance().getCoreInstance(), new Runnable() {
-
-								@Override
-								public void run() {
-									ACHelper.getInstance().unBanPlayer(player.getPlayer());
-
-								}
-							}, timeLeft * Utils.secondInMillis * 20);
-				}
-			} else
+		if (player != null) {		
 				event.disallow(Result.KICK_BANNED, player.getReason());
 			return;
 		}
