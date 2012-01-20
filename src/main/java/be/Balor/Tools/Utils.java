@@ -90,10 +90,10 @@ public class Utils {
 	public static Heroes heroes = null;
 	public static MInfoReader mChatApi = null;
 	public static boolean signExtention = false;
-	private final static long secondInMillis = 1000;
-	private final static long minuteInMillis = secondInMillis * 60;
-	private final static long hourInMillis = minuteInMillis * 60;
-	private final static long dayInMillis = hourInMillis * 24;
+	public final static long secondInMillis = 1000;
+	public final static long minuteInMillis = secondInMillis * 60;
+	public final static long hourInMillis = minuteInMillis * 60;
+	public final static long dayInMillis = hourInMillis * 24;
 	public final static int MAX_BLOCKS = 512;
 
 	/**

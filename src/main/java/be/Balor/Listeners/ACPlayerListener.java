@@ -82,7 +82,7 @@ public class ACPlayerListener extends PlayerListener {
 									ACHelper.getInstance().unBanPlayer(player.getPlayer());
 
 								}
-							}, timeLeft * 1000 * 20);
+							}, timeLeft * Utils.secondInMillis * 20);
 				}
 			} else
 				event.disallow(Result.KICK_BANNED, player.getReason());
