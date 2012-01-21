@@ -26,6 +26,16 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public interface ExConfigurationSection extends ConfigurationSection {
 	/**
+	 * Create an entry in the {@link ExConfigurationSection} if it not existing
+	 * else return the existing one.
+	 * 
+	 * @param path
+	 *            Path to create/get the entry at.
+	 * @return false if the path already exists, true if it's not set.
+	 */
+	public boolean add(String path, Object value);
+
+	/**
 	 * Create a {@link ExConfigurationSection} if it not existing else return
 	 * the existing one.
 	 * 
@@ -35,22 +45,26 @@ public interface ExConfigurationSection extends ConfigurationSection {
 	 */
 	public ExConfigurationSection addSection(String path);
 
-	/**
-	 * Create an entry in the {@link ExConfigurationSection} if it not existing
-	 * else return the existing one.
-	 * 
-	 * @param path
-	 *            Path to create/get the entry at.
-	 */
-	public void add(String path, Object value);
+	@Override
+	public ExConfigurationSection createSection(String path);
 
 	/**
-	 * Shortcut to remove an item by setting it null
+	 * Gets a list of booleans. Non-valid entries will not be in the list. There
+	 * will be no null slots. If the list is not defined, the default will be
+	 * returned. 'null' can be passed for the default and an empty list will be
+	 * returned instead. The node must be an actual list and cannot be just a
+	 * boolean,
 	 * 
 	 * @param path
-	 *            Path to remove the entry at.
+	 *            path to node (dot notation)
+	 * @param def
+	 *            default value or null for an empty list as default
+	 * @return list of integers
 	 */
-	public void remove(String path);
+	public List<Boolean> getBooleanList(String path, List<Boolean> def);
+
+	@Override
+	public ExConfigurationSection getConfigurationSection(String path);
 
 	/**
 	 * Gets a list of doubles. Non-valid entries will not be in the list. There
@@ -68,11 +82,11 @@ public interface ExConfigurationSection extends ConfigurationSection {
 	public List<Double> getDoubleList(String path, List<Double> def);
 
 	/**
-	 * Gets a list of booleans. Non-valid entries will not be in the list. There
+	 * Gets a list of integers. Non-valid entries will not be in the list. There
 	 * will be no null slots. If the list is not defined, the default will be
 	 * returned. 'null' can be passed for the default and an empty list will be
-	 * returned instead. The node must be an actual list and cannot be just a
-	 * boolean,
+	 * returned instead. The node must be an actual list and not just an
+	 * integer.
 	 * 
 	 * @param path
 	 *            path to node (dot notation)
@@ -80,7 +94,7 @@ public interface ExConfigurationSection extends ConfigurationSection {
 	 *            default value or null for an empty list as default
 	 * @return list of integers
 	 */
-	public List<Boolean> getBooleanList(String path, List<Boolean> def);
+	public List<Integer> getIntList(String path, List<Integer> def);
 
 	/**
 	 * Gets a list of strings. Non-valid entries will not be in the list. There
@@ -99,24 +113,11 @@ public interface ExConfigurationSection extends ConfigurationSection {
 	public List<String> getStringList(String path, List<String> def);
 
 	/**
-	 * Gets a list of integers. Non-valid entries will not be in the list. There
-	 * will be no null slots. If the list is not defined, the default will be
-	 * returned. 'null' can be passed for the default and an empty list will be
-	 * returned instead. The node must be an actual list and not just an
-	 * integer.
+	 * Shortcut to remove an item by setting it null
 	 * 
 	 * @param path
-	 *            path to node (dot notation)
-	 * @param def
-	 *            default value or null for an empty list as default
-	 * @return list of integers
+	 *            Path to remove the entry at.
 	 */
-	public List<Integer> getIntList(String path, List<Integer> def);
-
-	@Override
-	public ExConfigurationSection createSection(String path);
-
-	@Override
-	public ExConfigurationSection getConfigurationSection(String path);
+	public void remove(String path);
 
 }

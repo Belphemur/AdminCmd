@@ -24,9 +24,11 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
+import be.Balor.World.WorldManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -53,9 +55,15 @@ public class WarpList extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Player p = (Player) sender;
-			
 			String msg = "";
-			Set<String> wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
+			Set<String> wp;
+			if (args.hasFlag('a')) {
+				if (!PermissionManager.hasPerm(sender, "admincmd.warp.tp.all")) {
+					return;
+				}
+				wp = WorldManager.getInstance().getAllWarpList();
+			} else
+				wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
 			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
 			for (String name : wp) {
 				msg += name + ", ";
@@ -81,6 +89,19 @@ public class WarpList extends CoreCommand {
 	@Override
 	public boolean argsCheck(String... args) {
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
+	 * .CommandSender)
+	 */
+	@Override
+	public boolean permissionCheck(CommandSender sender) {
+		plugin.getPermissionLinker().addPermChild("admincmd.warp.tp.all");
+		return super.permissionCheck(sender);
 	}
 
 }

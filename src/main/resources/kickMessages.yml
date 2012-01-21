@@ -1,0 +1,4 @@
+default: '&5%player has been kicked.'
+griefer: '&5%player has been kicked for griefing.'
+ban: '%player is banned.'
+bang: '%player is banned for griefing.'

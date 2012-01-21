@@ -1,5 +1,7 @@
 package be.Balor.bukkit.AdminCmd;
 
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -114,7 +116,7 @@ import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Ping;
+import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -124,10 +126,14 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
+	private ACHelper worker;
+
+	public static final Logger log = Logger.getLogger("Minecraft");
+
 	/**
 	 * @param name
 	 */
@@ -135,42 +141,137 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		super("Core");
 	}
 
-	private ACHelper worker;
-
-	public static final Logger log = Logger.getLogger("Minecraft");
+	@Override
+	public void onDisable() {
+		final PluginDescriptionFile pdfFile = this.getDescription();
+		getServer().getScheduler().cancelTasks(this);
+		FilePlayer.forceSaveList();
+		for (final ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
+			PlayerManager.getInstance().setOffline(p);
+		}
+		ACPluginManager.getInstance().stopChildrenPlugins();
+		CommandManager.getInstance().stopAllExecutorThreads();
+		worker = null;
+		ACHelper.killInstance();
+		InvisibleWorker.killInstance();
+		AFKWorker.killInstance();
+		CommandManager.killInstance();
+		HelpLister.killInstance();
+		DebugLog.stopLogging();
+		System.gc();
+		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
+				+ pdfFile.getVersion() + ")");
+	}
 
 	@Override
-	protected void registerPermParents() {
-		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
-		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
-		permissionLinker.addPermChild("admincmd.player.bypass");
-		permissionLinker.addPermChild("admincmd.item.noblacklist");
-		permissionLinker.addPermChild("admincmd.player.noreset");
-		permissionLinker.addPermChild("admincmd.spec.notprequest");
-		permissionLinker.addPermChild("admincmd.player.noafkkick");
-		permissionLinker.addPermChild("admincmd.admin.home");
-		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
-		permissionLinker.addPermChild("admincmd.item.infinity");
-		for (int i = 0; i < 150; i++) {
-			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
-		}
+	public void onEnable() {
+		ACPluginManager.setServer(getServer());
+		DebugLog.setFile(getDataFolder().getPath());
+		final PluginDescriptionFile pdfFile = this.getDescription();
+		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
+		final PluginManager pm = getServer().getPluginManager();
+		final ACPluginListener pL = new ACPluginListener();
+		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
+				+ pdfFile.getVersion() + ")");
+		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
+		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pL, Priority.Monitor, this);
 
+		worker = ACHelper.getInstance();
+		worker.setCoreInstance(this);
+		super.onEnable();
+		TerminalCommandManager.getInstance().setPerm(this);
+		worker.loadInfos();
+		permissionLinker.registerAllPermParent();
+		final ACPlayerListener playerListener = new ACPlayerListener();
+		final ACEntityListener entityListener = new ACEntityListener();
+		final ACBlockListener blkListener = new ACBlockListener();
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Lowest, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
+
+		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
+		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.High, this);
+		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
+				this);
+		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
+		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
+		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
+		try {
+			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
+		} catch (final Throwable e) {
+			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
+				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
+			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
+		}
+		// Some problem witht the bukkit API and server_command
+		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
+		// Priority.Normal, this);
+		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
+		if (worker.getConfBoolean("ColoredSign"))
+			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
+		try {
+			// create a new metrics object
+			final Metrics metrics = new Metrics();
+
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Banned Players";
+				}
+
+				@Override
+				public int getValue() {
+					return worker.countBannedPlayers();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Kits";
+				}
+
+				@Override
+				public int getValue() {
+					return worker.getNbKit();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Invisible Players";
+				}
+
+				@Override
+				public int getValue() {
+					return InvisibleWorker.getInstance().nbInvisibles();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Afk Players";
+				}
+
+				@Override
+				public int getValue() {
+					return AFKWorker.getInstance().nbAfk();
+				}
+			});
+
+			// 'this' in this context is the Plugin object
+			metrics.beginMeasuringPlugin(this);
+		} catch (final IOException e) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
+		}
 	}
 
 	@Override
@@ -269,6 +370,41 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
+	}
+
+	@Override
+	protected void registerPermParents() {
+		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
+		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
+		permissionLinker.addPermChild("admincmd.player.bypass");
+		permissionLinker.addPermChild("admincmd.item.noblacklist");
+		permissionLinker.addPermChild("admincmd.player.noreset");
+		permissionLinker.addPermChild("admincmd.spec.notprequest");
+		permissionLinker.addPermChild("admincmd.player.noafkkick");
+		permissionLinker.addPermChild("admincmd.admin.home");
+		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
+		permissionLinker.addPermChild("admincmd.item.infinity");
+		permissionLinker.addPermChild("admincmd.player.fly.allowed");
+		for (int i = 0; i < 150; i++) {
+			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
+			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
+		}
+
 	}
 
 	@Override
@@ -431,20 +567,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("wFrozen", "Weather is frozen in world :");
 		Utils.addLocale("wUnFrozen", "Weather can change in world :");
 		Utils.addLocale("invTitle", "[INV]");
-		Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
-				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
-				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
-				+ ChatColor.AQUA + "%lastlogin");
-		Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
-				+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
-				+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
-				+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
-				+ "#elapsedTotalTime#");
-		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
-		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
-		Utils.addLocale("NEWS", ChatColor.DARK_GREEN + "News : AdminCmd Plugin has been installed");
 		Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] " + ChatColor.WHITE + "rolled a "
 				+ ChatColor.GOLD + "%face dice : " + ChatColor.YELLOW + "%result");
 		Utils.addLocale("extinguish", ChatColor.AQUA + "%nb blocks" + ChatColor.DARK_AQUA
@@ -512,12 +634,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("serverUnlock", ChatColor.GREEN + "Server is now UnLocked.");
 		Utils.addLocale("serverLock", ChatColor.RED + "Server will be lock in 5 seconds,"
 				+ " you'll be kicked if you don't have the Permission to stay.");
-		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
-				+ "3. Be friendly to other players!");
-		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
-		Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
-				+ "3. Be friendly to other players!");
-		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("eternalDisabled", ChatColor.DARK_RED + "ETERNAL mode disabled.");
 		Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED
 				+ "ETERNAL mode disabled for %player");
@@ -551,13 +667,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("spawnerNaN", ChatColor.RED + "Your input is not a number!");
 		Utils.addLocale("addSpawnWarp", ChatColor.GREEN + "Spawnpoint for the group "
 				+ ChatColor.DARK_AQUA + " %name" + ChatColor.GREEN + " added.");
-		Utils.addLocale("tpTO", "to you.");
-		Utils.addLocale("tpHERE", "to them.");
-		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
-		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
-		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
-		Utils.addLocale("noPlayerToReply", ChatColor.RED + "You can't reply to a message if noone did send you a private message.");
-		Utils.addLocale("tpHERE", "to them.");
+		Utils.addLocale("tpTO", "to them.");
+		Utils.addLocale("tpHERE", "to you.");
 		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
 		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
 		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
@@ -602,86 +713,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "s total experience is: " + ChatColor.GOLD + "%exp");
 		Utils.addLocale("kitOnce", ChatColor.RED + "The kit " + ChatColor.GOLD + "%kit"
 				+ ChatColor.RED + " can be only used once.");
+		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
+		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
+		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		LocaleManager.getInstance().save();
-	}
-
-	@Override
-	public void onEnable() {
-		ACPluginManager.setServer(getServer());
-		DebugLog.setFile(getDataFolder().getPath());
-		PluginDescriptionFile pdfFile = this.getDescription();
-		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
-		PluginManager pm = getServer().getPluginManager();
-		ACPluginListener pL = new ACPluginListener();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
-				+ pdfFile.getVersion() + ")");
-		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
-		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pL, Priority.Monitor, this);
-
-		worker = ACHelper.getInstance();
-		worker.setCoreInstance(this);
-		super.onEnable();
-		TerminalCommandManager.getInstance().setPerm(this);
-		worker.loadInfos();
-		permissionLinker.registerAllPermParent();
-		ACPlayerListener playerListener = new ACPlayerListener();
-		ACEntityListener entityListener = new ACEntityListener();
-		ACBlockListener blkListener = new ACBlockListener();
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
-
-		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
-				this);
-		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-		try {
-			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
-		} catch (Throwable e) {
-			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
-				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
-			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
-		}
-		// Some problem witht the bukkit API and server_command
-		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
-		// Priority.Normal, this);
-		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
-		if (worker.getConfBoolean("ColoredSign"))
-			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
-		// get Plugin Stat on http://pluginstats.randomappdev.com/index.aspx
-		Ping.init(this);
-	}
-
-	@Override
-	public void onDisable() {
-		PluginDescriptionFile pdfFile = this.getDescription();
-		getServer().getScheduler().cancelTasks(this);
-		FilePlayer.forceSaveList();
-		for (ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
-			PlayerManager.getInstance().setOffline(p);
-		}
-		ACPluginManager.getInstance().stopChildrenPlugins();
-		CommandManager.getInstance().stopAllExecutorThreads();
-		worker = null;
-		ACHelper.killInstance();
-		InvisibleWorker.killInstance();
-		AFKWorker.killInstance();
-		CommandManager.killInstance();
-		HelpLister.killInstance();
-		DebugLog.stopLogging();
-		System.gc();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
-				+ pdfFile.getVersion() + ")");
 	}
 }

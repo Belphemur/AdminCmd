@@ -21,13 +21,15 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class KickPlayer extends CoreCommand {
 
@@ -41,7 +43,7 @@ public class KickPlayer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -51,20 +53,32 @@ public class KickPlayer extends CoreCommand {
 		Player toKick = sender.getServer().getPlayer(args.getString(0));
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
-		if (args.length >= 2)
+		if (args.hasFlag('m')) {
+			message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
+					"player", toKick.getName());
+		} else if (args.length >= 2)
 			for (int i = 1; i < args.length; i++)
 				message += args.getString(i) + " ";
-		else {
+		if (message == null || (message != null && message.isEmpty())) {
 			message = "You have been kick by ";
 			if (!Utils.isPlayer(sender, false))
 				message += "Server Admin";
 			else
 				message += Utils.getPlayerName((Player) sender);
 		}
-		message = message.trim();
+
 		if (toKick != null) {
+			final String finalmsg = message.trim();
+			final Player finalToKick = toKick;
 			replace.put("player", Utils.getPlayerName(toKick));
-			toKick.kickPlayer(message);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					finalToKick.kickPlayer(finalmsg);
+
+				}
+			});
 		} else
 			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 
@@ -72,7 +86,7 @@ public class KickPlayer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

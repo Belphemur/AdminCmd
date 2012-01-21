@@ -27,7 +27,7 @@ import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
@@ -35,7 +35,7 @@ import be.Balor.Tools.Utils;
  * @authors Balor, Lathanael
  * 
  */
-public class PermissionsEx extends AbstractPermission {
+public class PermissionsEx implements IPermissionPlugin {
 	private PermissionManager PEX;
 
 	/**
@@ -159,6 +159,26 @@ public class PermissionsEx extends AbstractPermission {
 			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty())
 				break;
 		return prefix;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
+	 * .Player)
+	 */
+	@Override
+	public String getSuffix(Player player) {
+		PermissionUser user = PEX.getUser(player);
+		if (user != null)
+			return user.getSuffix() == null ? "" : user.getSuffix();
+
+		String suffix = "";
+		for (PermissionGroup group : PEX.getUser(player).getGroups())
+			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty())
+				break;
+		return suffix;
 	}
 
 }

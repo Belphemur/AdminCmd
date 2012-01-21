@@ -35,18 +35,28 @@ import com.google.common.collect.MapMaker;
  */
 public class ACPluginManager {
 	private final static ACPluginManager instance = new ACPluginManager();
-	private ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker()
+	private final ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker()
 			.makeMap();
 	private static Server server = null;
-
-	private ACPluginManager() {
-	}
 
 	/**
 	 * @return the instance
 	 */
 	protected static ACPluginManager getInstance() {
 		return instance;
+	}
+
+	public static AbstractAdminCmdPlugin getPluginInstance(String name) {
+		return getInstance().getPlugin(name);
+	}
+
+	/**
+	 * Get Bukkit Scheduler
+	 * 
+	 * @return
+	 */
+	public static BukkitScheduler getScheduler() {
+		return server.getScheduler();
 	}
 
 	/**
@@ -56,12 +66,45 @@ public class ACPluginManager {
 		return server;
 	}
 
+	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
+			throws IllegalArgumentException {
+		getInstance().registerPlugin(addon);
+	}
+
+	/**
+	 * Register a Plugin Command
+	 * 
+	 * @param clazz
+	 */
+	public static void registerCommand(Class<? extends CoreCommand> clazz)
+			throws IllegalArgumentException {
+		CommandManager.getInstance().registerCommand(clazz);
+	}
+
+	/**
+	 * Schedule a SyncTask
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public static int scheduleSyncTask(Runnable task) {
+		return server.getScheduler().scheduleSyncDelayedTask(instance.getPlugin("Core"), task);
+	}
+
 	/**
 	 * @param server
 	 *            the server to set
 	 */
 	public static void setServer(Server server) {
 		ACPluginManager.server = server;
+	}
+
+	public static void unRegisterACPlugin(Plugin addon) {
+		if (addon instanceof AbstractAdminCmdPlugin)
+			getInstance().unRegisterPlugin((AbstractAdminCmdPlugin) addon);
+	}
+
+	private ACPluginManager() {
 	}
 
 	/**
@@ -75,27 +118,23 @@ public class ACPluginManager {
 		return pluginInstances.get(name);
 	}
 
-	public static AbstractAdminCmdPlugin getPluginInstance(String name) {
-		return getInstance().getPlugin(name);
-	}
-
 	/**
 	 * Register a AdminCmd addon
 	 * 
 	 * @param addon
 	 */
-	protected void registerPlugin(AbstractAdminCmdPlugin addon)
-			throws IllegalArgumentException {
+	protected void registerPlugin(AbstractAdminCmdPlugin addon) throws IllegalArgumentException {
 		if (!pluginInstances.containsKey(addon.getName()))
 			pluginInstances.put(addon.getName(), addon);
 		else
-			throw new IllegalArgumentException("Plugin " + addon.getName()
-					+ " Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getName() + " Already registered.");
 	}
 
-	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
-			throws IllegalArgumentException {
-		getInstance().registerPlugin(addon);
+	void stopChildrenPlugins() {
+		ACLogger.info("Disabling all AdminCmd's plugins");
+		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet())
+			if (plugin.getValue().isEnabled())
+				server.getPluginManager().disablePlugin(plugin.getValue());
 	}
 
 	/**
@@ -105,49 +144,6 @@ public class ACPluginManager {
 	 */
 	protected void unRegisterPlugin(AbstractAdminCmdPlugin addon) {
 		pluginInstances.remove(addon.getName());
-	}
-
-	public static void unRegisterACPlugin(Plugin addon) {
-		if (addon instanceof AbstractAdminCmdPlugin)
-			getInstance().unRegisterPlugin((AbstractAdminCmdPlugin) addon);
-	}
-
-	/**
-	 * Get Bukkit Scheduler
-	 * 
-	 * @return
-	 */
-	public static BukkitScheduler getScheduler() {
-		return server.getScheduler();
-	}
-
-	/**
-	 * Schedule a SyncTask
-	 * 
-	 * @param task
-	 * @return
-	 */
-	public static int scheduleSyncTask(Runnable task) {
-		return server.getScheduler().scheduleSyncDelayedTask(
-				instance.getPlugin("Core"), task);
-	}
-
-	/**
-	 * Register a Plugin Command
-	 * 
-	 * @param clazz
-	 */
-	public static void registerCommand(Class<? extends CoreCommand> clazz)
-			throws IllegalArgumentException {
-		CommandManager.getInstance().registerCommand(clazz);
-	}
-
-	void stopChildrenPlugins() {
-		ACLogger.info("Disabling all AdminCmd's plugins");
-		for (Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances
-				.entrySet())
-			if (plugin.getValue().isEnabled())
-				server.getPluginManager().disablePlugin(plugin.getValue());
 	}
 
 }

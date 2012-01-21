@@ -28,7 +28,7 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public abstract class AbstractPermission {
+public interface IPermissionPlugin {
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
@@ -49,4 +49,6 @@ public abstract class AbstractPermission {
 	public abstract String getPermissionLimit(Player p, String limit);
 
 	public abstract String getPrefix(Player player);
+	
+	public abstract String getSuffix(Player player);
 }

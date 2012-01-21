@@ -45,27 +45,27 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		hashCode = result;
 	}
 
-	/**
-	 * @return the permissionLinker
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public PermissionLinker getPermissionLinker() {
-		return permissionLinker;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof AbstractAdminCmdPlugin))
+			return false;
+		final AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
-
-	/**
-	 * Definition of the Permissions used by the plugin
-	 */
-	protected abstract void registerPermParents();
-
-	/**
-	 * Definitions of the command used by the plugin
-	 */
-	public abstract void registerCmds();
-
-	/**
-	 * Definitions of the locale used by the plugin
-	 */
-	protected abstract void setDefaultLocale();
 
 	/**
 	 * @return the name
@@ -75,12 +75,29 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	}
 
 	/**
+	 * @return the permissionLinker
+	 */
+	public PermissionLinker getPermissionLinker() {
+		return permissionLinker;
+	}
+
+	/**
 	 * Return the name of the plugin in the plugin.yml
 	 * 
 	 * @return the bukkit name of the plugin
 	 */
 	public String getPluginName() {
 		return getDescription().getName();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return hashCode;
 	}
 
 	/*
@@ -98,36 +115,19 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		setDefaultLocale();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * Definitions of the command used by the plugin
 	 */
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
+	public abstract void registerCmds();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * Definition of the Permissions used by the plugin
 	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof AbstractAdminCmdPlugin))
-			return false;
-		AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
+	protected abstract void registerPermParents();
+
+	/**
+	 * Definitions of the locale used by the plugin
+	 */
+	protected abstract void setDefaultLocale();
 
 }

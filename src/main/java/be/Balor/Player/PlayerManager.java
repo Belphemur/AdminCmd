@@ -174,10 +174,12 @@ public class PlayerManager {
 		return onlinePlayers.remove(player) != null;
 	}
 
-	public void setOnline(Player player) {
+	public ACPlayer setOnline(Player player) {
 		playerFactory.addExistingPlayer(player.getName());
-		onlinePlayers.put(demandACPlayer(player), true);
+		ACPlayer acPlayer = demandACPlayer(player);
+		onlinePlayers.put(acPlayer, true);
 		DebugLog.INSTANCE.info(player.getName() + " is put online.");
+		return acPlayer;
 	}
 
 	ACPlayer demandACPlayer(String name) {
@@ -190,10 +192,11 @@ public class PlayerManager {
 			result = getPlayer(name);
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(name);
-			if (tmp.equals(result))
-				return result;
-			result = tmp;
+			if (tmp instanceof EmptyPlayer)
+				return result;			
 			players.remove(name);
+			onlinePlayers.remove(result);
+			result = tmp;
 			addPlayer(result);
 			result = getPlayer(name);
 		}
@@ -210,11 +213,12 @@ public class PlayerManager {
 			addPlayer(result);
 			result = getPlayer(playerName);
 		} else if (result instanceof EmptyPlayer) {
-			ACPlayer tmp = playerFactory.createPlayer(player);
-			if (tmp.equals(result))
-				return result;
-			result = tmp;
+			ACPlayer tmp = playerFactory.createPlayer(playerName);
+			if (tmp instanceof EmptyPlayer)
+				return result;			
 			players.remove(playerName);
+			onlinePlayers.remove(result);
+			result = tmp;
 			addPlayer(result);
 			result = getPlayer(playerName);
 		}

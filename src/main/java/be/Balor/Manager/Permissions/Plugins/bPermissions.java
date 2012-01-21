@@ -120,5 +120,15 @@ public class bPermissions extends SuperPermissions {
 			prefix = infoReader.getPrefix(player);
 		return prefix;
 	}
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Permissions.Plugins.SuperPermissions#getSuffix(org.bukkit.entity.Player)
+	 */
+	@Override
+	public String getSuffix(Player player) {
+		String suffix = super.getSuffix(player);
+		if (suffix == null || suffix.isEmpty())
+			suffix = infoReader.getSuffix(player);
+		return suffix;
+	}
 
 }

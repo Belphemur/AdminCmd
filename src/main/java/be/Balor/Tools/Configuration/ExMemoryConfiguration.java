@@ -27,83 +27,86 @@ import org.bukkit.configuration.MemoryConfiguration;
  *
  */
 public class ExMemoryConfiguration extends ExMemorySection implements Configuration {
-    protected Configuration defaults;
-    protected ExMemoryConfigurationOption options;
+	protected Configuration defaults;
+	protected ExMemoryConfigurationOption options;
 
-    /**
-     * Creates an empty {@link MemoryConfiguration} with no default values.
-     */
-    public ExMemoryConfiguration() {}
+	/**
+	 * Creates an empty {@link MemoryConfiguration} with no default values.
+	 */
+	public ExMemoryConfiguration() {
+	}
 
-    /**
-     * Creates an empty {@link MemoryConfiguration} using the specified {@link Configuration}
-     * as a source for all default values.
-     *
-     * @param defaults Default value provider
-     * @throws IllegalArgumentException Thrown if defaults is null
-     */
-    public ExMemoryConfiguration(Configuration defaults) {
-        this.defaults = defaults;
-    }
+	/**
+	 * Creates an empty {@link MemoryConfiguration} using the specified
+	 * {@link Configuration} as a source for all default values.
+	 *
+	 * @param defaults
+	 *            Default value provider
+	 * @throws IllegalArgumentException
+	 *             Thrown if defaults is null
+	 */
+	public ExMemoryConfiguration(Configuration defaults) {
+		this.defaults = defaults;
+	}
 
-    @Override
-    public void addDefault(String path, Object value) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path may not be null");
-        }
+	@Override
+	public void addDefault(String path, Object value) {
+		if (path == null) {
+			throw new IllegalArgumentException("Path may not be null");
+		}
 
-        if (defaults == null) {
-            defaults = new MemoryConfiguration();
-        }
+		if (defaults == null) {
+			defaults = new MemoryConfiguration();
+		}
 
-        defaults.set(path, value);
-    }
+		defaults.set(path, value);
+	}
 
-    @Override
-	public void addDefaults(Map<String, Object> defaults) {
-        if (defaults == null) {
-            throw new IllegalArgumentException("Defaults may not be null");
-        }
-
-        for (Map.Entry<String, Object> entry : defaults.entrySet()) {
-            addDefault(entry.getKey(), entry.getValue());
-        }
-    }
-
-    @Override
+	@Override
 	public void addDefaults(Configuration defaults) {
-        if (defaults == null) {
-            throw new IllegalArgumentException("Defaults may not be null");
-        }
+		if (defaults == null) {
+			throw new IllegalArgumentException("Defaults may not be null");
+		}
 
-        addDefaults(defaults.getValues(true));
-    }
+		addDefaults(defaults.getValues(true));
+	}
 
-    @Override
-	public void setDefaults(Configuration defaults) {
-        if (defaults == null) {
-            throw new IllegalArgumentException("Defaults may not be null");
-        }
+	@Override
+	public void addDefaults(Map<String, Object> defaults) {
+		if (defaults == null) {
+			throw new IllegalArgumentException("Defaults may not be null");
+		}
 
-        this.defaults = defaults;
-    }
+		for (final Map.Entry<String, Object> entry : defaults.entrySet()) {
+			addDefault(entry.getKey(), entry.getValue());
+		}
+	}
 
-    @Override
+	@Override
 	public Configuration getDefaults() {
-        return defaults;
-    }
+		return defaults;
+	}
 
-    @Override
-    public ConfigurationSection getParent() {
-        return null;
-    }
+	@Override
+	public ConfigurationSection getParent() {
+		return null;
+	}
 
-    @Override
+	@Override
 	public ExMemoryConfigurationOption options() {
-        if (options == null) {
-            options = new ExMemoryConfigurationOption(this);
-        }
+		if (options == null) {
+			options = new ExMemoryConfigurationOption(this);
+		}
 
-        return options;
-    }
+		return options;
+	}
+
+	@Override
+	public void setDefaults(Configuration defaults) {
+		if (defaults == null) {
+			throw new IllegalArgumentException("Defaults may not be null");
+		}
+
+		this.defaults = defaults;
+	}
 }

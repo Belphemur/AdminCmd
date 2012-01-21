@@ -21,6 +21,7 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.BannedPlayer;
@@ -31,7 +32,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BanPlayer extends CoreCommand {
 
@@ -45,7 +46,7 @@ public class BanPlayer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -66,12 +67,19 @@ public class BanPlayer extends CoreCommand {
 			banPlayerString = args.getString(0);
 		Integer tmpBan = null;
 		if (args.length >= 2) {
-			for (int i = 1; i < args.length - 1; i++)
-				message += args.getString(i) + " ";
+			if (args.hasFlag('m'))
+				message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
+						"player", banPlayerString);
+			if (message == null || (message != null && message.isEmpty())) {
+				message = "";
+				for (int i = 1; i < args.length - 1; i++)
+					message += args.getString(i) + " ";
+			}
 			try {
 				tmpBan = args.getInt(args.length - 1);
 			} catch (Exception e) {
-				message += args.getString(args.length - 1);
+				if (!args.hasFlag('m'))
+					message += args.getString(args.length - 1);
 			}
 			if (tmpBan != null) {
 				message += "(Banned for " + tmpBan + " minutes)";
@@ -97,8 +105,17 @@ public class BanPlayer extends CoreCommand {
 		}
 		message = message.trim();
 		replace.put("player", banPlayerString);
-		if (toBan != null)
-			toBan.kickPlayer(message);
+		if (toBan != null) {
+			final String finalmsg = message;
+			final Player finalToKick = toBan;
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					finalToKick.kickPlayer(finalmsg);
+				}
+			});
+		}
 		if (tmpBan != null)
 			ACHelper.getInstance().addBannedPlayer(
 					new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
@@ -110,7 +127,7 @@ public class BanPlayer extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

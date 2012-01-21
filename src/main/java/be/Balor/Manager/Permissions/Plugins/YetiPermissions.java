@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.AbstractPermission;
+import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Tools.Utils;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -32,7 +32,7 @@ import com.nijiko.permissions.PermissionHandler;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class YetiPermissions extends AbstractPermission {
+public class YetiPermissions implements IPermissionPlugin {
 	protected PermissionHandler permission = null;
 	/*
 	 * (non-Javadoc)
@@ -156,6 +156,28 @@ public class YetiPermissions extends AbstractPermission {
 		} catch (NoSuchMethodError e) {
 			String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupPrefix(world, group);
+		}
+		return prefixstring;
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity.Player)
+	 */
+	@Override
+	@SuppressWarnings("deprecation")
+	public String getSuffix(Player player) {
+		String world = player.getWorld().getName();
+		String pName = player.getName();
+		String prefixstring= null;
+		try {
+			prefixstring = permission.safeGetUser(world, pName)
+					.getSuffix();
+		} catch (Exception e) {
+			String group = permission.getGroup(world, pName);
+			prefixstring = permission.getGroupSuffix(world, group);
+		} catch (NoSuchMethodError e) {
+			String group = permission.getGroup(world, pName);
+			prefixstring = permission.getGroupSuffix(world, group);
 		}
 		return prefixstring;
 	}

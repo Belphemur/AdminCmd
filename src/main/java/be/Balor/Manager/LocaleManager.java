@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +39,8 @@ import be.Balor.Tools.Debug.ACLogger;
  */
 public class LocaleManager {
 	private static LocaleManager instance = new LocaleManager();
-	private ExtendedConfiguration localeFile;
+	private final Map<String, ExtendedConfiguration> localesFiles = new HashMap<String, ExtendedConfiguration>();
+	public static final String PRIMARY_LOCALE = "primary";
 	private boolean noMsg = false;
 	private final Pattern recursiveLocale = Pattern.compile("#([\\w]+)#");
 	private final Pattern replaceLocale = Pattern.compile("%([\\w]+)");
@@ -59,12 +62,14 @@ public class LocaleManager {
 	}
 
 	/**
-	 * Set the locale file.
+	 * add a locale file.
 	 * 
+	 * @param name
+	 *            of the file
 	 * @param fileName
 	 */
-	public void setLocaleFile(File file) {
-		localeFile = ExtendedConfiguration.loadConfiguration(file);
+	public void addLocaleFile(String name, File file) {
+		localesFiles.put(name, ExtendedConfiguration.loadConfiguration(file));
 	}
 
 	/**
@@ -72,7 +77,8 @@ public class LocaleManager {
 	 */
 	public void save() {
 		try {
-			localeFile.save();
+			for (ExtendedConfiguration conf : localesFiles.values())
+				conf.save();
 		} catch (Exception e) {
 			ACLogger.severe("Problem while saving locale file", e);
 		}
@@ -91,9 +97,9 @@ public class LocaleManager {
 
 	public void addLocale(String key, String value, boolean override) {
 		if (override)
-			localeFile.set(key, value);
+			localesFiles.get(PRIMARY_LOCALE).set(key, value);
 		else
-			localeFile.add(key, value);
+			localesFiles.get(PRIMARY_LOCALE).add(key, value);
 	}
 
 	/**
@@ -116,10 +122,63 @@ public class LocaleManager {
 	public String get(String key, Map<String, String> values) {
 		if (noMsg)
 			return null;
-		String locale = localeFile.getString(key);
+		String locale = getLocale(key);
 		if (locale != null && values != null)
 			locale = recursiveReplaceLocale(locale, values);
 		return locale;
+	}
+
+	/**
+	 * Get the locale in the particular file, replace the keyword by the given
+	 * strings
+	 * 
+	 * @param key
+	 * @param values
+	 * @return
+	 */
+	public String get(String file, String key, Map<String, String> values) {
+		if (noMsg)
+			return null;
+		String locale = getLocale(file, key);
+		if (locale != null && values != null)
+			locale = recursiveReplaceLocale(locale, values);
+		return locale;
+	}
+
+	/**
+	 * Get the locale in the wanted file.
+	 * 
+	 * @param file
+	 * @param key
+	 * @return
+	 */
+	private String getLocale(String file, String key) {
+		ExtendedConfiguration ex = localesFiles.get(file);
+		if (ex == null)
+			return null;
+		return ex.getString(key);
+	}
+
+	/**
+	 * Looking in every locale file for the locale asked, begin by the
+	 * principalLocale;
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private String getLocale(String key) {
+		String result = localesFiles.get(PRIMARY_LOCALE).getString(key);
+		if (result == null || (result != null && result.isEmpty()))
+			for (Entry<String, ExtendedConfiguration> e : localesFiles.entrySet()) {
+				if (e.getKey().equals(PRIMARY_LOCALE))
+					continue;
+				result = e.getValue().getString(key);
+				if (result != null && !result.isEmpty())
+					break;
+
+			}
+		return result;
+
 	}
 
 	private String recursiveReplaceLocale(String locale, Map<String, String> values) {
@@ -129,7 +188,7 @@ public class LocaleManager {
 			Matcher regexMatcher = recursiveLocale.matcher(locale);
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group(1);
-				String recLocale = localeFile.getString(ResultString);
+				String recLocale = getLocale(ResultString);
 				if (recLocale != null)
 					result = regexMatcher.replaceFirst(recLocale);
 				else
@@ -163,7 +222,20 @@ public class LocaleManager {
 	public String get(String key, String alias, String replaceBy) {
 		if (noMsg)
 			return null;
-		String locale = localeFile.getString(key);
+		String locale = getLocale(key);
+		if (locale != null && alias != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put(alias, replaceBy);
+			locale = recursiveReplaceLocale(locale, replace);
+		}
+
+		return locale;
+	}
+
+	public String get(String file, String key, String alias, String replaceBy) {
+		if (noMsg)
+			return null;
+		String locale = getLocale(file, key);
 		if (locale != null && alias != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put(alias, replaceBy);
@@ -179,7 +251,10 @@ public class LocaleManager {
 	 * @return
 	 */
 	public Set<String> getKeys() {
-		return localeFile.getKeys(false);
+		Set<String> locales = new HashSet<String>();
+		for (ExtendedConfiguration exConf : localesFiles.values())
+			locales.addAll(exConf.getKeys(false));
+		return locales;
 	}
 
 	/**
@@ -187,7 +262,8 @@ public class LocaleManager {
 	 */
 	public void reload() {
 		try {
-			localeFile.reload();
+			for (ExtendedConfiguration exConf : localesFiles.values())
+				exConf.reload();
 		} catch (FileNotFoundException e) {
 			ACLogger.severe("Locale Reload Problem :", e);
 		} catch (IOException e) {

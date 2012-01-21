@@ -45,8 +45,12 @@ public class ACCommandContainer {
 	 * Parse the arguments, flags, etc ... by creating the CommandArgs
 	 */
 	public void processArguments() {
-		if (args == null) 
-			args = new CommandArgs(argsStrings);		
+		if (args == null)
+			try {
+				args = new CommandArgs(argsStrings);
+			} catch (Exception e) {
+				ACLogger.severe("Problem in parsing the commandString", e);
+			}
 	}
 
 	/**
