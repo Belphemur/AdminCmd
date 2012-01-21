@@ -221,6 +221,52 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		try {
 			// create a new metrics object
 			final Metrics metrics = new Metrics();
+
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Banned Players";
+				}
+
+				@Override
+				public int getValue() {
+					return worker.countBannedPlayers();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Kits";
+				}
+
+				@Override
+				public int getValue() {
+					return worker.getNbKit();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Invisible Players";
+				}
+
+				@Override
+				public int getValue() {
+					return InvisibleWorker.getInstance().nbInvisibles();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Afk Players";
+				}
+
+				@Override
+				public int getValue() {
+					return AFKWorker.getInstance().nbAfk();
+				}
+			});
+
 			// 'this' in this context is the Plugin object
 			metrics.beginMeasuringPlugin(this);
 		} catch (final IOException e) {

@@ -103,6 +103,15 @@ final public class AFKWorker {
 	}
 
 	/**
+	 * Get the number of afk players
+	 * 
+	 * @return
+	 */
+	public int nbAfk() {
+		return playersAfk.size();
+	}
+
+	/**
 	 * update a player timeStamp (last time the player moved)
 	 * 
 	 * @param player

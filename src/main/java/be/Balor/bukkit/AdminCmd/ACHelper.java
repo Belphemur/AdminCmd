@@ -543,6 +543,15 @@ public class ACHelper {
 		return kitList.trim();
 	}
 
+	/**
+	 * Get the number of kit in the system.
+	 * 
+	 * @return
+	 */
+	public int getNbKit() {
+		return kits.size();
+	}
+
 	public int getLimit(CommandSender sender, String type) {
 		if (sender instanceof ConsoleCommandSender)
 			return Integer.MAX_VALUE;
@@ -781,6 +790,10 @@ public class ACHelper {
 			});
 		}
 		return true;
+	}
+
+	public int countBannedPlayers() {
+		return bannedPlayers.size();
 	}
 
 	public synchronized void loadInfos() {
