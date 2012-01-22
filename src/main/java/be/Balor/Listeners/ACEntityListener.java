@@ -101,7 +101,7 @@ public class ACEntityListener extends EntityListener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		final Player player = (Player) event.getEntity();
-		ACPlayer.getPlayer(player.getName()).setLastLocation(player.getLocation());
+		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 	}
 
 	@Override
