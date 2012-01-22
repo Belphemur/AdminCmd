@@ -108,4 +108,36 @@ public class ACPluginLogger {
 						err == null ? "? unknown exception ?" : err.getMessage()), err);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 7;
+		result = prime * result + ((prefix == null) ? 0 : prefix.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ACPluginLogger))
+			return false;
+		ACPluginLogger other = (ACPluginLogger) obj;
+		if (prefix == null) {
+			if (other.prefix != null)
+				return false;
+		} else if (!prefix.equals(other.prefix))
+			return false;
+		return true;
+	}
+	
+
 }

@@ -31,6 +31,8 @@ public class PermissionLinker {
 	protected LinkedList<PermParent> permissions = new LinkedList<PermParent>();
 	protected PermParent majorPerm;
 	protected String name;
+	private static int counter = 0;
+	private final int plId = counter++;
 
 	/**
 	 * 
@@ -153,5 +155,46 @@ public class PermissionLinker {
 	public String getName() {
 		return name;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((majorPerm == null) ? 0 : majorPerm.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + plId;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PermissionLinker))
+			return false;
+		PermissionLinker other = (PermissionLinker) obj;
+		if (majorPerm == null) {
+			if (other.majorPerm != null)
+				return false;
+		} else if (!majorPerm.equals(other.majorPerm))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (plId != other.plId)
+			return false;
+		return true;
+	}
+	
 
 }

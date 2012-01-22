@@ -81,4 +81,45 @@ public class PermParent {
 			perm.getChildren().putAll(children);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((compareName == null) ? 0 : compareName.hashCode());
+		result = prime * result + ((def == null) ? 0 : def.hashCode());
+		result = prime * result + ((permName == null) ? 0 : permName.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PermParent))
+			return false;
+		PermParent other = (PermParent) obj;
+		if (compareName == null) {
+			if (other.compareName != null)
+				return false;
+		} else if (!compareName.equals(other.compareName))
+			return false;
+		if (def != other.def)
+			return false;
+		if (permName == null) {
+			if (other.permName != null)
+				return false;
+		} else if (!permName.equals(other.permName))
+			return false;
+		return true;
+	}
+	
+
 }

@@ -29,7 +29,6 @@ import be.Balor.Tools.Debug.ACPluginLogger;
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
-	private final int hashCode;
 	protected final ACPluginLogger logger;
 
 	/**
@@ -41,10 +40,6 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		final int prime = 31;
-		int result = 5;
-		result = prime * result + this.name.hashCode();
-		hashCode = result;
 		ACPluginManager.registerACPlugin(this);
 		logger = ACPluginLogger.getLogger(this);
 	}
@@ -52,35 +47,10 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	public AbstractAdminCmdPlugin() {
 		this.name = this.getClass().getSimpleName();
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		final int prime = 31;
-		int result = 5;
-		result = prime * result + this.name.hashCode();
-		hashCode = result;
 		ACPluginManager.registerACPlugin(this);
 		logger = ACPluginLogger.getLogger(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof AbstractAdminCmdPlugin))
-			return false;
-		final AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
 
 	/**
 	 * @return the name
@@ -105,14 +75,47 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		return getDescription().getName();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		return hashCode;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((logger == null) ? 0 : logger.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof AbstractAdminCmdPlugin))
+			return false;
+		AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
+		if (logger == null) {
+			if (other.logger != null)
+				return false;
+		} else if (!logger.equals(other.logger))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (permissionLinker == null) {
+			if (other.permissionLinker != null)
+				return false;
+		} else if (!permissionLinker.equals(other.permissionLinker))
+			return false;
+		return true;
 	}
 
 	/*
