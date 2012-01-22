@@ -16,8 +16,11 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.List;
+
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -49,9 +52,10 @@ public class ACEntityListener extends EntityListener {
 			return;
 		final World world = e.getWorld();
 		final ACWorld acWorld = ACWorld.getWorld(world.getName());
+		final List<LivingEntity> livEntities = world.getLivingEntities();
 		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
 		if (limit != -1) {
-			if ((world.getLivingEntities().size() - world.getPlayers().size()) >= limit)
+			if ((livEntities.size() - world.getPlayers().size()) >= limit)
 				event.setCancelled(true);
 		}
 		if (!event.isCancelled()) {
@@ -61,7 +65,7 @@ public class ACEntityListener extends EntityListener {
 			if (limit == -1)
 				return;
 			int count = 0;
-			for (final Entity entity : world.getLivingEntities())
+			for (final Entity entity : livEntities)
 				if (entity.getClass().equals(entityClass) && ++count >= limit) {
 					event.setCancelled(true);
 					break;
