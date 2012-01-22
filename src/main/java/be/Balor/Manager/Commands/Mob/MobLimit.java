@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.CreatureType;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
@@ -53,12 +54,38 @@ public class MobLimit extends CoreCommand {
 		World world = sender.getServer().getWorld(args.getString(0));
 		if (world != null) {
 			int limit;
+			if (args.hasFlag('m')) {
+				String name = args.getValueFlag('m');
+				CreatureType ct = CreatureType.fromName(name);
+				if (ct == null) {
+					Utils.sI18n(sender, "errorMob", "mob", name);
+					return;
+				}
+				try {
+					HashMap<String, String> replace = new HashMap<String, String>();
+					limit = args.getInt(1);
+					ACWorld.getWorld(world.getName()).setMobLimit(
+							ct.getEntityClass().getSimpleName(), limit);
+					replace.put("number", args.getString(1));
+					replace.put("world", args.getString(0));
+					replace.put("mob", name);
+					Utils.sI18n(sender, "mobLimitPerMob", replace);
+				} catch (NumberFormatException e) {
+					if (args.getString(1).equals("none")) {
+						ACWorld.getWorld(world.getName()).removeMobLimit(
+								ct.getEntityClass().getSimpleName());
+						Utils.sI18n(sender, "mobLimitRemovedPerMob", "world", world.getName());
+					} else
+						Utils.sI18n(sender, "NaN", "number", args.getString(1));
+				}
+				return;
+			}
 			try {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				limit = args.getInt(1);
 				ACWorld.getWorld(world.getName()).setInformation(Type.MOB_LIMIT.toString(), limit);
-				replace.put("number", args.getString(0));
-				replace.put("world", args.getString(1));
+				replace.put("number", args.getString(1));
+				replace.put("world", args.getString(0));
 				Utils.sI18n(sender, "mobLimit", replace);
 			} catch (NumberFormatException e) {
 				if (args.getString(1).equals("none")) {
