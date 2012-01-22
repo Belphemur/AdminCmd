@@ -51,11 +51,16 @@ public class MobLimit extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		World world = sender.getServer().getWorld(args.getString(0));
-		if (world != null) {
+		World world = null;
 			int limit;
 			if (args.hasFlag('m')) {
 				String name = args.getValueFlag('m');
+				world = sender.getServer().getWorld(args.getString(0));
+				if (world == null)
+				{
+					Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+					return;
+				}
 				CreatureType ct = CreatureType.fromName(name);
 				if (ct == null) {
 					Utils.sI18n(sender, "errorMob", "mob", name);
@@ -80,6 +85,12 @@ public class MobLimit extends CoreCommand {
 				}
 				return;
 			}
+			world = sender.getServer().getWorld(args.getString(0));
+			if (world == null)
+			{
+				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+				return;
+			}
 			try {
 				HashMap<String, String> replace = new HashMap<String, String>();
 				limit = args.getInt(1);
@@ -95,8 +106,6 @@ public class MobLimit extends CoreCommand {
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));
 			}
 
-		} else
-			Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 	}
 
 	/*
