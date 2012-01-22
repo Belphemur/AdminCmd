@@ -131,6 +131,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
+	private final ACEntityListener entityListener = new ACEntityListener();
 
 	public static final Logger log = Logger.getLogger("Minecraft");
 
@@ -183,7 +184,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		worker.loadInfos();
 		permissionLinker.registerAllPermParent();
 		final ACPlayerListener playerListener = new ACPlayerListener();
-		final ACEntityListener entityListener = new ACEntityListener();
 		final ACBlockListener blkListener = new ACBlockListener();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Lowest, this);
@@ -212,7 +212,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		// Some problem witht the bukkit API and server_command
 		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
 		// Priority.Normal, this);
-		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		if (worker.getConfBoolean("ColoredSign"))
 			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
@@ -276,7 +275,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	public void registerCmds() {
-
+		final PluginManager pm = getServer().getPluginManager();
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
@@ -303,6 +302,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Strike.class);
 		CommandManager.getInstance().registerCommand(RemoveAlias.class);
 		CommandManager.getInstance().registerCommand(SpawnMob.class);
+
 		CommandManager.getInstance().registerCommand(KickPlayer.class);
 		CommandManager.getInstance().registerCommand(PrivateMessage.class);
 		CommandManager.getInstance().registerCommand(AddAlias.class);
@@ -330,7 +330,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Freeze.class);
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
-		CommandManager.getInstance().registerCommand(MobLimit.class);
+		if (CommandManager.getInstance().registerCommand(MobLimit.class))
+			pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
 		CommandManager.getInstance().registerCommand(NoPickup.class);
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 		CommandManager.getInstance().registerCommand(MOTD.class);

@@ -187,7 +187,7 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 * @param clazz
 	 */
-	public void registerCommand(Class<? extends CoreCommand> clazz) {
+	public boolean registerCommand(Class<? extends CoreCommand> clazz) {
 		CoreCommand command = null;
 		try {
 			DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
@@ -199,14 +199,17 @@ public class CommandManager implements CommandExecutor {
 			registeredCommands.put(command.getPluginCommand(), command);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
+			return false;
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+			return false;
 		} catch (CommandDisabled e) {
 			unRegisterBukkitCommand(command.getPluginCommand());
 			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 					command.getCmdName());
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				ACLogger.info(e.getMessage());
+			return false;
 		} catch (CommandAlreadyExist e) {
 			boolean disableCommand = true;
 			HashMap<String, Command> commands = pluginCommands.get(command.getPlugin());
@@ -229,17 +232,21 @@ public class CommandManager implements CommandExecutor {
 				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 					ACLogger.info(e.getMessage());
 				DebugLog.INSTANCE.info("Command Disabled");
+				return false;
 			} else {
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				registeredCommands.put(command.getPluginCommand(), command);
 				DebugLog.INSTANCE.info("Command Prioritized but already exists");
+				return true;
 			}
 		} catch (CommandException e) {
 			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+			return false;
 		}
 		DebugLog.INSTANCE.info("End registering Command " + clazz.getName());
+		return true;
 	}
 
 	/**
