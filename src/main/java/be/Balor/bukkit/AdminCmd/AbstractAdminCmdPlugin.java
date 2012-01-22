@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionLinker;
+import be.Balor.Tools.Debug.ACPluginLogger;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -29,6 +30,10 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
 	private final int hashCode;
+	protected final ACPluginLogger logger = ACPluginLogger.getLogger(this);
+	{
+		ACPluginManager.registerACPlugin(this);
+	}
 
 	/**
 	 * Create the AdminCmd plugin.
@@ -43,17 +48,17 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		int result = 5;
 		result = prime * result + this.name.hashCode();
 		hashCode = result;
-		ACPluginManager.registerACPlugin(this);
 	}
-	public AbstractAdminCmdPlugin() {		
+
+	public AbstractAdminCmdPlugin() {
 		this.name = this.getClass().getSimpleName();
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		final int prime = 31;
 		int result = 5;
 		result = prime * result + this.name.hashCode();
 		hashCode = result;
-		ACPluginManager.registerACPlugin(this);
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
