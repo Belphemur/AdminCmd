@@ -148,8 +148,19 @@ public class CommandArgs implements Iterable<String> {
 		return booleanFlags.contains(ch) || valueFlags.containsKey(ch);
 	}
 
+	/**
+	 * Get the Value Flag, and remove the flag from the normal arguments.
+	 * 
+	 * @param ch
+	 *            flag to look for.
+	 * @return null if not found else the value of the flag
+	 */
 	public String getValueFlag(char ch) {
-		return valueFlags.get(ch);
+		String result = valueFlags.get(ch);
+		if (result == null)
+			return null;
+		parsedArgs.remove(result);
+		return result;
 	}
 
 	/*
