@@ -43,6 +43,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		int result = 5;
 		result = prime * result + this.name.hashCode();
 		hashCode = result;
+		ACPluginManager.registerACPlugin(this);
 	}
 
 	/*
@@ -107,7 +108,6 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		ACPluginManager.registerACPlugin(this);
 		registerPermParents();
 		CommandManager.getInstance().registerACPlugin(this);
 		registerCmds();
