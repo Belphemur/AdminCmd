@@ -123,11 +123,50 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		lock.lock();
 		Object info;
 		try {
-			info = super.get(path, def);
+			// info = super.get(path, def);
+			info = newGet(path, def);
+
 		} finally {
 			lock.unlock();
 		}
 		return info;
+	}
+
+	/**
+	 * For retro-compatibility, will be deleted when the RB is out.
+	 * 
+	 * @param path
+	 * @param def
+	 * @return
+	 */
+	@Deprecated
+	private Object newGet(String path, Object def) {
+		if (path == null) {
+			throw new IllegalArgumentException("Path cannot be null");
+		} else if (path.length() == 0) {
+			return this;
+		}
+
+		Object result = null;
+		String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
+				.pathSeparator())));
+		ConfigurationSection section = this;
+
+		for (int i = 0; i < split.length - 1; i++) {
+			section = section.getConfigurationSection(split[i]);
+
+			if (section == null) {
+				return def;
+			}
+		}
+
+		String key = split[split.length - 1];
+
+		if (section == this) {
+			result = map.get(key);
+			return (result == null) ? def : result;
+		}
+		return section.get(key, def);
 	}
 
 	/*
@@ -248,9 +287,49 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	public void set(String path, Object value) {
 		lock.lock();
 		try {
-			super.set(path, value);
+			// super.set(path, value);
+			newSet(path, value);
 		} finally {
 			lock.unlock();
+		}
+	}
+
+	/**
+	 * For retro-compatibility, will be deleted when the RB is out.
+	 * 
+	 * @param path
+	 * @param value
+	 */
+	@Deprecated
+	private void newSet(String path, Object value) {
+		String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
+				.pathSeparator())));
+		ConfigurationSection section = this;
+
+		if (path.length() == 0) {
+			throw new IllegalArgumentException("Cannot set to an empty path");
+		}
+
+		for (int i = 0; i < split.length - 1; i++) {
+			ConfigurationSection last = section;
+
+			section = last.getConfigurationSection(split[i]);
+
+			if (section == null) {
+				section = last.createSection(split[i]);
+			}
+		}
+
+		String key = split[split.length - 1];
+
+		if (section == this) {
+			if (value == null) {
+				map.remove(key);
+			} else {
+				map.put(key, value);
+			}
+		} else {
+			section.set(key, value);
 		}
 	}
 
