@@ -280,7 +280,7 @@ public class FileWorld extends ACWorld {
 	 */
 	@Override
 	public int getMobLimit(String mob) {
-		return (Integer) mobLimits.get(mob, -1);
+		return mobLimits.getInt(mob, -1);
 	}
 
 }
