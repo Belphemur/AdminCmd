@@ -52,59 +52,57 @@ public class MobLimit extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		World world = null;
-			int limit;
-			if (args.hasFlag('m')) {
-				String name = args.getValueFlag('m');
-				world = sender.getServer().getWorld(args.getString(0));
-				if (world == null)
-				{
-					Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
-					return;
-				}
-				CreatureType ct = CreatureType.fromName(name);
-				if (ct == null) {
-					Utils.sI18n(sender, "errorMob", "mob", name);
-					return;
-				}
-				try {
-					HashMap<String, String> replace = new HashMap<String, String>();
-					limit = args.getInt(1);
-					ACWorld.getWorld(world.getName()).setMobLimit(
-							ct.getEntityClass().getSimpleName(), limit);
-					replace.put("number", args.getString(1));
-					replace.put("world", args.getString(0));
-					replace.put("mob", name);
-					Utils.sI18n(sender, "mobLimitPerMob", replace);
-				} catch (NumberFormatException e) {
-					if (args.getString(1).equals("none")) {
-						ACWorld.getWorld(world.getName()).removeMobLimit(
-								ct.getEntityClass().getSimpleName());
-						Utils.sI18n(sender, "mobLimitRemovedPerMob", "world", world.getName());
-					} else
-						Utils.sI18n(sender, "NaN", "number", args.getString(1));
-				}
-				return;
-			}
+		int limit;
+		if (args.hasFlag('m')) {
+			String name = args.getValueFlag('m');
 			world = sender.getServer().getWorld(args.getString(0));
-			if (world == null)
-			{
+			if (world == null) {
 				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
+			CreatureType ct = CreatureType.fromName(name);
+			if (ct == null) {
+				Utils.sI18n(sender, "errorMob", "mob", name);
+				return;
+			}
+			HashMap<String, String> replace = new HashMap<String, String>();
 			try {
-				HashMap<String, String> replace = new HashMap<String, String>();
 				limit = args.getInt(1);
-				ACWorld.getWorld(world.getName()).setInformation(Type.MOB_LIMIT.toString(), limit);
+				ACWorld.getWorld(world.getName()).setMobLimit("Craft" + ct.getName(), limit);
 				replace.put("number", args.getString(1));
 				replace.put("world", args.getString(0));
-				Utils.sI18n(sender, "mobLimit", replace);
+				replace.put("mob", name);
+				Utils.sI18n(sender, "mobLimitPerMob", replace);
 			} catch (NumberFormatException e) {
 				if (args.getString(1).equals("none")) {
-					ACWorld.getWorld(world.getName()).removeInformation(Type.MOB_LIMIT.toString());
-					Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
+					replace.put("world", args.getString(0));
+					replace.put("mob", name);
+					ACWorld.getWorld(world.getName()).removeMobLimit("Craft" + ct.getName());
+					Utils.sI18n(sender, "mobLimitRemovedPerMob", replace);
 				} else
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));
 			}
+			return;
+		}
+		world = sender.getServer().getWorld(args.getString(0));
+		if (world == null) {
+			Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+			return;
+		}
+		try {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			limit = args.getInt(1);
+			ACWorld.getWorld(world.getName()).setInformation(Type.MOB_LIMIT.toString(), limit);
+			replace.put("number", args.getString(1));
+			replace.put("world", args.getString(0));
+			Utils.sI18n(sender, "mobLimit", replace);
+		} catch (NumberFormatException e) {
+			if (args.getString(1).equals("none")) {
+				ACWorld.getWorld(world.getName()).removeInformation(Type.MOB_LIMIT.toString());
+				Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
+			} else
+				Utils.sI18n(sender, "NaN", "number", args.getString(1));
+		}
 
 	}
 
