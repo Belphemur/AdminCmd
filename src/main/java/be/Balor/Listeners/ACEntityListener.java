@@ -62,10 +62,10 @@ public class ACEntityListener extends EntityListener {
 				return;
 			int count = 0;
 			for (final Entity entity : world.getLivingEntities())
-				if (entity.getClass().equals(entityClass))
-					count++;
-			if (count >= limit)
-				event.setCancelled(true);
+				if (entity.getClass().equals(entityClass) && ++count >= limit) {
+					event.setCancelled(true);
+					break;
+				}
 
 		}
 	}
