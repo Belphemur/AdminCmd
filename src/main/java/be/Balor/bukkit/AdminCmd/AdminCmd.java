@@ -158,7 +158,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		HelpLister.killInstance();
 		DebugLog.stopLogging();
 		System.gc();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
+		ACLogger.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
 				+ pdfFile.getVersion() + ")");
 	}
 
@@ -170,7 +170,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		final PluginManager pm = getServer().getPluginManager();
 		final ACPluginListener pL = new ACPluginListener();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
+		ACLogger.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
 				+ pdfFile.getVersion() + ")");
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pL, Priority.Monitor, this);
