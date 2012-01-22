@@ -255,6 +255,7 @@ public class FileWorld extends ACWorld {
 	@Override
 	public void setMobLimit(String mob, int limit) {
 		mobLimits.set(mob, limit);
+		writeFile();
 	}
 
 	/*
@@ -266,6 +267,7 @@ public class FileWorld extends ACWorld {
 	public boolean removeMobLimit(String mob) {
 		if (mobLimits.isSet(mob)) {
 			mobLimits.remove(mob);
+			writeFile();
 			return true;
 		}
 		return false;
