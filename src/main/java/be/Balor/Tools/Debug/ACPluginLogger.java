@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
  * 
  */
 public class ACPluginLogger {
-	private final static Map<AbstractAdminCmdPlugin, WeakReference<ACPluginLogger>> loggers = new HashMap<AbstractAdminCmdPlugin, WeakReference<ACPluginLogger>>();
+	private final static Map<String, WeakReference<ACPluginLogger>> loggers = new HashMap<String, WeakReference<ACPluginLogger>>();
 	private final String prefix;
 	protected static final Logger logger = Logger.getLogger("Minecraft");
 
@@ -42,22 +42,26 @@ public class ACPluginLogger {
 		prefix = '[' + name + ']' + ' ';
 	}
 
-	public static ACPluginLogger getLogger(AbstractAdminCmdPlugin plugin) {
-		final String name = plugin.getName();
-		WeakReference<ACPluginLogger> ref = loggers.get(plugin);
+	public static ACPluginLogger getLogger(final AbstractAdminCmdPlugin plugin) {
+		return getLogger(plugin.getName());
+
+	}
+
+	public static ACPluginLogger getLogger(final String name) {
+		WeakReference<ACPluginLogger> ref = loggers.get(name);
 		ACPluginLogger log;
 		if (ref == null) {
 			log = new ACPluginLogger(name);
-			loggers.put(plugin, new WeakReference<ACPluginLogger>(log));
+			loggers.put(name, new WeakReference<ACPluginLogger>(log));
 			return log;
 		}
 		log = ref.get();
 		if (log == null) {
 			// Hashtable holds stale weak reference
 			// to a logger which has been GC-ed.
-			loggers.remove(plugin);
+			loggers.remove(name);
 			log = new ACPluginLogger(name);
-			loggers.put(plugin, new WeakReference<ACPluginLogger>(log));
+			loggers.put(name, new WeakReference<ACPluginLogger>(log));
 		}
 		return log;
 	}
@@ -108,7 +112,9 @@ public class ACPluginLogger {
 						err == null ? "? unknown exception ?" : err.getMessage()), err);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -119,7 +125,9 @@ public class ACPluginLogger {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -138,6 +146,5 @@ public class ACPluginLogger {
 			return false;
 		return true;
 	}
-	
 
 }
