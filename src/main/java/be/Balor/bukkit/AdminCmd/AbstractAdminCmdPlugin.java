@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.bukkit.AdminCmd;
 
-import java.util.logging.Logger;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
@@ -47,7 +45,15 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		hashCode = result;
 		ACPluginManager.registerACPlugin(this);
 	}
-
+	public AbstractAdminCmdPlugin() {		
+		this.name = this.getClass().getSimpleName();
+		permissionLinker = PermissionLinker.getPermissionLinker(name);
+		final int prime = 31;
+		int result = 5;
+		result = prime * result + this.name.hashCode();
+		hashCode = result;
+		ACPluginManager.registerACPlugin(this);
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
