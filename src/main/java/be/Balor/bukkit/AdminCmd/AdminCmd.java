@@ -562,7 +562,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("notMuted", ChatColor.DARK_AQUA + "This player is not muted.");
 		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
-		Utils.addLocale("mobLimitPerMob", "#moblimit# " + ChatColor.RED + "for mob %mob");
+		Utils.addLocale("mobLimitPerMob", "#mobLimit# " + ChatColor.RED + "for mob %mob");
 		LocaleManager.getInstance().save();
 		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN
 				+ "Mob limit is removed for world : %world");
