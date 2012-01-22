@@ -159,11 +159,6 @@ public class SpawnMob extends CoreCommand {
 			replace.put("mob", ct.getName());
 			for (int i = 0; i < nb; i++) {
 				loc.getWorld().spawnCreature(loc, ct);
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					// e.printStackTrace();
-				}
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender))
@@ -197,11 +192,6 @@ public class SpawnMob extends CoreCommand {
 			for (int i = 0; i < nb; i++) {
 				loc.getWorld().spawnCreature(loc, ct)
 						.setPassenger(loc.getWorld().spawnCreature(loc, passenger));
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					// e.printStackTrace();
-				}
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender))
