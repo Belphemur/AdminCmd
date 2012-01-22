@@ -16,12 +16,8 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import java.util.List;
-
 import org.bukkit.World;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -35,7 +31,6 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.World.ACWorld;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -46,12 +41,42 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class ACEntityListener extends EntityListener {
 
 	@Override
+	public void onCreatureSpawn(CreatureSpawnEvent event) {
+		if (event.isCancelled())
+			return;
+		final Entity e = event.getEntity();
+		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
+			return;
+		final World world = e.getWorld();
+		final ACWorld acWorld = ACWorld.getWorld(world.getName());
+		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
+		if (limit != -1) {
+			if ((world.getLivingEntities().size() - world.getPlayers().size()) >= limit)
+				event.setCancelled(true);
+		}
+		if (!event.isCancelled()) {
+			final Class<?> entityClass = e.getClass();
+			final String entityName = entityClass.getSimpleName();
+			limit = acWorld.getMobLimit(entityName);
+			if (limit == -1)
+				return;
+			int count = 0;
+			for (final Entity entity : world.getLivingEntities())
+				if (entity.getClass().equals(entityClass))
+					count++;
+			if (count >= limit)
+				event.setCancelled(true);
+
+		}
+	}
+
+	@Override
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
 		if (!(event.getEntity() instanceof Player))
 			return;
-		Player player = (Player) event.getEntity();
+		final Player player = (Player) event.getEntity();
 		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.FLY)
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
@@ -71,7 +96,7 @@ public class ACEntityListener extends EntityListener {
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
-		Player player = (Player) event.getEntity();
+		final Player player = (Player) event.getEntity();
 		ACPlayer.getPlayer(player.getName()).setLastLocation(player.getLocation());
 	}
 
@@ -81,40 +106,10 @@ public class ACEntityListener extends EntityListener {
 			return;
 		if (!(event.getTarget() instanceof Player))
 			return;
-		Player p = (Player) event.getTarget();
+		final Player p = (Player) event.getTarget();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false))
 			event.setCancelled(true);
-	}
-
-	@Override
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		if (event.isCancelled())
-			return;
-		Entity e = event.getEntity();
-		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
-			return;
-		World world = e.getWorld();
-		ACWorld acWorld = ACWorld.getWorld(world.getName());
-		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
-		if (limit != -1) {
-			if ((world.getLivingEntities().size() - world.getPlayers().size()) >= limit)
-				event.setCancelled(true);
-		}
-		if (!event.isCancelled()) {
-			Class<?> entityClass = e.getClass();
-			String entityName = entityClass.getSimpleName();
-			limit = acWorld.getMobLimit(entityName);
-			if (limit == -1)
-				return;
-			int count = 0;
-			for (Entity entity : world.getLivingEntities())
-				if (entity.getClass().equals(entityClass))
-					count++;
-			if (count >= limit)
-				event.setCancelled(true);
-
-		}
 	}
 
 	@Override
@@ -123,7 +118,7 @@ public class ACEntityListener extends EntityListener {
 			return;
 		if (!(event.getEntity() instanceof Player))
 			return;
-		Player player = (Player) event.getEntity();
+		final Player player = (Player) event.getEntity();
 		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.ETERNAL))
 			event.setCancelled(true);
 	}

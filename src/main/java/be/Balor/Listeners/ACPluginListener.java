@@ -46,12 +46,17 @@ import de.diddiz.LogBlock.LogBlock;
 public class ACPluginListener extends ServerListener {
 
 	@Override
+	public void onPluginDisable(PluginDisableEvent event) {
+		ACPluginManager.unRegisterACPlugin(event.getPlugin());
+	}
+
+	@Override
 	public void onPluginEnable(PluginEnableEvent event) {
 		if (event.getPlugin().getDescription().getName().equals("PermissionsEx"))
 			PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 
 		if (!PermissionManager.isPermissionsExSet()) {
-			Plugin Permissions = ACPluginManager.getServer().getPluginManager()
+			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsEx");
 			if (Permissions != null) {
 				if (Permissions.isEnabled())
@@ -59,7 +64,7 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
-			Plugin Permissions = ACPluginManager.getServer().getPluginManager()
+			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("Permissions");
 			if (Permissions != null) {
 				if (Permissions.isEnabled())
@@ -67,7 +72,7 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (!PermissionManager.isbPermissionsSet()) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager()
+			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("bPermissions");
 			if (plugin != null) {
 				PermissionManager.setbPermissions(
@@ -76,21 +81,22 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (!PermissionManager.isPermissionsBukkitSet()) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager()
+			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsBukkit");
 			if (plugin != null) {
 				PermissionManager.setPermissionsBukkit((PermissionsPlugin) plugin);
 			}
 		}
 		if (Utils.oddItem == null) {
-			Plugin items = ACPluginManager.getServer().getPluginManager().getPlugin("OddItem");
+			final Plugin items = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("OddItem");
 			if (items != null && items.isEnabled()) {
 				Utils.oddItem = (OddItemBase) items;
 				ACLogger.info("Successfully linked with OddItem");
 			}
 		}
 		if (!SuperPermissions.isApiSet()) {
-			Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager()
+			final Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("mChatSuite");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
@@ -99,33 +105,31 @@ public class ACPluginListener extends ServerListener {
 			}
 		}
 		if (Utils.logBlock == null) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("LogBlock");
+			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("LogBlock");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.setLogBlock(((LogBlock) plugin).getConsumer());
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
 		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins")) {
-			for (Plugin plugin : event.getPlugin().getServer().getPluginManager().getPlugins())
+			for (final Plugin plugin : event.getPlugin().getServer().getPluginManager()
+					.getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
 		}
 		if (!Utils.signExtention) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager()
+			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("SignExtensions");
 			if (plugin != null)
 				Utils.signExtention = true;
 		}
 		if (Utils.heroes == null) {
-			Plugin plugin = ACPluginManager.getServer().getPluginManager().getPlugin("Heroes");
+			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("Heroes");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.heroes = (Heroes) plugin;
 				ACLogger.info("Successfully linked with Heroes");
 			}
 		}
-	}
-
-	@Override
-	public void onPluginDisable(PluginDisableEvent event) {
-		ACPluginManager.unRegisterACPlugin(event.getPlugin());
 	}
 }
