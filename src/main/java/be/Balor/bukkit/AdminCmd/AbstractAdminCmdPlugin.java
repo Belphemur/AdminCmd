@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.bukkit.AdminCmd;
 
+import java.util.logging.Logger;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
@@ -29,6 +31,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
 	private final int hashCode;
+	public static final Logger log = Logger.getLogger("Minecraft");
 
 	/**
 	 * Create the AdminCmd plugin.

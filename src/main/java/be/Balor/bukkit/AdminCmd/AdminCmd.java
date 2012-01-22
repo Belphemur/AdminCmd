@@ -133,8 +133,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
 	private final ACEntityListener entityListener = new ACEntityListener();
 
-	public static final Logger log = Logger.getLogger("Minecraft");
-
 	/**
 	 * @param name
 	 */
