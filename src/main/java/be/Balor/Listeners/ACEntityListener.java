@@ -16,8 +16,12 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.util.List;
+
 import org.bukkit.World;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -36,7 +40,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACEntityListener extends EntityListener {
 
@@ -84,14 +88,31 @@ public class ACEntityListener extends EntityListener {
 
 	@Override
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
+		if (event.isCancelled())
+			return;
 		Entity e = event.getEntity();
 		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
 			return;
 		World world = e.getWorld();
-		Integer limit = ACWorld.getWorld(world.getName()).getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
+		ACWorld acWorld = ACWorld.getWorld(world.getName());
+		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
 		if (limit != -1) {
 			if ((world.getLivingEntities().size() - world.getPlayers().size()) >= limit)
 				event.setCancelled(true);
+		}
+		if (!event.isCancelled()) {
+			Class<?> entityClass = e.getClass();
+			String entityName = entityClass.getSimpleName();
+			limit = acWorld.getMobLimit(entityName);
+			if (limit == -1)
+				return;
+			int count = 0;
+			for (Entity entity : world.getLivingEntities())
+				if (entity.getClass().equals(entityClass))
+					count++;
+			if (count >= limit)
+				event.setCancelled(true);
+
 		}
 	}
 
