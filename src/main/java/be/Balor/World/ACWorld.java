@@ -28,7 +28,7 @@ import be.Balor.Tools.Files.ObjectContainer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class ACWorld {
 	private final String name;
@@ -64,7 +64,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the wanted world
-	 *
+	 * 
 	 * @param name
 	 *            name of the wanted world
 	 * @return the ACWorld
@@ -77,7 +77,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Set the spawn location
-	 *
+	 * 
 	 * @param loc
 	 *            location of the spawn
 	 */
@@ -85,28 +85,29 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the spawn location
-	 *
+	 * 
 	 * @return the spawn location
 	 */
 	public abstract Location getSpawn();
 
 	/**
 	 * Get the worlds difficulty
-	 *
+	 * 
 	 * @return The difficulty
 	 */
 	public abstract Difficulty getDifficulty() throws WorldNotLoaded;
 
 	/**
 	 * Set the difficulty of the world.
-	 *
-	 * @param dif The difficulty to set.
+	 * 
+	 * @param dif
+	 *            The difficulty to set.
 	 */
 	public abstract void setDifficulty(Difficulty dif);
 
 	/**
 	 * Add a warp point
-	 *
+	 * 
 	 * @param name
 	 *            name of the warp
 	 * @param loc
@@ -116,7 +117,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the location of the Warp
-	 *
+	 * 
 	 * @param name
 	 *            name of the Warp
 	 * @return location of the Warp
@@ -127,14 +128,14 @@ public abstract class ACWorld {
 
 	/**
 	 * List of the warps' name
-	 *
+	 * 
 	 * @return a List containing the name of each warp of the World
 	 */
 	public abstract Set<String> getWarpList();
 
 	/**
 	 * Remove the warp
-	 *
+	 * 
 	 * @param name
 	 *            name of the warp to remove
 	 */
@@ -142,7 +143,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Set player information
-	 *
+	 * 
 	 * @param info
 	 *            key of the information
 	 * @param value
@@ -152,7 +153,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Remove the information
-	 *
+	 * 
 	 * @param info
 	 *            key of the information
 	 */
@@ -160,7 +161,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get the information
-	 *
+	 * 
 	 * @param info
 	 *            key of the information
 	 */
@@ -168,7 +169,7 @@ public abstract class ACWorld {
 
 	/**
 	 * Get all informations about the world
-	 *
+	 * 
 	 * @return
 	 */
 	public abstract Map<String, String> getInformations();
@@ -178,9 +179,37 @@ public abstract class ACWorld {
 	 */
 	abstract void forceSave();
 
+	/**
+	 * To set a limit for a specific mob
+	 * 
+	 * @param mob
+	 *            name of the mob
+	 * @param limit
+	 *            limit for that mob
+	 */
+	public abstract void setMobLimit(String mob, int limit);
+
+	/**
+	 * To remove the limit set on a specific mob
+	 * 
+	 * @param mob
+	 *            name of the mob
+	 * @return true if the limit is removed, false if there is no limit
+	 */
+	public abstract boolean removeMobLimit(String mob);
+
+	/**
+	 * Get the limit for the given mob.
+	 * 
+	 * @param mob
+	 *            name of the mob
+	 * @return the limit if is set, else return -1.
+	 */
+	public abstract int getMobLimit(String mob);
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -190,7 +219,7 @@ public abstract class ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
