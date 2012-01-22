@@ -49,6 +49,7 @@ public class ACPluginLogger {
 		if (ref == null) {
 			log = new ACPluginLogger(name);
 			loggers.put(plugin, new WeakReference<ACPluginLogger>(log));
+			return log;
 		}
 		log = ref.get();
 		if (log == null) {

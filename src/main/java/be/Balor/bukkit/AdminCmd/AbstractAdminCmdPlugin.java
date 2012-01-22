@@ -30,10 +30,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
 	private final int hashCode;
-	protected final ACPluginLogger logger = ACPluginLogger.getLogger(this);
-	{
-		ACPluginManager.registerACPlugin(this);
-	}
+	protected final ACPluginLogger logger;
 
 	/**
 	 * Create the AdminCmd plugin.
@@ -48,6 +45,8 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		int result = 5;
 		result = prime * result + this.name.hashCode();
 		hashCode = result;
+		ACPluginManager.registerACPlugin(this);
+		logger = ACPluginLogger.getLogger(this);
 	}
 
 	public AbstractAdminCmdPlugin() {
@@ -57,6 +56,8 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		int result = 5;
 		result = prime * result + this.name.hashCode();
 		hashCode = result;
+		ACPluginManager.registerACPlugin(this);
+		logger = ACPluginLogger.getLogger(this);
 	}
 
 	/*
