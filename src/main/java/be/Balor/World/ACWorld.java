@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Warp;
 import be.Balor.Tools.Files.ObjectContainer;
 
 /**
@@ -124,7 +125,7 @@ public abstract class ACWorld {
 	 * @throws WorldNotLoaded
 	 *             if the location's world is not loaded
 	 */
-	public abstract Location getWarp(String name) throws WorldNotLoaded;
+	public abstract Warp getWarp(String name) throws WorldNotLoaded;
 
 	/**
 	 * List of the warps' name

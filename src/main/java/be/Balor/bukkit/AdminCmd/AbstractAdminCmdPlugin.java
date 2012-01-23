@@ -20,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Permissions.PermissionLinker;
-import be.Balor.Tools.Debug.ACPluginLogger;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -29,7 +28,6 @@ import be.Balor.Tools.Debug.ACPluginLogger;
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
-	protected final ACPluginLogger logger;
 
 	/**
 	 * Create the AdminCmd plugin.
@@ -41,14 +39,12 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		ACPluginManager.registerACPlugin(this);
-		logger = ACPluginLogger.getLogger(this);
 	}
 
 	public AbstractAdminCmdPlugin() {
 		this.name = this.getClass().getSimpleName();
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		ACPluginManager.registerACPlugin(this);
-		logger = ACPluginLogger.getLogger(this);
 	}
 
 
@@ -82,7 +78,6 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((logger == null) ? 0 : logger.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
 		return result;
@@ -100,11 +95,6 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		if (!(obj instanceof AbstractAdminCmdPlugin))
 			return false;
 		AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
-		if (logger == null) {
-			if (other.logger != null)
-				return false;
-		} else if (!logger.equals(other.logger))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
