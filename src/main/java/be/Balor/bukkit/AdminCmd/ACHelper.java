@@ -84,8 +84,8 @@ public class ACHelper {
 		return instance;
 	}
 
-	private final HashMap<Material, String[]> materialsColors;
-	private final List<Integer> listOfPossibleRepair;
+	private final static HashMap<Material, String[]> materialsColors;
+	private final static List<Integer> listOfPossibleRepair;
 	private FileManager fManager;
 	private List<Integer> itemBlacklist;
 	private List<Integer> blockBlacklist;
@@ -100,20 +100,9 @@ public class ACHelper {
 	private final ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private static long pluginStarted;
-
-	static void killInstance() {
-		instance = null;
-	}
-
-	private ExtendedConfiguration pluginConfig;
-
-	private DataManager dataManager;
-
-	private boolean serverLocked = false;
-
-	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
-
-	private ACHelper() {
+	
+	static
+	{
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
 				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
@@ -139,6 +128,19 @@ public class ACHelper {
 		listOfPossibleRepair.add(359);
 		listOfPossibleRepair.add(Material.BOW.getId());
 	}
+
+	static void killInstance() {
+		instance = null;
+	}
+
+	private ExtendedConfiguration pluginConfig;
+
+	private DataManager dataManager;
+
+	private boolean serverLocked = false;
+
+	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
+
 
 	/**
 	 * Ban a new player
