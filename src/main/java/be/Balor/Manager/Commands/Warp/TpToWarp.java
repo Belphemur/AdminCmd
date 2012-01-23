@@ -30,6 +30,7 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Warp;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -72,7 +73,9 @@ public class TpToWarp extends CoreCommand {
 					String warp = split[1];
 					replace.put("name", world + ":" + warp);
 					try {
-						loc = ACWorld.getWorld(world).getWarp(warp);
+						Warp warpPoint = ACWorld.getWorld(world).getWarp(warp);
+						loc = warpPoint.loc;
+						replace.put("name", world + ":" + warpPoint.name);
 					} catch (WorldNotLoaded e) {
 						Utils.sI18n(sender, "worldNotFound", "world", world);
 						return;
@@ -81,7 +84,10 @@ public class TpToWarp extends CoreCommand {
 					replace.put("name", args.getString(0));
 
 					try {
-						loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
+						Warp warpPoint = ACWorld.getWorld(p.getWorld().getName()).getWarp(
+								args.getString(0));
+						loc = warpPoint.loc;
+						replace.put("name", warpPoint.name);
 					} catch (WorldNotLoaded e) {
 					}
 				}

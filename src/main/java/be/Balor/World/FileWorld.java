@@ -29,6 +29,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Warp;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -145,16 +146,17 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Location getWarp(String name) throws WorldNotLoaded {
+	public Warp getWarp(String name) throws WorldNotLoaded {
 		Object warp = warps.get(name);
+		String warpName = name;
 		if (warp == null) {
-			String warpName = Str.matchString(warps.getKeys(false), name);
+			warpName = Str.matchString(warps.getKeys(false), name);
 			if (warpName == null)
 				return null;
 			warp = warps.get(warpName);
 		}
 
-		return ((SimpleLocation) warp).getLocation();
+		return new Warp(warpName, ((SimpleLocation) warp).getLocation());
 	}
 
 	/*

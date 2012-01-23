@@ -327,7 +327,7 @@ public class ACPlayerListener extends PlayerListener {
 					try {
 						if (PermissionManager.isInGroup(groupName, player))
 							loc = ACWorld.getWorld(worldName).getWarp(
-									"spawn" + groupName.toLowerCase());
+									"spawn" + groupName.toLowerCase()).loc;
 						break;
 					} catch (final NoPermissionsPlugin e) {
 						loc = ACWorld.getWorld(worldName).getSpawn();
