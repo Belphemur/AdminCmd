@@ -25,6 +25,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.collect.MapMaker;
 
@@ -240,13 +241,20 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			for (Player p : playersAfk.keySet()) {
+			for (final Player p : playersAfk.keySet()) {
 				Long timeStamp = playerTimeStamp.get(p);
 				if (timeStamp != null && (now - timeStamp >= kickTime)
 						&& !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
-					p.kickPlayer(Utils.I18n("afkKick"));
-					playersAfk.remove(p);
-					playerTimeStamp.remove(p);
+					ACPluginManager.scheduleSyncTask(new Runnable() {
+
+						@Override
+						public void run() {
+							p.kickPlayer(Utils.I18n("afkKick"));
+							playersAfk.remove(p);
+							playerTimeStamp.remove(p);
+
+						}
+					});
 				}
 			}
 
