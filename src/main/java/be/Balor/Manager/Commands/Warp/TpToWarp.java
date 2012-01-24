@@ -65,6 +65,7 @@ public class TpToWarp extends CoreCommand {
 			Location loc = null;
 			if (target != null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
+
 				if (args.getString(0).contains(":")) {
 					if (!PermissionManager.hasPerm(sender, "admincmd.warp.tp.all"))
 						return;
@@ -73,9 +74,10 @@ public class TpToWarp extends CoreCommand {
 					String warp = split[1];
 					replace.put("name", world + ":" + warp);
 					try {
-						Warp warpPoint = ACWorld.getWorld(world).getWarp(warp);
+						ACWorld acWorld = ACWorld.getWorld(world);
+						Warp warpPoint = acWorld.getWarp(warp);
 						loc = warpPoint.loc;
-						replace.put("name", world + ":" + warpPoint.name);
+						replace.put("name", acWorld.getName() + ":" + warpPoint.name);
 					} catch (WorldNotLoaded e) {
 						Utils.sI18n(sender, "worldNotFound", "world", world);
 						return;

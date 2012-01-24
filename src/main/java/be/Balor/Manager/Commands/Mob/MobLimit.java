@@ -18,12 +18,12 @@ package be.Balor.Manager.Commands.Mob;
 
 import java.util.HashMap;
 
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
@@ -51,12 +51,13 @@ public class MobLimit extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		World world = null;
+		ACWorld world = null;
 		int limit;
 		if (args.hasFlag('m')) {
 			String name = args.getValueFlag('m');
-			world = sender.getServer().getWorld(args.getString(0));
-			if (world == null) {
+			try {
+				world = ACWorld.getWorld(args.getString(0));
+			} catch (WorldNotLoaded e) {
 				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
@@ -68,7 +69,7 @@ public class MobLimit extends CoreCommand {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			try {
 				limit = args.getInt(1);
-				ACWorld.getWorld(world.getName()).setMobLimit("Craft" + ct.getName(), limit);
+				world.setMobLimit("Craft" + ct.getName(), limit);
 				replace.put("number", args.getString(1));
 				replace.put("world", args.getString(0));
 				replace.put("mob", name);
@@ -84,21 +85,22 @@ public class MobLimit extends CoreCommand {
 			}
 			return;
 		}
-		world = sender.getServer().getWorld(args.getString(0));
-		if (world == null) {
+		try {
+			world = ACWorld.getWorld(args.getString(0));
+		} catch (WorldNotLoaded e) {
 			Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 			return;
 		}
 		try {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			limit = args.getInt(1);
-			ACWorld.getWorld(world.getName()).setInformation(Type.MOB_LIMIT.toString(), limit);
+			world.setInformation(Type.MOB_LIMIT.toString(), limit);
 			replace.put("number", args.getString(1));
 			replace.put("world", args.getString(0));
 			Utils.sI18n(sender, "mobLimit", replace);
 		} catch (NumberFormatException e) {
 			if (args.getString(1).equals("none")) {
-				ACWorld.getWorld(world.getName()).removeInformation(Type.MOB_LIMIT.toString());
+				world.removeInformation(Type.MOB_LIMIT.toString());
 				Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
 			} else
 				Utils.sI18n(sender, "NaN", "number", args.getString(1));
