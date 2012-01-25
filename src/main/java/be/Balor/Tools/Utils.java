@@ -69,6 +69,7 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
+import be.Balor.Tools.Type.Whois;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -366,7 +367,8 @@ public class Utils {
 						colorint = colorint * 10 + Integer.parseInt(ResultString.substring(2));
 					}
 				}
-				result = regexMatcher.replaceFirst(ChatColor.getByChar(Integer.toHexString(colorint)).toString());
+				result = regexMatcher.replaceFirst(ChatColor.getByChar(
+						Integer.toHexString(colorint)).toString());
 				regexMatcher = regex.matcher(result);
 			}
 			return result;
@@ -835,16 +837,11 @@ public class Utils {
 		return timeFormatted;
 	}
 
-	public static String replaceDateAndTimeFormat(Player player) {
-		return replaceDateAndTimeFormat(player.getName());
-	}
-
-	public static String replaceDateAndTimeFormat(String player) {
+	public static String replaceDateAndTimeFormat(ACPlayer player, Type.Whois type) {
 		final String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
-		lastlogin = formater.format(new Date(ACPlayer.getPlayer(player)
-				.getInformation("lastConnection").getLong(1)));
+		lastlogin = formater.format(new Date(player.getInformation(type.getVal()).getLong(1)));
 		if (lastlogin == formater.format(new Date(1)))
 			return null;
 		return lastlogin;
@@ -1005,7 +1002,8 @@ public class Utils {
 	public static void sParsedLocale(Player p, String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
-		final long total = ACPlayer.getPlayer(p.getName()).getCurrentPlayedTime();
+		ACPlayer acPlayer = ACPlayer.getPlayer(p);
+		final long total = acPlayer.getCurrentPlayedTime();
 		final Long[] time = Utils.transformToElapsedTime(total);
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());
@@ -1026,7 +1024,7 @@ public class Utils {
 		replace.put("connected", connected);
 		final String serverTime = replaceDateAndTimeFormat();
 		replace.put("time", serverTime);
-		final String date = replaceDateAndTimeFormat(p);
+		final String date = replaceDateAndTimeFormat(acPlayer,Whois.LOGIN);
 		if (date == null)
 			replace.put("lastlogin", I18n("noLoginInformation"));
 		else

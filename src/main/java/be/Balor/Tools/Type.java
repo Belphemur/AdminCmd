@@ -18,32 +18,20 @@ package be.Balor.Tools;
 
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum Type {
-	FLY(Category.SUPER_POWER),
-	VULCAN(Category.SUPER_POWER),
-	GOD(Category.SUPER_POWER),
-	THOR(Category.SUPER_POWER),
-	BANNED(	Category.SANCTION),
-	FIREBALL(Category.SUPER_POWER),
-	SPYMSG(Category.OTHER),
-	FROZEN(	Category.SANCTION),
-	MUTED(Category.SANCTION),
-	MOB_LIMIT(Category.WORLD),
-	NO_PICKUP(Category.SUPER_POWER),
-	WEATHER_FROZEN(Category.WORLD),
-	REPEAT_CMD(Category.OTHER),
-	TIME_FREEZED(Category.WORLD),
-	TP_REQUEST(Category.OTHER),
-	TP_AT_SEE(Category.SUPER_POWER),
-	SUPER_BREAKER(Category.SUPER_POWER),
-	INVISIBLE(Category.SUPER_POWER),
-	FAKEQUIT(Category.SUPER_POWER),
-	ETERNAL(Category.SUPER_POWER),
-	CUSTOM(Category.MISC);
+	FLY(Category.SUPER_POWER), VULCAN(Category.SUPER_POWER), GOD(Category.SUPER_POWER), THOR(
+			Category.SUPER_POWER), BANNED(Category.SANCTION), FIREBALL(Category.SUPER_POWER), SPYMSG(
+			Category.OTHER), FROZEN(Category.SANCTION), MUTED(Category.SANCTION), MOB_LIMIT(
+			Category.WORLD), NO_PICKUP(Category.SUPER_POWER), WEATHER_FROZEN(Category.WORLD), REPEAT_CMD(
+			Category.OTHER), TIME_FREEZED(Category.WORLD), TP_REQUEST(Category.OTHER), TP_AT_SEE(
+			Category.SUPER_POWER), SUPER_BREAKER(Category.SUPER_POWER), INVISIBLE(
+			Category.SUPER_POWER), FAKEQUIT(Category.SUPER_POWER), ETERNAL(Category.SUPER_POWER), CUSTOM(
+			Category.MISC);
 
 	private static final Map<String, Type> lookupName = new HashMap<String, Type>();
 
@@ -68,7 +56,7 @@ public enum Type {
 	 * Attempts to match the Type with the given name. This is a match lookup;
 	 * names will be converted to uppercase, then stripped of special characters
 	 * in an attempt to format it like the enum
-	 *
+	 * 
 	 * @param name
 	 *            Name of the type to get
 	 * @return Type if found, or null
@@ -82,10 +70,11 @@ public enum Type {
 
 		return result;
 	}
-	public static void addCustomPower(final String name)
-	{
+
+	public static void addCustomPower(final String name) {
 		lookupName.put(name, CUSTOM);
 	}
+
 	static {
 		for (Type type : values()) {
 			lookupName.put(type.name(), type);
@@ -94,7 +83,7 @@ public enum Type {
 
 	/**
 	 * Gets the Category assigned to this type
-	 *
+	 * 
 	 * @return Category of this Type
 	 */
 	public Category getCategory() {
@@ -115,6 +104,22 @@ public enum Type {
 		public String toString() {
 			String s = super.toString();
 			return s.toLowerCase().replaceAll("_", " ");
+		}
+	}
+
+	public enum Whois {
+		LOGOUT("lastDisconnect"), LOGIN("lastConnection");
+		private final String val;
+
+		private Whois(String val) {
+			this.val = val;
+		}
+
+		/**
+		 * @return the val
+		 */
+		public String getVal() {
+			return val;
 		}
 	}
 }

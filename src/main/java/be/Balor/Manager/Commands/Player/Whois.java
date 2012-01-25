@@ -28,6 +28,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
@@ -92,9 +93,18 @@ public class Whois extends CoreCommand {
 		int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(loginDate);
 		loginDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget.getName()),
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget,Type.Whois.LOGIN),
 				logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
+		
+		// Logout
+		String logoutDate = ChatColor.GOLD + "Last Quit" + ChatColor.WHITE + " : ";
+		int logoutSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(logoutDate);
+		logoutDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget,Type.Whois.LOGOUT),
+				logoutSizeRemaining, ' ');
+		sender.sendMessage(logoutDate);
 
 		// Presentation
 		String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE + " : ";
