@@ -71,12 +71,12 @@ public class MobLimit extends CoreCommand {
 				limit = args.getInt(1);
 				world.setMobLimit("Craft" + ct.getName(), limit);
 				replace.put("number", args.getString(1));
-				replace.put("world", args.getString(0));
+				replace.put("world", world.getName());
 				replace.put("mob", name);
 				Utils.sI18n(sender, "mobLimitPerMob", replace);
 			} catch (NumberFormatException e) {
 				if (args.getString(1).equals("none")) {
-					replace.put("world", args.getString(0));
+					replace.put("world", world.getName());
 					replace.put("mob", name);
 					ACWorld.getWorld(world.getName()).removeMobLimit("Craft" + ct.getName());
 					Utils.sI18n(sender, "mobLimitRemovedPerMob", replace);
