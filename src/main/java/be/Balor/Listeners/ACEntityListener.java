@@ -16,65 +16,28 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import java.util.List;
-
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
-import be.Balor.World.ACWorld;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACEntityListener extends EntityListener {
+public class ACEntityListener implements Listener {
 
-	@Override
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		if (event.isCancelled())
-			return;
-		final Entity e = event.getEntity();
-		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
-			return;
-		final World world = e.getWorld();
-		final ACWorld acWorld = ACWorld.getWorld(world.getName());
-		final List<LivingEntity> livEntities = world.getLivingEntities();
-		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
-		if (limit != -1) {
-			if ((livEntities.size() - world.getPlayers().size()) >= limit)
-				event.setCancelled(true);
-		}
-		if (!event.isCancelled()) {
-			final Class<?> entityClass = e.getClass();
-			final String entityName = entityClass.getSimpleName();
-			limit = acWorld.getMobLimit(entityName);
-			if (limit == -1)
-				return;
-			int count = 0;
-			for (final Entity entity : livEntities)
-				if (entity.getClass().equals(entityClass) && ++count >= limit) {
-					event.setCancelled(true);
-					break;
-				}
-
-		}
-	}
-
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
@@ -96,7 +59,7 @@ public class ACEntityListener extends EntityListener {
 
 	}
 
-	@Override
+	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
@@ -104,7 +67,7 @@ public class ACEntityListener extends EntityListener {
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (event.isCancelled())
 			return;
@@ -116,7 +79,7 @@ public class ACEntityListener extends EntityListener {
 			event.setCancelled(true);
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {
 		if (event.isCancelled())
 			return;

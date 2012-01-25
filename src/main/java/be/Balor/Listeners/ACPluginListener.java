@@ -19,9 +19,10 @@ package be.Balor.Listeners;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -43,14 +44,14 @@ import de.diddiz.LogBlock.LogBlock;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPluginListener extends ServerListener {
+public class ACPluginListener implements Listener {
 
-	@Override
+	@EventHandler
 	public void onPluginDisable(PluginDisableEvent event) {
 		ACPluginManager.unRegisterACPlugin(event.getPlugin());
 	}
 
-	@Override
+	@EventHandler
 	public void onPluginEnable(PluginEnableEvent event) {
 		if (event.getPlugin().getDescription().getName().equals("PermissionsEx"))
 			PermissionManager.setPEX(PermissionsEx.getPermissionManager());

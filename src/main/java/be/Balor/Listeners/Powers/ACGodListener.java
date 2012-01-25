@@ -14,23 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners;
+package be.Balor.Listeners.Powers;
 
-import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.event.server.ServerListener;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import be.Balor.Manager.CommandManager;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACServerListener extends ServerListener {
-	@Override
-	public void onServerCommand(ServerCommandEvent event) {
-		if (CommandManager.getInstance()
-				.processCommandString(event.getSender(), event.getCommand())) {
+public class ACGodListener implements Listener {
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.isCancelled())
+			return;
+		if (!(event.getEntity() instanceof Player))
+			return;
+		final Player player = (Player) event.getEntity();
+		if (ACPlayer.getPlayer(player).hasPower(Type.GOD)) {
+			if (event.getCause().equals(DamageCause.FIRE)
+					|| event.getCause().equals(DamageCause.FIRE_TICK))
+				player.setFireTicks(0);
+			event.setCancelled(true);
+			event.setDamage(0);
 		}
-	}
 
+	}
 }

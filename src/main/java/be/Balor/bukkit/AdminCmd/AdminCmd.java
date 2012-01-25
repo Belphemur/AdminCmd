@@ -2,20 +2,21 @@ package be.Balor.bukkit.AdminCmd;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import be.Balor.Listeners.ACBlockListener;
+import be.Balor.Listeners.ACColorSignListener;
+import be.Balor.Listeners.ACCreatureSpawnListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
+import be.Balor.Listeners.Powers.ACFlyListener;
+import be.Balor.Listeners.Powers.ACGodListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -131,7 +132,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
-	private final ACEntityListener entityListener = new ACEntityListener();
 
 	/**
 	 * @param name
@@ -168,51 +168,20 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		final PluginManager pm = getServer().getPluginManager();
-		final ACPluginListener pL = new ACPluginListener();
 		ACLogger.info("Plugin Enabled. (version " + pdfFile.getVersion() + ")");
-		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
-		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pL, Priority.Monitor, this);
-
+		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
 		worker.loadInfos();
 		permissionLinker.registerAllPermParent();
-		final ACPlayerListener playerListener = new ACPlayerListener();
-		final ACBlockListener blkListener = new ACBlockListener();
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Lowest, this);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
-
-		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
-				this);
-		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-		try {
-			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
-		} catch (final Throwable e) {
-			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
-				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
-			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
-		}
-		// Some problem witht the bukkit API and server_command
-		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
-		// Priority.Normal, this);
+		pm.registerEvents(new ACBlockListener(), this);
+		pm.registerEvents(new ACEntityListener(), this);
+		pm.registerEvents(new ACPlayerListener(), this);
+		pm.registerEvents(new ACWeatherListener(), this);
 		if (worker.getConfBoolean("ColoredSign"))
-			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
+			pm.registerEvents(new ACColorSignListener(), this);
 		try {
 			// create a new metrics object
 			final Metrics metrics = new Metrics();
@@ -278,7 +247,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(More.class);
 		CommandManager.getInstance().registerCommand(PlayerList.class);
 		CommandManager.getInstance().registerCommand(PlayerLocation.class);
-		CommandManager.getInstance().registerCommand(God.class);
+		if (CommandManager.getInstance().registerCommand(God.class))
+			pm.registerEvents(new ACGodListener(), this);
 		CommandManager.getInstance().registerCommand(Thor.class);
 		CommandManager.getInstance().registerCommand(Kill.class);
 		CommandManager.getInstance().registerCommand(Heal.class);
@@ -320,14 +290,15 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(BanPlayer.class);
 		CommandManager.getInstance().registerCommand(UnBan.class);
 		CommandManager.getInstance().registerCommand(KillMob.class);
-		CommandManager.getInstance().registerCommand(Fly.class);
+		if (CommandManager.getInstance().registerCommand(Fly.class))
+			pm.registerEvents(new ACFlyListener(), this);
 		CommandManager.getInstance().registerCommand(DeleteHome.class);
 		CommandManager.getInstance().registerCommand(ListHomes.class);
 		CommandManager.getInstance().registerCommand(Freeze.class);
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
 		if (CommandManager.getInstance().registerCommand(MobLimit.class))
-			pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
+			pm.registerEvents(new ACCreatureSpawnListener(), this);
 		CommandManager.getInstance().registerCommand(NoPickup.class);
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 		CommandManager.getInstance().registerCommand(MOTD.class);

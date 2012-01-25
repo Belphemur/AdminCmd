@@ -18,21 +18,30 @@ package be.Balor.Listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.block.SignChangeEvent;
 
-import be.Balor.Tools.Type;
-import be.Balor.World.ACWorld;
+import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class ACWeatherListener implements Listener {
+public class ACColorSignListener implements Listener {
 	@EventHandler
-	public void onWeatherChange(WeatherChangeEvent event) {
-		if (!ACWorld.getWorld(event.getWorld().getName())
-				.getInformation(Type.WEATHER_FROZEN.toString()).isNull())
-			event.setCancelled(true);
+	public void onSignChange(SignChangeEvent event) {
+		if (event.isCancelled())
+			return;
+		String parsed = null;
+		String line;
+		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]"))
+			return;
+		for (int i = 0; i < 4; i++) {
+			line = event.getLine(i);
+			if (line != null && !line.isEmpty()) {
+				parsed = Utils.colorParser(line);
+				if (parsed != null)
+					event.setLine(i, parsed);
+			}
+		}
 	}
-
 }

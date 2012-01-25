@@ -23,6 +23,9 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -30,7 +33,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -38,7 +40,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.util.Vector;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
@@ -62,7 +63,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPlayerListener extends PlayerListener {
+public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
 		Player newPlayer;
 
@@ -89,7 +90,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
@@ -102,7 +103,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerChat(PlayerChatEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
@@ -117,7 +118,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		if (CommandManager.getInstance()
 				.processCommandString(event.getPlayer(), event.getMessage())) {
@@ -126,7 +127,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		final Player p = event.getPlayer();
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
@@ -154,7 +155,7 @@ public class ACPlayerListener extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
@@ -204,7 +205,7 @@ public class ACPlayerListener extends PlayerListener {
 			player.setPower(Type.TP_REQUEST);
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerKick(PlayerKickEvent event) {
 		if (event.isCancelled())
 			return;
@@ -215,7 +216,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
 		if (player != null) {
@@ -231,7 +232,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.allow();
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
 		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
@@ -250,24 +251,9 @@ public class ACPlayerListener extends PlayerListener {
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
 			return;
 		}
-		final Float power = player.getPower(Type.FLY).getFloat(0);
-		if (power != 0)
-			if (p.isSneaking())
-				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else if (ACHelper.getInstance().getConfBoolean("glideWhenFallingInFlyMode")) {
-				final Vector vel = p.getVelocity();
-				vel.add(p.getLocation().getDirection()
-						.multiply(ACHelper.getInstance().getConfFloat("gliding.multiplicator"))
-						.setY(0));
-				if (vel.getY() < ACHelper.getInstance().getConfFloat(
-						"gliding.YvelocityCheckToGlide")) {
-					vel.setY(ACHelper.getInstance().getConfFloat("gliding.newYvelocity"));
-					p.setVelocity(vel);
-				}
-			}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (event.isCancelled())
 			return;
@@ -276,7 +262,7 @@ public class ACPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
@@ -295,7 +281,7 @@ public class ACPlayerListener extends PlayerListener {
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		final Player player = event.getPlayer();
 		playerRespawnOrJoin(player);
@@ -345,7 +331,7 @@ public class ACPlayerListener extends PlayerListener {
 
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if (event.isCancelled())
 			return;
