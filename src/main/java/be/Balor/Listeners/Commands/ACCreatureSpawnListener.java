@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners;
+package be.Balor.Listeners.Commands;
 
 import java.util.List;
 
@@ -51,17 +51,15 @@ public class ACCreatureSpawnListener implements Listener {
 				event.setCancelled(true);
 		}
 		if (!event.isCancelled()) {
-			final Class<?> entityClass = e.getClass();
+			final Class< ? extends Entity> entityClass = e.getClass();
 			final String entityName = entityClass.getSimpleName();
 			limit = acWorld.getMobLimit(entityName);
 			if (limit == -1)
 				return;
-			int count = 0;
-			for (final Entity entity : livEntities)
-				if (entity.getClass().equals(entityClass) && ++count >= limit) {
-					event.setCancelled(true);
-					break;
-				}
+			@SuppressWarnings("unchecked")
+			int count = world.getEntitiesByClass(entityClass).size();
+			if(count >= limit)
+				event.setCancelled(true);
 
 		}
 	}

@@ -1024,7 +1024,7 @@ public class Utils {
 		replace.put("connected", connected);
 		final String serverTime = replaceDateAndTimeFormat();
 		replace.put("time", serverTime);
-		final String date = replaceDateAndTimeFormat(acPlayer,Whois.LOGIN);
+		final String date = replaceDateAndTimeFormat(acPlayer, Whois.LOGIN);
 		if (date == null)
 			replace.put("lastlogin", I18n("noLoginInformation"));
 		else

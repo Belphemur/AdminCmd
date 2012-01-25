@@ -10,13 +10,13 @@ import org.bukkit.plugin.PluginManager;
 
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACColorSignListener;
-import be.Balor.Listeners.ACCreatureSpawnListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
-import be.Balor.Listeners.Powers.ACFlyListener;
-import be.Balor.Listeners.Powers.ACGodListener;
+import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
+import be.Balor.Listeners.Commands.ACFlyListener;
+import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
