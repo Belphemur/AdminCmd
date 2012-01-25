@@ -366,7 +366,7 @@ public class Utils {
 						colorint = colorint * 10 + Integer.parseInt(ResultString.substring(2));
 					}
 				}
-				result = regexMatcher.replaceFirst(ChatColor.getByChar((char)colorint).toString());
+				result = regexMatcher.replaceFirst(ChatColor.getByChar(Integer.toHexString(colorint)).toString());
 				regexMatcher = regex.matcher(result);
 			}
 			return result;
