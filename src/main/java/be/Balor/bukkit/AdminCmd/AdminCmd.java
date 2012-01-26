@@ -185,6 +185,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		try {
 			// create a new metrics object
 			final Metrics metrics = new Metrics();
+			ACPluginManager.setMetrics(metrics);
 
 			metrics.addCustomData(this, new Metrics.Plotter() {
 				@Override
