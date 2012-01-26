@@ -28,6 +28,7 @@ import be.Balor.Manager.Permissions.PermissionLinker;
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
 	protected final String name;
+	private final int hashCode;
 
 	/**
 	 * Create the AdminCmd plugin.
@@ -39,14 +40,23 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		ACPluginManager.registerACPlugin(this);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
+		hashCode = result;
 	}
 
 	public AbstractAdminCmdPlugin() {
 		this.name = this.getClass().getSimpleName();
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		ACPluginManager.registerACPlugin(this);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
+		hashCode = result;
 	}
-
 
 	/**
 	 * @return the name
@@ -71,19 +81,19 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		return getDescription().getName();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
-		return result;
+		return hashCode;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
