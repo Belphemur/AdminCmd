@@ -169,6 +169,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		final PluginManager pm = getServer().getPluginManager();
 		ACLogger.info("Plugin Enabled. (version " + pdfFile.getVersion() + ")");
+		ACPluginManager.registerACPlugin(this);
 		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);

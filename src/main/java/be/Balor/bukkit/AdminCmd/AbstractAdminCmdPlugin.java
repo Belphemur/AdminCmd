@@ -39,7 +39,6 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		ACPluginManager.registerACPlugin(this);
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -49,8 +48,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 
 	public AbstractAdminCmdPlugin() {
 		this.name = this.getClass().getSimpleName();
-		permissionLinker = PermissionLinker.getPermissionLinker(name);
-		ACPluginManager.registerACPlugin(this);
+		permissionLinker = PermissionLinker.getPermissionLinker(name);		
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());

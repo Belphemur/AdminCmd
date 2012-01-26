@@ -71,9 +71,9 @@ public class ACPluginManager {
 		return server;
 	}
 
-	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
-			throws IllegalArgumentException {
-		getInstance().registerPlugin(addon);
+	public static void registerACPlugin(final Plugin addon) throws IllegalArgumentException {
+		if (addon instanceof AbstractAdminCmdPlugin)
+			getInstance().registerPlugin((AbstractAdminCmdPlugin) addon);
 	}
 
 	/**
