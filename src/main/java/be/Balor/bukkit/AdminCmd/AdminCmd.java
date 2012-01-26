@@ -237,6 +237,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				public void run() {
 					try {
 						metrics.beginMeasuringPlugin(AdminCmd.this);
+						DebugLog.INSTANCE.info("Stats started");
 					} catch (IOException e) {
 						DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 					}
