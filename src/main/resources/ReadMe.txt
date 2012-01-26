@@ -58,3 +58,6 @@ config.yml -> Config file
 items.csv -> Contain the default alias of Essentials
 kits.yml -> Contain the kits.
 commands.yml -> Contain the command you want to disable, prioritize and your alias for each commands.
+motd.txt -> file to set the Message of the Day
+rules.txt -> file to set the rules
+news.txt -> file to set the news.
