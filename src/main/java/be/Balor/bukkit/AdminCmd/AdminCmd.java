@@ -241,7 +241,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 						DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 					}
 				}
-			}, 60 * 20);
+			}, 30 * 20);
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 		}
