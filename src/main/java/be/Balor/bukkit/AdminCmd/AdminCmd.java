@@ -231,9 +231,17 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					return AFKWorker.getInstance().nbAfk();
 				}
 			});
+			getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
 
-			// 'this' in this context is the Plugin object
-			metrics.beginMeasuringPlugin(this);
+				@Override
+				public void run() {
+					try {
+						metrics.beginMeasuringPlugin(AdminCmd.this);
+					} catch (IOException e) {
+						DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
+					}
+				}
+			}, 60 * 20);
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 		}
