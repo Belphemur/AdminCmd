@@ -242,7 +242,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 						DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 					}
 				}
-			}, 30 * 20);
+			}, 30 * Utils.secInTick);
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 		}
@@ -697,6 +697,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
+		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
+				+ ChatColor.DARK_RED + "You lost it.");
 		LocaleManager.getInstance().save();
 	}
 }

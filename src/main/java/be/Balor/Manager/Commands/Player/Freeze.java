@@ -26,6 +26,8 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -50,11 +52,12 @@ public class Freeze extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		String timeOut = args.getValueFlag('t');
 		Player player = sender.getServer().getPlayer(args.getString(0));
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.FROZEN)) {
 				acp.removePower(Type.FROZEN);
 				Utils.sI18n(player, "freezeDisabled");
@@ -65,6 +68,18 @@ public class Freeze extends CoreCommand {
 				Utils.sI18n(player, "freezeEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "freezeEnabledTarget", replace);
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FROZEN),
+						Utils.secInTick * 60 * timeOutValue);
 			}
 		}
 

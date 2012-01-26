@@ -14,64 +14,44 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Player;
+package be.Balor.Tools.Threads;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SpyMsg extends CoreCommand {
+public class RemovePowerTask implements Runnable {
+
+	private final ACPlayer player;
+	private final Type power;
 
 	/**
-	 * 
+	 * @param player
+	 * @param power
 	 */
-	public SpyMsg() {
-		permNode = "admincmd.player.spymsg";
-		cmdName = "bal_spymsg";
+	public RemovePowerTask(ACPlayer player, Type power) {
+		super();
+		this.player = player;
+		this.power = power;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	 * @see java.lang.Runnable#run()
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender)) {
-			ACPlayer acp = ACPlayer.getPlayer(((Player) sender));
-			if (acp.hasPower(Type.SPYMSG)) {
-				acp.removePower(Type.SPYMSG);
-				ACHelper.getInstance().removeSpy((Player) sender);
-				Utils.sI18n(sender, "spymsgDisabled");
-			} else {
-				acp.setPower(Type.SPYMSG);
-				ACHelper.getInstance().addSpy((Player) sender);
-				Utils.sI18n(sender, "spymsgEnabled");
-			}
-
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return true;
+	public void run() {
+		player.removePower(power);
+		Player handler = player.getHandler();
+		if (handler != null)
+			Utils.sI18n(handler, "timeOutPower", "power", power.display());
 	}
 
 }

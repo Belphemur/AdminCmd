@@ -139,6 +139,7 @@ public class Utils {
 	public final static long minuteInMillis = secondInMillis * 60;
 	public final static long hourInMillis = minuteInMillis * 60;
 	public final static long dayInMillis = hourInMillis * 24;
+	public final static int secInTick = 20;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)

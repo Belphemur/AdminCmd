@@ -34,7 +34,7 @@ public class CommandArgs implements Iterable<String> {
 	protected final List<String> parsedArgs;
 	protected final Map<Character, String> valueFlags = new HashMap<Character, String>();
 	protected final Set<Character> booleanFlags = new HashSet<Character>();
-	public final int length;
+	public int length;
 
 	public CommandArgs(String args) {
 		this(args.split(" "));
@@ -160,6 +160,7 @@ public class CommandArgs implements Iterable<String> {
 		if (result == null)
 			return null;
 		parsedArgs.remove(result);
+		length--;
 		return result;
 	}
 

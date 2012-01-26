@@ -26,7 +26,9 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -53,6 +55,7 @@ public class Vulcan extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player player = null;
 		float power = ACHelper.getInstance().getConfFloat("DefaultVulcanPower");
+		String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
@@ -79,6 +82,18 @@ public class Vulcan extends CoreCommand {
 				Utils.sI18n(player, "vulcanEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "vulcanEnabledTarget", replace);
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.VULCAN),
+						Utils.secInTick * 60 * timeOutValue);
 			}
 		}
 	}
