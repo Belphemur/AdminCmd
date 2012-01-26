@@ -53,7 +53,6 @@ public class ACPluginListener implements Listener {
 
 	@EventHandler
 	public void onPluginEnable(PluginEnableEvent event) {
-		ACPluginManager.registerACPlugin(event.getPlugin());
 		if (!PermissionManager.isPermissionsExSet()) {
 			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsEx");

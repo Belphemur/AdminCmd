@@ -123,6 +123,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		ACPluginManager.registerACPlugin(this);
 		registerPermParents();
 		CommandManager.getInstance().registerACPlugin(this);
 		registerCmds();
