@@ -154,6 +154,8 @@ public class ACPluginManager {
 			throws IllegalArgumentException {
 		if (!pluginInstances.containsKey(addon.getName())) {
 			pluginInstances.put(addon.getName(), addon);
+			if (corePlugin == null || addon.equals(corePlugin))
+				return;
 			metrics.addCustomData(corePlugin, new Plotter() {
 
 				@Override
@@ -184,18 +186,19 @@ public class ACPluginManager {
 	 */
 	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
 		pluginInstances.remove(addon.getName());
-		metrics.removeCustomData(corePlugin, new Plotter() {
+		if (!addon.equals(corePlugin))
+			metrics.removeCustomData(corePlugin, new Plotter() {
 
-			@Override
-			public int getValue() {
-				return 1;
-			}
+				@Override
+				public int getValue() {
+					return 1;
+				}
 
-			@Override
-			public String getColumnName() {
-				return "Addon " + addon.getName();
-			}
-		});
+				@Override
+				public String getColumnName() {
+					return "Addon " + addon.getName();
+				}
+			});
 	}
 
 }
