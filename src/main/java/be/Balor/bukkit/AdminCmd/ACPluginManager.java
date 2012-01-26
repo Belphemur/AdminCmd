@@ -182,8 +182,20 @@ public class ACPluginManager {
 	 * 
 	 * @param addon
 	 */
-	protected void unRegisterPlugin(AbstractAdminCmdPlugin addon) {
+	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
 		pluginInstances.remove(addon.getName());
+		metrics.removeCustomData(corePlugin, new Plotter() {
+
+			@Override
+			public int getValue() {
+				return 1;
+			}
+
+			@Override
+			public String getColumnName() {
+				return "Addon " + addon.getName();
+			}
+		});
 	}
 
 }

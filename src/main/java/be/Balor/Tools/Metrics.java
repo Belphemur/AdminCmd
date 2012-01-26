@@ -167,6 +167,21 @@ public class Metrics {
 	}
 
 	/**
+	 * Removes a custom data plotter for a given plugin
+	 * 
+	 * @param plugin
+	 * @param plotter
+	 */
+	public void removeCustomData(Plugin plugin, Plotter plotter) {
+		Set<Plotter> plotters = customData.get(plugin);
+
+		if (plotters == null)
+			return;
+
+		plotters.remove(plotter);
+	}
+
+	/**
 	 * Begin measuring a plugin
 	 * 
 	 * @param plugin
