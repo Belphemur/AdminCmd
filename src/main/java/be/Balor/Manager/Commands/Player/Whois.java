@@ -32,7 +32,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -150,8 +150,7 @@ public class Whois extends CoreCommand {
 		sender.sendMessage(line);
 
 		// Immunity Level
-		int level = actarget.getInformation("immunityLvl").getInt(
-				ACHelper.getInstance().getConfInt("defaultImmunityLvl"));
+		int level = actarget.getInformation("immunityLvl").getInt(ConfigEnum.DIMMUNITY.getInt());
 		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);

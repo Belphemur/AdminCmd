@@ -28,6 +28,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,8 +41,7 @@ public class ACBlockListener implements Listener {
 			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
 		final ItemStack itemInHand = event.getItemInHand();
-		if (itemInHand != null
-				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
+		if (itemInHand != null && itemInHand.getTypeId() == ConfigEnum.SB_ITEM.getInt()
 				&& player.hasPower(Type.SUPER_BREAKER)) {
 			event.setInstaBreak(true);
 			itemInHand.setDurability((short) 0);

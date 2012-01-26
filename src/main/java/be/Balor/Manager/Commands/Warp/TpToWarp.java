@@ -34,6 +34,7 @@ import be.Balor.Tools.Warp;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
@@ -101,8 +102,7 @@ public class TpToWarp extends CoreCommand {
 							.scheduleSyncDelayedTask(
 									ACHelper.getInstance().getCoreInstance(),
 									new DelayedTeleport(target.getLocation(), loc, target, replace,
-											sender),
-									ACHelper.getInstance().getConfLong("teleportDelay"));
+											sender), ConfigEnum.TP_DELAY.getLong());
 				}
 			}
 		}
@@ -150,12 +150,11 @@ public class TpToWarp extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (locBefore.equals(target.getLocation())
-					&& ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+			if (locBefore.equals(target.getLocation()) && ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
-			} else if (!ACHelper.getInstance().getConfBoolean("teleportDelay")) {
+			} else if (!ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);

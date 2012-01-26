@@ -32,11 +32,12 @@ import org.bukkit.plugin.PluginDescriptionFile;
 public enum ConfigEnum {
 	MOTD("MessageOfTheDay", true, "if true, display MOTD on join"),
 	NEWS("DisplayNewsOnJoin", true, "If true, display the news message on Join"),
-	RULES("DisplayRulesOnlyOnFirstJoin", true, "If true, display the rules ONLY ON FIRST JOIN\n"
+	RULES("DisplayRulesOnJoin", true, "If true, display the rules on Join"),
+	FJ_RULES("DisplayRulesOnlyOnFirstJoin", false, "If true, display the rules ONLY ON FIRST JOIN\n"
 			+ "(override the above parameter DisplayRulesOnJoin)"),
-	DVULCAN("DefaultVulcanPower", 4.0D, "Default value for Vulcan power"),
-	DFB("DefaultFireBallPower", 1.0D, "Default value for Fireball power"),
-	DFLY("DefaultFlyPower", 1.75D, "Default value for Fly power"),
+	DVULCAN("DefaultVulcanPower", 4.0F, "Default value for Vulcan power"),
+	DFB("DefaultFireBallPower", 1.0F, "Default value for Fireball power"),
+	DFLY("DefaultFlyPower", 1.75F, "Default value for Fly power"),
 	SUPERPERM("forceOfficialBukkitPerm", false, "Only useful when using bridge with SuperPerm,\n"
 			+ "to avoid the use of the bridge."),
 	LOCALE("locale", "en_US", "Language of messages displayed in the plugin."),
@@ -59,7 +60,7 @@ public enum ConfigEnum {
 	FQINVISIBLE("fakeQuitWhenInvisible", true, "Fake quit when you become invisible"),
 	NPINVISIBLE("InvisAndNoPickup", true, "Setting this to true, will disable the auto-picking item when invisible"),
 	GLIDE("glideWhenFallingInFlyMode", true, "Activate the parachute when falling in fly mode"),
-	G_YVEL("gliding.newYvelocity", -0.5D, "New velocity to slower the fall"),
+	G_NEWYVEL("gliding.newYvelocity", -0.5D, "New velocity to slower the fall"),
 	G_VELCHECK("gliding.YvelocityCheckToGlide", -0.2D, "Velocity needed to open the parachute"),
 	G_MULT("gliding.multiplicator", 0.1D, "Gliding multiplicator"),
 	COLSIGN("ColoredSign", true, "Activate the color sign, using & to select the color."),
@@ -90,7 +91,7 @@ public enum ConfigEnum {
 			+ "Can be : globalSpawn, bed, home, none"),
 	CHECKTP("checkTeleportLocation", false, "When using a Spawn/Home command, the plugin will check\n"
 			+ "if the player didn't moved"),
-	DELAYTP("teleportDelay", 0, "Delay before teleporting (Spawn/Home) in ticks (20 Ticks = 1 Sec)"),
+	TP_DELAY("teleportDelay", 0, "Delay before teleporting (Spawn/Home) in ticks (20 Ticks = 1 Sec)"),
 	LOG_CMD("logAllCmd", false, "To log all command in the console and server.log"),
 	JQMSG("useJoinQuitMsg", true, "To activate the change of the Join/Quit message\n"
 			+ "(that can be configured in the locale file)"),
@@ -159,7 +160,6 @@ public enum ConfigEnum {
 	public List<String> getStringList() {
 		return config.getStringList(confVal);
 	}
-
 	/**
 	 * @return the defaultvalues
 	 */
@@ -193,3 +193,4 @@ public enum ConfigEnum {
 		ConfigEnum.pluginName = pdf.getName();
 	}
 }
+

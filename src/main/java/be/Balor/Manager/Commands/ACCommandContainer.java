@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -57,7 +58,7 @@ public class ACCommandContainer {
 	 * Execute the command
 	 */
 	public void execute() {
-		if (ACHelper.getInstance().getConfBoolean("logAllCmd")) {
+		if (ConfigEnum.LOG_CMD.getBoolean()) {
 			String name = "Console";
 			if (sender instanceof Player)
 				name = ((Player) sender).getName();

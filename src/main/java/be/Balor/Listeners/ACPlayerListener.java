@@ -56,6 +56,7 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -80,7 +81,7 @@ public class ACPlayerListener implements Listener {
 					+ newPlayer.getName());
 			for (final Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
-				if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
+				if (ConfigEnum.FQINVISIBLE.getBoolean())
 					Utils.removePlayerFromOnlineList(toVanish, newPlayer);
 			}
 			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for "
@@ -93,7 +94,7 @@ public class ACPlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
+		if (ConfigEnum.RESET_POWERS.getBoolean()
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
 			player.removeAllSuperPower();
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
@@ -107,7 +108,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerChat(PlayerChatEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
+		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
@@ -129,13 +130,15 @@ public class ACPlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.isCancelled())
+			return;
 		final Player p = event.getPlayer();
-		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
+		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		final ACPlayer player = ACPlayer.getPlayer(p.getName());
+		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
@@ -159,7 +162,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
-		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
+		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setJoinMessage(Utils.I18n("joinMessage", replace));
@@ -169,7 +172,7 @@ public class ACPlayerListener implements Listener {
 			Utils.sI18n(event.getPlayer(), "stillInv");
 			InvisibleWorker.getInstance().onJoinEvent(p);
 		}
-		if (ACHelper.getInstance().getConfBoolean("autoAfk"))
+		if (ConfigEnum.AUTO_AFK.getBoolean())
 			AFKWorker.getInstance().updateTimeStamp(p);
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
 		if (player.hasPower(Type.FAKEQUIT)) {
@@ -180,27 +183,24 @@ public class ACPlayerListener implements Listener {
 			ACHelper.getInstance().addSpy(p);
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
-			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
+			if (ConfigEnum.FCSPAWN.getBoolean())
 				ACHelper.getInstance().spawn(p);
-			if (!ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint")
-					&& ACHelper.getInstance().getConfString("globalRespawnSetting")
-							.equalsIgnoreCase("group"))
+			if (!ConfigEnum.FCSPAWN.getBoolean()
+					&& ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group"))
 				ACHelper.getInstance().groupSpawn(p);
-			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
+			if (ConfigEnum.FJ_RULES.getBoolean())
 				Utils.sParsedLocale(p, "Rules");
-			if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+			if (ConfigEnum.MOTD.getBoolean())
 				Utils.sParsedLocale(p, "MOTDNewUser");
-		} else if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
+		} else if (ConfigEnum.MOTD.getBoolean())
 			Utils.sParsedLocale(p, "MOTD");
 		player.setInformation("lastConnection", System.currentTimeMillis());
 
-		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
+		if (ConfigEnum.NEWS.getBoolean())
 			Utils.sParsedLocale(p, "NEWS");
-		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin")
-				&& !ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
+		if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
 			Utils.sParsedLocale(p, "Rules");
-		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
-				&& !player.hasPower(Type.TP_REQUEST)
+		if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
 			player.setPower(Type.TP_REQUEST);
 	}
@@ -235,7 +235,7 @@ public class ACPlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
-		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
+		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
@@ -268,7 +268,7 @@ public class ACPlayerListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
 		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
-		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
+		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setQuitMessage(Utils.I18n("quitMessage", replace));
@@ -285,7 +285,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		final Player player = event.getPlayer();
 		playerRespawnOrJoin(player);
-		final String spawn = ACHelper.getInstance().getConfString("globalRespawnSetting");
+		final String spawn = ConfigEnum.GSPAWN.getString();
 		Location loc = null;
 		final String worldName = player.getWorld().getName();
 		if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
@@ -377,9 +377,8 @@ public class ACPlayerListener implements Listener {
 			try {
 				final Player p = player.getHandler();
 				final Block toTp = p.getWorld().getBlockAt(
-						p.getTargetBlock(null,
-								ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
-								.getLocation().add(0, 1, 0));
+						p.getTargetBlock(null, ConfigEnum.RTPSEE.getInt()).getLocation()
+								.add(0, 1, 0));
 				if (toTp.getTypeId() == 0) {
 					final Location loc = toTp.getLocation().clone();
 					loc.setPitch(p.getLocation().getPitch());

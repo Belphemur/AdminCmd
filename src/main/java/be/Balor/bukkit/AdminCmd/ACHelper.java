@@ -415,37 +415,6 @@ public class ACHelper {
 			return -1;
 		return value;
 	}
-
-	/**
-	 * Get boolean from config
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public boolean getConfBoolean(String path) {
-		return pluginConfig.getBoolean(path, false);
-	}
-
-	/**
-	 * Get float parameter of config file.
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public Float getConfFloat(String path) {
-		return Float.parseFloat(pluginConfig.getString(path));
-	}
-
-	/**
-	 * Get Integer parameter from config.
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public Integer getConfInt(String path) {
-		return pluginConfig.getInt(path, 0);
-	}
-
 	/*
 	 * private void convertBannedMuted() { Map<String, Object> map =
 	 * fManager.loadMap(Type.BANNED, null, Type.BANNED.toString()); if
@@ -458,26 +427,6 @@ public class ACHelper {
 	 * ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key)); }
 	 * muted.delete(); } }
 	 */
-
-	/**
-	 * Get Long parameter from config.
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public Long getConfLong(String path) {
-		return pluginConfig.getLong(path, 0);
-	}
-
-	/**
-	 * Get String parameter from config.
-	 * 
-	 * @param path
-	 * @return
-	 */
-	public String getConfString(String path) {
-		return pluginConfig.getString(path, "");
-	}
 
 	/**
 	 * @return the pluginInstance
@@ -874,7 +823,7 @@ public class ACHelper {
 		CommandManager.getInstance().registerACPlugin(coreInstance);
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias(coreInstance);
-		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins"))
+		if (ConfigEnum.H_ALLPLUGIN.getBoolean())
 			for (final Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
 		if (pluginConfig.getBoolean("autoAfk", true)) {
@@ -1019,56 +968,8 @@ public class ACHelper {
 		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(coreInstance
 				.getDataFolder(), "config.yml"));
-		pluginConfig.add("resetPowerWhenTpAnotherWorld", true);
-		pluginConfig.add("noMessage", false);
-		pluginConfig.add("locale", "en_US");
-		pluginConfig.add("statutCheckInSec", 20);
-		pluginConfig.add("invisibleRangeInBlock", 320);
-		pluginConfig.add("autoAfk", true);
-		pluginConfig.add("afkTimeInSecond", 60);
-		pluginConfig.add("autoKickAfkPlayer", false);
-		pluginConfig.add("afkKickInMinutes", 3);
-		pluginConfig.add("glideWhenFallingInFlyMode", true);
-		pluginConfig.add("maxHomeByUser", 0);
-		pluginConfig.add("fakeQuitWhenInvisible", true);
-		pluginConfig.add("forceOfficialBukkitPerm", false);
-		pluginConfig.add("MessageOfTheDay", false);
-		pluginConfig.add("ColoredSign", true);
-		pluginConfig.add("DefaultFlyPower", 1.75F);
-		pluginConfig.add("DefaultFireBallPower", 1.0F);
-		pluginConfig.add("DefaultVulcanPower", 4.0F);
-		pluginConfig.add("firstConnectionToSpawnPoint", false);
-		pluginConfig.add("mutedPlayerCantPm", false);
-		pluginConfig.add("maxRangeForTpAtSee", 400);
-		pluginConfig.add("tpRequestTimeOutInMinutes", 5);
-		pluginConfig.add("verboseLog", true);
-		pluginConfig.add("tpRequestActivatedByDefault", false);
-		pluginConfig.add("logPrivateMessages", false);
-		pluginConfig.add("broadcastServerReload", true);
-		pluginConfig.add("help.entryPerPage", 9);
-		pluginConfig.add("help.shortenEntries", false);
-		pluginConfig.add("help.useWordWrap", false);
-		pluginConfig.add("help.wordWrapRight", false);
-		pluginConfig.add("help.getHelpForAllPlugins", true);
-		pluginConfig.add("superBreakerItem", Material.DIAMOND_PICKAXE.getId());
-		pluginConfig.add("DisplayNewsOnJoin", true);
-		pluginConfig.add("DisplayRulesOnJoin", true);
-		pluginConfig.add("DisplayRulesOnlyOnFirstJoin", false);
-		pluginConfig.add("DateAndTime.Format", "E, dd/MM/yy '-' HH:mm:ss");
-		pluginConfig.add("DateAndTime.GMToffset", "+00:00");
-		pluginConfig.add("useImmunityLvl", false);
-		pluginConfig.add("defaultImmunityLvl", 0);
-		pluginConfig.add("maxItemAmount", 0);
-		pluginConfig.add("useDisplayName", true);
-		pluginConfig.add("debug", false);
-		pluginConfig.add("globalRespawnSetting", "globalSpawn");
-		pluginConfig.add("groupNames", Arrays.asList("default", "mod", "admin"));
-		pluginConfig.add("InvisAndNoPickup", false);
-		pluginConfig.add("checkTeleportLocation", false);
-		pluginConfig.add("teleportDelay", 0L);
-		pluginConfig.add("logAllCmd", false);
-		pluginConfig.add("useJoinQuitMsg", true);
-		pluginConfig.add("delayBeforeWriteUserFileInSec", 2 * 60);
+		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
+		ConfigEnum.setConfig(pluginConfig);
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
@@ -1080,10 +981,10 @@ public class ACHelper {
 			pluginConfig.remove("prioritizedCommands");
 		}
 		if (pluginConfig.get("glinding") != null) {
-			pluginConfig.add("gliding.multiplicator", getConfFloat("glinding.multiplicator"));
+			pluginConfig.add("gliding.multiplicator", ConfigEnum.G_MULT.getFloat());
 			pluginConfig.add("gliding.YvelocityCheckToGlide",
-					getConfFloat("glinding.YvelocityCheckToGlide"));
-			pluginConfig.add("gliding.newYvelocity", getConfFloat("glinding.newYvelocity"));
+					ConfigEnum.G_VELCHECK.getFloat());
+			pluginConfig.add("gliding.newYvelocity", ConfigEnum.G_NEWYVEL.getFloat());
 			pluginConfig.remove("glinding");
 
 		} else {

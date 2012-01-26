@@ -51,14 +51,14 @@ public class ACCreatureSpawnListener implements Listener {
 				event.setCancelled(true);
 		}
 		if (!event.isCancelled()) {
-			final Class< ? extends Entity> entityClass = e.getClass();
+			final Class<? extends Entity> entityClass = e.getClass();
 			final String entityName = entityClass.getSimpleName();
 			limit = acWorld.getMobLimit(entityName);
 			if (limit == -1)
 				return;
 			@SuppressWarnings("unchecked")
-			int count = world.getEntitiesByClass(entityClass).size();
-			if(count >= limit)
+			final int count = world.getEntitiesByClass(entityClass).size();
+			if (count >= limit)
 				event.setCancelled(true);
 
 		}

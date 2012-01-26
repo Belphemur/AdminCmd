@@ -26,6 +26,9 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -51,6 +54,7 @@ public class Eternal extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player player = null;
+		String timeOut = args.getValueFlag('t');
 		if (args.length >= 1)
 				player = Utils.getUser(sender, args, permNode, 0, false);
 		else
@@ -71,6 +75,18 @@ public class Eternal extends CoreCommand {
 				Utils.sI18n(player, "eternalEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "eternalEnabledTarget", replace);
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.ETERNAL),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

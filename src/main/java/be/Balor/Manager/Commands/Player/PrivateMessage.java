@@ -29,6 +29,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -56,8 +57,8 @@ public class PrivateMessage extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender, false)
-				&& ACPlayer.getPlayer(((Player) sender).getName()).hasPower(Type.MUTED)
-				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
+				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
+				&& ConfigEnum.MUTEDPM.getBoolean()) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
@@ -97,7 +98,7 @@ public class PrivateMessage extends CoreCommand {
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))
 					p.sendMessage(spyMsg);
-			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages")
+			if (ConfigEnum.LOG_PM.getBoolean()
 					&& !(sender instanceof ConsoleCommandSender))
 				ACLogger.info(spyMsg);
 		} else

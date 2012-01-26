@@ -31,8 +31,8 @@ import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Help.HelpLister;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.herocraftonline.dev.heroes.Heroes;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -110,7 +110,7 @@ public class ACPluginListener implements Listener {
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
-		if (ACHelper.getInstance().getConfBoolean("help.getHelpForAllPlugins")) {
+		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
 			for (final Plugin plugin : event.getPlugin().getServer().getPluginManager()
 					.getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);

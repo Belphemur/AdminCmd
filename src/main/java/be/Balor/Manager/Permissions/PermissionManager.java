@@ -30,7 +30,7 @@ import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
@@ -50,15 +50,6 @@ public class PermissionManager {
 	private static boolean permissionsBukkit = false;
 	private static IPermissionPlugin permissionHandler;
 	private static boolean warningSend = false;
-	private Hashtable<String, WeakReference<PermissionLinker>> permissionLinkers = new Hashtable<String, WeakReference<PermissionLinker>>();
-
-	/**
-	 *
-	 */
-	private PermissionManager() {
-		if (permissionHandler == null)
-			permissionHandler = new SuperPermissions();
-	}
 
 	/**
 	 * @return the instance
@@ -69,52 +60,31 @@ public class PermissionManager {
 		return instance;
 	}
 
-	public synchronized PermissionLinker getPermissionLinker(String name) {
-		WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
-		if (ref == null) {
-			return null;
-		}
-		PermissionLinker perm = ref.get();
-		if (perm == null) {
-			// Hashtable holds stale weak reference
-			// to a logger which has been GC-ed.
-			permissionLinkers.remove(name);
-		}
-		return perm;
+	public static String getPermissionLimit(Player p, String limit) {
+		return permissionHandler.getPermissionLimit(p, limit);
 	}
 
-	public synchronized boolean addPermissionLinker(PermissionLinker perm) {
-		final String name = perm.getName();
-		if (name == null) {
-			throw new NullPointerException();
-		}
-
-		WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
-		if (ref != null) {
-			if (ref.get() == null) {
-				// Hashtable holds stale weak reference
-				// to a logger which has been GC-ed.
-				// Allow to register new one.
-				permissionLinkers.remove(name);
-			} else {
-				// We already have a registered logger with the given name.
-				return false;
-			}
-		}
-		// We're adding a new logger.
-		// Note that we are creating a weak reference here.
-		permissionLinkers.put(name, new WeakReference<PermissionLinker>(perm));
-		return true;
+	public static String getPrefix(Player player) {
+		return permissionHandler.getPrefix(player);
 	}
 
-	PermissionLinker demandPermissionLinker(String name) {
-		PermissionLinker result = getPermissionLinker(name);
-		if (result == null) {
-			result = new PermissionLinker(name);
-			addPermissionLinker(result);
-			result = getPermissionLinker(name);
-		}
-		return result;
+	public static String getSuffix(Player player) {
+		return permissionHandler.getSuffix(player);
+	}
+
+	public static boolean hasPerm(CommandSender player, Permission perm)
+			throws NullPointerException {
+		return hasPerm(player, perm, true);
+	}
+
+	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg)
+			throws NullPointerException {
+		if (perm == null)
+			throw new NullPointerException("The Permission Node can't be NULL");
+		if (player == null)
+			throw new NullPointerException("The CommandSender can't be NULL");
+		return permissionHandler.hasPerm(player, perm, errorMsg);
+
 	}
 
 	/**
@@ -130,11 +100,6 @@ public class PermissionManager {
 	 *             when the permission node is null
 	 */
 	public static boolean hasPerm(CommandSender player, String perm) throws NullPointerException {
-		return hasPerm(player, perm, true);
-	}
-
-	public static boolean hasPerm(CommandSender player, Permission perm)
-			throws NullPointerException {
 		return hasPerm(player, perm, true);
 	}
 
@@ -162,31 +127,24 @@ public class PermissionManager {
 
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg)
-			throws NullPointerException {
-		if (perm == null)
-			throw new NullPointerException("The Permission Node can't be NULL");
-		if (player == null)
-			throw new NullPointerException("The CommandSender can't be NULL");
-		return permissionHandler.hasPerm(player, perm, errorMsg);
-
+	/**
+	 * @return the bPermissions
+	 */
+	public static boolean isbPermissionsSet() {
+		return bPermissions;
 	}
 
 	public static boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin {
 		return permissionHandler.isInGroup(groupName, player);
 	}
 
-	public static String getPermissionLimit(Player p, String limit) {
-		return permissionHandler.getPermissionLimit(p, limit);
+	/**
+	 * @return the PermissionsBukkit
+	 */
+	public static boolean isPermissionsBukkitSet() {
+		return permissionsBukkit;
 	}
 
-	public static String getPrefix(Player player) {
-		return permissionHandler.getPrefix(player);
-	}
-
-	public static String getSuffix(Player player) {
-		return permissionHandler.getSuffix(player);
-	}
 	/**
 	 * @return the permissionsEx
 	 */
@@ -199,64 +157,6 @@ public class PermissionManager {
 	 */
 	public static boolean isYetiPermissionsSet() {
 		return yetiPermissions;
-	}
-
-	/**
-	 * @return the bPermissions
-	 */
-	public static boolean isbPermissionsSet() {
-		return bPermissions;
-	}
-
-	/**
-	 * @return the PermissionsBukkit
-	 */
-	public static boolean isPermissionsBukkitSet() {
-		return permissionsBukkit;
-	}
-
-	/**
-	 * @param pEX
-	 *            the pEX to set
-	 */
-	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
-		if (!permissionsEx) {
-			if (!ACHelper.getInstance().getConfBoolean("forceOfficialBukkitPerm")) {
-				permissionsEx = true;
-				permissionHandler = new PermissionsEx(pEX);
-				if (!yetiPermissions)
-					ACLogger.info("Successfully linked with PermissionsEX");
-				else
-					ACLogger.info("Use PermissionsEX instead of Yeti's Permissions.");
-			} else if (!warningSend) {
-				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
-				warningSend = true;
-			}
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * Set Permission Plugin
-	 * 
-	 * @param plugin
-	 * @return
-	 */
-	public static boolean setYetiPermissions(PermissionHandler plugin) {
-		if (!yetiPermissions && !permissionsEx) {
-			if (!ACHelper.getInstance().getConfBoolean("forceOfficialBukkitPerm")) {
-				yetiPermissions = true;
-				permissionHandler = new YetiPermissions(plugin);
-				ACLogger.info("Successfully linked with Yeti's Permissions.");
-			} else if (!warningSend) {
-				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
-				warningSend = true;
-			}
-		} else {
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -298,6 +198,108 @@ public class PermissionManager {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @param pEX
+	 *            the pEX to set
+	 */
+	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
+		if (!permissionsEx) {
+			if (!ConfigEnum.SUPERPERM.getBoolean()) {
+				permissionsEx = true;
+				permissionHandler = new PermissionsEx(pEX);
+				if (!yetiPermissions)
+					ACLogger.info("Successfully linked with PermissionsEX");
+				else
+					ACLogger.info("Use PermissionsEX instead of Yeti's Permissions.");
+			} else if (!warningSend) {
+				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
+				warningSend = true;
+			}
+			return true;
+		} else
+			return false;
+	}
+
+	/**
+	 * Set Permission Plugin
+	 * 
+	 * @param plugin
+	 * @return
+	 */
+	public static boolean setYetiPermissions(PermissionHandler plugin) {
+		if (!yetiPermissions && !permissionsEx) {
+			if (!ConfigEnum.SUPERPERM.getBoolean()) {
+				yetiPermissions = true;
+				permissionHandler = new YetiPermissions(plugin);
+				ACLogger.info("Successfully linked with Yeti's Permissions.");
+			} else if (!warningSend) {
+				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
+				warningSend = true;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	private final Hashtable<String, WeakReference<PermissionLinker>> permissionLinkers = new Hashtable<String, WeakReference<PermissionLinker>>();
+
+	/**
+	 *
+	 */
+	private PermissionManager() {
+		if (permissionHandler == null)
+			permissionHandler = new SuperPermissions();
+	}
+
+	public synchronized boolean addPermissionLinker(PermissionLinker perm) {
+		final String name = perm.getName();
+		if (name == null) {
+			throw new NullPointerException();
+		}
+
+		final WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
+		if (ref != null) {
+			if (ref.get() == null) {
+				// Hashtable holds stale weak reference
+				// to a logger which has been GC-ed.
+				// Allow to register new one.
+				permissionLinkers.remove(name);
+			} else {
+				// We already have a registered logger with the given name.
+				return false;
+			}
+		}
+		// We're adding a new logger.
+		// Note that we are creating a weak reference here.
+		permissionLinkers.put(name, new WeakReference<PermissionLinker>(perm));
+		return true;
+	}
+
+	PermissionLinker demandPermissionLinker(String name) {
+		PermissionLinker result = getPermissionLinker(name);
+		if (result == null) {
+			result = new PermissionLinker(name);
+			addPermissionLinker(result);
+			result = getPermissionLinker(name);
+		}
+		return result;
+	}
+
+	public synchronized PermissionLinker getPermissionLinker(String name) {
+		final WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
+		if (ref == null) {
+			return null;
+		}
+		final PermissionLinker perm = ref.get();
+		if (perm == null) {
+			// Hashtable holds stale weak reference
+			// to a logger which has been GC-ed.
+			permissionLinkers.remove(name);
+		}
+		return perm;
 	}
 
 }

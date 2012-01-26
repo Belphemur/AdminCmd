@@ -15,7 +15,7 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 
 import be.Balor.Tools.Files.YmlFilter;
 import be.Balor.Tools.Help.String.Str;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 public class HelpLoader {
 	private static Logger HelpLogger = Logger.getLogger("Minecraft");
@@ -133,7 +133,7 @@ public class HelpLoader {
 			// HelpLogger.info(count + " extra help entries loaded" +
 			// (filesLoaded.length()>2 ? " from files: " +
 			// filesLoaded.replaceFirst(", $", "") : ""));
-			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+			if (ConfigEnum.VERBOSE.getBoolean())
 				HelpLogger.info("[AdminCmd] "
 						+ count
 						+ " extra help entries loaded"

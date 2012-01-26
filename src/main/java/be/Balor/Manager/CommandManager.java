@@ -49,10 +49,10 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -207,7 +207,7 @@ public class CommandManager implements CommandExecutor {
 			unRegisterBukkitCommand(command.getPluginCommand());
 			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 					command.getCmdName());
-			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+			if (ConfigEnum.VERBOSE.getBoolean())
 				ACLogger.info(e.getMessage());
 			return false;
 		} catch (CommandAlreadyExist e) {
@@ -229,7 +229,7 @@ public class CommandManager implements CommandExecutor {
 				unRegisterBukkitCommand(command.getPluginCommand());
 				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 						command.getCmdName());
-				if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+				if (ConfigEnum.VERBOSE.getBoolean())
 					ACLogger.info(e.getMessage());
 				DebugLog.INSTANCE.info("Command Disabled");
 				return false;
@@ -241,7 +241,7 @@ public class CommandManager implements CommandExecutor {
 				return true;
 			}
 		} catch (CommandException e) {
-			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+			if (ConfigEnum.VERBOSE.getBoolean())
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 			return false;
 		}
@@ -310,7 +310,7 @@ public class CommandManager implements CommandExecutor {
 	 * Check if some alias have been disabled for the registered commands
 	 */
 	public void checkAlias(AbstractAdminCmdPlugin plugin) {
-		if (ACHelper.getInstance().getConfBoolean("verboseLog")) {
+		if (ConfigEnum.VERBOSE.getBoolean()) {
 			HashMap<String, Command> commands = pluginCommands.get(plugin);
 			if (commands != null)
 				for (String cmdName : commands.keySet()) {
@@ -323,7 +323,7 @@ public class CommandManager implements CommandExecutor {
 						for (String alias : aliasesList)
 							aliases += alias + ", ";
 						if (!aliases.isEmpty()
-								&& ACHelper.getInstance().getConfBoolean("verboseLog"))
+								&& ConfigEnum.VERBOSE.getBoolean())
 							Logger.getLogger("Minecraft").info(
 									"[" + corePlugin.getDescription().getName()
 											+ "] Disabled Alias(es) for " + cmd.getName() + " : "
@@ -345,7 +345,7 @@ public class CommandManager implements CommandExecutor {
 		String cmdName = split[0].substring(1).toLowerCase();
 		CoreCommand cmd = commandReplacer.get(cmdName);
 		if (cmd != null) {
-			if (ACHelper.getInstance().getConfBoolean("verboseLog"))
+			if (ConfigEnum.VERBOSE.getBoolean())
 				ACLogger.info("Command " + cmdName + " intercepted.");
 			return executeCommand(sender, cmd, Utils.Arrays_copyOfRange(split, 1, split.length));
 		}

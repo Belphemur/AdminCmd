@@ -28,6 +28,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -52,7 +53,7 @@ public class Reply extends CoreCommand {
 
 		if (Utils.isPlayer(sender, false)
 				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
-				&& ACHelper.getInstance().getConfBoolean("mutedPlayerCantPm")) {
+				&& ConfigEnum.MUTEDPM.getBoolean()) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
@@ -94,7 +95,7 @@ public class Reply extends CoreCommand {
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))
 					p.sendMessage(spyMsg);
-			if (ACHelper.getInstance().getConfBoolean("logPrivateMessages"))
+			if (ConfigEnum.LOG_PM.getBoolean())
 				ACLogger.info(spyMsg);
 		} else
 			Utils.sI18n(sender, "noPlayerToReply");

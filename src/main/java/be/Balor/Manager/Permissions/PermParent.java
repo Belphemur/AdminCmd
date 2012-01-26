@@ -34,14 +34,18 @@ public class PermParent {
 	protected String compareName = "";
 	protected PermissionDefault def;
 
+	public PermParent(String perm) {
+		this(perm, perm.substring(0, perm.length() - 1), PermissionDefault.OP);
+	}
+
 	public PermParent(String perm, String compare, PermissionDefault def) {
 		this.permName = perm;
 		this.compareName = compare;
 		this.def = def;
 	}
 
-	public PermParent(String perm) {
-		this(perm, perm.substring(0, perm.length() - 1), PermissionDefault.OP);
+	public void addChild(String name) {
+		addChild(name, true);
 	}
 
 	/**
@@ -54,8 +58,33 @@ public class PermParent {
 		children.put(name, bool);
 	}
 
-	public void addChild(String name) {
-		addChild(name, true);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PermParent))
+			return false;
+		final PermParent other = (PermParent) obj;
+		if (compareName == null) {
+			if (other.compareName != null)
+				return false;
+		} else if (!compareName.equals(other.compareName))
+			return false;
+		if (def != other.def)
+			return false;
+		if (permName == null) {
+			if (other.permName != null)
+				return false;
+		} else if (!permName.equals(other.permName))
+			return false;
+		return true;
 	}
 
 	/**
@@ -72,16 +101,9 @@ public class PermParent {
 		return permName;
 	}
 
-	public void registerBukkitPerm() {
-		Permission perm = ACPluginManager.getServer().getPluginManager().getPermission(permName);
-		if (perm == null)
-			ACPluginManager.getServer().getPluginManager()
-					.addPermission(new Permission(permName, def, children));
-		else
-			perm.getChildren().putAll(children);
-	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -94,32 +116,14 @@ public class PermParent {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof PermParent))
-			return false;
-		PermParent other = (PermParent) obj;
-		if (compareName == null) {
-			if (other.compareName != null)
-				return false;
-		} else if (!compareName.equals(other.compareName))
-			return false;
-		if (def != other.def)
-			return false;
-		if (permName == null) {
-			if (other.permName != null)
-				return false;
-		} else if (!permName.equals(other.permName))
-			return false;
-		return true;
+	public void registerBukkitPerm() {
+		final Permission perm = ACPluginManager.getServer().getPluginManager()
+				.getPermission(permName);
+		if (perm == null)
+			ACPluginManager.getServer().getPluginManager()
+					.addPermission(new Permission(permName, def, children));
+		else
+			perm.getChildren().putAll(children);
 	}
-	
 
 }

@@ -27,8 +27,8 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Threads.RemovePowerTask;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -55,14 +55,14 @@ public class Fly extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player player = null;
-		float power = ACHelper.getInstance().getConfFloat("DefaultFlyPower");
+		float power =  ConfigEnum.DFLY.getFloat();
 		String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = args.getFloat(0);
 			} catch (NumberFormatException e) {
-				power = ACHelper.getInstance().getConfFloat("DefaultFlyPower");
+				power = ConfigEnum.DFLY.getFloat();
 				player = Utils.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2)
@@ -104,7 +104,7 @@ public class Fly extends CoreCommand {
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FLY),
-						Utils.secInTick * 60 * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 

@@ -31,7 +31,7 @@ import org.bukkit.plugin.Plugin;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -136,7 +136,7 @@ public class HelpList {
 	 * @return
 	 */
 	public List<String> getPage(int page, CommandSender sender) {
-		int entryPerPage = ACHelper.getInstance().getConfInt("help.entryPerPage");
+		int entryPerPage = ConfigEnum.H_ENTRY.getInt();
 		List<String> helpList = new ArrayList<String>();
 		checkPermissions(sender);
 		int maxPages = (int) Math.ceil(lastHelpEntries.size() / (double) entryPerPage);

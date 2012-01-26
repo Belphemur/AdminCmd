@@ -62,6 +62,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
@@ -69,10 +70,10 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
-import be.Balor.Tools.Type.Whois;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -254,7 +255,7 @@ public class Utils {
 				return false;
 			}
 		else {
-			if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+			if (!ConfigEnum.IMMUNITY.getBoolean())
 				return true;
 			if (!isPlayer(sender, false))
 				return true;
@@ -290,7 +291,7 @@ public class Utils {
 	 *         false.
 	 */
 	public static boolean checkImmunity(CommandSender sender, Player target) {
-		if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+		if (!ConfigEnum.IMMUNITY.getBoolean())
 			return true;
 		if (!isPlayer(sender, false))
 			return true;
@@ -590,13 +591,13 @@ public class Utils {
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
 			if (prefix.isEmpty())
 				prefix = ChatColor.WHITE.toString();
-			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+			if (ConfigEnum.DNAME.getBoolean())
 				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 
 			return prefix + player.getName() + suffix + ChatColor.YELLOW;
 		}
 
-		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+		if (ConfigEnum.DNAME.getBoolean())
 			return ChatColor.WHITE + player.getDisplayName();
 
 		return ChatColor.WHITE + player.getName();
@@ -830,16 +831,16 @@ public class Utils {
 	 */
 	public static String replaceDateAndTimeFormat() {
 		String timeFormatted = "";
-		final String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
+		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		final Date serverTime = getServerRealTime("GMT"
-				+ ACHelper.getInstance().getConfString("DateAndTime.GMToffSet"));
+				+  ConfigEnum.DT_GMT.getString());
 		timeFormatted = formater.format(serverTime);
 		return timeFormatted;
 	}
 
 	public static String replaceDateAndTimeFormat(ACPlayer player, Type.Whois type) {
-		final String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
+		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
 		lastlogin = formater.format(new Date(player.getInformation(type.getVal()).getLong(1)));

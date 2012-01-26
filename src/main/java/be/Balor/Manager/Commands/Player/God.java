@@ -28,6 +28,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -80,7 +81,7 @@ public class God extends CoreCommand {
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.GOD),
-						Utils.secInTick * 60 * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

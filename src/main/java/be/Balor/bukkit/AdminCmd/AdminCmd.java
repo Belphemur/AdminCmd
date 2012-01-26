@@ -180,7 +180,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACEntityListener(), this);
 		pm.registerEvents(new ACPlayerListener(), this);
 		pm.registerEvents(new ACWeatherListener(), this);
-		if (worker.getConfBoolean("ColoredSign"))
+		if (ConfigEnum.COLSIGN.getBoolean())
 			pm.registerEvents(new ACColorSignListener(), this);
 		try {
 			// create a new metrics object

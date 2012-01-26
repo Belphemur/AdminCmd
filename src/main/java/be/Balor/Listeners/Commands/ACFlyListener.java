@@ -26,34 +26,13 @@ import org.bukkit.util.Vector;
 
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class ACFlyListener implements Listener {
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
-		Player p = event.getPlayer();
-		ACPlayer player = ACPlayer.getPlayer(p);
-		final Float power = player.getPower(Type.FLY).getFloat(0);
-		if (power != 0)
-			if (p.isSneaking())
-				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else if (ACHelper.getInstance().getConfBoolean("glideWhenFallingInFlyMode")) {
-				final Vector vel = p.getVelocity();
-				vel.add(p.getLocation().getDirection()
-						.multiply(ACHelper.getInstance().getConfFloat("gliding.multiplicator"))
-						.setY(0));
-				if (vel.getY() < ACHelper.getInstance().getConfFloat(
-						"gliding.YvelocityCheckToGlide")) {
-					vel.setY(ACHelper.getInstance().getConfFloat("gliding.newYvelocity"));
-					p.setVelocity(vel);
-				}
-			}
-	}
-
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled())
@@ -66,5 +45,24 @@ public class ACFlyListener implements Listener {
 			event.setCancelled(true);
 			event.setDamage(0);
 		}
+	}
+
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		final Float power = player.getPower(Type.FLY).getFloat(0);
+		if (power != 0)
+			if (p.isSneaking())
+				p.setVelocity(p.getLocation().getDirection().multiply(power));
+			else if (ConfigEnum.GLIDE.getBoolean()) {
+				final Vector vel = p.getVelocity();
+				vel.add(p.getLocation().getDirection().multiply(ConfigEnum.G_MULT.getFloat())
+						.setY(0));
+				if (vel.getY() < ConfigEnum.G_VELCHECK.getFloat()) {
+					vel.setY(ConfigEnum.G_NEWYVEL.getFloat());
+					p.setVelocity(vel);
+				}
+			}
 	}
 }

@@ -24,7 +24,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACColorSignListener implements Listener {
 	@EventHandler

@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -81,12 +81,11 @@ public class HelpEntry {
 				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
 						"]" + ChatColor.WHITE), sizeRemaining, ' ');
 
-		if (ACHelper.getInstance().getConfBoolean("help.shortenEntries")) {
+		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strChatTrim(line);
-		} else if (sizeRemaining > descriptionSize
-				|| !ACHelper.getInstance().getConfBoolean("help.useWordWrap")) {
+		} else if (sizeRemaining > descriptionSize || !ConfigEnum.H_WRAP.getBoolean()) {
 			return line;
-		} else if (ACHelper.getInstance().getConfBoolean("help.wordWrapRight")) {
+		} else if (ConfigEnum.H_RWRAP.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line, 10, ' ', ':');
 		} else {
 			return ACMinecraftFontWidthCalculator.strChatWordWrap(line, 10);
@@ -103,12 +102,11 @@ public class HelpEntry {
 				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
 						"]" + ChatColor.WHITE), sizeRemaining, ' ');
 
-		if (ACHelper.getInstance().getConfBoolean("help.shortenEntries")) {
+		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strTrim(line, width);
-		} else if (sizeRemaining > descriptionSize
-				|| !ACHelper.getInstance().getConfBoolean("help.useWordWrap")) {
+		} else if (sizeRemaining > descriptionSize || !ConfigEnum.H_WRAP.getBoolean()) {
 			return line;
-		} else if (ACHelper.getInstance().getConfBoolean("help.wordWrapRight")) {
+		} else if (ConfigEnum.H_RWRAP.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strWordWrapRight(line, width, 10, ' ', ':');
 		} else {
 			return ACMinecraftFontWidthCalculator.strWordWrap(line, width, 10);
