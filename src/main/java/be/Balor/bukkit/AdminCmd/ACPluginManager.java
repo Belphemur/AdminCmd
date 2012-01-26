@@ -30,6 +30,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Metrics.Plotter;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -154,6 +155,7 @@ public class ACPluginManager {
 			throws IllegalArgumentException {
 		if (!pluginInstances.containsKey(addon.getName())) {
 			pluginInstances.put(addon.getName(), addon);
+			DebugLog.INSTANCE.info("Registering : " + addon);
 			if (corePlugin == null || addon.equals(corePlugin))
 				return;
 			metrics.addCustomData(corePlugin, new Plotter() {

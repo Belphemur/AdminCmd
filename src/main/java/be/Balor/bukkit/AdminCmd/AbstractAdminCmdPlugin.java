@@ -147,4 +147,14 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	protected abstract void setDefaultLocale();
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AbstractAdminCmdPlugin [permissionLinker=" + permissionLinker + ", name=" + name
+				+ ", hashCode=" + hashCode + "]";
+	}
+	
+
 }
