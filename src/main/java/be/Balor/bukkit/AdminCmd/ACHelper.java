@@ -970,6 +970,8 @@ public class ACHelper {
 				.getDataFolder(), "config.yml"));
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
+		pluginConfig.options().copyDefaults(true).header(ConfigEnum.getHeader());
+		pluginConfig.addDefaults(ConfigEnum.getDefaultvalues());
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
