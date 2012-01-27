@@ -84,7 +84,7 @@ public enum ConfigEnum {
 	DT_FORMAT("DateAndTime.Format", "dd/MM/yy - HH:mm:ss", "Date/Time format"),
 	DT_GMT("DateAndTime.GMToffset", "GMT+00:00", "TimeZone to be displayed, only Use GMT or UTC here"),
 	IMMUNITY("useImmunityLvl", false, "if you want to use the immunity level explained in the Read Me."),
-	DIMMUNITY("defaultImmunityLvl", 0, "Level assigned by default to an user."),
+	DIMMUNITY("defaultImmunityLvl", 1, "Level assigned by default to an user."),
 	DNAME("useDisplayName", true, "Use the DisplayName of the player when using the player name"),
 	DEBUG("debug", false, "To activate the debug log (debug.log file)"),
 	GSPAWN("globalRespawnSetting", "globalSpawn", "To change the global Respawn point\n"
