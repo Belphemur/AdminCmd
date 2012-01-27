@@ -14,6 +14,7 @@ import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
+import be.Balor.Listeners.Commands.ACBanListener;
 import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
 import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
@@ -305,7 +306,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if(CommandManager.getInstance().registerCommand(UnBan.class))
 			banCommands = true;
 		if(banCommands)
-			pm.registerEvents(new ACBlockListener(), this);
+			pm.registerEvents(new ACBanListener(), this);
 		CommandManager.getInstance().registerCommand(KillMob.class);
 		if (CommandManager.getInstance().registerCommand(Fly.class))
 			pm.registerEvents(new ACFlyListener(), this);
