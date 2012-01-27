@@ -46,7 +46,6 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
@@ -216,18 +215,10 @@ public class ACPlayerListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
-		if (player != null) {
-			event.disallow(Result.KICK_BANNED, player.getReason());
+		if(event.getResult().equals(Result.ALLOWED))
 			return;
-		}
-		if (ACHelper.getInstance().isServerLocked()
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
-			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
-			return;
-		}
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
 			event.allow();
 	}

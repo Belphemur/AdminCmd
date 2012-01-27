@@ -24,7 +24,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
@@ -76,17 +75,6 @@ public class ACEntityListener implements Listener {
 		final Player p = (Player) event.getTarget();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false))
-			event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onFoodLevelChange(FoodLevelChangeEvent event) {
-		if (event.isCancelled())
-			return;
-		if (!(event.getEntity() instanceof Player))
-			return;
-		final Player player = (Player) event.getEntity();
-		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.ETERNAL))
 			event.setCancelled(true);
 	}
 }

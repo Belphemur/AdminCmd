@@ -16,7 +16,9 @@ import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
 import be.Balor.Listeners.Commands.ACFlyListener;
+import be.Balor.Listeners.Commands.ACFoodListener;
 import be.Balor.Listeners.Commands.ACGodListener;
+import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -297,7 +299,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(TpToWarp.class);
 		CommandManager.getInstance().registerCommand(WarpList.class);
 		CommandManager.getInstance().registerCommand(Ip.class);
-		CommandManager.getInstance().registerCommand(BanPlayer.class);
+		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
+			pm.registerEvents(new ACBlockListener(), this);
 		CommandManager.getInstance().registerCommand(UnBan.class);
 		CommandManager.getInstance().registerCommand(KillMob.class);
 		if (CommandManager.getInstance().registerCommand(Fly.class))
@@ -335,10 +338,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Help.class);
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
-		CommandManager.getInstance().registerCommand(LockServer.class);
+		if (CommandManager.getInstance().registerCommand(LockServer.class))
+			pm.registerEvents(new ACLockedServerListener(), this);
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
-		CommandManager.getInstance().registerCommand(Eternal.class);
+		if(CommandManager.getInstance().registerCommand(Eternal.class))
+			pm.registerEvents(new ACFoodListener(), this);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
