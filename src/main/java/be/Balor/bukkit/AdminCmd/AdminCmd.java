@@ -22,6 +22,7 @@ import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
+import be.Balor.Listeners.Commands.ACTpAtSeeListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -187,7 +188,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACWeatherListener(), this);
 		if (ConfigEnum.COLSIGN.getBoolean())
 			pm.registerEvents(new ACColorSignListener(), this);
-		if(ConfigEnum.RESET_POWERS.getBoolean())
+		if (ConfigEnum.RESET_POWERS.getBoolean())
 			pm.registerEvents(new ACResetPowerListener(), this);
 		try {
 			// create a new metrics object
@@ -306,10 +307,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WarpList.class);
 		CommandManager.getInstance().registerCommand(Ip.class);
 		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
-			banCommands = true;;
-		if(CommandManager.getInstance().registerCommand(UnBan.class))
 			banCommands = true;
-		if(banCommands)
+		;
+		if (CommandManager.getInstance().registerCommand(UnBan.class))
+			banCommands = true;
+		if (banCommands)
 			pm.registerEvents(new ACBanListener(), this);
 		CommandManager.getInstance().registerCommand(KillMob.class);
 		if (CommandManager.getInstance().registerCommand(Fly.class))
@@ -337,13 +339,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Afk.class);
 		CommandManager.getInstance().registerCommand(MoreAll.class);
 		CommandManager.getInstance().registerCommand(TpToggle.class);
-		CommandManager.getInstance().registerCommand(TpAtSee.class);
+		if (CommandManager.getInstance().registerCommand(TpAtSee.class))
+			pm.registerEvents(new ACTpAtSeeListener(), this);
 		CommandManager.getInstance().registerCommand(Uptime.class);
 		CommandManager.getInstance().registerCommand(Kit.class);
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
 		CommandManager.getInstance().registerCommand(LastLocation.class);
-		if(CommandManager.getInstance().registerCommand(SuperBreaker.class))
+		if (CommandManager.getInstance().registerCommand(SuperBreaker.class))
 			pm.registerEvents(new ACSuperBreaker(), this);
 		CommandManager.getInstance().registerCommand(Help.class);
 		CommandManager.getInstance().registerCommand(Played.class);
@@ -352,7 +355,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACLockedServerListener(), this);
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
-		if(CommandManager.getInstance().registerCommand(Eternal.class))
+		if (CommandManager.getInstance().registerCommand(Eternal.class))
 			pm.registerEvents(new ACFoodListener(), this);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);

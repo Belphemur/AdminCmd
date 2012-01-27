@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -138,7 +137,6 @@ public class ACPlayerListener implements Listener {
 			power = null;
 			if ((power = player.getPower(Type.FIREBALL).getFloat(0)) != 0)
 				ShootFireball.shoot(p, power);
-			tpAtSee(player);
 
 		}
 	}
@@ -203,7 +201,7 @@ public class ACPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if(event.getResult().equals(Result.ALLOWED))
+		if (event.getResult().equals(Result.ALLOWED))
 			return;
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
 			event.allow();
@@ -342,29 +340,6 @@ public class ACPlayerListener implements Listener {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Tp at see mode
-	 * 
-	 * @param p
-	 */
-	private void tpAtSee(ACPlayer player) {
-		if (player.hasPower(Type.TP_AT_SEE))
-			try {
-				final Player p = player.getHandler();
-				final Block toTp = p.getWorld().getBlockAt(
-						p.getTargetBlock(null, ConfigEnum.RTPSEE.getInt()).getLocation()
-								.add(0, 1, 0));
-				if (toTp.getTypeId() == 0) {
-					final Location loc = toTp.getLocation().clone();
-					loc.setPitch(p.getLocation().getPitch());
-					loc.setYaw(p.getLocation().getYaw());
-					player.setLastLocation(p.getLocation());
-					p.teleport(loc);
-				}
-			} catch (final Exception e) {
-			}
 	}
 
 }
