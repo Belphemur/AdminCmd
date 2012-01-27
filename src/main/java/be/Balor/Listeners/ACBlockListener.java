@@ -20,34 +20,16 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
 
-import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class ACBlockListener implements Listener {
-	@EventHandler
-	public void onBlockDamage(BlockDamageEvent event) {
-		if (event.isCancelled())
-			return;
-		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
-		final ItemStack itemInHand = event.getItemInHand();
-		if (itemInHand != null && itemInHand.getTypeId() == ConfigEnum.SB_ITEM.getInt()
-				&& player.hasPower(Type.SUPER_BREAKER)) {
-			event.setInstaBreak(true);
-			itemInHand.setDurability((short) 0);
-		}
-	}
-
 	/**
 	 * @author Lathanael (aka Philippe Leipold)
 	 * 

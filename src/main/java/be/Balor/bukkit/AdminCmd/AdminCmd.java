@@ -21,6 +21,7 @@ import be.Balor.Listeners.Commands.ACFoodListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
+import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -342,7 +343,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
 		CommandManager.getInstance().registerCommand(LastLocation.class);
-		CommandManager.getInstance().registerCommand(SuperBreaker.class);
+		if(CommandManager.getInstance().registerCommand(SuperBreaker.class))
+			pm.registerEvents(new ACSuperBreaker(), this);
 		CommandManager.getInstance().registerCommand(Help.class);
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
