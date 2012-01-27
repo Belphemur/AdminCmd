@@ -51,11 +51,11 @@ public abstract class CoreCommand {
 	public CoreCommand(String name, String perm) {
 		this.permNode = perm;
 		this.cmdName = name;
-		this.plugin = ACPluginManager.getPluginInstance("Core");
+		this.plugin = ACPluginManager.getCorePlugin();
 	}
 
 	public CoreCommand() {
-		this.plugin = ACPluginManager.getPluginInstance("Core");
+		this.plugin = ACPluginManager.getCorePlugin();
 	}
 
 	/**
