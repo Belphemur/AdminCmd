@@ -37,10 +37,11 @@ public class ACVulcanListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		Float power = null;
 		if ((power = player.getPower(Type.VULCAN).getFloat(0)) == 0)
-			player.getHandler()
-					.getWorld()
-					.createExplosion(player.getHandler().getTargetBlock(null, 600).getLocation(),
-							power, true);
+			return;
+		player.getHandler()
+				.getWorld()
+				.createExplosion(player.getHandler().getTargetBlock(null, 600).getLocation(),
+						power, true);
 
 	}
 }
