@@ -20,6 +20,7 @@ import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
@@ -46,12 +47,12 @@ import de.diddiz.LogBlock.LogBlock;
  */
 public class ACPluginListener implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginDisable(PluginDisableEvent event) {
 		ACPluginManager.unRegisterACPlugin(event.getPlugin());
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(PluginEnableEvent event) {
 		if (!PermissionManager.isPermissionsExSet()) {
 			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
