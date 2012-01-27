@@ -29,7 +29,6 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -172,17 +171,6 @@ public class ACPlayerListener implements Listener {
 		if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
 				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
 			player.setPower(Type.TP_REQUEST);
-	}
-
-	@EventHandler
-	public void onPlayerKick(PlayerKickEvent event) {
-		if (event.isCancelled())
-			return;
-		final Player p = event.getPlayer();
-		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
-				.contains("floating"))
-				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
-			event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)

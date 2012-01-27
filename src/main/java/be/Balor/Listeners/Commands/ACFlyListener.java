@@ -21,9 +21,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -64,5 +66,16 @@ public class ACFlyListener implements Listener {
 					p.setVelocity(vel);
 				}
 			}
+	}
+
+	@EventHandler
+	public void onPlayerKick(PlayerKickEvent event) {
+		if (event.isCancelled())
+			return;
+		final Player p = event.getPlayer();
+		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
+				.contains("floating"))
+				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
+			event.setCancelled(true);
 	}
 }
