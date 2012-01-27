@@ -418,13 +418,15 @@ public class CommandManager implements CommandExecutor {
 			for (final String alias : cmd.getAliases())
 				knownCommands.remove(alias);
 		} catch (final SecurityException e) {
-			e.printStackTrace();
+			ACLogger.severe("Unregistering command problem", e);
 		} catch (final IllegalArgumentException e) {
-			e.printStackTrace();
+			ACLogger.severe("Unregistering command problem", e);
 		} catch (final NoSuchFieldException e) {
-			e.printStackTrace();
+			ACLogger.severe("Unregistering command problem", e);
 		} catch (final IllegalAccessException e) {
-			e.printStackTrace();
+			ACLogger.severe("Unregistering command problem", e);
+		}catch (final Exception e) {
+			ACLogger.severe("Unregistering command problem", e);
 		}
 	}
 
