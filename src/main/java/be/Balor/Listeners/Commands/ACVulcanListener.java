@@ -17,27 +17,30 @@
 package be.Balor.Listeners.Commands;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACLockedServerListener implements Listener {
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (!event.getResult().equals(Result.ALLOWED))
+public class ACVulcanListener implements Listener {
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
+				&& (event.getAction() != Action.LEFT_CLICK_AIR))
 			return;
-		if (ACHelper.getInstance().isServerLocked()
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
-			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
-		}
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		Float power = null;
+		if ((power = player.getPower(Type.VULCAN).getFloat(0)) == 0)
+			player.getHandler()
+					.getWorld()
+					.createExplosion(player.getHandler().getTargetBlock(null, 600).getLocation(),
+							power, true);
+
 	}
 }

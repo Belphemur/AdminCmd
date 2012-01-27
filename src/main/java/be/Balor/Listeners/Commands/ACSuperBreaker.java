@@ -27,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACSuperBreaker implements Listener {
 	@EventHandler
@@ -35,7 +35,7 @@ public class ACSuperBreaker implements Listener {
 		if (event.isCancelled())
 			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if(!player.hasPower(Type.SUPER_BREAKER))
+		if (!player.hasPower(Type.SUPER_BREAKER))
 			return;
 		final ItemStack itemInHand = event.getItemInHand();
 		if (itemInHand != null && itemInHand.getTypeId() == ConfigEnum.SB_ITEM.getInt()) {

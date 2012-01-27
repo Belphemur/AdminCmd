@@ -27,15 +27,15 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACBanListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent event) {
-		if(!event.getResult().equals(Result.ALLOWED))
+		if (!event.getResult().equals(Result.ALLOWED))
 			return;
 		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
-		if (player != null) 
-			event.disallow(Result.KICK_BANNED, player.getReason());		
+		if (player != null)
+			event.disallow(Result.KICK_BANNED, player.getReason());
 	}
 }

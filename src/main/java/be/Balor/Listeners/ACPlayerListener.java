@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -45,7 +44,6 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
@@ -126,18 +124,6 @@ public class ACPlayerListener implements Listener {
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;
-		}
-		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			if (player.hasPower(Type.THOR))
-				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
-			Float power = null;
-			if ((power = player.getPower(Type.VULCAN).getFloat(0)) != 0)
-				p.getWorld()
-						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
-			power = null;
-			if ((power = player.getPower(Type.FIREBALL).getFloat(0)) != 0)
-				ShootFireball.shoot(p, power);
-
 		}
 	}
 

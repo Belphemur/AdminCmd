@@ -16,13 +16,16 @@ import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Listeners.Commands.ACBanListener;
 import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
+import be.Balor.Listeners.Commands.ACFireballListener;
 import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
+import be.Balor.Listeners.Commands.ACThorListener;
 import be.Balor.Listeners.Commands.ACTpAtSeeListener;
+import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -268,7 +271,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(PlayerLocation.class);
 		if (CommandManager.getInstance().registerCommand(God.class))
 			pm.registerEvents(new ACGodListener(), this);
-		CommandManager.getInstance().registerCommand(Thor.class);
+		if (CommandManager.getInstance().registerCommand(Thor.class))
+			pm.registerEvents(new ACThorListener(), this);
 		CommandManager.getInstance().registerCommand(Kill.class);
 		CommandManager.getInstance().registerCommand(Heal.class);
 		CommandManager.getInstance().registerCommand(ClearSky.class);
@@ -294,11 +298,13 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
 		CommandManager.getInstance().registerCommand(TpLoc.class);
 		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
-		CommandManager.getInstance().registerCommand(Vulcan.class);
+		if (CommandManager.getInstance().registerCommand(Vulcan.class))
+			pm.registerEvents(new ACVulcanListener(), this);
 		CommandManager.getInstance().registerCommand(Drop.class);
 		CommandManager.getInstance().registerCommand(Invisible.class);
 		CommandManager.getInstance().registerCommand(SpyMsg.class);
-		CommandManager.getInstance().registerCommand(Fireball.class);
+		if (CommandManager.getInstance().registerCommand(Fireball.class))
+			pm.registerEvents(new ACFireballListener(), this);
 		CommandManager.getInstance().registerCommand(Home.class);
 		CommandManager.getInstance().registerCommand(SetHome.class);
 		CommandManager.getInstance().registerCommand(AddWarp.class);

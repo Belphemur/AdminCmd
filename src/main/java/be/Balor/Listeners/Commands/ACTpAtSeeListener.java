@@ -35,11 +35,10 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 public class ACTpAtSeeListener implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.isCancelled())
+		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
+				&& (event.getAction() != Action.LEFT_CLICK_AIR))
 			return;
-		if (((event.getAction() != Action.LEFT_CLICK_BLOCK) && (event.getAction() != Action.LEFT_CLICK_AIR)))
-			return;
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (!player.hasPower(Type.TP_AT_SEE))
 			return;
 		try {

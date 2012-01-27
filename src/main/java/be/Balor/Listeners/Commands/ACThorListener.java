@@ -14,25 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Listeners.Commands;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ShootFireball {
-	public static void shoot(Player player, Float yield) {
-		Location playerLoc = player.getLocation();
-		Location fbLocation = playerLoc.add(
-				playerLoc.getDirection().normalize().multiply(2)
-						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
-				.add(0, 1D, 0);
-		Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
-		f.setYield(yield);
-		f.setShooter(player);
+public class ACThorListener implements Listener {
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
+				&& (event.getAction() != Action.LEFT_CLICK_AIR))
+			return;
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		if (!player.hasPower(Type.THOR))
+			return;
+		player.getHandler().getWorld()
+				.strikeLightning(player.getHandler().getTargetBlock(null, 600).getLocation());
+
 	}
 }

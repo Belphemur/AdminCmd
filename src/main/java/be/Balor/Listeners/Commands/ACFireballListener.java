@@ -16,28 +16,40 @@
  ************************************************************************/
 package be.Balor.Listeners.Commands;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACLockedServerListener implements Listener {
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
-		if (!event.getResult().equals(Result.ALLOWED))
+public class ACFireballListener implements Listener {
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
+				&& (event.getAction() != Action.LEFT_CLICK_AIR))
 			return;
-		if (ACHelper.getInstance().isServerLocked()
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
-			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
-		}
+		final Player player = event.getPlayer();
+		final ACPlayer acPlayer = ACPlayer.getPlayer(player);
+		Float power;
+		if ((power = acPlayer.getPower(Type.FIREBALL).getFloat(0)) == 0)
+			return;
+		final Location playerLoc = player.getLocation();
+		final Location fbLocation = playerLoc.add(
+				playerLoc.getDirection().normalize().multiply(2)
+						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
+				.add(0, 1D, 0);
+		final Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
+		f.setYield(power);
+		f.setShooter(player);
+
 	}
 }

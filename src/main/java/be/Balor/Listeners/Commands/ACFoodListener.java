@@ -27,7 +27,7 @@ import be.Balor.Tools.Type;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACFoodListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)

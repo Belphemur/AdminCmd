@@ -27,19 +27,19 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACResetPowerListener implements Listener {
 	@EventHandler
-	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {		
-			if(PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) 
-				return;
-			final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-			player.removeAllSuperPower();
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
-				InvisibleWorker.getInstance().reappear(event.getPlayer());
-			}
-			Utils.sI18n(event.getPlayer(), "changedWorld");
-		
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false))
+			return;
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		player.removeAllSuperPower();
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
+			InvisibleWorker.getInstance().reappear(event.getPlayer());
+		}
+		Utils.sI18n(event.getPlayer(), "changedWorld");
+
 	}
 }
