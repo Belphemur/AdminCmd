@@ -20,14 +20,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -35,28 +32,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACEntityListener implements Listener {
-
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled())
-			return;
-		if (!(event.getEntity() instanceof Player))
-			return;
-		final Player player = (Player) event.getEntity();
-		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.FLY)
-				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-			event.setCancelled(true);
-			event.setDamage(0);
-			return;
-		} else if (ACPlayer.getPlayer(player.getName()).hasPower(Type.GOD)) {
-			if (event.getCause().equals(DamageCause.FIRE)
-					|| event.getCause().equals(DamageCause.FIRE_TICK))
-				player.setFireTicks(0);
-			event.setCancelled(true);
-			event.setDamage(0);
-		}
-
-	}
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
