@@ -20,6 +20,7 @@ import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
+import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -185,6 +186,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACWeatherListener(), this);
 		if (ConfigEnum.COLSIGN.getBoolean())
 			pm.registerEvents(new ACColorSignListener(), this);
+		if(ConfigEnum.RESET_POWERS.getBoolean())
+			pm.registerEvents(new ACResetPowerListener(), this);
 		try {
 			// create a new metrics object
 			final Metrics metrics = new Metrics();

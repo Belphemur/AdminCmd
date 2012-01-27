@@ -27,7 +27,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -87,19 +86,6 @@ public class ACPlayerListener implements Listener {
 					+ newPlayer.getName());
 			for (final Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
 				Utils.removePlayerFromOnlineList(toFq, newPlayer);
-		}
-	}
-
-	@EventHandler
-	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (ConfigEnum.RESET_POWERS.getBoolean()
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
-			player.removeAllSuperPower();
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
-				InvisibleWorker.getInstance().reappear(event.getPlayer());
-			}
-			Utils.sI18n(event.getPlayer(), "changedWorld");
 		}
 	}
 
