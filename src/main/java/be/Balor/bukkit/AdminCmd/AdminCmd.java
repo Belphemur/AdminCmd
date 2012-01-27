@@ -253,6 +253,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	@Override
 	public void registerCmds() {
 		final PluginManager pm = getServer().getPluginManager();
+		boolean banCommands = false;
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
@@ -300,8 +301,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WarpList.class);
 		CommandManager.getInstance().registerCommand(Ip.class);
 		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
+			banCommands = true;;
+		if(CommandManager.getInstance().registerCommand(UnBan.class))
+			banCommands = true;
+		if(banCommands)
 			pm.registerEvents(new ACBlockListener(), this);
-		CommandManager.getInstance().registerCommand(UnBan.class);
 		CommandManager.getInstance().registerCommand(KillMob.class);
 		if (CommandManager.getInstance().registerCommand(Fly.class))
 			pm.registerEvents(new ACFlyListener(), this);
