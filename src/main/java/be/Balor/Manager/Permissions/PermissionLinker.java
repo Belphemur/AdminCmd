@@ -16,7 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -28,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermissionLinker {
-	protected LinkedList<PermParent> permissions = new LinkedList<PermParent>();
+	protected Map<String, PermParent> permissions = new HashMap<String, PermParent>();
 	protected PermParent majorPerm;
 	protected String name;
 	private static int counter = 0;
@@ -87,7 +88,7 @@ public class PermissionLinker {
 	 * @param permNode
 	 * @return
 	 */
-	public Permission addPermChild(String permNode) {
+	public PermChild addPermChild(String permNode) {
 		return addPermChild(permNode, PermissionDefault.OP);
 	}
 
@@ -97,17 +98,17 @@ public class PermissionLinker {
 	 * @param permNode
 	 * @param bukkitDefault
 	 * @return
+	 * @throws NullPointerException
+	 *             if the Permission Parent of the child can't be found.
 	 */
-	public Permission addPermChild(String permNode, PermissionDefault bukkitDefault) {
-		Permission bukkitPerm = null;
-		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
-			bukkitPerm = new Permission(permNode, bukkitDefault);
-			ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
-			for (final PermParent pp : permissions)
-				if (permNode.contains(pp.getCompareName()))
-					pp.addChild(permNode);
-		}
-		return bukkitPerm;
+	public PermChild addPermChild(String permNode, PermissionDefault bukkitDefault)
+			throws NullPointerException {
+		final PermParent parent = matchPermParent(permNode);
+		if (parent == null)
+			throw new NullPointerException("Permission Parent of " + permNode + " don't exists.");
+		final PermChild child = new PermChild(permNode, parent, true, bukkitDefault);
+		parent.addChild(parent);
+		return child;
 	}
 
 	/**
@@ -115,12 +116,15 @@ public class PermissionLinker {
 	 * 
 	 * @param toAdd
 	 */
-	public void addPermParent(PermParent toAdd) {
-		permissions.add(toAdd);
+	public PermParent addPermParent(PermParent toAdd) {
+		permissions.put(toAdd.getPermName(), toAdd);
+		return toAdd;
 	}
 
-	public void addPermParent(String toAdd) {
-		permissions.add(new PermParent(toAdd));
+	public PermParent addPermParent(String toAdd) {
+		final PermParent pp = new PermParent(toAdd, majorPerm);
+		permissions.put(pp.getPermName(), pp);
+		return pp;
 	}
 
 	/*
@@ -159,6 +163,16 @@ public class PermissionLinker {
 		return name;
 	}
 
+	/**
+	 * Getting the PermParent of the given node.
+	 * 
+	 * @param permNode
+	 * @return
+	 */
+	public PermParent getPermParent(String permNode) {
+		return permissions.get(permNode);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -174,13 +188,31 @@ public class PermissionLinker {
 		return result;
 	}
 
+	private PermParent matchPermParent(String search) {
+		PermParent found = null;
+		final String lowerSearch = search.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		for (final PermParent perm : permissions.values()) {
+			final String str = perm.getCompareName();
+			if (lowerSearch.toLowerCase().startsWith(str)) {
+				final int curDelta = lowerSearch.length() - str.length();
+				if (curDelta < delta) {
+					found = perm;
+					delta = curDelta;
+				}
+				if (curDelta == 0)
+					break;
+			}
+		}
+		return found;
+
+	}
+
 	/**
 	 * Register all parent node.
 	 */
 	public void registerAllPermParent() {
-		for (final PermParent pp : permissions)
-			pp.registerBukkitPerm();
-		majorPerm.registerBukkitPerm();
+		PermParent.ROOT.registerPermission();
 	}
 
 	/**
@@ -188,16 +220,18 @@ public class PermissionLinker {
 	 * 
 	 * @param major
 	 */
-	public void setMajorPerm(PermParent major) {
+	public PermParent setMajorPerm(PermParent major) {
 		majorPerm = major;
-		for (final PermParent pp : permissions)
-			majorPerm.addChild(pp.getPermName());
+		for (final PermParent pp : permissions.values())
+			majorPerm.addChild(pp);
+		return majorPerm;
 	}
 
-	public void setMajorPerm(String major) {
-		majorPerm = new PermParent(major);
-		for (final PermParent pp : permissions)
-			majorPerm.addChild(pp.getPermName());
+	public PermParent setMajorPerm(String major) {
+		majorPerm = new PermParent(major, PermParent.ROOT);
+		for (final PermParent pp : permissions.values())
+			majorPerm.addChild(pp);
+		return majorPerm;
 	}
 
 	/*
@@ -210,5 +244,4 @@ public class PermissionLinker {
 		return "PermissionLinker [majorPerm=" + majorPerm + ", name=" + name + ", plId=" + plId
 				+ "]";
 	}
-
 }

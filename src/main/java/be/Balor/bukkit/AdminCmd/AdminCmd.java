@@ -121,6 +121,7 @@ import be.Balor.Manager.Commands.Weather.Rain;
 import be.Balor.Manager.Commands.Weather.Storm;
 import be.Balor.Manager.Commands.Weather.Strike;
 import be.Balor.Manager.Commands.Weather.Thor;
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
@@ -376,8 +377,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	protected void registerPermParents() {
+		permissionLinker.setMajorPerm(PermParent.ROOT);
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
+		PermParent player = permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
@@ -391,20 +393,22 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
-		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
-		permissionLinker.addPermChild("admincmd.player.bypass");
+		PermParent homes = permissionLinker.addPermParent(new PermParent("admincmd.maxHomeByUser.*"));
+		PermParent immunity = permissionLinker.addPermParent(new PermParent("admincmd.immunityLvl.*"));
+		PermParent maxItem = permissionLinker.addPermParent(new PermParent("admincmd.maxItemAmount.*"));
+		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
 		permissionLinker.addPermChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
-		permissionLinker.addPermChild("admincmd.player.noafkkick");
+		player.addChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
 		permissionLinker.addPermChild("admincmd.item.infinity");
-		permissionLinker.addPermChild("admincmd.player.fly.allowed");
+		player.addChild("admincmd.player.fly.allowed");
 		for (int i = 0; i < 150; i++) {
-			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
+			homes.addChild(new PermChild("admincmd.maxHomeByUser." + i, homes, true, PermissionDefault.FALSE));
+			immunity.addChild(new PermChild("admincmd.immunityLvl." + i, immunity, true, PermissionDefault.FALSE));
+			maxItem.addChild(new PermChild("admincmd.maxItemAmount." + i, maxItem, true, PermissionDefault.FALSE));
 		}
 
 	}
