@@ -22,7 +22,11 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import net.minecraft.server.Entity;
+import net.minecraft.server.EntityAnimal;
+import net.minecraft.server.EntityExperienceOrb;
 import net.minecraft.server.EntityHuman;
+import net.minecraft.server.EntityItem;
+import net.minecraft.server.EntityMonster;
 import net.minecraft.server.EntityPainting;
 
 import org.bukkit.ChatColor;
@@ -38,7 +42,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Memory extends CoreCommand {
 
@@ -52,21 +56,22 @@ public class Memory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		if (args.hasFlag('f')) {
+		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
+				|| args.hasFlag('a')) {
 			int count = 0;
 			final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
 					sender.getServer().getWorlds().size());
 			final List<World> worlds = sender.getServer().getWorlds();
 			final Semaphore sema = new Semaphore(0);
 
-			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@SuppressWarnings("unchecked")
 				@Override
 				public void run() {
@@ -80,14 +85,13 @@ public class Memory extends CoreCommand {
 					}
 				}
 			});
-
 			for (World w : worlds) {
 				try {
 					sema.acquire();
 				} catch (InterruptedException e) {
 				}
 				for (Entity entity : entityList.get(w.getName())) {
-					if (entity instanceof EntityHuman || entity instanceof EntityPainting)
+					if (dontKill(args, entity))
 						continue;
 					entity.die();
 					count++;
@@ -133,7 +137,7 @@ public class Memory extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -160,7 +164,7 @@ public class Memory extends CoreCommand {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -173,4 +177,18 @@ public class Memory extends CoreCommand {
 		}
 	}
 
+	private boolean dontKill(CommandArgs args, Entity toKill) {
+		if (args.hasFlag('f'))
+			return (toKill instanceof EntityHuman || toKill instanceof EntityPainting);
+		else if (args.hasFlag('x'))
+			return !(toKill instanceof EntityExperienceOrb);
+		else if (args.hasFlag('i'))
+			return !(toKill instanceof EntityItem);
+		else if (args.hasFlag('m'))
+			return !(toKill instanceof EntityMonster);
+		else if (args.hasFlag('a'))
+			return !(toKill instanceof EntityAnimal);
+		else
+			return true;
+	}
 }
