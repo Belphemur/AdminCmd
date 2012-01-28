@@ -17,38 +17,20 @@
 package be.Balor.Tools.Threads;
 
 import java.util.Stack;
-
-import be.Balor.Tools.SynchronizedStack;
 import be.Balor.Tools.Blocks.BlockRemanence;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ReplaceBlockTask implements Runnable {
-	protected Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
-
-	public ReplaceBlockTask() {
-
-	}
+public class ReplaceWaterBlockTask extends ReplaceBlockTask {
 
 	/**
 	 * @param blocks
 	 */
-	public ReplaceBlockTask(Stack<BlockRemanence> blocks) {
-		super();
+	public ReplaceWaterBlockTask(Stack<BlockRemanence> blocks) {
 		while (!blocks.empty())
-			this.blocks.push(blocks.pop());
+			this.blocks.add(blocks.pop());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run() {
-		while (!blocks.empty())
-			blocks.pop().setBlockType(0);
-	}
 }

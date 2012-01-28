@@ -227,10 +227,10 @@ public class CommandManager implements CommandExecutor {
 			if (!cmd.argsCheck(args))
 				return false;
 			container = new ACCommandContainer(sender, cmd, args);
-			if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_extinguish"))
+			/*if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_extinguish"))
 				corePlugin.getServer().getScheduler()
 						.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
-			else
+			else*/
 				threads.execute(new NormalCommand(container));
 			if (!cmd.getCmdName().equals("bal_repeat")) {
 				if (Utils.isPlayer(sender, false))

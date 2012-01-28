@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,8 +69,11 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
+import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
+import be.Balor.Tools.Threads.ReplaceWaterBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -407,7 +412,7 @@ public class Utils {
 						if (blocksCache.size() == MAX_BLOCKS)
 							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 									ACHelper.getInstance().getCoreInstance(),
-									new ReplaceBlockTask(blocksCache));
+									new ReplaceWaterBlockTask(blocksCache));
 					}
 
 				}
@@ -428,7 +433,7 @@ public class Utils {
 							if (blocksCache.size() == MAX_BLOCKS)
 								ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 										ACHelper.getInstance().getCoreInstance(),
-										new ReplaceBlockTask(blocksCache));
+										new ReplaceWaterBlockTask(blocksCache));
 							visited.add(newPos);
 						}
 					}
@@ -436,9 +441,8 @@ public class Utils {
 				}
 			}
 		}
-		if (blocksCache.size() == MAX_BLOCKS)
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(), new ReplaceWaterBlockTask(blocksCache));
 		return blocks;
 	}
 
@@ -833,8 +837,7 @@ public class Utils {
 		String timeFormatted = "";
 		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
-		final Date serverTime = getServerRealTime("GMT"
-				+  ConfigEnum.DT_GMT.getString());
+		final Date serverTime = getServerRealTime("GMT" + ConfigEnum.DT_GMT.getString());
 		timeFormatted = formater.format(serverTime);
 		return timeFormatted;
 	}
@@ -859,29 +862,29 @@ public class Utils {
 	 */
 	private static Stack<BlockRemanence> replaceInCuboid(String playername, List<Material> mat,
 			Block block, int radius) {
-		final Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
-		final Stack<BlockRemanence> blocksCache = new Stack<BlockRemanence>();
+		final Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
+		final Stack<BlockRemanence> blocksCache = new SynchronizedStack<BlockRemanence>();
 		final int limitX = block.getX() + radius;
 		final int limitY = block.getY() + radius;
 		final int limitZ = block.getZ() + radius;
 		BlockRemanence br = null;
-		for (int y = block.getY() - radius; y <= limitY; y++) {
-			for (int x = block.getX() - radius; x <= limitX; x++)
-				for (int z = block.getZ() - radius; z <= limitZ; z++) {
-					if (mat.contains(Material.getMaterial(block.getWorld()
-							.getBlockTypeIdAt(x, y, z)))) {
-						br = IBlockRemanenceFactory.FACTORY
-								.createBlockRemanence(new SimplifiedLocation(block.getWorld(), x,
-										y, z));
-						blocks.push(br);
-						blocksCache.push(br);
-						if (blocksCache.size() == MAX_BLOCKS)
-							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-									ACHelper.getInstance().getCoreInstance(),
-									new ReplaceBlockTask(blocksCache), 1);
-
-					}
-				}
+		final Semaphore sema = new Semaphore(0, true);
+		final List<SimplifiedLocation> okBlocks = new ArrayList<SimplifiedLocation>(50);
+		ACPluginManager.scheduleSyncTask(new CheckingBlockTask(sema, okBlocks, block, radius,
+				limitY, limitX, limitZ, mat));
+		try {
+			sema.acquire();
+		} catch (InterruptedException e) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with acquiring the semaphore", e);
+		}
+		for (SimplifiedLocation loc : okBlocks) {
+			br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(loc);
+			blocks.push(br);
+			blocksCache.push(br);
+			if (blocksCache.size() == MAX_BLOCKS)
+				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+						ACHelper.getInstance().getCoreInstance(),
+						new ReplaceBlockTask(blocksCache), 1);
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
