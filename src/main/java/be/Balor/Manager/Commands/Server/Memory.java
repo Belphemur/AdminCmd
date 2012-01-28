@@ -38,6 +38,7 @@ import org.bukkit.craftbukkit.CraftWorld;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermChild;
+import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -174,8 +175,11 @@ public class Memory extends CoreCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermParent(permNode + ".*").addChild(mob).addChild(animal)
-				.addChild(xp).addChild(item).addChild(full).addChild(npc);
+		PermParent parent = new PermParent(permNode + ".*", plugin.getPermissionLinker()
+				.getMajorPerm());
+		plugin.getPermissionLinker().addPermParent(parent);
+		parent.addChild(mob).addChild(animal).addChild(xp).addChild(item).addChild(full)
+				.addChild(npc);
 		super.registerBukkitPerm();
 	}
 

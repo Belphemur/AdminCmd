@@ -53,7 +53,6 @@ public class PermChild {
 	 */
 	public PermChild(String permName, PermParent parent, boolean value,
 			PermissionDefault permDefault) {
-		super();
 		this.permName = permName;
 		this.parent = parent;
 		this.set = value;
@@ -88,25 +87,23 @@ public class PermChild {
 		return permDefault;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 37;
+		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
 		result = prime * result + ((permDefault == null) ? 0 : permDefault.hashCode());
 		result = prime * result + ((permName == null) ? 0 : permName.hashCode());
+		result = prime * result + (registered ? 1231 : 1237);
 		result = prime * result + (set ? 1231 : 1237);
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -118,17 +115,14 @@ public class PermChild {
 		if (!(obj instanceof PermChild))
 			return false;
 		PermChild other = (PermChild) obj;
-		if (parent == null) {
-			if (other.parent != null)
-				return false;
-		} else if (!parent.equals(other.parent))
-			return false;
 		if (permDefault != other.permDefault)
 			return false;
 		if (permName == null) {
 			if (other.permName != null)
 				return false;
 		} else if (!permName.equals(other.permName))
+			return false;
+		if (registered != other.registered)
 			return false;
 		if (set != other.set)
 			return false;

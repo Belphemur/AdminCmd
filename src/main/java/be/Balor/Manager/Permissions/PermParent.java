@@ -31,16 +31,18 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermParent extends PermChild {
-	protected String compareName = "";
-	protected Set<PermChild> children = new HashSet<PermChild>();
-	public final static PermParent ROOT = new PermParent("admincmd.*", null);
+	protected final String compareName;
+	protected final Set<PermChild> children = new HashSet<PermChild>();
+	public final static PermParent ROOT = new PermParent(null, null);
+	public final static PermParent ALONE = new PermParent(null, null);
 
 	public PermParent(String perm) {
 		this(perm, ROOT);
 	}
 
 	public PermParent(String perm, PermParent parent) {
-		this(perm, perm.substring(0, perm.length() - 1), PermissionDefault.OP, parent);
+		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
+				PermissionDefault.OP, parent);
 	}
 
 	public PermParent(String perm, String compare, PermissionDefault def, PermParent parent) {
@@ -71,7 +73,8 @@ public class PermParent extends PermChild {
 	public PermParent addChild(PermChild perm) {
 		children.add(perm);
 		perm.parent = this;
-		perm.registerPermission();
+		if (!(perm instanceof PermParent))
+			perm.registerPermission();
 		return this;
 	}
 
@@ -107,6 +110,10 @@ public class PermParent extends PermChild {
 	void registerPermission() {
 		if (registered)
 			return;
+		if (permName == null)
+			return;
+		for (PermChild child : children)
+			child.registerPermission();
 		final Permission perm = ACPluginManager.getServer().getPluginManager()
 				.getPermission(permName);
 		if (perm == null)
@@ -117,4 +124,35 @@ public class PermParent extends PermChild {
 		registered = true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((compareName == null) ? 0 : compareName.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof PermParent))
+			return false;
+		PermParent other = (PermParent) obj;
+		if (compareName == null) {
+			if (other.compareName != null)
+				return false;
+		} else if (!compareName.equals(other.compareName))
+			return false;
+		return true;
+	}
+	
 }

@@ -122,7 +122,7 @@ public abstract class CoreCommand {
 	 */
 	public void registerBukkitPerm() {
 		if (permNode != null && !permNode.isEmpty()) {
-			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault).getBukkitPerm();
+			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
 			if (other)
 				plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
 		}
