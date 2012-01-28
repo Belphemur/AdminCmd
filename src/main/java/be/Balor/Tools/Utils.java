@@ -73,7 +73,6 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
-import be.Balor.Tools.Threads.ReplaceWaterBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -412,7 +411,7 @@ public class Utils {
 						if (blocksCache.size() == MAX_BLOCKS)
 							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 									ACHelper.getInstance().getCoreInstance(),
-									new ReplaceWaterBlockTask(blocksCache));
+									new ReplaceBlockTask(blocksCache));
 					}
 
 				}
@@ -433,7 +432,7 @@ public class Utils {
 							if (blocksCache.size() == MAX_BLOCKS)
 								ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 										ACHelper.getInstance().getCoreInstance(),
-										new ReplaceWaterBlockTask(blocksCache));
+										new ReplaceBlockTask(blocksCache));
 							visited.add(newPos);
 						}
 					}
@@ -442,7 +441,7 @@ public class Utils {
 			}
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(), new ReplaceWaterBlockTask(blocksCache));
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
 		return blocks;
 	}
 
