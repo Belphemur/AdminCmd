@@ -108,7 +108,7 @@ public class PermissionLinker {
 			DebugLog.INSTANCE.info("No Permission Parent found for : " + permNode);
 		}
 		final PermChild child = new PermChild(permNode, parent, true, bukkitDefault);
-		parent.addChild(parent);
+		parent.addChild(child);
 		return child.getBukkitPerm();
 	}
 

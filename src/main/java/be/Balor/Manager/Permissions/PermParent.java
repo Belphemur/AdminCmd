@@ -70,7 +70,9 @@ public class PermParent extends PermChild {
 	 * @param perm
 	 * @return the PermParent (this)
 	 */
-	public PermParent addChild(PermChild perm) {
+	public PermParent addChild(PermChild perm) throws IllegalArgumentException {
+		if (perm.equals(this))
+			throw new IllegalArgumentException("The Child can't be the parent.");
 		children.add(perm);
 		perm.parent = this;
 		if (!(perm instanceof PermParent))
@@ -124,7 +126,9 @@ public class PermParent extends PermChild {
 		registered = true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -135,7 +139,9 @@ public class PermParent extends PermChild {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -154,5 +160,5 @@ public class PermParent extends PermChild {
 			return false;
 		return true;
 	}
-	
+
 }
