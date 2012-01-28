@@ -395,7 +395,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
 		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
-		permissionLinker.addPermChild("admincmd.spec.notprequest");
+		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		player.addChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");

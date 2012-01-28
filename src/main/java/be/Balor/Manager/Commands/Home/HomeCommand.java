@@ -16,52 +16,18 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Home;
 
-import org.bukkit.command.CommandSender;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class DeleteHome extends HomeCommand {
-
+public abstract class HomeCommand extends CoreCommand {
 	/**
-	 * 
-	 */
-	public DeleteHome() {
-		permNode = "admincmd.tp.home";
-		cmdName = "bal_rmhome";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender)) {
-			be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
-			if(home == null)
-				return;
-			ACPlayer.getPlayer(home.player).removeHome(home.home);
-			Utils.sI18n(sender, "rmHome", "home", home.home);
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
+ * 
+ */
+	public HomeCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.tp.*");
 	}
 }

@@ -34,7 +34,11 @@ public class PermChild {
 	protected Permission bukkitPerm;
 
 	public PermChild(String permName) {
-		this(permName, null);
+		this(permName, PermParent.ALONE);
+	}
+
+	public PermChild(String permName, PermissionDefault permDefault) {
+		this(permName, null, true, permDefault);
 	}
 
 	/**
@@ -87,9 +91,9 @@ public class PermChild {
 		return permDefault;
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -103,7 +107,9 @@ public class PermChild {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

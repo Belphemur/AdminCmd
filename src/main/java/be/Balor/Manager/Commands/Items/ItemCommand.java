@@ -16,45 +16,18 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.command.CommandSender;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class AddAlias extends ItemCommand {
-
+public abstract class ItemCommand extends CoreCommand {
 	/**
-	 * 
-	 */
-	public AddAlias() {
-		permNode = "admincmd.item.alias";
-		cmdName = "bal_addalias";
+ * 
+ */
+	public ItemCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.item.*");
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		ACHelper.getInstance().alias(sender, args);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 2;
-	}
-
 }

@@ -19,14 +19,13 @@ package be.Balor.Manager.Commands.Items;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class RemoveBlackList extends CoreCommand {
+public class RemoveBlackList extends ItemCommand {
 
 	/**
 	 *
