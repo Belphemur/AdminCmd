@@ -24,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
@@ -36,7 +35,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @authors Balor, Lathanael
  * 
  */
-public class Spawn extends CoreCommand {
+public class Spawn extends SpawnCommand {
 
 	/**
 	 *

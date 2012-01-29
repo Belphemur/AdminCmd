@@ -16,56 +16,27 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Spawn;
 
-import org.bukkit.command.CommandSender;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SetSpawn extends SpawnCommand {
+public abstract class SpawnCommand extends CoreCommand {
+	/**
+ * 
+ */
+	public SpawnCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.spawn.*");
+	}
 
 	/**
-	 * 
+	 * @param string
+	 * @param string2
 	 */
-	public SetSpawn() {
-		permNode = "admincmd.spawn.set";
-		cmdName = "bal_setspawn";
+	public SpawnCommand(String cmd, String permNode) {
+		super(cmd, permNode);
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.spawn.*");
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		ACHelper.getInstance().setSpawn(sender);
-		if (args.length >= 1 && Utils.isPlayer(sender)) {
-			try {
-				int nbTaped;
-				nbTaped = args.getInt(0);
-				sender.getServer().setSpawnRadius(nbTaped);
-			} catch (Exception e) {
-				Utils.sI18n(sender, "NaN", "number", args.getString(0));
-			}
-
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null;
-	}
-
 }
