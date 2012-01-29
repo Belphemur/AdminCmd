@@ -96,9 +96,6 @@ public enum ConfigEnum {
 	JQMSG("useJoinQuitMsg", true, "To activate the change of the Join/Quit message\n"
 			+ "(that can be configured in the locale file)"),
 	WDELAY("delayBeforeWriteUserFileInSec", 120, "Delay before writing the user file on the disk (in seconds)"),
-	SCALE_TIMEOUT("timeOutScale", 60, "When using the parameter -t in power commands (god, fly, etc ...)\n"
-			+ "Configure the scale used for the time (here 60 sec).\n"
-			+ "It mean if you type /god -t 5 you will be god for 5 minutes"),
 
 	GNAMES("groupNames", Collections.list(new Enumeration<String>() {
 		private int count = 0;
@@ -113,7 +110,10 @@ public enum ConfigEnum {
 		public String nextElement() {
 			return val[count++];
 		}
-	}), "Will be used in a later version");
+	}), "Will be used in a later version"),
+	SCALE_TIMEOUT("timeOutScale", 60, "When using the parameter -t in power commands (god, fly, etc ...)\n"
+			+ "Configure the scale used for the time (here 60 sec).\n"
+			+ "It mean if you type /god -t 5 you will be god for 5 minutes");
 
 	private final String confVal;
 	private final Object defaultVal;
@@ -160,6 +160,7 @@ public enum ConfigEnum {
 	public List<String> getStringList() {
 		return config.getStringList(confVal);
 	}
+
 	/**
 	 * @return the defaultvalues
 	 */
@@ -193,4 +194,3 @@ public enum ConfigEnum {
 		ConfigEnum.pluginName = pdf.getName();
 	}
 }
-
