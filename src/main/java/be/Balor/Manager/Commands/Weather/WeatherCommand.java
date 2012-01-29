@@ -16,43 +16,18 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Weather;
 
-import org.bukkit.command.CommandSender;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class Rain extends WeatherCommand {
-
+public abstract class WeatherCommand extends CoreCommand {
 	/**
-	 * 
-	 */
-	public Rain() {
-		permNode = "admincmd.weather.rain";
-		cmdName = "bal_wrain";
+ * 
+ */
+	public WeatherCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.weather.*");
 	}
-
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Utils.weather(sender, Type.Weather.RAIN, args);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null;
-	}
-
 }

@@ -22,16 +22,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class Thor extends CoreCommand {
+public class Thor extends WeatherCommand {
 
 	/**
 	 *
@@ -44,7 +46,7 @@ public class Thor extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -52,6 +54,7 @@ public class Thor extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player player = Utils.getUser(sender, args, permNode);
+		String timeOut = args.getValueFlag('t');
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
@@ -66,13 +69,25 @@ public class Thor extends CoreCommand {
 				Utils.sI18n(player, "thorEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "thorEnabledTarget", replace);
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.THOR),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
