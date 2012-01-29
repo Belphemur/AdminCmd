@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Tools.Utils;
 
 import com.nijiko.permissions.PermissionHandler;
