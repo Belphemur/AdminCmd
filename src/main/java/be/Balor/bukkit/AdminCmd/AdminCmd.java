@@ -731,9 +731,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
 				+ ChatColor.DARK_RED + "You lost it.");
 		Utils.addLocale("serverStop", "The server is stopping.");
-		Utils.addLocale("serverWillStop", ChatColor.YELLOW + "The server will "
-				+ ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + " in " + ChatColor.GOLD
-				+ " %sec seconds.");
+		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
+				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
+				+ ChatColor.GOLD + "%sec seconds.");
 		LocaleManager.getInstance().save();
 	}
 }
