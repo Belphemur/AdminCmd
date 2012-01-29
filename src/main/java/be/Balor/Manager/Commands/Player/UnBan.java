@@ -19,7 +19,6 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -28,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class UnBan extends CoreCommand {
+public class UnBan extends PlayerCommand {
 
 	/**
 	 * 

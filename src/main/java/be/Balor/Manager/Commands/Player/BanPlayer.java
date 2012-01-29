@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Utils;
@@ -34,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class BanPlayer extends CoreCommand {
+public class BanPlayer extends PlayerCommand {
 
 	/**
 	 *

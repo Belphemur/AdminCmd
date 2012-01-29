@@ -16,55 +16,27 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import org.bukkit.command.CommandSender;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Heal extends PlayerCommand {
+public abstract class PlayerCommand extends CoreCommand {
+	/**
+ * 
+ */
+	public PlayerCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
+	}
 
 	/**
-	 * 
+	 * @param string
+	 * @param string2
 	 */
-	public Heal() {
-		permNode = "admincmd.player.heal";
-		cmdName = "bal_playerheal";
-		other = true;
+	public PlayerCommand(String cmd, String permNode) {
+		super(cmd, permNode);
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
-		ACPluginManager.scheduleSyncTask(new Runnable() {
-
-			@Override
-			public void run() {
-				Utils.setPlayerHealth(sender, args, "heal");
-			}
-		});
-		
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		// TODO Auto-generated method stub
-		return args != null;
-	}
-
 }
