@@ -17,7 +17,9 @@
 package be.Balor.Manager.Permissions;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -210,7 +212,10 @@ public class PermissionLinker {
 		PermParent found = null;
 		final String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
-		for (final PermParent perm : permissions.values()) {
+		Set<PermParent> values = new HashSet<PermParent>();
+		values.addAll(permissions.values());
+		values.addAll(childrenPermParents.values());
+		for (final PermParent perm : values) {
 			final String str = perm.getCompareName();
 			if (lowerSearch.toLowerCase().startsWith(str)) {
 				final int curDelta = lowerSearch.length() - str.length();
