@@ -26,7 +26,7 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public interface IPermissionPlugin {
 
@@ -42,7 +42,7 @@ public interface IPermissionPlugin {
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
-	 * 
+	 *
 	 * @param player
 	 * @param perm
 	 * @param errorMsg

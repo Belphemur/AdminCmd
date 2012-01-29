@@ -25,7 +25,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACCommandContainer {
 	private final CommandSender sender;
@@ -69,7 +69,7 @@ public class ACCommandContainer {
 
 	/**
 	 * Debug display
-	 *
+	 * 
 	 * @return
 	 */
 	public String debug() {
@@ -78,9 +78,9 @@ public class ACCommandContainer {
 				+ "]["
 				+ Thread.currentThread().getName()
 				+ "] The command "
-				+ cmd.getCmdName()
+				+ (cmd != null ? cmd.getCmdName() : "command=null")
 				+ " "
-				+ args.toString()
+				+ (args != null ? args.toString() : "args=null")
 				+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/";
 	}
 }

@@ -227,11 +227,14 @@ public class CommandManager implements CommandExecutor {
 			if (!cmd.argsCheck(args))
 				return false;
 			container = new ACCommandContainer(sender, cmd, args);
-			/*if (cmd.getCmdName().equals("bal_replace") || cmd.getCmdName().equals("bal_extinguish"))
-				corePlugin.getServer().getScheduler()
-						.scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
-			else*/
-				threads.execute(new NormalCommand(container));
+			/*
+			 * if (cmd.getCmdName().equals("bal_replace") ||
+			 * cmd.getCmdName().equals("bal_extinguish"))
+			 * corePlugin.getServer().getScheduler()
+			 * .scheduleSyncDelayedTask(corePlugin, new SyncCommand(container));
+			 * else
+			 */
+			threads.execute(new NormalCommand(container));
 			if (!cmd.getCmdName().equals("bal_repeat")) {
 				if (Utils.isPlayer(sender, false))
 					ACPlayer.getPlayer(((Player) sender)).setLastCmd(container);
@@ -240,8 +243,10 @@ public class CommandManager implements CommandExecutor {
 			}
 			return true;
 		} catch (final Throwable t) {
-			ACLogger.severe(container.debug(), t);
-			Utils.broadcastMessage("[AdminCmd] " + container.debug());
+			ACLogger.severe(container != null ? container.debug() : "The container is null", t);
+			Utils.broadcastMessage("[AdminCmd] " + container != null ? container.debug()
+					: cmd.getCmdName()
+							+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/");
 			return false;
 		}
 	}
@@ -425,7 +430,7 @@ public class CommandManager implements CommandExecutor {
 			ACLogger.severe("Unregistering command problem", e);
 		} catch (final IllegalAccessException e) {
 			ACLogger.severe("Unregistering command problem", e);
-		}catch (final Exception e) {
+		} catch (final Exception e) {
 			ACLogger.severe("Unregistering command problem", e);
 		}
 	}

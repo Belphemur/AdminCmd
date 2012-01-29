@@ -14,51 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Tp;
+package be.Balor.Manager.Commands.Mob;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpTo extends TeleportCommand {
-
+public abstract class MobCommand extends CoreCommand {
 	/**
-	 * 
-	 */
-	public TpTo() {
-		permNode = "admincmd.tp.to";
-		cmdName = "bal_tpto";
+ * 
+ */
+	public MobCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.mob.*");
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender) && Utils.checkImmunity(sender, args, 0)) {
-			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
-	}
-
 }

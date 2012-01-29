@@ -28,6 +28,7 @@ import net.minecraft.server.EntityHuman;
 import net.minecraft.server.EntityItem;
 import net.minecraft.server.EntityMonster;
 import net.minecraft.server.EntityPainting;
+import net.minecraft.server.EntityVillager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -35,7 +36,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftWorld;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Permissions.PermChild;
+import be.Balor.Manager.Permissions.PermParent;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -44,7 +47,8 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Memory extends CoreCommand {
+public class Memory extends ServerCommand {
+	private final PermChild full, animal, xp, item, mob, npc;
 
 	/**
 	 *
@@ -52,6 +56,12 @@ public class Memory extends CoreCommand {
 	public Memory() {
 		permNode = "admincmd.server.memory";
 		cmdName = "bal_memory";
+		full = new PermChild(permNode + ".full");
+		animal = new PermChild(permNode + ".animal");
+		mob = new PermChild(permNode + ".mob");
+		item = new PermChild(permNode + ".item");
+		xp = new PermChild(permNode + ".xp");
+		npc = new PermChild(permNode + ".npc");
 	}
 
 	/*
@@ -63,8 +73,20 @@ public class Memory extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full.getBukkitPerm()))
+			return;
+		if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal.getBukkitPerm()))
+			return;
+		if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob.getBukkitPerm()))
+			return;
+		if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item.getBukkitPerm()))
+			return;
+		if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp.getBukkitPerm()))
+			return;
+		if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc.getBukkitPerm()))
+			return;
 		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
-				|| args.hasFlag('a')) {
+				|| args.hasFlag('a') || args.hasFlag('n')) {
 			int count = 0;
 			final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
 					sender.getServer().getWorlds().size());
@@ -145,6 +167,21 @@ public class Memory extends CoreCommand {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		PermParent parent = new PermParent(permNode + ".*", permParent);
+		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
+		PermChild child = new PermChild(permNode, bukkitDefault);
+		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)
+				.addChild(full).addChild(npc);
+		bukkitPerm = child.getBukkitPerm();
+	}
+
 	private class CheckTicks implements Runnable {
 
 		protected long oldNanoTime;
@@ -178,17 +215,19 @@ public class Memory extends CoreCommand {
 	}
 
 	private boolean dontKill(CommandArgs args, Entity toKill) {
+		boolean dontKill = true;
 		if (args.hasFlag('f'))
-			return (toKill instanceof EntityHuman || toKill instanceof EntityPainting);
-		else if (args.hasFlag('x'))
-			return !(toKill instanceof EntityExperienceOrb);
-		else if (args.hasFlag('i'))
-			return !(toKill instanceof EntityItem);
-		else if (args.hasFlag('m'))
-			return !(toKill instanceof EntityMonster);
-		else if (args.hasFlag('a'))
-			return !(toKill instanceof EntityAnimal);
-		else
-			return true;
+			dontKill = (toKill instanceof EntityHuman || toKill instanceof EntityPainting);
+		if (args.hasFlag('x'))
+			dontKill = !(toKill instanceof EntityExperienceOrb);
+		if (args.hasFlag('i'))
+			dontKill = !(toKill instanceof EntityItem);
+		if (args.hasFlag('m'))
+			dontKill = !(toKill instanceof EntityMonster);
+		if (args.hasFlag('a'))
+			dontKill = !(toKill instanceof EntityAnimal);
+		if (args.hasFlag('n'))
+			dontKill = !(toKill instanceof EntityVillager);
+		return dontKill;
 	}
 }

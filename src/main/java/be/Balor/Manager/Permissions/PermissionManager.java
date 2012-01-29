@@ -25,6 +25,7 @@ import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.IPermissionPlugin;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;

@@ -22,14 +22,13 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Extinguish extends CoreCommand {
+public class Extinguish extends ServerCommand {
 
 	/**
 	 * 

@@ -20,7 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -28,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Undo extends CoreCommand {
+public class Undo extends ServerCommand {
 
 	/**
 	 * 
@@ -54,7 +53,7 @@ public class Undo extends CoreCommand {
 				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
 			} catch (Exception e) {
 				Utils.sI18n(sender, "nothingToUndo");
-			}			
+			}
 		}
 	}
 

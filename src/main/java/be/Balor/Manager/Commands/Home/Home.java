@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
@@ -33,7 +32,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @authors Balor, Lathanael
  * 
  */
-public class Home extends CoreCommand {
+public class Home extends HomeCommand {
 	public Home() {
 		permNode = "admincmd.tp.home";
 		cmdName = "bal_home";

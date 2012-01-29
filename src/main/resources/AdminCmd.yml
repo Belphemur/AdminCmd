@@ -643,4 +643,11 @@ acserverdifficulty:
     plugin: AdminCmd
     permissions: admincmd.player.pres
     cmdname: bal_pres
+
+acserverstop:
+    command: stop [-t second]
+    description: "Stop the server by kicking first every connected players. If the -t parameter is set, wait the time before stopping, else take the one configured in the configuration file."
+    plugin: AdminCmd
+    permissions: admincmd.server.stop
+    cmdname: bal_stop
     

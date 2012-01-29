@@ -21,7 +21,6 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.Type;
@@ -31,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class BanConvert extends CoreCommand {
+public class BanConvert extends ServerCommand {
 
 	public BanConvert() {
 		super("bal_banconvert", "admincmd.server.converter");

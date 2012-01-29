@@ -19,7 +19,6 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -29,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ReloadAll extends CoreCommand {
+public class ReloadAll extends ServerCommand {
 
 	/**
 	 * 
@@ -50,10 +49,10 @@ public class ReloadAll extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		ACHelper.getInstance().saveElapsedTime();
 		boolean bcast = ConfigEnum.BSRELOAD.getBoolean();
-		ACPluginManager.scheduleSyncTask(new Runnable() {			
+		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
-				ACPluginManager.getServer().reload();				
+				ACPluginManager.getServer().reload();
 			}
 		});
 		if (bcast)

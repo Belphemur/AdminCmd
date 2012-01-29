@@ -22,7 +22,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
 
@@ -30,7 +29,7 @@ import be.Balor.World.ACWorld;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class RemoveWarp extends CoreCommand {
+public class RemoveWarp extends WarpCommand {
 
 	/**
 	 * 
