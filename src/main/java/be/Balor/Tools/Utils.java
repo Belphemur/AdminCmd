@@ -700,7 +700,11 @@ public class Utils {
 			int index, boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
-			target = getPlayer(args.getString(index));
+			String playerFlag = args.getValueFlag('P');
+			if (playerFlag == null)
+				target = getPlayer(args.getString(index));
+			else
+				target = getPlayer(playerFlag);
 			if (target != null)
 				if (target.equals(sender))
 					return target;
