@@ -22,16 +22,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class TpAtSee extends CoreCommand {
+public class TpAtSee extends TeleportCommand {
 
 	/**
 	 *
@@ -43,12 +45,13 @@ public class TpAtSee extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
 			HashMap<String, String> replace = new HashMap<String, String>();
@@ -60,6 +63,18 @@ public class TpAtSee extends CoreCommand {
 			} else {
 				acp.setPower(Type.TP_AT_SEE);
 				Utils.sI18n(player, "tpSeeEnabled");
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.TP_AT_SEE),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 
 		}
@@ -67,7 +82,7 @@ public class TpAtSee extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
