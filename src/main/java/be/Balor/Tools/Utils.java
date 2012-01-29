@@ -686,6 +686,53 @@ public class Utils {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
+		return getUserParam(sender, args, permNode, true);
+	}
+
+	/**
+	 * Get the user using the -P param as indicating the userName and check who
+	 * launched the command.
+	 * 
+	 * @param sender
+	 * @param args
+	 * @param permNode
+	 * @param errorMsg
+	 * @return
+	 */
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
+			boolean errorMsg) {
+		Player target = null;
+		String playerName = args.getValueFlag('P');
+		if (playerName != null) {
+			target = getPlayer(playerName);
+			if (target != null)
+				if (target.equals(sender))
+					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+					if (checkImmunity(sender, target))
+						return target;
+					else {
+						Utils.sI18n(sender, "insufficientLvl");
+						return null;
+					}
+				} else
+					return null;
+		} else if (isPlayer(sender, false))
+			target = ((Player) sender);
+		else if (errorMsg) {
+			sender.sendMessage("You must type the player name");
+			return target;
+		}
+		if (target == null && errorMsg) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", playerName);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return target;
+		}
+		return target;
+	}
+
 	/**
 	 * Get the user and check who launched the command.
 	 * 
@@ -700,11 +747,7 @@ public class Utils {
 			int index, boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
-			String playerFlag = args.getValueFlag('P');
-			if (playerFlag == null)
-				target = getPlayer(args.getString(index));
-			else
-				target = getPlayer(playerFlag);
+			target = getPlayer(args.getString(index));
 			if (target != null)
 				if (target.equals(sender))
 					return target;

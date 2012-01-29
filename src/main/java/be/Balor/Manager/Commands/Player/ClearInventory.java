@@ -53,10 +53,10 @@ public class ClearInventory extends PlayerCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		final Player target = Utils.getUser(sender, args, permNode);
+		final Player target = Utils.getUserParam(sender, args, permNode);
 		if (target == null)
 			return;
-		if (args.length == 2) {
+		if (args.length == 1) {
 			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
 					sender, args.getString(1));
 			if (mc.isNull())
@@ -70,7 +70,7 @@ public class ClearInventory extends PlayerCommand {
 				}
 			});
 
-		} else if (args.length >= 3) {
+		} else if (args.length >= 2) {
 			final HashMap<Integer, ? extends ItemStack> stacks;
 			final int startAmount = args.getInt(2);
 
