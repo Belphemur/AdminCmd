@@ -61,7 +61,7 @@ public class StopServer extends ServerCommand {
 			}
 		else
 			timeOutValue = ConfigEnum.TIME_STOP.getInt();
-		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec", timeOut.toString()));
+		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec", String.valueOf(timeOutValue)));
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 
