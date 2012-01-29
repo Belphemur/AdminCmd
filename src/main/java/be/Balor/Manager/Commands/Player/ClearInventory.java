@@ -58,7 +58,7 @@ public class ClearInventory extends PlayerCommand {
 			return;
 		if (args.length == 1) {
 			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
-					sender, args.getString(1));
+					sender, args.getString(0));
 			if (mc.isNull())
 				return;
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -72,10 +72,10 @@ public class ClearInventory extends PlayerCommand {
 
 		} else if (args.length >= 2) {
 			final HashMap<Integer, ? extends ItemStack> stacks;
-			final int startAmount = args.getInt(2);
+			final int startAmount = args.getInt(1);
 
 			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
-					args.getString(1));
+					args.getString(0));
 			if (mc.isNull())
 				return;
 			stacks = target.getInventory().all(mc.getMaterial());
