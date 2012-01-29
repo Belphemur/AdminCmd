@@ -83,7 +83,7 @@ public class TpToggle extends TeleportCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		PermParent parent = plugin.getPermissionLinker().getPermParent("admincmd.tp.tptoggle.*");
+		PermParent parent = plugin.getPermissionLinker().getPermParent("admincmd.tp.toggle.*");
 		parent.addChild("admincmd.tp.toggle.allow").addChild("admincmd.tp.toggle.use");
 	}
 
