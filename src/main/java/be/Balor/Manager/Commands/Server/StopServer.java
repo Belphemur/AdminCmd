@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -48,8 +49,7 @@ public class StopServer extends ServerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		final List<Player> onlinePlayers = Utils.getOnlinePlayers();
+	public void execute(CommandSender sender, CommandArgs args) {		
 		String timeOut = args.getValueFlag('t');
 		int timeOutValue;
 		if (timeOut != null)
@@ -62,6 +62,8 @@ public class StopServer extends ServerCommand {
 		else
 			timeOutValue = ConfigEnum.TIME_STOP.getInt();
 		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec", String.valueOf(timeOutValue)));
+		ACHelper.getInstance().setServerLocked(true);
+		final List<Player> onlinePlayers = Utils.getOnlinePlayers();
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 

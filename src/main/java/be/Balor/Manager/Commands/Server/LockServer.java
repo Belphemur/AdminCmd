@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -57,10 +59,11 @@ public class LockServer extends ServerCommand {
 				ACLogger.info(bcast);
 			}
 			ACHelper.getInstance().setServerLocked(true);
-			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(), new Runnable() {
+			final List<Player> onlinePlayers = Utils.getOnlinePlayers();
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable() {
 				@Override
 				public void run() {
-					for (Player p : Utils.getOnlinePlayers()) {
+					for (Player p : onlinePlayers) {
 						if (PermissionManager.hasPerm(p, "admincmd.server.lockdown"))
 							continue;
 						p.kickPlayer(Utils.I18n("serverLockMessage"));
