@@ -153,6 +153,12 @@ public class ACPlayerListener implements Listener {
 			ACHelper.getInstance().addSpy(p);
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
+			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) 
+			{
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("name", Utils.getPlayerName(p, null, true));
+				event.setJoinMessage(Utils.I18n("joinMessageFirstTime", replace));
+			}
 			if (ConfigEnum.FCSPAWN.getBoolean())
 				ACHelper.getInstance().spawn(p);
 			if (!ConfigEnum.FCSPAWN.getBoolean()
