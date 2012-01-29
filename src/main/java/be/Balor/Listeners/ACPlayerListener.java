@@ -143,7 +143,7 @@ public class ACPlayerListener implements Listener {
 		if (ConfigEnum.AUTO_AFK.getBoolean())
 			AFKWorker.getInstance().updateTimeStamp(p);
 		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
-		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY
+		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
 				: imLvl);
 		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setJoinMessage(null);
@@ -219,7 +219,7 @@ public class ACPlayerListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
 		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
-		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY
+		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
 				: imLvl);
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
