@@ -375,21 +375,25 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	}
 
 	@Override
-	protected void registerPermParents() {		
+	protected void registerPermParents() {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
 		PermParent player = new PermParent("admincmd.player.*");
 		permissionLinker.addPermParent(player);
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
+		PermParent tp = new PermParent("admincmd.tp.*");
+		permissionLinker.addPermParent(tp);
+		permissionLinker.addChildPermParent(new PermParent("admincmd.tp.toggle.*"), tp);
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
+		PermParent server = new PermParent("admincmd.server.*");
+		permissionLinker.addPermParent(server);
+		PermParent sExec = new PermParent("admincmd.server.exec.*");
+		PermParent sSet = new PermParent("admincmd.server.set.*");
+		permissionLinker.addChildPermParent(sExec, server);
+		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
@@ -402,7 +406,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
-		for (int i = 0; i < 150; i++) {
+		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);

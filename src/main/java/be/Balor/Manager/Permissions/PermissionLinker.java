@@ -31,6 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class PermissionLinker {
 	protected Map<String, PermParent> permissions = new HashMap<String, PermParent>();
+	protected Map<String, PermParent> childrenPermParents = new HashMap<String, PermParent>();
 	protected PermParent majorPerm;
 	protected String name;
 	private static int counter = 0;
@@ -126,6 +127,21 @@ public class PermissionLinker {
 		permissions.put(pp.getPermName(), pp);
 	}
 
+	/**
+	 * Add a PermParent as the child of another PermParent.
+	 * 
+	 * @param toAdd
+	 *            permParent to add.
+	 * @param parent
+	 *            PermParent that will be the father of the item to add.
+	 * @return the PermParent added.
+	 */
+	public PermParent addChildPermParent(PermParent toAdd, PermParent parent) {
+		parent.addChild(toAdd);
+		childrenPermParents.put(toAdd.getPermName(), toAdd);
+		return toAdd;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -169,7 +185,10 @@ public class PermissionLinker {
 	 * @return
 	 */
 	public PermParent getPermParent(String permNode) {
-		return permissions.get(permNode);
+		PermParent result = permissions.get(permNode);
+		if (result == null)
+			result = childrenPermParents.get(permNode);
+		return result;
 	}
 
 	/*

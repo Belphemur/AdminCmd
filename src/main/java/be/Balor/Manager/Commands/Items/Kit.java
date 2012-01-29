@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
@@ -90,8 +91,7 @@ public class Kit extends ItemCommand {
 			if (kitDelay == -1) {
 				if (kitLastUse == 0)
 					actarget.updateLastKitUse(kit.getName());
-				else
-				{
+				else {
 					Utils.sI18n(sender, "kitOnce", "kit", kit.getName());
 					return;
 				}
@@ -155,8 +155,8 @@ public class Kit extends ItemCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.item.nodelay", bukkitDefault);
-		plugin.getPermissionLinker().addPermChild("admincmd.item.kithelp", bukkitDefault);
+		permParent.addChild(new PermChild("admincmd.item.nodelay", bukkitDefault)).addChild(
+				new PermChild("admincmd.item.kithelp", bukkitDefault));
 		super.registerBukkitPerm();
 	}
 
