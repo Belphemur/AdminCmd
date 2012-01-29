@@ -21,8 +21,8 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import be.Balor.Player.ACPlayer;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -38,9 +38,7 @@ public class TpRequest {
 	public TpRequest(Player from, Player to) {
 		this.from = from;
 		this.to = to;
-		timeOut = System.currentTimeMillis()
-				+ (ACHelper.getInstance().getConfInt(
-						"tpRequestTimeOutInMinutes") * 60000);
+		timeOut = System.currentTimeMillis() + (ConfigEnum.TPR_TIMEOUT.getLong() * 60000);
 	}
 
 	public void teleport(Player sender) {
@@ -54,8 +52,7 @@ public class TpRequest {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					ACPlayer.getPlayer(from)
-							.setLastLocation(from.getLocation());
+					ACPlayer.getPlayer(from).setLastLocation(from.getLocation());
 					from.teleport(to);
 					HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("fromPlayer", fromName);
@@ -90,7 +87,6 @@ public class TpRequest {
 	 */
 	@Override
 	public String toString() {
-		return from == null || to == null ? "false" : from.getName() + ":"
-				+ to.getName();
+		return from == null || to == null ? "false" : from.getName() + ":" + to.getName();
 	}
 }

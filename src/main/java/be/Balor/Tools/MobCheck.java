@@ -7,6 +7,7 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Giant;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 
@@ -30,13 +32,18 @@ public class MobCheck {
 	public static boolean isMonster(Entity e) {
 		return (e instanceof Creeper) || (e instanceof Monster) || (e instanceof Skeleton)
 				|| (e instanceof Spider) || (e instanceof Zombie) || (e instanceof PigZombie)
-				|| (e instanceof Ghast) || (e instanceof Giant) || (e instanceof Slime);
+				|| (e instanceof Ghast) || (e instanceof Giant) || (e instanceof Slime)
+				|| (e instanceof EnderDragon);
 	}
 
 	public static boolean isAnimal(Entity e) {
 		return (e instanceof Chicken) || (e instanceof Cow) || (e instanceof Sheep)
 				|| (e instanceof Squid) || (e instanceof Pig) || (e instanceof Wolf)
 				|| (e instanceof Animals);
+	}
+
+	public static boolean isNPC(LivingEntity e) {
+		return (e instanceof Villager);
 	}
 
 	public static boolean isZombie(LivingEntity e) {
@@ -97,5 +104,9 @@ public class MobCheck {
 
 	public static boolean isSquid(LivingEntity e) {
 		return (e instanceof Squid);
+	}
+
+	public static boolean isEnderDragon(LivingEntity e) {
+		return (e instanceof EnderDragon);
 	}
 }

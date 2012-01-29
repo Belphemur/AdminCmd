@@ -29,6 +29,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Warp;
+import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.ObjectContainer;
@@ -44,7 +46,8 @@ import com.google.common.io.Files;
 public class FileWorld extends ACWorld {
 	private final ExtendedConfiguration datas;
 	private final ConfigurationSection warps;
-	private final ConfigurationSection informations;
+	private final ExConfigurationSection informations;
+	private final ExConfigurationSection mobLimits;
 	static {
 		ExtendedConfiguration.registerClass(SimpleLocation.class);
 	}
@@ -63,6 +66,7 @@ public class FileWorld extends ACWorld {
 
 		warps = datas.addSection("warps");
 		informations = datas.addSection("informations");
+		mobLimits = informations.addSection("mobLimits");
 		forceSave();
 	}
 
@@ -120,7 +124,7 @@ public class FileWorld extends ACWorld {
 				handler.setDifficulty(dif);
 			}
 		});
-		
+
 		informations.set("difficulty", dif);
 	}
 
@@ -142,16 +146,17 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Location getWarp(String name) throws WorldNotLoaded {
+	public Warp getWarp(String name) throws WorldNotLoaded {
 		Object warp = warps.get(name);
+		String warpName = name;
 		if (warp == null) {
-			String warpName = Str.matchString(warps.getKeys(false), name);
+			warpName = Str.matchString(warps.getKeys(false), name);
 			if (warpName == null)
 				return null;
 			warp = warps.get(warpName);
 		}
 
-		return ((SimpleLocation) warp).getLocation();
+		return new Warp(warpName, ((SimpleLocation) warp).getLocation());
 	}
 
 	/*
@@ -239,7 +244,45 @@ public class FileWorld extends ACWorld {
 		TreeMap<String, String> result = new TreeMap<String, String>();
 		for (Entry<String, Object> entry : informations.getValues(false).entrySet())
 			result.put(entry.getKey(), entry.getValue().toString());
+		for (Entry<String, Object> entry : mobLimits.getValues(false).entrySet())
+			result.put("Limit on " + entry.getKey(), entry.getValue().toString());
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#setMobLimit(java.lang.String, int)
+	 */
+	@Override
+	public void setMobLimit(String mob, int limit) {
+		mobLimits.set(mob, limit);
+		writeFile();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#removeMobLimit(java.lang.String)
+	 */
+	@Override
+	public boolean removeMobLimit(String mob) {
+		if (mobLimits.isSet(mob)) {
+			mobLimits.remove(mob);
+			writeFile();
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getMobLimit(java.lang.String)
+	 */
+	@Override
+	public int getMobLimit(String mob) {
+		return mobLimits.getInt(mob, -1);
 	}
 
 }

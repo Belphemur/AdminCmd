@@ -19,7 +19,6 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -28,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class Feed extends CoreCommand {
+public class Feed extends PlayerCommand {
 
 	/**
 	 *

@@ -20,7 +20,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 
@@ -28,7 +27,7 @@ import be.Balor.Manager.Terminal.TerminalCommandManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Execution extends CoreCommand {
+public class Execution extends ServerCommand {
 
 	/**
 	 * 

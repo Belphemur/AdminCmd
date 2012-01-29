@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
@@ -30,7 +29,7 @@ import be.Balor.Tools.Utils;
  * 
  */
 
-public class Set extends CoreCommand {
+public class Set extends ServerCommand {
 
 	/**
 	 *
@@ -110,15 +109,18 @@ public class Set extends CoreCommand {
 		return args != null && args.length >= 2;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
-	public void registerBukkitPerm() {		
+	public void registerBukkitPerm() {
 		plugin.getPermissionLinker().addPermChild("admincmd.server.set.motd");
 		plugin.getPermissionLinker().addPermChild("admincmd.server.set.news");
 		plugin.getPermissionLinker().addPermChild("admincmd.server.set.rules");
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

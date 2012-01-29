@@ -19,7 +19,6 @@ package be.Balor.Manager.Commands.Time;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
@@ -27,7 +26,7 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class SetTime extends CoreCommand {
+public class SetTime extends TimeCommand {
 
 	/**
 	 *

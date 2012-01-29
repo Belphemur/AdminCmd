@@ -29,7 +29,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Manager.Permissions.IPermissionPlugin;
 import be.Balor.Tools.Utils;
 
 /**

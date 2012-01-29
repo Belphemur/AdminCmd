@@ -23,14 +23,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Roll extends CoreCommand {
+public class Roll extends PlayerCommand {
 
 	/**
 	 *

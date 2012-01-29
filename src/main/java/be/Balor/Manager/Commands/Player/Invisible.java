@@ -23,18 +23,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Invisible extends CoreCommand {
+public class Invisible extends PlayerCommand {
 
 	/**
 	 *
@@ -55,7 +54,7 @@ public class Invisible extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode);
-		boolean noPickUp = ACHelper.getInstance().getConfBoolean("InvisAndNoPickup");
+		boolean noPickUp = ConfigEnum.NPINVISIBLE.getBoolean();
 		if (target != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));

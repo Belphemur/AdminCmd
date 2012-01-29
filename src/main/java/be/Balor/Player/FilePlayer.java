@@ -41,6 +41,7 @@ import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.IOSaveTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.google.common.io.Files;
 
@@ -109,8 +110,7 @@ public class FilePlayer extends ACPlayer {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
-		int delay = ACHelper.getInstance().getConfInt("delayBeforeWriteUserFileInSec") >= 30 ? ACHelper
-				.getInstance().getConfInt("delayBeforeWriteUserFileInSec") : 30;
+		int delay = ConfigEnum.WDELAY.getInt() >= 30 ?  ConfigEnum.WDELAY.getInt() : 30;
 		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);

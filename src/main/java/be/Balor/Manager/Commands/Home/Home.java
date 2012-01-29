@@ -21,18 +21,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
  * 
  */
-public class Home extends CoreCommand {
+public class Home extends HomeCommand {
 	public Home() {
 		permNode = "admincmd.tp.home";
 		cmdName = "bal_home";
@@ -61,7 +61,7 @@ public class Home extends CoreCommand {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 						ACHelper.getInstance().getCoreInstance(),
 						new DelayedTeleport(loc, player, home, sender),
-						ACHelper.getInstance().getConfLong("teleportDelay"));
+						ConfigEnum.TP_DELAY.getLong());
 			}
 		}
 	}
@@ -95,7 +95,7 @@ public class Home extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (!ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+			if (!ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);

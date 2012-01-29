@@ -14,25 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools;
+package be.Balor.Listeners.Commands;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ShootFireball {
-	public static void shoot(Player player, Float yield) {
-		Location playerLoc = player.getLocation();
-		Location fbLocation = playerLoc.add(
-				playerLoc.getDirection().normalize().multiply(2)
-						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
-				.add(0, 1D, 0);
-		Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
-		f.setYield(yield);
-		f.setShooter(player);
+public class ACGodListener implements Listener {
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.isCancelled())
+			return;
+		if (!(event.getEntity() instanceof Player))
+			return;
+		final Player player = (Player) event.getEntity();
+		if (ACPlayer.getPlayer(player).hasPower(Type.GOD)) {
+			if (event.getCause().equals(DamageCause.FIRE)
+					|| event.getCause().equals(DamageCause.FIRE_TICK))
+				player.setFireTicks(0);
+			event.setCancelled(true);
+			event.setDamage(0);
+		}
+
 	}
 }

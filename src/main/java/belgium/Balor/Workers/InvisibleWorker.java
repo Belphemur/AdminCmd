@@ -31,6 +31,7 @@ import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.google.common.collect.MapMaker;
 
@@ -162,7 +163,7 @@ final public class InvisibleWorker {
 										uninvisible(toReappear, p);
 								}
 							});
-			if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible")) {
+			if (ConfigEnum.FQINVISIBLE.getBoolean()) {
 				Utils.broadcastFakeJoin(toReappear);
 				Utils.addPlayerInOnlineList(toReappear);
 			}
@@ -255,7 +256,7 @@ final public class InvisibleWorker {
 									new UpdateInvisible(toVanish),
 									tickCheck / 2, tickCheck));
 		}
-		if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible")) {
+		if (ConfigEnum.FQINVISIBLE.getBoolean()) {
 			Utils.broadcastFakeQuit(toVanish);
 			Utils.removePlayerFromOnlineList(toVanish);
 		}

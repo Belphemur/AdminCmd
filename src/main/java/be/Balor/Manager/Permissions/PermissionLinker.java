@@ -16,11 +16,15 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -28,85 +32,11 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermissionLinker {
-	protected LinkedList<PermParent> permissions = new LinkedList<PermParent>();
+	protected Map<String, PermParent> permissions = new HashMap<String, PermParent>();
+	protected Map<String, PermParent> childrenPermParents = new HashMap<String, PermParent>();
 	protected PermParent majorPerm;
 	protected String name;
-
-	/**
-	 * 
-	 */
-	protected PermissionLinker(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Get the PermissionLinker 
-	 * Note: The PermissionManager may only retain a weak
-	 * reference to the newly created PermissionLinker. 
-	 * It is important to understand that
-	 * a previously created PermissionLinker with the given name may be garbage collected
-	 * at any time if there is no strong reference to the PermissionLinker. 
-	 * In particular,
-	 * this means that two back-to-back calls like
-	 * {@code PermissionLinker("MyPermissionLinker").addPermParent(...)} may use different PermissionLinker objects
-	 * named "MyPermissionLinker" if there is no strong reference to the PermissionLinker named
-	 * "MyPermissionLinker" elsewhere in the program.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public static synchronized PermissionLinker getPermissionLinker(String name) {
-		return PermissionManager.getInstance().demandPermissionLinker(name);
-	}
-
-	/**
-	 * Set major permission, the root.
-	 * 
-	 * @param major
-	 */
-	public void setMajorPerm(PermParent major) {
-		majorPerm = major;
-		for (PermParent pp : permissions)
-			majorPerm.addChild(pp.getPermName());
-	}
-	public void setMajorPerm(String major) {
-		majorPerm = new PermParent(major);
-		for (PermParent pp : permissions)
-			majorPerm.addChild(pp.getPermName());
-	}
-
-	/**
-	 * Add some important node (like myplygin.item)
-	 * 
-	 * @param toAdd
-	 */
-	public void addPermParent(PermParent toAdd) {
-		permissions.add(toAdd);
-	}
-	public void addPermParent(String toAdd) {
-		permissions.add(new PermParent(toAdd));
-	}
-
-
-	/**
-	 * Add permission child (like myplugin.item.add)
-	 * 
-	 * @param permNode
-	 * @param bukkitDefault
-	 * @return
-	 */
-	public Permission addPermChild(String permNode,
-			PermissionDefault bukkitDefault) {
-		Permission bukkitPerm = null;
-		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
-			bukkitPerm = new Permission(permNode, bukkitDefault);
-			ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
-			for (PermParent pp : permissions)
-				if (permNode.contains(pp.getCompareName()))
-					pp.addChild(permNode);
-		}
-		return bukkitPerm;
-	}
+	private static int counter = 0;
 
 	/**
 	 * Add a perm on the fly
@@ -118,14 +48,42 @@ public class PermissionLinker {
 	public static Permission addOnTheFly(String permNode, String parentNode) {
 		Permission child;
 		if ((child = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
-			Permission parent = ACPluginManager.getServer()
-					.getPluginManager().getPermission(parentNode);
+			final Permission parent = ACPluginManager.getServer().getPluginManager()
+					.getPermission(parentNode);
 			child = new Permission(permNode, PermissionDefault.OP);
 			ACPluginManager.getServer().getPluginManager().addPermission(child);
 			parent.getChildren().put(permNode, true);
 		}
 		return child;
 
+	}
+
+	/**
+	 * Get the PermissionLinker Note: The PermissionManager may only retain a
+	 * weak reference to the newly created PermissionLinker. It is important to
+	 * understand that a previously created PermissionLinker with the given name
+	 * may be garbage collected at any time if there is no strong reference to
+	 * the PermissionLinker. In particular, this means that two back-to-back
+	 * calls like
+	 * {@code PermissionLinker("MyPermissionLinker").addPermParent(...)} may use
+	 * different PermissionLinker objects named "MyPermissionLinker" if there is
+	 * no strong reference to the PermissionLinker named "MyPermissionLinker"
+	 * elsewhere in the program.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static synchronized PermissionLinker getPermissionLinker(String name) {
+		return PermissionManager.getInstance().demandPermissionLinker(name);
+	}
+
+	private final int plId = counter++;
+
+	/**
+	 * 
+	 */
+	protected PermissionLinker(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -139,12 +97,80 @@ public class PermissionLinker {
 	}
 
 	/**
-	 * Register all parent node.
+	 * Add permission child (like myplugin.item.add)
+	 * 
+	 * @param permNode
+	 * @param bukkitDefault
+	 * @return
 	 */
-	public void registerAllPermParent() {
-		for (PermParent pp : permissions)
-			pp.registerBukkitPerm();
-		majorPerm.registerBukkitPerm();
+	public Permission addPermChild(String permNode, PermissionDefault bukkitDefault)
+			throws NullPointerException {
+		PermParent parent = matchPermParent(permNode);
+		if (parent == null) {
+			parent = PermParent.ALONE;
+			DebugLog.INSTANCE.info("No Permission Parent found for : " + permNode);
+		}
+		final PermChild child = new PermChild(permNode, parent, true, bukkitDefault);
+		parent.addChild(child);
+		return child.getBukkitPerm();
+	}
+
+	/**
+	 * Add some important node (like myplygin.item)
+	 * 
+	 * @param toAdd
+	 */
+	public void addPermParent(PermParent toAdd) {
+		permissions.put(toAdd.getPermName(), toAdd);
+	}
+
+	public void addPermParent(String toAdd) {
+		final PermParent pp = new PermParent(toAdd, majorPerm);
+		permissions.put(pp.getPermName(), pp);
+	}
+
+	/**
+	 * Add a PermParent as the child of another PermParent.
+	 * 
+	 * @param toAdd
+	 *            permParent to add.
+	 * @param parent
+	 *            PermParent that will be the father of the item to add.
+	 * @return the PermParent added.
+	 */
+	public PermParent addChildPermParent(PermParent toAdd, PermParent parent) {
+		parent.addChild(toAdd);
+		childrenPermParents.put(toAdd.getPermName(), toAdd);
+		return toAdd;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PermissionLinker))
+			return false;
+		final PermissionLinker other = (PermissionLinker) obj;
+		if (majorPerm == null) {
+			if (other.majorPerm != null)
+				return false;
+		} else if (!majorPerm.equals(other.majorPerm))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (plId != other.plId)
+			return false;
+		return true;
 	}
 
 	/**
@@ -154,4 +180,97 @@ public class PermissionLinker {
 		return name;
 	}
 
+	/**
+	 * Getting the PermParent of the given node.
+	 * 
+	 * @param permNode
+	 * @return
+	 */
+	public PermParent getPermParent(String permNode) {
+		PermParent result = permissions.get(permNode);
+		if (result == null)
+			result = childrenPermParents.get(permNode);
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((majorPerm == null) ? 0 : majorPerm.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + plId;
+		return result;
+	}
+
+	private PermParent matchPermParent(String search) {
+		PermParent found = null;
+		final String lowerSearch = search.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		Set<PermParent> values = new HashSet<PermParent>();
+		values.addAll(permissions.values());
+		values.addAll(childrenPermParents.values());
+		for (final PermParent perm : values) {
+			final String str = perm.getCompareName();
+			if (lowerSearch.toLowerCase().startsWith(str)) {
+				final int curDelta = lowerSearch.length() - str.length();
+				if (curDelta < delta) {
+					found = perm;
+					delta = curDelta;
+				}
+				if (curDelta == 0)
+					break;
+			}
+		}
+		return found;
+
+	}
+
+	/**
+	 * Register all parent node.
+	 */
+	public void registerAllPermParent() {
+		PermParent.ROOT.registerPermission();
+		PermParent.ALONE.registerPermission();
+	}
+
+	/**
+	 * Set major permission, the root.
+	 * 
+	 * @param major
+	 */
+	public void setMajorPerm(PermParent major) {
+		majorPerm = major;
+		for (final PermParent pp : permissions.values())
+			majorPerm.addChild(pp);
+	}
+
+	public void setMajorPerm(String major) {
+		majorPerm = new PermParent(major, PermParent.ROOT);
+		for (final PermParent pp : permissions.values())
+			majorPerm.addChild(pp);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PermissionLinker [majorPerm=" + majorPerm + ", name=" + name + ", plId=" + plId
+				+ "]";
+	}
+
+	/**
+	 * @return the majorPerm
+	 */
+	public PermParent getMajorPerm() {
+		return majorPerm;
+	}
 }

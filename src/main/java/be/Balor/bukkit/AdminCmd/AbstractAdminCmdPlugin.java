@@ -40,31 +40,20 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		final int prime = 31;
-		int result = 5;
-		result = prime * result + this.name.hashCode();
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
 		hashCode = result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof AbstractAdminCmdPlugin))
-			return false;
-		final AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public AbstractAdminCmdPlugin() {
+		this.name = this.getClass().getSimpleName();
+		permissionLinker = PermissionLinker.getPermissionLinker(name);		
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
+		hashCode = result;
 	}
 
 	/**
@@ -103,6 +92,33 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof AbstractAdminCmdPlugin))
+			return false;
+		AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (permissionLinker == null) {
+			if (other.permissionLinker != null)
+				return false;
+		} else if (!permissionLinker.equals(other.permissionLinker))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	@Override
@@ -129,5 +145,15 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 * Definitions of the locale used by the plugin
 	 */
 	protected abstract void setDefaultLocale();
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AbstractAdminCmdPlugin [permissionLinker=" + permissionLinker + ", name=" + name
+				+ ", hashCode=" + hashCode + "]";
+	}
+	
 
 }

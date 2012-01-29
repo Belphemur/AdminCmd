@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -34,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ClearInventory extends CoreCommand {
+public class ClearInventory extends PlayerCommand {
 
 	/**
 	 *
@@ -54,12 +53,12 @@ public class ClearInventory extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		final Player target = Utils.getUser(sender, args, permNode);
+		final Player target = Utils.getUserParam(sender, args, permNode);
 		if (target == null)
 			return;
-		if (args.length == 2) {
+		if (args.length == 1) {
 			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
-					sender, args.getString(1));
+					sender, args.getString(0));
 			if (mc.isNull())
 				return;
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -71,12 +70,12 @@ public class ClearInventory extends CoreCommand {
 				}
 			});
 
-		} else if (args.length >= 3) {
+		} else if (args.length >= 2) {
 			final HashMap<Integer, ? extends ItemStack> stacks;
-			final int startAmount = args.getInt(2);
+			final int startAmount = args.getInt(1);
 
 			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
-					args.getString(1));
+					args.getString(0));
 			if (mc.isNull())
 				return;
 			stacks = target.getInventory().all(mc.getMaterial());

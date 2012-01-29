@@ -124,6 +124,8 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		Object info;
 		try {
 			info = super.get(path, def);
+			//info = newGet(path, def);
+
 		} finally {
 			lock.unlock();
 		}
@@ -249,6 +251,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		lock.lock();
 		try {
 			super.set(path, value);
+			//newSet(path, value);
 		} finally {
 			lock.unlock();
 		}

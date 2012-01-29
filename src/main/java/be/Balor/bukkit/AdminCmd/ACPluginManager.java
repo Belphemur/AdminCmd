@@ -16,8 +16,10 @@
  ************************************************************************/
 package be.Balor.bukkit.AdminCmd;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -25,9 +27,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Tools.Metrics;
+import be.Balor.Tools.Metrics.Plotter;
 import be.Balor.Tools.Debug.ACLogger;
-
-import com.google.common.collect.MapMaker;
+import be.Balor.Tools.Debug.DebugLog;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -35,9 +38,11 @@ import com.google.common.collect.MapMaker;
  */
 public class ACPluginManager {
 	private final static ACPluginManager instance = new ACPluginManager();
-	private final ConcurrentMap<String, AbstractAdminCmdPlugin> pluginInstances = new MapMaker()
-			.makeMap();
+	private final Map<String, AbstractAdminCmdPlugin> pluginInstances = Collections
+			.synchronizedMap(new HashMap<String, AbstractAdminCmdPlugin>());
 	private static Server server = null;
+	public static Metrics metrics = null;
+	public static AbstractAdminCmdPlugin corePlugin;
 
 	/**
 	 * @return the instance
@@ -88,15 +93,38 @@ public class ACPluginManager {
 	 * @return
 	 */
 	public static int scheduleSyncTask(Runnable task) {
-		return server.getScheduler().scheduleSyncDelayedTask(instance.getPlugin("Core"), task);
+		return server.getScheduler().scheduleSyncDelayedTask(corePlugin, task);
 	}
 
 	/**
 	 * @param server
 	 *            the server to set
 	 */
-	public static void setServer(Server server) {
+	static void setServer(Server server) {
 		ACPluginManager.server = server;
+	}
+
+	/**
+	 * @param corePlugin
+	 *            the corePlugin to set
+	 */
+	static void setCorePlugin(AbstractAdminCmdPlugin corePlugin) {
+		ACPluginManager.corePlugin = corePlugin;
+	}
+
+	/**
+	 * @return the corePlugin
+	 */
+	public static AbstractAdminCmdPlugin getCorePlugin() {
+		return corePlugin;
+	}
+
+	/**
+	 * @param metrics
+	 *            the metrics to set
+	 */
+	static void setMetrics(Metrics metrics) {
+		ACPluginManager.metrics = metrics;
 	}
 
 	public static void unRegisterACPlugin(Plugin addon) {
@@ -123,10 +151,26 @@ public class ACPluginManager {
 	 * 
 	 * @param addon
 	 */
-	protected void registerPlugin(AbstractAdminCmdPlugin addon) throws IllegalArgumentException {
-		if (!pluginInstances.containsKey(addon.getName()))
+	protected void registerPlugin(final AbstractAdminCmdPlugin addon)
+			throws IllegalArgumentException {
+		if (!pluginInstances.containsKey(addon.getName())) {
 			pluginInstances.put(addon.getName(), addon);
-		else
+			DebugLog.INSTANCE.info("Registering : " + addon);
+			if (corePlugin == null || addon.equals(corePlugin))
+				return;
+			metrics.addCustomData(corePlugin, new Plotter() {
+
+				@Override
+				public int getValue() {
+					return 1;
+				}
+
+				@Override
+				public String getColumnName() {
+					return "Addon " + addon.getName();
+				}
+			});
+		} else
 			throw new IllegalArgumentException("Plugin " + addon.getName() + " Already registered.");
 	}
 
@@ -142,8 +186,21 @@ public class ACPluginManager {
 	 * 
 	 * @param addon
 	 */
-	protected void unRegisterPlugin(AbstractAdminCmdPlugin addon) {
+	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
 		pluginInstances.remove(addon.getName());
+		if (!addon.equals(corePlugin))
+			metrics.removeCustomData(corePlugin, new Plotter() {
+
+				@Override
+				public int getValue() {
+					return 1;
+				}
+
+				@Override
+				public String getColumnName() {
+					return "Addon " + addon.getName();
+				}
+			});
 	}
 
 }

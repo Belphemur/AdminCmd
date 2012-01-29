@@ -26,7 +26,6 @@ import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -34,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Lathanael (aka Philippe Leipold)
  * 
  */
-public class ChangeMobSpawner extends CoreCommand {
+public class ChangeMobSpawner extends MobCommand {
 
 	/**
 	 *

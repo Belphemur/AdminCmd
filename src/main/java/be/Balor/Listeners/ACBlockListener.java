@@ -18,66 +18,29 @@ package be.Balor.Listeners;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.inventory.ItemStack;
 
-import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACBlockListener extends BlockListener {
-	@Override
-	public void onSignChange(SignChangeEvent event) {
-		if (event.isCancelled())
-			return;
-		String parsed = null;
-		String line;
-		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]"))
-			return;
-		for (int i = 0; i < 4; i++) {
-			line = event.getLine(i);
-			if (line != null && !line.isEmpty()) {
-				parsed = Utils.colorParser(line);
-				if (parsed != null)
-					event.setLine(i, parsed);
-			}
-		}
-	}
-
-	@Override
-	public void onBlockDamage(BlockDamageEvent event) {
-		if (event.isCancelled())
-			return;
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer().getName());
-		ItemStack itemInHand = event.getItemInHand();
-		if (itemInHand != null
-				&& itemInHand.getTypeId() == ACHelper.getInstance().getConfInt("superBreakerItem")
-				&& player.hasPower(Type.SUPER_BREAKER)) {
-			event.setInstaBreak(true);
-			itemInHand.setDurability((short) 0);
-		}
-	}
-
+public class ACBlockListener implements Listener {
 	/**
 	 * @author Lathanael (aka Philippe Leipold)
 	 * 
 	 */
-	@Override
+	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (event.isCancelled())
 			return;
-		Player player = event.getPlayer();
-		Block block = event.getBlock();
-		MaterialContainer mat = ACHelper.getInstance().checkMaterial(player,
+		final Player player = event.getPlayer();
+		final Block block = event.getBlock();
+		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(player,
 				String.valueOf(block.getTypeId()));
 		if (!ACHelper.getInstance().inBlackListBlock(player, mat))
 			return;

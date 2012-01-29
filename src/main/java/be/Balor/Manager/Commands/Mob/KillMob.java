@@ -28,7 +28,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -37,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class KillMob extends CoreCommand {
+public class KillMob extends MobCommand {
 
 	/**
 	 * 
@@ -101,8 +100,7 @@ public class KillMob extends CoreCommand {
 		return args != null;
 	}
 
-	private void killMobs(List<LivingEntity> mobs, String type,
-			CommandSender sender) {
+	private void killMobs(List<LivingEntity> mobs, String type, CommandSender sender) {
 		int mobKilled = 0;
 		for (Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
 			LivingEntity m = (LivingEntity) iterator.next();
@@ -110,7 +108,7 @@ public class KillMob extends CoreCommand {
 				continue;
 			}
 			if (type.equalsIgnoreCase("all")
-					&& (MobCheck.isAnimal(m) || MobCheck.isMonster(m))) {
+					&& (MobCheck.isAnimal(m) || MobCheck.isMonster(m) || MobCheck.isNPC(m))) {
 				m.setHealth(0);
 				mobKilled++;
 				continue;
@@ -196,6 +194,16 @@ public class KillMob extends CoreCommand {
 				continue;
 			}
 			if (MobCheck.isWolf(m) && (type.equalsIgnoreCase("wolf"))) {
+				m.setHealth(0);
+				mobKilled++;
+				continue;
+			}
+			if (MobCheck.isEnderDragon(m) && (type.equalsIgnoreCase("enderdragon"))) {
+				m.setHealth(0);
+				mobKilled++;
+				continue;
+			}
+			if (MobCheck.isNPC(m) && (type.equalsIgnoreCase("villager"))) {
 				m.setHealth(0);
 				mobKilled++;
 				continue;

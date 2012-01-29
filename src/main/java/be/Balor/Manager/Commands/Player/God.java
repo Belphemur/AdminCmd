@@ -22,16 +22,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class God extends CoreCommand {
+public class God extends PlayerCommand {
 
 	/**
 	 *
@@ -51,11 +53,12 @@ public class God extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		String timeOut = args.getValueFlag('t');
 		Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.GOD)) {
 				acp.removePower(Type.GOD);
 				Utils.sI18n(player, "godDisabled");
@@ -66,6 +69,18 @@ public class God extends CoreCommand {
 				Utils.sI18n(player, "godEnabled");
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "godEnabledTarget", replace);
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.GOD),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

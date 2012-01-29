@@ -19,7 +19,6 @@ package be.Balor.Manager.Commands.Items;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -27,7 +26,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class AddBlackList extends CoreCommand {
+public class AddBlackList extends ItemCommand {
 
 	/**
 	 *

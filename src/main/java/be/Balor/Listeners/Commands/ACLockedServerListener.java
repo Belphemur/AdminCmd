@@ -14,23 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners;
+package be.Balor.Listeners.Commands;
 
-import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.event.server.ServerListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 
-import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACServerListener extends ServerListener {
-	@Override
-	public void onServerCommand(ServerCommandEvent event) {
-		if (CommandManager.getInstance()
-				.processCommandString(event.getSender(), event.getCommand())) {
+public class ACLockedServerListener implements Listener {
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerLogin(PlayerLoginEvent event) {
+		if (!event.getResult().equals(Result.ALLOWED))
+			return;
+		if (ACHelper.getInstance().isServerLocked()
+				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
+			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
 		}
 	}
-
 }

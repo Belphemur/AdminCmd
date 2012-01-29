@@ -16,93 +16,40 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.MobCheck;
-import be.Balor.Tools.Type;
-import be.Balor.World.ACWorld;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class ACEntityListener extends EntityListener {
+public class ACEntityListener implements Listener {
 
-	@Override
-	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled())
-			return;
-		if (!(event.getEntity() instanceof Player))
-			return;
-		Player player = (Player) event.getEntity();
-		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.FLY)
-				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-			event.setCancelled(true);
-			event.setDamage(0);
-			return;
-		} else if (ACPlayer.getPlayer(player.getName()).hasPower(Type.GOD)) {
-			if (event.getCause().equals(DamageCause.FIRE)
-					|| event.getCause().equals(DamageCause.FIRE_TICK))
-				player.setFireTicks(0);
-			event.setCancelled(true);
-			event.setDamage(0);
-		}
-
-	}
-
-	@Override
+	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
-		Player player = (Player) event.getEntity();
-		ACPlayer.getPlayer(player.getName()).setLastLocation(player.getLocation());
+		final Player player = (Player) event.getEntity();
+		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (event.isCancelled())
 			return;
 		if (!(event.getTarget() instanceof Player))
 			return;
-		Player p = (Player) event.getTarget();
+		final Player p = (Player) event.getTarget();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false))
-			event.setCancelled(true);
-	}
-
-	@Override
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		Entity e = event.getEntity();
-		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
-			return;
-		World world = e.getWorld();
-		Integer limit = ACWorld.getWorld(world.getName()).getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
-		if (limit != -1) {
-			if ((world.getLivingEntities().size() - world.getPlayers().size()) >= limit)
-				event.setCancelled(true);
-		}
-	}
-
-	@Override
-	public void onFoodLevelChange(FoodLevelChangeEvent event) {
-		if (event.isCancelled())
-			return;
-		if (!(event.getEntity() instanceof Player))
-			return;
-		Player player = (Player) event.getEntity();
-		if (ACPlayer.getPlayer(player.getName()).hasPower(Type.ETERNAL))
 			event.setCancelled(true);
 	}
 }

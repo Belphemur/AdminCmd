@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,16 +64,20 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
+import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -138,6 +144,7 @@ public class Utils {
 	public final static long minuteInMillis = secondInMillis * 60;
 	public final static long hourInMillis = minuteInMillis * 60;
 	public final static long dayInMillis = hourInMillis * 24;
+	public final static int secInTick = 20;
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -252,7 +259,7 @@ public class Utils {
 				return false;
 			}
 		else {
-			if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+			if (!ConfigEnum.IMMUNITY.getBoolean())
 				return true;
 			if (!isPlayer(sender, false))
 				return true;
@@ -288,7 +295,7 @@ public class Utils {
 	 *         false.
 	 */
 	public static boolean checkImmunity(CommandSender sender, Player target) {
-		if (!ACHelper.getInstance().getConfBoolean("useImmunityLvl"))
+		if (!ConfigEnum.IMMUNITY.getBoolean())
 			return true;
 		if (!isPlayer(sender, false))
 			return true;
@@ -366,7 +373,8 @@ public class Utils {
 						colorint = colorint * 10 + Integer.parseInt(ResultString.substring(2));
 					}
 				}
-				result = regexMatcher.replaceFirst(ChatColor.getByCode(colorint).toString());
+				result = regexMatcher.replaceFirst(ChatColor.getByChar(
+						Integer.toHexString(colorint)).toString());
 				regexMatcher = regex.matcher(result);
 			}
 			return result;
@@ -432,9 +440,8 @@ public class Utils {
 				}
 			}
 		}
-		if (blocksCache.size() == MAX_BLOCKS)
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
 		return blocks;
 	}
 
@@ -587,13 +594,13 @@ public class Utils {
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
 			if (prefix.isEmpty())
 				prefix = ChatColor.WHITE.toString();
-			if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+			if (ConfigEnum.DNAME.getBoolean())
 				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 
 			return prefix + player.getName() + suffix + ChatColor.YELLOW;
 		}
 
-		if (ACHelper.getInstance().getConfBoolean("useDisplayName"))
+		if (ConfigEnum.DNAME.getBoolean())
 			return ChatColor.WHITE + player.getDisplayName();
 
 		return ChatColor.WHITE + player.getName();
@@ -677,6 +684,53 @@ public class Utils {
 
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
+	}
+
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
+		return getUserParam(sender, args, permNode, true);
+	}
+
+	/**
+	 * Get the user using the -P param as indicating the userName and check who
+	 * launched the command.
+	 * 
+	 * @param sender
+	 * @param args
+	 * @param permNode
+	 * @param errorMsg
+	 * @return
+	 */
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
+			boolean errorMsg) {
+		Player target = null;
+		String playerName = args.getValueFlag('P');
+		if (playerName != null) {
+			target = getPlayer(playerName);
+			if (target != null)
+				if (target.equals(sender))
+					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+					if (checkImmunity(sender, target))
+						return target;
+					else {
+						Utils.sI18n(sender, "insufficientLvl");
+						return null;
+					}
+				} else
+					return null;
+		} else if (isPlayer(sender, false))
+			target = ((Player) sender);
+		else if (errorMsg) {
+			sender.sendMessage("You must type the player name");
+			return target;
+		}
+		if (target == null && errorMsg) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", playerName);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return target;
+		}
+		return target;
 	}
 
 	/**
@@ -827,24 +881,18 @@ public class Utils {
 	 */
 	public static String replaceDateAndTimeFormat() {
 		String timeFormatted = "";
-		final String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
+		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
-		final Date serverTime = getServerRealTime("GMT"
-				+ ACHelper.getInstance().getConfString("DateAndTime.GMToffSet"));
+		final Date serverTime = getServerRealTime("GMT" + ConfigEnum.DT_GMT.getString());
 		timeFormatted = formater.format(serverTime);
 		return timeFormatted;
 	}
 
-	public static String replaceDateAndTimeFormat(Player player) {
-		return replaceDateAndTimeFormat(player.getName());
-	}
-
-	public static String replaceDateAndTimeFormat(String player) {
-		final String format = ACHelper.getInstance().getConfString("DateAndTime.Format");
+	public static String replaceDateAndTimeFormat(ACPlayer player, Type.Whois type) {
+		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
-		lastlogin = formater.format(new Date(ACPlayer.getPlayer(player)
-				.getInformation("lastConnection").getLong(1)));
+		lastlogin = formater.format(new Date(player.getInformation(type.getVal()).getLong(1)));
 		if (lastlogin == formater.format(new Date(1)))
 			return null;
 		return lastlogin;
@@ -860,29 +908,29 @@ public class Utils {
 	 */
 	private static Stack<BlockRemanence> replaceInCuboid(String playername, List<Material> mat,
 			Block block, int radius) {
-		final Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
-		final Stack<BlockRemanence> blocksCache = new Stack<BlockRemanence>();
+		final Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
+		final Stack<BlockRemanence> blocksCache = new SynchronizedStack<BlockRemanence>();
 		final int limitX = block.getX() + radius;
 		final int limitY = block.getY() + radius;
 		final int limitZ = block.getZ() + radius;
 		BlockRemanence br = null;
-		for (int y = block.getY() - radius; y <= limitY; y++) {
-			for (int x = block.getX() - radius; x <= limitX; x++)
-				for (int z = block.getZ() - radius; z <= limitZ; z++) {
-					if (mat.contains(Material.getMaterial(block.getWorld()
-							.getBlockTypeIdAt(x, y, z)))) {
-						br = IBlockRemanenceFactory.FACTORY
-								.createBlockRemanence(new SimplifiedLocation(block.getWorld(), x,
-										y, z));
-						blocks.push(br);
-						blocksCache.push(br);
-						if (blocksCache.size() == MAX_BLOCKS)
-							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-									ACHelper.getInstance().getCoreInstance(),
-									new ReplaceBlockTask(blocksCache), 1);
-
-					}
-				}
+		final Semaphore sema = new Semaphore(0, true);
+		final List<SimplifiedLocation> okBlocks = new ArrayList<SimplifiedLocation>(50);
+		ACPluginManager.scheduleSyncTask(new CheckingBlockTask(sema, okBlocks, block, radius,
+				limitY, limitX, limitZ, mat));
+		try {
+			sema.acquire();
+		} catch (InterruptedException e) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with acquiring the semaphore", e);
+		}
+		for (SimplifiedLocation loc : okBlocks) {
+			br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(loc);
+			blocks.push(br);
+			blocksCache.push(br);
+			if (blocksCache.size() == MAX_BLOCKS)
+				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+						ACHelper.getInstance().getCoreInstance(),
+						new ReplaceBlockTask(blocksCache), 1);
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
@@ -1005,7 +1053,8 @@ public class Utils {
 	public static void sParsedLocale(Player p, String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
-		final long total = ACPlayer.getPlayer(p.getName()).getCurrentPlayedTime();
+		ACPlayer acPlayer = ACPlayer.getPlayer(p);
+		final long total = acPlayer.getCurrentPlayedTime();
 		final Long[] time = Utils.transformToElapsedTime(total);
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());
@@ -1026,7 +1075,7 @@ public class Utils {
 		replace.put("connected", connected);
 		final String serverTime = replaceDateAndTimeFormat();
 		replace.put("time", serverTime);
-		final String date = replaceDateAndTimeFormat(p);
+		final String date = replaceDateAndTimeFormat(acPlayer, Whois.LOGIN);
 		if (date == null)
 			replace.put("lastlogin", I18n("noLoginInformation"));
 		else

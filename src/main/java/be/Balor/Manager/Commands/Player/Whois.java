@@ -24,21 +24,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Whois extends CoreCommand {
+public class Whois extends PlayerCommand {
 	/**
 	 *
 	 */
@@ -92,9 +92,18 @@ public class Whois extends CoreCommand {
 		int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(loginDate);
 		loginDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget.getName()),
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget,Type.Whois.LOGIN),
 				logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
+		
+		// Logout
+		String logoutDate = ChatColor.GOLD + "Last Quit" + ChatColor.WHITE + " : ";
+		int logoutSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(logoutDate);
+		logoutDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget,Type.Whois.LOGOUT),
+				logoutSizeRemaining, ' ');
+		sender.sendMessage(logoutDate);
 
 		// Presentation
 		String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE + " : ";
@@ -140,8 +149,7 @@ public class Whois extends CoreCommand {
 		sender.sendMessage(line);
 
 		// Immunity Level
-		int level = actarget.getInformation("immunityLvl").getInt(
-				ACHelper.getInstance().getConfInt("defaultImmunityLvl"));
+		int level = actarget.getInformation("immunityLvl").getInt(ConfigEnum.DIMMUNITY.getInt());
 		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);

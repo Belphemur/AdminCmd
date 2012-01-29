@@ -22,16 +22,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class Played extends CoreCommand {
+public class Played extends PlayerCommand {
 	/**
 	 *
 	 */
@@ -42,7 +40,7 @@ public class Played extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.CoreCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -51,16 +49,15 @@ public class Played extends CoreCommand {
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player target = Utils.getUser(sender, args, permNode);
 		if (target != null) {
-			String playername = Utils.getPlayerName(target);
-			long total = ACPlayer.getPlayer(playername).getCurrentPlayedTime();
+			String playername = Utils.getPlayerName(target, sender);
+			long total = ACPlayer.getPlayer(target).getCurrentPlayedTime();
 			Long[] time = Utils.transformToElapsedTime(total);
-			String prefix = Utils.colorParser(PermissionManager.getPrefix(target));
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("d", time[0].toString());
 			replace.put("h", time[1].toString());
 			replace.put("m", time[2].toString());
 			replace.put("s", time[3].toString());
-			replace.put("player", prefix + playername);
+			replace.put("player", playername);
 			Utils.sI18n(sender, "playedTime", replace);
 
 		}
@@ -68,7 +65,7 @@ public class Played extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

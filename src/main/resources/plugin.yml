@@ -172,19 +172,19 @@ commands:
     usage: /<command> homeName
   bal_createwarp:
     description: create a warp point.
-    aliases: [wp,cwarp]
+    aliases: [wp,cwarp,warpcreate]
     usage: /<command> warpName
   bal_rmwarp:
     description: remove a warp point.
-    aliases: [rwp,rwarp]
+    aliases: [rwp,rwarp,warpdelete]
     usage: /<command> warpName
   bal_tpwarp:
     description: Tp to a warp point.
-    aliases: [twp,twarp]
+    aliases: [twp,twarp,warp]
     usage: /<command> warpName
   bal_warplist:
     description: List all warp points.
-    aliases: [lwp,lwarp]
+    aliases: [lwp,lwarp,warplist]
     usage: /<command>
   bal_ip:
     description: get the ip of the player.
@@ -378,3 +378,7 @@ commands:
     description: Add, Dropp experience or set the Level or progression, if no player given the sender is affected
     aliases: [xp, exp, experience]
     usage: /<command> <-a|-l|-p|-d> <player> <amount>
+  bal_stop:
+   description: Stop the server by kicking first every connected players. If the -t parameter is set, wait the time before stopping, else take the one configured in the configuration file.
+   aliases: [stop, ss, sstop]
+   usage: /<command> <-t second>

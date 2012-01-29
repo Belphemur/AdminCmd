@@ -86,10 +86,12 @@ public class LocaleManager {
 	}
 
 	/**
-	 * Add a locale.
+	 * Add a locale to the primary file.
 	 * 
 	 * @param key
+	 *            key of the locale
 	 * @param value
+	 *            text of the locale
 	 */
 	public void addLocale(String key, String value) {
 		addLocale(key, value, false);
@@ -100,6 +102,45 @@ public class LocaleManager {
 			localesFiles.get(PRIMARY_LOCALE).set(key, value);
 		else
 			localesFiles.get(PRIMARY_LOCALE).add(key, value);
+	}
+
+	/**
+	 * Add a locale to the wanted file.
+	 * 
+	 * @param file
+	 *            name of the file.
+	 * @param key
+	 *            key of the locale
+	 * @param value
+	 *            text of the locale
+	 * @param override
+	 *            if true, override the existing locale
+	 * @return true if everything went fine, else false.
+	 */
+	public boolean addLocale(String file, String key, String value, boolean override) {
+		ExtendedConfiguration conf = localesFiles.get(file);
+		if (conf == null)
+			return false;
+		if (override) {
+			conf.set(key, value);
+			return true;
+		} else
+			return conf.add(key, value);
+	}
+
+	/**
+	 * Add a locale to the wanted file.
+	 * 
+	 * @param file
+	 *            name of the file.
+	 * @param key
+	 *            key of the locale
+	 * @param value
+	 *            text of the locale
+	 * @return true if everything went fine, else false.
+	 */
+	public boolean addLocale(String file, String key, String value) {
+		return addLocale(file, key, value, false);
 	}
 
 	/**

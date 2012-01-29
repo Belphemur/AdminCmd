@@ -20,17 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -38,17 +36,13 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.util.Vector;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.TempBannedPlayer;
-import be.Balor.Tools.ShootFireball;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
@@ -56,6 +50,7 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -63,32 +58,146 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPlayerListener extends PlayerListener {
-	@Override
-	public void onPlayerLogin(PlayerLoginEvent event) {
-		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
-		if (player != null) {		
-				event.disallow(Result.KICK_BANNED, player.getReason());
-			return;
+public class ACPlayerListener implements Listener {
+	protected class UpdateInvisibleOnJoin implements Runnable {
+		Player newPlayer;
+
+		/**
+		 *
+		 */
+		public UpdateInvisibleOnJoin(Player p) {
+			newPlayer = p;
 		}
-		if (ACHelper.getInstance().isServerLocked()
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
-			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
-			return;
+
+		@Override
+		public void run() {
+			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (Invisible) for "
+					+ newPlayer.getName());
+			for (final Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
+				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
+				if (ConfigEnum.FQINVISIBLE.getBoolean())
+					Utils.removePlayerFromOnlineList(toVanish, newPlayer);
+			}
+			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for "
+					+ newPlayer.getName());
+			for (final Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
+				Utils.removePlayerFromOnlineList(toFq, newPlayer);
 		}
-		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
-			event.allow();
 	}
 
-	@Override
-	public void onPlayerMove(PlayerMoveEvent event) {
-		Player p = event.getPlayer();
-		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
+	@EventHandler
+	public void onPlayerChat(PlayerChatEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		ACPlayer player = ACPlayer.getPlayer(p.getName());
+		if (player.hasPower(Type.MUTED)) {
+			event.setCancelled(true);
+			Utils.sI18n(p, "muteEnabled");
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		if (CommandManager.getInstance()
+				.processCommandString(event.getPlayer(), event.getMessage())) {
+			event.setCancelled(true);
+			event.setMessage("/AdminCmd took the control of that command.");
+		}
+	}
+
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.isCancelled())
+			return;
+		final Player p = event.getPlayer();
+		if (ConfigEnum.AUTO_AFK.getBoolean()) {
+			AFKWorker.getInstance().updateTimeStamp(p);
+			if (AFKWorker.getInstance().isAfk(p))
+				AFKWorker.getInstance().setOnline(p);
+		}
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		if (player.hasPower(Type.FROZEN)) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
+		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", Utils.getPlayerName(p, null, true));
+			event.setJoinMessage(Utils.I18n("joinMessage", replace));
+		}
+		if (player.hasPower(Type.INVISIBLE)) {
+			event.setJoinMessage(null);
+			Utils.sI18n(event.getPlayer(), "stillInv");
+			InvisibleWorker.getInstance().onJoinEvent(p);
+		}
+		if (ConfigEnum.AUTO_AFK.getBoolean())
+			AFKWorker.getInstance().updateTimeStamp(p);
+		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
+		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
+				: imLvl);
+		if (player.hasPower(Type.FAKEQUIT)) {
+			event.setJoinMessage(null);
+			ACHelper.getInstance().addFakeQuit(p);
+		}
+		if (player.hasPower(Type.SPYMSG))
+			ACHelper.getInstance().addSpy(p);
+		if (player.getInformation("firstTime").getBoolean(true)) {
+			player.setInformation("firstTime", false);
+			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) 
+			{
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("name", Utils.getPlayerName(p, null, true));
+				event.setJoinMessage(Utils.I18n("joinMessageFirstTime", replace));
+			}
+			if (ConfigEnum.FCSPAWN.getBoolean())
+				ACHelper.getInstance().spawn(p);
+			if (!ConfigEnum.FCSPAWN.getBoolean()
+					&& ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group"))
+				ACHelper.getInstance().groupSpawn(p);
+			if (ConfigEnum.FJ_RULES.getBoolean())
+				Utils.sParsedLocale(p, "Rules");
+			if (ConfigEnum.MOTD.getBoolean())
+				Utils.sParsedLocale(p, "MOTDNewUser");
+		} else if (ConfigEnum.MOTD.getBoolean())
+			Utils.sParsedLocale(p, "MOTD");
+		player.setInformation("lastConnection", System.currentTimeMillis());
+
+		if (ConfigEnum.NEWS.getBoolean())
+			Utils.sParsedLocale(p, "NEWS");
+		if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
+			Utils.sParsedLocale(p, "Rules");
+		if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
+				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
+			player.setPower(Type.TP_REQUEST);
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerLogin(PlayerLoginEvent event) {
+		if (event.getResult().equals(Result.ALLOWED))
+			return;
+		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
+			event.allow();
+	}
+
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		final Player p = event.getPlayer();
+		if (ConfigEnum.AUTO_AFK.getBoolean()) {
+			AFKWorker.getInstance().updateTimeStamp(p);
+			if (AFKWorker.getInstance().isAfk(p))
+				AFKWorker.getInstance().setOnline(p);
+		}
+		final ACPlayer player = ACPlayer.getPlayer(p.getName());
 		if (player.hasPower(Type.FROZEN)) {
 			// event.setCancelled(true);
 			/**
@@ -99,81 +208,27 @@ public class ACPlayerListener extends PlayerListener {
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
 			return;
 		}
-		Float power = player.getPower(Type.FLY).getFloat(0);
-		if (power != 0)
-			if (p.isSneaking())
-				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else if (ACHelper.getInstance().getConfBoolean("glideWhenFallingInFlyMode")) {
-				Vector vel = p.getVelocity();
-				vel.add(p.getLocation().getDirection()
-						.multiply(ACHelper.getInstance().getConfFloat("gliding.multiplicator"))
-						.setY(0));
-				if (vel.getY() < ACHelper.getInstance().getConfFloat(
-						"gliding.YvelocityCheckToGlide")) {
-					vel.setY(ACHelper.getInstance().getConfFloat("gliding.newYvelocity"));
-					p.setVelocity(vel);
-				}
-			}
 	}
 
-	@Override
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player p = event.getPlayer();
-		ACPlayer player = PlayerManager.getInstance().setOnline(p);
-		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", Utils.getPlayerName(p, null, true));
-			event.setJoinMessage(Utils.I18n("joinMessage", replace));
-		}
-		if (player.hasPower(Type.INVISIBLE)) {
-			event.setJoinMessage(null);
-			Utils.sI18n(event.getPlayer(), "stillInv");
-			InvisibleWorker.getInstance().onJoinEvent(p);
-		}
-		if (ACHelper.getInstance().getConfBoolean("autoAfk"))
-			AFKWorker.getInstance().updateTimeStamp(p);
-		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
-		if (player.hasPower(Type.FAKEQUIT)) {
-			event.setJoinMessage(null);
-			ACHelper.getInstance().addFakeQuit(p);
-		}
-		if (player.hasPower(Type.SPYMSG))
-			ACHelper.getInstance().addSpy(p);
-		if (player.getInformation("firstTime").getBoolean(true)) {
-			player.setInformation("firstTime", false);
-			if (ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint"))
-				ACHelper.getInstance().spawn(p);
-			if (!ACHelper.getInstance().getConfBoolean("firstConnectionToSpawnPoint")
-					&& ACHelper.getInstance().getConfString("globalRespawnSetting")
-							.equalsIgnoreCase("group"))
-				ACHelper.getInstance().groupSpawn(p);
-			if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
-				Utils.sParsedLocale(p, "Rules");
-			if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
-				Utils.sParsedLocale(p, "MOTDNewUser");
-		} else if (ACHelper.getInstance().getConfBoolean("MessageOfTheDay"))
-			Utils.sParsedLocale(p, "MOTD");
-		player.setInformation("lastConnection", System.currentTimeMillis());
-
-		if (ACHelper.getInstance().getConfBoolean("DisplayNewsOnJoin"))
-			Utils.sParsedLocale(p, "NEWS");
-		if (ACHelper.getInstance().getConfBoolean("DisplayRulesOnJoin")
-				&& !ACHelper.getInstance().getConfBoolean("DisplayRulesOnlyOnFirstJoin"))
-			Utils.sParsedLocale(p, "Rules");
-		if (ACHelper.getInstance().getConfBoolean("tpRequestActivatedByDefault")
-				&& !player.hasPower(Type.TP_REQUEST)
-				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
-			player.setPower(Type.TP_REQUEST);
+	@EventHandler
+	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+		if (event.isCancelled())
+			return;
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		if (player.hasPower(Type.NO_PICKUP))
+			event.setCancelled(true);
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player p = event.getPlayer();
-		ACPlayer player = ACPlayer.getPlayer(p);
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
-		player.setInformation("immunityLvl", ACHelper.getInstance().getLimit(p, "immunityLvl"));
-		if (ACHelper.getInstance().getConfBoolean("useJoinQuitMsg") && !SuperPermissions.isApiSet()) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
+		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
+				: imLvl);
+		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setQuitMessage(Utils.I18n("quitMessage", replace));
 		}
@@ -185,24 +240,13 @@ public class ACPlayerListener extends PlayerListener {
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
 
-	@Override
-	public void onPlayerKick(PlayerKickEvent event) {
-		if (event.isCancelled())
-			return;
-		Player p = event.getPlayer();
-		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
-				.contains("floating"))
-				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
-			event.setCancelled(true);
-	}
-
-	@Override
+	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		playerRespawnOrJoin(player);
-		String spawn = ACHelper.getInstance().getConfString("globalRespawnSetting");
+		final String spawn = ConfigEnum.GSPAWN.getString();
 		Location loc = null;
-		String worldName = player.getWorld().getName();
+		final String worldName = player.getWorld().getName();
 		if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
 			loc = ACWorld.getWorld(worldName).getSpawn();
 			event.setRespawnLocation(loc);
@@ -216,21 +260,21 @@ public class ACPlayerListener extends PlayerListener {
 				loc = player.getBedSpawnLocation();
 				if (loc == null)
 					loc = ACWorld.getWorld(worldName).getSpawn();
-			} catch (NullPointerException e) {
+			} catch (final NullPointerException e) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
 			}
 
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("group")) {
-			List<String> groups = ACHelper.getInstance().getGroupList();
+			final List<String> groups = ACHelper.getInstance().getGroupList();
 			if (!groups.isEmpty()) {
-				for (String groupName : groups) {
+				for (final String groupName : groups) {
 					try {
 						if (PermissionManager.isInGroup(groupName, player))
 							loc = ACWorld.getWorld(worldName).getWarp(
-									"spawn" + groupName.toLowerCase());
+									"spawn" + groupName.toLowerCase()).loc;
 						break;
-					} catch (NoPermissionsPlugin e) {
+					} catch (final NoPermissionsPlugin e) {
 						loc = ACWorld.getWorld(worldName).getSpawn();
 						break;
 					}
@@ -246,14 +290,14 @@ public class ACPlayerListener extends PlayerListener {
 
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if (event.isCancelled())
 			return;
-		Location from = event.getFrom();
-		Location to = event.getTo();
-		boolean otherWorld = !from.getWorld().equals(to.getWorld());
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		final Location from = event.getFrom();
+		final Location to = event.getTo();
+		final boolean otherWorld = !from.getWorld().equals(to.getWorld());
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (otherWorld) {
 			player.setLastLocation(from);
 		}
@@ -262,34 +306,6 @@ public class ACPlayerListener extends PlayerListener {
 			return;
 		}
 		playerRespawnOrJoin(event.getPlayer());
-	}
-
-	@Override
-	public void onPlayerInteract(PlayerInteractEvent event) {
-		Player p = event.getPlayer();
-		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
-			AFKWorker.getInstance().updateTimeStamp(p);
-			if (AFKWorker.getInstance().isAfk(p))
-				AFKWorker.getInstance().setOnline(p);
-		}
-		ACPlayer player = ACPlayer.getPlayer(p.getName());
-		if (player.hasPower(Type.FROZEN)) {
-			event.setCancelled(true);
-			return;
-		}
-		if (((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.LEFT_CLICK_AIR))) {
-			if (player.hasPower(Type.THOR))
-				p.getWorld().strikeLightning(p.getTargetBlock(null, 600).getLocation());
-			Float power = null;
-			if ((power = player.getPower(Type.VULCAN).getFloat(0)) != 0)
-				p.getWorld()
-						.createExplosion(p.getTargetBlock(null, 600).getLocation(), power, true);
-			power = null;
-			if ((power = player.getPower(Type.FIREBALL).getFloat(0)) != 0)
-				ShootFireball.shoot(p, power);
-			tpAtSee(player);
-
-		}
 	}
 
 	private boolean playerRespawnOrJoin(Player newPlayer) {
@@ -308,102 +324,6 @@ public class ACPlayerListener extends PlayerListener {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public void onPlayerChat(PlayerChatEvent event) {
-		Player p = event.getPlayer();
-		ACPlayer player = ACPlayer.getPlayer(p);
-		if (ACHelper.getInstance().getConfBoolean("autoAfk")) {
-			AFKWorker.getInstance().updateTimeStamp(p);
-			if (AFKWorker.getInstance().isAfk(p))
-				AFKWorker.getInstance().setOnline(p);
-		}
-		if (player.hasPower(Type.MUTED)) {
-			event.setCancelled(true);
-			Utils.sI18n(p, "muteEnabled");
-		}
-	}
-
-	@Override
-	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if (event.isCancelled())
-			return;
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (player.hasPower(Type.NO_PICKUP))
-			event.setCancelled(true);
-	}
-
-	@Override
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		if (CommandManager.getInstance()
-				.processCommandString(event.getPlayer(), event.getMessage())) {
-			event.setCancelled(true);
-			event.setMessage("/AdminCmd took the control of that command.");
-		}
-	}
-
-	@Override
-	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (ACHelper.getInstance().getConfBoolean("resetPowerWhenTpAnotherWorld")
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
-			player.removeAllSuperPower();
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
-				InvisibleWorker.getInstance().reappear(event.getPlayer());
-			}
-			Utils.sI18n(event.getPlayer(), "changedWorld");
-		}
-	}
-
-	/**
-	 * Tp at see mode
-	 * 
-	 * @param p
-	 */
-	private void tpAtSee(ACPlayer player) {
-		if (player.hasPower(Type.TP_AT_SEE))
-			try {
-				Player p = player.getHandler();
-				Block toTp = p.getWorld().getBlockAt(
-						p.getTargetBlock(null,
-								ACHelper.getInstance().getConfInt("maxRangeForTpAtSee"))
-								.getLocation().add(0, 1, 0));
-				if (toTp.getTypeId() == 0) {
-					Location loc = toTp.getLocation().clone();
-					loc.setPitch(p.getLocation().getPitch());
-					loc.setYaw(p.getLocation().getYaw());
-					player.setLastLocation(p.getLocation());
-					p.teleport(loc);
-				}
-			} catch (Exception e) {
-			}
-	}
-
-	protected class UpdateInvisibleOnJoin implements Runnable {
-		Player newPlayer;
-
-		/**
-		 *
-		 */
-		public UpdateInvisibleOnJoin(Player p) {
-			newPlayer = p;
-		}
-
-		@Override
-		public void run() {
-			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (Invisible) for "
-					+ newPlayer.getName());
-			for (Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
-				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
-				if (ACHelper.getInstance().getConfBoolean("fakeQuitWhenInvisible"))
-					Utils.removePlayerFromOnlineList(toVanish, newPlayer);
-			}
-			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for "
-					+ newPlayer.getName());
-			for (Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
-				Utils.removePlayerFromOnlineList(toFq, newPlayer);
-		}
 	}
 
 }

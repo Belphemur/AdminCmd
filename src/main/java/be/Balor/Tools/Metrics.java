@@ -27,10 +27,6 @@
  */
 package be.Balor.Tools;
 
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +42,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 /**
  * Tooling to post to metrics.griefcraft.com
@@ -164,6 +164,21 @@ public class Metrics {
 		}
 
 		plotters.add(plotter);
+	}
+
+	/**
+	 * Removes a custom data plotter for a given plugin
+	 * 
+	 * @param plugin
+	 * @param plotter
+	 */
+	public void removeCustomData(Plugin plugin, Plotter plotter) {
+		Set<Plotter> plotters = customData.get(plugin);
+
+		if (plotters == null)
+			return;
+
+		plotters.remove(plotter);
 	}
 
 	/**

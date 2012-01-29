@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.TpRequest;
@@ -29,9 +29,9 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class TpToggle extends CoreCommand {
+public class TpToggle extends TeleportCommand {
 
 	/**
 	 *
@@ -42,7 +42,7 @@ public class TpToggle extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
@@ -51,8 +51,8 @@ public class TpToggle extends CoreCommand {
 		if (Utils.isPlayer(sender)) {
 			Player player = (Player) sender;
 			ACPlayer acp = ACPlayer.getPlayer(player.getName());
-			if (args.length >= 1
-					&& acp.hasPower(Type.TP_REQUEST) && args.getString(0).equalsIgnoreCase("yes")) {
+			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)
+					&& args.getString(0).equalsIgnoreCase("yes")) {
 				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow"))
 					return;
 				TpRequest request = acp.getTpRequest();
@@ -76,18 +76,20 @@ public class TpToggle extends CoreCommand {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.tp.toggle.allow");
-		plugin.getPermissionLinker().addPermChild("admincmd.tp.toggle.use");
+		PermParent parent = plugin.getPermissionLinker().getPermParent("admincmd.tp.toggle.*");
+		parent.addChild("admincmd.tp.toggle.allow").addChild("admincmd.tp.toggle.use");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

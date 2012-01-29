@@ -20,14 +20,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class News extends CoreCommand {
+public class News extends ServerCommand {
 
 	/**
 	 *
@@ -39,7 +38,7 @@ public class News extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -47,7 +46,7 @@ public class News extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender, false))
-			Utils.sParsedLocale((Player) sender,"NEWS");
+			Utils.sParsedLocale((Player) sender, "NEWS");
 		else
 			Utils.sI18n(sender, "NEWS");
 		return;
@@ -55,7 +54,7 @@ public class News extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

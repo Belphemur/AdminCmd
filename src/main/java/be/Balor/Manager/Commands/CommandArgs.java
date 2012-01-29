@@ -34,7 +34,7 @@ public class CommandArgs implements Iterable<String> {
 	protected final List<String> parsedArgs;
 	protected final Map<Character, String> valueFlags = new HashMap<Character, String>();
 	protected final Set<Character> booleanFlags = new HashSet<Character>();
-	public final int length;
+	public int length;
 
 	public CommandArgs(String args) {
 		this(args.split(" "));
@@ -148,8 +148,20 @@ public class CommandArgs implements Iterable<String> {
 		return booleanFlags.contains(ch) || valueFlags.containsKey(ch);
 	}
 
+	/**
+	 * Get the Value Flag, and remove the flag from the normal arguments.
+	 * 
+	 * @param ch
+	 *            flag to look for.
+	 * @return null if not found else the value of the flag
+	 */
 	public String getValueFlag(char ch) {
-		return valueFlags.get(ch);
+		String result = valueFlags.get(ch);
+		if (result == null)
+			return null;
+		parsedArgs.remove(result);
+		length--;
+		return result;
 	}
 
 	/*

@@ -18,6 +18,7 @@ package be.Balor.Tools.Threads;
 
 import java.util.Stack;
 
+import be.Balor.Tools.SynchronizedStack;
 import be.Balor.Tools.Blocks.BlockRemanence;
 
 /**
@@ -25,7 +26,11 @@ import be.Balor.Tools.Blocks.BlockRemanence;
  * 
  */
 public class ReplaceBlockTask implements Runnable {
-	protected Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
+	protected Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
+
+	public ReplaceBlockTask() {
+
+	}
 
 	/**
 	 * @param blocks

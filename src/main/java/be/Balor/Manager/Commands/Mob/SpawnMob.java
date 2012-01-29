@@ -24,7 +24,6 @@ import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -32,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class SpawnMob extends CoreCommand {
+public class SpawnMob extends MobCommand {
 
 	/**
 	 *
@@ -159,11 +158,6 @@ public class SpawnMob extends CoreCommand {
 			replace.put("mob", ct.getName());
 			for (int i = 0; i < nb; i++) {
 				loc.getWorld().spawnCreature(loc, ct);
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					// e.printStackTrace();
-				}
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender))
@@ -197,11 +191,6 @@ public class SpawnMob extends CoreCommand {
 			for (int i = 0; i < nb; i++) {
 				loc.getWorld().spawnCreature(loc, ct)
 						.setPassenger(loc.getWorld().spawnCreature(loc, passenger));
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					// e.printStackTrace();
-				}
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender))

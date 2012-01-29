@@ -23,6 +23,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
+import be.Balor.Manager.Permissions.PermChild;
+import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
@@ -39,6 +41,7 @@ public abstract class CoreCommand {
 	protected boolean other = false;
 	protected PluginCommand pluginCommand;
 	protected final AbstractAdminCmdPlugin plugin;
+	protected PermParent permParent;
 
 	/**
 	 * Constructor of CoreCommand
@@ -51,11 +54,11 @@ public abstract class CoreCommand {
 	public CoreCommand(String name, String perm) {
 		this.permNode = perm;
 		this.cmdName = name;
-		this.plugin = ACPluginManager.getPluginInstance("Core");
+		this.plugin = ACPluginManager.getCorePlugin();
 	}
 
 	public CoreCommand() {
-		this.plugin = ACPluginManager.getPluginInstance("Core");
+		this.plugin = ACPluginManager.getCorePlugin();
 	}
 
 	/**
@@ -72,6 +75,25 @@ public abstract class CoreCommand {
 		this.permNode = perm;
 		this.cmdName = name;
 		this.plugin = ACPluginManager.getPluginInstance(plugin);
+	}
+
+	/**
+	 * Constructor of CoreCommand
+	 * 
+	 * @param name
+	 *            name of the command (in the plugin.yml)
+	 * @param perm
+	 *            permission needed by the player to execute the command
+	 * @param plugin
+	 *            name of the AdminCmd plugin that the command belong to.
+	 * @param parent
+	 *            PermParent used to register the permission of the command
+	 */
+	public CoreCommand(String name, String perm, String plugin, PermParent parent) {
+		this.permNode = perm;
+		this.cmdName = name;
+		this.plugin = ACPluginManager.getPluginInstance(plugin);
+		this.permParent = parent;
 	}
 
 	/**
@@ -122,6 +144,15 @@ public abstract class CoreCommand {
 	 */
 	public void registerBukkitPerm() {
 		if (permNode != null && !permNode.isEmpty()) {
+			if (permParent != null) {
+				PermChild child = new PermChild(permNode, bukkitDefault);
+				permParent.addChild(child);
+				bukkitPerm = child.getBukkitPerm();
+				if (other)
+					permParent.addChild(new PermChild(permNode + ".other", bukkitDefault));
+
+				return;
+			}
 			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
 			if (other)
 				plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);

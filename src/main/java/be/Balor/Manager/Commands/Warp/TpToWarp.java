@@ -25,20 +25,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Warp;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
  *
  */
-public class TpToWarp extends CoreCommand {
+public class TpToWarp extends WarpCommand {
 
 	/**
 	 *
@@ -64,6 +65,7 @@ public class TpToWarp extends CoreCommand {
 			Location loc = null;
 			if (target != null) {
 				HashMap<String, String> replace = new HashMap<String, String>();
+
 				if (args.getString(0).contains(":")) {
 					if (!PermissionManager.hasPerm(sender, "admincmd.warp.tp.all"))
 						return;
@@ -72,7 +74,10 @@ public class TpToWarp extends CoreCommand {
 					String warp = split[1];
 					replace.put("name", world + ":" + warp);
 					try {
-						loc = ACWorld.getWorld(world).getWarp(warp);
+						ACWorld acWorld = ACWorld.getWorld(world);
+						Warp warpPoint = acWorld.getWarp(warp);
+						loc = warpPoint.loc;
+						replace.put("name", acWorld.getName() + ":" + warpPoint.name);
 					} catch (WorldNotLoaded e) {
 						Utils.sI18n(sender, "worldNotFound", "world", world);
 						return;
@@ -81,7 +86,10 @@ public class TpToWarp extends CoreCommand {
 					replace.put("name", args.getString(0));
 
 					try {
-						loc = ACWorld.getWorld(p.getWorld().getName()).getWarp(args.getString(0));
+						Warp warpPoint = ACWorld.getWorld(p.getWorld().getName()).getWarp(
+								args.getString(0));
+						loc = warpPoint.loc;
+						replace.put("name", warpPoint.name);
 					} catch (WorldNotLoaded e) {
 					}
 				}
@@ -93,8 +101,7 @@ public class TpToWarp extends CoreCommand {
 							.scheduleSyncDelayedTask(
 									ACHelper.getInstance().getCoreInstance(),
 									new DelayedTeleport(target.getLocation(), loc, target, replace,
-											sender),
-									ACHelper.getInstance().getConfLong("teleportDelay"));
+											sender), ConfigEnum.TP_DELAY.getLong());
 				}
 			}
 		}
@@ -142,12 +149,11 @@ public class TpToWarp extends CoreCommand {
 
 		@Override
 		public void run() {
-			if (locBefore.equals(target.getLocation())
-					&& ACHelper.getInstance().getConfBoolean("checkTeleportLocation")) {
+			if (locBefore.equals(target.getLocation()) && ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
-			} else if (!ACHelper.getInstance().getConfBoolean("teleportDelay")) {
+			} else if (!ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				target.teleport(teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);

@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Help.String.Str;
 
 import com.google.common.collect.MapMaker;
 
@@ -31,7 +32,7 @@ import com.google.common.collect.MapMaker;
 public class WorldManager {
 	private ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
 	private ACWorldFactory worldFactory;
-	private static WorldManager instance = null;
+	private static WorldManager instance = new WorldManager();
 
 	/**
 	 * 
@@ -43,8 +44,6 @@ public class WorldManager {
 	 * @return the instance
 	 */
 	public static WorldManager getInstance() {
-		if (instance == null)
-			instance = new WorldManager();
 		return instance;
 	}
 
@@ -77,6 +76,9 @@ public class WorldManager {
 	ACWorld demandACWorld(String name) throws WorldNotLoaded {
 		ACWorld result = worlds.get(name);
 		if (result == null) {
+			String found = Str.matchString(worlds.keySet(), name);
+			if (found != null)
+				return worlds.get(found);
 			result = worldFactory.createWorld(name);
 			addWorld(result);
 			result = worlds.get(name);

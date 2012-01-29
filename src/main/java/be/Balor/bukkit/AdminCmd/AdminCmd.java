@@ -2,20 +2,30 @@ package be.Balor.bukkit.AdminCmd;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import be.Balor.Listeners.ACBlockListener;
+import be.Balor.Listeners.ACColorSignListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
+import be.Balor.Listeners.Commands.ACBanListener;
+import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
+import be.Balor.Listeners.Commands.ACFireballListener;
+import be.Balor.Listeners.Commands.ACFlyListener;
+import be.Balor.Listeners.Commands.ACFoodListener;
+import be.Balor.Listeners.Commands.ACGodListener;
+import be.Balor.Listeners.Commands.ACLockedServerListener;
+import be.Balor.Listeners.Commands.ACResetPowerListener;
+import be.Balor.Listeners.Commands.ACSuperBreaker;
+import be.Balor.Listeners.Commands.ACThorListener;
+import be.Balor.Listeners.Commands.ACTpAtSeeListener;
+import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -86,6 +96,7 @@ import be.Balor.Manager.Commands.Server.RepeatCmd;
 import be.Balor.Manager.Commands.Server.ReplaceBlock;
 import be.Balor.Manager.Commands.Server.Rules;
 import be.Balor.Manager.Commands.Server.Set;
+import be.Balor.Manager.Commands.Server.StopServer;
 import be.Balor.Manager.Commands.Server.Undo;
 import be.Balor.Manager.Commands.Server.Uptime;
 import be.Balor.Manager.Commands.Server.Version;
@@ -132,8 +143,6 @@ import belgium.Balor.Workers.InvisibleWorker;
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
 
-	public static final Logger log = Logger.getLogger("Minecraft");
-
 	/**
 	 * @param name
 	 */
@@ -159,8 +168,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		HelpLister.killInstance();
 		DebugLog.stopLogging();
 		System.gc();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Disabled. (version "
-				+ pdfFile.getVersion() + ")");
+		ACLogger.info("Plugin Disabled. (version " + pdfFile.getVersion() + ")");
 	}
 
 	@Override
@@ -170,57 +178,26 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		final PluginManager pm = getServer().getPluginManager();
-		final ACPluginListener pL = new ACPluginListener();
-		log.info("[" + pdfFile.getName() + "]" + " Plugin Enabled. (version "
-				+ pdfFile.getVersion() + ")");
-		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pL, Priority.Monitor, this);
-		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pL, Priority.Monitor, this);
-
+		ACLogger.info("Plugin Enabled. (version " + pdfFile.getVersion() + ")");
+		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
 		worker.loadInfos();
 		permissionLinker.registerAllPermParent();
-		final ACPlayerListener playerListener = new ACPlayerListener();
-		final ACEntityListener entityListener = new ACEntityListener();
-		final ACBlockListener blkListener = new ACBlockListener();
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Lowest, this);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
-
-		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.High, this);
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest,
-				this);
-		pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_TARGET, entityListener, Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Normal, this);
-		try {
-			pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, entityListener, Priority.High, this);
-		} catch (final Throwable e) {
-			if (CommandManager.getInstance().unRegisterCommand(Eternal.class, this))
-				CommandManager.getInstance().unRegisterCommand(Feed.class, this);
-			ACLogger.info("Need bukkit version 1185 or newer to play with food. Command /eternal disabled.");
-		}
-		// Some problem witht the bukkit API and server_command
-		// pm.registerEvent(Event.Type.SERVER_COMMAND, new ACServerListener(),
-		// Priority.Normal, this);
-		pm.registerEvent(Event.Type.CREATURE_SPAWN, entityListener, Priority.Highest, this);
-		if (worker.getConfBoolean("ColoredSign"))
-			pm.registerEvent(Event.Type.SIGN_CHANGE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACE, blkListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.WEATHER_CHANGE, new ACWeatherListener(), Priority.Normal, this);
+		pm.registerEvents(new ACBlockListener(), this);
+		pm.registerEvents(new ACEntityListener(), this);
+		pm.registerEvents(new ACPlayerListener(), this);
+		pm.registerEvents(new ACWeatherListener(), this);
+		if (ConfigEnum.COLSIGN.getBoolean())
+			pm.registerEvents(new ACColorSignListener(), this);
+		if (ConfigEnum.RESET_POWERS.getBoolean())
+			pm.registerEvents(new ACResetPowerListener(), this);
 		try {
 			// create a new metrics object
 			final Metrics metrics = new Metrics();
+			ACPluginManager.setMetrics(metrics);
 
 			metrics.addCustomData(this, new Metrics.Plotter() {
 				@Override
@@ -266,9 +243,18 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					return AFKWorker.getInstance().nbAfk();
 				}
 			});
+			getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
 
-			// 'this' in this context is the Plugin object
-			metrics.beginMeasuringPlugin(this);
+				@Override
+				public void run() {
+					try {
+						metrics.beginMeasuringPlugin(AdminCmd.this);
+						DebugLog.INSTANCE.info("Stats started");
+					} catch (IOException e) {
+						DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
+					}
+				}
+			}, 30 * Utils.secInTick);
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 		}
@@ -276,15 +262,18 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	public void registerCmds() {
-
+		final PluginManager pm = getServer().getPluginManager();
+		boolean banCommands = false;
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
 		CommandManager.getInstance().registerCommand(More.class);
 		CommandManager.getInstance().registerCommand(PlayerList.class);
 		CommandManager.getInstance().registerCommand(PlayerLocation.class);
-		CommandManager.getInstance().registerCommand(God.class);
-		CommandManager.getInstance().registerCommand(Thor.class);
+		if (CommandManager.getInstance().registerCommand(God.class))
+			pm.registerEvents(new ACGodListener(), this);
+		if (CommandManager.getInstance().registerCommand(Thor.class))
+			pm.registerEvents(new ACThorListener(), this);
 		CommandManager.getInstance().registerCommand(Kill.class);
 		CommandManager.getInstance().registerCommand(Heal.class);
 		CommandManager.getInstance().registerCommand(ClearSky.class);
@@ -303,17 +292,20 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Strike.class);
 		CommandManager.getInstance().registerCommand(RemoveAlias.class);
 		CommandManager.getInstance().registerCommand(SpawnMob.class);
+
 		CommandManager.getInstance().registerCommand(KickPlayer.class);
 		CommandManager.getInstance().registerCommand(PrivateMessage.class);
 		CommandManager.getInstance().registerCommand(AddAlias.class);
 		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
 		CommandManager.getInstance().registerCommand(TpLoc.class);
 		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
-		CommandManager.getInstance().registerCommand(Vulcan.class);
+		if (CommandManager.getInstance().registerCommand(Vulcan.class))
+			pm.registerEvents(new ACVulcanListener(), this);
 		CommandManager.getInstance().registerCommand(Drop.class);
 		CommandManager.getInstance().registerCommand(Invisible.class);
 		CommandManager.getInstance().registerCommand(SpyMsg.class);
-		CommandManager.getInstance().registerCommand(Fireball.class);
+		if (CommandManager.getInstance().registerCommand(Fireball.class))
+			pm.registerEvents(new ACFireballListener(), this);
 		CommandManager.getInstance().registerCommand(Home.class);
 		CommandManager.getInstance().registerCommand(SetHome.class);
 		CommandManager.getInstance().registerCommand(AddWarp.class);
@@ -321,16 +313,23 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(TpToWarp.class);
 		CommandManager.getInstance().registerCommand(WarpList.class);
 		CommandManager.getInstance().registerCommand(Ip.class);
-		CommandManager.getInstance().registerCommand(BanPlayer.class);
-		CommandManager.getInstance().registerCommand(UnBan.class);
+		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
+			banCommands = true;
+		;
+		if (CommandManager.getInstance().registerCommand(UnBan.class))
+			banCommands = true;
+		if (banCommands)
+			pm.registerEvents(new ACBanListener(), this);
 		CommandManager.getInstance().registerCommand(KillMob.class);
-		CommandManager.getInstance().registerCommand(Fly.class);
+		if (CommandManager.getInstance().registerCommand(Fly.class))
+			pm.registerEvents(new ACFlyListener(), this);
 		CommandManager.getInstance().registerCommand(DeleteHome.class);
 		CommandManager.getInstance().registerCommand(ListHomes.class);
 		CommandManager.getInstance().registerCommand(Freeze.class);
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
-		CommandManager.getInstance().registerCommand(MobLimit.class);
+		if (CommandManager.getInstance().registerCommand(MobLimit.class))
+			pm.registerEvents(new ACCreatureSpawnListener(), this);
 		CommandManager.getInstance().registerCommand(NoPickup.class);
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 		CommandManager.getInstance().registerCommand(MOTD.class);
@@ -347,20 +346,24 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Afk.class);
 		CommandManager.getInstance().registerCommand(MoreAll.class);
 		CommandManager.getInstance().registerCommand(TpToggle.class);
-		CommandManager.getInstance().registerCommand(TpAtSee.class);
+		if (CommandManager.getInstance().registerCommand(TpAtSee.class))
+			pm.registerEvents(new ACTpAtSeeListener(), this);
 		CommandManager.getInstance().registerCommand(Uptime.class);
 		CommandManager.getInstance().registerCommand(Kit.class);
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
 		CommandManager.getInstance().registerCommand(LastLocation.class);
-		CommandManager.getInstance().registerCommand(SuperBreaker.class);
+		if (CommandManager.getInstance().registerCommand(SuperBreaker.class))
+			pm.registerEvents(new ACSuperBreaker(), this);
 		CommandManager.getInstance().registerCommand(Help.class);
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
-		CommandManager.getInstance().registerCommand(LockServer.class);
+		if (CommandManager.getInstance().registerCommand(LockServer.class))
+			pm.registerEvents(new ACLockedServerListener(), this);
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
-		CommandManager.getInstance().registerCommand(Eternal.class);
+		if (CommandManager.getInstance().registerCommand(Eternal.class))
+			pm.registerEvents(new ACFoodListener(), this);
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
@@ -370,36 +373,42 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
+		CommandManager.getInstance().registerCommand(StopServer.class);
 	}
 
 	@Override
 	protected void registerPermParents() {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
+		PermParent player = new PermParent("admincmd.player.*");
+		permissionLinker.addPermParent(player);
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
+		PermParent tp = new PermParent("admincmd.tp.*");
+		permissionLinker.addPermParent(tp);
+		permissionLinker.addChildPermParent(new PermParent("admincmd.tp.toggle.*"), tp);
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
+		PermParent server = new PermParent("admincmd.server.*");
+		permissionLinker.addPermParent(server);
+		PermParent sExec = new PermParent("admincmd.server.exec.*");
+		PermParent sSet = new PermParent("admincmd.server.set.*");
+		permissionLinker.addChildPermParent(sExec, server);
+		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
-		permissionLinker.addPermChild("admincmd.player.bypass");
+		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
-		permissionLinker.addPermChild("admincmd.player.noreset");
+		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
-		permissionLinker.addPermChild("admincmd.player.noafkkick");
+		player.addChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
 		permissionLinker.addPermChild("admincmd.item.infinity");
-		permissionLinker.addPermChild("admincmd.player.fly.allowed");
-		for (int i = 0; i < 150; i++) {
+		player.addChild("admincmd.player.fly.allowed");
+		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
@@ -561,9 +570,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("notMuted", ChatColor.DARK_AQUA + "This player is not muted.");
 		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
+		Utils.addLocale("mobLimitPerMob", "#mobLimit# " + ChatColor.RED + "for mob %mob");
 		LocaleManager.getInstance().save();
 		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN
 				+ "Mob limit is removed for world : %world");
+		Utils.addLocale("mobLimitRemovedPerMob", "#mobLimitRemoved# " + ChatColor.AQUA
+				+ " for mob %mob");
 		Utils.addLocale("wFrozen", "Weather is frozen in world :");
 		Utils.addLocale("wUnFrozen", "Weather can change in world :");
 		Utils.addLocale("invTitle", "[INV]");
@@ -688,6 +700,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
 		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
+		Utils.addLocale("joinMessageFirstTime", "%name" + ChatColor.YELLOW + " joined the game "
+				+ ChatColor.GOLD + "for the first time!");
 		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
 		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
 				+ " %player" + ChatColor.YELLOW + " set to : " + ChatColor.GOLD + "%pres");
@@ -716,6 +730,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("MOTDset", ChatColor.YELLOW + "The new Message Of The Day is : %motd");
 		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
+		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
+				+ ChatColor.DARK_RED + "You lost it.");
+		Utils.addLocale("serverStop", "The server is stopping.");
+		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
+				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
+				+ ChatColor.GOLD + "%sec seconds.");
 		LocaleManager.getInstance().save();
 	}
 }

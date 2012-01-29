@@ -19,7 +19,6 @@ package be.Balor.Manager.Commands.Spawn;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -27,7 +26,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SetSpawn extends CoreCommand {
+public class SetSpawn extends SpawnCommand {
 
 	/**
 	 * 
