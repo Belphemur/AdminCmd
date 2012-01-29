@@ -112,10 +112,10 @@ public class PermParent extends PermChild {
 	void registerPermission() {
 		if (registered)
 			return;
+		if (permName == null && !this.equals(ROOT) && !this.equals(ALONE))
+			return;
 		for (PermChild child : children)			
 			child.registerPermission();
-		if (permName == null)
-			return;
 		final Permission perm = ACPluginManager.getServer().getPluginManager()
 				.getPermission(permName);
 		if (perm == null)
