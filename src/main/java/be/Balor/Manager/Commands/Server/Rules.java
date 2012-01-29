@@ -21,27 +21,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 
-public class Rules extends CoreCommand {
+public class Rules extends ServerCommand {
 
 	/**
 	 *
 	 */
-	public Rules(){
+	public Rules() {
 		permNode = "admincmd.server.rules";
-		cmdName =  "bal_rules";
+		cmdName = "bal_rules";
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -57,7 +56,7 @@ public class Rules extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

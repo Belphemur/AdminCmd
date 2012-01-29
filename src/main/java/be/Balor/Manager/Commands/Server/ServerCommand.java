@@ -16,57 +16,27 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class RepeatCmd extends ServerCommand {
+public abstract class ServerCommand extends CoreCommand {
+	/**
+ * 
+ */
+	public ServerCommand() {
+		super();
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.server.*");
+	}
 
 	/**
-	 * 
+	 * @param string
+	 * @param string2
 	 */
-	public RepeatCmd() {
-		permNode = "admincmd.server.repeat";
-		cmdName = "bal_repeat";
+	public ServerCommand(String cmd, String permNode) {
+		super(cmd, permNode);
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.server.*");
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		try {
-
-			if (Utils.isPlayer(sender, false))
-				ACPlayer.getPlayer(((Player) sender).getName()).executeLastCmd();
-			else
-				ACPlayer.getPlayer("serverConsole").executeLastCmd();
-			Utils.sI18n(sender, "reExec");
-		} catch (NullPointerException e) {
-			Utils.sI18n(sender, "noRepeat");
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(String... args) {
-		return true;
-	}
-
 }

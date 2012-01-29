@@ -23,7 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -32,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ReplaceBlock extends CoreCommand {
+public class ReplaceBlock extends ServerCommand {
 
 	/**
 	 * 
@@ -56,9 +55,9 @@ public class ReplaceBlock extends CoreCommand {
 			return;
 		ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(mc.getMaterial());
-		if(mc.getMaterial().equals(Material.LAVA))
+		if (mc.getMaterial().equals(Material.LAVA))
 			mats.add(Material.STATIONARY_LAVA);
-		else if(mc.getMaterial().equals(Material.WATER))
+		else if (mc.getMaterial().equals(Material.WATER))
 			mats.add(Material.STATIONARY_WATER);
 		Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
 		if (count == null)

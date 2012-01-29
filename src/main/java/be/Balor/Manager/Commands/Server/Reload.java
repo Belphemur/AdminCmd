@@ -20,7 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -29,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Reload extends CoreCommand {
+public class Reload extends ServerCommand {
 
 	/**
 	 * 
@@ -49,19 +48,20 @@ public class Reload extends CoreCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (args.length >= 1 && !args.getString(0).equals("AdminCmd")) {
-			final Plugin plugin = sender.getServer().getPluginManager().getPlugin(args.getString(0));
+			final Plugin plugin = sender.getServer().getPluginManager()
+					.getPlugin(args.getString(0));
 			if (plugin == null) {
 				Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 				return;
 			}
-		ACPluginManager.scheduleSyncTask(new Runnable() {			
-			@Override
-			public void run() {
-				ACPluginManager.getServer().getPluginManager().disablePlugin(plugin);
-				ACPluginManager.getServer().getPluginManager().enablePlugin(plugin);
-				
-			}
-		});
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					ACPluginManager.getServer().getPluginManager().disablePlugin(plugin);
+					ACPluginManager.getServer().getPluginManager().enablePlugin(plugin);
+
+				}
+			});
 			Utils.sI18n(sender, "pluginReloaded", "plugin", args.getString(0));
 		} else {
 			ACHelper.getInstance().reload();

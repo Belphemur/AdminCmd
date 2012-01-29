@@ -36,7 +36,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftWorld;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -48,7 +47,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Memory extends CoreCommand {
+public class Memory extends ServerCommand {
 	private final PermChild full, animal, xp, item, mob, npc;
 
 	/**
@@ -175,12 +174,12 @@ public class Memory extends CoreCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		PermParent parent = new PermParent(permNode + ".*", plugin.getPermissionLinker()
-				.getMajorPerm());
-		plugin.getPermissionLinker().addPermParent(parent);
-		parent.addChild(mob).addChild(animal).addChild(xp).addChild(item).addChild(full)
-				.addChild(npc);
-		super.registerBukkitPerm();
+		PermParent parent = new PermParent(permNode + ".*", permParent);
+		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
+		PermChild child = new PermChild(permNode, bukkitDefault);
+		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)
+				.addChild(full).addChild(npc);
+		bukkitPerm = child.getBukkitPerm();
 	}
 
 	private class CheckTicks implements Runnable {

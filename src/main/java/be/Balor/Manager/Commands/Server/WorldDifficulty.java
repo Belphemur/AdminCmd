@@ -24,16 +24,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
-public class WorldDifficulty extends CoreCommand {
+public class WorldDifficulty extends ServerCommand {
 
 	/**
 	 *
@@ -45,7 +44,7 @@ public class WorldDifficulty extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -63,15 +62,14 @@ public class WorldDifficulty extends CoreCommand {
 			}
 			if (args.length >= 1 && worldGiven)
 				world = ACWorld.getWorld(args.getString(0));
-			else
-				if (Utils.isPlayer(sender, false))
-					world = ACWorld.getWorld(((Player) sender).getWorld().getName());
-				else {
-					HashMap<String, String> replace = new HashMap<String, String>();
-					replace.put("argument", "world");
-					Utils.sI18n(sender, "errorInsufficientArguments", replace);
-					return;
-				}
+			else if (Utils.isPlayer(sender, false))
+				world = ACWorld.getWorld(((Player) sender).getWorld().getName());
+			else {
+				HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("argument", "world");
+				Utils.sI18n(sender, "errorInsufficientArguments", replace);
+				return;
+			}
 		} catch (WorldNotLoaded e) {
 			Utils.sI18n(sender, "worldNotFound");
 			return;
@@ -80,9 +78,9 @@ public class WorldDifficulty extends CoreCommand {
 		Difficulty toSet = Difficulty.NORMAL;
 		Map<String, String> replace = new HashMap<String, String>();
 		if (args.hasFlag('g')) {
-				replace.put("world", world.getName());
-				replace.put("difficulty", world.getDifficulty().toString());
-				Utils.sI18n(sender, "getDifficulty", replace);
+			replace.put("world", world.getName());
+			replace.put("difficulty", world.getDifficulty().toString());
+			Utils.sI18n(sender, "getDifficulty", replace);
 		} else if (args.hasFlag('s')) {
 			if (args.length >= 2)
 				toSet = Difficulty.getByValue(args.getInt(1));
@@ -102,7 +100,7 @@ public class WorldDifficulty extends CoreCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

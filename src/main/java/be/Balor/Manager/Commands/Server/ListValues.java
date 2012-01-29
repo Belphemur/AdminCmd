@@ -23,7 +23,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -32,7 +31,7 @@ import be.Balor.Tools.Utils;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ListValues extends CoreCommand {
+public class ListValues extends ServerCommand {
 
 	/**
 	 * 
@@ -59,8 +58,7 @@ public class ListValues extends CoreCommand {
 		for (String str : args)
 			arg += str + " ";
 		arg = arg.trim();
-		if(Type.matchType(arg) == null)
-		{
+		if (Type.matchType(arg) == null) {
 			Utils.sI18n(sender, "emptyList");
 			return;
 		}
