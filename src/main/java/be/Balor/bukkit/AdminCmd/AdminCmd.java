@@ -700,7 +700,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
 		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
-		Utils.addLocale("joinMessageFristTime", "%name" + ChatColor.YELLOW + " joined the game "
+		Utils.addLocale("joinMessageFirstTime", "%name" + ChatColor.YELLOW + " joined the game "
 				+ ChatColor.GOLD + "for the first time!");
 		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
 		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
