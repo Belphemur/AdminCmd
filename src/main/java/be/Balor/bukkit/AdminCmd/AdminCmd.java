@@ -96,6 +96,7 @@ import be.Balor.Manager.Commands.Server.RepeatCmd;
 import be.Balor.Manager.Commands.Server.ReplaceBlock;
 import be.Balor.Manager.Commands.Server.Rules;
 import be.Balor.Manager.Commands.Server.Set;
+import be.Balor.Manager.Commands.Server.StopServer;
 import be.Balor.Manager.Commands.Server.Undo;
 import be.Balor.Manager.Commands.Server.Uptime;
 import be.Balor.Manager.Commands.Server.Version;
@@ -372,6 +373,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
+		CommandManager.getInstance().registerCommand(StopServer.class);
 	}
 
 	@Override
@@ -728,6 +730,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
 				+ ChatColor.DARK_RED + "You lost it.");
+		Utils.addLocale("serverStop", "The server is stopping.");
+		Utils.addLocale("serverWillStop", ChatColor.YELLOW + "The server will "
+				+ ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + " in " + ChatColor.GOLD
+				+ " %sec seconds.");
 		LocaleManager.getInstance().save();
 	}
 }

@@ -113,7 +113,8 @@ public enum ConfigEnum {
 	}), "Will be used in a later version"),
 	SCALE_TIMEOUT("timeOutScale", 60, "When using the parameter -t in power commands (god, fly, etc ...)\n"
 			+ "Configure the scale used for the time (here 60 sec).\n"
-			+ "It mean if you type /god -t 5 you will be god for 5 minutes");
+			+ "It mean if you type /god -t 5 you will be god for 5 minutes"),
+	TIME_STOP("timeInSecBeforeStop", 5, "Time before stopping the server when using the AdminCmd command Stop.");
 
 	private final String confVal;
 	private final Object defaultVal;
