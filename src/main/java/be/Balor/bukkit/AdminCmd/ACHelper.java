@@ -100,9 +100,8 @@ public class ACHelper {
 	private final ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
 	private static long pluginStarted;
-	
-	static
-	{
+
+	static {
 		materialsColors = new HashMap<Material, String[]>();
 		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
 				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
@@ -140,7 +139,6 @@ public class ACHelper {
 	private boolean serverLocked = false;
 
 	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
-
 
 	/**
 	 * Ban a new player
@@ -415,6 +413,7 @@ public class ACHelper {
 			return -1;
 		return value;
 	}
+
 	/*
 	 * private void convertBannedMuted() { Map<String, Object> map =
 	 * fManager.loadMap(Type.BANNED, null, Type.BANNED.toString()); if
@@ -915,10 +914,14 @@ public class ACHelper {
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {
+		if (key == null)
+			return;
 		playersForReplyMessage.remove(key);
 	}
 
 	public void removeSpy(Player p) {
+		if (p == null)
+			return;
 		spyPlayers.remove(p);
 	}
 
@@ -984,8 +987,7 @@ public class ACHelper {
 		}
 		if (pluginConfig.get("glinding") != null) {
 			pluginConfig.add("gliding.multiplicator", ConfigEnum.G_MULT.getFloat());
-			pluginConfig.add("gliding.YvelocityCheckToGlide",
-					ConfigEnum.G_VELCHECK.getFloat());
+			pluginConfig.add("gliding.YvelocityCheckToGlide", ConfigEnum.G_VELCHECK.getFloat());
 			pluginConfig.add("gliding.newYvelocity", ConfigEnum.G_NEWYVEL.getFloat());
 			pluginConfig.remove("glinding");
 
@@ -1005,8 +1007,8 @@ public class ACHelper {
 		final ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
 				coreInstance.getDataFolder(), "commands.yml"));
 		commands.add("disabledCommands", disabled);
-		commands.add("prioritizedCommands", priority.isEmpty() ? Arrays.asList("reload", "/")
-				: priority);
+		commands.add("prioritizedCommands",
+				priority.isEmpty() ? Arrays.asList("reload", "/", "stop") : priority);
 		commands.add("alias.god", Arrays.asList("gg", "gd"));
 		try {
 			commands.save();

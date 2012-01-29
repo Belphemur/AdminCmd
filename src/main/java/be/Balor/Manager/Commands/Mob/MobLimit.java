@@ -22,7 +22,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.CreatureType;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -32,7 +31,7 @@ import be.Balor.World.ACWorld;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MobLimit extends CoreCommand {
+public class MobLimit extends MobCommand {
 
 	/**
 	 * 

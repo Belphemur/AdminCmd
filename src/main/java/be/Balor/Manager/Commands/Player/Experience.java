@@ -24,7 +24,6 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -32,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Lathanael (aka Philippe Leipold)
  * 
  */
-public class Experience extends CoreCommand {
+public class Experience extends PlayerCommand {
 
 	public Experience() {
 		permNode = "admincmd.player.experience";

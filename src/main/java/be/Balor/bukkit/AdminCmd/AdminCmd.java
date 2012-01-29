@@ -96,6 +96,7 @@ import be.Balor.Manager.Commands.Server.RepeatCmd;
 import be.Balor.Manager.Commands.Server.ReplaceBlock;
 import be.Balor.Manager.Commands.Server.Rules;
 import be.Balor.Manager.Commands.Server.Set;
+import be.Balor.Manager.Commands.Server.StopServer;
 import be.Balor.Manager.Commands.Server.Undo;
 import be.Balor.Manager.Commands.Server.Uptime;
 import be.Balor.Manager.Commands.Server.Version;
@@ -372,36 +373,42 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
+		CommandManager.getInstance().registerCommand(StopServer.class);
 	}
 
 	@Override
 	protected void registerPermParents() {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.player.*"));
+		PermParent player = new PermParent("admincmd.player.*");
+		permissionLinker.addPermParent(player);
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.tp.toggle.*"));
+		PermParent tp = new PermParent("admincmd.tp.*");
+		permissionLinker.addPermParent(tp);
+		permissionLinker.addChildPermParent(new PermParent("admincmd.tp.toggle.*"), tp);
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.exec.*"));
-		permissionLinker.addPermParent(new PermParent("admincmd.server.set.*"));
+		PermParent server = new PermParent("admincmd.server.*");
+		permissionLinker.addPermParent(server);
+		PermParent sExec = new PermParent("admincmd.server.exec.*");
+		PermParent sSet = new PermParent("admincmd.server.set.*");
+		permissionLinker.addChildPermParent(sExec, server);
+		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
-		permissionLinker.addPermChild("admincmd.player.bypass");
+		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
-		permissionLinker.addPermChild("admincmd.player.noreset");
+		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
-		permissionLinker.addPermChild("admincmd.player.noafkkick");
+		player.addChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
 		permissionLinker.addPermChild("admincmd.item.infinity");
-		permissionLinker.addPermChild("admincmd.player.fly.allowed");
-		for (int i = 0; i < 150; i++) {
+		player.addChild("admincmd.player.fly.allowed");
+		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
@@ -693,6 +700,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
 		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
+		Utils.addLocale("joinMessageFirstTime", "%name" + ChatColor.YELLOW + " joined the game "
+				+ ChatColor.GOLD + "for the first time!");
 		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW + " left the game!");
 		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
 				+ " %player" + ChatColor.YELLOW + " set to : " + ChatColor.GOLD + "%pres");
@@ -723,6 +732,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
 				+ ChatColor.DARK_RED + "You lost it.");
+		Utils.addLocale("serverStop", "The server is stopping.");
+		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
+				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
+				+ ChatColor.GOLD + "%sec seconds.");
 		LocaleManager.getInstance().save();
 	}
 }

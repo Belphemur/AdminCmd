@@ -16,8 +16,10 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -28,63 +30,24 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class PermParent {
-	protected Map<String, Boolean> children = new HashMap<String, Boolean>();
-	protected String permName = "";
-	protected String compareName = "";
-	protected PermissionDefault def;
+public class PermParent extends PermChild {
+	protected final String compareName;
+	protected final Set<PermChild> children = new HashSet<PermChild>();
+	public final static PermParent ROOT = new PermParent(null, null);
+	public final static PermParent ALONE = new PermParent(null, null);
 
 	public PermParent(String perm) {
-		this(perm, perm.substring(0, perm.length() - 1), PermissionDefault.OP);
+		this(perm, ROOT);
 	}
 
-	public PermParent(String perm, String compare, PermissionDefault def) {
-		this.permName = perm;
+	public PermParent(String perm, PermParent parent) {
+		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
+				PermissionDefault.OP, parent);
+	}
+
+	public PermParent(String perm, String compare, PermissionDefault def, PermParent parent) {
+		super(perm, parent, true, def);
 		this.compareName = compare;
-		this.def = def;
-	}
-
-	public void addChild(String name) {
-		addChild(name, true);
-	}
-
-	/**
-	 * Add a Permission Child.
-	 * 
-	 * @param name
-	 * @param bool
-	 */
-	public void addChild(String name, boolean bool) {
-		children.put(name, bool);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof PermParent))
-			return false;
-		final PermParent other = (PermParent) obj;
-		if (compareName == null) {
-			if (other.compareName != null)
-				return false;
-		} else if (!compareName.equals(other.compareName))
-			return false;
-		if (def != other.def)
-			return false;
-		if (permName == null) {
-			if (other.permName != null)
-				return false;
-		} else if (!permName.equals(other.permName))
-			return false;
-		return true;
 	}
 
 	/**
@@ -101,6 +64,70 @@ public class PermParent {
 		return permName;
 	}
 
+	/**
+	 * Add a permission Child to the Permission Parent
+	 * 
+	 * @param perm
+	 * @return the PermParent (this)
+	 */
+	public PermParent addChild(PermChild perm) throws IllegalArgumentException {
+		if (perm.equals(this))
+			throw new IllegalArgumentException("The Child can't be the parent.");
+		children.add(perm);
+		perm.parent = this;
+		if (!(perm instanceof PermParent))
+			perm.registerPermission();
+		return this;
+	}
+
+	/**
+	 * Add a permission Child to the Permission Parent
+	 * 
+	 * @param perm
+	 * @return the PermParent (this)
+	 */
+	public PermParent addChild(String perm) {
+		PermChild child = new PermChild(perm, this);
+		child.registerPermission();
+		children.add(child);
+		return this;
+	}
+
+	/**
+	 * @return the children to be registered by the bukkit API.
+	 */
+	private Map<String, Boolean> getChildren() {
+		Map<String, Boolean> childrenMap = new LinkedHashMap<String, Boolean>();
+		for (PermChild child : children)
+			childrenMap.put(child.getPermName(), child.isSet());
+		return childrenMap;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Permissions.PermChild#registerPermission()
+	 */
+	@Override
+	void registerPermission() {
+		if (registered)
+			return;
+		if (permName == null && !this.equals(ROOT) && !this.equals(ALONE))
+			return;
+		for (PermChild child : children)
+			child.registerPermission();
+		if (permName == null)
+			return;
+		final Permission perm = ACPluginManager.getServer().getPluginManager()
+				.getPermission(permName);
+		if (perm == null)
+			ACPluginManager.getServer().getPluginManager()
+					.addPermission(new Permission(permName, permDefault, getChildren()));
+		else
+			perm.getChildren().putAll(getChildren());
+		registered = true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -109,21 +136,31 @@ public class PermParent {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((compareName == null) ? 0 : compareName.hashCode());
-		result = prime * result + ((def == null) ? 0 : def.hashCode());
-		result = prime * result + ((permName == null) ? 0 : permName.hashCode());
 		return result;
 	}
 
-	public void registerBukkitPerm() {
-		final Permission perm = ACPluginManager.getServer().getPluginManager()
-				.getPermission(permName);
-		if (perm == null)
-			ACPluginManager.getServer().getPluginManager()
-					.addPermission(new Permission(permName, def, children));
-		else
-			perm.getChildren().putAll(children);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof PermParent))
+			return false;
+		PermParent other = (PermParent) obj;
+		if (compareName == null) {
+			if (other.compareName != null)
+				return false;
+		} else if (!compareName.equals(other.compareName))
+			return false;
+		return true;
 	}
 
 }

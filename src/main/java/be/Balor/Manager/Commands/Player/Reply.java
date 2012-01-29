@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
@@ -36,7 +35,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * @author Lathanael (aka Philippe Leipold)
  * 
  */
-public class Reply extends CoreCommand {
+public class Reply extends PlayerCommand {
 
 	/**
 	 *

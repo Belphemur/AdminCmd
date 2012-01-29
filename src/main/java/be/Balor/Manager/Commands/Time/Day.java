@@ -19,14 +19,13 @@ package be.Balor.Manager.Commands.Time;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public class Day extends CoreCommand {
+public class Day extends TimeCommand {
 
 	/**
 	 *

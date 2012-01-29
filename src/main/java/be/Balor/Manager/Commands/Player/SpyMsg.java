@@ -20,17 +20,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SpyMsg extends CoreCommand {
+public class SpyMsg extends PlayerCommand {
 
 	/**
 	 * 
@@ -49,8 +51,9 @@ public class SpyMsg extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
+		String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
-			ACPlayer acp = ACPlayer.getPlayer(((Player) sender));
+			final ACPlayer acp = ACPlayer.getPlayer(((Player) sender));
 			if (acp.hasPower(Type.SPYMSG)) {
 				acp.removePower(Type.SPYMSG);
 				ACHelper.getInstance().removeSpy((Player) sender);
@@ -59,6 +62,24 @@ public class SpyMsg extends CoreCommand {
 				acp.setPower(Type.SPYMSG);
 				ACHelper.getInstance().addSpy((Player) sender);
 				Utils.sI18n(sender, "spymsgEnabled");
+				if (timeOut == null)
+					return;
+				int timeOutValue;
+				try {
+					timeOutValue = Integer.parseInt(timeOut);
+				} catch (Exception e) {
+					Utils.sI18n(sender, "NaN", "number", timeOut);
+					return;
+				}
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+						ACPluginManager.getCorePlugin(), new Runnable() {
+
+							@Override
+							public void run() {
+								ACHelper.getInstance().removeSpy(acp.getHandler());
+								new RemovePowerTask(acp, Type.SPYMSG).run();
+							}
+						}, Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 
 		}
