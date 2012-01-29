@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -34,7 +33,7 @@ import be.Balor.World.WorldManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class WarpList extends CoreCommand {
+public class WarpList extends WarpCommand {
 
 	/**
 	 * 
