@@ -34,19 +34,11 @@ public class PermChild {
 	protected Permission bukkitPerm;
 
 	public PermChild(String permName) {
-		this(permName, PermParent.ALONE);
+		this(permName, PermissionDefault.OP);
 	}
 
 	public PermChild(String permName, PermissionDefault permDefault) {
-		this(permName, null, true, permDefault);
-	}
-
-	/**
-	 * @param permName
-	 * @param parent
-	 */
-	public PermChild(String permName, PermParent parent) {
-		this(permName, parent, true, PermissionDefault.OP);
+		this(permName, true, permDefault);
 	}
 
 	/**
@@ -55,10 +47,9 @@ public class PermChild {
 	 * @param value
 	 * @param permDefault
 	 */
-	public PermChild(String permName, PermParent parent, boolean value,
-			PermissionDefault permDefault) {
+	public PermChild(String permName, boolean value, PermissionDefault permDefault) {
 		this.permName = permName;
-		this.parent = parent;
+		this.parent = PermParent.ALONE;
 		this.set = value;
 		this.permDefault = permDefault;
 	}
