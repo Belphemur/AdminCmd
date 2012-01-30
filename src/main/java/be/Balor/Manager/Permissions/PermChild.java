@@ -37,6 +37,16 @@ public class PermChild {
 		this(permName, PermissionDefault.OP);
 	}
 
+	/**
+	 * 
+	 */
+	protected PermChild(String permName, PermParent parent, PermissionDefault permDefault) {
+		this.permName = permName;
+		this.parent = parent;
+		this.set = true;
+		this.permDefault = permDefault;
+	}
+
 	public PermChild(String permName, PermissionDefault permDefault) {
 		this(permName, true, permDefault);
 	}

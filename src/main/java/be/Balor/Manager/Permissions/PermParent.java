@@ -42,7 +42,7 @@ public class PermParent extends PermChild {
 	}
 
 	public PermParent(String perm, String compare, PermissionDefault def) {
-		super(perm, true, def);
+		super(perm, ROOT, def);
 		this.compareName = compare;
 	}
 
