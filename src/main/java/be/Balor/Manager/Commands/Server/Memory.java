@@ -174,7 +174,7 @@ public class Memory extends ServerCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		PermParent parent = new PermParent(permNode + ".*", permParent);
+		PermParent parent = new PermParent(permNode + ".*");
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)

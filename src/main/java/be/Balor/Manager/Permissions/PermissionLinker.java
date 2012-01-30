@@ -110,7 +110,7 @@ public class PermissionLinker {
 			parent = PermParent.ALONE;
 			DebugLog.INSTANCE.info("No Permission Parent found for : " + permNode);
 		}
-		final PermChild child = new PermChild(permNode, parent, true, bukkitDefault);
+		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child);
 		return child.getBukkitPerm();
 	}
@@ -125,7 +125,7 @@ public class PermissionLinker {
 	}
 
 	public void addPermParent(String toAdd) {
-		final PermParent pp = new PermParent(toAdd, majorPerm);
+		final PermParent pp = new PermParent(toAdd);
 		permissions.put(pp.getPermName(), pp);
 	}
 
@@ -246,12 +246,14 @@ public class PermissionLinker {
 	 */
 	public void setMajorPerm(PermParent major) {
 		majorPerm = major;
+		PermParent.ROOT.addChild(majorPerm);
 		for (final PermParent pp : permissions.values())
 			majorPerm.addChild(pp);
 	}
 
 	public void setMajorPerm(String major) {
-		majorPerm = new PermParent(major, PermParent.ROOT);
+		majorPerm = new PermParent(major);
+		PermParent.ROOT.addChild(majorPerm);
 		for (final PermParent pp : permissions.values())
 			majorPerm.addChild(pp);
 	}
