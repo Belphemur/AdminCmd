@@ -487,10 +487,9 @@ public class FileManager implements DataManager {
 			return null;
 		if (toParse.isEmpty())
 			return null;
-		String infos[] = new String[5];
 		Double coords[] = new Double[3];
 		Float direction[] = new Float[2];
-		infos = toParse.split(";");
+		String[] infos = toParse.split(";");
 		for (int i = 0; i < coords.length; i++)
 			try {
 				coords[i] = Double.parseDouble(infos[i]);
@@ -551,6 +550,10 @@ public class FileManager implements DataManager {
 		boolean convert = false;
 
 		ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
+		if (kitNodes == null) {
+			ACLogger.severe("A problem happen when wanting to load the kits. Please check your kits.yml file.");
+			return result;
+		}
 		for (String kitName : kitNodes.getKeys(false)) {
 			int delay = 0;
 			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);

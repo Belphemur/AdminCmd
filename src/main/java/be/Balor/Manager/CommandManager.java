@@ -88,6 +88,16 @@ public class CommandManager implements CommandExecutor {
 			}
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "NormalCommand [acc=" + acc + "]";
+		}
+
 	}
 
 	private class SyncCommand extends NormalCommand {
@@ -113,6 +123,16 @@ public class CommandManager implements CommandExecutor {
 				ACLogger.severe(acc.debug(), t);
 				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
 			}
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "SyncCommand [acc=" + acc + "]";
 		}
 
 	}

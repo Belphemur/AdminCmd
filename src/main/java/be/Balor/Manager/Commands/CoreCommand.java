@@ -198,4 +198,14 @@ public abstract class CoreCommand {
 		return plugin;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CoreCommand [permNode=" + permNode + ", cmdName=" + cmdName + ", plugin=" + plugin
+				+ ", permParent=" + permParent + "]";
+	}
+	
+
 }
