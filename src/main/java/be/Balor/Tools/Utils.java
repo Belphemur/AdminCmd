@@ -62,7 +62,6 @@ import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
-import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
@@ -302,7 +301,6 @@ public class Utils {
 		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
 				&& pLvl != tLvl)
 			return false;
-		ACLogger.info("plvl >= tLvl " + (pLvl >= tLvl) + " pLvl : " + pLvl + " tLvl: " + tLvl);
 		if (pLvl >= tLvl)
 			return true;
 		else
