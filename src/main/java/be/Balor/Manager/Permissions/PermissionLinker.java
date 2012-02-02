@@ -112,6 +112,7 @@ public class PermissionLinker {
 		}
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child);
+		DebugLog.INSTANCE.info(child + " registered as child of " + parent);
 		return child.getBukkitPerm();
 	}
 

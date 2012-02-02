@@ -157,4 +157,14 @@ public class PermChild {
 	public Permission getBukkitPerm() {
 		return bukkitPerm;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PermChild [permName=" + permName + ", set=" + set + ", permDefault=" + permDefault
+				+ ", registered=" + registered + "]";
+	}
+	
 }
