@@ -17,6 +17,7 @@
 package be.Balor.Tools.Files;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -87,6 +88,7 @@ public class FileManager implements DataManager {
 			instance = new FileManager();
 		return instance;
 	}
+
 	/**
 	 * Get a txt-file and return its content in a String
 	 * 
@@ -120,6 +122,7 @@ public class FileManager implements DataManager {
 		else
 			return result.toString().trim();
 	}
+
 	/**
 	 * @param path
 	 *            the path to set
@@ -206,6 +209,32 @@ public class FileManager implements DataManager {
 	}
 
 	/**
+	 * To write a text file on the AdminCmd folder.
+	 * 
+	 * @param filename
+	 * @param toSet
+	 */
+	public void setTxtFile(String filename, String toSet) {
+		File txt = getFile(null, filename + ".txt");
+		FileWriter fstream = null;
+		try {
+			fstream = new FileWriter(txt);
+		} catch (IOException e) {
+			ACLogger.severe("Can't write the txt file : " + filename, e);
+			return;
+		}
+		BufferedWriter out = new BufferedWriter(fstream);
+		try {
+			out.write(toSet);
+			out.close();
+		} catch (IOException e) {
+			ACLogger.severe("Can't write the txt file : " + filename, e);
+			return;
+		}
+
+	}
+
+	/**
 	 * Write the alias in the yml file
 	 * 
 	 * @param alias
@@ -214,9 +243,8 @@ public class FileManager implements DataManager {
 	public void addAlias(String alias, MaterialContainer mc) {
 		ExtendedConfiguration conf = getYml("Alias");
 
-		List<String> aliasList =  conf.getStringList("alias",
-				new ArrayList<String>());
-		List<String> idList =  conf.getStringList("ids", new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		if (aliasList.contains(alias)) {
 			int index = aliasList.indexOf(alias);
 			aliasList.remove(index);
@@ -239,8 +267,7 @@ public class FileManager implements DataManager {
 	 */
 	public void removeAlias(String alias) {
 		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias",
-				new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
 		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		int index = aliasList.indexOf(alias);
 		aliasList.remove(index);
