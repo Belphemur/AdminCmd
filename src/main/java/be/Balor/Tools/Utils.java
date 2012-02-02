@@ -640,7 +640,6 @@ public class Utils {
 		return serverTime;
 	}
 
-
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
 	}
@@ -1092,64 +1091,67 @@ public class Utils {
 			found = false;
 		}
 
-		if (found) {
-			if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-					&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
-					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
-				replace.put("player", nTo);
-				Utils.sI18n(sender, "playerNotFound", replace);
-				return;
-			}
-			if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-					&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
-							.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
-				replace.put("player", nFrom);
-				Utils.sI18n(sender, "playerNotFound", replace);
-				return;
-			}
-			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-				ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
-				ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
-				replace.put("fromPlayer", pFrom.getName());
-				replace.put("toPlayer", pTo.getName());
-				Utils.sI18n(sender, "tp", replace);
-			} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-					&& ACPlayer.getPlayer(pTo.getName()).hasPower(Type.TP_REQUEST)) {
-				ACPlayer.getPlayer(pTo).setTpRequest(new TpRequest(pFrom, pTo));
-				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
-				final HashMap<String, String> replace2 = new HashMap<String, String>();
-				replace2.put("player", pTo.getName());
-				if (type.toString().equalsIgnoreCase("to"))
-					replace2.put("tp_type", Utils.I18n("tpTO"));
-				else if (type.toString().equalsIgnoreCase("players")) {
-					replace2.put("tp_type", Utils.I18n("tpPLAYERSTO"));
-					replace2.put("target", pTo.getName());
-				} else
-					replace2.put("tp_type", type.toString());
-				Utils.sI18n(pFrom, "tpRequestSend", replace2);
+		if (!found)
+			return;
+		if (!checkImmunity(pFrom, pTo))
+			return;
+		if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
+				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
+				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
+			replace.put("player", nTo);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return;
+		}
+		if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
+				&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
+						.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
+			replace.put("player", nFrom);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return;
+		}
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
+			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
+			replace.put("fromPlayer", pFrom.getName());
+			replace.put("toPlayer", pTo.getName());
+			Utils.sI18n(sender, "tp", replace);
+		} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
+				&& ACPlayer.getPlayer(pTo.getName()).hasPower(Type.TP_REQUEST)) {
+			ACPlayer.getPlayer(pTo).setTpRequest(new TpRequest(pFrom, pTo));
+			Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
+			final HashMap<String, String> replace2 = new HashMap<String, String>();
+			replace2.put("player", pTo.getName());
+			if (type.toString().equalsIgnoreCase("to"))
+				replace2.put("tp_type", Utils.I18n("tpTO"));
+			else if (type.toString().equalsIgnoreCase("players")) {
+				replace2.put("tp_type", Utils.I18n("tpPLAYERSTO"));
+				replace2.put("target", pTo.getName());
+			} else
+				replace2.put("tp_type", type.toString());
+			Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
-			} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-					&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
-				ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
-				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
-				final HashMap<String, String> replace2 = new HashMap<String, String>();
-				replace2.put("player", pFrom.getName());
-				if (type.toString().equalsIgnoreCase("here"))
-					replace2.put("tp_type", Utils.I18n("tpHERE"));
-				else if (type.toString().equalsIgnoreCase("players")) {
-					replace2.put("tp_type", Utils.I18n("tpPLAYERSFROM"));
-					replace2.put("target", pFrom.getName());
-				} else
-					replace2.put("tp_type", type.toString());
-				Utils.sI18n(pTo, "tpRequestSend", replace2);
+		} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
+				&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
+			ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
+			Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
+			final HashMap<String, String> replace2 = new HashMap<String, String>();
+			replace2.put("player", pFrom.getName());
+			if (type.toString().equalsIgnoreCase("here"))
+				replace2.put("tp_type", Utils.I18n("tpHERE"));
+			else if (type.toString().equalsIgnoreCase("players")) {
+				replace2.put("tp_type", Utils.I18n("tpPLAYERSFROM"));
+				replace2.put("target", pFrom.getName());
+			} else
+				replace2.put("tp_type", type.toString());
+			Utils.sI18n(pTo, "tpRequestSend", replace2);
 
-			} else {
-				ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
-				ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
-				replace.put("fromPlayer", pFrom.getName());
-				replace.put("toPlayer", pTo.getName());
-				Utils.sI18n(sender, "tp", replace);
-			}
+		} else {
+			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
+			replace.put("fromPlayer", pFrom.getName());
+			replace.put("toPlayer", pTo.getName());
+			Utils.sI18n(sender, "tp", replace);
+
 		}
 	}
 

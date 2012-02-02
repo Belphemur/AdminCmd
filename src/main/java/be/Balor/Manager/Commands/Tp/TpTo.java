@@ -46,7 +46,7 @@ public class TpTo extends TeleportCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender) && Utils.checkImmunity(sender, args, 0)) {
+		if (Utils.isPlayer(sender)) {
 			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
 		}
 	}
