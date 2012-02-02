@@ -18,11 +18,14 @@ package be.Balor.Tools.Files;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -43,6 +47,7 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -82,7 +87,39 @@ public class FileManager implements DataManager {
 			instance = new FileManager();
 		return instance;
 	}
-
+	/**
+	 * Get a txt-file and return its content in a String
+	 * 
+	 * @param fileName
+	 *            - The name of the file to be loaded
+	 * @return The content of the file
+	 */
+	public String getTextFile(String fileName) {
+		final StringBuffer result = new StringBuffer();
+		try {
+			final File fileDir = getInnerFile(fileName);
+			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
+					fileDir), "UTF8"));
+			String temp;
+			while ((temp = in.readLine()) != null) {
+				result.append(temp + "\n");
+			}
+			in.close();
+		} catch (final UnsupportedEncodingException e) {
+			// TODO: Better debug code here
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
+		} catch (final IOException e) {
+			// TODO: Better debug code here
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
+		} catch (final Exception e) {
+			// TODO: Better debug code here
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
+		}
+		if (result.length() == 0)
+			return null;
+		else
+			return result.toString().trim();
+	}
 	/**
 	 * @param path
 	 *            the path to set

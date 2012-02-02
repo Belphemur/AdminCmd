@@ -20,12 +20,6 @@ import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,9 +62,7 @@ import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
-import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
@@ -648,39 +640,6 @@ public class Utils {
 		return serverTime;
 	}
 
-	/**
-	 * Get a txt-file and return its content in a String
-	 * 
-	 * @param fileName
-	 *            - The name of the file to be loaded
-	 * @return The content of the file
-	 */
-	public static String getTextFile(String fileName) {
-		final StringBuffer result = new StringBuffer();
-		try {
-			final File fileDir = FileManager.getInstance().getInnerFile(fileName);
-			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
-					fileDir), "UTF8"));
-			String temp;
-			while ((temp = in.readLine()) != null) {
-				result.append(temp + "\n");
-			}
-			in.close();
-		} catch (final UnsupportedEncodingException e) {
-			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
-		} catch (final IOException e) {
-			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
-		} catch (final Exception e) {
-			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
-		}
-		if (result.length() == 0)
-			return null;
-		else
-			return result.toString().trim();
-	}
 
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);

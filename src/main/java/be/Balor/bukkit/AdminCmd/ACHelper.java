@@ -231,7 +231,7 @@ public class ACHelper {
 	}
 
 	private void addLocaleFromFile() {
-		String locale = Utils.getTextFile("motd.txt");
+		String locale = fManager.getTextFile("motd.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motd.txt. Using default values for the MotD!");
 			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
@@ -244,7 +244,7 @@ public class ACHelper {
 			ACLogger.info("motd.txt loaded");
 			Utils.addLocale("MOTD", Utils.colorParser(locale), true);
 		}
-		locale = Utils.getTextFile("motdNewUser.txt");
+		locale = fManager.getTextFile("motdNewUser.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotDNewUser!");
 			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE
@@ -256,7 +256,7 @@ public class ACHelper {
 			ACLogger.info("motdNewUser.txt loaded");
 			Utils.addLocale("MOTDNewUser", Utils.colorParser(locale), true);
 		}
-		locale = Utils.getTextFile("news.txt");
+		locale = fManager.getTextFile("news.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read news.txt. Using default values for the MotD!");
 			Utils.addLocale("NEWS", ChatColor.DARK_GREEN
@@ -265,7 +265,7 @@ public class ACHelper {
 			ACLogger.info("news.txt loaded");
 			Utils.addLocale("NEWS", Utils.colorParser(locale), true);
 		}
-		locale = Utils.getTextFile("rules.txt");
+		locale = fManager.getTextFile("rules.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
 			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
