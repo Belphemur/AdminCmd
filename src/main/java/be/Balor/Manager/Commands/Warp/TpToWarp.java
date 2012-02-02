@@ -37,7 +37,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
- * 
+ *
  */
 public class TpToWarp extends WarpCommand {
 
@@ -52,7 +52,7 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -88,6 +88,11 @@ public class TpToWarp extends WarpCommand {
 					try {
 						Warp warpPoint = ACWorld.getWorld(p.getWorld().getName()).getWarp(
 								args.getString(0));
+						if (warpPoint == null) {
+							replace.put("name", args.getString(0));
+							Utils.sI18n(sender, "errorWarp", replace);
+							return;
+						}
 						loc = warpPoint.loc;
 						replace.put("name", warpPoint.name);
 					} catch (WorldNotLoaded e) {
@@ -110,7 +115,7 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -120,7 +125,7 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
 	 * .CommandSender)
