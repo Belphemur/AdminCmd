@@ -122,6 +122,7 @@ import be.Balor.Manager.Commands.Weather.Rain;
 import be.Balor.Manager.Commands.Weather.Storm;
 import be.Balor.Manager.Commands.Weather.Strike;
 import be.Balor.Manager.Commands.Weather.Thor;
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
@@ -405,9 +406,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		player.addChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
-		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
+		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE));
 		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);

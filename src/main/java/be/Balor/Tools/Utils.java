@@ -1094,7 +1094,10 @@ public class Utils {
 		if (!found)
 			return;
 		if (!checkImmunity(pFrom, pTo))
+		{
+			sI18n(sender, "insufficientLvl");
 			return;
+		}
 		if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
 				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
 				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
