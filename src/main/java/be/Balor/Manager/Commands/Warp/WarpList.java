@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -34,6 +35,7 @@ import be.Balor.World.WorldManager;
  * 
  */
 public class WarpList extends WarpCommand {
+	private PermChild tpAll;
 
 	/**
 	 * 
@@ -57,7 +59,7 @@ public class WarpList extends WarpCommand {
 			String msg = "";
 			Set<String> wp;
 			if (args.hasFlag('a')) {
-				if (!PermissionManager.hasPerm(sender, "admincmd.warp.tp.all")) {
+				if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm())) {
 					return;
 				}
 				wp = WorldManager.getInstance().getAllWarpList();
@@ -83,24 +85,23 @@ public class WarpList extends WarpCommand {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
-		return true;
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
+		tpAll = new PermChild("admincmd.warp.tp.all", bukkitDefault);
+		permParent.addChild(tpAll);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
-	 * .CommandSender)
+	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean permissionCheck(CommandSender sender) {
-		plugin.getPermissionLinker().addPermChild("admincmd.warp.tp.all");
-		return super.permissionCheck(sender);
+	public boolean argsCheck(String... args) {
+		return true;
 	}
 
 }

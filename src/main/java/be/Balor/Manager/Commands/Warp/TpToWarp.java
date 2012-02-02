@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
@@ -40,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  *
  */
 public class TpToWarp extends WarpCommand {
-
+	private PermChild tpAll;
 	/**
 	 *
 	 */
@@ -48,6 +49,7 @@ public class TpToWarp extends WarpCommand {
 		permNode = "admincmd.warp.tp";
 		cmdName = "bal_tpwarp";
 		other = true;
+		
 	}
 
 	/*
@@ -67,7 +69,7 @@ public class TpToWarp extends WarpCommand {
 				HashMap<String, String> replace = new HashMap<String, String>();
 
 				if (args.getString(0).contains(":")) {
-					if (!PermissionManager.hasPerm(sender, "admincmd.warp.tp.all"))
+					if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm()))
 						return;
 					String[] split = args.getString(0).split(":");
 					String world = split[0];
@@ -125,15 +127,14 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see
-	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
-	 * .CommandSender)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
-	public boolean permissionCheck(CommandSender sender) {
-		plugin.getPermissionLinker().addPermChild("admincmd.warp.tp.all");
-		return super.permissionCheck(sender);
+	public void registerBukkitPerm() {
+		super.registerBukkitPerm();
+		tpAll = new PermChild("admincmd.warp.tp.all", bukkitDefault);
+		permParent.addChild(tpAll);
 	}
 
 	private class DelayedTeleport implements Runnable {
