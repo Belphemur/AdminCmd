@@ -130,7 +130,7 @@ public class Whois extends PlayerCommand {
 
 		// Powers
 		for (Entry<String, String> power : actarget.getPowers().entrySet()) {
-			String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE + " : ";
+			String line = ChatColor.GOLD + Type.matchType(power.getKey()).display() + ChatColor.WHITE + " : ";
 			int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(line);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
