@@ -115,7 +115,9 @@ public enum ConfigEnum {
 			+ "Configure the scale used for the time (here 60 sec).\n"
 			+ "It mean if you type /god -t 5 you will be god for 5 minutes"),
 	TIME_STOP("timeInSecBeforeStop", 0, "Time before stopping the server when using the AdminCmd command Stop."),
-	TP_DIFF_WORLD("tpInDiffWorld", true, "Allow users to teleport to other user that are in a different world.");
+	TP_DIFF_WORLD("tpInDiffWorld", true, "Allow users to teleport to other user that are in a different world.\n"
+			+ "If FALSE the player that want to tp to another player that is in an another world will have to have the permission node :\n"
+			+ "admincmd.tp.world.WORLDNAME (where WORLDNAME is the name of the world where the space are replaced by underscore (_) )");
 
 	private final String confVal;
 	private final Object defaultVal;
