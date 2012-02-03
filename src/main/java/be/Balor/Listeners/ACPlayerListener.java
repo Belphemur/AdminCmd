@@ -140,17 +140,36 @@ public class ACPlayerListener implements Listener {
 			Utils.sI18n(event.getPlayer(), "stillInv");
 			InvisibleWorker.getInstance().onJoinEvent(p);
 		}
-		if (ConfigEnum.AUTO_AFK.getBoolean())
-			AFKWorker.getInstance().updateTimeStamp(p);
-		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
-		player.setInformation("immunityLvl",
-				imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new Runnable() {
+
+					@Override
+					public void run() {
+						if (ConfigEnum.AUTO_AFK.getBoolean())
+							AFKWorker.getInstance().updateTimeStamp(p);
+						int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+								"defaultImmunityLvl");
+						player.setInformation("immunityLvl",
+								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+						if (player.hasPower(Type.SPYMSG))
+							ACHelper.getInstance().addSpy(p);
+						player.setInformation("lastConnection", System.currentTimeMillis());
+						if (ConfigEnum.NEWS.getBoolean())
+							Utils.sParsedLocale(p, "NEWS");
+						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
+							Utils.sParsedLocale(p, "Rules");
+						if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
+								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
+							player.setPower(Type.TP_REQUEST);
+
+					}
+				});
+
 		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setJoinMessage(null);
 			ACHelper.getInstance().addFakeQuit(p);
 		}
-		if (player.hasPower(Type.SPYMSG))
-			ACHelper.getInstance().addSpy(p);
+
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
 			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
@@ -169,15 +188,6 @@ public class ACPlayerListener implements Listener {
 				Utils.sParsedLocale(p, "MOTDNewUser");
 		} else if (ConfigEnum.MOTD.getBoolean())
 			Utils.sParsedLocale(p, "MOTD");
-		player.setInformation("lastConnection", System.currentTimeMillis());
-
-		if (ConfigEnum.NEWS.getBoolean())
-			Utils.sParsedLocale(p, "NEWS");
-		if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
-			Utils.sParsedLocale(p, "Rules");
-		if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
-				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
-			player.setPower(Type.TP_REQUEST);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
