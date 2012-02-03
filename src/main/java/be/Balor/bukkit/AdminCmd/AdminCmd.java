@@ -394,7 +394,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
 		PermParent tp = new PermParent("admincmd.tp.*");
+		PermParent worldTp = new PermParent("admincmd.tp.world.*");
 		permissionLinker.addPermParent(tp);
+		permissionLinker.addChildPermParent(worldTp, tp);
 		permissionLinker.addChildPermParent(new PermParent("admincmd.tp.toggle.*"), tp);
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
@@ -420,7 +422,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl",
 				PermissionDefault.FALSE));
 		for (World w : this.getServer().getWorlds())
-			tp.addChild("admincmd.tp." + w.getName().replace(' ', '_'));
+			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);

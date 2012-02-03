@@ -1095,7 +1095,7 @@ public class Utils {
 			return;
 		if (!ConfigEnum.TP_DIFF_WORLD.getBoolean()
 				&& !pFrom.getWorld().equals(pTo.getWorld())
-				&& !PermissionManager.hasPerm(sender, "admincmd.tp."
+				&& !PermissionManager.hasPerm(sender, "admincmd.tp.world."
 						+ pTo.getWorld().getName().replace(' ', '_'), false)) {
 			replace.put("to", pTo.getName());
 			sI18n(sender, "diffWorld", replace);
