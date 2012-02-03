@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -70,7 +72,6 @@ public class Reply extends PlayerCommand {
 				return;
 			}
 			String senderPm = "";
-			String msgPrefix = Utils.I18n("privateTitle");
 			String msg = "";
 			String senderName = "";
 			senderName = pSender.getName();
@@ -82,12 +83,15 @@ public class Reply extends PlayerCommand {
 			String parsed = Utils.colorParser(msg);
 			if (parsed == null)
 				parsed = msg;
-			buddy.sendMessage(msgPrefix + senderPm + parsed);
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("sender", senderPm);
+			replace.put("receiver", Utils.getPlayerName(buddy));
+			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
 			ACHelper.getInstance().setReplyPlayer(buddy, pSender);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
-				sender.sendMessage(msgPrefix + senderPm + parsed);
+				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
 			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
 					+ "-" + buddy.getName() + ": " + parsed;
 			for (Player p : ACHelper.getInstance().getSpyPlayers())
