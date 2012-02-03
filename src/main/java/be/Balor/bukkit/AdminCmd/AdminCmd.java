@@ -21,6 +21,7 @@ import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
+import be.Balor.Listeners.Commands.ACNoDropListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACThorListener;
@@ -67,6 +68,7 @@ import be.Balor.Manager.Commands.Player.KickAllPlayers;
 import be.Balor.Manager.Commands.Player.KickPlayer;
 import be.Balor.Manager.Commands.Player.Kill;
 import be.Balor.Manager.Commands.Player.Mute;
+import be.Balor.Manager.Commands.Player.NoDrop;
 import be.Balor.Manager.Commands.Player.NoPickup;
 import be.Balor.Manager.Commands.Player.Played;
 import be.Balor.Manager.Commands.Player.PlayerList;
@@ -375,6 +377,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
 		CommandManager.getInstance().registerCommand(StopServer.class);
+		if(CommandManager.getInstance().registerCommand(NoDrop.class))
+			pm.registerEvents(new ACNoDropListener(), this);
 	}
 
 	@Override
@@ -476,6 +480,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("godDisabledTarget", ChatColor.DARK_AQUA + "GOD mode disabled for %player");
 		Utils.addLocale("godEnabled", ChatColor.DARK_AQUA + "GOD mode enabled.");
 		Utils.addLocale("godEnabledTarget", ChatColor.DARK_AQUA + "GOD mode enabled for %player");
+		Utils.addLocale("noDropDisabled", ChatColor.DARK_AQUA + "NO DROP mode disabled.");
+		Utils.addLocale("noDropDisabledTarget", ChatColor.DARK_AQUA + "NO DROP mode disabled for %player");
+		Utils.addLocale("noDropEnabled", ChatColor.DARK_AQUA + "NO DROP mode enabled.");
+		Utils.addLocale("noDropEnabledTarget", ChatColor.DARK_AQUA + "NO DROP mode enabled for %player");
 		Utils.addLocale("thorDisabled", ChatColor.DARK_AQUA + "THOR mode disabled.");
 		Utils.addLocale("thorDisabledTarget", ChatColor.DARK_AQUA
 				+ "THOR mode disabled for %player");

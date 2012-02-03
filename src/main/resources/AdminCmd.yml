@@ -651,3 +651,9 @@ acserverstop:
     permissions: admincmd.server.stop
     cmdname: bal_stop
     
+acplayernodrop:
+    command: nodrop [-P player] [-t time]
+    description: "disable the drop for the selected player (-P), for the selected time (-t). The 2 parameters are optional. When trying to drop, it's cancelled, when dying, you keep your items."
+    aliases: [nd,nodrop]
+    cmdname: bal_nodrop
+    
