@@ -267,6 +267,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void registerCmds() {
 		final PluginManager pm = getServer().getPluginManager();
 		boolean banCommands = false;
+		boolean lockCommand = false;
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
@@ -318,7 +319,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Ip.class);
 		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
 			banCommands = true;
-		;
 		if (CommandManager.getInstance().registerCommand(UnBan.class))
 			banCommands = true;
 		if (banCommands)
@@ -362,7 +362,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
 		if (CommandManager.getInstance().registerCommand(LockServer.class))
-			pm.registerEvents(new ACLockedServerListener(), this);
+			lockCommand = true;
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
 		if (CommandManager.getInstance().registerCommand(Eternal.class))
@@ -376,8 +376,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
-		CommandManager.getInstance().registerCommand(StopServer.class);
-		if(CommandManager.getInstance().registerCommand(NoDrop.class))
+		if (CommandManager.getInstance().registerCommand(StopServer.class))
+			lockCommand = true;
+		if (lockCommand)
+			pm.registerEvents(new ACLockedServerListener(), this);
+		if (CommandManager.getInstance().registerCommand(NoDrop.class))
 			pm.registerEvents(new ACNoDropListener(), this);
 	}
 
@@ -413,7 +416,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
-		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE));
+		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl",
+				PermissionDefault.FALSE));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
@@ -481,9 +485,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("godEnabled", ChatColor.DARK_AQUA + "GOD mode enabled.");
 		Utils.addLocale("godEnabledTarget", ChatColor.DARK_AQUA + "GOD mode enabled for %player");
 		Utils.addLocale("noDropDisabled", ChatColor.DARK_AQUA + "NO DROP mode disabled.");
-		Utils.addLocale("noDropDisabledTarget", ChatColor.DARK_AQUA + "NO DROP mode disabled for %player");
+		Utils.addLocale("noDropDisabledTarget", ChatColor.DARK_AQUA
+				+ "NO DROP mode disabled for %player");
 		Utils.addLocale("noDropEnabled", ChatColor.DARK_AQUA + "NO DROP mode enabled.");
-		Utils.addLocale("noDropEnabledTarget", ChatColor.DARK_AQUA + "NO DROP mode enabled for %player");
+		Utils.addLocale("noDropEnabledTarget", ChatColor.DARK_AQUA
+				+ "NO DROP mode enabled for %player");
 		Utils.addLocale("thorDisabled", ChatColor.DARK_AQUA + "THOR mode disabled.");
 		Utils.addLocale("thorDisabledTarget", ChatColor.DARK_AQUA
 				+ "THOR mode disabled for %player");
