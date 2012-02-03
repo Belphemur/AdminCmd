@@ -121,7 +121,10 @@ public class PermParent extends PermChild {
 			ACPluginManager.getServer().getPluginManager()
 					.addPermission(new Permission(permName, permDefault, getChildren()));
 		else
+		{
 			perm.getChildren().putAll(getChildren());
+			perm.recalculatePermissibles();
+		}
 		registered = true;
 	}
 

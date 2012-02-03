@@ -145,7 +145,10 @@ public class PermChild {
 		if (permName == null)
 			return;
 		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null)
+		{
+			bukkitPerm.setDefault(permDefault);
 			return;
+		}
 		bukkitPerm = new Permission(permName, permDefault);
 		ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
 		registered = true;
