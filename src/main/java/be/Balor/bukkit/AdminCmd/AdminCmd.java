@@ -399,7 +399,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
-		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
+		PermParent majorPerm = new PermParent("admincmd.*");
+		permissionLinker.setMajorPerm(majorPerm);
 		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
 		player.addChild("admincmd.player.noreset");
@@ -409,6 +410,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
 		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE));
+		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
 			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);

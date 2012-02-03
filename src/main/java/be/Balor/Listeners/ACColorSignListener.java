@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 /**
@@ -30,6 +31,8 @@ public class ACColorSignListener implements Listener {
 	@EventHandler
 	public void onSignChange(SignChangeEvent event) {
 		if (event.isCancelled())
+			return;
+		if(!PermissionManager.hasPerm(event.getPlayer(), "admincmd.coloredsign.create"))
 			return;
 		String parsed = null;
 		String line;
