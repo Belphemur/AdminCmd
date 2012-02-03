@@ -39,7 +39,7 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACNoDropListener implements Listener {
-	private final Map<String, List<ItemStack>> itemsDrops = new HashMap<String, List<ItemStack>>();
+	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
 
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent event) {
@@ -62,7 +62,7 @@ public class ACNoDropListener implements Listener {
 			items.add(item.clone());
 			item.setAmount(0);
 		}
-		itemsDrops.put(p.getName(), items);
+		itemsDrops.put(p, items);
 	}
 
 	@EventHandler
@@ -71,15 +71,15 @@ public class ACNoDropListener implements Listener {
 		ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.NO_DROP))
 			return;
-		List<ItemStack> items = itemsDrops.get(p.getName());
+		List<ItemStack> items = itemsDrops.get(p);
 		if (items == null)
 			return;
 		p.getInventory().addItem(items.toArray(new ItemStack[items.size()]));
-		itemsDrops.remove(p.getName());
+		itemsDrops.remove(p);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(PlayerQuitEvent event) {
-		itemsDrops.remove(event.getPlayer().getName());
+		itemsDrops.remove(event.getPlayer());
 	}
 }
