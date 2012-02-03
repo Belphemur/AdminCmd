@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -418,6 +419,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		player.addChild("admincmd.player.fly.allowed");
 		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl",
 				PermissionDefault.FALSE));
+		for (World w : this.getServer().getWorlds())
+			tp.addChild("admincmd.tp." + w.getName().replace(' ', '_'));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
 			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
