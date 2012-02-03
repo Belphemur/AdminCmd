@@ -521,7 +521,7 @@ public class ACHelper {
 		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(defaultLvl, 0);
-		if (limit == 0)
+		if (limit == 0 && !type.equals("immunityLvl"))
 			limit = Integer.MAX_VALUE;
 		return limit;
 	}
