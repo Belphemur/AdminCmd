@@ -1093,6 +1093,11 @@ public class Utils {
 
 		if (!found)
 			return;
+		if (!ConfigEnum.TP_DIFF_WORLD.getBoolean() && !pFrom.getWorld().equals(pTo.getWorld())) {
+			replace.put("to", pTo.getName());
+			sI18n(sender, "diffWorld", replace);
+			return;
+		}
 		if (type.equals(Type.Tp.TO) && !checkImmunity(pFrom, pTo)) {
 			sI18n(sender, "insufficientLvl");
 			return;

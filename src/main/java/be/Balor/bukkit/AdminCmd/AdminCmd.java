@@ -753,6 +753,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
 				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
 				+ ChatColor.GOLD + "%sec seconds.");
+		Utils.addLocale("diffWorld", ChatColor.AQUA + "%player" + ChatColor.RED
+				+ " is in a different world as " + ChatColor.DARK_PURPLE + "%to"
+				+ ChatColor.DARK_RED + " . He can't be tp there.");
 		LocaleManager.getInstance().save();
 	}
 }

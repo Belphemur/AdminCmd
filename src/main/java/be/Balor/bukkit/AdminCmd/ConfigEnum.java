@@ -114,7 +114,8 @@ public enum ConfigEnum {
 	SCALE_TIMEOUT("timeOutScale", 60, "When using the parameter -t in power commands (god, fly, etc ...)\n"
 			+ "Configure the scale used for the time (here 60 sec).\n"
 			+ "It mean if you type /god -t 5 you will be god for 5 minutes"),
-	TIME_STOP("timeInSecBeforeStop", 0, "Time before stopping the server when using the AdminCmd command Stop.");
+	TIME_STOP("timeInSecBeforeStop", 0, "Time before stopping the server when using the AdminCmd command Stop."),
+	TP_DIFF_WORLD("tpInDiffWorld", true, "Allow users to teleport to other user that are in a different world.");
 
 	private final String confVal;
 	private final Object defaultVal;
