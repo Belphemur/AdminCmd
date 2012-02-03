@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -50,7 +50,7 @@ public class ACNoDropListener implements Listener {
 	}
 
 	@EventHandler
-	public void onDeath(PlayerDeathEvent event) {
+	public void onDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player p = (Player) event.getEntity();
