@@ -41,6 +41,23 @@ public class KitInstance {
 		return result;
 	}
 
+	/**
+	 * Adding a parent to the kit
+	 * 
+	 * @param parent
+	 */
+	public void addParent(KitInstance parent) {
+		for (MaterialContainer mc : parent.items) {
+			int index = items.indexOf(mc);
+			if (index == -1)
+				items.add(mc);
+			else {
+				MaterialContainer mat = items.get(index);
+				mat.setAmount(mat.getAmount() + mc.getAmount());
+			}
+		}
+	}
+
 	public int getDelay() {
 		return delay;
 	}
@@ -51,4 +68,5 @@ public class KitInstance {
 	public String getName() {
 		return name;
 	}
+
 }

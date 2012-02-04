@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
@@ -549,6 +550,7 @@ public class FileManager implements DataManager {
 		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		ExtendedConfiguration kits = getYml("kits");
+		Map<KitInstance, List<String>> kitParents = new HashMap<KitInstance, List<String>>();
 		Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 				ArmorPart.class);
 		boolean convert = false;
@@ -563,9 +565,11 @@ public class FileManager implements DataManager {
 			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
 			ConfigurationSection kitItems = null;
 			ConfigurationSection armorItems = null;
+			ConfigurationSection parents = null;
 			try {
 				kitItems = kitNode.getConfigurationSection("items");
 				armorItems = kitNode.getConfigurationSection("armor");
+				parents = kitNode.getConfigurationSection("parents");
 			} catch (NullPointerException e) {
 				continue;
 			}
@@ -596,8 +600,8 @@ public class FileManager implements DataManager {
 				kitNode.set("delay", 0);
 				convert = true;
 			}
+			KitInstance kit;
 			if (armorItems != null) {
-
 				for (ArmorPart part : ArmorPart.values()) {
 					String partId = armorItems.getString(part.toString());
 					if (partId == null)
@@ -606,15 +610,26 @@ public class FileManager implements DataManager {
 					if (!m.isNull())
 						armor.put(part, m);
 				}
-				result.put(kitName, new ArmoredKitInstance(kitName, delay,
+				result.put(kitName, kit = new ArmoredKitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items),
 						new EnumMap<Type.ArmorPart, MaterialContainer>(armor)));
 			} else
-				result.put(kitName, new KitInstance(kitName, delay,
+				result.put(kitName, kit = new KitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items)));
+			if (parents != null)
+				kitParents.put(kit, kitNode.getStringList("parents"));
 
 			items.clear();
 			armor.clear();
+		}
+		for (Entry<KitInstance, List<String>> entry : kitParents.entrySet()) {
+			KitInstance kit = entry.getKey();
+			for (String parent : entry.getValue()) {
+				KitInstance parentKit = result.get(parent);
+				if (parentKit == null)
+					continue;
+				kit.addParent(parentKit);
+			}
 		}
 
 		if (convert)
