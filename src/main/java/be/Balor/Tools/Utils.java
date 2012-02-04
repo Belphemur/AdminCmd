@@ -469,8 +469,11 @@ public class Utils {
 			}
 			if (!Utils.checkImmunity(sender, args, 0))
 				return null;
-		} else
+		} else {
+			if (!checkImmunity(sender, target))
+				return null;
 			actarget = ACPlayer.getPlayer(target);
+		}
 		return actarget;
 	}
 
