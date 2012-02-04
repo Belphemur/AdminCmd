@@ -137,6 +137,9 @@ public class Utils {
 	public final static long hourInMillis = minuteInMillis * 60;
 	public final static long dayInMillis = hourInMillis * 24;
 	public final static int secInTick = 20;
+	private static final Character delimiter = '&';
+	public static final Pattern regexColorParser = Pattern.compile(delimiter + "[A-Fa-f]|"
+			+ delimiter + "1[0-5]|" + delimiter + "[0-9]");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -344,10 +347,6 @@ public class Utils {
 
 	}
 
-	public static String colorParser(String toParse) {
-		return colorParser(toParse, "&");
-	}
-
 	/**
 	 * Parse a string and replace the color in it
 	 * 
@@ -355,12 +354,10 @@ public class Utils {
 	 * @param toParse
 	 * @return
 	 */
-	public static String colorParser(String toParse, String delimiter) {
+	public static String colorParser(String toParse) {
 		String ResultString = null;
 		try {
-			final Pattern regex = Pattern.compile(delimiter + "[A-Fa-f]|" + delimiter + "1[0-5]|"
-					+ delimiter + "[0-9]");
-			Matcher regexMatcher = regex.matcher(toParse);
+			Matcher regexMatcher = regexColorParser.matcher(toParse);
 			String result = toParse;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
@@ -372,7 +369,7 @@ public class Utils {
 				}
 				result = regexMatcher.replaceFirst(ChatColor.getByChar(
 						Integer.toHexString(colorint)).toString());
-				regexMatcher = regex.matcher(result);
+				regexMatcher = regexColorParser.matcher(result);
 			}
 			return result;
 		} catch (final Exception ex) {
@@ -652,53 +649,6 @@ public class Utils {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
-		return getUserParam(sender, args, permNode, true);
-	}
-
-	/**
-	 * Get the user using the -P param as indicating the userName and check who
-	 * launched the command.
-	 * 
-	 * @param sender
-	 * @param args
-	 * @param permNode
-	 * @param errorMsg
-	 * @return
-	 */
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
-			boolean errorMsg) {
-		Player target = null;
-		String playerName = args.getValueFlag('P');
-		if (playerName != null) {
-			target = getPlayer(playerName);
-			if (target != null)
-				if (target.equals(sender))
-					return target;
-				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
-					if (checkImmunity(sender, target))
-						return target;
-					else {
-						Utils.sI18n(sender, "insufficientLvl");
-						return null;
-					}
-				} else
-					return null;
-		} else if (isPlayer(sender, false))
-			target = ((Player) sender);
-		else if (errorMsg) {
-			sender.sendMessage("You must type the player name");
-			return target;
-		}
-		if (target == null && errorMsg) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", playerName);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
-		}
-		return target;
-	}
-
 	/**
 	 * Get the user and check who launched the command.
 	 * 
@@ -740,6 +690,53 @@ public class Utils {
 		}
 		return target;
 
+	}
+
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
+		return getUserParam(sender, args, permNode, true);
+	}
+
+	/**
+	 * Get the user using the -P param as indicating the userName and check who
+	 * launched the command.
+	 * 
+	 * @param sender
+	 * @param args
+	 * @param permNode
+	 * @param errorMsg
+	 * @return
+	 */
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
+			boolean errorMsg) {
+		Player target = null;
+		final String playerName = args.getValueFlag('P');
+		if (playerName != null) {
+			target = getPlayer(playerName);
+			if (target != null)
+				if (target.equals(sender))
+					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+					if (checkImmunity(sender, target))
+						return target;
+					else {
+						Utils.sI18n(sender, "insufficientLvl");
+						return null;
+					}
+				} else
+					return null;
+		} else if (isPlayer(sender, false))
+			target = ((Player) sender);
+		else if (errorMsg) {
+			sender.sendMessage("You must type the player name");
+			return target;
+		}
+		if (target == null && errorMsg) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", playerName);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return target;
+		}
+		return target;
 	}
 
 	public static String I18n(String key) {
@@ -886,10 +883,10 @@ public class Utils {
 				limitY, limitX, limitZ, mat));
 		try {
 			sema.acquire();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with acquiring the semaphore", e);
 		}
-		for (SimplifiedLocation loc : okBlocks) {
+		for (final SimplifiedLocation loc : okBlocks) {
 			br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(loc);
 			blocks.push(br);
 			blocksCache.push(br);
@@ -1019,7 +1016,7 @@ public class Utils {
 	public static void sParsedLocale(Player p, String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
-		ACPlayer acPlayer = ACPlayer.getPlayer(p);
+		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
 		final long total = acPlayer.getCurrentPlayedTime();
 		final Long[] time = Utils.transformToElapsedTime(total);
 		replace.put("d", time[0].toString());
