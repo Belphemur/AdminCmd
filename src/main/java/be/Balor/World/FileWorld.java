@@ -146,9 +146,9 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Warp getWarp(String name) throws WorldNotLoaded {
-		if (name == null)
-			throw new WorldNotLoaded(new NullPointerException("Name can't be null"));
+	public Warp getWarp(String name) throws WorldNotLoaded, IllegalArgumentException {
+		if (name == null || (name != null && name.isEmpty()))
+			throw new IllegalArgumentException("Name can't be null or Empty");
 		Object warp = warps.get(name);
 		String warpName = name;
 		if (warp == null) {
