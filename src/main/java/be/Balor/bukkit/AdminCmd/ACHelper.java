@@ -787,7 +787,6 @@ public class ACHelper {
 	 * Reload the "plugin"
 	 */
 	public synchronized void reload() {
-		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
 		FilePlayer.forceSaveList();
 		alias.clear();

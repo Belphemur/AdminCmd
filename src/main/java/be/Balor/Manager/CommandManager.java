@@ -22,7 +22,7 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -171,8 +171,8 @@ public class CommandManager implements CommandExecutor {
 
 	private final HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
 
-	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2, MAX_THREADS, 30,
-			TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2, MAX_THREADS, 60L,
+			TimeUnit.SECONDS, new SynchronousQueue<Runnable>(true));
 
 	private final HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
 
