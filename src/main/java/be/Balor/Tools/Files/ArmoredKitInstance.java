@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 public class ArmoredKitInstance extends KitInstance {
 	private static final int firstArmorItemId = 298;
 	private static final int lastArmorItemId = 317;
-	private final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
+	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 			Type.ArmorPart.class);
 
 	/**
@@ -55,6 +55,10 @@ public class ArmoredKitInstance extends KitInstance {
 					&& e.getValue().getMaterial().getId() >= firstArmorItemId)
 				this.armor.put(e.getKey(), e.getValue());
 
+	}
+
+	public ArmoredKitInstance(KitInstance kit) {
+		super(kit.name, kit.delay, kit.items);
 	}
 
 	/**
@@ -110,5 +114,25 @@ public class ArmoredKitInstance extends KitInstance {
 			}
 		});
 		return armorParts.toArray(new ArmorPart[0]);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Files.KitInstance#addParent(be.Balor.Tools.Files.KitInstance
+	 * )
+	 */
+	@Override
+	public void addParent(KitInstance parent) {
+		super.addParent(parent);
+		if (!(parent instanceof ArmoredKitInstance))
+			return;
+		ArmoredKitInstance armoredParent = (ArmoredKitInstance) parent;
+		for (ArmorPart part : ArmorPart.values()) {
+			if (armor.get(part) == null)
+				armor.put(part, armoredParent.armor.get(part));
+		}
+
 	}
 }

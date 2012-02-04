@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,11 +49,11 @@ import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.io.Files;
@@ -547,13 +548,12 @@ public class FileManager implements DataManager {
 	 * @return
 	 */
 	public Map<String, KitInstance> loadKits() {
-		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
+		Map<String, KitInstance> result = new LinkedHashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		ExtendedConfiguration kits = getYml("kits");
-		Map<KitInstance, List<String>> kitParents = new HashMap<KitInstance, List<String>>();
+		Map<String, List<String>> kitParents = new HashMap<String, List<String>>();
 		Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 				ArmorPart.class);
-		boolean convert = false;
 
 		ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
 		if (kitNodes == null) {
@@ -565,42 +565,35 @@ public class FileManager implements DataManager {
 			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
 			ConfigurationSection kitItems = null;
 			ConfigurationSection armorItems = null;
-			ConfigurationSection parents = null;
+			List<String> parents = null;
 			try {
 				kitItems = kitNode.getConfigurationSection("items");
 				armorItems = kitNode.getConfigurationSection("armor");
-				parents = kitNode.getConfigurationSection("parents");
+				parents = kitNode.getStringList("parents");
 			} catch (NullPointerException e) {
+				DebugLog.INSTANCE.warning("Problem with kit " + kitName);
 				continue;
 			}
 
-			if (kitItems != null) {
+			if (kitItems != null)
 				for (String item : kitItems.getKeys(false)) {
 					MaterialContainer m = Utils.checkMaterial(item);
 					m.setAmount(kitItems.getInt(item, 1));
 					if (!m.isNull())
 						items.add(m);
 				}
-				delay = kitNode.getInt("delay", 0);
-			} else {
-				kitNode.addDefault("items", new HashMap<String, Object>());
-				kitItems = kitNode.getConfigurationSection("items");
-				for (String item : kitNode.getKeys(false)) {
-					if (item.equals("items"))
-						continue;
-					MaterialContainer m = Utils.checkMaterial(item);
-					int amount = kitNode.getInt(item, 1);
-					m.setAmount(amount);
-					if (!m.isNull()) {
-						items.add(m);
-						kitItems.set(item, amount);
-						kitNode.set(item, null);
-					}
-				}
-				kitNode.set("delay", 0);
-				convert = true;
-			}
-			KitInstance kit;
+			delay = kitNode.getInt("delay", 0);
+			/*
+			 * Old convertor code, not used anymore TODO: CLEAN IT. } else {
+			 * kitNode.addDefault("items", new HashMap<String, Object>());
+			 * kitItems = kitNode.getConfigurationSection("items"); for (String
+			 * item : kitNode.getKeys(false)) { if (item.equals("items"))
+			 * continue; MaterialContainer m = Utils.checkMaterial(item); int
+			 * amount = kitNode.getInt(item, 1); m.setAmount(amount); if
+			 * (!m.isNull()) { items.add(m); kitItems.set(item, amount);
+			 * kitNode.set(item, null); } } kitNode.set("delay", 0); convert =
+			 * true; }
+			 */
 			if (armorItems != null) {
 				for (ArmorPart part : ArmorPart.values()) {
 					String partId = armorItems.getString(part.toString());
@@ -610,33 +603,38 @@ public class FileManager implements DataManager {
 					if (!m.isNull())
 						armor.put(part, m);
 				}
-				result.put(kitName, kit = new ArmoredKitInstance(kitName, delay,
+				result.put(kitName, new ArmoredKitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items),
 						new EnumMap<Type.ArmorPart, MaterialContainer>(armor)));
 			} else
-				result.put(kitName, kit = new KitInstance(kitName, delay,
+				result.put(kitName, new KitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items)));
+
 			if (parents != null)
-				kitParents.put(kit, kitNode.getStringList("parents"));
+				kitParents.put(kitName, parents);
+			else
+				ACLogger.info(kitName + " has no parents");
 
 			items.clear();
 			armor.clear();
 		}
-		for (Entry<KitInstance, List<String>> entry : kitParents.entrySet()) {
-			KitInstance kit = entry.getKey();
+		for (Entry<String, List<String>> entry : kitParents.entrySet()) {
+			KitInstance kit = result.get(entry.getKey());
 			for (String parent : entry.getValue()) {
 				KitInstance parentKit = result.get(parent);
 				if (parentKit == null)
 					continue;
+				if (parentKit instanceof ArmoredKitInstance) {
+					kit = new ArmoredKitInstance(kit);
+					result.put(kit.getName(), kit);
+				}
 				kit.addParent(parentKit);
 			}
 		}
 
-		if (convert)
-			try {
-				kits.save();
-			} catch (IOException e) {
-			}
+		/*
+		 * if (convert) try { kits.save(); } catch (IOException e) { }
+		 */
 		return result;
 	}
 
