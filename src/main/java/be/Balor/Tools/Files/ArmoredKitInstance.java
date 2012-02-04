@@ -37,8 +37,6 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * 
  */
 public class ArmoredKitInstance extends KitInstance {
-	private static final int firstArmorItemId = 298;
-	private static final int lastArmorItemId = 317;
 	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 			Type.ArmorPart.class);
 
@@ -50,10 +48,11 @@ public class ArmoredKitInstance extends KitInstance {
 	public ArmoredKitInstance(String name, int delay, List<MaterialContainer> items,
 			Map<Type.ArmorPart, MaterialContainer> armor) {
 		super(name, delay, items);
-		for (Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet())
-			if (lastArmorItemId <= e.getValue().getMaterial().getId()
-					&& e.getValue().getMaterial().getId() >= firstArmorItemId)
-				this.armor.put(e.getKey(), e.getValue());
+		for (Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet()) {
+			if (!e.getKey().isValid(e.getValue().getMaterial().getId()))
+				continue;
+			this.armor.put(e.getKey(), e.getValue());
+		}
 
 	}
 

@@ -16,7 +16,9 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -148,17 +150,21 @@ public enum Type {
 	}
 
 	public enum ArmorPart {
-		BOOTS(0),
-		LEGS(1),
-		CHEST(2),
-		HEAD(3);
+		BOOTS(0, 301),
+		LEGS(1, 300),
+		CHEST(2, 299),
+		HEAD(3, 298);
 		private final int placeInInventory;
+		private final List<Integer> possibleId = new ArrayList<Integer>();
+		private static final int nbEquipment = 5;
 
 		/**
 		 * @param placeInInventory
 		 */
-		private ArmorPart(int placeInInventory) {
+		private ArmorPart(int placeInInventory, int firstPossible) {
 			this.placeInInventory = placeInInventory;
+			for (int i = 0; i < nbEquipment; i++)
+				possibleId.add((i * 4) + firstPossible);
 		}
 
 		/**
@@ -170,6 +176,16 @@ public enum Type {
 
 		public String toString() {
 			return super.toString().toLowerCase();
-		};
+		}
+
+		/**
+		 * Check if the id is valid for that ArmorPart
+		 * 
+		 * @param toCheck
+		 * @return
+		 */
+		public boolean isValid(int toCheck) {
+			return possibleId.contains(toCheck);
+		}
 	}
 }
