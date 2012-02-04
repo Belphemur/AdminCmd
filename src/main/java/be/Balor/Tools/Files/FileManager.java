@@ -624,7 +624,7 @@ public class FileManager implements DataManager {
 				KitInstance parentKit = result.get(parent);
 				if (parentKit == null)
 					continue;
-				if (parentKit instanceof ArmoredKitInstance) {
+				if (parentKit instanceof ArmoredKitInstance && !(kit instanceof ArmoredKitInstance)) {
 					kit = new ArmoredKitInstance(kit);
 					result.put(kit.getName(), kit);
 				}
