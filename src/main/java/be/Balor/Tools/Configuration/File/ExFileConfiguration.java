@@ -241,8 +241,8 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}
-
-		Files.createParentDirs(file);
+		if (!file.getParentFile().exists())
+			Files.createParentDirs(file);
 		if (!file.exists())
 			file.createNewFile();
 
