@@ -92,7 +92,7 @@ public class ACHelper {
 	private List<String> groups;
 	private AdminCmd coreInstance;
 	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
-	private final HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
+	private Map<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private final ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
@@ -756,11 +756,7 @@ public class ACHelper {
 
 		addLocaleFromFile();
 
-		final Map<String, KitInstance> kitsLoaded = fManager.loadKits();
-		for (final String kit : kitsLoaded.keySet()) {
-			kits.put(kit, kitsLoaded.get(kit));
-			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);
-		}
+		kits = fManager.loadKits();
 		final Map<String, BannedPlayer> bans = dataManager.loadBan();
 		for (final Entry<String, BannedPlayer> ban : bans.entrySet()) {
 			if (checkBan(ban.getValue()))
