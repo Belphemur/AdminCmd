@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +51,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.io.Files;
@@ -547,6 +549,8 @@ public class FileManager implements DataManager {
 		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		ExtendedConfiguration kits = getYml("kits");
+		Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
+				ArmorPart.class);
 		boolean convert = false;
 
 		ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
@@ -558,8 +562,10 @@ public class FileManager implements DataManager {
 			int delay = 0;
 			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
 			ConfigurationSection kitItems = null;
+			ConfigurationSection armorItems = null;
 			try {
 				kitItems = kitNode.getConfigurationSection("items");
+				armorItems = kitNode.getConfigurationSection("armor");
 			} catch (NullPointerException e) {
 				continue;
 			}
@@ -590,10 +596,25 @@ public class FileManager implements DataManager {
 				kitNode.set("delay", 0);
 				convert = true;
 			}
+			if (armorItems != null) {
 
-			result.put(kitName, new KitInstance(kitName, delay, new ArrayList<MaterialContainer>(
-					items)));
+				for (ArmorPart part : ArmorPart.values()) {
+					String partId = armorItems.getString(part.toString());
+					if (partId == null)
+						continue;
+					MaterialContainer m = Utils.checkMaterial(partId);
+					if (!m.isNull())
+						armor.put(part, m);
+				}
+				result.put(kitName, new ArmoredKitInstance(kitName, delay,
+						new ArrayList<MaterialContainer>(items),
+						new EnumMap<Type.ArmorPart, MaterialContainer>(armor)));
+			} else
+				result.put(kitName, new KitInstance(kitName, delay,
+						new ArrayList<MaterialContainer>(items)));
+
 			items.clear();
+			armor.clear();
 		}
 
 		if (convert)

@@ -11,3 +11,11 @@ kits:
         items:
           'dirt': 64
           'grass': 2
+    darmor:
+        delay: -1
+        armor:
+          head: 310
+          chest: 311
+          legs: 312
+          boots: 313
+          

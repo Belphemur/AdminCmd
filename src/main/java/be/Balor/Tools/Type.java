@@ -146,4 +146,30 @@ public enum Type {
 			return val;
 		}
 	}
+
+	public enum ArmorPart {
+		BOOTS(0),
+		LEGS(1),
+		CHEST(2),
+		HEAD(3);
+		private final int placeInInventory;
+
+		/**
+		 * @param placeInInventory
+		 */
+		private ArmorPart(int placeInInventory) {
+			this.placeInInventory = placeInInventory;
+		}
+
+		/**
+		 * @return the placeInInventory
+		 */
+		public int getPlaceInInventory() {
+			return placeInInventory;
+		}
+
+		public String toString() {
+			return super.toString().toLowerCase();
+		};
+	}
 }
