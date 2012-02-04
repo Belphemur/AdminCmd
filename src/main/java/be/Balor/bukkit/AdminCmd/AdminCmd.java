@@ -425,9 +425,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
-			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
+			PermParent.ALONE.addChild(new PermChild("admincmd.maxHomeByUser." + i,
+					PermissionDefault.FALSE));
+			PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl." + i,
+					PermissionDefault.FALSE));
+			PermParent.ALONE.addChild(new PermChild("admincmd.maxItemAmount." + i,
+					PermissionDefault.FALSE));
 		}
 
 	}
