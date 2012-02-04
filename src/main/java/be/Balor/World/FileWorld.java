@@ -147,6 +147,8 @@ public class FileWorld extends ACWorld {
 	 */
 	@Override
 	public Warp getWarp(String name) throws WorldNotLoaded {
+		if (name == null)
+			throw new WorldNotLoaded(new NullPointerException("Name can't be null"));
 		Object warp = warps.get(name);
 		String warpName = name;
 		if (warp == null) {
