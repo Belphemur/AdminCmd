@@ -133,6 +133,7 @@ import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.HelpLister;
@@ -177,7 +178,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	public void onEnable() {
-		ACPluginManager.setServer(getServer());
+		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());

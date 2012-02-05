@@ -79,18 +79,16 @@ class YamlConstructor extends Constructor {
 	}
 
 	private final HashMap<String, Class<?>> classMap = new HashMap<String, Class<?>>();
+	private final ClassLoader pluginClassLoader;
 
 	/**
 	 * 
 	 */
-	public YamlConstructor() {
+	public YamlConstructor(ClassLoader classLoader) {
 		super();
 		this.yamlConstructors.put(new Tag("!tpRequest"), new ConstructTpRequest());
 		this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());
-	}
-
-	public YamlConstructor(Class<? extends Object> theRoot) {
-		super(theRoot);
+		this.pluginClassLoader = classLoader;
 	}
 
 	public void addClassInfo(Class<? extends Object> c) {
@@ -109,11 +107,10 @@ class YamlConstructor extends Constructor {
 	 */
 	@Override
 	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-		final Class<?> cl = classMap.get(name);
+		Class<?> cl = classMap.get(name);
 		if (cl == null)
-			return super.getClassForName(name);
-		else
-			return cl;
+			return Class.forName(name, true, pluginClassLoader);
+		return cl;
 	}
 
 	/**

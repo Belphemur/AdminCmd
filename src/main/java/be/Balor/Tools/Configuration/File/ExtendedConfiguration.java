@@ -54,7 +54,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
 	private static Representer yamlRepresenter = new ExtendedRepresenter();
-	protected final static YamlConstructor ymlConstructor = new YamlConstructor();
+	protected static YamlConstructor ymlConstructor;
 	protected final static Yaml yaml = new Yaml(ymlConstructor, yamlRepresenter, yamlOptions);
 
 	/**
@@ -93,6 +93,10 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		}
 
 		return config;
+	}
+
+	public static void setClassLoader(ClassLoader loader) {
+		ymlConstructor = new YamlConstructor(loader);
 	}
 
 	/**
