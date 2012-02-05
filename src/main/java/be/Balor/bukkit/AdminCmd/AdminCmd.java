@@ -771,6 +771,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ChatColor.GOLD + "-%param .");
 		Utils.addLocale("eggDontExists", ChatColor.RED + "This Egg Type (" + ChatColor.GOLD
 				+ "%egg" + ChatColor.RED + ") don't exists.");
+		Utils.addLocale("eggEnabled", ChatColor.DARK_AQUA + "EGG " + ChatColor.GOLD + "(%egg)"
+				+ ChatColor.AQUA + " mode enabled.");
+		Utils.addLocale("eggNormal", ChatColor.GREEN + "EGG return to normality.");
 		LocaleManager.getInstance().save();
 	}
 }

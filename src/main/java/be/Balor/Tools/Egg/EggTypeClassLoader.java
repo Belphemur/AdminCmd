@@ -41,7 +41,7 @@ import be.Balor.Manager.Permissions.PermissionLinker;
  */
 public class EggTypeClassLoader extends ClassLoader {
 	private static final Map<String, Class<? extends EggType<?>>> classes = new HashMap<String, Class<? extends EggType<?>>>();
-	private static final PermParent parent = new PermParent("admincmd.egg.*");
+	private static final Map<String, Class<? extends EggType<?>>> classesSimpleName = new HashMap<String, Class<? extends EggType<?>>>();
 	private static final Pattern regex = Pattern.compile("\\w.+Egg");
 
 	/**
@@ -54,11 +54,11 @@ public class EggTypeClassLoader extends ClassLoader {
 	public static void addPackage(Plugin plugin, String packageName) {
 		PermissionLinker linker = PermissionLinker.getPermissionLinker(plugin == null ? "alone"
 				: plugin.getDescription().getName());
+		PermParent parent = new PermParent("admincmd.egg.*");
 		linker.addPermParent(parent);
 		linker.setMajorPerm(new PermParent("admincmd.*"));
 		for (Class<?> clazz : getClassesInPackage(packageName))
 			if (EggType.class.isAssignableFrom(clazz)) {
-				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
 					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
 					if (!annotation.permission().isEmpty())
@@ -68,8 +68,24 @@ public class EggTypeClassLoader extends ClassLoader {
 					parent.addChild("admincmd.egg."
 							+ simpleName.substring(0, simpleName.length() - 4).toLowerCase());
 				}
+				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
+				classesSimpleName.put(clazz.getSimpleName(), (Class<? extends EggType<?>>) clazz);
 			}
 		linker.registerAllPermParent();
+	}
+
+	/**
+	 * Return a list of all the SimpleName of all the class
+	 * 
+	 * @return
+	 */
+	public static SortedSet<String> getClassSimpleNameList() {
+		SortedSet<String> result = new TreeSet<String>();
+
+		for (Entry<String, Class<? extends EggType<?>>> entry : classes.entrySet()) {
+			result.add(entry.getValue().getSimpleName());
+		}
+		return result;
 	}
 
 	private Class<? extends EggType<?>> matchClassName(String search) throws ClassNotFoundException {
@@ -101,6 +117,8 @@ public class EggTypeClassLoader extends ClassLoader {
 	@Override
 	protected Class<? extends EggType<?>> findClass(String name) throws ClassNotFoundException {
 		Class<? extends EggType<?>> clazz = classes.get(name);
+		if (clazz == null)
+			clazz = classesSimpleName.get(name);
 		if (clazz == null)
 			clazz = matchClassName(name);
 		return clazz;
