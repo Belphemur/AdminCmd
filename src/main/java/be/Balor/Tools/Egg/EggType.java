@@ -22,6 +22,9 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
+import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
+import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)

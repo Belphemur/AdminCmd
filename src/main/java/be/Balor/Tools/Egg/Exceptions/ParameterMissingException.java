@@ -14,24 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg;
+package be.Balor.Tools.Egg.Exceptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class DontHaveThePermissionException extends Exception {
+public class ParameterMissingException extends ProcessingArgsException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8920472001709861953L;
+	private static final long serialVersionUID = 4437719310884213242L;
 
 	/**
-	 * 
+	 * @param message
 	 */
-	public DontHaveThePermissionException(String message) {
-		super(message);
+	public ParameterMissingException(String message) {
+		super("missingParam", message);
+	}
+
+	/**
+	 * @param message
+	 * @param ex
+	 */
+	public ParameterMissingException(String message, Throwable ex) {
+		super("missingParam", message, ex);
 	}
 
 }

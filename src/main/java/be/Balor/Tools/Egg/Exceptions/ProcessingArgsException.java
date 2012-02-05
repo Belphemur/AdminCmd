@@ -14,32 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg;
+package be.Balor.Tools.Egg.Exceptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ParameterMissingException extends ProcessingArgsException {
+public class ProcessingArgsException extends IllegalArgumentException {
+
+	protected final String type;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6083647989627639647L;
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4437719310884213242L;
+	public ProcessingArgsException(String type, String message) {
+		super(message);
+		this.type = type;
 
-	/**
-	 * @param message
-	 */
-	public ParameterMissingException(String message) {
-		super("missingParam", message);
 	}
 
 	/**
-	 * @param message
-	 * @param ex
+	 * 
 	 */
-	public ParameterMissingException(String message, Throwable ex) {
-		super("missingParam", message, ex);
+	public ProcessingArgsException(String type, String message, Throwable ex) {
+		super(message, ex);
+		this.type = type;
 	}
 
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
 }

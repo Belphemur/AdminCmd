@@ -14,41 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg;
+package be.Balor.Tools.Egg.Exceptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ProcessingArgsException extends IllegalArgumentException {
-
-	protected final String type;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6083647989627639647L;
+public class DontHaveThePermissionException extends Exception {
 
 	/**
 	 * 
 	 */
-	public ProcessingArgsException(String type, String message) {
+	private static final long serialVersionUID = 8920472001709861953L;
+
+	/**
+	 * 
+	 */
+	public DontHaveThePermissionException(String message) {
 		super(message);
-		this.type = type;
-
 	}
 
-	/**
-	 * 
-	 */
-	public ProcessingArgsException(String type, String message, Throwable ex) {
-		super(message, ex);
-		this.type = type;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
 }

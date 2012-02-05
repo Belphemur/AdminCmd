@@ -27,10 +27,10 @@ import org.junit.Test;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
-import be.Balor.Tools.Egg.DontHaveThePermissionException;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.EggTypeClassLoader;
-import be.Balor.Tools.Egg.ProcessingArgsException;
+import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
+import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)

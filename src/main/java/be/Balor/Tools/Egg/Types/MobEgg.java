@@ -26,8 +26,8 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.CreaturesInEgg;
 import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.ParameterMissingException;
-import be.Balor.Tools.Egg.ProcessingArgsException;
+import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
+import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)

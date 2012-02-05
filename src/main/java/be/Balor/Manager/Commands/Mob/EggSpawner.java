@@ -27,11 +27,11 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Egg.DontHaveThePermissionException;
 import be.Balor.Tools.Egg.EggPermissionLister;
 import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.ParameterMissingException;
-import be.Balor.Tools.Egg.ProcessingArgsException;
+import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
+import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
+import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.Tools.Egg.Types.NormalEgg;
 
 /**

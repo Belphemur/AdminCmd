@@ -23,7 +23,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.ProcessingArgsException;
+import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**

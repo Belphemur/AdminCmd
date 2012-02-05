@@ -22,7 +22,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Egg.EggPermission;
 import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.ProcessingArgsException;
+import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
