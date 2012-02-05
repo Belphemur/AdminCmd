@@ -767,6 +767,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("diffWorld", ChatColor.AQUA + "%player" + ChatColor.RED
 				+ " is in a different world as " + ChatColor.DARK_PURPLE + "%to"
 				+ ChatColor.DARK_RED + " . He can't be tp there.");
+		Utils.addLocale("eggArgError",
+				"The parameter -e is needed to know which type of Egg you want.");
+		Utils.addLocale("eggClassError", "This EggType does't exists : ");
+		Utils.addLocale("MobEggMParam", "This command need the parameter -m for the mob.");
 		LocaleManager.getInstance().save();
 	}
 }

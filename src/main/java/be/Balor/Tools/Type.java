@@ -47,6 +47,7 @@ public enum Type {
 	FAKEQUIT(Category.SUPER_POWER),
 	ETERNAL(Category.SUPER_POWER),
 	NO_DROP(Category.SUPER_POWER),
+	EGG(Category.SUPER_POWER),
 	CUSTOM(Category.MISC);
 
 	private static final Map<String, Type> lookupName = new HashMap<String, Type>();
@@ -188,4 +189,5 @@ public enum Type {
 			return possibleId.contains(toCheck);
 		}
 	}
+
 }
