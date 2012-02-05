@@ -48,9 +48,6 @@ public class FileWorld extends ACWorld {
 	private final ConfigurationSection warps;
 	private final ExConfigurationSection informations;
 	private final ExConfigurationSection mobLimits;
-	static {
-		ExtendedConfiguration.registerClass(SimpleLocation.class);
-	}
 
 	/**
 	 * @param name

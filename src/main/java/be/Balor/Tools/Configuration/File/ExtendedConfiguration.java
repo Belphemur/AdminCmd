@@ -54,8 +54,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
 	private static Representer yamlRepresenter = new ExtendedRepresenter();
-	protected static YamlConstructor ymlConstructor;
-	protected final static Yaml yaml = new Yaml(ymlConstructor, yamlRepresenter, yamlOptions);
+	protected static Yaml yaml;
 
 	/**
 	 * Creates a new {@link ExtendedConfiguration}, loading from the given file.
@@ -96,16 +95,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	}
 
 	public static void setClassLoader(ClassLoader loader) {
-		ymlConstructor = new YamlConstructor(loader);
-	}
-
-	/**
-	 * When using JavaBean class in the YML, you have to register them first.
-	 * 
-	 * @param c
-	 */
-	public static void registerClass(Class<? extends Object> c) {
-		ymlConstructor.addClassInfo(c);
+		yaml = new Yaml(new YamlConstructor(loader), yamlRepresenter, yamlOptions);
 	}
 
 	@Override

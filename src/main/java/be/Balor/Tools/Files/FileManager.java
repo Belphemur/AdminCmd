@@ -46,7 +46,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.BannedPlayer;
-import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.ArmorPart;
@@ -72,8 +71,6 @@ public class FileManager implements DataManager {
 	private ExtendedConfiguration lastLoadedConf = null;
 	private static String fileVersion = null;
 	static {
-		ExtendedConfiguration.registerClass(BannedPlayer.class);
-		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
 		try {
 			Properties gitVersion = new Properties();
 			gitVersion.load(FileManager.class.getResourceAsStream("/git.properties"));

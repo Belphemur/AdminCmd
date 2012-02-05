@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import be.Balor.Player.BannedPlayer;
-import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 
 /**
@@ -44,8 +43,8 @@ public class ExtendedConfigurationTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
 		file = new File("test.yml");
-		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);		
 		conf.add("test", "blah");
 		conf.createSection("yatta").set("test", "blah");
