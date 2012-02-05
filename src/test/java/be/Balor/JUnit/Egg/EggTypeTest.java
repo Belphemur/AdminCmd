@@ -31,7 +31,6 @@ import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.EggTypeClassLoader;
 import be.Balor.Tools.Egg.ProcessingArgsException;
 
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -39,12 +38,13 @@ import be.Balor.Tools.Egg.ProcessingArgsException;
 public class EggTypeTest {
 	@Test
 	public void registeringNewEggs() throws ProcessingArgsException, DontHaveThePermissionException {
-		EggTypeClassLoader.addPackage("be.Balor.JUnit.Egg");
+		EggTypeClassLoader.addPackage(null, "be.Balor.JUnit.Egg");
 		assertTrue(EggType.createEggType(null, new CommandArgs("-e Test -m Test")) instanceof TestEgg);
 	}
 
 	@Test
-	public void serializationOfEggType() throws IOException, InvalidConfigurationException, ProcessingArgsException, DontHaveThePermissionException {
+	public void serializationOfEggType() throws IOException, InvalidConfigurationException,
+			ProcessingArgsException, DontHaveThePermissionException {
 		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
 		EggType<?> egg = EggType.createEggType(null, new CommandArgs("-e Test -t"));
 		File test = new File("testEgg.yml");

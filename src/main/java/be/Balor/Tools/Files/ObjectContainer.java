@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import be.Balor.Tools.TpRequest;
+import be.Balor.Tools.Egg.EggType;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -61,7 +62,7 @@ public class ObjectContainer {
 	}
 
 	/**
-	 * Gets a TpRequest at a location. This will either return an String or
+	 * Gets a TpRequest at a location. This will either return a TpRequest or
 	 * null, with null meaning that no configuration value exists at that
 	 * location. If the object at the particular location is not actually a
 	 * TpRequest, it will return null.
@@ -72,6 +73,17 @@ public class ObjectContainer {
 		if (obj == null || !(obj instanceof TpRequest))
 			return null;
 		return (TpRequest) obj;
+	}
+
+	/**
+	 * Check if the object is a EggType, and return it.
+	 * 
+	 * @return EggType or null if not an EggType.
+	 */
+	public EggType<?> getEggType() {
+		if (obj == null || !(obj instanceof EggType<?>))
+			return null;
+		return (EggType<?>) obj;
 	}
 
 	/**
@@ -427,6 +439,5 @@ public class ObjectContainer {
 			return Arrays.toString(((List) obj).toArray(new String[] {}));
 		return obj.toString();
 	}
-
 
 }

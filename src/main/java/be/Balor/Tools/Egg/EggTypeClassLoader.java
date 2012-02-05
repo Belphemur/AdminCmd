@@ -30,8 +30,10 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.bukkit.plugin.Plugin;
+
 import be.Balor.Manager.Permissions.PermParent;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.Manager.Permissions.PermissionLinker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -41,10 +43,6 @@ public class EggTypeClassLoader extends ClassLoader {
 	private static final Map<String, Class<? extends EggType<?>>> classes = new HashMap<String, Class<? extends EggType<?>>>();
 	private static final PermParent parent = new PermParent("admincmd.egg.*");
 	private static final Pattern regex = Pattern.compile("\\w.+Egg");
-	static {
-		if (ACPluginManager.getCorePlugin() != null)
-			ACPluginManager.getCorePlugin().getPermissionLinker().addPermParent(parent);
-	}
 
 	/**
 	 * Add a Package that containing the EggType class. The Class must have a
@@ -53,7 +51,11 @@ public class EggTypeClassLoader extends ClassLoader {
 	 * @param packageName
 	 */
 	@SuppressWarnings("unchecked")
-	public static void addPackage(String packageName) {
+	public static void addPackage(Plugin plugin, String packageName) {
+		PermissionLinker linker = PermissionLinker.getPermissionLinker(plugin == null ? "alone"
+				: plugin.getDescription().getName());
+		linker.addPermParent(parent);
+		linker.setMajorPerm(new PermParent("admincmd.*"));
 		for (Class<?> clazz : getClassesInPackage(packageName))
 			if (EggType.class.isAssignableFrom(clazz)) {
 				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
@@ -67,7 +69,7 @@ public class EggTypeClassLoader extends ClassLoader {
 							+ simpleName.substring(0, simpleName.length() - 4).toLowerCase());
 				}
 			}
-
+		linker.registerAllPermParent();
 	}
 
 	private Class<? extends EggType<?>> matchClassName(String search) throws ClassNotFoundException {

@@ -18,7 +18,7 @@ package be.Balor.Tools.Egg;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class DontHaveThePermissionException extends Exception {
 
@@ -26,5 +26,12 @@ public class DontHaveThePermissionException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = 8920472001709861953L;
+
+	/**
+	 * 
+	 */
+	public DontHaveThePermissionException(String message) {
+		super(message);
+	}
 
 }

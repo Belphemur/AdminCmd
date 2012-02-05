@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -59,8 +60,11 @@ public abstract class EggType<T> {
 	 * 
 	 * @param player
 	 * @return
+	 * @throws DontHaveThePermissionException
+	 *             when the player don't have the permission, with the message
+	 *             to display to the user
 	 */
-	protected boolean checkPermission(Player player) {
+	protected boolean checkPermission(Player player) throws DontHaveThePermissionException {
 		String perm;
 		if (this.getClass().isAnnotationPresent(EggPermission.class))
 			perm = this.getClass().getAnnotation(EggPermission.class).permission();
@@ -70,7 +74,9 @@ public abstract class EggType<T> {
 		}
 		if (perm == null || (perm != null && perm.isEmpty()))
 			return true;
-		return PermissionManager.hasPerm(player, perm);
+		if (!PermissionManager.hasPerm(player, perm, false))
+			throw new DontHaveThePermissionException(Utils.I18n("errorNotPerm", "p", perm));
+		return true;
 	}
 
 	public T getValue() {
@@ -112,8 +118,7 @@ public abstract class EggType<T> {
 		} catch (IllegalAccessException e) {
 			throw new ProcessingArgsException("IllegalAccess", className, e);
 		}
-		if (!eggType.checkPermission(player))
-			throw new DontHaveThePermissionException();
+		eggType.checkPermission(player);
 		eggType.processArguments(player, args);
 		return eggType;
 	}

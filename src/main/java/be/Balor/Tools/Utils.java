@@ -994,7 +994,7 @@ public class Utils {
 			sI18n(sender, "timePaused", "world", w.getName());
 
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-				ACPluginManager.getPluginInstance("Core"), new SetTime(w, newtime));
+				ACPluginManager.getCorePlugin(), new SetTime(w, newtime));
 	}
 
 	public static void sI18n(CommandSender sender, String key) {

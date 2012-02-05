@@ -17,6 +17,7 @@ import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Listeners.Commands.ACBanListener;
 import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
+import be.Balor.Listeners.Commands.ACEggListener;
 import be.Balor.Listeners.Commands.ACFireballListener;
 import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
@@ -149,13 +150,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
-
-	/**
-	 * @param name
-	 */
-	public AdminCmd() {
-		super("Core");
-	}
 
 	@Override
 	public void onDisable() {
@@ -386,9 +380,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACLockedServerListener(), this);
 		if (CommandManager.getInstance().registerCommand(NoDrop.class))
 			pm.registerEvents(new ACNoDropListener(), this);
-		if(CommandManager.getInstance().registerCommand(EggSpawner.class))
-		{
-			EggTypeClassLoader.addPackage("be.Balor.Tools.Egg.Types");
+		if (CommandManager.getInstance().registerCommand(EggSpawner.class)) {
+			EggTypeClassLoader.addPackage(this, "be.Balor.Tools.Egg.Types");
+			pm.registerEvents(new ACEggListener(), this);
 		}
 	}
 
@@ -773,10 +767,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("diffWorld", ChatColor.AQUA + "%player" + ChatColor.RED
 				+ " is in a different world as " + ChatColor.DARK_PURPLE + "%to"
 				+ ChatColor.DARK_RED + " . He can't be tp there.");
-		Utils.addLocale("eggArgError",
-				"The parameter -e is needed to know which type of Egg you want.");
-		Utils.addLocale("eggClassError", "This EggType does't exists : ");
-		Utils.addLocale("MobEggMParam", "This command need the parameter -m for the mob.");
+		Utils.addLocale("paramMissing", ChatColor.RED + "This command need the parameter "
+				+ ChatColor.GOLD + "-%param .");
+		Utils.addLocale("eggDontExists", ChatColor.RED + "This Egg Type (" + ChatColor.GOLD
+				+ "%egg" + ChatColor.RED + ") don't exists.");
 		LocaleManager.getInstance().save();
 	}
 }
