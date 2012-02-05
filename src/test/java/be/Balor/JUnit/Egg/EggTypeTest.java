@@ -39,7 +39,7 @@ import be.Balor.Tools.Egg.ProcessingArgsException;
 public class EggTypeTest {
 	@Before
 	public void registerClass() {
-		EggTypeClassLoader.addPackage(null, "be.Balor.JUnit.Egg");
+		EggTypeClassLoader.addPackage(new TestPlugin(), "be.Balor.JUnit.Egg");
 	}
 
 	@Test

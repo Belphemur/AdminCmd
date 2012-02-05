@@ -110,7 +110,7 @@ public class EggSpawner extends MobCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 1;
+		return args != null;
 	}
 
 }

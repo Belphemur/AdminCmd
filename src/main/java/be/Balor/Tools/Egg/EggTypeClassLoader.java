@@ -51,13 +51,13 @@ public class EggTypeClassLoader extends ClassLoader {
 	 * @param packageName
 	 */
 	@SuppressWarnings("unchecked")
-	public static void addPackage(Plugin plugin, String packageName) {
-		PermissionLinker linker = PermissionLinker.getPermissionLinker(plugin == null ? "alone"
-				: plugin.getDescription().getName());
+	public synchronized static void addPackage(Plugin plugin, String packageName) {
+		PermissionLinker linker = PermissionLinker.getPermissionLinker(plugin.getDescription()
+				.getName());
 		PermParent parent = new PermParent("admincmd.egg.*");
 		linker.addPermParent(parent);
 		linker.setMajorPerm(new PermParent("admincmd.*"));
-		for (Class<?> clazz : getClassesInPackage(packageName))
+		for (Class<?> clazz : getClassesInPackage(packageName, plugin.getClass().getClassLoader()))
 			if (EggType.class.isAssignableFrom(clazz)) {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
 					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
@@ -82,8 +82,8 @@ public class EggTypeClassLoader extends ClassLoader {
 	public static SortedSet<String> getClassSimpleNameList() {
 		SortedSet<String> result = new TreeSet<String>();
 
-		for (Entry<String, Class<? extends EggType<?>>> entry : classes.entrySet()) {
-			result.add(entry.getValue().getSimpleName());
+		for (String name : classesSimpleName.keySet()) {
+			result.add(name);
 		}
 		return result;
 	}
@@ -125,20 +125,20 @@ public class EggTypeClassLoader extends ClassLoader {
 	}
 
 	/**
-	 * Scans all classes accessible from the context class loader which belong
-	 * to the given package and subpackages. Adapted from
+	 * /** Scans all classes accessible from the context class loader which
+	 * belong to the given package and subpackages. Adapted from
 	 * http://snippets.dzone.com/posts/show/4831 and extended to support use of
 	 * JAR files
 	 * 
 	 * @param packageName
 	 *            The base package
-	 * @param regexFilter
-	 *            an optional class name pattern.
-	 * @return The classes
+	 * 
+	 * @param classLoader
+	 *            the parent class loader.
+	 * @return
 	 */
-	private static List<Class<?>> getClassesInPackage(String packageName) {
+	private static List<Class<?>> getClassesInPackage(String packageName, ClassLoader classLoader) {
 		try {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			assert classLoader != null;
 			String path = packageName.replace('.', '/');
 			Enumeration<URL> resources = classLoader.getResources(path);
@@ -153,7 +153,7 @@ public class EggTypeClassLoader extends ClassLoader {
 			}
 			List<Class<?>> classList = new ArrayList<Class<?>>();
 			for (String clazz : classes) {
-				classList.add(Class.forName(clazz));
+				classList.add(Class.forName(clazz, true, classLoader));
 			}
 			return classList;
 		} catch (Exception e) {
