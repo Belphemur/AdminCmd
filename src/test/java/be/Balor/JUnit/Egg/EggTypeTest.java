@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.junit.Before;
 import org.junit.Test;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -36,9 +37,13 @@ import be.Balor.Tools.Egg.ProcessingArgsException;
  * 
  */
 public class EggTypeTest {
+	@Before
+	public void registerClass() {
+		EggTypeClassLoader.addPackage(null, "be.Balor.JUnit.Egg");
+	}
+
 	@Test
 	public void registeringNewEggs() throws ProcessingArgsException, DontHaveThePermissionException {
-		EggTypeClassLoader.addPackage(null, "be.Balor.JUnit.Egg");
 		assertTrue(EggType.createEggType(null, new CommandArgs("-E Test -m Test")) instanceof TestEgg);
 	}
 
