@@ -32,8 +32,8 @@ import java.util.zip.ZipInputStream;
 
 import org.bukkit.plugin.Plugin;
 
-import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionLinker;
+
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -52,26 +52,24 @@ public class EggTypeClassLoader extends ClassLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized static void addPackage(Plugin plugin, String packageName) {
-		PermissionLinker linker = PermissionLinker.getPermissionLinker(plugin.getDescription()
-				.getName());
-		PermParent parent = new PermParent("admincmd.egg.*");
-		linker.addPermParent(parent);
-		linker.setMajorPerm(new PermParent("admincmd.*"));
-		for (Class<?> clazz : getClassesInPackage(packageName, plugin.getClass().getClassLoader()))
+
+		for (Class<?> clazz : getClassesInPackage(packageName, plugin.getClass().getClassLoader())) {
 			if (EggType.class.isAssignableFrom(clazz)) {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
 					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
 					if (!annotation.permission().isEmpty())
-						parent.addChild(annotation.permission());
+						PermissionLinker.addOnTheFly(annotation.permission(), "admincmd.egg.*");
 				} else {
 					String simpleName = clazz.getSimpleName();
-					parent.addChild("admincmd.egg."
-							+ simpleName.substring(0, simpleName.length() - 3).toLowerCase());
+					PermissionLinker.addOnTheFly(
+							"admincmd.egg."
+									+ simpleName.substring(0, simpleName.length() - 3)
+											.toLowerCase(), "admincmd.egg.*");
 				}
 				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
 				classesSimpleName.put(clazz.getSimpleName(), (Class<? extends EggType<?>>) clazz);
 			}
-		linker.registerAllPermParent();
+		}
 	}
 
 	/**

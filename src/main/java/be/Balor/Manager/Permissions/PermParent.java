@@ -124,7 +124,7 @@ public class PermParent extends PermChild {
 					.addPermission(new Permission(permName, permDefault, getChildren()));
 		else {
 			perm.getChildren().putAll(getChildren());
-			perm.recalculatePermissibles();
+			perm.setDefault(permDefault);
 		}
 		registered = true;
 	}

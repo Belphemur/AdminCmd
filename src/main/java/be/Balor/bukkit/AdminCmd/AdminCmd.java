@@ -410,6 +410,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));
 		PermParent majorPerm = new PermParent("admincmd.*");
 		permissionLinker.setMajorPerm(majorPerm);
 		player.addChild("admincmd.player.bypass");
