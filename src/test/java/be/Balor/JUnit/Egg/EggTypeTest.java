@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.junit.Before;
 import org.junit.Test;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -32,12 +33,18 @@ import be.Balor.Tools.Egg.ParameterMissingException;
 import be.Balor.Tools.Egg.ProcessingArgsException;
 import be.Balor.Tools.Egg.Types.ExplosionEgg;
 import be.Balor.Tools.Egg.Types.MobEgg;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.AdminCmd;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class EggTypeTest {
+	@Before
+	public void initEggTypes() {
+		EggTypeClassLoader.addPackage("be.Balor.Tools.Egg.Types");		
+	}
 
 	/**
 	 * Test method for

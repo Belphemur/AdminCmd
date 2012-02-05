@@ -47,6 +47,7 @@ import be.Balor.Manager.Commands.Items.RemoveBlackList;
 import be.Balor.Manager.Commands.Items.Repair;
 import be.Balor.Manager.Commands.Items.RepairAll;
 import be.Balor.Manager.Commands.Mob.ChangeMobSpawner;
+import be.Balor.Manager.Commands.Mob.EggSpawner;
 import be.Balor.Manager.Commands.Mob.KillMob;
 import be.Balor.Manager.Commands.Mob.MobLimit;
 import be.Balor.Manager.Commands.Mob.SpawnMob;
@@ -136,6 +137,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Egg.EggTypeClassLoader;
 import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -384,6 +386,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACLockedServerListener(), this);
 		if (CommandManager.getInstance().registerCommand(NoDrop.class))
 			pm.registerEvents(new ACNoDropListener(), this);
+		if(CommandManager.getInstance().registerCommand(EggSpawner.class))
+		{
+			EggTypeClassLoader.addPackage("be.Balor.Tools.Egg.Types");
+		}
 	}
 
 	@Override

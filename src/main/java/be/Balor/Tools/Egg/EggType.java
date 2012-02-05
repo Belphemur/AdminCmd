@@ -28,9 +28,6 @@ public abstract class EggType<T> {
 	protected T value;
 
 	private final static ClassLoader eggTypeLoader = new EggTypeClassLoader();
-	static {
-		EggTypeClassLoader.addPackage("be.Balor.Tools.Egg.Types");
-	}
 
 	/**
 	 * This function will be executed by the listener when the player have the

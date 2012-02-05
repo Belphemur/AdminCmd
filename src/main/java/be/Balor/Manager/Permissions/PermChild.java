@@ -144,8 +144,9 @@ public class PermChild {
 			return;
 		if (permName == null)
 			return;
-		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null)
-		{
+		if (ACPluginManager.getServer() == null)
+			return;
+		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null) {
 			bukkitPerm.setDefault(permDefault);
 			return;
 		}
@@ -161,7 +162,9 @@ public class PermChild {
 		return bukkitPerm;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -169,5 +172,5 @@ public class PermChild {
 		return "PermChild [permName=" + permName + ", set=" + set + ", permDefault=" + permDefault
 				+ ", registered=" + registered + "]";
 	}
-	
+
 }

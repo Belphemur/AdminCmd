@@ -30,12 +30,21 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import be.Balor.Manager.Permissions.PermParent;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class EggTypeClassLoader extends ClassLoader {
 	private static final Map<String, Class<? extends EggType<?>>> classes = new HashMap<String, Class<? extends EggType<?>>>();
+	private static final PermParent parent = new PermParent("admincmd.egg.*");
+	private static final Pattern regex = Pattern.compile("\\w.+Egg");
+	static {
+		if (ACPluginManager.getCorePlugin() != null)
+			ACPluginManager.getCorePlugin().getPermissionLinker().addPermParent(parent);
+	}
 
 	/**
 	 * Add a Package that containing the EggType class. The Class must have a
@@ -45,9 +54,19 @@ public class EggTypeClassLoader extends ClassLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void addPackage(String packageName) {
-		for (Class<?> clazz : getClassesInPackage(packageName, "\\w.+Egg"))
-			if (EggType.class.isAssignableFrom(clazz))
+		for (Class<?> clazz : getClassesInPackage(packageName))
+			if (EggType.class.isAssignableFrom(clazz)) {
 				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
+				if (clazz.isAnnotationPresent(EggPermission.class)) {
+					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
+					if (!annotation.permission().isEmpty())
+						parent.addChild(annotation.permission());
+				} else {
+					String simpleName = clazz.getSimpleName();
+					parent.addChild("admincmd.egg."
+							+ simpleName.substring(0, simpleName.length() - 3).toLowerCase());
+				}
+			}
 
 	}
 
@@ -97,11 +116,7 @@ public class EggTypeClassLoader extends ClassLoader {
 	 *            an optional class name pattern.
 	 * @return The classes
 	 */
-	private static List<Class<?>> getClassesInPackage(String packageName, String regexFilter) {
-		Pattern regex = null;
-		if (regexFilter != null)
-			regex = Pattern.compile(regexFilter);
-
+	private static List<Class<?>> getClassesInPackage(String packageName) {
 		try {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			assert classLoader != null;
@@ -114,7 +129,7 @@ public class EggTypeClassLoader extends ClassLoader {
 			}
 			SortedSet<String> classes = new TreeSet<String>();
 			for (String directory : dirs) {
-				classes.addAll(findClasses(directory, packageName, regex));
+				classes.addAll(findClasses(directory, packageName));
 			}
 			List<Class<?>> classList = new ArrayList<Class<?>>();
 			for (String clazz : classes) {
@@ -141,8 +156,7 @@ public class EggTypeClassLoader extends ClassLoader {
 	 *            an optional class name pattern. e.g. .*Test
 	 * @return The classes
 	 */
-	private static SortedSet<String> findClasses(String path, String packageName, Pattern regex)
-			throws Exception {
+	private static SortedSet<String> findClasses(String path, String packageName) throws Exception {
 		TreeSet<String> classes = new TreeSet<String>();
 		if (path.startsWith("file:") && path.contains("!")) {
 			String[] split = path.split("!");
@@ -168,7 +182,7 @@ public class EggTypeClassLoader extends ClassLoader {
 			if (file.isDirectory()) {
 				assert !file.getName().contains(".");
 				classes.addAll(findClasses(file.getAbsolutePath(),
-						packageName + "." + file.getName(), regex));
+						packageName + "." + file.getName()));
 			} else if (file.getName().endsWith(".class")) {
 				String className = packageName + '.'
 						+ file.getName().substring(0, file.getName().length() - 6);

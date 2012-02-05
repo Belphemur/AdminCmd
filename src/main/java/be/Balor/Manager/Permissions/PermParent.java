@@ -37,8 +37,7 @@ public class PermParent extends PermChild {
 	public final static PermParent ALONE = new PermParent(null);
 
 	public PermParent(String perm) {
-		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
-				PermissionDefault.OP);
+		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1), PermissionDefault.OP);
 	}
 
 	public PermParent(String perm, String compare, PermissionDefault def) {
@@ -115,13 +114,14 @@ public class PermParent extends PermChild {
 			child.registerPermission();
 		if (permName == null)
 			return;
+		if (ACPluginManager.getServer() == null)
+			return;
 		final Permission perm = ACPluginManager.getServer().getPluginManager()
 				.getPermission(permName);
 		if (perm == null)
 			ACPluginManager.getServer().getPluginManager()
 					.addPermission(new Permission(permName, permDefault, getChildren()));
-		else
-		{
+		else {
 			perm.getChildren().putAll(getChildren());
 			perm.recalculatePermissibles();
 		}

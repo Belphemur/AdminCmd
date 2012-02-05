@@ -14,36 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg.Types;
+package be.Balor.Tools.Egg;
 
-import org.bukkit.event.player.PlayerEggThrowEvent;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Egg.EggPermission;
-import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.ProcessingArgsException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-@EggPermission(permission = "")
-public class NormalEgg extends EggType<Object> {
-
-	/* (non-Javadoc)
-	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.PlayerEggThrowEvent)
-	 */
-	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands.CommandArgs)
-	 */
-	@Override
-	public void processArguments(CommandArgs args) throws ProcessingArgsException {
-		
-	}
-
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.CLASS)
+public @interface EggPermission {
+	String permission();
 }

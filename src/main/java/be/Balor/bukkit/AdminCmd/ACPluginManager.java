@@ -43,7 +43,7 @@ public class ACPluginManager {
 			.synchronizedMap(new HashMap<String, AbstractAdminCmdPlugin>());
 	private final static Server server = Bukkit.getServer();
 	public static Metrics metrics = null;
-	public static AbstractAdminCmdPlugin corePlugin;
+	private static AbstractAdminCmdPlugin corePlugin;
 
 	/**
 	 * @return the instance
