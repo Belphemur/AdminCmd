@@ -73,4 +73,14 @@ public class CreaturesInEgg {
 		this.nb = nb;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CreaturesInEgg [type=" + type.getName() + ", nb=" + nb + "]";
+	}
+
 }

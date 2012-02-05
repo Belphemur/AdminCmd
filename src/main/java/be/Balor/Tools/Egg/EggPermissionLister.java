@@ -43,8 +43,6 @@ public class EggPermissionLister {
 	}
 
 	void addPermission(Class<? extends EggType<?>> clazz, Permission perm) {
-		if (perm == null)
-			return;
 		permissions.put(clazz, perm);
 	}
 
@@ -58,6 +56,10 @@ public class EggPermissionLister {
 	public SortedSet<String> getEggTypeNames(Player player) {
 		SortedSet<String> result = new TreeSet<String>();
 		for (Entry<Class<? extends EggType<?>>, Permission> entry : permissions.entrySet()) {
+			if (entry.getValue() == null) {
+				result.add(entry.getKey().getSimpleName());
+				continue;
+			}
 			if (!PermissionManager.hasPerm(player, entry.getValue(), false))
 				continue;
 			result.add(entry.getKey().getSimpleName());
