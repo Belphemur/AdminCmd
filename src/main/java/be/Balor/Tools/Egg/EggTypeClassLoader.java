@@ -58,7 +58,7 @@ public class EggTypeClassLoader extends ClassLoader {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
 					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
 					if (!annotation.permission().isEmpty())
-						PermissionLinker.addOnTheFly(annotation.permission(), "admincmd.egg.*");
+						PermissionLinker.addOnTheFly(annotation.permission(), annotation.permissionParent());
 				} else {
 					String simpleName = clazz.getSimpleName();
 					PermissionLinker.addOnTheFly(

@@ -28,7 +28,7 @@ import be.Balor.Tools.Egg.ProcessingArgsException;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-@EggPermission(permission = "")
+@EggPermission(permission = "", permissionParent = "")
 public class NormalEgg extends EggType<Object> {
 
 	/*

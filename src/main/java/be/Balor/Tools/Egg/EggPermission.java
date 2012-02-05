@@ -24,6 +24,12 @@ import java.lang.annotation.Target;
 /**
  * Represent a Permission to use an egg in the EggSpawner commmand.
  * 
+ * @param permission
+ *            represent the permission of the EggType.
+ * @param permissionParent
+ *            represent to which permission the permission will be the child.
+ *            Can be empty if you don't want any parent.
+ * 
  * @author Balor (aka Antoine Aflalo)
  * 
  */
@@ -31,4 +37,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EggPermission {
 	String permission();
+
+	String permissionParent();
 }

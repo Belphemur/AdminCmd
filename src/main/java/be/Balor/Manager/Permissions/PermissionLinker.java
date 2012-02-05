@@ -50,10 +50,13 @@ public class PermissionLinker {
 		if (ACPluginManager.getServer() == null)
 			return null;
 		if ((child = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
-			Permission parent = ACPluginManager.getServer().getPluginManager()
-					.getPermission(parentNode);
 			child = new Permission(permNode, PermissionDefault.OP);
 			ACPluginManager.getServer().getPluginManager().addPermission(child);
+			if (parentNode.isEmpty())
+				return child;
+			Permission parent = ACPluginManager.getServer().getPluginManager()
+					.getPermission(parentNode);
+
 			if (parent == null) {
 				parent = new Permission(parentNode, PermissionDefault.OP);
 				ACPluginManager.getServer().getPluginManager().addPermission(parent);
