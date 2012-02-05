@@ -80,6 +80,5 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 			return;
 		}
 		value = new CreaturesInEgg(ct, Integer.valueOf(nbre).byteValue());
-
 	}
 }
