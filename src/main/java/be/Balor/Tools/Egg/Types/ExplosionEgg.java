@@ -21,8 +21,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.ProcessingArgsException;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -44,13 +46,27 @@ public class ExplosionEgg extends EggType<Float> {
 		egg.getWorld().createExplosion(egg.getLocation(), value);
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands
+	 * .CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player player, CommandArgs args) throws ProcessingArgsException {
-		// TODO Auto-generated method stub
-		
+	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
+		float power = ConfigEnum.DVULCAN.getFloat();
+		if (args.hasFlag('p')) {
+			String flag = args.getValueFlag('p');
+			try {
+				power = Float.parseFloat(flag);
+			} catch (NumberFormatException e) {
+				Utils.sI18n(sender, "NaN", "number", flag);
+				return;
+			}
+		}
+		value = power;
+
 	}
 
 }
