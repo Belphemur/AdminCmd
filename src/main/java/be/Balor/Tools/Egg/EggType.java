@@ -105,10 +105,10 @@ public abstract class EggType<T> {
 	 */
 	public static EggType<?> createEggType(Player player, CommandArgs args)
 			throws ProcessingArgsException, DontHaveThePermissionException {
-		if (!args.hasFlag('e'))
-			throw new ParameterMissingException("e");
+		if (!args.hasFlag('E'))
+			throw new ParameterMissingException("E");
 		EggType<?> eggType;
-		String className = args.getValueFlag('e');
+		String className = args.getValueFlag('E');
 		try {
 			eggType = matchEggClass(className);
 		} catch (ClassNotFoundException e) {
