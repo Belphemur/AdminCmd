@@ -388,5 +388,5 @@ commands:
     usage: /<command> <-P player> <-t time>
   bal_egg:
     description: Command to change the behavior of the Egg throwing.
-    aliases: [nd,nodrop]
+    aliases: [egg,et]
     usage: /<command> -E eggType <other param depending on the eggType>
