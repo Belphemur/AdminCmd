@@ -119,7 +119,8 @@ public enum ConfigEnum {
 			+ "If FALSE the player that want to tp to another player that is in an another world will have to have the permission node :\n"
 			+ "admincmd.tp.world.WORLDNAME (where WORLDNAME is the name of the world where the space are replaced by underscore (_) )"),
 	ARMOR_KIT_OVERRIDE("armorKitOverride", true, "When using an armored kit, if this options is set to true,"
-			+ " it will override what the player is wearing to replace it by the armor of the kit.");
+			+ " it will override what the player is wearing to replace it by the armor of the kit."),
+	DEGG_KILL_RADIUS("defaultEggKillRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command.");
 
 	private final String confVal;
 	private final Object defaultVal;
