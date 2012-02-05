@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -25,25 +26,42 @@ import be.Balor.Tools.Egg.ProcessingArgsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 @EggPermission(permission = "")
 public class NormalEgg extends EggType<Object> {
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.PlayerEggThrowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.
+	 * PlayerEggThrowEvent)
 	 */
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
-		
+
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands
+	 * .CommandArgs)
 	 */
 	@Override
-	public void processArguments(CommandArgs args) throws ProcessingArgsException {
-		
+	protected void processArguments(Player player, CommandArgs args) throws ProcessingArgsException {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Egg.EggType#checkPermission(org.bukkit.entity.Player)
+	 */
+	@Override
+	protected boolean checkPermission(Player player) {
+		return true;
 	}
 
 }

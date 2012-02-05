@@ -22,6 +22,7 @@ package be.Balor.Tools.Egg;
  */
 public class ProcessingArgsException extends IllegalArgumentException {
 
+	protected final String type;
 	/**
 	 * 
 	 */
@@ -30,14 +31,24 @@ public class ProcessingArgsException extends IllegalArgumentException {
 	/**
 	 * 
 	 */
-	public ProcessingArgsException(String message) {
+	public ProcessingArgsException(String type, String message) {
 		super(message);
+		this.type = type;
+
 	}
 
 	/**
 	 * 
 	 */
-	public ProcessingArgsException(String message, Throwable ex) {
+	public ProcessingArgsException(String type, String message, Throwable ex) {
 		super(message, ex);
+		this.type = type;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
 	}
 }

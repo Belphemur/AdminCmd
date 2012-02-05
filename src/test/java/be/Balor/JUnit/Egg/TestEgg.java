@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.JUnit.Egg;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -48,12 +49,22 @@ public class TestEgg extends EggType<Boolean> {
 	 * .CommandArgs)
 	 */
 	@Override
-	public void processArguments(CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(Player player, CommandArgs args) throws ProcessingArgsException {
 		if (args.hasFlag('t'))
 			value = true;
 		else
 			value = false;
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Egg.EggType#checkPermission(org.bukkit.entity.Player)
+	 */
+	@Override
+	protected boolean checkPermission(Player player) {
+		return true;
 	}
 
 }

@@ -17,6 +17,7 @@
 package be.Balor.Tools.Egg.Types;
 
 import org.bukkit.entity.Egg;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -47,7 +48,7 @@ public class ExplosionEgg extends EggType<Float> {
 	 * @see be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void processArguments(CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(Player player, CommandArgs args) throws ProcessingArgsException {
 		// TODO Auto-generated method stub
 		
 	}

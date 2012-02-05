@@ -22,76 +22,39 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.junit.Before;
 import org.junit.Test;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Egg.DontHaveThePermissionException;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.EggTypeClassLoader;
-import be.Balor.Tools.Egg.ParameterMissingException;
 import be.Balor.Tools.Egg.ProcessingArgsException;
-import be.Balor.Tools.Egg.Types.ExplosionEgg;
-import be.Balor.Tools.Egg.Types.MobEgg;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
-import be.Balor.bukkit.AdminCmd.AdminCmd;
+
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class EggTypeTest {
-	@Before
-	public void initEggTypes() {
-		EggTypeClassLoader.addPackage("be.Balor.Tools.Egg.Types");		
-	}
-
-	/**
-	 * Test method for
-	 * {@link be.Balor.Tools.Egg.EggType#createEggType(be.Balor.Manager.Commands.CommandArgs)}
-	 * .
-	 */
 	@Test
-	public void testExplosionType() {
-		assertTrue(EggType.createEggType(new CommandArgs("-e ExplosionEgg -p 1.5")) instanceof ExplosionEgg);
-	}
-
-	@Test
-	public void testMobType() {
-		assertTrue(EggType.createEggType(new CommandArgs("-e Mo -m Test")) instanceof MobEgg);
-	}
-
-	@Test
-	public void testMobType2() {
-		try {
-			EggType.createEggType(new CommandArgs("-e Mo"));
-		} catch (ParameterMissingException e) {
-			assertTrue(true);
-			return;
-		} catch (ProcessingArgsException e) {
-
-		}
-		assertTrue(false);
-	}
-
-	@Test
-	public void registeringNewEggs() {
+	public void registeringNewEggs() throws ProcessingArgsException, DontHaveThePermissionException {
 		EggTypeClassLoader.addPackage("be.Balor.JUnit.Egg");
-		assertTrue(EggType.createEggType(new CommandArgs("-e Test -m Test")) instanceof TestEgg);
+		assertTrue(EggType.createEggType(null, new CommandArgs("-e Test -m Test")) instanceof TestEgg);
 	}
 
 	@Test
-	public void serializationOfEggType() throws IOException, InvalidConfigurationException {
+	public void serializationOfEggType() throws IOException, InvalidConfigurationException, ProcessingArgsException, DontHaveThePermissionException {
 		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
-		EggType<?> egg = EggType.createEggType(new CommandArgs("-e Test -t"));
+		EggType<?> egg = EggType.createEggType(null, new CommandArgs("-e Test -t"));
 		File test = new File("testEgg.yml");
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(test);
 		conf.set("egg", egg);
-		conf.set("egg2", EggType.createEggType(new CommandArgs("-e Test")));
+		conf.set("egg2", EggType.createEggType(null, new CommandArgs("-e Test")));
 		conf.save();
 		conf.reload();
-		assertEquals(EggType.createEggType(new CommandArgs("-e Test -t")), conf.get("egg"));
-		assertEquals(EggType.createEggType(new CommandArgs("-e Test")), conf.get("egg2"));
+		assertEquals(EggType.createEggType(null, new CommandArgs("-e Test -t")), conf.get("egg"));
+		assertEquals(EggType.createEggType(null, new CommandArgs("-e Test")), conf.get("egg2"));
 		test.deleteOnExit();
 
 	}

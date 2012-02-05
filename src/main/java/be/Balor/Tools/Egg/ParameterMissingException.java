@@ -18,7 +18,7 @@ package be.Balor.Tools.Egg;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ParameterMissingException extends ProcessingArgsException {
 
@@ -31,7 +31,7 @@ public class ParameterMissingException extends ProcessingArgsException {
 	 * @param message
 	 */
 	public ParameterMissingException(String message) {
-		super(message);
+		super("missingParam", message);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ParameterMissingException extends ProcessingArgsException {
 	 * @param ex
 	 */
 	public ParameterMissingException(String message, Throwable ex) {
-		super(message, ex);
+		super("missingParam", message, ex);
 	}
 
 }

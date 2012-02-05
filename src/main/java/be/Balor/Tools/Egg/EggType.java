@@ -43,12 +43,16 @@ public abstract class EggType<T> {
 	/**
 	 * Will be called by the command {@link EggSpawner} to set the value
 	 * 
+	 * @param player
+	 *            Player that sended the command.
 	 * @param args
 	 *            argument that will be used to set the EggType.
+	 * 
 	 * @throws ProcessingArgsException
 	 *             when there is a problem in the arguments
 	 */
-	public abstract void processArguments(CommandArgs args) throws ProcessingArgsException;
+	protected abstract void processArguments(Player player, CommandArgs args)
+			throws ProcessingArgsException;
 
 	/**
 	 * Check if the user have the permission to use this Egg
@@ -56,7 +60,7 @@ public abstract class EggType<T> {
 	 * @param player
 	 * @return
 	 */
-	public boolean checkPermission(Player player) {
+	protected boolean checkPermission(Player player) {
 		String perm;
 		if (this.getClass().isAnnotationPresent(EggPermission.class))
 			perm = this.getClass().getAnnotation(EggPermission.class).permission();
@@ -77,7 +81,24 @@ public abstract class EggType<T> {
 		this.value = value;
 	}
 
-	public static EggType<?> createEggType(CommandArgs args) throws ProcessingArgsException {
+	/**
+	 * Will create the Egg that can be assigned later to the player. This method
+	 * check if the player has the permission to use that egg and if the
+	 * arguments of the command are right.
+	 * 
+	 * @param player
+	 *            That execute the EggSpawn command.
+	 * @param args
+	 *            Provided by the EggSpawn command.
+	 * @return an EggType of the chosen type if every test is passed.
+	 * @throws ProcessingArgsException
+	 *             if there is a problem while processing the arguments, like a
+	 *             Parameter missing, or some other error.
+	 * @throws DontHaveThePermissionException
+	 *             if the player don't have the permission to use that egg
+	 */
+	public static EggType<?> createEggType(Player player, CommandArgs args)
+			throws ProcessingArgsException, DontHaveThePermissionException {
 		if (!args.hasFlag('e'))
 			throw new ParameterMissingException("e");
 		EggType<?> eggType;
@@ -85,13 +106,15 @@ public abstract class EggType<T> {
 		try {
 			eggType = matchEggClass(className);
 		} catch (ClassNotFoundException e) {
-			throw new ProcessingArgsException(className, e);
+			throw new ProcessingArgsException("classNotFound", className, e);
 		} catch (InstantiationException e) {
-			throw new ProcessingArgsException(className, e);
+			throw new ProcessingArgsException("instance", className, e);
 		} catch (IllegalAccessException e) {
-			throw new ProcessingArgsException(className, e);
+			throw new ProcessingArgsException("IllegalAccess", className, e);
 		}
-		eggType.processArguments(args);
+		if (!eggType.checkPermission(player))
+			throw new DontHaveThePermissionException();
+		eggType.processArguments(player, args);
 		return eggType;
 	}
 

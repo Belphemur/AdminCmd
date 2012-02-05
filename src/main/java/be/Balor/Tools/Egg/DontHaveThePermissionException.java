@@ -16,19 +16,15 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * Represent a Permission to use an egg in the EggSpawner commmand.
- * 
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EggPermission {
-	String permission();
+public class DontHaveThePermissionException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8920472001709861953L;
+
 }

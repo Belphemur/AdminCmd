@@ -16,9 +16,14 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
+import java.util.HashMap;
+
+import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.CreaturesInEgg;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.ParameterMissingException;
@@ -52,9 +57,29 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 	 * .CommandArgs)
 	 */
 	@Override
-	public void processArguments(CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
 		if (!args.hasFlag('m'))
 			throw new ParameterMissingException("m");
-	}
+		int nbre = 1;
+		String valFlag = args.getValueFlag('n');
+		String mob = args.getValueFlag('m');
+		if (args.hasFlag('n'))
+			try {
+				nbre = Integer.parseInt(valFlag);
+			} catch (NumberFormatException e) {
+				Utils.sI18n(sender, "NaN", "number", valFlag);
+				return;
+			}
+		CreatureType ct = null;
 
+		ct = CreatureType.fromName(mob);
+		if (ct == null) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("mob", mob);
+			Utils.sI18n(sender, "errorMob", replace);
+			return;
+		}
+		value = new CreaturesInEgg(ct, Integer.valueOf(nbre).byteValue());
+
+	}
 }
