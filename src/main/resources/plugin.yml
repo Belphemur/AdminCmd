@@ -386,3 +386,7 @@ commands:
     description: disable the drop for the selected player. When trying to drop, it's cancelled, when dying, you keep your items.
     aliases: [nd,nodrop]
     usage: /<command> <-P player> <-t time>
+  bal_egg:
+    description: Command to change the behavior of the Egg throwing.
+    aliases: [nd,nodrop]
+    usage: /<command> -E eggType <other param depending on the eggType>
