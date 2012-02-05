@@ -172,6 +172,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 				if (e.getContextMark() == null) {
 					ACLogger.severe("File : " + file
 							+ "\n You have to correct the error manualy in the file.", e);
+					corrupted = true;
 					return;
 				}
 				removeLineFromFile(e.getContextMark().getLine());
@@ -185,8 +186,11 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			} catch (final ParserException e) {
 				ACLogger.severe("File : " + file
 						+ "\n You have to correct the error manualy in the file.", e);
+				corrupted = true;
+				return;
 
 			} catch (final Throwable ex) {
+				corrupted = true;
 				throw new InvalidConfigurationException(
 						"Specified contents is not a valid Configuration", ex);
 			}
@@ -208,6 +212,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			if (input != null) {
 				convertMapsToSections(input, this);
 			}
+			corrupted = false;
 		} finally {
 			lock.unlock();
 		}
