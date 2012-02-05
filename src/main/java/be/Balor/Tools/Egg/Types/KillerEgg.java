@@ -16,8 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.EntityLiving;
@@ -53,7 +53,7 @@ public class KillerEgg extends EggType<Integer> {
 		event.setHatching(false);
 		final Location loc = event.getEgg().getLocation();
 		event.getEgg().remove();
-		final List<EntityLiving> entities = new CopyOnWriteArrayList<EntityLiving>();
+		final List<EntityLiving> entities = new ArrayList<EntityLiving>();
 		final CraftPlayer p = (CraftPlayer) event.getPlayer();
 		final World w = p.getWorld();
 		for (Object entity : ((CraftWorld) w).getHandle().entityList)
@@ -64,28 +64,20 @@ public class KillerEgg extends EggType<Integer> {
 
 					@Override
 					public void run() {
+						int count = 0;
 						for (EntityLiving entity : entities) {
 							if (entity.equals(p.getHandle())) {
-								entities.remove(entity);
 								continue;
 							}
 							Location entityLoc = new Location(w, entity.locX, entity.locY,
 									entity.locZ, entity.yaw, entity.pitch);
 							if (entityLoc.distance(loc) > value)
-								entities.remove(entity);
+								continue;
+							entity.die(DamageSource.playerAttack(p.getHandle()));
+							entity.die();
+							count++;
 						}
-						ACPluginManager.scheduleSyncTask(new Runnable() {
-							int count = 0;
-
-							@Override
-							public void run() {
-								for (EntityLiving entity : entities) {
-									entity.die(DamageSource.playerAttack(p.getHandle()));
-									count++;
-								}
-								p.sendMessage(String.valueOf(count) + " killed.");
-							}
-						});
+						p.sendMessage(String.valueOf(count) + " killed.");
 					}
 				});
 	}
