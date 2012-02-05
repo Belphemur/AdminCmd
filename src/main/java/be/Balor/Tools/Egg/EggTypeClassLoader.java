@@ -30,10 +30,10 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.Permissions.PermissionLinker;
-
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,44 +54,34 @@ public class EggTypeClassLoader extends ClassLoader {
 	public synchronized static void addPackage(Plugin plugin, String packageName) {
 
 		for (Class<?> clazz : getClassesInPackage(packageName, plugin.getClass().getClassLoader())) {
+			Permission perm = null;
 			if (EggType.class.isAssignableFrom(clazz)) {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
 					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
 					if (!annotation.permission().isEmpty())
-						PermissionLinker.addOnTheFly(annotation.permission(), annotation.permissionParent());
+						perm = PermissionLinker.addOnTheFly(annotation.permission(),
+								annotation.permissionParent());
 				} else {
 					String simpleName = clazz.getSimpleName();
-					PermissionLinker.addOnTheFly(
+					perm = PermissionLinker.addOnTheFly(
 							"admincmd.egg."
 									+ simpleName.substring(0, simpleName.length() - 3)
 											.toLowerCase(), "admincmd.egg.*");
 				}
 				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
 				classesSimpleName.put(clazz.getSimpleName(), (Class<? extends EggType<?>>) clazz);
+				EggPermissionLister.INSTANCE.addPermission((Class<? extends EggType<?>>) clazz,
+						perm);
 			}
 		}
-	}
-
-	/**
-	 * Return a list of all the SimpleName of all the class
-	 * 
-	 * @return
-	 */
-	public static SortedSet<String> getClassSimpleNameList() {
-		SortedSet<String> result = new TreeSet<String>();
-
-		for (String name : classesSimpleName.keySet()) {
-			result.add(name);
-		}
-		return result;
 	}
 
 	private Class<? extends EggType<?>> matchClassName(String search) throws ClassNotFoundException {
 		Class<? extends EggType<?>> found = null;
 		String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
-		for (Entry<String, Class<? extends EggType<?>>> entry : classes.entrySet()) {
-			String str = entry.getValue().getSimpleName();
+		for (Entry<String, Class<? extends EggType<?>>> entry : classesSimpleName.entrySet()) {
+			String str = entry.getKey();
 			if (str.toLowerCase().startsWith(lowerSearch)) {
 				int curDelta = str.length() - lowerSearch.length();
 				if (curDelta < delta) {
@@ -119,6 +109,8 @@ public class EggTypeClassLoader extends ClassLoader {
 			clazz = classesSimpleName.get(name);
 		if (clazz == null)
 			clazz = matchClassName(name);
+		if (clazz == null)
+			throw new ClassNotFoundException();
 		return clazz;
 	}
 
