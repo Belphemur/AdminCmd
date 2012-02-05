@@ -64,7 +64,7 @@ public class EggTypeClassLoader extends ClassLoader {
 				} else {
 					String simpleName = clazz.getSimpleName();
 					parent.addChild("admincmd.egg."
-							+ simpleName.substring(0, simpleName.length() - 3).toLowerCase());
+							+ simpleName.substring(0, simpleName.length() - 4).toLowerCase());
 				}
 			}
 

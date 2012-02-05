@@ -16,9 +16,11 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Permissions.PermissionManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -47,6 +49,25 @@ public abstract class EggType<T> {
 	 *             when there is a problem in the arguments
 	 */
 	public abstract void processArguments(CommandArgs args) throws ProcessingArgsException;
+
+	/**
+	 * Check if the user have the permission to use this Egg
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean checkPermission(Player player) {
+		String perm;
+		if (this.getClass().isAnnotationPresent(EggPermission.class))
+			perm = this.getClass().getAnnotation(EggPermission.class).permission();
+		else {
+			String simpleName = this.getClass().getSimpleName();
+			perm = simpleName.substring(0, simpleName.length() - 4).toLowerCase();
+		}
+		if (perm == null || (perm != null && perm.isEmpty()))
+			return true;
+		return PermissionManager.hasPerm(player, perm);
+	}
 
 	public T getValue() {
 		return value;
