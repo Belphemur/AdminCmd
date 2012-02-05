@@ -43,15 +43,15 @@ public abstract class EggType<T> {
 	/**
 	 * Will be called by the command {@link EggSpawner} to set the value
 	 * 
-	 * @param player
-	 *            Player that sended the command.
+	 * @param sender
+	 *            Player that send the command.
 	 * @param args
 	 *            argument that will be used to set the EggType.
 	 * 
 	 * @throws ProcessingArgsException
 	 *             when there is a problem in the arguments
 	 */
-	protected abstract void processArguments(Player player, CommandArgs args)
+	protected abstract void processArguments(Player sender, CommandArgs args)
 			throws ProcessingArgsException;
 
 	/**
