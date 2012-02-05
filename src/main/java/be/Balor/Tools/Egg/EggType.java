@@ -70,7 +70,7 @@ public abstract class EggType<T> {
 			perm = this.getClass().getAnnotation(EggPermission.class).permission();
 		else {
 			String simpleName = this.getClass().getSimpleName();
-			perm = simpleName.substring(0, simpleName.length() - 4).toLowerCase();
+			perm = "admincmd.egg." + simpleName.substring(0, simpleName.length() - 3).toLowerCase();
 		}
 		if (perm == null || (perm != null && perm.isEmpty()))
 			return true;

@@ -72,6 +72,7 @@ public class PermParent extends PermChild {
 		perm.parent = this;
 		if (!(perm instanceof PermParent))
 			perm.registerPermission();
+		registered = false;
 		return this;
 	}
 
@@ -86,6 +87,7 @@ public class PermParent extends PermChild {
 		child.registerPermission();
 		child.parent = this;
 		children.add(child);
+		registered = false;
 		return this;
 	}
 
