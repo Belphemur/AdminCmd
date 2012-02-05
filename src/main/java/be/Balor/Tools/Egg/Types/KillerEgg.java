@@ -22,6 +22,7 @@ import java.util.List;
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.EntityLiving;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
@@ -56,6 +57,7 @@ public class KillerEgg extends EggType<Integer> {
 		final List<EntityLiving> entities = new ArrayList<EntityLiving>();
 		final CraftPlayer p = (CraftPlayer) event.getPlayer();
 		final World w = p.getWorld();
+		final int radius = value * value;
 		for (Object entity : ((CraftWorld) w).getHandle().entityList)
 			if (entity instanceof EntityLiving)
 				entities.add((EntityLiving) entity);
@@ -65,13 +67,15 @@ public class KillerEgg extends EggType<Integer> {
 					@Override
 					public void run() {
 						int count = 0;
+						w.playEffect(loc, Effect.SMOKE, 1, value);
+						w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
 						for (EntityLiving entity : entities) {
 							if (entity.equals(p.getHandle())) {
 								continue;
 							}
 							Location entityLoc = new Location(w, entity.locX, entity.locY,
 									entity.locZ, entity.yaw, entity.pitch);
-							if (entityLoc.distance(loc) > value)
+							if (entityLoc.distanceSquared(loc) > radius)
 								continue;
 							entity.die(DamageSource.playerAttack(p.getHandle()));
 							entity.die();
