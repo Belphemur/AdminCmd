@@ -16,15 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -32,16 +24,13 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class PermParent extends PermChild {
 	protected final String compareName;
-	protected final Set<PermChild> children = new HashSet<PermChild>();
-	public final static PermParent ROOT = new SpecialPermParent();
-	public final static PermParent ALONE = new SpecialPermParent();
 
 	public PermParent(String perm) {
 		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1), PermissionDefault.OP);
 	}
 
 	public PermParent(String perm, String compare, PermissionDefault def) {
-		super(perm, ROOT, def);
+		super(perm, def);
 		this.compareName = compare;
 	}
 
@@ -53,13 +42,6 @@ public class PermParent extends PermChild {
 	}
 
 	/**
-	 * @return the permName
-	 */
-	public String getPermName() {
-		return permName;
-	}
-
-	/**
 	 * Add a permission Child to the Permission Parent
 	 * 
 	 * @param perm
@@ -68,11 +50,7 @@ public class PermParent extends PermChild {
 	public PermParent addChild(PermChild perm) throws IllegalArgumentException {
 		if (perm.equals(this))
 			throw new IllegalArgumentException("The Child can't be the parent.");
-		children.add(perm);
-		perm.parent = this;
-		if (!(perm instanceof PermParent))
-			perm.registerPermission();
-		registered = false;
+		perm.bukkitPerm.addParent(bukkitPerm, true);
 		return this;
 	}
 
@@ -83,50 +61,8 @@ public class PermParent extends PermChild {
 	 * @return the PermParent (this)
 	 */
 	public PermParent addChild(String perm) {
-		PermChild child = new PermChild(perm);
-		child.registerPermission();
-		child.parent = this;
-		children.add(child);
-		registered = false;
+		this.addChild(new PermChild(perm));
 		return this;
-	}
-
-	/**
-	 * @return the children to be registered by the bukkit API.
-	 */
-	private Map<String, Boolean> getChildren() {
-		Map<String, Boolean> childrenMap = new LinkedHashMap<String, Boolean>();
-		for (PermChild child : children)
-			childrenMap.put(child.getPermName(), child.isSet());
-		return childrenMap;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.Permissions.PermChild#registerPermission()
-	 */
-	@Override
-	void registerPermission() {
-		if (registered)
-			return;
-		if (permName == null)
-			return;
-		for (PermChild child : children)
-			child.registerPermission();
-
-		if (ACPluginManager.getServer() == null)
-			return;
-		final Permission perm = ACPluginManager.getServer().getPluginManager()
-				.getPermission(permName);
-		if (perm == null)
-			ACPluginManager.getServer().getPluginManager()
-					.addPermission(new Permission(permName, permDefault, getChildren()));
-		else {
-			perm.getChildren().putAll(getChildren());
-			perm.setDefault(permDefault);
-		}
-		registered = true;
 	}
 
 	/*

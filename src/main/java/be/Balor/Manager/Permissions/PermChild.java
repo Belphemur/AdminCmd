@@ -26,29 +26,10 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermChild {
-	protected final String permName;
-	protected PermParent parent;
-	protected final boolean set;
-	protected final PermissionDefault permDefault;
-	protected boolean registered = false;
 	protected Permission bukkitPerm;
 
 	public PermChild(String permName) {
 		this(permName, PermissionDefault.OP);
-	}
-
-	/**
-	 * 
-	 */
-	protected PermChild(String permName, PermParent parent, PermissionDefault permDefault) {
-		this.permName = permName;
-		this.parent = parent;
-		this.set = true;
-		this.permDefault = permDefault;
-	}
-
-	public PermChild(String permName, PermissionDefault permDefault) {
-		this(permName, true, permDefault);
 	}
 
 	/**
@@ -57,41 +38,40 @@ public class PermChild {
 	 * @param value
 	 * @param permDefault
 	 */
-	public PermChild(String permName, boolean value, PermissionDefault permDefault) {
-		this.permName = permName;
-		this.parent = PermParent.ALONE;
-		this.set = value;
-		this.permDefault = permDefault;
+	public PermChild(String permName, PermissionDefault permDefault) {
+		if (permName == null)
+			return;
+		if (ACPluginManager.getServer() == null)
+			return;
+		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null) {
+			bukkitPerm.setDefault(permDefault);
+			return;
+		}
+		bukkitPerm = new Permission(permName, permDefault);
+		ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
 	}
 
 	/**
 	 * @return the permName
 	 */
 	public String getPermName() {
-		return permName;
-	}
-
-	/**
-	 * @return the parent
-	 */
-	public PermParent getParent() {
-		return parent;
-	}
-
-	/**
-	 * @return the set
-	 */
-	public boolean isSet() {
-		return set;
+		return bukkitPerm.getName();
 	}
 
 	/**
 	 * @return the permDefault
 	 */
 	public PermissionDefault getPermDefault() {
-		return permDefault;
+		return bukkitPerm.getDefault();
 	}
 
+	/**
+	 * @return the bukkitPerm
+	 */
+	public Permission getBukkitPerm() {
+		return bukkitPerm;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -101,10 +81,7 @@ public class PermChild {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((permDefault == null) ? 0 : permDefault.hashCode());
-		result = prime * result + ((permName == null) ? 0 : permName.hashCode());
-		result = prime * result + (registered ? 1231 : 1237);
-		result = prime * result + (set ? 1231 : 1237);
+		result = prime * result + ((bukkitPerm == null) ? 0 : bukkitPerm.hashCode());
 		return result;
 	}
 
@@ -122,44 +99,12 @@ public class PermChild {
 		if (!(obj instanceof PermChild))
 			return false;
 		PermChild other = (PermChild) obj;
-		if (permDefault != other.permDefault)
-			return false;
-		if (permName == null) {
-			if (other.permName != null)
+		if (bukkitPerm == null) {
+			if (other.bukkitPerm != null)
 				return false;
-		} else if (!permName.equals(other.permName))
-			return false;
-		if (registered != other.registered)
-			return false;
-		if (set != other.set)
+		} else if (!bukkitPerm.equals(other.bukkitPerm))
 			return false;
 		return true;
-	}
-
-	/**
-	 * Register the permission in the bukkit system.
-	 */
-	void registerPermission() {
-		if (registered)
-			return;
-		if (permName == null)
-			return;
-		if (ACPluginManager.getServer() == null)
-			return;
-		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null) {
-			bukkitPerm.setDefault(permDefault);
-			return;
-		}
-		bukkitPerm = new Permission(permName, permDefault);
-		ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
-		registered = true;
-	}
-
-	/**
-	 * @return the bukkitPerm
-	 */
-	public Permission getBukkitPerm() {
-		return bukkitPerm;
 	}
 
 	/*
@@ -169,8 +114,8 @@ public class PermChild {
 	 */
 	@Override
 	public String toString() {
-		return "PermChild [permName=" + permName + ", set=" + set + ", permDefault=" + permDefault
-				+ ", registered=" + registered + "]";
+		return "PermChild [getPermName()=" + getPermName() + ", getPermDefault()="
+				+ getPermDefault() + "]";
 	}
 
 }

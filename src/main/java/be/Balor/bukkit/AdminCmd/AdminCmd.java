@@ -421,18 +421,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
-		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl",
-				PermissionDefault.FALSE));
+		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (World w : this.getServer().getWorlds())
 			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
-			PermParent.ALONE.addChild(new PermChild("admincmd.maxHomeByUser." + i,
-					PermissionDefault.FALSE));
-			PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl." + i,
-					PermissionDefault.FALSE));
-			PermParent.ALONE.addChild(new PermChild("admincmd.maxItemAmount." + i,
-					PermissionDefault.FALSE));
+			new PermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
+			new PermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
+			new PermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
 
 	}
