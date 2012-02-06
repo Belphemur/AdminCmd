@@ -18,6 +18,7 @@ package be.Balor.Tools.Egg;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -68,17 +69,10 @@ public abstract class EggType<T> {
 	 *             to display to the user
 	 */
 	protected boolean checkPermission(Player player) throws DontHaveThePermissionException {
-		String perm;
-		if (this.getClass().isAnnotationPresent(EggPermission.class))
-			perm = this.getClass().getAnnotation(EggPermission.class).permission();
-		else {
-			String simpleName = this.getClass().getSimpleName();
-			perm = "admincmd.egg." + simpleName.substring(0, simpleName.length() - 3).toLowerCase();
-		}
-		if (perm == null || (perm != null && perm.isEmpty()))
-			return true;
+		Permission perm = EggPermissionManager.INSTANCE.getPermission(this);
 		if (!PermissionManager.hasPerm(player, perm, false))
-			throw new DontHaveThePermissionException(Utils.I18n("errorNotPerm", "p", perm));
+			throw new DontHaveThePermissionException(
+					Utils.I18n("errorNotPerm", "p", perm.getName()));
 		return true;
 	}
 

@@ -27,7 +27,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Egg.EggPermissionLister;
+import be.Balor.Tools.Egg.EggPermissionManager;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
@@ -65,7 +65,7 @@ public class EggSpawner extends MobCommand {
 		} catch (ParameterMissingException e) {
 			if (e.getMessage().equals("E")) {
 				String list = Joiner.on(", ").skipNulls()
-						.join(EggPermissionLister.INSTANCE.getEggTypeNames(player));
+						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else
