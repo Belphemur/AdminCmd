@@ -19,7 +19,10 @@ package be.Balor.Manager.Permissions.Plugins;
 import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +33,8 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -133,13 +138,30 @@ public class SuperPermissions implements IPermissionPlugin {
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(Player p, String limit) {
+	public String getPermissionLimit(final Player p, String limit) {
 		String result = null;
 		if (mChatInfo != null)
 			result = mChatInfo.getInfo(p, p.getWorld(), "admincmd." + limit);
 		if (result == null || (result != null && result.isEmpty())) {
 			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-			for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+			final Set<PermissionAttachmentInfo> perms = new LinkedHashSet<PermissionAttachmentInfo>();
+			final CountDownLatch countDown = new CountDownLatch(1);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					perms.addAll(p.getEffectivePermissions());
+					countDown.countDown();
+
+				}
+			});
+			try {
+				countDown.await();
+			} catch (InterruptedException e) {
+				DebugLog.INSTANCE.log(Level.WARNING,
+						"Problem to get Permission of the user " + p.getName(), e);
+			}
+			for (PermissionAttachmentInfo info : perms) {
 				Matcher regexMatcher = regex.matcher(info.getPermission());
 				if (regexMatcher.find())
 					return info.getPermission().split("\\.")[2];

@@ -17,19 +17,27 @@
 package be.Balor.Tools.Files;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,11 +46,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.BannedPlayer;
-import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -62,8 +71,6 @@ public class FileManager implements DataManager {
 	private ExtendedConfiguration lastLoadedConf = null;
 	private static String fileVersion = null;
 	static {
-		ExtendedConfiguration.registerClass(BannedPlayer.class);
-		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
 		try {
 			Properties gitVersion = new Properties();
 			gitVersion.load(FileManager.class.getResourceAsStream("/git.properties"));
@@ -81,6 +88,40 @@ public class FileManager implements DataManager {
 		if (instance == null)
 			instance = new FileManager();
 		return instance;
+	}
+
+	/**
+	 * Get a txt-file and return its content in a String
+	 * 
+	 * @param fileName
+	 *            - The name of the file to be loaded
+	 * @return The content of the file
+	 */
+	public String getTextFile(String fileName) {
+		final StringBuffer result = new StringBuffer();
+		try {
+			final File fileDir = getInnerFile(fileName);
+			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
+					fileDir), "UTF8"));
+			String temp;
+			while ((temp = in.readLine()) != null) {
+				result.append(temp + "\n");
+			}
+			in.close();
+		} catch (final UnsupportedEncodingException e) {
+			// TODO: Better debug code here
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
+		} catch (final IOException e) {
+			// TODO: Better debug code here
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
+		} catch (final Exception e) {
+			// TODO: Better debug code here
+			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
+		}
+		if (result.length() == 0)
+			return null;
+		else
+			return result.toString().trim();
 	}
 
 	/**
@@ -169,6 +210,32 @@ public class FileManager implements DataManager {
 	}
 
 	/**
+	 * To write a text file on the AdminCmd folder.
+	 * 
+	 * @param filename
+	 * @param toSet
+	 */
+	public void setTxtFile(String filename, String toSet) {
+		File txt = getFile(null, filename + ".txt");
+		FileWriter fstream = null;
+		try {
+			fstream = new FileWriter(txt);
+		} catch (IOException e) {
+			ACLogger.severe("Can't write the txt file : " + filename, e);
+			return;
+		}
+		BufferedWriter out = new BufferedWriter(fstream);
+		try {
+			out.write(toSet);
+			out.close();
+		} catch (IOException e) {
+			ACLogger.severe("Can't write the txt file : " + filename, e);
+			return;
+		}
+
+	}
+
+	/**
 	 * Write the alias in the yml file
 	 * 
 	 * @param alias
@@ -177,9 +244,8 @@ public class FileManager implements DataManager {
 	public void addAlias(String alias, MaterialContainer mc) {
 		ExtendedConfiguration conf = getYml("Alias");
 
-		List<String> aliasList =  conf.getStringList("alias",
-				new ArrayList<String>());
-		List<String> idList =  conf.getStringList("ids", new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		if (aliasList.contains(alias)) {
 			int index = aliasList.indexOf(alias);
 			aliasList.remove(index);
@@ -202,8 +268,7 @@ public class FileManager implements DataManager {
 	 */
 	public void removeAlias(String alias) {
 		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias",
-				new ArrayList<String>());
+		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
 		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		int index = aliasList.indexOf(alias);
 		aliasList.remove(index);
@@ -423,10 +488,9 @@ public class FileManager implements DataManager {
 			return null;
 		if (toParse.isEmpty())
 			return null;
-		String infos[] = new String[5];
 		Double coords[] = new Double[3];
 		Float direction[] = new Float[2];
-		infos = toParse.split(";");
+		String[] infos = toParse.split(";");
 		for (int i = 0; i < coords.length; i++)
 			try {
 				coords[i] = Double.parseDouble(infos[i]);
@@ -481,59 +545,93 @@ public class FileManager implements DataManager {
 	 * @return
 	 */
 	public Map<String, KitInstance> loadKits() {
-		Map<String, KitInstance> result = new HashMap<String, KitInstance>();
+		Map<String, KitInstance> result = new LinkedHashMap<String, KitInstance>();
 		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		ExtendedConfiguration kits = getYml("kits");
-		boolean convert = false;
+		Map<String, List<String>> kitParents = new HashMap<String, List<String>>();
+		Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
+				ArmorPart.class);
 
 		ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
+		if (kitNodes == null) {
+			ACLogger.severe("A problem happen when wanting to load the kits. Please check your kits.yml file.");
+			return result;
+		}
 		for (String kitName : kitNodes.getKeys(false)) {
 			int delay = 0;
 			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
 			ConfigurationSection kitItems = null;
+			ConfigurationSection armorItems = null;
+			List<String> parents = null;
 			try {
 				kitItems = kitNode.getConfigurationSection("items");
+				armorItems = kitNode.getConfigurationSection("armor");
+				parents = kitNode.getStringList("parents");
 			} catch (NullPointerException e) {
+				DebugLog.INSTANCE.warning("Problem with kit " + kitName);
 				continue;
 			}
 
-			if (kitItems != null) {
+			if (kitItems != null)
 				for (String item : kitItems.getKeys(false)) {
 					MaterialContainer m = Utils.checkMaterial(item);
 					m.setAmount(kitItems.getInt(item, 1));
 					if (!m.isNull())
 						items.add(m);
 				}
-				delay = kitNode.getInt("delay", 0);
-			} else {
-				kitNode.addDefault("items", new HashMap<String, Object>());
-				kitItems = kitNode.getConfigurationSection("items");
-				for (String item : kitNode.getKeys(false)) {
-					if (item.equals("items"))
+			delay = kitNode.getInt("delay", 0);
+			/*
+			 * Old convertor code, not used anymore TODO: CLEAN IT. } else {
+			 * kitNode.addDefault("items", new HashMap<String, Object>());
+			 * kitItems = kitNode.getConfigurationSection("items"); for (String
+			 * item : kitNode.getKeys(false)) { if (item.equals("items"))
+			 * continue; MaterialContainer m = Utils.checkMaterial(item); int
+			 * amount = kitNode.getInt(item, 1); m.setAmount(amount); if
+			 * (!m.isNull()) { items.add(m); kitItems.set(item, amount);
+			 * kitNode.set(item, null); } } kitNode.set("delay", 0); convert =
+			 * true; }
+			 */
+			if (armorItems != null) {
+				for (ArmorPart part : ArmorPart.values()) {
+					String partId = armorItems.getString(part.toString());
+					if (partId == null)
 						continue;
-					MaterialContainer m = Utils.checkMaterial(item);
-					int amount = kitNode.getInt(item, 1);
-					m.setAmount(amount);
-					if (!m.isNull()) {
-						items.add(m);
-						kitItems.set(item, amount);
-						kitNode.set(item, null);
-					}
+					MaterialContainer m = Utils.checkMaterial(partId);
+					if (!m.isNull())
+						armor.put(part, m);
 				}
-				kitNode.set("delay", 0);
-				convert = true;
-			}
+				result.put(kitName, new ArmoredKitInstance(kitName, delay,
+						new ArrayList<MaterialContainer>(items),
+						new EnumMap<Type.ArmorPart, MaterialContainer>(armor)));
+			} else
+				result.put(kitName, new KitInstance(kitName, delay,
+						new ArrayList<MaterialContainer>(items)));
 
-			result.put(kitName, new KitInstance(kitName, delay, new ArrayList<MaterialContainer>(
-					items)));
+			if (parents != null)
+				kitParents.put(kitName, parents);
+			else
+				ACLogger.info(kitName + " has no parents");
+
 			items.clear();
+			armor.clear();
+		}
+		for (Entry<String, List<String>> entry : kitParents.entrySet()) {
+			KitInstance kit = result.get(entry.getKey());
+			for (String parent : entry.getValue()) {
+				KitInstance parentKit = result.get(parent);
+				if (parentKit == null)
+					continue;
+				if (parentKit instanceof ArmoredKitInstance && !(kit instanceof ArmoredKitInstance)) {
+					kit = new ArmoredKitInstance(kit);
+					result.put(kit.getName(), kit);
+				}
+				kit.addParent(parentKit);
+			}
 		}
 
-		if (convert)
-			try {
-				kits.save();
-			} catch (IOException e) {
-			}
+		/*
+		 * if (convert) try { kits.save(); } catch (IOException e) { }
+		 */
 		return result;
 	}
 

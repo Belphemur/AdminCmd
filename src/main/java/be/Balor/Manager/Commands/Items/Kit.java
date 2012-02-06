@@ -27,6 +27,7 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Files.ArmoredKitInstance;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -145,6 +146,8 @@ public class Kit extends ItemCommand {
 
 			}
 		});
+		if (kit instanceof ArmoredKitInstance)
+			((ArmoredKitInstance) kit).setPlayerArmorParts(target);
 
 	}
 

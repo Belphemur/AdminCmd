@@ -4,12 +4,12 @@
  * Redistribution and use in source and binary forms, with or without modification, are
  * permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice, this list of
- *       conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice, this list of
+ * conditions and the following disclaimer.
  *
- *    2. Redistributions in binary form must reproduce the above copyright notice, this list
- *       of conditions and the following disclaimer in the documentation and/or other materials
- *       provided with the distribution.
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+ * of conditions and the following disclaimer in the documentation and/or other materials
+ * provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
@@ -27,6 +27,10 @@
  */
 package be.Balor.Tools;
 
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -42,10 +46,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Tooling to post to metrics.griefcraft.com
@@ -71,6 +71,12 @@ public class Metrics {
 		 */
 		public abstract int getValue();
 
+		/**
+		 * Called after the website graphs have been updated
+		 */
+		public void reset() {
+		}
+
 		@Override
 		public int hashCode() {
 			return getColumnName().hashCode() + getValue();
@@ -92,7 +98,7 @@ public class Metrics {
 	/**
 	 * The metrics revision number
 	 */
-	private final static int REVISION = 3;
+	private final static int REVISION = 4;
 
 	/**
 	 * The base url of the metrics domain
@@ -259,6 +265,15 @@ public class Metrics {
 
 		if (response.startsWith("ERR")) {
 			throw new IOException(response); // Throw the exception
+		} else {
+			// Is this the first update this hour?
+			if (response.contains("OK This is your first update this hour")) {
+				if (plotters != null) {
+					for (Plotter plotter : plotters) {
+						plotter.reset();
+					}
+				}
+			}
 		}
 		// if (response.startsWith("OK")) - We should get "OK" followed by an
 		// optional description if everything goes right

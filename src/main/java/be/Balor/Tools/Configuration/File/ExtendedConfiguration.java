@@ -54,8 +54,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
 	private static Representer yamlRepresenter = new ExtendedRepresenter();
-	protected final static YamlConstructor ymlConstructor = new YamlConstructor();
-	protected final static Yaml yaml = new Yaml(ymlConstructor, yamlRepresenter, yamlOptions);
+	protected static Yaml yaml;
 
 	/**
 	 * Creates a new {@link ExtendedConfiguration}, loading from the given file.
@@ -95,13 +94,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return config;
 	}
 
-	/**
-	 * When using JavaBean class in the YML, you have to register them first.
-	 * 
-	 * @param c
-	 */
-	public static void registerClass(Class<? extends Object> c) {
-		ymlConstructor.addClassInfo(c);
+	public static void setClassLoader(ClassLoader loader) {
+		yaml = new Yaml(new YamlConstructor(loader), yamlRepresenter, yamlOptions);
 	}
 
 	@Override
@@ -178,6 +172,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 				if (e.getContextMark() == null) {
 					ACLogger.severe("File : " + file
 							+ "\n You have to correct the error manualy in the file.", e);
+					corrupted = true;
 					return;
 				}
 				removeLineFromFile(e.getContextMark().getLine());
@@ -191,8 +186,11 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			} catch (final ParserException e) {
 				ACLogger.severe("File : " + file
 						+ "\n You have to correct the error manualy in the file.", e);
+				corrupted = true;
+				return;
 
 			} catch (final Throwable ex) {
+				corrupted = true;
 				throw new InvalidConfigurationException(
 						"Specified contents is not a valid Configuration", ex);
 			}
@@ -214,6 +212,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			if (input != null) {
 				convertMapsToSections(input, this);
 			}
+			corrupted = false;
 		} finally {
 			lock.unlock();
 		}

@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Tools.Configuration.File;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -78,25 +77,17 @@ class YamlConstructor extends Constructor {
 		}
 	}
 
-	private final HashMap<String, Class<?>> classMap = new HashMap<String, Class<?>>();
+	private final ClassLoader pluginClassLoader;
 
 	/**
 	 * 
 	 */
-	public YamlConstructor() {
+	public YamlConstructor(ClassLoader classLoader) {
 		super();
 		this.yamlConstructors.put(new Tag("!tpRequest"), new ConstructTpRequest());
 		this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());
+		this.pluginClassLoader = classLoader;
 	}
-
-	public YamlConstructor(Class<? extends Object> theRoot) {
-		super(theRoot);
-	}
-
-	public void addClassInfo(Class<? extends Object> c) {
-		classMap.put(c.getName(), c);
-	}
-
 	/*
 	 * This is a modified version of the Constructor. Rather than using a class
 	 * loader to get external classes, they are already predefined above. This
@@ -109,20 +100,6 @@ class YamlConstructor extends Constructor {
 	 */
 	@Override
 	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-		final Class<?> cl = classMap.get(name);
-		if (cl == null)
-			return super.getClassForName(name);
-		else
-			return cl;
-	}
-
-	/**
-	 * Check if the class is registered
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public boolean isClassRegistered(Class<? extends Object> c) {
-		return classMap.containsKey(c.getName());
+		return Class.forName(name, true, pluginClassLoader);
 	}
 }

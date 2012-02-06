@@ -66,14 +66,14 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -92,7 +92,7 @@ public class ACHelper {
 	private List<String> groups;
 	private AdminCmd coreInstance;
 	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
-	private final HashMap<String, KitInstance> kits = new HashMap<String, KitInstance>();
+	private Map<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private final ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
@@ -126,6 +126,7 @@ public class ACHelper {
 			listOfPossibleRepair.add(i);
 		listOfPossibleRepair.add(359);
 		listOfPossibleRepair.add(Material.BOW.getId());
+		listOfPossibleRepair.add(Material.FISHING_ROD.getId());
 	}
 
 	static void killInstance() {
@@ -142,7 +143,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -152,7 +153,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -182,7 +183,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -216,7 +217,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 * 
+	 *
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -231,7 +232,7 @@ public class ACHelper {
 	}
 
 	private void addLocaleFromFile() {
-		String locale = Utils.getTextFile("motd.txt");
+		String locale = fManager.getTextFile("motd.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motd.txt. Using default values for the MotD!");
 			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
@@ -244,7 +245,7 @@ public class ACHelper {
 			ACLogger.info("motd.txt loaded");
 			Utils.addLocale("MOTD", Utils.colorParser(locale), true);
 		}
-		locale = Utils.getTextFile("motdNewUser.txt");
+		locale = fManager.getTextFile("motdNewUser.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotDNewUser!");
 			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE
@@ -256,7 +257,7 @@ public class ACHelper {
 			ACLogger.info("motdNewUser.txt loaded");
 			Utils.addLocale("MOTDNewUser", Utils.colorParser(locale), true);
 		}
-		locale = Utils.getTextFile("news.txt");
+		locale = fManager.getTextFile("news.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read news.txt. Using default values for the MotD!");
 			Utils.addLocale("NEWS", ChatColor.DARK_GREEN
@@ -265,7 +266,7 @@ public class ACHelper {
 			ACLogger.info("news.txt loaded");
 			Utils.addLocale("NEWS", Utils.colorParser(locale), true);
 		}
-		locale = Utils.getTextFile("rules.txt");
+		locale = fManager.getTextFile("rules.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
 			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
@@ -296,7 +297,7 @@ public class ACHelper {
 	/**
 	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
 	 * unBan the player or unban him if his time out.
-	 * 
+	 *
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
@@ -324,7 +325,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -375,7 +376,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
@@ -385,7 +386,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
@@ -440,7 +441,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -449,7 +450,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 * 
+	 *
 	 * @return
 	 */
 	private List<String> getGroupNames() {
@@ -458,7 +459,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
@@ -468,7 +469,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -496,7 +497,7 @@ public class ACHelper {
 
 	/**
 	 * Get the number of kit in the system.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getNbKit() {
@@ -521,7 +522,7 @@ public class ACHelper {
 		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(defaultLvl, 0);
-		if (limit == 0)
+		if (limit == 0 && !type.equals("immunityLvl"))
 			limit = Integer.MAX_VALUE;
 		return limit;
 	}
@@ -530,7 +531,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 * 
+	 *
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -683,7 +684,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -756,11 +757,7 @@ public class ACHelper {
 
 		addLocaleFromFile();
 
-		final Map<String, KitInstance> kitsLoaded = fManager.loadKits();
-		for (final String kit : kitsLoaded.keySet()) {
-			kits.put(kit, kitsLoaded.get(kit));
-			coreInstance.getPermissionLinker().addPermChild("admincmd.kit." + kit);
-		}
+		kits = fManager.loadKits();
 		final Map<String, BannedPlayer> bans = dataManager.loadBan();
 		for (final Entry<String, BannedPlayer> ban : bans.entrySet()) {
 			if (checkBan(ban.getValue()))
@@ -791,7 +788,6 @@ public class ACHelper {
 	 * Reload the "plugin"
 	 */
 	public synchronized void reload() {
-		CommandManager.getInstance().stopAllExecutorThreads();
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
 		FilePlayer.forceSaveList();
 		alias.clear();
@@ -833,7 +829,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -866,7 +862,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -910,7 +906,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 * 
+	 *
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {
@@ -925,7 +921,7 @@ public class ACHelper {
 		spyPlayers.remove(p);
 	}
 
-	public boolean reparable(int id) {
+	public boolean repairable(int id) {
 		return listOfPossibleRepair.contains(id);
 	}
 
@@ -1019,7 +1015,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 * 
+	 *
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -1067,7 +1063,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 * 
+	 *
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {

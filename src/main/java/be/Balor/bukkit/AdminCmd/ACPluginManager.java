@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -40,9 +41,9 @@ public class ACPluginManager {
 	private final static ACPluginManager instance = new ACPluginManager();
 	private final Map<String, AbstractAdminCmdPlugin> pluginInstances = Collections
 			.synchronizedMap(new HashMap<String, AbstractAdminCmdPlugin>());
-	private static Server server = null;
+	private final static Server server = Bukkit.getServer();
 	public static Metrics metrics = null;
-	public static AbstractAdminCmdPlugin corePlugin;
+	private static AbstractAdminCmdPlugin corePlugin;
 
 	/**
 	 * @return the instance
@@ -94,14 +95,6 @@ public class ACPluginManager {
 	 */
 	public static int scheduleSyncTask(Runnable task) {
 		return server.getScheduler().scheduleSyncDelayedTask(corePlugin, task);
-	}
-
-	/**
-	 * @param server
-	 *            the server to set
-	 */
-	static void setServer(Server server) {
-		ACPluginManager.server = server;
 	}
 
 	/**

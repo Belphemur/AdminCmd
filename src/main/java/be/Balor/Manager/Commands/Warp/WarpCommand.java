@@ -23,9 +23,7 @@ import be.Balor.Manager.Commands.CoreCommand;
  * 
  */
 public abstract class WarpCommand extends CoreCommand {
-	/**
- * 
- */
+
 	public WarpCommand() {
 		super();
 		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.warp.*");

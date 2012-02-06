@@ -23,6 +23,7 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Files.FileManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -57,7 +58,7 @@ public class Set extends ServerCommand {
 				if (result == null)
 					result = message;
 				LocaleManager.getInstance().addLocale("MOTD", result, true);
-				LocaleManager.getInstance().save();
+				FileManager.getInstance().setTxtFile("motd", result);
 				Utils.sI18n(sender, "MOTDset", "motd", result);
 			}
 		} else if (args.hasFlag('n')) {
@@ -69,7 +70,7 @@ public class Set extends ServerCommand {
 				if (result == null)
 					result = message;
 				LocaleManager.getInstance().addLocale("NEWS", result, true);
-				LocaleManager.getInstance().save();
+				FileManager.getInstance().setTxtFile("news", result);
 				Utils.sI18n(sender, "NEWSset", "news", result);
 			}
 		} else if (args.hasFlag('r')) {
@@ -81,7 +82,7 @@ public class Set extends ServerCommand {
 				if (result == null)
 					result = message;
 				LocaleManager.getInstance().addLocale("Rules", result, true);
-				LocaleManager.getInstance().save();
+				FileManager.getInstance().setTxtFile("rules", result);
 				Utils.sI18n(sender, "RulesSet", "rules", result);
 			}
 		} else if (args.hasFlag('u')) {
@@ -93,7 +94,7 @@ public class Set extends ServerCommand {
 				if (result == null)
 					result = message;
 				LocaleManager.getInstance().addLocale("MOTDNewUser", result, true);
-				LocaleManager.getInstance().save();
+				FileManager.getInstance().setTxtFile("motdNewUser", result);
 				Utils.sI18n(sender, "MOTDset", "motd", result);
 			}
 		}

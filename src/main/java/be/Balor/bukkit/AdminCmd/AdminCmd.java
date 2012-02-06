@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -16,11 +17,13 @@ import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
 import be.Balor.Listeners.Commands.ACBanListener;
 import be.Balor.Listeners.Commands.ACCreatureSpawnListener;
+import be.Balor.Listeners.Commands.ACEggListener;
 import be.Balor.Listeners.Commands.ACFireballListener;
 import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
+import be.Balor.Listeners.Commands.ACNoDropListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACThorListener;
@@ -45,6 +48,7 @@ import be.Balor.Manager.Commands.Items.RemoveBlackList;
 import be.Balor.Manager.Commands.Items.Repair;
 import be.Balor.Manager.Commands.Items.RepairAll;
 import be.Balor.Manager.Commands.Mob.ChangeMobSpawner;
+import be.Balor.Manager.Commands.Mob.EggSpawner;
 import be.Balor.Manager.Commands.Mob.KillMob;
 import be.Balor.Manager.Commands.Mob.MobLimit;
 import be.Balor.Manager.Commands.Mob.SpawnMob;
@@ -67,6 +71,7 @@ import be.Balor.Manager.Commands.Player.KickAllPlayers;
 import be.Balor.Manager.Commands.Player.KickPlayer;
 import be.Balor.Manager.Commands.Player.Kill;
 import be.Balor.Manager.Commands.Player.Mute;
+import be.Balor.Manager.Commands.Player.NoDrop;
 import be.Balor.Manager.Commands.Player.NoPickup;
 import be.Balor.Manager.Commands.Player.Played;
 import be.Balor.Manager.Commands.Player.PlayerList;
@@ -122,6 +127,7 @@ import be.Balor.Manager.Commands.Weather.Rain;
 import be.Balor.Manager.Commands.Weather.Storm;
 import be.Balor.Manager.Commands.Weather.Strike;
 import be.Balor.Manager.Commands.Weather.Thor;
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
@@ -129,8 +135,10 @@ import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Egg.EggTypeClassLoader;
 import be.Balor.Tools.Help.HelpLister;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -142,13 +150,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
-
-	/**
-	 * @param name
-	 */
-	public AdminCmd() {
-		super("Core");
-	}
 
 	@Override
 	public void onDisable() {
@@ -173,7 +174,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	public void onEnable() {
-		ACPluginManager.setServer(getServer());
+		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
@@ -264,6 +265,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void registerCmds() {
 		final PluginManager pm = getServer().getPluginManager();
 		boolean banCommands = false;
+		boolean lockCommand = false;
 		CommandManager.getInstance().registerCommand(Day.class);
 		CommandManager.getInstance().registerCommand(Repair.class);
 		CommandManager.getInstance().registerCommand(RepairAll.class);
@@ -315,7 +317,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Ip.class);
 		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
 			banCommands = true;
-		;
 		if (CommandManager.getInstance().registerCommand(UnBan.class))
 			banCommands = true;
 		if (banCommands)
@@ -359,7 +360,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Played.class);
 		CommandManager.getInstance().registerCommand(BanConvert.class);
 		if (CommandManager.getInstance().registerCommand(LockServer.class))
-			pm.registerEvents(new ACLockedServerListener(), this);
+			lockCommand = true;
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
 		if (CommandManager.getInstance().registerCommand(Eternal.class))
@@ -373,7 +374,16 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
-		CommandManager.getInstance().registerCommand(StopServer.class);
+		if (CommandManager.getInstance().registerCommand(StopServer.class))
+			lockCommand = true;
+		if (lockCommand)
+			pm.registerEvents(new ACLockedServerListener(), this);
+		if (CommandManager.getInstance().registerCommand(NoDrop.class))
+			pm.registerEvents(new ACNoDropListener(), this);
+		if (CommandManager.getInstance().registerCommand(EggSpawner.class)) {
+			EggTypeClassLoader.addPackage(this, "be.Balor.Tools.Egg.Types");
+			pm.registerEvents(new ACEggListener(), this);
+		}
 	}
 
 	@Override
@@ -385,7 +395,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
 		PermParent tp = new PermParent("admincmd.tp.*");
+		PermParent worldTp = new PermParent("admincmd.tp.world.*");
 		permissionLinker.addPermParent(tp);
+		permissionLinker.addChildPermParent(worldTp, tp);
 		permissionLinker.addChildPermParent(new PermParent("admincmd.tp.toggle.*"), tp);
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
@@ -398,20 +410,29 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
-		permissionLinker.setMajorPerm(new PermParent("admincmd.*"));
+		permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));
+		PermParent majorPerm = new PermParent("admincmd.*");
+		permissionLinker.setMajorPerm(majorPerm);
 		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
 		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		player.addChild("admincmd.player.noafkkick");
 		permissionLinker.addPermChild("admincmd.admin.home");
-		permissionLinker.addPermChild("admincmd.immunityLvl.samelvl");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
+		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl",
+				PermissionDefault.FALSE));
+		for (World w : this.getServer().getWorlds())
+			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
+		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
-			permissionLinker.addPermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
-			permissionLinker.addPermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
+			PermParent.ALONE.addChild(new PermChild("admincmd.maxHomeByUser." + i,
+					PermissionDefault.FALSE));
+			PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl." + i,
+					PermissionDefault.FALSE));
+			PermParent.ALONE.addChild(new PermChild("admincmd.maxItemAmount." + i,
+					PermissionDefault.FALSE));
 		}
 
 	}
@@ -473,6 +494,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("godDisabledTarget", ChatColor.DARK_AQUA + "GOD mode disabled for %player");
 		Utils.addLocale("godEnabled", ChatColor.DARK_AQUA + "GOD mode enabled.");
 		Utils.addLocale("godEnabledTarget", ChatColor.DARK_AQUA + "GOD mode enabled for %player");
+		Utils.addLocale("noDropDisabled", ChatColor.DARK_AQUA + "NO DROP mode disabled.");
+		Utils.addLocale("noDropDisabledTarget", ChatColor.DARK_AQUA
+				+ "NO DROP mode disabled for %player");
+		Utils.addLocale("noDropEnabled", ChatColor.DARK_AQUA + "NO DROP mode enabled.");
+		Utils.addLocale("noDropEnabledTarget", ChatColor.DARK_AQUA
+				+ "NO DROP mode enabled for %player");
 		Utils.addLocale("thorDisabled", ChatColor.DARK_AQUA + "THOR mode disabled.");
 		Utils.addLocale("thorDisabledTarget", ChatColor.DARK_AQUA
 				+ "THOR mode disabled for %player");
@@ -699,6 +726,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("errorMoved", ChatColor.RED
 				+ "You have moved since you issued the %cmdname command, teleportation aborted!");
 		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]" + ChatColor.WHITE);
+		Utils.addLocale("privateMessageHeader", "#privateTitle# " + "%sender" + "-" + "%receiver"
+				+ ChatColor.WHITE + ": ");
 		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW + " joined the game!");
 		Utils.addLocale("joinMessageFirstTime", "%name" + ChatColor.YELLOW + " joined the game "
 				+ ChatColor.GOLD + "for the first time!");
@@ -736,6 +765,16 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
 				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
 				+ ChatColor.GOLD + "%sec seconds.");
+		Utils.addLocale("diffWorld", ChatColor.AQUA + "%player" + ChatColor.RED
+				+ " is in a different world as " + ChatColor.DARK_PURPLE + "%to"
+				+ ChatColor.DARK_RED + " . He can't be tp there.");
+		Utils.addLocale("paramMissing", ChatColor.RED + "This command need the parameter "
+				+ ChatColor.GOLD + "-%param .");
+		Utils.addLocale("eggDontExists", ChatColor.RED + "This Egg Type (" + ChatColor.GOLD
+				+ "%egg" + ChatColor.RED + ") don't exists.");
+		Utils.addLocale("eggEnabled", ChatColor.DARK_AQUA + "EGG " + ChatColor.GOLD + "(%egg)"
+				+ ChatColor.AQUA + " mode enabled.");
+		Utils.addLocale("eggNormal", ChatColor.GREEN + "EGG return to normality.");
 		LocaleManager.getInstance().save();
 	}
 }

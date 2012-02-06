@@ -140,21 +140,39 @@ public class ACPlayerListener implements Listener {
 			Utils.sI18n(event.getPlayer(), "stillInv");
 			InvisibleWorker.getInstance().onJoinEvent(p);
 		}
-		if (ConfigEnum.AUTO_AFK.getBoolean())
-			AFKWorker.getInstance().updateTimeStamp(p);
-		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
-		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
-				: imLvl);
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new Runnable() {
+
+					@Override
+					public void run() {
+						if (ConfigEnum.AUTO_AFK.getBoolean())
+							AFKWorker.getInstance().updateTimeStamp(p);
+						int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+								"defaultImmunityLvl");
+						player.setInformation("immunityLvl",
+								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+						if (player.hasPower(Type.SPYMSG))
+							ACHelper.getInstance().addSpy(p);
+						player.setInformation("lastConnection", System.currentTimeMillis());
+						if (ConfigEnum.NEWS.getBoolean())
+							Utils.sParsedLocale(p, "NEWS");
+						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
+							Utils.sParsedLocale(p, "Rules");
+						if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
+								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
+							player.setPower(Type.TP_REQUEST);
+
+					}
+				});
+
 		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setJoinMessage(null);
 			ACHelper.getInstance().addFakeQuit(p);
 		}
-		if (player.hasPower(Type.SPYMSG))
-			ACHelper.getInstance().addSpy(p);
+
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
-			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) 
-			{
+			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("name", Utils.getPlayerName(p, null, true));
 				event.setJoinMessage(Utils.I18n("joinMessageFirstTime", replace));
@@ -170,15 +188,6 @@ public class ACPlayerListener implements Listener {
 				Utils.sParsedLocale(p, "MOTDNewUser");
 		} else if (ConfigEnum.MOTD.getBoolean())
 			Utils.sParsedLocale(p, "MOTD");
-		player.setInformation("lastConnection", System.currentTimeMillis());
-
-		if (ConfigEnum.NEWS.getBoolean())
-			Utils.sParsedLocale(p, "NEWS");
-		if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
-			Utils.sParsedLocale(p, "Rules");
-		if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
-				&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
-			player.setPower(Type.TP_REQUEST);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
@@ -219,14 +228,23 @@ public class ACPlayerListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
-		int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl");
-		player.setInformation("immunityLvl", imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
-				: imLvl);
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new Runnable() {
+
+					@Override
+					public void run() {
+						int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+								"defaultImmunityLvl");
+						player.setInformation("immunityLvl",
+								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+
+					}
+				});
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));

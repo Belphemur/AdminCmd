@@ -128,22 +128,57 @@ public class CommandArgs implements Iterable<String> {
 
 	}
 
+	/**
+	 * Try to parse the argument to an int
+	 * 
+	 * @param index
+	 * @return
+	 * @throws NumberFormatException
+	 */
 	public int getInt(int index) throws NumberFormatException {
 		return Integer.parseInt(getString(index));
 	}
 
+	/**
+	 * Try to parse the argument to a float
+	 * 
+	 * @param index
+	 * @return
+	 * @throws NumberFormatException
+	 */
 	public float getFloat(int index) throws NumberFormatException {
 		return Float.parseFloat(getString(index));
 	}
 
+	/**
+	 * Try to parse the argument to a double
+	 * 
+	 * @param index
+	 * @return
+	 * @throws NumberFormatException
+	 */
 	public double getDouble(int index) throws NumberFormatException {
 		return Double.parseDouble(getString(index));
 	}
 
+	/**
+	 * Try to parse the argument to a long
+	 * 
+	 * @param index
+	 * @return
+	 * @throws NumberFormatException
+	 */
 	public long getLong(int index) throws NumberFormatException {
 		return Long.parseLong(getString(index));
 	}
 
+	/**
+	 * Check if the arguments contain the wanted flagF
+	 * 
+	 * @param ch
+	 *            flag to be searched
+	 * @return true if found.
+	 */
 	public boolean hasFlag(char ch) {
 		return booleanFlags.contains(ch) || valueFlags.containsKey(ch);
 	}
@@ -159,8 +194,8 @@ public class CommandArgs implements Iterable<String> {
 		String result = valueFlags.get(ch);
 		if (result == null)
 			return null;
-		parsedArgs.remove(result);
-		length--;
+		if (parsedArgs.remove(result))
+			length--;
 		return result;
 	}
 

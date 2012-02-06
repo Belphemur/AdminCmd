@@ -47,12 +47,21 @@ public class PermissionLinker {
 	 */
 	public static Permission addOnTheFly(String permNode, String parentNode) {
 		Permission child;
+		if (ACPluginManager.getServer() == null)
+			return null;
 		if ((child = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
-			final Permission parent = ACPluginManager.getServer().getPluginManager()
-					.getPermission(parentNode);
 			child = new Permission(permNode, PermissionDefault.OP);
 			ACPluginManager.getServer().getPluginManager().addPermission(child);
-			parent.getChildren().put(permNode, true);
+			if (parentNode.isEmpty())
+				return child;
+			Permission parent = ACPluginManager.getServer().getPluginManager()
+					.getPermission(parentNode);
+
+			if (parent == null) {
+				parent = new Permission(parentNode, PermissionDefault.OP);
+				ACPluginManager.getServer().getPluginManager().addPermission(parent);
+			}
+			child.addParent(parent, true);
 		}
 		return child;
 
@@ -112,6 +121,7 @@ public class PermissionLinker {
 		}
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child);
+		DebugLog.INSTANCE.info(child + " registered as child of " + parent);
 		return child.getBukkitPerm();
 	}
 

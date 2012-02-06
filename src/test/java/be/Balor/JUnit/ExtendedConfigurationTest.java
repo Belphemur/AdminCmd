@@ -16,19 +16,20 @@
  ************************************************************************/
 package be.Balor.JUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import be.Balor.Player.BannedPlayer;
-import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 
 /**
@@ -43,9 +44,9 @@ public class ExtendedConfigurationTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
 		file = new File("test.yml");
-		ExtendedConfiguration.registerClass(TempBannedPlayer.class);
-		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);		
+		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
 		conf.add("test", "blah");
 		conf.createSection("yatta").set("test", "blah");
 		conf.save();
@@ -61,29 +62,24 @@ public class ExtendedConfigurationTest {
 	}
 
 	@Test
-	public void serializeBukkitTest() throws IOException {
+	public void serializeBukkitTest() throws IOException, InvalidConfigurationException {
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
 		ItemStack test = new ItemStack(Material.WATER, 10);
 		conf.set("serial.item", test);
 		conf.save();
+		conf.reload();
+		assertEquals(new ItemStack(Material.WATER, 10), conf.get("serial.item"));
 	}
 
 	@Test
-	public void deserializeBukkitTest() {
-		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
-		assertEquals(new ItemStack(Material.WATER, 10), conf.get("serial.item"));
-	}
-	@Test
-	public void serializeAdminCmdTest() throws IOException {		
+	public void serializeAdminCmdTest() throws IOException, InvalidConfigurationException {
 		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
 		conf.set("serial.banPlayer", new BannedPlayer("Test", "testing"));
 		conf.save();
+		conf.reload();
+		assertEquals("Test", ((BannedPlayer) conf.get("serial.banPlayer")).getPlayer());
 	}
-	@Test
-	public void deserializeAdminCmdTest() {
-		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
-		assertEquals("Test", ((BannedPlayer)conf.get("serial.banPlayer")).getPlayer());
-	}
+
 	@After
 	public void tearDown() throws Exception {
 		file.deleteOnExit();

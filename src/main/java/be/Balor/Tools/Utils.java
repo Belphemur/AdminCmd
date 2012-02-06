@@ -20,12 +20,6 @@ import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import info.somethingodd.bukkit.OddItem.OddItemBase;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,9 +62,7 @@ import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
-import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
@@ -145,6 +137,9 @@ public class Utils {
 	public final static long hourInMillis = minuteInMillis * 60;
 	public final static long dayInMillis = hourInMillis * 24;
 	public final static int secInTick = 20;
+	private static final Character delimiter = '&';
+	public static final Pattern regexColorParser = Pattern.compile(delimiter + "[A-Fa-f]|"
+			+ delimiter + "1[0-5]|" + delimiter + "[0-9]");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -309,6 +304,11 @@ public class Utils {
 		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
 				&& pLvl != tLvl)
 			return false;
+		/*
+		 * ACLogger.info("Immunity Check " + player.getName() + "-" +
+		 * target.getName() + " : " + pLvl + ">=" + tLvl + " = " + (pLvl >=
+		 * tLvl));
+		 */
 		if (pLvl >= tLvl)
 			return true;
 		else
@@ -347,10 +347,6 @@ public class Utils {
 
 	}
 
-	public static String colorParser(String toParse) {
-		return colorParser(toParse, "&");
-	}
-
 	/**
 	 * Parse a string and replace the color in it
 	 * 
@@ -358,12 +354,10 @@ public class Utils {
 	 * @param toParse
 	 * @return
 	 */
-	public static String colorParser(String toParse, String delimiter) {
+	public static String colorParser(String toParse) {
 		String ResultString = null;
 		try {
-			final Pattern regex = Pattern.compile(delimiter + "[A-Fa-f]|" + delimiter + "1[0-5]|"
-					+ delimiter + "[0-9]");
-			Matcher regexMatcher = regex.matcher(toParse);
+			Matcher regexMatcher = regexColorParser.matcher(toParse);
 			String result = toParse;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
@@ -375,7 +369,7 @@ public class Utils {
 				}
 				result = regexMatcher.replaceFirst(ChatColor.getByChar(
 						Integer.toHexString(colorint)).toString());
-				regexMatcher = regex.matcher(result);
+				regexMatcher = regexColorParser.matcher(result);
 			}
 			return result;
 		} catch (final Exception ex) {
@@ -472,8 +466,11 @@ public class Utils {
 			}
 			if (!Utils.checkImmunity(sender, args, 0))
 				return null;
-		} else
+		} else {
+			if (!checkImmunity(sender, target))
+				return null;
 			actarget = ACPlayer.getPlayer(target);
+		}
 		return actarget;
 	}
 
@@ -648,89 +645,8 @@ public class Utils {
 		return serverTime;
 	}
 
-	/**
-	 * Get a txt-file and return its content in a String
-	 * 
-	 * @param fileName
-	 *            - The name of the file to be loaded
-	 * @return The content of the file
-	 */
-	public static String getTextFile(String fileName) {
-		final StringBuffer result = new StringBuffer();
-		try {
-			final File fileDir = FileManager.getInstance().getInnerFile(fileName);
-			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
-					fileDir), "UTF8"));
-			String temp;
-			while ((temp = in.readLine()) != null) {
-				result.append(temp + "\n");
-			}
-			in.close();
-		} catch (final UnsupportedEncodingException e) {
-			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
-		} catch (final IOException e) {
-			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
-		} catch (final Exception e) {
-			// TODO: Better debug code here
-			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
-		}
-		if (result.length() == 0)
-			return null;
-		else
-			return result.toString().trim();
-	}
-
 	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
-	}
-
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
-		return getUserParam(sender, args, permNode, true);
-	}
-
-	/**
-	 * Get the user using the -P param as indicating the userName and check who
-	 * launched the command.
-	 * 
-	 * @param sender
-	 * @param args
-	 * @param permNode
-	 * @param errorMsg
-	 * @return
-	 */
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
-			boolean errorMsg) {
-		Player target = null;
-		String playerName = args.getValueFlag('P');
-		if (playerName != null) {
-			target = getPlayer(playerName);
-			if (target != null)
-				if (target.equals(sender))
-					return target;
-				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
-					if (checkImmunity(sender, target))
-						return target;
-					else {
-						Utils.sI18n(sender, "insufficientLvl");
-						return null;
-					}
-				} else
-					return null;
-		} else if (isPlayer(sender, false))
-			target = ((Player) sender);
-		else if (errorMsg) {
-			sender.sendMessage("You must type the player name");
-			return target;
-		}
-		if (target == null && errorMsg) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", playerName);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
-		}
-		return target;
 	}
 
 	/**
@@ -774,6 +690,53 @@ public class Utils {
 		}
 		return target;
 
+	}
+
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
+		return getUserParam(sender, args, permNode, true);
+	}
+
+	/**
+	 * Get the user using the -P param as indicating the userName and check who
+	 * launched the command.
+	 * 
+	 * @param sender
+	 * @param args
+	 * @param permNode
+	 * @param errorMsg
+	 * @return
+	 */
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
+			boolean errorMsg) {
+		Player target = null;
+		final String playerName = args.getValueFlag('P');
+		if (playerName != null) {
+			target = getPlayer(playerName);
+			if (target != null)
+				if (target.equals(sender))
+					return target;
+				else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+					if (checkImmunity(sender, target))
+						return target;
+					else {
+						Utils.sI18n(sender, "insufficientLvl");
+						return null;
+					}
+				} else
+					return null;
+		} else if (isPlayer(sender, false))
+			target = ((Player) sender);
+		else if (errorMsg) {
+			sender.sendMessage("You must type the player name");
+			return target;
+		}
+		if (target == null && errorMsg) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", playerName);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return target;
+		}
+		return target;
 	}
 
 	public static String I18n(String key) {
@@ -920,10 +883,10 @@ public class Utils {
 				limitY, limitX, limitZ, mat));
 		try {
 			sema.acquire();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with acquiring the semaphore", e);
 		}
-		for (SimplifiedLocation loc : okBlocks) {
+		for (final SimplifiedLocation loc : okBlocks) {
 			br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(loc);
 			blocks.push(br);
 			blocksCache.push(br);
@@ -1031,7 +994,7 @@ public class Utils {
 			sI18n(sender, "timePaused", "world", w.getName());
 
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-				ACPluginManager.getPluginInstance("Core"), new SetTime(w, newtime));
+				ACPluginManager.getCorePlugin(), new SetTime(w, newtime));
 	}
 
 	public static void sI18n(CommandSender sender, String key) {
@@ -1053,7 +1016,7 @@ public class Utils {
 	public static void sParsedLocale(Player p, String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
-		ACPlayer acPlayer = ACPlayer.getPlayer(p);
+		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
 		final long total = acPlayer.getCurrentPlayedTime();
 		final Long[] time = Utils.transformToElapsedTime(total);
 		replace.put("d", time[0].toString());
@@ -1133,64 +1096,86 @@ public class Utils {
 			found = false;
 		}
 
-		if (found) {
-			if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-					&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
-					&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
-				replace.put("player", nTo);
-				Utils.sI18n(sender, "playerNotFound", replace);
-				return;
-			}
-			if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-					&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
-							.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
-				replace.put("player", nFrom);
-				Utils.sI18n(sender, "playerNotFound", replace);
-				return;
-			}
-			if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-				ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
-				ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
-				replace.put("fromPlayer", pFrom.getName());
-				replace.put("toPlayer", pTo.getName());
-				Utils.sI18n(sender, "tp", replace);
-			} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-					&& ACPlayer.getPlayer(pTo.getName()).hasPower(Type.TP_REQUEST)) {
-				ACPlayer.getPlayer(pTo).setTpRequest(new TpRequest(pFrom, pTo));
-				Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
-				final HashMap<String, String> replace2 = new HashMap<String, String>();
-				replace2.put("player", pTo.getName());
-				if (type.toString().equalsIgnoreCase("to"))
-					replace2.put("tp_type", Utils.I18n("tpTO"));
-				else if (type.toString().equalsIgnoreCase("players")) {
-					replace2.put("tp_type", Utils.I18n("tpPLAYERSTO"));
-					replace2.put("target", pTo.getName());
-				} else
-					replace2.put("tp_type", type.toString());
-				Utils.sI18n(pFrom, "tpRequestSend", replace2);
+		if (!found)
+			return;
+		if (!ConfigEnum.TP_DIFF_WORLD.getBoolean()
+				&& !pFrom.getWorld().equals(pTo.getWorld())
+				&& !PermissionManager.hasPerm(sender, "admincmd.tp.world."
+						+ pTo.getWorld().getName().replace(' ', '_'), false)) {
+			replace.put("to", pTo.getName());
+			sI18n(sender, "diffWorld", replace);
+			return;
+		}
+		if (type.equals(Type.Tp.TO) && !checkImmunity(pFrom, pTo)) {
+			sI18n(sender, "insufficientLvl");
+			return;
+		}
+		if (type.equals(Type.Tp.HERE) && !checkImmunity(pTo, pFrom)) {
+			sI18n(sender, "insufficientLvl");
+			return;
+		}
+		if (type.equals(Type.Tp.PLAYERS) && !checkImmunity(sender, pFrom)
+				&& !checkImmunity(sender, pTo)) {
+			sI18n(sender, "insufficientLvl");
+			return;
+		}
+		if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
+				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
+				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
+			replace.put("player", nTo);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return;
+		}
+		if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
+				&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
+						.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
+			replace.put("player", nFrom);
+			Utils.sI18n(sender, "playerNotFound", replace);
+			return;
+		}
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
+			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
+			replace.put("fromPlayer", pFrom.getName());
+			replace.put("toPlayer", pTo.getName());
+			Utils.sI18n(sender, "tp", replace);
+		} else if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
+				&& ACPlayer.getPlayer(pTo.getName()).hasPower(Type.TP_REQUEST)) {
+			ACPlayer.getPlayer(pTo).setTpRequest(new TpRequest(pFrom, pTo));
+			Utils.sI18n(pTo, "tpRequestTo", "player", pFrom.getName());
+			final HashMap<String, String> replace2 = new HashMap<String, String>();
+			replace2.put("player", pTo.getName());
+			if (type.toString().equalsIgnoreCase("to"))
+				replace2.put("tp_type", Utils.I18n("tpTO"));
+			else if (type.toString().equalsIgnoreCase("players")) {
+				replace2.put("tp_type", Utils.I18n("tpPLAYERSTO"));
+				replace2.put("target", pTo.getName());
+			} else
+				replace2.put("tp_type", type.toString());
+			Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
-			} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-					&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
-				ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
-				Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
-				final HashMap<String, String> replace2 = new HashMap<String, String>();
-				replace2.put("player", pFrom.getName());
-				if (type.toString().equalsIgnoreCase("here"))
-					replace2.put("tp_type", Utils.I18n("tpHERE"));
-				else if (type.toString().equalsIgnoreCase("players")) {
-					replace2.put("tp_type", Utils.I18n("tpPLAYERSFROM"));
-					replace2.put("target", pFrom.getName());
-				} else
-					replace2.put("tp_type", type.toString());
-				Utils.sI18n(pTo, "tpRequestSend", replace2);
+		} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
+				&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
+			ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
+			Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
+			final HashMap<String, String> replace2 = new HashMap<String, String>();
+			replace2.put("player", pFrom.getName());
+			if (type.toString().equalsIgnoreCase("here"))
+				replace2.put("tp_type", Utils.I18n("tpHERE"));
+			else if (type.toString().equalsIgnoreCase("players")) {
+				replace2.put("tp_type", Utils.I18n("tpPLAYERSFROM"));
+				replace2.put("target", pFrom.getName());
+			} else
+				replace2.put("tp_type", type.toString());
+			Utils.sI18n(pTo, "tpRequestSend", replace2);
 
-			} else {
-				ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
-				ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
-				replace.put("fromPlayer", pFrom.getName());
-				replace.put("toPlayer", pTo.getName());
-				Utils.sI18n(sender, "tp", replace);
-			}
+		} else {
+			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
+			replace.put("fromPlayer", pFrom.getName());
+			replace.put("toPlayer", pTo.getName());
+			Utils.sI18n(sender, "tp", replace);
+
 		}
 	}
 

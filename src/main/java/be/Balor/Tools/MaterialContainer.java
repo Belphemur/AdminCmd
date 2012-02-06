@@ -16,21 +16,27 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MaterialContainer {
+public class MaterialContainer implements Comparable<MaterialContainer> {
 	private Material material = null;
 	private short dmg = 0;
 	private int amount = 1;
+	private final Map<Enchantment, Integer> enchantments;
 
 	public MaterialContainer(ItemStack is) {
 		material = is.getType();
 		dmg = is.getDurability();
+		this.enchantments = is.getEnchantments();
 	}
 
 	public MaterialContainer(String mat) {
@@ -43,6 +49,7 @@ public class MaterialContainer {
 		}
 		parseMat(info[0]);
 		parseDmg(info[1]);
+		this.enchantments = new HashMap<Enchantment, Integer>();
 	}
 
 	/**
@@ -60,10 +67,11 @@ public class MaterialContainer {
 	public MaterialContainer(String mat, String damage) {
 		parseMat(mat);
 		parseDmg(damage);
+		this.enchantments = new HashMap<Enchantment, Integer>();
 	}
 
 	public MaterialContainer() {
-
+		this.enchantments = new HashMap<Enchantment, Integer>();
 	}
 
 	private void parseMat(String material) {
@@ -97,7 +105,9 @@ public class MaterialContainer {
 	 * @return
 	 */
 	public ItemStack getItemStack(int amount) {
-		return new ItemStack(material, amount, dmg);
+		ItemStack toReturn = new ItemStack(material, amount, dmg);
+		toReturn.addUnsafeEnchantments(enchantments);
+		return toReturn;
 	}
 
 	public ItemStack getItemStack() {
@@ -125,4 +135,55 @@ public class MaterialContainer {
 	public Material getMaterial() {
 		return material;
 	}
+
+	/**
+	 * @return the amount
+	 */
+	public int getAmount() {
+		return amount;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(MaterialContainer o) {
+		return material.compareTo(o.getMaterial());
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + dmg;
+		result = prime * result + ((material == null) ? 0 : material.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof MaterialContainer))
+			return false;
+		MaterialContainer other = (MaterialContainer) obj;
+		if (dmg != other.dmg)
+			return false;
+		if (material != other.material)
+			return false;
+		return true;
+	}
+
+
+
 }

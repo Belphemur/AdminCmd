@@ -114,7 +114,13 @@ public enum ConfigEnum {
 	SCALE_TIMEOUT("timeOutScale", 60, "When using the parameter -t in power commands (god, fly, etc ...)\n"
 			+ "Configure the scale used for the time (here 60 sec).\n"
 			+ "It mean if you type /god -t 5 you will be god for 5 minutes"),
-	TIME_STOP("timeInSecBeforeStop", 5, "Time before stopping the server when using the AdminCmd command Stop.");
+	TIME_STOP("timeInSecBeforeStop", 0, "Time before stopping the server when using the AdminCmd command Stop."),
+	TP_DIFF_WORLD("tpInDiffWorld", true, "Allow users to teleport to other user that are in a different world.\n"
+			+ "If FALSE the player that want to tp to another player that is in an another world will have to have the permission node :\n"
+			+ "admincmd.tp.world.WORLDNAME (where WORLDNAME is the name of the world where the space are replaced by underscore (_) )"),
+	ARMOR_KIT_OVERRIDE("armorKitOverride", true, "When using an armored kit, if this options is set to true,"
+			+ " it will override what the player is wearing to replace it by the armor of the kit."),
+	DEGG_KILL_RADIUS("defaultEggKillRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command.");
 
 	private final String confVal;
 	private final Object defaultVal;

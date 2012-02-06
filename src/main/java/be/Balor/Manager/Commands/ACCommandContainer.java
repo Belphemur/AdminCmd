@@ -83,4 +83,12 @@ public class ACCommandContainer {
 				+ (args != null ? args.toString() : "args=null")
 				+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/";
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ACCommandContainer [sender=" + sender + ", cmd=" + cmd + ", args=" + args + "]";
+	}
 }

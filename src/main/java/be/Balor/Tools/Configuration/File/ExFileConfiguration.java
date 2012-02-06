@@ -25,6 +25,7 @@ import com.google.common.io.Files;
  */
 public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	protected File file;
+	protected boolean corrupted = false;
 
 	/**
 	 * Creates an empty {@link ExFileConfiguration} with no default values.
@@ -238,11 +239,13 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 *             Thrown when file is null.
 	 */
 	public void save(File file) throws IOException {
+		if(corrupted)
+			return;
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}
-
-		Files.createParentDirs(file);
+		if (file.getParentFile() != null && !file.getParentFile().exists())
+			Files.createParentDirs(file);
 		if (!file.exists())
 			file.createNewFile();
 

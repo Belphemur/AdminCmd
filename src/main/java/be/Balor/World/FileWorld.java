@@ -48,9 +48,6 @@ public class FileWorld extends ACWorld {
 	private final ConfigurationSection warps;
 	private final ExConfigurationSection informations;
 	private final ExConfigurationSection mobLimits;
-	static {
-		ExtendedConfiguration.registerClass(SimpleLocation.class);
-	}
 
 	/**
 	 * @param name
@@ -146,7 +143,9 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Warp getWarp(String name) throws WorldNotLoaded {
+	public Warp getWarp(String name) throws WorldNotLoaded, IllegalArgumentException {
+		if (name == null || (name != null && name.isEmpty()))
+			throw new IllegalArgumentException("Name can't be null or Empty");
 		Object warp = warps.get(name);
 		String warpName = name;
 		if (warp == null) {

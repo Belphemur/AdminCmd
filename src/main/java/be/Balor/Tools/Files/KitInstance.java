@@ -1,6 +1,7 @@
 package be.Balor.Tools.Files;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
@@ -11,10 +12,10 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 public class KitInstance {
 
-	private final String name;
-	private int delay = 0;
-	private final List<MaterialContainer> items;
-	private static final PermissionLinker perm = ACPluginManager.getPluginInstance("Core")
+	protected final String name;
+	protected int delay = 0;
+	protected final List<MaterialContainer> items;
+	private static final PermissionLinker perm = ACPluginManager.getCorePlugin()
 			.getPermissionLinker();
 
 	public KitInstance(String name, int delay, List<MaterialContainer> items) {
@@ -41,6 +42,23 @@ public class KitInstance {
 		return result;
 	}
 
+	/**
+	 * Adding a parent to the kit
+	 * 
+	 * @param parent
+	 */
+	public void addParent(KitInstance parent) {
+		for (MaterialContainer mc : parent.items) {
+			int index = items.indexOf(mc);
+			if (index == -1)
+				items.add(mc);
+			else {
+				MaterialContainer mat = items.get(index);
+				mat.setAmount(mat.getAmount() + mc.getAmount());
+			}
+		}
+	}
+
 	public int getDelay() {
 		return delay;
 	}
@@ -51,4 +69,14 @@ public class KitInstance {
 	public String getName() {
 		return name;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "KitInstance [name=" + name + ", delay=" + delay + ", items=" + Arrays.toString(items.toArray()) + "]";
+	}
+	
+
 }

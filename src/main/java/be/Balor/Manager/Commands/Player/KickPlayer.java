@@ -49,7 +49,9 @@ public class KickPlayer extends PlayerCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player toKick = sender.getServer().getPlayer(args.getString(0));
+		Player toKick = Utils.getUser(sender, args, permNode);
+		if (toKick == null)
+			return;
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		if (args.hasFlag('m')) {
@@ -66,20 +68,17 @@ public class KickPlayer extends PlayerCommand {
 				message += Utils.getPlayerName((Player) sender);
 		}
 
-		if (toKick != null) {
-			final String finalmsg = message.trim();
-			final Player finalToKick = toKick;
-			replace.put("player", Utils.getPlayerName(toKick));
-			ACPluginManager.scheduleSyncTask(new Runnable() {
+		final String finalmsg = message.trim();
+		final Player finalToKick = toKick;
+		replace.put("player", Utils.getPlayerName(toKick));
+		ACPluginManager.scheduleSyncTask(new Runnable() {
 
-				@Override
-				public void run() {
-					finalToKick.kickPlayer(finalmsg);
+			@Override
+			public void run() {
+				finalToKick.kickPlayer(finalmsg);
 
-				}
-			});
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
+			}
+		});
 
 	}
 

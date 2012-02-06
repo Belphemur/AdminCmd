@@ -33,12 +33,11 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class PermParent extends PermChild {
 	protected final String compareName;
 	protected final Set<PermChild> children = new HashSet<PermChild>();
-	public final static PermParent ROOT = new PermParent(null);
-	public final static PermParent ALONE = new PermParent(null);
+	public final static PermParent ROOT = new SpecialPermParent();
+	public final static PermParent ALONE = new SpecialPermParent();
 
 	public PermParent(String perm) {
-		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
-				PermissionDefault.OP);
+		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1), PermissionDefault.OP);
 	}
 
 	public PermParent(String perm, String compare, PermissionDefault def) {
@@ -73,6 +72,7 @@ public class PermParent extends PermChild {
 		perm.parent = this;
 		if (!(perm instanceof PermParent))
 			perm.registerPermission();
+		registered = false;
 		return this;
 	}
 
@@ -87,6 +87,7 @@ public class PermParent extends PermChild {
 		child.registerPermission();
 		child.parent = this;
 		children.add(child);
+		registered = false;
 		return this;
 	}
 
@@ -109,19 +110,22 @@ public class PermParent extends PermChild {
 	void registerPermission() {
 		if (registered)
 			return;
-		if (permName == null && !this.equals(ROOT) && !this.equals(ALONE))
+		if (permName == null)
 			return;
 		for (PermChild child : children)
 			child.registerPermission();
-		if (permName == null)
+
+		if (ACPluginManager.getServer() == null)
 			return;
 		final Permission perm = ACPluginManager.getServer().getPluginManager()
 				.getPermission(permName);
 		if (perm == null)
 			ACPluginManager.getServer().getPluginManager()
 					.addPermission(new Permission(permName, permDefault, getChildren()));
-		else
+		else {
 			perm.getChildren().putAll(getChildren());
+			perm.setDefault(permDefault);
+		}
 		registered = true;
 	}
 

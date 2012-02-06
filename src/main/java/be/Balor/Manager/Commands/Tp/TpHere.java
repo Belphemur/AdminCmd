@@ -46,7 +46,7 @@ public class TpHere extends TeleportCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender)&& Utils.checkImmunity(sender, args, 0)) {
+		if (Utils.isPlayer(sender)) {
 				Utils.tpP2P(sender, args.getString(0), ((Player) sender).getName(), Type.Tp.HERE);
 		}
 	}
