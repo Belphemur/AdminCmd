@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class RepairAll extends ItemCommand {
 
@@ -44,7 +44,7 @@ public class RepairAll extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -59,7 +59,7 @@ public class RepairAll extends ItemCommand {
 			public void run() {
 				for (ItemStack item : player.getInventory().getContents())
 					if (item != null
-							&& ACHelper.getInstance().reparable(
+							&& ACHelper.getInstance().repairable(
 									item.getTypeId()))
 						item.setDurability((short) 0);
 				for (ItemStack item : player.getInventory().getArmorContents())
@@ -78,7 +78,7 @@ public class RepairAll extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

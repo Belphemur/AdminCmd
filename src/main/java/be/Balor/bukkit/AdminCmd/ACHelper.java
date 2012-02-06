@@ -66,14 +66,14 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -126,6 +126,7 @@ public class ACHelper {
 			listOfPossibleRepair.add(i);
 		listOfPossibleRepair.add(359);
 		listOfPossibleRepair.add(Material.BOW.getId());
+		listOfPossibleRepair.add(Material.FISHING_ROD.getId());
 	}
 
 	static void killInstance() {
@@ -142,7 +143,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -152,7 +153,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -182,7 +183,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -216,7 +217,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 * 
+	 *
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -296,7 +297,7 @@ public class ACHelper {
 	/**
 	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
 	 * unBan the player or unban him if his time out.
-	 * 
+	 *
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
@@ -324,7 +325,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -375,7 +376,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
@@ -385,7 +386,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
@@ -440,7 +441,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -449,7 +450,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 * 
+	 *
 	 * @return
 	 */
 	private List<String> getGroupNames() {
@@ -458,7 +459,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
@@ -468,7 +469,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -496,7 +497,7 @@ public class ACHelper {
 
 	/**
 	 * Get the number of kit in the system.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getNbKit() {
@@ -530,7 +531,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 * 
+	 *
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -683,7 +684,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -828,7 +829,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -861,7 +862,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -905,7 +906,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 * 
+	 *
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {
@@ -920,7 +921,7 @@ public class ACHelper {
 		spyPlayers.remove(p);
 	}
 
-	public boolean reparable(int id) {
+	public boolean repairable(int id) {
 		return listOfPossibleRepair.contains(id);
 	}
 
@@ -1014,7 +1015,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 * 
+	 *
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -1062,7 +1063,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 * 
+	 *
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {
