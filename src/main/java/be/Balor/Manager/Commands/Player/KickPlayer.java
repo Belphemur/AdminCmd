@@ -49,10 +49,17 @@ public class KickPlayer extends PlayerCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player toKick = Utils.getUser(sender, args, permNode);
-		if (toKick == null)
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		Player toKick = sender.getServer().getPlayer(args.getString(0));
+		if (toKick == null) {
+			replace.put("player", args.getString(0));
+			Utils.sI18n(sender, "playerNotFound", replace);
 			return;
-		HashMap<String, String> replace = new HashMap<String, String>();
+		}
+		if (!Utils.checkImmunity(sender, toKick)) {
+			Utils.sI18n(sender, "insufficientLvl");
+			return;
+		}
 		String message = "";
 		if (args.hasFlag('m')) {
 			message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
