@@ -74,6 +74,8 @@ public class EggSpawner extends MobCommand {
 		} catch (ProcessingArgsException e) {
 			if (e.getType().equals("classNotFound"))
 				Utils.sI18n(sender, "eggDontExists", "egg", e.getMessage());
+			else if(e.getType().equals("dont_exists"))
+				Utils.sI18n(sender, "entityDontExists", "entity", e.getMessage());
 			else
 				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(), e);
 			return;

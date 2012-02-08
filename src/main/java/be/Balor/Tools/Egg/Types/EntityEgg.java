@@ -51,7 +51,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 		event.setHatching(false);
 		World w = event.getEgg().getWorld();
 		Location loc = event.getEgg().getLocation();
-		
+
 		for (int i = 0; i < value.getNb(); i++)
 			w.spawn(loc, value.getEntityClass());
 	}
@@ -85,8 +85,14 @@ public class EntityEgg extends EggType<EntityInEgg> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		Entity entity = EntityTypes.a(entityNb, ((CraftWorld) sender.getWorld()).getHandle()).getBukkitEntity();
-		value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass().getSimpleName());
+		try {
+			Entity entity = EntityTypes.a(entityNb, ((CraftWorld) sender.getWorld()).getHandle())
+					.getBukkitEntity();
+			value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass()
+					.getSimpleName());
+		} catch (NullPointerException e) {
+			throw new ProcessingArgsException("dont_exist", String.valueOf(entityNb));
+		}
 
 	}
 
