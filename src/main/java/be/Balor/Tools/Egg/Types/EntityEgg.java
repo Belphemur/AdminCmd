@@ -29,6 +29,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.EntityInEgg;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
@@ -91,7 +92,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 			value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass()
 					.getSimpleName());
 		} catch (NullPointerException e) {
-			throw new ProcessingArgsException("dont_exist", String.valueOf(entityNb));
+			throw new ProcessingArgsException(ExceptionType.DONT_EXISTS, String.valueOf(entityNb));
 		}
 
 	}

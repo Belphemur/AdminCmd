@@ -24,6 +24,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
@@ -109,11 +110,11 @@ public abstract class EggType<T> {
 		try {
 			eggType = matchEggClass(className);
 		} catch (ClassNotFoundException e) {
-			throw new ProcessingArgsException("classNotFound", className, e);
+			throw new ProcessingArgsException(ExceptionType.NO_CLASS, className, e);
 		} catch (InstantiationException e) {
-			throw new ProcessingArgsException("instance", className, e);
+			throw new ProcessingArgsException(ExceptionType.INSTANCE, className, e);
 		} catch (IllegalAccessException e) {
-			throw new ProcessingArgsException("IllegalAccess", className, e);
+			throw new ProcessingArgsException(ExceptionType.ILLEGAL_ACCESS, className, e);
 		}
 		eggType.checkPermission(player);
 		eggType.processArguments(player, args);
