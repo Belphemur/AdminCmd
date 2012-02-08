@@ -79,7 +79,7 @@ public class NoPickup extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.NO_PICKUP),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.NO_PICKUP, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}

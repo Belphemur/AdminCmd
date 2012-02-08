@@ -145,7 +145,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -757,6 +757,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
 				+ ChatColor.DARK_RED + "You lost it.");
+		Utils.addLocale("timeOutPowerSender", ChatColor.DARK_RED + "Power " + ChatColor.GOLD + "%power "
+				+  ChatColor.DARK_RED +  "disabled for %player: Time expired");
 		Utils.addLocale("serverStop", "The server is stopping.");
 		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
 				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
