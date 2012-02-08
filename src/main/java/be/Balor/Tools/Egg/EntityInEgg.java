@@ -16,73 +16,61 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
-import net.minecraft.server.Entity;
-
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class EntityInEgg<T extends Entity> {
-	private Class<T> entity;
+public class EntityInEgg {
+	private int entity;
 	private int nb;
-
-	
+	/**
+	 * @param entity
+	 * @param nb
+	 */
+	public EntityInEgg(int entity, int nb) {
+		super();
+		this.entity = entity;
+		this.nb = nb;
+	}
 	/**
 	 * 
 	 */
 	public EntityInEgg() {
 		super();
 	}
-
-	/**
-	 * @param entity
-	 * @param nb
-	 */
-	public EntityInEgg(Class<T> entity, int nb) {
-		super();
-		this.entity = entity;
-		this.nb = nb;
-	}
-
 	/**
 	 * @return the entity
 	 */
-	public Class<T> getEntity() {
+	public int getEntity() {
 		return entity;
 	}
-
 	/**
 	 * @return the nb
 	 */
 	public int getNb() {
 		return nb;
 	}
-
 	/**
-	 * @param entity
-	 *            the entity to set
+	 * @param entity the entity to set
 	 */
-	public void setEntity(Class<T> entity) {
+	public void setEntity(int entity) {
 		this.entity = entity;
 	}
-
 	/**
-	 * @param nb
-	 *            the nb to set
+	 * @param nb the nb to set
 	 */
 	public void setNb(int nb) {
 		this.nb = nb;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "EntityInEgg [entity=" + entity.getSimpleName() + ", nb=" + nb + "]";
+		return "EntityInEgg [entity=" + entity + ", nb=" + nb + "]";
 	}
+	
+	
 
 }

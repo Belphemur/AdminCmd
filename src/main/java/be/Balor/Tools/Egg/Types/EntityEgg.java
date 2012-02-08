@@ -36,7 +36,6 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-@SuppressWarnings("rawtypes")
 public class EntityEgg extends EggType<EntityInEgg> {
 
 	/*
@@ -46,14 +45,14 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public void onEvent(PlayerEggThrowEvent event) {
 		event.getEgg().remove();
 		event.setHatching(false);
 		World w = event.getEgg().getWorld();
 		Location loc = event.getEgg().getLocation();
+		Entity entity = EntityTypes.a(value.getEntity(), ((CraftWorld) w).getHandle()).getBukkitEntity();
 		for (int i = 0; i < value.getNb(); i++)
-			w.spawn(loc, value.getEntity());
+			w.spawn(loc, entity.getClass());
 	}
 
 	/*
@@ -64,7 +63,6 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
 		String entityParam = args.getValueFlag('e');
 		if (entityParam == null)
@@ -86,8 +84,8 @@ public class EntityEgg extends EggType<EntityInEgg> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		Entity entity = EntityTypes.a(entityNb, ((CraftWorld) sender.getWorld()).getHandle()).getBukkitEntity();
-		value = new EntityInEgg(entity.getClass(), nbre);
+	
+		value = new EntityInEgg(entityNb, nbre);
 
 	}
 
