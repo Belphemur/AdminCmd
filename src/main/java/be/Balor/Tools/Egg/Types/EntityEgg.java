@@ -44,15 +44,16 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.
 	 * PlayerEggThrowEvent)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
 		event.getEgg().remove();
 		event.setHatching(false);
 		World w = event.getEgg().getWorld();
 		Location loc = event.getEgg().getLocation();
-		Entity entity = EntityTypes.a(value.getEntity(), ((CraftWorld) w).getHandle()).getBukkitEntity();
+		
 		for (int i = 0; i < value.getNb(); i++)
-			w.spawn(loc, entity.getClass());
+			w.spawn(loc, value.getEntityClass());
 	}
 
 	/*
@@ -84,8 +85,8 @@ public class EntityEgg extends EggType<EntityInEgg> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-	
-		value = new EntityInEgg(entityNb, nbre);
+		Entity entity = EntityTypes.a(entityNb, ((CraftWorld) sender.getWorld()).getHandle()).getBukkitEntity();
+		value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass().getSimpleName());
 
 	}
 

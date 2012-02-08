@@ -16,61 +16,98 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
+import org.bukkit.entity.Chicken;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class EntityInEgg {
-	private int entity;
+	private String entityClass;
 	private int nb;
+	private String entityName;
+
 	/**
-	 * @param entity
+	 * @param entityClass
 	 * @param nb
+	 * @param entityName
 	 */
-	public EntityInEgg(int entity, int nb) {
+	public EntityInEgg(String entityClass, int nb, String entityName) {
 		super();
-		this.entity = entity;
+		this.entityClass = entityClass;
 		this.nb = nb;
+		this.entityName = entityName;
 	}
+
 	/**
 	 * 
 	 */
 	public EntityInEgg() {
 		super();
 	}
+
 	/**
-	 * @return the entity
+	 * @return the entityClass
 	 */
-	public int getEntity() {
-		return entity;
+	public String getEntityClassName() {
+		return entityClass;
 	}
+
 	/**
 	 * @return the nb
 	 */
 	public int getNb() {
 		return nb;
 	}
+
 	/**
-	 * @param entity the entity to set
+	 * @return the entityName
 	 */
-	public void setEntity(int entity) {
-		this.entity = entity;
+	public String getEntityName() {
+		return entityName;
 	}
+
 	/**
-	 * @param nb the nb to set
+	 * @param entityClass
+	 *            the entityClass to set
+	 */
+	public void setEntityClass(String entityClass) {
+		this.entityClass = entityClass;
+	}
+
+	/**
+	 * @param nb
+	 *            the nb to set
 	 */
 	public void setNb(int nb) {
 		this.nb = nb;
 	}
-	/* (non-Javadoc)
+
+	/**
+	 * @param entityName
+	 *            the entityName to set
+	 */
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Class getEntityClass() {
+		try {
+			return Class.forName(entityClass);
+		} catch (ClassNotFoundException e) {
+			return Chicken.class;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "EntityInEgg [entity=" + entity + ", nb=" + nb + "]";
+		return "EntityInEgg [nb=" + nb + ", entity=" + entityName + "]";
 	}
-	
-	
 
 }
