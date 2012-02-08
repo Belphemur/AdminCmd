@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Fireball extends PlayerCommand {
 	public Fireball() {
@@ -42,7 +42,7 @@ public class Fireball extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -88,7 +88,7 @@ public class Fireball extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FIREBALL),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FIREBALL, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
@@ -97,7 +97,7 @@ public class Fireball extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

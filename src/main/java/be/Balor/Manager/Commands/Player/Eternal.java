@@ -84,7 +84,7 @@ public class Eternal extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.ETERNAL),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.ETERNAL, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}

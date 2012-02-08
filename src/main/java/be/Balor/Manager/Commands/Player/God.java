@@ -79,7 +79,7 @@ public class God extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.GOD),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.GOD, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}

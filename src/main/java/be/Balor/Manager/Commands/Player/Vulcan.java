@@ -91,7 +91,7 @@ public class Vulcan extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.VULCAN),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.VULCAN, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
