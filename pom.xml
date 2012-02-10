@@ -75,15 +75,8 @@
 							<Specification-Title>AdminCmd</Specification-Title>
 							<Specification-Version>${project.version}</Specification-Version>
 							<Specification-Vendor>AdminCmd Team</Specification-Vendor>
-							<Sealed>true</Sealed>
 						</manifestEntries>
 						<manifestSections>
-							<manifestSection>
-								<name>be/Balor/</name>
-								<manifestEntries>
-									<Sealed>true</Sealed>
-								</manifestEntries>
-							</manifestSection>
 							<manifestSection>
 								<name>belgium/Balor/</name>
 								<manifestEntries>
