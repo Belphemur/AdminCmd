@@ -930,7 +930,7 @@ public class Utils {
 	 * @param name
 	 * @return
 	 */
-	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, String toDo) {
+	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, Type.Health toDo) {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		Hero hero = null;
 		if (target == null)
@@ -938,20 +938,28 @@ public class Utils {
 		if (heroes != null) {
 			hero = heroes.getHeroManager().getHero(target);
 		}
-		if (toDo.equals("heal") && hero == null) {
-			target.setHealth(20);
+		switch (toDo) {
+		case HEAL:
+			if (hero == null)
+				target.setHealth(20);
+			else
+				hero.setHealth(20D);
 			target.setFireTicks(0);
-		} else if (toDo.equals("heal") && hero != null) {
-			hero.setHealth(hero.getMaxHealth());
-			target.setFireTicks(0);
-		} else if (toDo.equals("feed")) {
+			break;
+		case FEED:
 			target.setFoodLevel(20);
-		} else {
-			target.setHealth(0);
+			break;
+		case KILL:
+			if (hero == null)
+				target.setHealth(0);
+			else
+				hero.setHealth(0D);
 			if (logBlock != null)
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
+			break;
+		default:
+			return false;
 		}
-
 		return true;
 	}
 
@@ -993,8 +1001,8 @@ public class Utils {
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
 
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-				ACPluginManager.getCorePlugin(), new SetTime(w, newtime));
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new SetTime(w, newtime));
 	}
 
 	public static void sI18n(CommandSender sender, String key) {

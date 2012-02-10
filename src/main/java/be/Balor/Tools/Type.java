@@ -190,4 +190,10 @@ public enum Type {
 		}
 	}
 
+	public enum Health {
+		KILL,
+		HEAL,
+		FEED;
+	}
+
 }

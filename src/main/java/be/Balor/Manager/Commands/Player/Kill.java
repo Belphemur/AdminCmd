@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Tools.Type.Health;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -50,7 +51,7 @@ public class Kill extends PlayerCommand {
 
 			@Override
 			public void run() {
-				Utils.setPlayerHealth(sender, args, "kill");
+				Utils.setPlayerHealth(sender, args, Health.KILL);
 			}
 		});
 		
