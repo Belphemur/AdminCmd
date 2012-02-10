@@ -31,6 +31,11 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 @EggPermission(permission = "", permissionParent = "")
 public class NormalEgg extends EggType<Object> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7074659045549362633L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

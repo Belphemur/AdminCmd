@@ -43,6 +43,11 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class KillerEgg extends EggType<Integer> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7763897329319981939L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

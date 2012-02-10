@@ -39,6 +39,11 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
  */
 public class EntityEgg extends EggType<EntityInEgg> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 805828153137593363L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

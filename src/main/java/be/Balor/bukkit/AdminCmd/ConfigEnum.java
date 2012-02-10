@@ -30,6 +30,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * 
  */
 public enum ConfigEnum {
+
 	MOTD("MessageOfTheDay", true, "if true, display MOTD on join"),
 	NEWS("DisplayNewsOnJoin", true, "If true, display the news message on Join"),
 	RULES("DisplayRulesOnJoin", true, "If true, display the rules on Join"),
@@ -121,7 +122,7 @@ public enum ConfigEnum {
 	ARMOR_KIT_OVERRIDE("armorKitOverride", true, "When using an armored kit, if this options is set to true,"
 			+ " it will override what the player is wearing to replace it by the armor of the kit."),
 	DEGG_KILL_RADIUS("defaultEggKillRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command.");
-
+	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;
 	private final String description;

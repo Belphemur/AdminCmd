@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.permissions.Permission;
@@ -32,7 +34,12 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class EggType<T> {
+public abstract class EggType<T> implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2793422400211176328L;
+
 	protected T value;
 
 	private final static ClassLoader eggTypeLoader = new EggTypeClassLoader();

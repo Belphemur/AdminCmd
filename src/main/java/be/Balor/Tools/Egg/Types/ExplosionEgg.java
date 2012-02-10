@@ -32,6 +32,11 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class ExplosionEgg extends EggType<Float> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 729116147611485304L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
