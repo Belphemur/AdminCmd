@@ -66,14 +66,14 @@ public class KillerEgg extends EggType<Integer> {
 		for (Object entity : ((CraftWorld) w).getHandle().entityList)
 			if (entity instanceof EntityLiving)
 				entities.add((EntityLiving) entity);
+		w.playEffect(loc, Effect.SMOKE, 1, value);
+		w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 
 					@Override
 					public void run() {
 						int count = 0;
-						w.playEffect(loc, Effect.SMOKE, 1, value);
-						w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
 						for (EntityLiving entity : entities) {
 							if (entity.equals(p.getHandle())) {
 								continue;
