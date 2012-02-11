@@ -49,6 +49,10 @@ public class SimpleLocation {
 	private float yaw;
 
 	public SimpleLocation(Location loc) {
+		setLocationValue(loc);
+	}
+
+	public void setLocationValue(Location loc) {
 		x = loc.getX();
 		y = loc.getY();
 		z = loc.getZ();

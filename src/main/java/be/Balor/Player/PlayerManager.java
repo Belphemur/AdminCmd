@@ -37,7 +37,7 @@ public class PlayerManager {
 	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
 			.makeMap();
 	private final static PlayerManager instance = new PlayerManager();
-	private ACPlayerFactory playerFactory;
+	private IPlayerFactory playerFactory;
 
 	/**
 	 * 
@@ -59,7 +59,7 @@ public class PlayerManager {
 	 * @param playerFactory
 	 *            the playerFactory to set
 	 */
-	public void setPlayerFactory(ACPlayerFactory playerFactory) {
+	public void setPlayerFactory(IPlayerFactory playerFactory) {
 		this.playerFactory = playerFactory;
 	}
 

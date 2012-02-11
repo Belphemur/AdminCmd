@@ -29,7 +29,7 @@ import be.Balor.Tools.Files.YmlFilter;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPlayerFactory {
+public class ACPlayerFactory implements IPlayerFactory{
 	final String directory;
 	private final Set<String> existingPlayers = new HashSet<String>();
 
@@ -48,11 +48,11 @@ public class ACPlayerFactory {
 		DebugLog.INSTANCE.info("User's file found : " + files.toString().trim());
 	}
 
-	void addExistingPlayer(String player) {
+	public void addExistingPlayer(String player) {
 		existingPlayers.add(player);
 	}
 
-	ACPlayer createPlayer(String playername) {
+	public ACPlayer createPlayer(String playername) {
 		if (!existingPlayers.contains(playername))
 			return new EmptyPlayer(playername);
 		else if (directory != null)
@@ -61,7 +61,7 @@ public class ACPlayerFactory {
 			return null;
 	}
 
-	ACPlayer createPlayer(Player player) {
+	public ACPlayer createPlayer(Player player) {
 		if (!existingPlayers.contains(player.getName()))
 			return new EmptyPlayer(player);
 		else if (directory != null)
@@ -73,7 +73,7 @@ public class ACPlayerFactory {
 	/**
 	 * @return the existingPlayers
 	 */
-	Set<String> getExistingPlayers() {
+	public Set<String> getExistingPlayers() {
 		return existingPlayers;
 	}
 
