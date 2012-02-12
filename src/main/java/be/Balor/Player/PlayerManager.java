@@ -18,6 +18,7 @@ package be.Balor.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
@@ -60,7 +61,39 @@ public class PlayerManager {
 	 *            the playerFactory to set
 	 */
 	public void setPlayerFactory(IPlayerFactory playerFactory) {
-		this.playerFactory = playerFactory;
+		if (this.playerFactory == null)
+			this.playerFactory = playerFactory;
+	}
+
+	/**
+	 * Convert the ACPlayer
+	 * 
+	 * @param playerFactory
+	 */
+	public void convertFactory(IPlayerFactory factory) {
+		for (String name : this.playerFactory.getExistingPlayers()) {
+			ACPlayer oldPlayer = playerFactory.createPlayer(name);
+			ACPlayer newPlayer = factory.createPlayer(name);
+			newPlayer.setLastLocation(oldPlayer.getLastLocation());
+			newPlayer.setPresentation(oldPlayer.getPresentation());
+
+			for (String home : oldPlayer.getHomeList())
+				newPlayer.setHome(home, oldPlayer.getHome(home));
+			for (Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
+				Type power = Type.matchType(entry.getKey());
+				if (power != null)
+					newPlayer.setPower(power, oldPlayer.getPower(power));
+				else
+					newPlayer.setCustomPower(entry.getKey(),
+							oldPlayer.getCustomPower(entry.getKey()));
+			}
+			for (String info : oldPlayer.getInformationsList())
+				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
+			for (String kit : oldPlayer.getKitUseList())
+				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
+			newPlayer.forceSave();
+		}
+		this.playerFactory = factory;
 	}
 
 	/**
@@ -193,7 +226,7 @@ public class PlayerManager {
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(name);
 			if (tmp instanceof EmptyPlayer)
-				return result;			
+				return result;
 			players.remove(name);
 			onlinePlayers.remove(result);
 			result = tmp;
@@ -215,7 +248,7 @@ public class PlayerManager {
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(playerName);
 			if (tmp instanceof EmptyPlayer)
-				return result;			
+				return result;
 			players.remove(playerName);
 			onlinePlayers.remove(result);
 			result = tmp;

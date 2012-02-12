@@ -39,15 +39,17 @@ public class EmptyPlayer extends ACPlayer {
 	 */
 	protected EmptyPlayer(String name) {
 		super(name);
-		DebugLog.INSTANCE.severe("Empty Player instancied with name : "+name);
+		DebugLog.INSTANCE.severe("Empty Player instancied with name : " + name);
 	}
+
 	/**
 	 * @param name
 	 */
 	protected EmptyPlayer(Player name) {
 		super(name);
-		DebugLog.INSTANCE.severe("Empty Player instancied with name : "+name.getName());
+		DebugLog.INSTANCE.severe("Empty Player instancied with name : " + name.getName());
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -265,34 +267,70 @@ public class EmptyPlayer extends ACPlayer {
 		return new HashMap<String, String>();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
 	 */
 	@Override
 	public void updateLastKitUse(String kit) {
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
 	 */
 	@Override
 	public long getLastKitUse(String kit) {
 		return 0;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#setPresentation(java.lang.String)
 	 */
 	@Override
 	public void setPresentation(String presentation) {
-		
+
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#getPresentation()
 	 */
 	@Override
 	public String getPresentation() {
 		return "";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getInformationsList()
+	 */
+	@Override
+	public Set<String> getInformationsList() {
+		return new HashSet<String>();
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#getKitUseList()
+	 */
+	@Override
+	public Set<String> getKitUseList() {
+		return new HashSet<String>();
+	}
+
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.ACPlayer#setLastKitUse(java.lang.String, long)
+	 */
+	@Override
+	public void setLastKitUse(String kit, long timestamp) {
+		
 	}
 
 }

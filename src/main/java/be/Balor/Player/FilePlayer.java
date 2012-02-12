@@ -411,17 +411,6 @@ public class FilePlayer extends ACPlayer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
-	 */
-	@Override
-	public void updateLastKitUse(String kit) {
-		kitsUse.set(kit, System.currentTimeMillis());
-		writeFile();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
 	 */
 	@Override
@@ -452,6 +441,37 @@ public class FilePlayer extends ACPlayer {
 		String pres = "";
 		pres = informations.getString("presentation", "");
 		return pres;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getInformationsList()
+	 */
+	@Override
+	public Set<String> getInformationsList() {
+		return informations.getKeys(false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getKitUseList()
+	 */
+	@Override
+	public Set<String> getKitUseList() {
+		return kitsUse.getKeys(false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#setLastKitUse(java.lang.String, long)
+	 */
+	@Override
+	public void setLastKitUse(String kit, long timestamp) {
+		kitsUse.set(kit, timestamp);
+		writeFile();
 	}
 
 }
