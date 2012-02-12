@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
 import com.google.common.collect.MapMaker;
@@ -61,8 +62,7 @@ public class PlayerManager {
 	 *            the playerFactory to set
 	 */
 	public void setPlayerFactory(IPlayerFactory playerFactory) {
-		if (this.playerFactory == null)
-			this.playerFactory = playerFactory;
+		this.playerFactory = playerFactory;
 	}
 
 	/**
@@ -71,6 +71,7 @@ public class PlayerManager {
 	 * @param playerFactory
 	 */
 	public void convertFactory(IPlayerFactory factory) {
+		ACLogger.info("Converting player to the new type.");
 		for (String name : this.playerFactory.getExistingPlayers()) {
 			ACPlayer oldPlayer = playerFactory.createPlayer(name);
 			ACPlayer newPlayer = factory.createPlayer(name);
@@ -82,18 +83,22 @@ public class PlayerManager {
 			for (Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
 				Type power = Type.matchType(entry.getKey());
 				if (power != null)
-					newPlayer.setPower(power, oldPlayer.getPower(power));
+					newPlayer.setPower(power, oldPlayer.getPower(power).getObj());
 				else
 					newPlayer.setCustomPower(entry.getKey(),
-							oldPlayer.getCustomPower(entry.getKey()));
+							oldPlayer.getCustomPower(entry.getKey()).getObj());
 			}
-			for (String info : oldPlayer.getInformationsList())
+			for (String info : oldPlayer.getInformationsList()) {
+				if (info.equals("lastLoc") || info.equals("presentation"))
+					continue;
 				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
+			}
 			for (String kit : oldPlayer.getKitUseList())
 				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
 			newPlayer.forceSave();
 		}
 		this.playerFactory = factory;
+		ACLogger.info("Convertion finished.");
 	}
 
 	/**
