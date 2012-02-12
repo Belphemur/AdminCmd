@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.World;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.bukkit.Location;
@@ -32,9 +30,6 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 @MappedSuperclass
 public class SimpleLocation {
-	@Id
-	@Column(name="id")
-	protected long id;
 	private String world;
 	private double x;
 	private double y;
@@ -158,21 +153,6 @@ public class SimpleLocation {
 	 */
 	public void setYaw(float yaw) {
 		this.yaw = yaw;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	/*
