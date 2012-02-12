@@ -29,14 +29,14 @@ import be.Balor.Tools.Files.YmlFilter;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPlayerFactory implements IPlayerFactory{
+public class FilePlayerFactory implements IPlayerFactory{
 	final String directory;
 	private final Set<String> existingPlayers = new HashSet<String>();
 
 	/**
 	 * 
 	 */
-	public ACPlayerFactory(String directory) {
+	public FilePlayerFactory(String directory) {
 		this.directory = directory;
 		File[] players = YmlFilter.listRecursively(new File(directory), 1);
 		StringBuffer files = new StringBuffer();

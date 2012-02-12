@@ -110,10 +110,20 @@ public class FilePlayer extends ACPlayer {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
-		int delay = ConfigEnum.WDELAY.getInt() >= 30 ?  ConfigEnum.WDELAY.getInt() : 30;
+		int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
 		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
+	}
+
+	/**
+	 * To stop the saving task.
+	 */
+	public static void stopSavingTask() {
+		if (!ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
+				&& !ACPluginManager.getScheduler().isQueued(ioStackTaskId))
+			return;
+		ACPluginManager.getScheduler().cancelTask(ioStackTaskId);
 	}
 
 	@Override

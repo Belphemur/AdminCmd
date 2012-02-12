@@ -38,7 +38,7 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.ACPlayerFactory;
+import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
@@ -57,7 +57,7 @@ import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
-import be.Balor.World.ACWorldFactory;
+import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -954,10 +954,10 @@ public class ACHelper {
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
 		PlayerManager.getInstance().setPlayerFactory(
-				new ACPlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
+				new FilePlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "userData"));
 		WorldManager.getInstance().setWorldFactory(
-				new ACWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
+				new FileWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "worldData"));
 		// convertBannedMuted();
 		convertSpawnWarp();

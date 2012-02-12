@@ -31,7 +31,7 @@ import com.google.common.collect.MapMaker;
  */
 public class WorldManager {
 	private ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
-	private ACWorldFactory worldFactory;
+	private IWorldFactory worldFactory;
 	private static WorldManager instance = new WorldManager();
 
 	/**
@@ -69,7 +69,7 @@ public class WorldManager {
 	 * @param worldFactory
 	 *            the worldFactory to set
 	 */
-	public void setWorldFactory(ACWorldFactory worldFactory) {
+	public void setWorldFactory(IWorldFactory worldFactory) {
 		this.worldFactory = worldFactory;
 	}
 
