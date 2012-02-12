@@ -69,6 +69,10 @@ public enum Type {
 		this.category = category;
 	}
 
+	public int id() {
+		return ordinal() ^ getClass().getName().hashCode();
+	}
+
 	/**
 	 * Attempts to match the Type with the given name. This is a match lookup;
 	 * names will be converted to uppercase, then stripped of special characters

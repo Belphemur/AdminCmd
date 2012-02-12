@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 @MappedSuperclass
 public class SimpleLocation {
 	@Id
-	@Column(name = "sl_id")
+	@Column(name="id")
 	protected long id;
 	private String world;
 	private double x;
