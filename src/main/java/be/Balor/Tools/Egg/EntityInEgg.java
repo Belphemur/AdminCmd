@@ -16,13 +16,19 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Chicken;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class EntityInEgg {
+public class EntityInEgg implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2370374531952085516L;
 	private String entityClass;
 	private int nb;
 	private String entityName;

@@ -16,13 +16,20 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.CreatureType;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class CreaturesInEgg {
+public class CreaturesInEgg implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3337151993591119472L;
 	private CreatureType type;
 	private byte nb;
 
