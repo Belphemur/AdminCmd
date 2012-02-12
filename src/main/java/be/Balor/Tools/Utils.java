@@ -567,11 +567,19 @@ public class Utils {
 	}
 
 	public static String getPlayerName(Player player) {
-		return getPlayerName(player, null, false);
+		return getPlayerName(player, null);
 	}
 
-	public static String getPlayerName(Player player, CommandSender sender) {
-		return getPlayerName(player, sender, true);
+	/**
+	 * For compatibility
+	 * 
+	 * @param player
+	 * @param sender
+	 * @param withPrefix
+	 * @return
+	 */
+	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
+		return getPlayerName(player, sender);
 	}
 
 	/**
@@ -581,12 +589,10 @@ public class Utils {
 	 *            player to get the name
 	 * @param sender
 	 *            sender that want the name
-	 * @param withPrefix
-	 *            return the name with or without prefixes/suffix (e.g [INV])
 	 * @return the complete player name with prefix
 	 */
-	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
-		if (withPrefix) {
+	public static String getPlayerName(Player player, CommandSender sender) {
+		if (ConfigEnum.USE_PREFIX.getBoolean()) {
 			String prefix = colorParser(getPrefix(player, sender));
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
 			if (prefix.isEmpty())

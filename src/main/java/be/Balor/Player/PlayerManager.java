@@ -76,11 +76,11 @@ public class PlayerManager {
 			factory.addExistingPlayer(name);
 			ACPlayer oldPlayer = playerFactory.createPlayer(name);
 			ACPlayer newPlayer = factory.createPlayer(name);
-			newPlayer.setLastLocation(oldPlayer.getLastLocation());
+			//newPlayer.setLastLocation(oldPlayer.getLastLocation());
 			newPlayer.setPresentation(oldPlayer.getPresentation());
 
-			for (String home : oldPlayer.getHomeList())
-				newPlayer.setHome(home, oldPlayer.getHome(home));
+			/*for (String home : oldPlayer.getHomeList())
+				newPlayer.setHome(home, oldPlayer.getHome(home));*/
 			for (Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
 				Type power = Type.matchType(entry.getKey());
 				if (power != null)
