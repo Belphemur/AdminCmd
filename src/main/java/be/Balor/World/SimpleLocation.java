@@ -17,25 +17,22 @@
 package be.Balor.World;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
-import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-@Entity
-@Table(name = ConfigEnum.PREFIX + "locations")
+@MappedSuperclass
 public class SimpleLocation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
