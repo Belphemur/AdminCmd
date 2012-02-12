@@ -73,6 +73,7 @@ public class PlayerManager {
 	public void convertFactory(IPlayerFactory factory) {
 		ACLogger.info("Converting player to the new type.");
 		for (String name : this.playerFactory.getExistingPlayers()) {
+			factory.addExistingPlayer(name);
 			ACPlayer oldPlayer = playerFactory.createPlayer(name);
 			ACPlayer newPlayer = factory.createPlayer(name);
 			newPlayer.setLastLocation(oldPlayer.getLastLocation());
