@@ -17,8 +17,6 @@
 package be.Balor.World;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -35,9 +33,8 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 @MappedSuperclass
 public class SimpleLocation {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "sl_id")
-	private long id;
+	protected long id;
 	private String world;
 	private double x;
 	private double y;
