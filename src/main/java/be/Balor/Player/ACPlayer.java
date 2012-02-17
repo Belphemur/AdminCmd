@@ -184,6 +184,13 @@ public abstract class ACPlayer {
 	public abstract ObjectContainer getInformation(String info);
 
 	/**
+	 * Get the list of all informations
+	 * 
+	 * @return
+	 */
+	public abstract Set<String> getInformationsList();
+
+	/**
 	 * Set the last location of the player before TP or dying
 	 * 
 	 * @param loc
@@ -290,7 +297,17 @@ public abstract class ACPlayer {
 	 * @param kit
 	 *            name of the kit
 	 */
-	public abstract void updateLastKitUse(String kit);
+	public void updateLastKitUse(String kit) {
+		setLastKitUse(kit, System.currentTimeMillis());
+	}
+
+	/**
+	 * Set the timestamp representing the last use of the kit
+	 * 
+	 * @param kit
+	 * @param timestamp
+	 */
+	public abstract void setLastKitUse(String kit, long timestamp);
 
 	/**
 	 * Get the last use of the kit
@@ -300,6 +317,13 @@ public abstract class ACPlayer {
 	 * @return timestamp representing the last use of the kit
 	 */
 	public abstract long getLastKitUse(String kit);
+
+	/**
+	 * Get the list of every kit used.
+	 * 
+	 * @return
+	 */
+	public abstract Set<String> getKitUseList();
 
 	/**
 	 * Force the save

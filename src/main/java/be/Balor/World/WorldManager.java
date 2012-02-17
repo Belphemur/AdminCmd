@@ -16,7 +16,10 @@
  ************************************************************************/
 package be.Balor.World;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -31,7 +34,7 @@ import com.google.common.collect.MapMaker;
  */
 public class WorldManager {
 	private ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
-	private ACWorldFactory worldFactory;
+	private IWorldFactory worldFactory;
 	private static WorldManager instance = new WorldManager();
 
 	/**
@@ -69,8 +72,33 @@ public class WorldManager {
 	 * @param worldFactory
 	 *            the worldFactory to set
 	 */
-	public void setWorldFactory(ACWorldFactory worldFactory) {
-		this.worldFactory = worldFactory;
+	public void setWorldFactory(IWorldFactory worldFactory) {
+		if (this.worldFactory == null)
+			this.worldFactory = worldFactory;
+	}
+
+	/**
+	 * To convert the ACWorld using an another factory
+	 * 
+	 * @param factory
+	 */
+	public void convertFactory(IWorldFactory factory) {
+		Map<String, ACWorld> newWorlds = new HashMap<String, ACWorld>();
+		for (Entry<String, ACWorld> entry : worlds.entrySet()) {
+			ACWorld newWorld = factory.createWorld(entry.getKey());
+			ACWorld oldWorld = entry.getValue();
+			newWorld.setDifficulty(oldWorld.getDifficulty());
+			newWorld.setSpawn(oldWorld.getSpawn());
+			for (String mob : oldWorld.getMobLimitList())
+				newWorld.setMobLimit(mob, oldWorld.getMobLimit(mob));
+			for (Entry<String, String> info : oldWorld.getInformations().entrySet())
+				newWorld.setInformation(info.getKey(), oldWorld.getInformation(info.getKey())
+						.getObj());
+			newWorlds.put(newWorld.getName(), newWorld);
+		}
+		worlds.clear();
+		worlds.putAll(newWorlds);
+		this.worldFactory = factory;
 	}
 
 	ACWorld demandACWorld(String name) throws WorldNotLoaded {

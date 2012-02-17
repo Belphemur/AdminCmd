@@ -16,37 +16,33 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.server.EntityTypes;
 
-import net.minecraft.server.DamageSource;
-import net.minecraft.server.EntityLiving;
-
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.EggType;
+import be.Balor.Tools.Egg.EntityInEgg;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
+import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
-import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class KillerEgg extends EggType<Integer> {
+public class EntityEgg extends EggType<EntityInEgg> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7763897329319981939L;
+	private static final long serialVersionUID = 805828153137593363L;
 
 	/*
 	 * (non-Javadoc)
@@ -54,41 +50,16 @@ public class KillerEgg extends EggType<Integer> {
 	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.
 	 * PlayerEggThrowEvent)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
-		event.setHatching(false);
-		final Location loc = event.getEgg().getLocation();
 		event.getEgg().remove();
-		final List<EntityLiving> entities = new ArrayList<EntityLiving>();
-		final CraftPlayer p = (CraftPlayer) event.getPlayer();
-		final World w = p.getWorld();
-		final int radius = value * value;
-		for (Object entity : ((CraftWorld) w).getHandle().entityList)
-			if (entity instanceof EntityLiving)
-				entities.add((EntityLiving) entity);
-		w.playEffect(loc, Effect.SMOKE, 1, value);
-		w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		event.setHatching(false);
+		World w = event.getEgg().getWorld();
+		Location loc = event.getEgg().getLocation();
 
-					@Override
-					public void run() {
-						int count = 0;
-						for (EntityLiving entity : entities) {
-							if (entity.equals(p.getHandle())) {
-								continue;
-							}
-							Location entityLoc = new Location(w, entity.locX, entity.locY,
-									entity.locZ, entity.yaw, entity.pitch);
-							if (entityLoc.distanceSquared(loc) > radius)
-								continue;
-							entity.die(DamageSource.playerAttack(p.getHandle()));
-							entity.die();
-							count++;
-						}
-						p.sendMessage(String.valueOf(count) + " killed.");
-					}
-				});
+		for (int i = 0; i < value.getNb(); i++)
+			w.spawn(loc, value.getEntityClass());
 	}
 
 	/*
@@ -100,16 +71,34 @@ public class KillerEgg extends EggType<Integer> {
 	 */
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		int radius = ConfigEnum.DEGG_KILL_RADIUS.getInt();
-		String valFlag = args.getValueFlag('r');
-		if (valFlag != null)
+		String entityParam = args.getValueFlag('e');
+		if (entityParam == null)
+			throw new ParameterMissingException("e");
+		String valFlag = args.getValueFlag('n');
+		int nbre = 1;
+		int entityNb = 93;
+		try {
+			entityNb = Integer.parseInt(entityParam);
+		} catch (NumberFormatException e) {
+			Utils.sI18n(sender, "NaN", "number", valFlag);
+			return;
+		}
+		if (args.hasFlag('n'))
 			try {
-				radius = Integer.parseInt(valFlag);
+				nbre = Integer.parseInt(valFlag);
+				entityNb = Integer.parseInt(entityParam);
 			} catch (NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		value = radius;
+		try {
+			Entity entity = EntityTypes.a(entityNb, ((CraftWorld) sender.getWorld()).getHandle())
+					.getBukkitEntity();
+			value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass()
+					.getSimpleName());
+		} catch (NullPointerException e) {
+			throw new ProcessingArgsException(ExceptionType.DONT_EXISTS, String.valueOf(entityNb));
+		}
 
 	}
 

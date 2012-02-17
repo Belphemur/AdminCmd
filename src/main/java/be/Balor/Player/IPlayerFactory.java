@@ -14,30 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Permissions;
+package be.Balor.Player;
+
+import java.util.Set;
+
+import org.bukkit.entity.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class SpecialPermParent extends PermParent {
+public interface IPlayerFactory {
+	ACPlayer createPlayer(String playername);
+
+	ACPlayer createPlayer(Player player);
 
 	/**
-	 * @param perm
+	 * @return the existingPlayers
 	 */
-	SpecialPermParent() {
-		super(null);
-	}
+	Set<String> getExistingPlayers();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.Permissions.PermParent#registerPermission()
-	 */
-	@Override
-	void registerPermission() {
-		for (PermChild child : children)
-			child.registerPermission();
-	}
-
+	void addExistingPlayer(String player);
 }

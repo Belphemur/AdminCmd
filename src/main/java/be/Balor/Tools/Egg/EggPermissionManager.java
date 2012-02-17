@@ -31,15 +31,15 @@ import be.Balor.Manager.Permissions.PermissionManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class EggPermissionLister {
+public class EggPermissionManager {
 
-	public final static EggPermissionLister INSTANCE = new EggPermissionLister();
+	public final static EggPermissionManager INSTANCE = new EggPermissionManager();
 	private final Map<Class<? extends EggType<?>>, Permission> permissions = new HashMap<Class<? extends EggType<?>>, Permission>();
 
 	/**
 	 * 
 	 */
-	private EggPermissionLister() {
+	private EggPermissionManager() {
 	}
 
 	void addPermission(Class<? extends EggType<?>> clazz, Permission perm) {
@@ -65,5 +65,9 @@ public class EggPermissionLister {
 			result.add(entry.getKey().getSimpleName());
 		}
 		return result;
+	}
+
+	Permission getPermission(EggType<?> eggInstance) {
+		return permissions.get(eggInstance.getClass());
 	}
 }

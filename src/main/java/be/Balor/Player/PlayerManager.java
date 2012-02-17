@@ -18,11 +18,13 @@ package be.Balor.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
 import com.google.common.collect.MapMaker;
@@ -37,7 +39,7 @@ public class PlayerManager {
 	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
 			.makeMap();
 	private final static PlayerManager instance = new PlayerManager();
-	private ACPlayerFactory playerFactory;
+	private IPlayerFactory playerFactory;
 
 	/**
 	 * 
@@ -59,8 +61,45 @@ public class PlayerManager {
 	 * @param playerFactory
 	 *            the playerFactory to set
 	 */
-	public void setPlayerFactory(ACPlayerFactory playerFactory) {
+	public void setPlayerFactory(IPlayerFactory playerFactory) {
 		this.playerFactory = playerFactory;
+	}
+
+	/**
+	 * Convert the ACPlayer
+	 * 
+	 * @param playerFactory
+	 */
+	public void convertFactory(IPlayerFactory factory) {
+		ACLogger.info("Converting player to the new type.");
+		for (String name : this.playerFactory.getExistingPlayers()) {
+			factory.addExistingPlayer(name);
+			ACPlayer oldPlayer = playerFactory.createPlayer(name);
+			ACPlayer newPlayer = factory.createPlayer(name);
+			//newPlayer.setLastLocation(oldPlayer.getLastLocation());
+			newPlayer.setPresentation(oldPlayer.getPresentation());
+
+			/*for (String home : oldPlayer.getHomeList())
+				newPlayer.setHome(home, oldPlayer.getHome(home));*/
+			for (Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
+				Type power = Type.matchType(entry.getKey());
+				if (power != null)
+					newPlayer.setPower(power, oldPlayer.getPower(power).getObj());
+				else
+					newPlayer.setCustomPower(entry.getKey(),
+							oldPlayer.getCustomPower(entry.getKey()).getObj());
+			}
+			for (String info : oldPlayer.getInformationsList()) {
+				if (info.equals("lastLoc") || info.equals("presentation"))
+					continue;
+				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
+			}
+			for (String kit : oldPlayer.getKitUseList())
+				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
+			newPlayer.forceSave();
+		}
+		this.playerFactory = factory;
+		ACLogger.info("Convertion finished.");
 	}
 
 	/**
@@ -193,7 +232,7 @@ public class PlayerManager {
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(name);
 			if (tmp instanceof EmptyPlayer)
-				return result;			
+				return result;
 			players.remove(name);
 			onlinePlayers.remove(result);
 			result = tmp;
@@ -215,7 +254,7 @@ public class PlayerManager {
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(playerName);
 			if (tmp instanceof EmptyPlayer)
-				return result;			
+				return result;
 			players.remove(playerName);
 			onlinePlayers.remove(result);
 			result = tmp;

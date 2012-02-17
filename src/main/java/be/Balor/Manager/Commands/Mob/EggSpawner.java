@@ -16,6 +16,9 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Mob;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,9 +30,10 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Egg.EggPermissionLister;
+import be.Balor.Tools.Egg.EggPermissionManager;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.Tools.Egg.Types.NormalEgg;
@@ -59,22 +63,29 @@ public class EggSpawner extends MobCommand {
 			return;
 		Player player = (Player) sender;
 		ACPlayer acp = ACPlayer.getPlayer(player);
-		EggType<?> egg;
+		EggType<?> egg = null;
 		try {
 			egg = EggType.createEggType(player, args);
 		} catch (ParameterMissingException e) {
 			if (e.getMessage().equals("E")) {
 				String list = Joiner.on(", ").skipNulls()
-						.join(EggPermissionLister.INSTANCE.getEggTypeNames(player));
+						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else
 				Utils.sI18n(sender, "paramMissing", "param", e.getMessage());
 			return;
 		} catch (ProcessingArgsException e) {
-			if (e.getType().equals("classNotFound"))
+			if (e.getType().equals(ExceptionType.NO_CLASS))
 				Utils.sI18n(sender, "eggDontExists", "egg", e.getMessage());
-			else
+			else if (e.getType().equals(ExceptionType.DONT_EXISTS))
+				Utils.sI18n(sender, "entityDontExists", "entity", e.getMessage());
+			else if (e.getType().equals(ExceptionType.CUSTOM)) {
+				Map<String, String> replace = new HashMap<String, String>();
+				replace.put("egg", egg.getClass().getSimpleName());
+				replace.put("error", e.getMessage());
+				Utils.sI18n(sender, "eggCustomError", replace);
+			} else
 				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(), e);
 			return;
 		} catch (DontHaveThePermissionException e) {

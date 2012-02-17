@@ -30,6 +30,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * 
  */
 public enum ConfigEnum {
+
 	MOTD("MessageOfTheDay", true, "if true, display MOTD on join"),
 	NEWS("DisplayNewsOnJoin", true, "If true, display the news message on Join"),
 	RULES("DisplayRulesOnJoin", true, "If true, display the rules on Join"),
@@ -120,8 +121,9 @@ public enum ConfigEnum {
 			+ "admincmd.tp.world.WORLDNAME (where WORLDNAME is the name of the world where the space are replaced by underscore (_) )"),
 	ARMOR_KIT_OVERRIDE("armorKitOverride", true, "When using an armored kit, if this options is set to true,"
 			+ " it will override what the player is wearing to replace it by the armor of the kit."),
-	DEGG_KILL_RADIUS("defaultEggKillRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command.");
-
+	DEGG_KILL_RADIUS("defaultEggKillRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command."),
+	USE_PREFIX("usePSfix", true, "Use the prefix and the suffix when displaying names");
+	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;
 	private final String description;

@@ -31,7 +31,7 @@ public class ParameterMissingException extends ProcessingArgsException {
 	 * @param message
 	 */
 	public ParameterMissingException(String message) {
-		super("missingParam", message);
+		super(ExceptionType.MISSING_PARAM, message);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ParameterMissingException extends ProcessingArgsException {
 	 * @param ex
 	 */
 	public ParameterMissingException(String message, Throwable ex) {
-		super("missingParam", message, ex);
+		super(ExceptionType.MISSING_PARAM, message, ex);
 	}
 
 }

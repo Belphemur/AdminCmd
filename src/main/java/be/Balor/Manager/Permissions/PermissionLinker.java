@@ -115,11 +115,11 @@ public class PermissionLinker {
 	public Permission addPermChild(String permNode, PermissionDefault bukkitDefault)
 			throws NullPointerException {
 		PermParent parent = matchPermParent(permNode);
-		if (parent == null) {
-			parent = PermParent.ALONE;
-			DebugLog.INSTANCE.info("No Permission Parent found for : " + permNode);
-		}
 		final PermChild child = new PermChild(permNode, bukkitDefault);
+		if (parent == null) {
+			DebugLog.INSTANCE.info("No Permission Parent found for : " + permNode);
+			return  child.getBukkitPerm();
+		}
 		parent.addChild(child);
 		DebugLog.INSTANCE.info(child + " registered as child of " + parent);
 		return child.getBukkitPerm();
@@ -245,8 +245,6 @@ public class PermissionLinker {
 	 * Register all parent node.
 	 */
 	public void registerAllPermParent() {
-		PermParent.ROOT.registerPermission();
-		PermParent.ALONE.registerPermission();
 	}
 
 	/**
@@ -256,14 +254,12 @@ public class PermissionLinker {
 	 */
 	public void setMajorPerm(PermParent major) {
 		majorPerm = major;
-		PermParent.ROOT.addChild(majorPerm);
 		for (final PermParent pp : permissions.values())
 			majorPerm.addChild(pp);
 	}
 
 	public void setMajorPerm(String major) {
 		majorPerm = new PermParent(major);
-		PermParent.ROOT.addChild(majorPerm);
 		for (final PermParent pp : permissions.values())
 			majorPerm.addChild(pp);
 	}

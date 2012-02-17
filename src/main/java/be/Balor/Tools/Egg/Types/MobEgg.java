@@ -35,6 +35,11 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
  */
 public class MobEgg extends EggType<CreaturesInEgg> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9183441312817879597L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

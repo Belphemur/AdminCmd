@@ -440,4 +440,11 @@ public class ObjectContainer {
 		return obj.toString();
 	}
 
+	/**
+	 * @return the obj
+	 */
+	public Object getObj() {
+		return obj;
+	}
+
 }

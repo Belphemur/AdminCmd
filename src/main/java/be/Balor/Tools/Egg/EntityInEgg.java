@@ -18,66 +18,92 @@ package be.Balor.Tools.Egg;
 
 import java.io.Serializable;
 
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.Chicken;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class CreaturesInEgg implements Serializable {
-	
+public class EntityInEgg implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3337151993591119472L;
-	private CreatureType type;
-	private byte nb;
+	private static final long serialVersionUID = -2370374531952085516L;
+	private String entityClass;
+	private int nb;
+	private String entityName;
 
 	/**
-	 * @param type
+	 * @param entityClass
 	 * @param nb
+	 * @param entityName
 	 */
-	public CreaturesInEgg(CreatureType type, byte nb) {
+	public EntityInEgg(String entityClass, int nb, String entityName) {
 		super();
-		this.type = type;
+		this.entityClass = entityClass;
 		this.nb = nb;
+		this.entityName = entityName;
 	}
 
 	/**
 	 * 
 	 */
-	public CreaturesInEgg() {
+	public EntityInEgg() {
 		super();
 	}
 
 	/**
-	 * @return the type
+	 * @return the entityClass
 	 */
-	public CreatureType getType() {
-		return type;
+	public String getEntityClassName() {
+		return entityClass;
 	}
 
 	/**
 	 * @return the nb
 	 */
-	public byte getNb() {
+	public int getNb() {
 		return nb;
 	}
 
 	/**
-	 * @param type
-	 *            the type to set
+	 * @return the entityName
 	 */
-	public void setType(CreatureType type) {
-		this.type = type;
+	public String getEntityName() {
+		return entityName;
+	}
+
+	/**
+	 * @param entityClass
+	 *            the entityClass to set
+	 */
+	public void setEntityClass(String entityClass) {
+		this.entityClass = entityClass;
 	}
 
 	/**
 	 * @param nb
 	 *            the nb to set
 	 */
-	public void setNb(byte nb) {
+	public void setNb(int nb) {
 		this.nb = nb;
+	}
+
+	/**
+	 * @param entityName
+	 *            the entityName to set
+	 */
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Class getEntityClass() {
+		try {
+			return Class.forName(entityClass);
+		} catch (ClassNotFoundException e) {
+			return Chicken.class;
+		}
 	}
 
 	/*
@@ -87,7 +113,7 @@ public class CreaturesInEgg implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "CreaturesInEgg [type=" + type.getName() + ", nb=" + nb + "]";
+		return "EntityInEgg [nb=" + nb + ", entity=" + entityName + "]";
 	}
 
 }

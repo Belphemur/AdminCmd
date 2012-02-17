@@ -421,18 +421,14 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
-		PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl.samelvl",
-				PermissionDefault.FALSE));
+		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (World w : this.getServer().getWorlds())
 			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
-			PermParent.ALONE.addChild(new PermChild("admincmd.maxHomeByUser." + i,
-					PermissionDefault.FALSE));
-			PermParent.ALONE.addChild(new PermChild("admincmd.immunityLvl." + i,
-					PermissionDefault.FALSE));
-			PermParent.ALONE.addChild(new PermChild("admincmd.maxItemAmount." + i,
-					PermissionDefault.FALSE));
+			new PermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);
+			new PermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
+			new PermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
 
 	}
@@ -761,6 +757,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
 		Utils.addLocale("timeOutPower", ChatColor.GOLD + "Time Out of the power %power. "
 				+ ChatColor.DARK_RED + "You lost it.");
+		Utils.addLocale("timeOutPowerSender", ChatColor.DARK_RED + "Power " + ChatColor.GOLD
+				+ "%power " + ChatColor.DARK_RED + "disabled for %player: Time expired");
 		Utils.addLocale("serverStop", "The server is stopping.");
 		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
 				+ "The server will " + ChatColor.DARK_RED + "STOP " + ChatColor.YELLOW + "in "
@@ -775,6 +773,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("eggEnabled", ChatColor.DARK_AQUA + "EGG " + ChatColor.GOLD + "(%egg)"
 				+ ChatColor.AQUA + " mode enabled.");
 		Utils.addLocale("eggNormal", ChatColor.GREEN + "EGG return to normality.");
+		Utils.addLocale("entityDontExists", ChatColor.RED + "The Entity id " + ChatColor.GOLD
+				+ "%entity" + ChatColor.RED + " don't exists.");
+		Utils.addLocale("eggCustomError", ChatColor.RED + "Problem with the egg " + ChatColor.GOLD
+				+ "%egg" + ChatColor.RED + " : " + ChatColor.YELLOW + "%error");
 		LocaleManager.getInstance().save();
 	}
 }

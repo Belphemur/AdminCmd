@@ -70,7 +70,7 @@ public class EggTypeClassLoader extends ClassLoader {
 				}
 				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
 				classesSimpleName.put(clazz.getSimpleName(), (Class<? extends EggType<?>>) clazz);
-				EggPermissionLister.INSTANCE.addPermission((Class<? extends EggType<?>>) clazz,
+				EggPermissionManager.INSTANCE.addPermission((Class<? extends EggType<?>>) clazz,
 						perm);
 			}
 		}

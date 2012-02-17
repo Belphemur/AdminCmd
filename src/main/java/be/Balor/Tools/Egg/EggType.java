@@ -16,13 +16,17 @@
  ************************************************************************/
 package be.Balor.Tools.Egg;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
@@ -30,7 +34,12 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class EggType<T> {
+public abstract class EggType<T> implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2793422400211176328L;
+
 	protected T value;
 
 	private final static ClassLoader eggTypeLoader = new EggTypeClassLoader();
@@ -68,17 +77,10 @@ public abstract class EggType<T> {
 	 *             to display to the user
 	 */
 	protected boolean checkPermission(Player player) throws DontHaveThePermissionException {
-		String perm;
-		if (this.getClass().isAnnotationPresent(EggPermission.class))
-			perm = this.getClass().getAnnotation(EggPermission.class).permission();
-		else {
-			String simpleName = this.getClass().getSimpleName();
-			perm = "admincmd.egg." + simpleName.substring(0, simpleName.length() - 3).toLowerCase();
-		}
-		if (perm == null || (perm != null && perm.isEmpty()))
-			return true;
+		Permission perm = EggPermissionManager.INSTANCE.getPermission(this);
 		if (!PermissionManager.hasPerm(player, perm, false))
-			throw new DontHaveThePermissionException(Utils.I18n("errorNotPerm", "p", perm));
+			throw new DontHaveThePermissionException(
+					Utils.I18n("errorNotPerm", "p", perm.getName()));
 		return true;
 	}
 
@@ -115,11 +117,11 @@ public abstract class EggType<T> {
 		try {
 			eggType = matchEggClass(className);
 		} catch (ClassNotFoundException e) {
-			throw new ProcessingArgsException("classNotFound", className, e);
+			throw new ProcessingArgsException(ExceptionType.NO_CLASS, className, e);
 		} catch (InstantiationException e) {
-			throw new ProcessingArgsException("instance", className, e);
+			throw new ProcessingArgsException(ExceptionType.INSTANCE, className, e);
 		} catch (IllegalAccessException e) {
-			throw new ProcessingArgsException("IllegalAccess", className, e);
+			throw new ProcessingArgsException(ExceptionType.ILLEGAL_ACCESS, className, e);
 		}
 		eggType.checkPermission(player);
 		eggType.processArguments(player, args);
