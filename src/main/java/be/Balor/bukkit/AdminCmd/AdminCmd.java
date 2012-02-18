@@ -145,7 +145,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -542,8 +542,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ") added to the Command Black List for i, give and drop.");
 		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE
 				+ "%material" + ChatColor.GREEN + ") added to the BlockPlace Black List.");
-		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") removed from the Black List.");
+		Utils.addLocale("rmBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") removed from the Blacklist.");
+		Utils.addLocale("rmBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") removed from the Blacklist.");
 		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
 				+ "%material" + ChatColor.DARK_RED + ") is black listed.");
 		Utils.addLocale("inBlacklistBlock", ChatColor.DARK_RED + "This block (" + ChatColor.WHITE

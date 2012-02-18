@@ -851,8 +851,8 @@ public class ACHelper {
 					&& itemBlacklist.contains(m.getMaterial().getId()))
 				itemBlacklist.remove((Integer) m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("getMaterial()", m.getMaterial().toString());
-			Utils.sI18n(sender, "rmBlacklist", replace);
+			replace.put("material", m.getMaterial().toString());
+			Utils.sI18n(sender, "rmBlacklistBlock", replace);
 			return true;
 		}
 		return false;
@@ -884,8 +884,8 @@ public class ACHelper {
 					&& itemBlacklist.contains(m.getMaterial().getId()))
 				itemBlacklist.remove((Integer) m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("getMaterial()", m.getMaterial().toString());
-			Utils.sI18n(sender, "rmBlacklist", replace);
+			replace.put("material", m.getMaterial().toString());
+			Utils.sI18n(sender, "rmBlacklistItem", replace);
 			return true;
 		}
 		return false;
