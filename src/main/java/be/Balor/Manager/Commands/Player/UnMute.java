@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -28,12 +28,12 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class UnMute extends PlayerCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public UnMute() {
 		permNode = "admincmd.player.mute";
@@ -42,7 +42,7 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -66,6 +66,18 @@ public class UnMute extends PlayerCommand {
 					Utils.sI18n(sender, "muteDisabledTarget", replace);
 			} else
 				Utils.sI18n(sender, "muteDisabledTarget", replace);
+		} else if (acp.hasPower(Type.MUTED_COMMAND)) {
+			if (!Utils.checkImmunity(sender, acp.getHandler())) {
+				Utils.sI18n(sender, "insufficientLvl");
+				return;
+			}
+			acp.removePower(Type.MUTED_COMMAND);
+			if (player != null) {
+				Utils.sI18n(player, "commandMuteDisabled");
+				if (!player.equals(sender))
+					Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
+			} else
+				Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
 		} else
 			Utils.sI18n(sender, "playerNotFound", replace);
 
@@ -73,7 +85,7 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

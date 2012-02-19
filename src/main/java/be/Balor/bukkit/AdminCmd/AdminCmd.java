@@ -593,8 +593,16 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You can't chat anymore for %minutes minutes.");
 		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED + "%player is muted.");
 		Utils.addLocale("alreadyMuted", ChatColor.DARK_AQUA
-				+ "This player is already muted. To unmute him it's the unmute command.");
+				+ "This player is already muted. To unmute him use the unmute command.");
 		Utils.addLocale("notMuted", ChatColor.DARK_AQUA + "This player is not muted.");
+		Utils.addLocale("commandMuteDisabled", ChatColor.DARK_GREEN + "You can use commands again.");
+		Utils.addLocale("commandMuteDisabledTarget", ChatColor.DARK_GREEN + "%player can use commands again.");
+		Utils.addLocale("commandMuteEnabled", ChatColor.DARK_RED + "You can't use commands anymore.");
+		Utils.addLocale("commandTmpMuteEnabled", ChatColor.DARK_RED
+				+ "You can't use commands anymore for %minutes minutes.");
+		Utils.addLocale("commandMuteEnabledTarget", ChatColor.DARK_RED + "%player is now unable to use commands.");
+		Utils.addLocale("alreadyCommandMuted", ChatColor.DARK_AQUA
+				+ "This player already can't use commands. To let him use commands again use the unmute command.");
 		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
 		Utils.addLocale("mobLimitPerMob", "#mobLimit# " + ChatColor.RED + "for mob %mob");

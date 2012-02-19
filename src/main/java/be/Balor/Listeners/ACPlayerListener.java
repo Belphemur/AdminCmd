@@ -102,6 +102,17 @@ public class ACPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		if (player.hasPower(Type.MUTED_COMMAND)) {
+			String[] split = event.getMessage().split("\\s+");
+			if (split.length != 0) {
+				if (split[0].contains("/")) {
+					event.setCancelled(true);
+					Utils.sI18n(p, "commandMuteEnabled");
+				}
+			}
+		}
 		if (CommandManager.getInstance()
 				.processCommandString(event.getPlayer(), event.getMessage())) {
 			event.setCancelled(true);
