@@ -189,7 +189,7 @@ public class Memory extends ServerCommand {
         plugin.getPermissionLinker().addChildPermParent(parent, permParent);
         PermChild child = new PermChild(permNode, bukkitDefault);
         parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)
-                .addChild(full).addChild(npc);
+                .addChild(full).addChild(npc).addChild(vehicle).addChild(cart).addChild(boat);
         bukkitPerm = child.getBukkitPerm();
     }
 
