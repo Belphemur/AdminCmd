@@ -272,7 +272,9 @@
 		<dependency>
 			<groupId>in.mDev</groupId>
 			<artifactId>mChatSuite</artifactId>
-			<version>86</version>
+			<version>DEV</version>
+            <type>jar</type>
+            <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>
