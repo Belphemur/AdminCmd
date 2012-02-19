@@ -390,3 +390,7 @@ commands:
     description: Command to change the behavior of the Egg throwing.
     aliases: [egg,et]
     usage: /<command> -E eggType <other param depending on the eggType>
+  bal_broadcast:
+    description: Broadcast a message.
+    aliases: [broadcast, bc]
+    usage: /<command> [message]
