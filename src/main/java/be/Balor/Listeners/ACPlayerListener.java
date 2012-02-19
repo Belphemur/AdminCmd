@@ -56,7 +56,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -130,6 +130,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
+		player.setInformation("last-ip", p.getAddress().getAddress().toString());
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));
@@ -211,7 +212,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());

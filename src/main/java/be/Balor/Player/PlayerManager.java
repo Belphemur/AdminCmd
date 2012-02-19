@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -31,7 +31,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class PlayerManager {
 	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
@@ -42,7 +42,7 @@ public class PlayerManager {
 	private IPlayerFactory playerFactory;
 
 	/**
-	 * 
+	 *
 	 */
 	private PlayerManager() {
 		EmptyPlayer console = new EmptyPlayer("serverConsole");
@@ -67,7 +67,7 @@ public class PlayerManager {
 
 	/**
 	 * Convert the ACPlayer
-	 * 
+	 *
 	 * @param playerFactory
 	 */
 	public void convertFactory(IPlayerFactory factory) {
@@ -104,7 +104,7 @@ public class PlayerManager {
 
 	/**
 	 * Add a new player
-	 * 
+	 *
 	 * @param player
 	 */
 	private synchronized boolean addPlayer(ACPlayer player) {
@@ -122,7 +122,7 @@ public class PlayerManager {
 
 	/**
 	 * Return online AC players
-	 * 
+	 *
 	 * @return
 	 */
 	public List<ACPlayer> getOnlineACPlayers() {
@@ -131,7 +131,7 @@ public class PlayerManager {
 
 	/**
 	 * Get Online Bukkit Player
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Player> getOnlinePlayers() {
@@ -146,7 +146,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted custom power
-	 * 
+	 *
 	 * @param power
 	 * @return
 	 */
@@ -161,7 +161,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted power
-	 * 
+	 *
 	 * @param power
 	 * @return
 	 */
@@ -186,7 +186,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the wanted player
-	 * 
+	 *
 	 * @param name
 	 *            name of the player
 	 * @return the ACPlayer if found, else null
@@ -199,9 +199,34 @@ public class PlayerManager {
 	}
 
 	/**
+	 * Get the an offline players ACPlayer object.
+	 *
+	 * @param name
+	 *            name of the player
+	 * @return the ACPlayer or null if it does not exist
+	 */
+	public ACPlayer getOfflinePlayer(String name) {
+		ACPlayer result = null;
+		result = playerFactory.createPlayer(name);
+		addPlayer(result);
+		result = getPlayer(name);
+		return result;
+	}
+
+	/**
+	 * Removes a player from the player Map
+	 *
+	 * @param player
+	 *              The player to be removed
+	 */
+	public void remove(ACPlayer player) {
+		players.remove(player.getName());
+	}
+
+	/**
 	 * Set Offline an online player. The player will lost his strong reference,
 	 * when the gc will be called, the reference will be deleted.
-	 * 
+	 *
 	 * @param player
 	 *            player to setOffline
 	 * @return
