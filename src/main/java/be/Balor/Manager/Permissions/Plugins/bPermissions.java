@@ -33,11 +33,6 @@ import de.bananaco.bpermissions.api.util.CalculableType;;
  */
 public class bPermissions extends SuperPermissions {
 
-	/**
-	 * @param plugin
-	 * @param infoReader
-	 *
-	 */
 	public bPermissions() {
 	}
 
