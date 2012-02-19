@@ -289,7 +289,7 @@
 		<dependency>
 			<groupId>de.bananaco</groupId>
 			<artifactId>bPermissions</artifactId>
-			<version>1337</version>
+			<version>1337-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
@@ -300,12 +300,12 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.1-R4-SNAPSHOT</version>
+			<version>1.1-R5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.1-R4-SNAPSHOT</version>
+			<version>1.1-R5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

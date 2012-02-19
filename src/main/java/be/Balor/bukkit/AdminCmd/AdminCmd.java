@@ -87,6 +87,7 @@ import be.Balor.Manager.Commands.Player.UnMute;
 import be.Balor.Manager.Commands.Player.Vulcan;
 import be.Balor.Manager.Commands.Player.Whois;
 import be.Balor.Manager.Commands.Server.BanConvert;
+import be.Balor.Manager.Commands.Server.Broadcast;
 import be.Balor.Manager.Commands.Server.Execution;
 import be.Balor.Manager.Commands.Server.Extinguish;
 import be.Balor.Manager.Commands.Server.Help;
@@ -374,6 +375,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
+		CommandManager.getInstance().registerCommand(Broadcast.class);
 		if (CommandManager.getInstance().registerCommand(StopServer.class))
 			lockCommand = true;
 		if (lockCommand)
@@ -542,8 +544,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ ") added to the Command Black List for i, give and drop.");
 		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE
 				+ "%material" + ChatColor.GREEN + ") added to the BlockPlace Black List.");
-		Utils.addLocale("rmBlacklist", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
-				+ ChatColor.GREEN + ") removed from the Black List.");
+		Utils.addLocale("rmBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") removed from the Blacklist.");
+		Utils.addLocale("rmBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
+				+ ChatColor.GREEN + ") removed from the Blacklist.");
 		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
 				+ "%material" + ChatColor.DARK_RED + ") is black listed.");
 		Utils.addLocale("inBlacklistBlock", ChatColor.DARK_RED + "This block (" + ChatColor.WHITE
@@ -589,8 +593,16 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "You can't chat anymore for %minutes minutes.");
 		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED + "%player is muted.");
 		Utils.addLocale("alreadyMuted", ChatColor.DARK_AQUA
-				+ "This player is already muted. To unmute him it's the unmute command.");
+				+ "This player is already muted. To unmute him use the unmute command.");
 		Utils.addLocale("notMuted", ChatColor.DARK_AQUA + "This player is not muted.");
+		Utils.addLocale("commandMuteDisabled", ChatColor.DARK_GREEN + "You can use commands again.");
+		Utils.addLocale("commandMuteDisabledTarget", ChatColor.DARK_GREEN + "%player can use commands again.");
+		Utils.addLocale("commandMuteEnabled", ChatColor.DARK_RED + "You can't use commands anymore.");
+		Utils.addLocale("commandTmpMuteEnabled", ChatColor.DARK_RED
+				+ "You can't use commands anymore for %minutes minutes.");
+		Utils.addLocale("commandMuteEnabledTarget", ChatColor.DARK_RED + "%player is now unable to use commands.");
+		Utils.addLocale("alreadyCommandMuted", ChatColor.DARK_AQUA
+				+ "This player already can't use commands. To let him use commands again use the unmute command.");
 		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED + "is not a number.");
 		Utils.addLocale("mobLimit", ChatColor.GOLD + "Mob limit (%number) set for world : %world");
 		Utils.addLocale("mobLimitPerMob", "#mobLimit# " + ChatColor.RED + "for mob %mob");
@@ -777,6 +789,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%entity" + ChatColor.RED + " don't exists.");
 		Utils.addLocale("eggCustomError", ChatColor.RED + "Problem with the egg " + ChatColor.GOLD
 				+ "%egg" + ChatColor.RED + " : " + ChatColor.YELLOW + "%error");
+		Utils.addLocale("broadcast", "[BROADCAST] %message");
 		LocaleManager.getInstance().save();
 	}
 }
