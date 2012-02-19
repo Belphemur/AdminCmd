@@ -87,6 +87,7 @@ import be.Balor.Manager.Commands.Player.UnMute;
 import be.Balor.Manager.Commands.Player.Vulcan;
 import be.Balor.Manager.Commands.Player.Whois;
 import be.Balor.Manager.Commands.Server.BanConvert;
+import be.Balor.Manager.Commands.Server.Broadcast;
 import be.Balor.Manager.Commands.Server.Execution;
 import be.Balor.Manager.Commands.Server.Extinguish;
 import be.Balor.Manager.Commands.Server.Help;
@@ -374,6 +375,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
+		CommandManager.getInstance().registerCommand(Broadcast.class);
 		if (CommandManager.getInstance().registerCommand(StopServer.class))
 			lockCommand = true;
 		if (lockCommand)
@@ -779,6 +781,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%entity" + ChatColor.RED + " don't exists.");
 		Utils.addLocale("eggCustomError", ChatColor.RED + "Problem with the egg " + ChatColor.GOLD
 				+ "%egg" + ChatColor.RED + " : " + ChatColor.YELLOW + "%error");
+		Utils.addLocale("broadcast", "[BROADCAST] %message");
 		LocaleManager.getInstance().save();
 	}
 }
