@@ -36,12 +36,10 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import com.nijiko.permissions.PermissionHandler;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-import de.bananaco.permissions.info.InfoReader;
-import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class PermissionManager {
 	private static PermissionManager instance = null;
@@ -91,7 +89,7 @@ public class PermissionManager {
 	/**
 	 * Check the permission with an error message if the user don't have the
 	 * Permission
-	 * 
+	 *
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -106,7 +104,7 @@ public class PermissionManager {
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
-	 * 
+	 *
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -162,15 +160,15 @@ public class PermissionManager {
 
 	/**
 	 * Set bPermission Plugin
-	 * 
+	 *
 	 * @param plugin
 	 * @param infoReader
 	 * @return
 	 */
-	public static boolean setbPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
+	public static boolean setbPermissions() {
 		if (!bPermissions && !permissionsEx) {
 			bPermissions = true;
-			permissionHandler = new bPermissions(plugin, infoReader);
+			permissionHandler = new bPermissions();
 			if (!yetiPermissions)
 				ACLogger.info("Successfully linked with bPermissions.");
 			else
@@ -183,7 +181,7 @@ public class PermissionManager {
 
 	/**
 	 * Set PermissionsBukkit Plugin
-	 * 
+	 *
 	 * @param plugin
 	 * @return
 	 */
@@ -225,7 +223,7 @@ public class PermissionManager {
 
 	/**
 	 * Set Permission Plugin
-	 * 
+	 *
 	 * @param plugin
 	 * @return
 	 */

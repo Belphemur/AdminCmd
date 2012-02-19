@@ -43,7 +43,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPluginListener implements Listener {
 
@@ -74,9 +74,7 @@ public class ACPluginListener implements Listener {
 			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("bPermissions");
 			if (plugin != null) {
-				PermissionManager.setbPermissions(
-						de.bananaco.permissions.Permissions.getWorldPermissionsManager(),
-						de.bananaco.permissions.Permissions.getInfoReader());
+				PermissionManager.setbPermissions();
 			}
 		}
 		if (!PermissionManager.isPermissionsBukkitSet()) {

@@ -24,50 +24,50 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Tools.Utils;
-import de.bananaco.permissions.info.InfoReader;
-import de.bananaco.permissions.worlds.WorldPermissionsManager;
+
+import de.bananaco.bpermissions.imp.Permissions;
+import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.util.Calculable;
+import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.Permission;;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class bPermissions extends SuperPermissions {
-	protected WorldPermissionsManager worldPermManager;
-	protected InfoReader infoReader;
 
 	/**
 	 * @param plugin
 	 * @param infoReader
-	 * 
+	 *
 	 */
-	public bPermissions(WorldPermissionsManager plugin, InfoReader infoReader) {
-		worldPermManager = plugin;
-		this.infoReader = infoReader;
+	public bPermissions() {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
-		List<String> groups = worldPermManager.getPermissionSet(player.getWorld().getName())
-				.getGroups(player);
+		String[] groups = ApiLayer.getGroups(player.getWorld().getName(), CalculableType.USER, player.getName());
 		if (groups == null)
 			return false;
-		if (groups.isEmpty())
+		if (groups.length == 0)
 			return false;
-		if (groups.contains(groupName))
-			return true;
+		for (String group : groups)
+			if (group.equalsIgnoreCase(groupName))
+				return true;
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
 	 * .String)
@@ -76,39 +76,27 @@ public class bPermissions extends SuperPermissions {
 	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
 		Set<Player> players = new HashSet<Player>();
 		for (Player player : Utils.getOnlinePlayers()) {
-			for (String group : worldPermManager.getPermissionSet(player.getWorld().getName())
-					.getGroups(player)) {
-				if (!group.equals(groupName))
-					continue;
+			if (ApiLayer.hasGroup(player.getWorld().getName(), CalculableType.USER, player.getName(), groupName))
 				players.add(player);
-
-			}
-
 		}
 		return players;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
-		String result = null;
-		if (result == null || result.isEmpty()) {
-			result = infoReader.getValue(p, limit);
-		}
-		if (result == null || result.isEmpty())
-			result = super.getPermissionLimit(p, limit);
-		return result;
+		return ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(), limit);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
@@ -117,7 +105,7 @@ public class bPermissions extends SuperPermissions {
 	public String getPrefix(Player player) {
 		String prefix = super.getPrefix(player);
 		if (prefix == null || prefix.isEmpty())
-			prefix = infoReader.getPrefix(player);
+			prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "prefix");
 		return prefix;
 	}
 	/* (non-Javadoc)
@@ -127,7 +115,7 @@ public class bPermissions extends SuperPermissions {
 	public String getSuffix(Player player) {
 		String suffix = super.getSuffix(player);
 		if (suffix == null || suffix.isEmpty())
-			suffix = infoReader.getSuffix(player);
+			suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "suffix");
 		return suffix;
 	}
 
