@@ -17,7 +17,6 @@
 package be.Balor.Manager.Permissions.Plugins;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
@@ -25,11 +24,8 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Tools.Utils;
 
-import de.bananaco.bpermissions.imp.Permissions;
 import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
-import de.bananaco.bpermissions.api.util.Permission;;
+import de.bananaco.bpermissions.api.util.CalculableType;;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
