@@ -266,7 +266,7 @@
 		<dependency>
 			<groupId>info.somethingodd.bukkit</groupId>
 			<artifactId>OddItem</artifactId>
-			<version>0.8</version>
+			<version>0.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
