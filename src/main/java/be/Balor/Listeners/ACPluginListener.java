@@ -17,7 +17,7 @@
 package be.Balor.Listeners;
 
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
-import info.somethingodd.bukkit.OddItem.OddItemBase;
+import info.somethingodd.OddItem.OddItemBase;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

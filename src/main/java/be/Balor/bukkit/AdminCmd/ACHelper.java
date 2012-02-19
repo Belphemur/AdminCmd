@@ -1,6 +1,6 @@
 package be.Balor.bukkit.AdminCmd;
 
-import info.somethingodd.bukkit.OddItem.OddItem;
+import info.somethingodd.OddItem.OddItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -478,7 +478,6 @@ public class ACHelper {
 		try {
 			list.addAll(kits.keySet());
 			if (Utils.oddItem != null) {
-				list.addAll(OddItem.getGroups());
 			}
 
 		} catch (final Throwable e) {
