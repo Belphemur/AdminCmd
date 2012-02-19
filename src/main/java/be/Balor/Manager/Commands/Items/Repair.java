@@ -81,7 +81,7 @@ public class Repair extends ItemCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		return args != null;
 	}
 
 }
