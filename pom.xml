@@ -229,6 +229,10 @@
 	</build>
 	<repositories>
 		<repository>
+            <id>mDev-repo</id>
+            <url>http://repo.mdev.in</url>
+        </repository>
+		<repository>
 			<snapshots />
 			<id>BukkitDev</id>
 			<name>BukkitDev</name>
@@ -274,7 +278,7 @@
 			<artifactId>mChatSuite</artifactId>
 			<version>DEV</version>
             <type>jar</type>
-            <scope>compile</scope>
+            <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>

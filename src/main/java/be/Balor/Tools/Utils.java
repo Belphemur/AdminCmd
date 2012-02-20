@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
+import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
 import info.somethingodd.OddItem.OddItem;
 import info.somethingodd.OddItem.OddItemBase;
 
