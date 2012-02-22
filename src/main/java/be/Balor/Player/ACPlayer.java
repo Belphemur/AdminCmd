@@ -107,26 +107,6 @@ public abstract class ACPlayer {
 	}
 
 	/**
-	 * Gets the ACPlayer object for a player currently offline.
-	 *
-	 * @param name
-	 *            The players name
-	 * @return The ACPlayer object if found or null
-	 */
-	public static ACPlayer getOfflinePlayer(String name) {
-		return PlayerManager.getInstance().getOfflinePlayer(name);
-	}
-
-	/**
-	 * Removes an offline player object from the players list
-	 *
-	 * @param player - The offline player
-	 */
-	public static void removeOfflinePlayer(ACPlayer player) {
-		PlayerManager.getInstance().remove(player);
-	}
-
-	/**
 	 * Get the bukkit player
 	 *
 	 * @return

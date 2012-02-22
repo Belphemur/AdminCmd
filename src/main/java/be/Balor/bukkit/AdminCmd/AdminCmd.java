@@ -470,8 +470,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("errorHolding", ChatColor.RED + "You have to be holding something!");
 		Utils.addLocale("moreTooMuch", "Excedent(s) item(s) (" + ChatColor.BLUE + "%amount"
 				+ ChatColor.WHITE + ") have been stored in your inventory");
-		Utils.addLocale("repair", "Your item " + ChatColor.RED + "%type" + ChatColor.WHITE
-				+ " have been successfully repaired.");
+		Utils.addLocale("repairTarget", "Your item " + ChatColor.RED + "%type" + ChatColor.WHITE
+				+ " has been successfully repaired.");
+		Utils.addLocale("repair", "%player" + "'s item " + ChatColor.RED + "%type" + ChatColor.WHITE
+				+ " has been successfully repaired.");
 		Utils.addLocale("errorRepair", "You can't repair this item : " + ChatColor.RED + "%type");
 		Utils.addLocale("repairAll", "All %player's items have been repaired.");
 		Utils.addLocale("repairAllTarget", "All your items have been repaired.");

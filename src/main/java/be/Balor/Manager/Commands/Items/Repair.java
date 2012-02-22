@@ -38,6 +38,7 @@ public class Repair extends ItemCommand {
 	public Repair() {
 		permNode = "admincmd.item.repair";
 		cmdName = "bal_repair";
+		other = true;
 	}
 
 	/*
@@ -50,7 +51,10 @@ public class Repair extends ItemCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			final ItemStack item = ((Player) sender).getItemInHand();
+			Player player = Utils.getUser(sender, args, permNode);
+			if (player == null)
+				return;
+			final ItemStack item = player.getItemInHand();
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
 			if (item != null
@@ -61,7 +65,10 @@ public class Repair extends ItemCommand {
 						item.setDurability((short) 0);
 					}
 				});
-				Utils.sI18n(sender, "repair", replace);
+				replace.put("player", Utils.getPlayerName(player));
+				if (!sender.equals(player))
+					Utils.sI18n(sender, "repair", replace);
+				Utils.sI18n(player, "repairTarget");
 			} else
 				Utils.sI18n(sender, "errorRepair", replace);
 		}
@@ -74,7 +81,7 @@ public class Repair extends ItemCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return true;
+		return args != null;
 	}
 
 }

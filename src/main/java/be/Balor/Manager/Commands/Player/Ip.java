@@ -56,14 +56,13 @@ public class Ip extends PlayerCommand {
 			replace.put("ip", target.getAddress().getAddress().toString());
 			Utils.sI18n(sender, "ip", replace);
 		} else {
-			ACPlayer acp = ACPlayer.getOfflinePlayer(args.getString(0));
+			ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 			if (acp == null) {
 				replace.put("player", args.getString(0));
 				Utils.sI18n(sender, "playerNotFound", replace);
 			}
 			replace.put("player", acp.getName());
 			replace.put("ip", acp.getInformation("last-ip").getString());
-			ACPlayer.removeOfflinePlayer(acp);
 			Utils.sI18n(sender, "ip", replace);
 		}
 

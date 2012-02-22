@@ -34,7 +34,7 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class EggType<T> implements Serializable{
+public abstract class EggType<T> implements Serializable {
 	/**
 	 * 
 	 */
@@ -142,7 +142,7 @@ public abstract class EggType<T> implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return "EggType " + "[Type=" + getClass().getSimpleName() + ", Value=" + getValue() + "]";
+		return getClass().getSimpleName() + " = " + getValue();
 	}
 
 	/*

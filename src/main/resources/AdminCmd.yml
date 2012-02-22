@@ -42,7 +42,7 @@ acitemaddbl:
     permissions: admincmd.item.blacklist
     cmdname: bal_addbl
 
-acrmbl:
+acitemrmbl:
     command: rmblacklist <-flags> [name|alias|item id]
     description: "Remove the item from the blacklist. -b for block and -i for item."
     plugin: AdminCmd
@@ -70,7 +70,7 @@ acitemmoreall:
     permissions: admincmd.item.more
     cmdname: bal_itemmoreall
 
-acrepairall:
+acitemrepairall:
     command: repairall [player_name]
     description: "Repair all items in the inventory of\n the [player], defaults to yourself."
     plugin: AdminCmd
@@ -84,14 +84,14 @@ acitemcolor:
     permissions: admincmd.item.color
     cmdname: bal_itemcolor
 
-acaddalias:
+acitemaddalias:
     command: aa [alias] [item id|name|alias]
     description: "Add an [alias] for the item\n [item id|name|alias]."
     plugin: AdminCmd
     permissions: admincmd.item.alias
     cmdname: bal_addalias
 
-acrmalias:
+acitemrmalias:
     command: rmalias [alias]
     description: Delete the alias.
     plugin: AdminCmd
@@ -399,6 +399,19 @@ acplayerreply:
     premissions: admincmd.player.reply
     cmdname: bal_reply
 
+acplayernodrop:
+    command: nodrop [-P player] [-t time]
+    description: "disable the drop for the selected player (-P), for the selected time (-t). The 2 parameters are optional. When trying to drop, it's cancelled, when dying, you keep your items."
+    aliases: [nd,nodrop]
+    cmdname: bal_nodrop
+
+acplayerpres:
+    command: pres [-p player] ["presentation"]
+    description: "Set the your presentation message or the one of other player (-p)"
+    plugin: AdminCmd
+    permissions: admincmd.player.pres
+    cmdname: bal_pres
+
 acweatherclear:
     command: wclear
     description: Clear the weather.
@@ -512,8 +525,8 @@ acspawn:
     cmdname: bal_spawn
 
 acservermemory:
-    command: memory [-f]
-    description: "List all the worlds, the memory used, the memory \n max, number of chuncks and entities by worlds.\n Use -f to kill all entities but players.\n Also lists the current TPS of your server."
+    command: memory [-a,-f,-m,-n,-x,-i,-c,-b,-v]
+    description: "List all the worlds, the memory used, the memory \n max, number of chuncks and entities by worlds.\n Use -f to kill all entities but players.\n Also lists the current TPS of your server.\n For flags explanation refer to AdminCmds' DevBukkit pages."
     plugin: AdminCmd
     permissions: admincmd.server.memory
     cmdname: bal_memory
@@ -636,13 +649,6 @@ acserverdifficulty:
     plugin: AdminCmd
     permissions: admincmd.server.difficulty
     cmdname: bal_difficulty
-    
-acserverdifficulty:
-    command: pres [-p player] ["presentation"]
-    description: "Set the your presentation message or the one of other player (-p)"
-    plugin: AdminCmd
-    permissions: admincmd.player.pres
-    cmdname: bal_pres
 
 acserverstop:
     command: stop [-t second]
@@ -650,10 +656,10 @@ acserverstop:
     plugin: AdminCmd
     permissions: admincmd.server.stop
     cmdname: bal_stop
-    
-acplayernodrop:
-    command: nodrop [-P player] [-t time]
-    description: "disable the drop for the selected player (-P), for the selected time (-t). The 2 parameters are optional. When trying to drop, it's cancelled, when dying, you keep your items."
-    aliases: [nd,nodrop]
-    cmdname: bal_nodrop
-    
+
+acserverbroadcast:
+    command: broadcast [message]
+    description: "Sends a message to all players. Layout can be adjusted via locale."
+    plugin: AdminCmd
+    permissions: admincmd.server.broadcast
+    cmdname: bal_broadcast

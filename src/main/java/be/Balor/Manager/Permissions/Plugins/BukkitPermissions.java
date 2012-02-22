@@ -52,7 +52,11 @@ public class BukkitPermissions extends SuperPermissions {
 	@Override
 	public boolean isInGroup(String groupName, Player player) {
 		List<Group> groups = new ArrayList<Group>();
-		groups = permBukkit.getGroups(player.getName());
+		try {
+			groups = permBukkit.getGroups(player.getName());
+		} catch (Exception e) {
+			return false;
+		}
 		if (groups.isEmpty())
 			return false;
 		for (Group group : groups)
@@ -71,7 +75,12 @@ public class BukkitPermissions extends SuperPermissions {
 	@Override
 	public Set<Player> getUsers(String groupName) {
 		Set<Player> players = new HashSet<Player>();
-		List<String> playersString = permBukkit.getGroup(groupName).getPlayers();
+		List<String> playersString;
+		try {
+			playersString = permBukkit.getGroup(groupName).getPlayers();
+		} catch (Exception e) {
+			return players;
+		}
 		if (playersString != null) {
 			for (String player : playersString) {
 				players.add(ACPlayer.getPlayer(player).getHandler());
