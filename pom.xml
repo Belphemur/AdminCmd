@@ -277,7 +277,6 @@
 			<groupId>in.mDev</groupId>
 			<artifactId>mChatSuite</artifactId>
 			<version>DEV</version>
-            <type>jar</type>
             <scope>provided</scope>
 		</dependency>
 		<dependency>

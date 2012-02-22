@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import in.mDev.MiracleM4n.mChatSuite.api.InfoType;
 import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 
@@ -141,7 +142,7 @@ public class SuperPermissions implements IPermissionPlugin {
 	public String getPermissionLimit(final Player p, String limit) {
 		String result = null;
 		if (mChatInfo != null)
-			result = mChatInfo.getInfo(p.getName(), p.getWorld().getName(), "admincmd." + limit);
+			result = mChatInfo.getInfo(p.getName(), InfoType.USER ,p.getWorld().getName(), "admincmd." + limit);
 		if (result == null || (result != null && result.isEmpty())) {
 			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
 			final Set<PermissionAttachmentInfo> perms = new LinkedHashSet<PermissionAttachmentInfo>();
@@ -182,7 +183,7 @@ public class SuperPermissions implements IPermissionPlugin {
 	@Override
 	public String getPrefix(Player player) {
 		if (mChatInfo != null)
-			return mChatInfo.getPrefix(player.getName(), player.getWorld().getName());
+			return mChatInfo.getPrefix(player.getName(), InfoType.USER, player.getWorld().getName());
 		else
 			return "";
 	}
@@ -197,7 +198,7 @@ public class SuperPermissions implements IPermissionPlugin {
 	@Override
 	public String getSuffix(Player player) {
 		if (mChatInfo != null)
-			return mChatInfo.getSuffix(player.getName(), player.getWorld().getName());
+			return mChatInfo.getSuffix(player.getName(), InfoType.USER, player.getWorld().getName());
 		else
 			return "";
 	}
