@@ -27,7 +27,6 @@ import be.Balor.Player.ACPlayer;
 
 import com.platymuus.bukkit.permissions.Group;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
-import com.platymuus.bukkit.permissions.data.DataAccessException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -55,7 +54,7 @@ public class BukkitPermissions extends SuperPermissions {
 		List<Group> groups = new ArrayList<Group>();
 		try {
 			groups = permBukkit.getGroups(player.getName());
-		} catch (DataAccessException e) {
+		} catch (Exception e) {
 			return false;
 		}
 		if (groups.isEmpty())
@@ -79,7 +78,7 @@ public class BukkitPermissions extends SuperPermissions {
 		List<String> playersString;
 		try {
 			playersString = permBukkit.getGroup(groupName).getPlayers();
-		} catch (DataAccessException e) {
+		} catch (Exception e) {
 			return players;
 		}
 		if (playersString != null) {

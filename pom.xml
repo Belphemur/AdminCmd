@@ -229,14 +229,6 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>mDev-repo</id>
-			<url>http://nexus.gestdown.info/nexus/content/repositories/mDev-repo/</url>
-		</repository>
-		<repository>
-			<id>mDev-snapshot</id>
-			<url>http://nexus.gestdown.info/nexus/content/repositories/mDev-snapshot/</url>
-		</repository>
-		<repository>
 			<snapshots />
 			<id>BukkitDev</id>
 			<name>BukkitDev</name>
@@ -280,7 +272,7 @@
 		<dependency>
 			<groupId>in.mDev</groupId>
 			<artifactId>mChatSuite</artifactId>
-			<version>DEV</version>
+			<version>149</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

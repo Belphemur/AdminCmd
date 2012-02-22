@@ -197,32 +197,7 @@ public class PlayerManager {
 			result.reloadHandler();
 		return result;
 	}
-
-	/**
-	 * Get the an offline players ACPlayer object.
-	 *
-	 * @param name
-	 *            name of the player
-	 * @return the ACPlayer or null if it does not exist
-	 */
-	public ACPlayer getOfflinePlayer(String name) {
-		ACPlayer result = null;
-		result = playerFactory.createPlayer(name);
-		addPlayer(result);
-		result = getPlayer(name);
-		return result;
-	}
-
-	/**
-	 * Removes a player from the player Map
-	 *
-	 * @param player
-	 *              The player to be removed
-	 */
-	public void remove(ACPlayer player) {
-		players.remove(player.getName());
-	}
-
+	
 	/**
 	 * Set Offline an online player. The player will lost his strong reference,
 	 * when the gc will be called, the reference will be deleted.
