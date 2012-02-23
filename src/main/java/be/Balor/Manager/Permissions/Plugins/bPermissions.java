@@ -83,7 +83,7 @@ public class bPermissions extends SuperPermissions {
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
 		String result = super.getPermissionLimit(p, limit);
-		if (result.isEmpty() || result == null || result.length() < 1)
+		if (result == null || result.isEmpty() || result.length() < 1)
 			result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(), limit);
 		return result;
 	}
