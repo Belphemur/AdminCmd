@@ -23,8 +23,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Joiner;
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
@@ -37,6 +35,8 @@ import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.Tools.Egg.Types.NormalEgg;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
