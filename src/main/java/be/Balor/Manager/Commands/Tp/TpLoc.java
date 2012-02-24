@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -36,6 +37,7 @@ public class TpLoc extends TeleportCommand {
 	public TpLoc() {
 		permNode = "admincmd.tp.location";
 		cmdName = "bal_tpthere";
+		other = true;
 	}
 
 	/*
@@ -47,29 +49,30 @@ public class TpLoc extends TeleportCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		if (Utils.isPlayer(sender)) {
-			final double x;
-			final double y;
-			final double z;
-			try {
-				x = args.getDouble(0);
-				y = args.getDouble(1);
-				z = args.getDouble(2);
-			} catch (Exception e) {
-				Utils.sI18n(sender, "errorLocation");
-				return;
-			}
-			final Player player = (Player) sender;
-			if (!player.getWorld().isChunkLoaded((int) x, (int) z)) {
-				ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {					
-					@Override
-					public void run() {
-						player.teleport(new Location(player.getWorld(), x, y, z));						
-					}
-				});
-			} else
-				((Player) sender).teleport(new Location(((Player) sender).getWorld(), x, y, z));
+		final Player target = Utils.getUserParam(sender, args, permNode);
+		if(target == null)
+			return;
+		final double x;
+		final double y;
+		final double z;
+		try {
+			x = args.getDouble(0);
+			y = args.getDouble(1);
+			z = args.getDouble(2);
+		} catch (Exception e) {
+			Utils.sI18n(sender, "errorLocation");
+			return;
 		}
+		if (!target.getWorld().isChunkLoaded((int) x, (int) z)) {
+			target.getWorld().loadChunk((int) x, (int) z);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+			}
+		}
+		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
+				target.getWorld(), x, y, z)));
+
 	}
 
 	/*
