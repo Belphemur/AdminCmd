@@ -1429,6 +1429,14 @@ public class Utils {
 		}
 	}
 
+	/**
+	 * Check if the chunk is loaded before teleport the player to the location
+	 * 
+	 * @param player
+	 *            player to be teleported
+	 * @param loc
+	 *            location where the player will be tp
+	 */
 	public static void doTeleportWithChunkCheck(Player player, Location loc) {
 		if (!player.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
 			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
