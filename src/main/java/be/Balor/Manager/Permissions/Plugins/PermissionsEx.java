@@ -19,22 +19,19 @@ package be.Balor.Manager.Permissions.Plugins;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
 
 /**
  * @authors Balor, Lathanael
  * 
  */
-public class PermissionsEx implements IPermissionPlugin {
+public class PermissionsEx extends SuperPermissions {
 	private PermissionManager PEX;
 
 	/**
@@ -50,19 +47,12 @@ public class PermissionsEx implements IPermissionPlugin {
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
+	 * 
+	 * @Override public boolean hasPerm(CommandSender player, String perm,
+	 * boolean errorMsg) { if (!(player instanceof Player)) return true; if
+	 * (PEX.has((Player) player, perm)) return true; else { if (errorMsg)
+	 * Utils.sI18n(player, "errorNotPerm", "p", perm); return false; } }
 	 */
-	@Override
-	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
-		if (!(player instanceof Player))
-			return true;
-		if (PEX.has((Player) player, perm))
-			return true;
-		else {
-			if (errorMsg)
-				Utils.sI18n(player, "errorNotPerm", "p", perm);
-			return false;
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -70,19 +60,13 @@ public class PermissionsEx implements IPermissionPlugin {
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
+	 * 
+	 * @Override public boolean hasPerm(CommandSender player, Permission perm,
+	 * boolean errorMsg) { if (!(player instanceof Player)) return true; if
+	 * (PEX.has((Player) player, perm.getName())) return true; else { if
+	 * (errorMsg) Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
+	 * return false; } }
 	 */
-	@Override
-	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
-		if (!(player instanceof Player))
-			return true;
-		if (PEX.has((Player) player, perm.getName()))
-			return true;
-		else {
-			if (errorMsg)
-				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
-			return false;
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -137,7 +121,10 @@ public class PermissionsEx implements IPermissionPlugin {
 	 */
 	@Override
 	public String getPermissionLimit(Player p, String limit) {
-		return PEX.getUser(p).getOption("admincmd." + limit);
+		String permLimit = PEX.getUser(p).getOption("admincmd." + limit);
+		if (permLimit == null || (permLimit != null && permLimit.isEmpty()))
+			permLimit = super.getPermissionLimit(p, limit);
+		return permLimit;
 	}
 
 	/*

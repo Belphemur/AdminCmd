@@ -14,41 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg.Exceptions;
+package be.Balor.World;
+
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ProcessingArgsException extends IllegalArgumentException {
-
-	protected final ExceptionType type;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6083647989627639647L;
-
-	/**
-	 * 
-	 */
-	public ProcessingArgsException(ExceptionType type, String message) {
-		super(message);
-		this.type = type;
-
-	}
-
-	/**
-	 * 
-	 */
-	public ProcessingArgsException(ExceptionType type, String message, Throwable ex) {
-		super(message, ex);
-		this.type = type;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public ExceptionType getType() {
-		return type;
-	}
+public interface IWorldFactory {
+	ACWorld createWorld(String worldName) throws WorldNotLoaded;
 }

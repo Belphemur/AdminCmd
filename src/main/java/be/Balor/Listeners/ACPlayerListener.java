@@ -56,7 +56,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -102,6 +102,17 @@ public class ACPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		if (player.hasPower(Type.MUTED_COMMAND)) {
+			String[] split = event.getMessage().split("\\s+");
+			if (split.length != 0) {
+				if (split[0].contains("/")) {
+					event.setCancelled(true);
+					Utils.sI18n(p, "commandMuteEnabled");
+				}
+			}
+		}
 		if (CommandManager.getInstance()
 				.processCommandString(event.getPlayer(), event.getMessage())) {
 			event.setCancelled(true);
@@ -130,6 +141,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
+		player.setInformation("last-ip", p.getAddress().getAddress().toString());
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));
@@ -211,7 +223,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());

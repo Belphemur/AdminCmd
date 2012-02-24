@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -18,18 +18,20 @@ package be.Balor.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
 import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class PlayerManager {
 	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
@@ -37,10 +39,10 @@ public class PlayerManager {
 	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
 			.makeMap();
 	private final static PlayerManager instance = new PlayerManager();
-	private ACPlayerFactory playerFactory;
+	private IPlayerFactory playerFactory;
 
 	/**
-	 * 
+	 *
 	 */
 	private PlayerManager() {
 		EmptyPlayer console = new EmptyPlayer("serverConsole");
@@ -59,13 +61,50 @@ public class PlayerManager {
 	 * @param playerFactory
 	 *            the playerFactory to set
 	 */
-	public void setPlayerFactory(ACPlayerFactory playerFactory) {
+	public void setPlayerFactory(IPlayerFactory playerFactory) {
 		this.playerFactory = playerFactory;
 	}
 
 	/**
+	 * Convert the ACPlayer
+	 *
+	 * @param playerFactory
+	 */
+	public void convertFactory(IPlayerFactory factory) {
+		ACLogger.info("Converting player to the new type.");
+		for (String name : this.playerFactory.getExistingPlayers()) {
+			factory.addExistingPlayer(name);
+			ACPlayer oldPlayer = playerFactory.createPlayer(name);
+			ACPlayer newPlayer = factory.createPlayer(name);
+			newPlayer.setLastLocation(oldPlayer.getLastLocation());
+			newPlayer.setPresentation(oldPlayer.getPresentation());
+
+			for (String home : oldPlayer.getHomeList())
+				newPlayer.setHome(home, oldPlayer.getHome(home));
+			for (Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
+				Type power = Type.matchType(entry.getKey());
+				if (power != null)
+					newPlayer.setPower(power, oldPlayer.getPower(power).getObj());
+				else
+					newPlayer.setCustomPower(entry.getKey(),
+							oldPlayer.getCustomPower(entry.getKey()).getObj());
+			}
+			for (String info : oldPlayer.getInformationsList()) {
+				if (info.equals("lastLoc") || info.equals("presentation"))
+					continue;
+				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
+			}
+			for (String kit : oldPlayer.getKitUseList())
+				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
+			newPlayer.forceSave();
+		}
+		this.playerFactory = factory;
+		ACLogger.info("Convertion finished.");
+	}
+
+	/**
 	 * Add a new player
-	 * 
+	 *
 	 * @param player
 	 */
 	private synchronized boolean addPlayer(ACPlayer player) {
@@ -83,7 +122,7 @@ public class PlayerManager {
 
 	/**
 	 * Return online AC players
-	 * 
+	 *
 	 * @return
 	 */
 	public List<ACPlayer> getOnlineACPlayers() {
@@ -92,7 +131,7 @@ public class PlayerManager {
 
 	/**
 	 * Get Online Bukkit Player
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Player> getOnlinePlayers() {
@@ -107,7 +146,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted custom power
-	 * 
+	 *
 	 * @param power
 	 * @return
 	 */
@@ -122,7 +161,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted power
-	 * 
+	 *
 	 * @param power
 	 * @return
 	 */
@@ -147,7 +186,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the wanted player
-	 * 
+	 *
 	 * @param name
 	 *            name of the player
 	 * @return the ACPlayer if found, else null
@@ -158,11 +197,11 @@ public class PlayerManager {
 			result.reloadHandler();
 		return result;
 	}
-
+	
 	/**
 	 * Set Offline an online player. The player will lost his strong reference,
 	 * when the gc will be called, the reference will be deleted.
-	 * 
+	 *
 	 * @param player
 	 *            player to setOffline
 	 * @return
@@ -193,7 +232,7 @@ public class PlayerManager {
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(name);
 			if (tmp instanceof EmptyPlayer)
-				return result;			
+				return result;
 			players.remove(name);
 			onlinePlayers.remove(result);
 			result = tmp;
@@ -215,7 +254,7 @@ public class PlayerManager {
 		} else if (result instanceof EmptyPlayer) {
 			ACPlayer tmp = playerFactory.createPlayer(playerName);
 			if (tmp instanceof EmptyPlayer)
-				return result;			
+				return result;
 			players.remove(playerName);
 			onlinePlayers.remove(result);
 			result = tmp;

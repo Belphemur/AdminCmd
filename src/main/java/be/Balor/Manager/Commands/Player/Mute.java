@@ -22,6 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Permissions.PermChild;
+import be.Balor.Manager.Permissions.PermParent;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Type;
@@ -33,6 +36,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  *
  */
 public class Mute extends PlayerCommand {
+	private final PermChild cmdMute;
 
 	/**
 	 *
@@ -40,6 +44,7 @@ public class Mute extends PlayerCommand {
 	public Mute() {
 		permNode = "admincmd.player.mute";
 		cmdName = "bal_mute";
+		cmdMute = new PermChild(permNode + ".command");
 	}
 
 	/*
@@ -52,6 +57,8 @@ public class Mute extends PlayerCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		Player player = sender.getServer().getPlayer(args.getString(0));
+		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cmdMute.getBukkitPerm()))
+			return;
 		if (player != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
@@ -62,6 +69,42 @@ public class Mute extends PlayerCommand {
 			}
 			if (!Utils.checkImmunity(sender, player)) {
 				Utils.sI18n(sender, "insufficientLvl");
+				return;
+			}
+			if (args.hasFlag('c')) {
+				if (!acp.hasPower(Type.MUTED_COMMAND)) {
+					String msg = "Server Admin";
+					if (Utils.isPlayer(sender, false))
+						msg = Utils.getPlayerName((Player) sender);
+					acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg);
+					if (!player.equals(sender))
+						Utils.sI18n(sender, "commandMuteEnabledTarget", replace);
+					if (args.length >= 2) {
+						Integer tmpMute = null;
+						try {
+							tmpMute = args.getInt(args.length - 1);
+							final String unmute = player.getName();
+							final CommandSender senderFinal = sender;
+							ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
+									new Runnable() {
+
+										@Override
+										public void run() {
+											ACPlayer.getPlayer(unmute).removePower(Type.MUTED_COMMAND);
+											Utils.sI18n(senderFinal, "commandMuteDisabledTarget", "player",
+													unmute);
+										}
+									}, 20 * 60 * tmpMute);
+
+						} catch (Exception e) {
+						}
+						if (tmpMute == null)
+							Utils.sI18n(player, "commandMuteEnabled");
+						else
+							Utils.sI18n(player, "commandTmpMuteEnabled", "minutes", tmpMute.toString());
+					}
+				} else
+					Utils.sI18n(sender, "alreadyCommandMuted");
 				return;
 			}
 			if (!acp.hasPower(Type.MUTED)) {
@@ -112,4 +155,17 @@ public class Mute extends PlayerCommand {
 		return args != null && args.length >= 1;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		PermParent parent = new PermParent(permNode + ".*");
+		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
+		PermChild child = new PermChild(permNode, bukkitDefault);
+		parent.addChild(child).addChild(cmdMute);
+		bukkitPerm = child.getBukkitPerm();
+	}
 }

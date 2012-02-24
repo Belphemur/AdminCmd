@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -28,13 +28,13 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.Configuration;
 
 import com.avaje.ebean.EbeanServer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class TestPlugin implements Plugin {
 	private final PluginDescriptionFile pdf = new PluginDescriptionFile("test", "0.1",
@@ -42,7 +42,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
@@ -55,7 +55,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getDataFolder()
 	 */
 	@Override
@@ -66,7 +66,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getDescription()
 	 */
 	@Override
@@ -76,10 +76,9 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getConfiguration()
 	 */
-	@Override
 	public Configuration getConfiguration() {
 		// TODO Auto-generated method stub
 		return null;
@@ -87,7 +86,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getConfig()
 	 */
 	@Override
@@ -98,7 +97,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getResource(java.lang.String)
 	 */
 	@Override
@@ -109,7 +108,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#saveConfig()
 	 */
 	@Override
@@ -120,7 +119,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#saveDefaultConfig()
 	 */
 	@Override
@@ -131,7 +130,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#saveResource(java.lang.String, boolean)
 	 */
 	@Override
@@ -142,7 +141,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#reloadConfig()
 	 */
 	@Override
@@ -153,7 +152,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getPluginLoader()
 	 */
 	@Override
@@ -164,7 +163,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getServer()
 	 */
 	@Override
@@ -175,7 +174,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#isEnabled()
 	 */
 	@Override
@@ -186,7 +185,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	@Override
@@ -197,7 +196,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#onLoad()
 	 */
 	@Override
@@ -208,7 +207,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	@Override
@@ -219,7 +218,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#isNaggable()
 	 */
 	@Override
@@ -230,7 +229,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#setNaggable(boolean)
 	 */
 	@Override
@@ -241,7 +240,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getDatabase()
 	 */
 	@Override
@@ -252,7 +251,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getDefaultWorldGenerator(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -264,7 +263,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.plugin.Plugin#getLogger()
 	 */
 	@Override

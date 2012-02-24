@@ -16,9 +16,9 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import in.mDev.MiracleM4n.mChatSuite.MInfoReader;
-import info.somethingodd.bukkit.OddItem.OddItem;
-import info.somethingodd.bukkit.OddItem.OddItemBase;
+import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
+import info.somethingodd.OddItem.OddItem;
+import info.somethingodd.OddItem.OddItemBase;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -80,7 +80,7 @@ import de.diddiz.LogBlock.Consumer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Utils {
 	public static class SetTime implements Runnable {
@@ -106,7 +106,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -143,7 +143,7 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 * 
+	 *
 	 */
 
 	public final static int MAX_BLOCKS = 512;
@@ -158,7 +158,7 @@ public class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 * 
+	 *
 	 * @param player
 	 *            player to remove
 	 */
@@ -191,7 +191,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 * 
+	 *
 	 * @param player
 	 *            that fake join.
 	 */
@@ -206,7 +206,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 * 
+	 *
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -221,7 +221,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void broadcastMessage(String message) {
@@ -234,7 +234,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 * 
+	 *
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -281,7 +281,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 * 
+	 *
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -317,7 +317,7 @@ public class Utils {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -349,7 +349,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 * 
+	 *
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -379,7 +379,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 * 
+	 *
 	 * @param block
 	 * @param radius
 	 * @return
@@ -441,7 +441,7 @@ public class Utils {
 
 	/**
 	 * Get the ACPlayer, useful when working with only the AC user informations
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -484,7 +484,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 * 
+	 *
 	 * @param start
 	 * @return
 	 */
@@ -494,7 +494,7 @@ public class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 * 
+	 *
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -532,7 +532,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -567,26 +567,32 @@ public class Utils {
 	}
 
 	public static String getPlayerName(Player player) {
-		return getPlayerName(player, null, false);
+		return getPlayerName(player, null);
 	}
 
-	public static String getPlayerName(Player player, CommandSender sender) {
-		return getPlayerName(player, sender, true);
+	/**
+	 * For compatibility
+	 *
+	 * @param player
+	 * @param sender
+	 * @param withPrefix
+	 * @return
+	 */
+	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
+		return getPlayerName(player, sender);
 	}
 
 	/**
 	 * Get the complete player name with all prefix
-	 * 
+	 *
 	 * @param player
 	 *            player to get the name
 	 * @param sender
 	 *            sender that want the name
-	 * @param withPrefix
-	 *            return the name with or without prefixes/suffix (e.g [INV])
 	 * @return the complete player name with prefix
 	 */
-	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
-		if (withPrefix) {
+	public static String getPlayerName(Player player, CommandSender sender) {
+		if (ConfigEnum.USE_PREFIX.getBoolean()) {
 			String prefix = colorParser(getPrefix(player, sender));
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
 			if (prefix.isEmpty())
@@ -605,7 +611,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -630,7 +636,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 * 
+	 *
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -651,7 +657,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 * 
+	 *
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -699,7 +705,7 @@ public class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 * 
+	 *
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -753,7 +759,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 * 
+	 *
 	 * @param loc
 	 * @return
 	 */
@@ -767,7 +773,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 * 
+	 *
 	 * @return
 	 */
 	public static boolean isPlayer(CommandSender sender) {
@@ -786,7 +792,7 @@ public class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 * 
+	 *
 	 * @param player
 	 *            player to remove
 	 */
@@ -837,7 +843,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 * 
+	 *
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -863,7 +869,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 * 
+	 *
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -926,11 +932,11 @@ public class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
-	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, String toDo) {
+	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, Type.Health toDo) {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		Hero hero = null;
 		if (target == null)
@@ -938,20 +944,28 @@ public class Utils {
 		if (heroes != null) {
 			hero = heroes.getHeroManager().getHero(target);
 		}
-		if (toDo.equals("heal") && hero == null) {
-			target.setHealth(20);
+		switch (toDo) {
+		case HEAL:
+			if (hero == null)
+				target.setHealth(20);
+			else
+				hero.setHealth(20D);
 			target.setFireTicks(0);
-		} else if (toDo.equals("heal") && hero != null) {
-			hero.setHealth(hero.getMaxHealth());
-			target.setFireTicks(0);
-		} else if (toDo.equals("feed")) {
+			break;
+		case FEED:
 			target.setFoodLevel(20);
-		} else {
-			target.setHealth(0);
+			break;
+		case KILL:
+			if (hero == null)
+				target.setHealth(0);
+			else
+				hero.setHealth(0D);
 			if (logBlock != null)
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
+			break;
+		default:
+			return false;
 		}
-
 		return true;
 	}
 
@@ -993,8 +1007,8 @@ public class Utils {
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
 
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-				ACPluginManager.getCorePlugin(), new SetTime(w, newtime));
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new SetTime(w, newtime));
 	}
 
 	public static void sI18n(CommandSender sender, String key) {
@@ -1181,7 +1195,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 * 
+	 *
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.

@@ -284,4 +284,12 @@ public class FileWorld extends ACWorld {
 		return mobLimits.getInt(mob, -1);
 	}
 
+	/* (non-Javadoc)
+	 * @see be.Balor.World.ACWorld#getMobLimitList()
+	 */
+	@Override
+	public Set<String> getMobLimitList() {
+		return mobLimits.getKeys(false);
+	}
+
 }

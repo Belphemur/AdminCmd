@@ -14,41 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg.Exceptions;
+package be.Balor.World;
+
+
+import org.bukkit.World;
+
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ProcessingArgsException extends IllegalArgumentException {
-
-	protected final ExceptionType type;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6083647989627639647L;
+public class FileWorldFactory implements IWorldFactory {
+	final String directory;
 
 	/**
 	 * 
 	 */
-	public ProcessingArgsException(ExceptionType type, String message) {
-		super(message);
-		this.type = type;
-
+	public FileWorldFactory(String directory) {
+		this.directory = directory;
 	}
 
-	/**
-	 * 
-	 */
-	public ProcessingArgsException(ExceptionType type, String message, Throwable ex) {
-		super(message, ex);
-		this.type = type;
+
+	public ACWorld createWorld(String worldName) throws WorldNotLoaded {
+		World w = ACPluginManager.getServer().getWorld(worldName);
+		if (w == null)
+			throw new WorldNotLoaded(worldName);
+		else if (directory != null)
+			return new FileWorld(w, directory);
+		else
+			return null;
 	}
 
-	/**
-	 * @return the type
-	 */
-	public ExceptionType getType() {
-		return type;
-	}
 }

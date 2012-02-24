@@ -78,7 +78,7 @@ public class SuperBreaker extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.SUPER_BREAKER),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.SUPER_BREAKER, sender),
 						Utils.secInTick * 60 * timeOutValue);
 			}
 		}

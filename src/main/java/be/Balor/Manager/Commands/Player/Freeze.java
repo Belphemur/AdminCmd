@@ -78,7 +78,7 @@ public class Freeze extends PlayerCommand {
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FROZEN),
+						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FROZEN, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}

@@ -14,37 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.World;
+package be.Balor.Player;
 
+import java.util.Set;
 
-import org.bukkit.World;
-
-import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import org.bukkit.entity.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACWorldFactory {
-	final String directory;
+public interface IPlayerFactory {
+	ACPlayer createPlayer(String playername);
+
+	ACPlayer createPlayer(Player player);
 
 	/**
-	 * 
+	 * @return the existingPlayers
 	 */
-	public ACWorldFactory(String directory) {
-		this.directory = directory;
-	}
+	Set<String> getExistingPlayers();
 
-
-	ACWorld createWorld(String worldName) throws WorldNotLoaded {
-		World w = ACPluginManager.getServer().getWorld(worldName);
-		if (w == null)
-			throw new WorldNotLoaded(worldName);
-		else if (directory != null)
-			return new FileWorld(w, directory);
-		else
-			return null;
-	}
-
+	void addExistingPlayer(String player);
 }

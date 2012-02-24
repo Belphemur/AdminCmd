@@ -20,35 +20,11 @@ package be.Balor.Tools.Egg.Exceptions;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ProcessingArgsException extends IllegalArgumentException {
-
-	protected final ExceptionType type;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6083647989627639647L;
-
-	/**
-	 * 
-	 */
-	public ProcessingArgsException(ExceptionType type, String message) {
-		super(message);
-		this.type = type;
-
-	}
-
-	/**
-	 * 
-	 */
-	public ProcessingArgsException(ExceptionType type, String message, Throwable ex) {
-		super(message, ex);
-		this.type = type;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public ExceptionType getType() {
-		return type;
-	}
+public enum ExceptionType {
+	DONT_EXISTS,
+	NO_CLASS,
+	ILLEGAL_ACCESS,
+	INSTANCE,
+	MISSING_PARAM,
+	CUSTOM;
 }

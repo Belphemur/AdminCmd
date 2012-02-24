@@ -1,7 +1,5 @@
 package be.Balor.bukkit.AdminCmd;
 
-import info.somethingodd.bukkit.OddItem.OddItem;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,9 +36,9 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.ACPlayerFactory;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.FilePlayer;
+import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.MaterialContainer;
@@ -57,7 +55,7 @@ import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
-import be.Balor.World.ACWorldFactory;
+import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -66,14 +64,18 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
 
+	private final static HashMap<Material, String[]> materialsColors;
+
+	private final static List<Integer> listOfPossibleRepair;
+
 	/**
 	 * Return the elapsed time.
-	 *
+	 * 
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -84,8 +86,10 @@ public class ACHelper {
 		return instance;
 	}
 
-	private final static HashMap<Material, String[]> materialsColors;
-	private final static List<Integer> listOfPossibleRepair;
+	static void killInstance() {
+		instance = null;
+	}
+
 	private FileManager fManager;
 	private List<Integer> itemBlacklist;
 	private List<Integer> blockBlacklist;
@@ -99,6 +103,7 @@ public class ACHelper {
 	private static ACHelper instance = new ACHelper();
 	private final ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
+
 	private static long pluginStarted;
 
 	static {
@@ -129,10 +134,6 @@ public class ACHelper {
 		listOfPossibleRepair.add(Material.FISHING_ROD.getId());
 	}
 
-	static void killInstance() {
-		instance = null;
-	}
-
 	private ExtendedConfiguration pluginConfig;
 
 	private DataManager dataManager;
@@ -143,7 +144,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 *
+	 * 
 	 * @param ban
 	 */
 	public void addBannedPlayer(BannedPlayer ban) {
@@ -153,7 +154,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -183,7 +184,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -217,7 +218,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 *
+	 * 
 	 * @param blocks
 	 */
 	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
@@ -297,7 +298,7 @@ public class ACHelper {
 	/**
 	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
 	 * unBan the player or unban him if his time out.
-	 *
+	 * 
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
@@ -325,7 +326,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -370,13 +371,17 @@ public class ACHelper {
 		}
 	}
 
+	public int countBannedPlayers() {
+		return bannedPlayers.size();
+	}
+
 	public MaterialContainer getAlias(String name) {
 		return alias.get(name);
 	}
 
 	/**
 	 * Get the blacklisted blocks
-	 *
+	 * 
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
@@ -386,13 +391,26 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 *
+	 * 
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
 		return fManager.getYml("blacklist")
 				.getIntList("BlackListedItems", new ArrayList<Integer>());
 	}
+
+	/*
+	 * private void convertBannedMuted() { Map<String, Object> map =
+	 * fManager.loadMap(Type.BANNED, null, Type.BANNED.toString()); if
+	 * (!map.isEmpty()) { fManager.getFile(null, "banned.yml", false).delete();
+	 * for (String key : map.keySet()) dataManager.addBannedPlayer(new
+	 * BannedPlayer(key, String.valueOf(map.get(key)))); } File muted =
+	 * fManager.getFile(null, "muted.yml", false); if (muted.exists()) { map =
+	 * fManager.loadMap(Type.MUTED, null, Type.MUTED.toString()); for (String
+	 * key : map.keySet()) { PlayerManager.getInstance().setOnline(key);
+	 * ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key)); }
+	 * muted.delete(); } }
+	 */
 
 	// translates a given color value/name into a real color value
 	// also does some checking (error = -1)
@@ -415,19 +433,6 @@ public class ACHelper {
 		return value;
 	}
 
-	/*
-	 * private void convertBannedMuted() { Map<String, Object> map =
-	 * fManager.loadMap(Type.BANNED, null, Type.BANNED.toString()); if
-	 * (!map.isEmpty()) { fManager.getFile(null, "banned.yml", false).delete();
-	 * for (String key : map.keySet()) dataManager.addBannedPlayer(new
-	 * BannedPlayer(key, String.valueOf(map.get(key)))); } File muted =
-	 * fManager.getFile(null, "muted.yml", false); if (muted.exists()) { map =
-	 * fManager.loadMap(Type.MUTED, null, Type.MUTED.toString()); for (String
-	 * key : map.keySet()) { PlayerManager.getInstance().setOnline(key);
-	 * ACPlayer.getPlayer(key).setPower(Type.MUTED, map.get(key)); }
-	 * muted.delete(); } }
-	 */
-
 	/**
 	 * @return the pluginInstance
 	 */
@@ -441,7 +446,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 *
+	 * 
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -450,7 +455,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 *
+	 * 
 	 * @return
 	 */
 	private List<String> getGroupNames() {
@@ -459,7 +464,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
@@ -469,7 +474,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 *
+	 * 
 	 * @return
 	 */
 	public String getKitList(CommandSender sender) {
@@ -478,7 +483,6 @@ public class ACHelper {
 		try {
 			list.addAll(kits.keySet());
 			if (Utils.oddItem != null) {
-				list.addAll(OddItem.getGroups());
 			}
 
 		} catch (final Throwable e) {
@@ -493,15 +497,6 @@ public class ACHelper {
 				kitList = kitList.substring(0, kitList.lastIndexOf(","));
 		}
 		return kitList.trim();
-	}
-
-	/**
-	 * Get the number of kit in the system.
-	 *
-	 * @return
-	 */
-	public int getNbKit() {
-		return kits.size();
 	}
 
 	public int getLimit(CommandSender sender, String type) {
@@ -530,8 +525,17 @@ public class ACHelper {
 	// ----- / item coloring section -----
 
 	/**
+	 * Get the number of kit in the system.
+	 * 
+	 * @return
+	 */
+	public int getNbKit() {
+		return kits.size();
+	}
+
+	/**
 	 * Get the player to whom the reply message is sent to.
-	 *
+	 * 
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -684,7 +688,7 @@ public class ACHelper {
 
 	/**
 	 * Is the player banned.
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -742,10 +746,6 @@ public class ACHelper {
 			});
 		}
 		return true;
-	}
-
-	public int countBannedPlayers() {
-		return bannedPlayers.size();
 	}
 
 	public synchronized void loadInfos() {
@@ -829,7 +829,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -851,8 +851,8 @@ public class ACHelper {
 					&& itemBlacklist.contains(m.getMaterial().getId()))
 				itemBlacklist.remove((Integer) m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("getMaterial()", m.getMaterial().toString());
-			Utils.sI18n(sender, "rmBlacklist", replace);
+			replace.put("material", m.getMaterial().toString());
+			Utils.sI18n(sender, "rmBlacklistBlock", replace);
 			return true;
 		}
 		return false;
@@ -862,7 +862,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -884,8 +884,8 @@ public class ACHelper {
 					&& itemBlacklist.contains(m.getMaterial().getId()))
 				itemBlacklist.remove((Integer) m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("getMaterial()", m.getMaterial().toString());
-			Utils.sI18n(sender, "rmBlacklist", replace);
+			replace.put("material", m.getMaterial().toString());
+			Utils.sI18n(sender, "rmBlacklistItem", replace);
 			return true;
 		}
 		return false;
@@ -906,7 +906,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 *
+	 * 
 	 * @param key
 	 */
 	public void removeReplyPlayer(Player key) {
@@ -954,10 +954,10 @@ public class ACHelper {
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
 		PlayerManager.getInstance().setPlayerFactory(
-				new ACPlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
+				new FilePlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "userData"));
 		WorldManager.getInstance().setWorldFactory(
-				new ACWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
+				new FileWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
 						+ "worldData"));
 		// convertBannedMuted();
 		convertSpawnWarp();
@@ -1015,7 +1015,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 *
+	 * 
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -1063,7 +1063,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 *
+	 * 
 	 * @param player
 	 */
 	public void unBanPlayer(String player) {

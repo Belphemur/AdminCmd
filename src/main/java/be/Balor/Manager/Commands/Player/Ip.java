@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
 /**
@@ -48,13 +49,23 @@ public class Ip extends PlayerCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode);
+		Player target = Utils.getUser(sender, args, permNode, 0, false);
+		HashMap<String, String> replace = new HashMap<String, String>();
 		if (target != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));
 			replace.put("ip", target.getAddress().getAddress().toString());
 			Utils.sI18n(sender, "ip", replace);
+		} else {
+			ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
+			if (acp == null) {
+				replace.put("player", args.getString(0));
+				Utils.sI18n(sender, "playerNotFound", replace);
+			}
+			replace.put("player", acp.getName());
+			replace.put("ip", acp.getInformation("last-ip").getString());
+			Utils.sI18n(sender, "ip", replace);
 		}
+
 
 	}
 

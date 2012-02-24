@@ -110,10 +110,20 @@ public class FilePlayer extends ACPlayer {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
-		int delay = ConfigEnum.WDELAY.getInt() >= 30 ?  ConfigEnum.WDELAY.getInt() : 30;
+		int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
 		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
+	}
+
+	/**
+	 * To stop the saving task.
+	 */
+	public static void stopSavingTask() {
+		if (!ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
+				&& !ACPluginManager.getScheduler().isQueued(ioStackTaskId))
+			return;
+		ACPluginManager.getScheduler().cancelTask(ioStackTaskId);
 	}
 
 	@Override
@@ -401,17 +411,6 @@ public class FilePlayer extends ACPlayer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
-	 */
-	@Override
-	public void updateLastKitUse(String kit) {
-		kitsUse.set(kit, System.currentTimeMillis());
-		writeFile();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
 	 */
 	@Override
@@ -442,6 +441,37 @@ public class FilePlayer extends ACPlayer {
 		String pres = "";
 		pres = informations.getString("presentation", "");
 		return pres;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getInformationsList()
+	 */
+	@Override
+	public Set<String> getInformationsList() {
+		return informations.getKeys(false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getKitUseList()
+	 */
+	@Override
+	public Set<String> getKitUseList() {
+		return kitsUse.getKeys(false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#setLastKitUse(java.lang.String, long)
+	 */
+	@Override
+	public void setLastKitUse(String kit, long timestamp) {
+		kitsUse.set(kit, timestamp);
+		writeFile();
 	}
 
 }

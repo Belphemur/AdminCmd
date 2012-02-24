@@ -17,7 +17,7 @@
 package be.Balor.Listeners;
 
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
-import info.somethingodd.bukkit.OddItem.OddItemBase;
+import info.somethingodd.OddItem.OddItemBase;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +25,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
-
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
@@ -43,7 +42,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPluginListener implements Listener {
 
@@ -74,9 +73,14 @@ public class ACPluginListener implements Listener {
 			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("bPermissions");
 			if (plugin != null) {
-				PermissionManager.setbPermissions(
-						de.bananaco.permissions.Permissions.getWorldPermissionsManager(),
-						de.bananaco.permissions.Permissions.getInfoReader());
+				String version = plugin.getDescription().getVersion();
+				version = version.replace(".", "");
+				int ver = Integer.parseInt(version);
+				if (ver < 285) {
+					ACLogger.info("You are using bPermissions v" + plugin.getDescription().getVersion() + ". This is an outdated version, permission support for bPermission will be disabled.");
+					return;
+				}
+				PermissionManager.setbPermissions();
 			}
 		}
 		if (!PermissionManager.isPermissionsBukkitSet()) {

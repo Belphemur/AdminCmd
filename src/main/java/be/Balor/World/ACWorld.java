@@ -210,6 +210,13 @@ public abstract class ACWorld {
 	 */
 	public abstract int getMobLimit(String mob);
 
+	/**
+	 * Get the list of every limited mobs
+	 * 
+	 * @return
+	 */
+	public abstract Set<String> getMobLimitList();
+
 	/*
 	 * (non-Javadoc)
 	 * 
