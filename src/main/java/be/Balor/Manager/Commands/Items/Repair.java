@@ -68,7 +68,7 @@ public class Repair extends ItemCommand {
 				replace.put("player", Utils.getPlayerName(player));
 				if (!sender.equals(player))
 					Utils.sI18n(sender, "repair", replace);
-				Utils.sI18n(player, "repairTarget");
+				Utils.sI18n(player, "repairTarget", replace);
 			} else
 				Utils.sI18n(sender, "errorRepair", replace);
 		}
