@@ -17,6 +17,8 @@ package be.Balor.Tools.Threads;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Utils;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -42,9 +44,7 @@ public class TeleportTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		if (!player.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
-			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
-		player.teleport(loc);
+		Utils.doTeleportWithChunkCheck(player, loc);
 	}
 
 }
