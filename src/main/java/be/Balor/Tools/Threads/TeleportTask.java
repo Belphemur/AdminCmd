@@ -19,12 +19,12 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TeleportTask implements Runnable {
 	private final Player player;
 	private final Location loc;
-	
+
 	/**
 	 * @param player
 	 * @param loc
@@ -35,11 +35,15 @@ public class TeleportTask implements Runnable {
 		this.loc = loc;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
 	public void run() {
+		if (!player.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
+			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
 		player.teleport(loc);
 	}
 

@@ -63,13 +63,6 @@ public class TpLoc extends TeleportCommand {
 			Utils.sI18n(sender, "errorLocation");
 			return;
 		}
-		if (!target.getWorld().isChunkLoaded((int) x, (int) z)) {
-			target.getWorld().loadChunk((int) x, (int) z);
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-			}
-		}
 		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
 				target.getWorld(), x, y, z)));
 
