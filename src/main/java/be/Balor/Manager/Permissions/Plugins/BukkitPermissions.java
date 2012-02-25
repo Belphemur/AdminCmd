@@ -34,7 +34,6 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
  */
 public class BukkitPermissions extends SuperPermissions {
 	protected PermissionsPlugin permBukkit = null;
-	
 	/**
 	 *
 	 */
