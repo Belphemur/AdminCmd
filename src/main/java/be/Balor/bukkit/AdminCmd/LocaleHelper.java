@@ -38,7 +38,14 @@ public enum LocaleHelper {
 	EGG_PARAM_ENTITY("eggEntityParam", ChatColor.RED + "The parameter " + ChatColor.GOLD + "-e"
 			+ ChatColor.RED + " is needed to choose the entity id to spawn."),
 	EGG_PARAM_MOB("eggMobParam", ChatColor.RED + "The parameter " + ChatColor.GOLD + "-m"
-			+ ChatColor.RED + " is needed to choose the mob to spawn.");
+			+ ChatColor.RED + " is needed to choose the mob to spawn."),
+	ECHANT_DONT_EXISTS("echantDontExists", ChatColor.RED + "The enchantment " + ChatColor.GOLD
+			+ "%enchant " + ChatColor.RED + "don't exists !"),
+	CANT_ENCHANT("cantEnchantItem", ChatColor.RED + "This item " + ChatColor.GOLD + "%item"
+			+ ChatColor.RED + " can't be enchanted with " + ChatColor.GREEN + "%enchant"),
+	SUCCESS_ENCHANT("enchantSuccess", ChatColor.GREEN + "Your item " + ChatColor.GOLD + "%item"
+			+ ChatColor.GREEN + " is now with " + ChatColor.BLUE + "%enchant" + ChatColor.GREEN
+			+ " lvl " + ChatColor.LIGHT_PURPLE + "%lvl");
 
 	private final String key;
 	private final String locale;

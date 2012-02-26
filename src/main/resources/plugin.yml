@@ -398,3 +398,7 @@ commands:
     description: Get the id and the data of the item in hand
     aliases: [data, getid]
     usage: /<command> <-P player> 
+  bal_enchant:
+    description: Enchant the item in hand with the wanted enchant.
+    aliases: [enchant, iench]
+    usage: /<command> <-P player> enchantement lvl

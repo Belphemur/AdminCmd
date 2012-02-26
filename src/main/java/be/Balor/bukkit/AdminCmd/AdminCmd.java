@@ -39,6 +39,7 @@ import be.Balor.Manager.Commands.Items.AddAlias;
 import be.Balor.Manager.Commands.Items.AddBlackList;
 import be.Balor.Manager.Commands.Items.Coloring;
 import be.Balor.Manager.Commands.Items.Drop;
+import be.Balor.Manager.Commands.Items.Enchant;
 import be.Balor.Manager.Commands.Items.GetItemId;
 import be.Balor.Manager.Commands.Items.Give;
 import be.Balor.Manager.Commands.Items.Kit;
@@ -384,6 +385,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACEggListener(), this);
 		}
 		CommandManager.getInstance().registerCommand(GetItemId.class);
+		CommandManager.getInstance().registerCommand(Enchant.class);
 	}
 
 	@Override
