@@ -71,6 +71,7 @@ import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -155,6 +156,14 @@ public class Utils {
 
 	public static void addLocale(String key, String value, boolean override) {
 		LocaleManager.getInstance().addLocale(key, value, true);
+	}
+
+	public static void addLocale(LocaleHelper key, String value) {
+		LocaleManager.getInstance().addLocale(key.getKey(), value);
+	}
+
+	public static void addLocale(LocaleHelper key, String value, boolean override) {
+		LocaleManager.getInstance().addLocale(key.getKey(), value, true);
 	}
 
 	/**
@@ -699,6 +708,20 @@ public class Utils {
 
 	}
 
+	/**
+	 * Get the user using the -P param as indicating the userName and check who
+	 * launched the command.
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param args
+	 *            argument of the command
+	 * @param permNode
+	 *            permission to run the command
+	 * @return target player if found
+	 * @throws PlayerNotFound
+	 *             if the target player is not found
+	 */
 	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode)
 			throws PlayerNotFound {
 		return getUserParam(sender, args, permNode, true);
@@ -709,11 +732,16 @@ public class Utils {
 	 * launched the command.
 	 * 
 	 * @param sender
+	 *            sender of the command
 	 * @param args
+	 *            argument of the command
 	 * @param permNode
+	 *            permission to run the command
 	 * @param errorMsg
-	 * @return
+	 *            send or not the exception about an unfound player
+	 * @return target player if found
 	 * @throws PlayerNotFound
+	 *             if the target player is not found
 	 */
 	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
 			boolean errorMsg) throws PlayerNotFound {
@@ -757,6 +785,18 @@ public class Utils {
 
 	public static String I18n(String key, String alias, String toReplace) {
 		return LocaleManager.getInstance().get(key, alias, toReplace);
+	}
+
+	public static String I18n(LocaleHelper key) {
+		return I18n(key.getKey(), null);
+	}
+
+	public static String I18n(LocaleHelper key, Map<String, String> replace) {
+		return LocaleManager.getInstance().get(key.getKey(), replace);
+	}
+
+	public static String I18n(LocaleHelper key, String alias, String toReplace) {
+		return LocaleManager.getInstance().get(key.getKey(), alias, toReplace);
 	}
 
 	/**
@@ -1024,6 +1064,22 @@ public class Utils {
 	}
 
 	public static void sI18n(CommandSender sender, String key, String alias, String toReplace) {
+		final String locale = I18n(key, alias, toReplace);
+		if (locale != null && !locale.isEmpty())
+			sender.sendMessage(locale);
+	}
+
+	public static void sI18n(CommandSender sender, LocaleHelper key) {
+		sI18n(sender, key, null);
+	}
+
+	public static void sI18n(CommandSender sender, LocaleHelper key, Map<String, String> replace) {
+		final String locale = I18n(key, replace);
+		if (locale != null && !locale.isEmpty())
+			sender.sendMessage(locale);
+	}
+
+	public static void sI18n(CommandSender sender, LocaleHelper key, String alias, String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
