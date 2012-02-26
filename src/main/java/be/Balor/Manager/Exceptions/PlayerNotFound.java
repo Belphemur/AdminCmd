@@ -14,22 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Items;
+package be.Balor.Manager.Exceptions;
 
-import be.Balor.Manager.Commands.CoreCommand;
+import org.bukkit.command.CommandSender;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class ItemCommand extends CoreCommand {
+public class PlayerNotFound extends Exception {
+
 	/**
- * 
- */
-	public ItemCommand() {
-		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.item.*");
+	 * 
+	 */
+	private static final long serialVersionUID = -6841087146104592092L;
+	private final CommandSender sender;
+
+	/**
+	 * @param message
+	 */
+	public PlayerNotFound(String message, CommandSender sender) {
+		super(message);
+		this.sender = sender;
 	}
-		
-	
+
+	/**
+	 * @return the sender
+	 */
+	public CommandSender getSender() {
+		return sender;
+	}
+
 }

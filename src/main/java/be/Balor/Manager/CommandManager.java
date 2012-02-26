@@ -39,6 +39,7 @@ import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
@@ -66,7 +67,7 @@ public class CommandManager implements CommandExecutor {
 			this.acc = acc;
 		}
 
-		protected void processCmd() {
+		protected void processCmd() throws PlayerNotFound {
 			acc.processArguments();
 			acc.execute();
 		}
@@ -86,10 +87,13 @@ public class CommandManager implements CommandExecutor {
 			} catch (final WorldNotLoaded e) {
 				ACLogger.severe("World not Loaded", e);
 				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
+			} catch (PlayerNotFound e) {
+				e.getSender().sendMessage(e.getMessage());
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
 				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
 			}
+
 		}
 
 		/*

@@ -21,6 +21,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -48,7 +49,7 @@ public class TpLoc extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		if(target == null)
 			return;

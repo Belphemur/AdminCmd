@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
@@ -45,7 +46,7 @@ public class RepeatCmd extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
 		try {
 
 			if (Utils.isPlayer(sender, false))

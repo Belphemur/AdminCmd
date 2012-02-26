@@ -54,6 +54,7 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
@@ -698,7 +699,8 @@ public class Utils {
 
 	}
 
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode)
+			throws PlayerNotFound {
 		return getUserParam(sender, args, permNode, true);
 	}
 
@@ -711,9 +713,10 @@ public class Utils {
 	 * @param permNode
 	 * @param errorMsg
 	 * @return
+	 * @throws PlayerNotFound
 	 */
 	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
-			boolean errorMsg) {
+			boolean errorMsg) throws PlayerNotFound {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
 		if (playerName != null) {
@@ -739,8 +742,7 @@ public class Utils {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", playerName);
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
 		}
 		return target;
 	}
