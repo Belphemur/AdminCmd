@@ -158,14 +158,6 @@ public class Utils {
 		LocaleManager.getInstance().addLocale(key, value, true);
 	}
 
-	public static void addLocale(LocaleHelper key, String value) {
-		LocaleManager.getInstance().addLocale(key.getKey(), value);
-	}
-
-	public static void addLocale(LocaleHelper key, String value, boolean override) {
-		LocaleManager.getInstance().addLocale(key.getKey(), value, true);
-	}
-
 	/**
 	 * Add the player in the online list (TAB key)
 	 * 

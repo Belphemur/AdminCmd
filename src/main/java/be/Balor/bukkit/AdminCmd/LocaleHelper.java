@@ -16,17 +16,28 @@
  ************************************************************************/
 package be.Balor.bukkit.AdminCmd;
 
+import java.util.Map;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
+import be.Balor.Manager.LocaleManager;
+import be.Balor.Tools.Utils;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public enum LocaleHelper {
-	ITEMID("itemId");
+	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
+			+ "%item" + ChatColor.WHITE + ":" + ChatColor.RED + "%data");
 
 	private final String key;
+	private final String locale;
 
-	private LocaleHelper(String key) {
+	private LocaleHelper(String key, String locale) {
 		this.key = key;
+		this.locale = locale;
 	}
 
 	/**
@@ -35,4 +46,18 @@ public enum LocaleHelper {
 	public String getKey() {
 		return key;
 	}
+
+	public static void addAllLocales() {
+		for (LocaleHelper lh : values())
+			LocaleManager.getInstance().addLocale(lh.key, lh.locale);
+	}
+
+	public void sendLocale(CommandSender sender, Map<String, String> replace) {
+		Utils.sI18n(sender, this, replace);
+	}
+
+	public String getLocale(Map<String, String> replace) {
+		return Utils.I18n(this, replace);
+	}
+
 }
