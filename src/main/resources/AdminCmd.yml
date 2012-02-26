@@ -672,7 +672,7 @@ acitemid:
     cmdname: bal_itemid
     
 acitemenchant:
-    command: getid [-P player] enchantment lvl
+    command: enchant [-P player] enchantment lvl
     description: "Enchant the item in hand with the wanted enchant. If player is defined, set the enchantment for that player."
     plugin: AdminCmd
     permissions: admincmd.item.enchant
