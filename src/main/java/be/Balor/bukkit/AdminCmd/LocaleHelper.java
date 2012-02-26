@@ -60,14 +60,34 @@ public enum LocaleHelper {
 			LocaleManager.getInstance().addLocale(lh.key, lh.locale);
 	}
 
+	/**
+	 * Send the locale the the CommandSender
+	 * 
+	 * @param sender
+	 *            CommandSender that will get the message
+	 * @param replace
+	 *            Replacement variables
+	 */
 	public void sendLocale(CommandSender sender, Map<String, String> replace) {
 		Utils.sI18n(sender, this, replace);
 	}
 
+	/**
+	 * Get the locale with replacement variables
+	 * 
+	 * @param replace
+	 *            Replacement variables
+	 * @return the locale with the variables replaced in.
+	 */
 	public String getLocale(Map<String, String> replace) {
 		return Utils.I18n(this, replace);
 	}
 
+	/**
+	 * Get the locale without replacement variables
+	 * 
+	 * @return the locale
+	 */
 	public String getLocale() {
 		return Utils.I18n(this);
 	}
