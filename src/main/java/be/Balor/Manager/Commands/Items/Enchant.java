@@ -31,6 +31,7 @@ import com.google.common.base.Joiner;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -65,8 +66,7 @@ public class Enchant extends ItemCommand {
 
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
-			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(enchantList));
+			sender.sendMessage(ChatColor.GOLD + Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
 			return;
 		}
 		String enchantString = args.getString(0);
@@ -76,14 +76,14 @@ public class Enchant extends ItemCommand {
 		} catch (NumberFormatException e) {
 			lvl = 1;
 		}
-		Enchantment enchantment = Enchantment.getByName(enchantString);
+		Enchantment enchantment = Enchantment
+				.getByName(Str.matchString(enchantList, enchantString));
 		HashMap<String, String> replace = new HashMap<String, String>();
 		if (enchantment == null) {
 			replace.put("enchant", enchantString);
 			LocaleHelper.ECHANT_DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
-			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(enchantList));
+			sender.sendMessage(ChatColor.GOLD + Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
 			return;
 		}
 		ItemStack itemInHand = target.getItemInHand();
