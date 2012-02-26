@@ -16,7 +16,9 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -36,6 +38,11 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  * 
  */
 public class Enchant extends ItemCommand {
+	private final static List<String> enchantList = new ArrayList<String>();
+	static {
+		for (Enchantment enchant : Enchantment.values())
+			enchantList.add(enchant.getName());
+	}
 
 	/**
 	 * 
@@ -55,10 +62,11 @@ public class Enchant extends ItemCommand {
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
 		Player target = Utils.getUserParam(sender, args, permNode);
+
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(Enchantment.values()));
+					+ Joiner.on(", ").skipNulls().join(enchantList));
 			return;
 		}
 		String enchantString = args.getString(0);
@@ -75,7 +83,7 @@ public class Enchant extends ItemCommand {
 			LocaleHelper.ECHANT_DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(Enchantment.values()));
+					+ Joiner.on(", ").skipNulls().join(enchantList));
 			return;
 		}
 		ItemStack itemInHand = target.getItemInHand();
