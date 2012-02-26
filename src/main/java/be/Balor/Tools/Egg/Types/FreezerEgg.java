@@ -60,4 +60,13 @@ public class FreezerEgg extends BlockEgg {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "FreezerEgg = " + value.getRadius();
+	}
+	
+
 }
