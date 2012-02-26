@@ -16,83 +16,25 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.SimplifiedLocation;
-import be.Balor.Tools.SynchronizedStack;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Blocks.BlockRemanence;
-import be.Balor.Tools.Blocks.BlockRemanenceFactory;
-import be.Balor.Tools.Egg.EggType;
+import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class FreezerEgg extends EggType<Integer> {
+public class FreezerEgg extends BlockEgg {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6781269132940660439L;
-	private int eggNb = 0;
-	private final Map<Integer, SynchronizedStack<BlockRemanence>> blocksPerEvent = Collections
-			.synchronizedMap(new HashMap<Integer, SynchronizedStack<BlockRemanence>>());
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.
-	 * PlayerEggThrowEvent)
-	 */
-	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
-		final int radius = value / 2;
-		final Integer eventId = eggNb++;
-		event.getEgg().remove();
-		event.setHatching(false);
-		Location loc = event.getEgg().getLocation();
-		SynchronizedStack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
-		World w = loc.getWorld();
-		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
-			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
-				for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
-					int blckId = w.getBlockTypeIdAt(x, y, z);
-					if (blckId != Material.AIR.getId() && blckId != Material.SNOW.getId())
-						continue;
-					BlockRemanence blk = BlockRemanenceFactory.FACTORY
-							.createBlockRemanence(new SimplifiedLocation(w, x, y, z));
-					blk.setBlockType(Material.ICE.getId());
-					blocks.add(blk);
-
-				}
-		blocksPerEvent.put(eventId, blocks);
-		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
-
-					@Override
-					public void run() {
-						SynchronizedStack<BlockRemanence> blocks = blocksPerEvent.get(eventId);
-						while (!blocks.empty())
-							blocks.pop().returnToThePast();
-						blocksPerEvent.remove(eventId);
-
-					}
-				}, ConfigEnum.EGG_FREEZE_TIMEOUT.getInt() * Utils.secInTick);
-
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -112,8 +54,9 @@ public class FreezerEgg extends EggType<Integer> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		value = radius > ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt() ? ConfigEnum.MAXEGG_FREEZE_RADIUS
-				.getInt() : radius;
+		value = new BlockChangeInfo(Material.ICE.getId(),
+				radius > ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt() ? ConfigEnum.MAXEGG_FREEZE_RADIUS
+						.getInt() : radius);
 
 	}
 
