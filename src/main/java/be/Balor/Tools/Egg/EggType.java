@@ -29,6 +29,7 @@ import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
 import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -111,7 +112,7 @@ public abstract class EggType<T> implements Serializable {
 	public static EggType<?> createEggType(Player player, CommandArgs args)
 			throws ProcessingArgsException, DontHaveThePermissionException {
 		if (!args.hasFlag('E'))
-			throw new ParameterMissingException("E");
+			throw new ParameterMissingException('E',LocaleHelper.EGG_PARAM.getLocale());
 		EggType<?> eggType;
 		String className = args.getValueFlag('E');
 		try {

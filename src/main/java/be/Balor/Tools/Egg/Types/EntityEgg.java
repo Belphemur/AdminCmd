@@ -32,6 +32,7 @@ import be.Balor.Tools.Egg.EntityInEgg;
 import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -73,7 +74,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
 		String entityParam = args.getValueFlag('e');
 		if (entityParam == null)
-			throw new ParameterMissingException("e");
+			throw new ParameterMissingException('e', LocaleHelper.EGG_PARAM_ENTITY.getLocale());
 		String valFlag = args.getValueFlag('n');
 		int nbre = 1;
 		int entityNb = 93;

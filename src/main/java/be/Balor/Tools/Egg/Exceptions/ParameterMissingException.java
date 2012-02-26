@@ -26,20 +26,20 @@ public class ParameterMissingException extends ProcessingArgsException {
 	 * 
 	 */
 	private static final long serialVersionUID = 4437719310884213242L;
+	private final char param;
 
 	/**
 	 * @param message
 	 */
-	public ParameterMissingException(String message) {
+	public ParameterMissingException(char param, String message) {
 		super(ExceptionType.MISSING_PARAM, message);
+		this.param = param;
 	}
 
 	/**
-	 * @param message
-	 * @param ex
+	 * @return the param
 	 */
-	public ParameterMissingException(String message, Throwable ex) {
-		super(ExceptionType.MISSING_PARAM, message, ex);
+	public char getParam() {
+		return param;
 	}
-
 }

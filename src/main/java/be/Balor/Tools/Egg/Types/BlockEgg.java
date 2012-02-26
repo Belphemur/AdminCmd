@@ -40,6 +40,7 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -109,7 +110,7 @@ public class BlockEgg extends EggType<BlockChangeInfo> {
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
 		String block = args.getValueFlag('b');
 		if (block == null)
-			throw new ParameterMissingException("b");
+			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
 		String valFlag = args.getValueFlag('r');
 		int radius = ConfigEnum.DEGG_BLOCK_RADIUS.getInt();
 		if (valFlag != null)
@@ -120,7 +121,7 @@ public class BlockEgg extends EggType<BlockChangeInfo> {
 				return;
 			}
 		MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
-		if(mat.isNull())
+		if (mat.isNull())
 			return;
 		value = new BlockChangeInfo(mat.getMaterial().getId(),
 				radius > ConfigEnum.MAXEGG_BLOCK_RADIUS.getInt() ? ConfigEnum.MAXEGG_BLOCK_RADIUS

@@ -30,7 +30,15 @@ import be.Balor.Tools.Utils;
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
-			+ "%item" + ChatColor.WHITE + ":" + ChatColor.RED + "%data");
+			+ "%item" + ChatColor.WHITE + ":" + ChatColor.RED + "%data"),
+	EGG_PARAM("eggCmdParam", ChatColor.RED + "The parameter " + ChatColor.GOLD + "-E"
+			+ ChatColor.RED + " is needed to choose the egg."),
+	EGG_PARAM_BLOCK("eggBlockParam", ChatColor.RED + "The parameter " + ChatColor.GOLD + "-b"
+			+ ChatColor.RED + " is needed to choose the block to use for replacement."),
+	EGG_PARAM_ENTITY("eggEntityParam", ChatColor.RED + "The parameter " + ChatColor.GOLD + "-e"
+			+ ChatColor.RED + " is needed to choose the entity id to spawn."),
+	EGG_PARAM_MOB("eggMobParam", ChatColor.RED + "The parameter " + ChatColor.GOLD + "-m"
+			+ ChatColor.RED + " is needed to choose the mob to spawn.");
 
 	private final String key;
 	private final String locale;
@@ -58,6 +66,10 @@ public enum LocaleHelper {
 
 	public String getLocale(Map<String, String> replace) {
 		return Utils.I18n(this, replace);
+	}
+
+	public String getLocale() {
+		return Utils.I18n(this);
 	}
 
 }
