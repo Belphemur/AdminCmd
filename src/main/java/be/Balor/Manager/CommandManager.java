@@ -66,6 +66,11 @@ public class CommandManager implements CommandExecutor {
 			this.acc = acc;
 		}
 
+		protected void processCmd() {
+			acc.processArguments();
+			acc.execute();
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -74,8 +79,7 @@ public class CommandManager implements CommandExecutor {
 		@Override
 		public void run() {
 			try {
-				acc.processArguments();
-				acc.execute();
+				processCmd();
 			} catch (final ConcurrentModificationException cme) {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
 						new SyncCommand(acc));
@@ -114,8 +118,7 @@ public class CommandManager implements CommandExecutor {
 		@Override
 		public void run() {
 			try {
-				acc.processArguments();
-				acc.execute();
+				processCmd();
 			} catch (final WorldNotLoaded e) {
 				ACLogger.severe("World not Loaded", e);
 				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
