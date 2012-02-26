@@ -663,3 +663,10 @@ acserverbroadcast:
     plugin: AdminCmd
     permissions: admincmd.server.broadcast
     cmdname: bal_broadcast
+
+acitemid:
+    command: getid [-P player]
+    description: "Get the id and the data of the item in hand. If player is defined, get the information from that player."
+    plugin: AdminCmd
+    permissions: admincmd.item.id
+    cmdname: bal_itemid

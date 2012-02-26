@@ -39,6 +39,7 @@ import be.Balor.Manager.Commands.Items.AddAlias;
 import be.Balor.Manager.Commands.Items.AddBlackList;
 import be.Balor.Manager.Commands.Items.Coloring;
 import be.Balor.Manager.Commands.Items.Drop;
+import be.Balor.Manager.Commands.Items.GetItemId;
 import be.Balor.Manager.Commands.Items.Give;
 import be.Balor.Manager.Commands.Items.Kit;
 import be.Balor.Manager.Commands.Items.More;
@@ -382,6 +383,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			EggTypeClassLoader.addPackage(this, "be.Balor.Tools.Egg.Types");
 			pm.registerEvents(new ACEggListener(), this);
 		}
+		CommandManager.getInstance().registerCommand(GetItemId.class);
 	}
 
 	@Override

@@ -394,3 +394,7 @@ commands:
     description: Broadcast a message.
     aliases: [broadcast, bc]
     usage: /<command> [message]
+  bal_itemid:
+    description: Get the id and the data of the item in hand
+    aliases: [data, getid]
+    usage: /<command> <-P player> 
