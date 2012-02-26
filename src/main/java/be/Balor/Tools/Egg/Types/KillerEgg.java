@@ -109,7 +109,8 @@ public class KillerEgg extends EggType<Integer> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		value = radius;
+		value = radius > ConfigEnum.MAXEGG_KILL_RADIUS.getInt() ? ConfigEnum.MAXEGG_KILL_RADIUS
+				.getInt() : radius;
 
 	}
 

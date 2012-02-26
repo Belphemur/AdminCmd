@@ -103,7 +103,7 @@ public class FreezingEgg extends EggType<Integer> {
 	 */
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		int radius = ConfigEnum.DFREEZE_RADIUS.getInt();
+		int radius = ConfigEnum.DEGG_FREEZE_RADIUS.getInt();
 		String valFlag = args.getValueFlag('r');
 		if (valFlag != null)
 			try {
@@ -112,7 +112,8 @@ public class FreezingEgg extends EggType<Integer> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		value = radius;
+		value = radius > ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt() ? ConfigEnum.MAXEGG_FREEZE_RADIUS
+				.getInt() : radius;
 
 	}
 
