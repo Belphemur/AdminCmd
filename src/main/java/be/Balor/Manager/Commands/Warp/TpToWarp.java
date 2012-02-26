@@ -157,11 +157,11 @@ public class TpToWarp extends WarpCommand {
 		public void run() {
 			if (locBefore.equals(target.getLocation()) && ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
-				target.teleport(teleportToLoc);
+				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else if (!ConfigEnum.CHECKTP.getBoolean()) {
 				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
-				target.teleport(teleportToLoc);
+				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else {
 				replace.clear();

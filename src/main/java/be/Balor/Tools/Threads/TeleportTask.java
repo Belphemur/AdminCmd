@@ -17,14 +17,16 @@ package be.Balor.Tools.Threads;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Utils;
+
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TeleportTask implements Runnable {
 	private final Player player;
 	private final Location loc;
-	
+
 	/**
 	 * @param player
 	 * @param loc
@@ -35,12 +37,14 @@ public class TeleportTask implements Runnable {
 		this.loc = loc;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
 	public void run() {
-		player.teleport(loc);
+		Utils.doTeleportWithChunkCheck(player, loc);
 	}
 
 }

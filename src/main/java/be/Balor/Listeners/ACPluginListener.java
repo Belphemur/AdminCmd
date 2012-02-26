@@ -25,7 +25,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
-
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
@@ -74,6 +73,13 @@ public class ACPluginListener implements Listener {
 			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("bPermissions");
 			if (plugin != null) {
+				String version = plugin.getDescription().getVersion();
+				version = version.replace(".", "");
+				int ver = Integer.parseInt(version);
+				if (ver < 285) {
+					ACLogger.info("You are using bPermissions v" + plugin.getDescription().getVersion() + ". This is an outdated version, permission support for bPermission will be disabled.");
+					return;
+				}
 				PermissionManager.setbPermissions();
 			}
 		}
