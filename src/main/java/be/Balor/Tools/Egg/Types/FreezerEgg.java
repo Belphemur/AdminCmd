@@ -41,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class FreezingEgg extends EggType<Integer> {
+public class FreezerEgg extends EggType<Integer> {
 
 	/**
 	 * 
@@ -90,7 +90,7 @@ public class FreezingEgg extends EggType<Integer> {
 						blocksPerEvent.remove(eventId);
 
 					}
-				}, ConfigEnum.FREEZE_TIMEOUT.getInt() * Utils.secInTick);
+				}, ConfigEnum.EGG_FREEZE_TIMEOUT.getInt() * Utils.secInTick);
 
 	}
 

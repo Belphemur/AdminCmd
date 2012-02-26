@@ -60,7 +60,7 @@ public class ExplosionEgg extends EggType<Float> {
 	 */
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		float power = ConfigEnum.DVULCAN.getFloat();
+		float power = ConfigEnum.DEGG_EX_RADIUS.getFloat();
 		if (args.hasFlag('p')) {
 			String flag = args.getValueFlag('p');
 			try {
@@ -70,7 +70,8 @@ public class ExplosionEgg extends EggType<Float> {
 				return;
 			}
 		}
-		value = power;
+		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getInt() ? ConfigEnum.MAXEGG_EX_RADIUS.getInt()
+				: power;
 
 	}
 
