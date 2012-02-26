@@ -121,9 +121,9 @@ public enum ConfigEnum {
 			+ "admincmd.tp.world.WORLDNAME (where WORLDNAME is the name of the world where the space are replaced by underscore (_) )"),
 	ARMOR_KIT_OVERRIDE("armorKitOverride", true, "When using an armored kit, if this options is set to true,"
 			+ " it will override what the player is wearing to replace it by the armor of the kit."),
+	USE_PREFIX("usePSfix", true, "Use the prefix and the suffix when displaying names"),
 	DEGG_KILL_RADIUS("egg.killer.defaultRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command."),
 	MAXEGG_KILL_RADIUS("egg.killer.maxRadiusInBlock", 30, "When the Killer Egg is used, this radius will be the max radius possible for the command."),
-	USE_PREFIX("usePSfix", true, "Use the prefix and the suffix when displaying names"),
 	EGG_FREEZE_TIMEOUT("egg.freezer.Timeout", 5, "How much time the ice stay (in sec) when using the Freezeregg"),
 	DEGG_FREEZE_RADIUS("egg.freezer.defaultRadiusInBlock", 8, "Default freeze radius when using the FreezerEgg"),
 	MAXEGG_FREEZE_RADIUS("egg.freezer.maxRadiusInBlock", 12, "Maximum radius for the FreezergEgg"),
