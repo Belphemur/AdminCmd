@@ -119,9 +119,8 @@ public class Utils {
 			world.setTime(newTime);
 			for (final Player p : getOnlinePlayers()) {
 				final CraftPlayer cp = (CraftPlayer) p;
-				cp.getHandle().netServerHandler
-						.sendPacket(new Packet4UpdateTime(cp.getHandle()
-								.getPlayerTime()));
+				cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp.getHandle()
+						.getPlayerTime()));
 			}
 
 		}
@@ -139,8 +138,8 @@ public class Utils {
 	public final static long dayInMillis = hourInMillis * 24;
 	public final static int secInTick = 20;
 	private static final Character delimiter = '&';
-	public static final Pattern regexColorParser = Pattern.compile(delimiter
-			+ "[A-Fa-f]|" + delimiter + "1[0-5]|" + delimiter + "[0-9]");
+	public static final Pattern regexColorParser = Pattern.compile(delimiter + "[A-Fa-f]|"
+			+ delimiter + "1[0-5]|" + delimiter + "[0-9]");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -164,16 +163,13 @@ public class Utils {
 	 *            player to remove
 	 */
 	public static void addPlayerInOnlineList(Player player) {
-		((CraftServer) player.getServer()).getHandle()
-				.sendAll(
-						new Packet201PlayerInfo(((CraftPlayer) player)
-								.getHandle().listName, true, 1000));
+		((CraftServer) player.getServer()).getHandle().sendAll(
+				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, true, 1000));
 	}
 
 	public static void addPlayerInOnlineList(Player toAdd, Player fromPlayer) {
-		((CraftPlayer) fromPlayer).getHandle().netServerHandler
-				.sendPacket(new Packet201PlayerInfo(((CraftPlayer) toAdd)
-						.getHandle().listName, true, 1000));
+		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
+				((CraftPlayer) toAdd).getHandle().listName, true, 1000));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -181,10 +177,9 @@ public class Utils {
 		if (original.length >= start && 0 <= start) {
 			if (start <= end) {
 				final int length = end - start;
-				final int copyLength = Math
-						.min(length, original.length - start);
-				final T[] copy = (T[]) Array.newInstance(original.getClass()
-						.getComponentType(), length);
+				final int copyLength = Math.min(length, original.length - start);
+				final T[] copy = (T[]) Array.newInstance(original.getClass().getComponentType(),
+						length);
 
 				System.arraycopy(original, start, copy, 0, copyLength);
 				return copy;
@@ -205,8 +200,7 @@ public class Utils {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ mChatApi.getEventMessage("Join"));
 		else
-			Utils.broadcastMessage(I18n("joinMessage", "name",
-					getPlayerName(player, null, true)));
+			Utils.broadcastMessage(I18n("joinMessage", "name", getPlayerName(player, null, true)));
 
 	}
 
@@ -221,8 +215,7 @@ public class Utils {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ mChatApi.getEventMessage("Quit"));
 		else
-			Utils.broadcastMessage(I18n("quitMessage", "name",
-					getPlayerName(player, null, true)));
+			Utils.broadcastMessage(I18n("quitMessage", "name", getPlayerName(player, null, true)));
 
 	}
 
@@ -251,10 +244,8 @@ public class Utils {
 	 * @return true if the sender have the right to execute the command, else
 	 *         false with displaying an error message to the sender.
 	 */
-	public static boolean checkImmunity(CommandSender sender, CommandArgs args,
-			int index) {
-		final Player target = sender.getServer().getPlayer(
-				args.getString(index));
+	public static boolean checkImmunity(CommandSender sender, CommandArgs args, int index) {
+		final Player target = sender.getServer().getPlayer(args.getString(index));
 		if (target != null)
 			if (checkImmunity(sender, target))
 				return true;
@@ -268,12 +259,12 @@ public class Utils {
 			if (!isPlayer(sender, false))
 				return true;
 			final Player player = (Player) sender;
-			final int pLvl = ACHelper.getInstance().getLimit(player,
-					"immunityLvl", "defaultImmunityLvl");
+			final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
+					"defaultImmunityLvl");
 			final int tLvl = ACPlayer.getPlayer(args.getString(index))
 					.getInformation("immunityLvl").getInt(0);
-			if (PermissionManager.hasPerm(player,
-					"admincmd.immunityLvl.samelvl", false) && pLvl != tLvl) {
+			if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
+					&& pLvl != tLvl) {
 				sI18n(sender, "insufficientLvl");
 				return false;
 			}
@@ -310,8 +301,8 @@ public class Utils {
 				"defaultImmunityLvl");
 		final int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl",
 				"defaultImmunityLvl");
-		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl",
-				false) && pLvl != tLvl)
+		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
+				&& pLvl != tLvl)
 			return false;
 		/*
 		 * ACLogger.info("Immunity Check " + player.getName() + "-" +
@@ -370,13 +361,10 @@ public class Utils {
 			String result = toParse;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
-				int colorint = Integer.parseInt(ResultString.substring(1, 2),
-						16);
+				int colorint = Integer.parseInt(ResultString.substring(1, 2), 16);
 				if (ResultString.length() > 1) {
-					if (colorint == 1
-							&& ResultString.substring(2).matches("[012345]")) {
-						colorint = colorint * 10
-								+ Integer.parseInt(ResultString.substring(2));
+					if (colorint == 1 && ResultString.substring(2).matches("[012345]")) {
+						colorint = colorint * 10 + Integer.parseInt(ResultString.substring(2));
 					}
 				}
 				result = regexMatcher.replaceFirst(ChatColor.getByChar(
@@ -396,8 +384,7 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> drainFluid(String playername,
-			Block block, int radius) {
+	private static Stack<BlockRemanence> drainFluid(String playername, Block block, int radius) {
 		final Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		final Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
 		BlockRemanence current = null;
@@ -408,21 +395,17 @@ public class Utils {
 		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
 			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
 				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
-					final SimplifiedLocation newPos = new SimplifiedLocation(w,
-							x, y, z);
+					final SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
 					if (isFluid(newPos) && !visited.contains(newPos)) {
 						visited.add(newPos);
 						processQueue.push(newPos);
-						current = IBlockRemanenceFactory.FACTORY
-								.createBlockRemanence(newPos);
+						current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 						blocks.push(current);
 						blocksCache.push(current);
 						if (blocksCache.size() == MAX_BLOCKS)
-							ACPluginManager.getScheduler()
-									.scheduleSyncDelayedTask(
-											ACHelper.getInstance()
-													.getCoreInstance(),
-											new ReplaceBlockTask(blocksCache));
+							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+									ACHelper.getInstance().getCoreInstance(),
+									new ReplaceBlockTask(blocksCache));
 					}
 
 				}
@@ -433,22 +416,17 @@ public class Utils {
 			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
 				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
 					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
-						final SimplifiedLocation newPos = new SimplifiedLocation(
-								w, x, y, z);
+						final SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
 						if (!visited.contains(newPos) && isFluid(newPos)
 								&& start.distance(newPos) < radius) {
 							processQueue.push(newPos);
-							current = IBlockRemanenceFactory.FACTORY
-									.createBlockRemanence(newPos);
+							current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
 							blocks.push(current);
 							blocksCache.push(current);
 							if (blocksCache.size() == MAX_BLOCKS)
-								ACPluginManager.getScheduler()
-										.scheduleSyncDelayedTask(
-												ACHelper.getInstance()
-														.getCoreInstance(),
-												new ReplaceBlockTask(
-														blocksCache));
+								ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+										ACHelper.getInstance().getCoreInstance(),
+										new ReplaceBlockTask(blocksCache));
 							visited.add(newPos);
 						}
 					}
@@ -457,8 +435,7 @@ public class Utils {
 			}
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(),
-				new ReplaceBlockTask(blocksCache));
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
 		return blocks;
 	}
 
@@ -473,8 +450,7 @@ public class Utils {
 	 *            permission node to execute the command
 	 * @return null if the ACPlayer can't be get else the ACPlayer
 	 */
-	public static ACPlayer getACPlayer(CommandSender sender, CommandArgs args,
-			String permNode) {
+	public static ACPlayer getACPlayer(CommandSender sender, CommandArgs args, String permNode) {
 		final Player target = Utils.getUser(sender, args, permNode, 0,
 				!Utils.isPlayer(sender, false));
 		ACPlayer actarget;
@@ -485,8 +461,7 @@ public class Utils {
 			}
 			actarget = ACPlayer.getPlayer(args.getString(0));
 			if (actarget instanceof EmptyPlayer) {
-				Utils.sI18n(sender, "playerNotFound", "player",
-						actarget.getName());
+				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());
 				return null;
 			}
 			if (!Utils.checkImmunity(sender, args, 0))
@@ -504,8 +479,7 @@ public class Utils {
 			return Double.MAX_VALUE;
 		final Location loc1 = player1.getLocation();
 		final Location loc2 = player2.getLocation();
-		return Math.pow((loc1.getX() - loc2.getX()), 2)
-				+ Math.pow((loc1.getZ() - loc2.getZ()), 2);
+		return Math.pow((loc1.getX() - loc2.getX()), 2) + Math.pow((loc1.getZ() - loc2.getZ()), 2);
 	}
 
 	/**
@@ -578,8 +552,7 @@ public class Utils {
 					found = player;
 					delta = curDelta;
 				} else {
-					curDelta = player.getDisplayName().length()
-							- lowerName.length();
+					curDelta = player.getDisplayName().length() - lowerName.length();
 					if (curDelta < delta) {
 						found = player;
 						delta = curDelta;
@@ -605,8 +578,7 @@ public class Utils {
 	 * @param withPrefix
 	 * @return
 	 */
-	public static String getPlayerName(Player player, CommandSender sender,
-			boolean withPrefix) {
+	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
 		return getPlayerName(player, sender);
 	}
 
@@ -622,13 +594,11 @@ public class Utils {
 	public static String getPlayerName(Player player, CommandSender sender) {
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
 			String prefix = colorParser(getPrefix(player, sender));
-			final String suffix = colorParser(PermissionManager
-					.getSuffix(player));
+			final String suffix = colorParser(PermissionManager.getSuffix(player));
 			if (prefix.isEmpty())
 				prefix = ChatColor.WHITE.toString();
 			if (ConfigEnum.DNAME.getBoolean())
-				return prefix + player.getDisplayName() + suffix
-						+ ChatColor.YELLOW;
+				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 
 			return prefix + player.getName() + suffix + ChatColor.YELLOW;
 		}
@@ -650,17 +620,15 @@ public class Utils {
 		String prefixstring = "";
 		String statusPrefix = "";
 		if (sender != null)
-			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(
-					player.getName())
-					&& PermissionManager.hasPerm(sender,
-							"admincmd.invisible.cansee", false);
+			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())
+					&& PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
 		if (isInv)
 			statusPrefix = Utils.I18n("invTitle");
 		if (AFKWorker.getInstance().isAfk(player))
 			statusPrefix = Utils.I18n("afkTitle") + statusPrefix;
 		prefixstring = PermissionManager.getPrefix(player);
 		String result = statusPrefix;
-		if (prefixstring.length() > 1)
+		if (prefixstring != null && prefixstring.length() > 1)
 			result += prefixstring;
 		return colorParser(result);
 
@@ -683,8 +651,7 @@ public class Utils {
 		return serverTime;
 	}
 
-	public static Player getUser(CommandSender sender, CommandArgs args,
-			String permNode) {
+	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
@@ -698,8 +665,8 @@ public class Utils {
 	 * @param errorMsg
 	 * @return
 	 */
-	public static Player getUser(CommandSender sender, CommandArgs args,
-			String permNode, int index, boolean errorMsg) {
+	public static Player getUser(CommandSender sender, CommandArgs args, String permNode,
+			int index, boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
 			target = getPlayer(args.getString(index));
@@ -731,8 +698,7 @@ public class Utils {
 
 	}
 
-	public static Player getUserParam(CommandSender sender, CommandArgs args,
-			String permNode) {
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode) {
 		return getUserParam(sender, args, permNode, true);
 	}
 
@@ -746,8 +712,8 @@ public class Utils {
 	 * @param errorMsg
 	 * @return
 	 */
-	public static Player getUserParam(CommandSender sender, CommandArgs args,
-			String permNode, boolean errorMsg) {
+	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
+			boolean errorMsg) {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
 		if (playerName != null) {
@@ -801,10 +767,8 @@ public class Utils {
 		final Block b = loc.getWorld().getBlockAt(loc);
 		if (b == null)
 			return false;
-		return b.getType() == Material.WATER
-				|| b.getType() == Material.STATIONARY_WATER
-				|| b.getType() == Material.LAVA
-				|| b.getType() == Material.STATIONARY_LAVA;
+		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
+				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
 	}
 
 	/**
@@ -834,22 +798,18 @@ public class Utils {
 	 */
 	public static void removePlayerFromOnlineList(Player player) {
 		((CraftServer) player.getServer()).getHandle().sendAll(
-				new Packet201PlayerInfo(
-						((CraftPlayer) player).getHandle().listName, false,
-						9999));
+				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, false, 9999));
 	}
 
-	public static void removePlayerFromOnlineList(Player toRemove,
-			Player fromPlayer) {
+	public static void removePlayerFromOnlineList(Player toRemove, Player fromPlayer) {
 		if (toRemove == null || fromPlayer == null)
 			return;
-		((CraftPlayer) fromPlayer).getHandle().netServerHandler
-				.sendPacket(new Packet201PlayerInfo(((CraftPlayer) toRemove)
-						.getHandle().listName, false, 9999));
+		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
+				((CraftPlayer) toRemove).getHandle().listName, false, 9999));
 	}
 
-	public static Integer replaceBlockByAir(CommandSender sender,
-			CommandArgs args, List<Material> mat, int defaultRadius) {
+	public static Integer replaceBlockByAir(CommandSender sender, CommandArgs args,
+			List<Material> mat, int defaultRadius) {
 		if (Utils.isPlayer(sender)) {
 			int radius = defaultRadius;
 			if (args.length >= 1) {
@@ -892,19 +852,16 @@ public class Utils {
 		String timeFormatted = "";
 		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
-		final Date serverTime = getServerRealTime("GMT"
-				+ ConfigEnum.DT_GMT.getString());
+		final Date serverTime = getServerRealTime("GMT" + ConfigEnum.DT_GMT.getString());
 		timeFormatted = formater.format(serverTime);
 		return timeFormatted;
 	}
 
-	public static String replaceDateAndTimeFormat(ACPlayer player,
-			Type.Whois type) {
+	public static String replaceDateAndTimeFormat(ACPlayer player, Type.Whois type) {
 		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
-		lastlogin = formater.format(new Date(player.getInformation(
-				type.getVal()).getLong(1)));
+		lastlogin = formater.format(new Date(player.getInformation(type.getVal()).getLong(1)));
 		if (lastlogin == formater.format(new Date(1)))
 			return null;
 		return lastlogin;
@@ -918,8 +875,8 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> replaceInCuboid(String playername,
-			List<Material> mat, Block block, int radius) {
+	private static Stack<BlockRemanence> replaceInCuboid(String playername, List<Material> mat,
+			Block block, int radius) {
 		final Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
 		final Stack<BlockRemanence> blocksCache = new SynchronizedStack<BlockRemanence>();
 		final int limitX = block.getX() + radius;
@@ -927,15 +884,13 @@ public class Utils {
 		final int limitZ = block.getZ() + radius;
 		BlockRemanence br = null;
 		final Semaphore sema = new Semaphore(0, true);
-		final List<SimplifiedLocation> okBlocks = new ArrayList<SimplifiedLocation>(
-				50);
-		ACPluginManager.scheduleSyncTask(new CheckingBlockTask(sema, okBlocks,
-				block, radius, limitY, limitX, limitZ, mat));
+		final List<SimplifiedLocation> okBlocks = new ArrayList<SimplifiedLocation>(50);
+		ACPluginManager.scheduleSyncTask(new CheckingBlockTask(sema, okBlocks, block, radius,
+				limitY, limitX, limitZ, mat));
 		try {
 			sema.acquire();
 		} catch (final InterruptedException e) {
-			DebugLog.INSTANCE.log(Level.SEVERE,
-					"Problem with acquiring the semaphore", e);
+			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with acquiring the semaphore", e);
 		}
 		for (final SimplifiedLocation loc : okBlocks) {
 			br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(loc);
@@ -947,18 +902,16 @@ public class Utils {
 						new ReplaceBlockTask(blocksCache), 1);
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(),
-				new ReplaceBlockTask(blocksCache), 1);
+				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
 		return blocks;
 	}
 
-	public static void sendMessage(CommandSender sender, CommandSender player,
-			String key) {
+	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
 		sendMessage(sender, player, key, null);
 	}
 
-	public static void sendMessage(CommandSender sender, CommandSender player,
-			String key, Map<String, String> replace) {
+	public static void sendMessage(CommandSender sender, CommandSender player, String key,
+			Map<String, String> replace) {
 		final String msg = I18n(key, replace);
 		if (msg != null && !msg.isEmpty()) {
 			if (!sender.equals(player))
@@ -983,8 +936,7 @@ public class Utils {
 	 * @param name
 	 * @return
 	 */
-	public static boolean setPlayerHealth(CommandSender sender,
-			CommandArgs name, Type.Health toDo) {
+	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, Type.Health toDo) {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		Hero hero = null;
 		if (target == null)
@@ -1009,8 +961,7 @@ public class Utils {
 			else
 				hero.setHealth(0D);
 			if (logBlock != null)
-				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender
-						: null, target);
+				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
 			break;
 		default:
 			return false;
@@ -1024,8 +975,7 @@ public class Utils {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("type", arg);
 		replace.put("world", w.getName());
-		if (ACWorld.getWorld(w.getName())
-				.getInformation(Type.TIME_FREEZED.toString()).isNull()) {
+		if (ACWorld.getWorld(w.getName()).getInformation(Type.TIME_FREEZED.toString()).isNull()) {
 			if (arg.equalsIgnoreCase("day"))
 				newtime += 0;
 			else if (arg.equalsIgnoreCase("night"))
@@ -1035,12 +985,9 @@ public class Utils {
 			else if (arg.equalsIgnoreCase("dawn"))
 				newtime += 23000;
 			else if (arg.equalsIgnoreCase("pause")) {
-				final int taskId = ACPluginManager.getScheduler()
-						.scheduleAsyncRepeatingTask(
-								ACHelper.getInstance().getCoreInstance(),
-								new SetTime(w), 0, 10);
-				ACWorld.getWorld(w.getName()).setInformation(
-						Type.TIME_FREEZED.toString(), taskId);
+				final int taskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new SetTime(w), 0, 10);
+				ACWorld.getWorld(w.getName()).setInformation(Type.TIME_FREEZED.toString(), taskId);
 			} else {
 				// if not a constant, use raw time
 				try {
@@ -1055,29 +1002,26 @@ public class Utils {
 			final int removeTask = ACWorld.getWorld(w.getName())
 					.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
 			ACPluginManager.getScheduler().cancelTask(removeTask);
-			ACWorld.getWorld(w.getName()).removeInformation(
-					Type.TIME_FREEZED.toString());
+			ACWorld.getWorld(w.getName()).removeInformation(Type.TIME_FREEZED.toString());
 			sI18n(sender, "timeSet", replace);
 		} else
 			sI18n(sender, "timePaused", "world", w.getName());
 
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-				ACPluginManager.getCorePlugin(), new SetTime(w, newtime));
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new SetTime(w, newtime));
 	}
 
 	public static void sI18n(CommandSender sender, String key) {
 		sI18n(sender, key, null);
 	}
 
-	public static void sI18n(CommandSender sender, String key,
-			Map<String, String> replace) {
+	public static void sI18n(CommandSender sender, String key, Map<String, String> replace) {
 		final String locale = I18n(key, replace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
 
-	public static void sI18n(CommandSender sender, String key, String alias,
-			String toReplace) {
+	public static void sI18n(CommandSender sender, String key, String alias, String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
@@ -1099,8 +1043,7 @@ public class Utils {
 						- InvisibleWorker.getInstance().nbInvisibles()));
 		String connected = "";
 		for (final Player player : p.getServer().getOnlinePlayers())
-			if (!InvisibleWorker.getInstance().hasInvisiblePowers(
-					player.getName()))
+			if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
 				connected += getPrefix(player, p) + player.getName() + ", ";
 		if (!connected.equals("")) {
 			if (connected.endsWith(", "))
@@ -1129,8 +1072,7 @@ public class Utils {
 	// false then means to show the default handle
 	// ! make sure the player variable IS a player!
 	// set world time to a new value
-	public static boolean timeSet(CommandSender sender, String time,
-			String world) {
+	public static boolean timeSet(CommandSender sender, String time, String world) {
 		if (isPlayer(sender, false) && world == null) {
 			final Player p = (Player) sender;
 			setTime(sender, p.getWorld(), time);
@@ -1151,8 +1093,7 @@ public class Utils {
 
 	}
 
-	public static void tpP2P(CommandSender sender, String nFrom, String nTo,
-			Type.Tp type) {
+	public static void tpP2P(CommandSender sender, String nFrom, String nTo, Type.Tp type) {
 		boolean found = true;
 		final Player pFrom = ACPluginManager.getServer().getPlayer(nFrom);
 		final Player pTo = ACPluginManager.getServer().getPlayer(nTo);
@@ -1193,27 +1134,22 @@ public class Utils {
 			return;
 		}
 		if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-				&& InvisibleWorker.getInstance().hasInvisiblePowers(
-						pTo.getName())
-				&& !PermissionManager.hasPerm(pFrom,
-						"admincmd.invisible.cansee", false)) {
+				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
+				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 			replace.put("player", nTo);
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return;
 		}
 		if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-				&& (InvisibleWorker.getInstance().hasInvisiblePowers(
-						pFrom.getName()) && !PermissionManager.hasPerm(pTo,
-						"admincmd.invisible.cansee", false))) {
+				&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
+						.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
 			replace.put("player", nFrom);
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return;
 		}
-		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest",
-				false)) {
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
 			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
-			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo
-					.getLocation()));
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
 			Utils.sI18n(sender, "tp", replace);
@@ -1233,8 +1169,7 @@ public class Utils {
 			Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
 		} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-				&& ACPlayer.getPlayer(pFrom.getName())
-						.hasPower(Type.TP_REQUEST)) {
+				&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
 			ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
 			Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 			final HashMap<String, String> replace2 = new HashMap<String, String>();
@@ -1250,8 +1185,7 @@ public class Utils {
 
 		} else {
 			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
-			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo
-					.getLocation()));
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
 			Utils.sI18n(sender, "tp", replace);
@@ -1277,16 +1211,13 @@ public class Utils {
 		diff = diff % minuteInMillis;
 		final long elapsedSeconds = diff / secondInMillis;
 
-		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes,
-				elapsedSeconds };
+		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
 	}
 
-	public static boolean weather(CommandSender sender, Type.Weather type,
-			CommandArgs duration) {
+	public static boolean weather(CommandSender sender, Type.Weather type, CommandArgs duration) {
 		if (isPlayer(sender, false)) {
 			if (duration.length >= 2) {
-				final World w = sender.getServer().getWorld(
-						duration.getString(1));
+				final World w = sender.getServer().getWorld(duration.getString(1));
 				if (w == null) {
 					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("world", duration.getString(2));
@@ -1294,11 +1225,9 @@ public class Utils {
 					return true;
 				}
 				weatherChange(sender, w, type, duration);
-			} else if ((type.equals(Type.Weather.FREEZE) || type
-					.equals(Type.Weather.CLEAR))
+			} else if ((type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR))
 					&& duration.getString(0) != null) {
-				final World w = sender.getServer().getWorld(
-						duration.getString(0));
+				final World w = sender.getServer().getWorld(duration.getString(0));
 				if (w == null) {
 					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("world", duration.getString(0));
@@ -1307,8 +1236,7 @@ public class Utils {
 				}
 				weatherChange(sender, w, type, duration);
 			} else
-				weatherChange(sender, ((Player) sender).getWorld(), type,
-						duration);
+				weatherChange(sender, ((Player) sender).getWorld(), type, duration);
 		} else if (duration.length >= 2) {
 			final World w = sender.getServer().getWorld(duration.getString(1));
 			if (w == null) {
@@ -1318,8 +1246,8 @@ public class Utils {
 				return true;
 			}
 			weatherChange(sender, w, type, duration);
-		} else if ((type.equals(Type.Weather.FREEZE) || type
-				.equals(Type.Weather.CLEAR)) && duration.getString(0) != null) {
+		} else if ((type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR))
+				&& duration.getString(0) != null) {
 			final World w = sender.getServer().getWorld(duration.getString(0));
 			if (w == null) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
@@ -1335,22 +1263,19 @@ public class Utils {
 		return true;
 	}
 
-	private static void weatherChange(CommandSender sender, World w,
-			Type.Weather type, CommandArgs duration) {
+	private static void weatherChange(CommandSender sender, World w, Type.Weather type,
+			CommandArgs duration) {
 		if (!type.equals(Type.Weather.FREEZE)
-				&& !ACWorld.getWorld(w.getName())
-						.getInformation(Type.WEATHER_FROZEN.toString())
+				&& !ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
 						.isNull()) {
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " "
-					+ w.getName());
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " " + w.getName());
 			return;
 		}
 		switch (type) {
 		case CLEAR:
 			w.setThundering(false);
 			w.setStorm(false);
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " "
-					+ w.getName());
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
 			break;
 		case STORM:
 			final HashMap<String, String> replace = new HashMap<String, String>();
@@ -1359,8 +1284,7 @@ public class Utils {
 				w.setThundering(true);
 				w.setWeatherDuration(12000);
 				replace.put("duration", "10");
-				sender.sendMessage(ChatColor.GOLD
-						+ Utils.I18n("sStorm", replace) + w.getName());
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 			} else {
 				try {
 					w.setStorm(true);
@@ -1368,31 +1292,27 @@ public class Utils {
 					final int time = duration.getInt(0);
 					w.setWeatherDuration(time * 1200);
 					replace.put("duration", String.valueOf(time));
-					sender.sendMessage(ChatColor.GOLD
-							+ Utils.I18n("sStorm", replace) + w.getName());
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				} catch (final NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
-							+ duration.getString(0) + ") isn't a number!");
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration.getString(0)
+							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replace.put("duration", "10");
-					sender.sendMessage(ChatColor.GOLD
-							+ Utils.I18n("sStorm", replace) + w.getName());
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
 				}
 			}
 			break;
 		case FREEZE:
-			if (!ACWorld.getWorld(w.getName())
-					.getInformation(Type.WEATHER_FROZEN.toString()).isNull()) {
-				ACWorld.getWorld(w.getName()).removeInformation(
-						Type.WEATHER_FROZEN.toString());
-				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFrozen")
-						+ " " + ChatColor.WHITE + w.getName());
-			} else {
-				ACWorld.getWorld(w.getName()).setInformation(
-						Type.WEATHER_FROZEN.toString(), true);
-				sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen") + " "
+			if (!ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
+					.isNull()) {
+				ACWorld.getWorld(w.getName()).removeInformation(Type.WEATHER_FROZEN.toString());
+				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFrozen") + " "
 						+ ChatColor.WHITE + w.getName());
+			} else {
+				ACWorld.getWorld(w.getName()).setInformation(Type.WEATHER_FROZEN.toString(), true);
+				sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen") + " " + ChatColor.WHITE
+						+ w.getName());
 			}
 			break;
 		case RAIN:
@@ -1402,8 +1322,7 @@ public class Utils {
 				w.setThundering(false);
 				w.setWeatherDuration(12000);
 				replaceRain.put("duration", "10");
-				sender.sendMessage(ChatColor.GOLD
-						+ Utils.I18n("sRain", replaceRain) + w.getName());
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
 			} else {
 				try {
 					w.setStorm(true);
@@ -1411,16 +1330,16 @@ public class Utils {
 					final int time = duration.getInt(0);
 					w.setWeatherDuration(time * 1200);
 					replaceRain.put("duration", String.valueOf(time));
-					sender.sendMessage(ChatColor.GOLD
-							+ Utils.I18n("sRain", replaceRain) + w.getName());
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
+							+ w.getName());
 				} catch (final NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
-							+ duration.getString(0) + ") isn't a number!");
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration.getString(0)
+							+ ") isn't a number!");
 					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replaceRain.put("duration", "10");
-					sender.sendMessage(ChatColor.GOLD
-							+ Utils.I18n("sRain", replaceRain) + w.getName());
+					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
+							+ w.getName());
 				}
 			}
 			break;
