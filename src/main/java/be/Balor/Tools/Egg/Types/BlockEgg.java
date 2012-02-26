@@ -23,6 +23,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
@@ -65,12 +66,24 @@ public class BlockEgg extends EggType<BlockChangeInfo> {
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
 		final int radius = value.getRadius() / 2;
-		final Integer eventId = eggNb++;
 		event.getEgg().remove();
 		event.setHatching(false);
 		Location loc = event.getEgg().getLocation();
 		SynchronizedStack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
 		World w = loc.getWorld();
+		if (blockTimeOut() == 0) {
+			for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
+				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
+					for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
+						Block block = w.getBlockAt(x, y, z);
+						if (block.getTypeId() != Material.AIR.getId()
+								&& block.getTypeId() != Material.SNOW.getId())
+							continue;
+						block.setTypeId(value.getBlockTypeId());
+					}
+			return;
+		}
+		final Integer eventId = eggNb++;
 		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
 			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
 				for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
@@ -95,8 +108,12 @@ public class BlockEgg extends EggType<BlockChangeInfo> {
 						blocksPerEvent.remove(eventId);
 
 					}
-				}, ConfigEnum.EGG_BLOCK_TIMEOUT.getInt() * Utils.secInTick);
+				}, blockTimeOut() * Utils.secInTick);
 
+	}
+
+	protected int blockTimeOut() {
+		return ConfigEnum.EGG_BLOCK_TIMEOUT.getInt();
 	}
 
 	/*

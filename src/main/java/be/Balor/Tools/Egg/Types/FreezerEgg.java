@@ -60,13 +60,24 @@ public class FreezerEgg extends BlockEgg {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Egg.Types.BlockEgg#blockTimeOut()
+	 */
+	@Override
+	protected int blockTimeOut() {
+		return ConfigEnum.EGG_FREEZE_TIMEOUT.getInt();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "FreezerEgg = " + value.getRadius();
 	}
-	
 
 }
