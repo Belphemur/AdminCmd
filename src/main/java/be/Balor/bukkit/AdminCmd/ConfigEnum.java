@@ -131,7 +131,10 @@ public enum ConfigEnum {
 	DEGG_FREEZE_RADIUS("egg.freezer.defaultRadiusInBlock", 8, "Default freeze radius when using the FreezerEgg"),
 	MAXEGG_FREEZE_RADIUS("egg.freezer.maxRadiusInBlock", 12, "Maximum radius for the FreezergEgg"),
 	DEGG_EX_RADIUS("egg.explosion.defaultRadiusInBlock", 8, "Default freeze radius when using the ExplosionEgg"),
-	MAXEGG_EX_RADIUS("egg.explosion.maxRadiusInBlock", 12, "Maximum radius for the ExplosionEgg");
+	MAXEGG_EX_RADIUS("egg.explosion.maxRadiusInBlock", 12, "Maximum radius for the ExplosionEgg"),
+	EGG_HIGH_TIMEOUT("egg.high.Timeout", 20, "How much time (in sec) the high effect least."),
+	DEGG_HIGH_RADIUS("egg.high.defaultRadiusInBlock", 5, "Default radius when using the HighEgg"),
+	MAXEGG_HIGH_RADIUS("egg.high.maxRadiusInBlock", 12, "Maximum radius for the HighEgg");
 	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;

@@ -45,7 +45,9 @@ public enum LocaleHelper {
 			+ ChatColor.RED + " can't be enchanted with " + ChatColor.GREEN + "%enchant"),
 	SUCCESS_ENCHANT("enchantSuccess", ChatColor.GREEN + "Your item " + ChatColor.GOLD + "%item"
 			+ ChatColor.GREEN + " is now with " + ChatColor.BLUE + "%enchant" + ChatColor.GREEN
-			+ " lvl " + ChatColor.LIGHT_PURPLE + "%lvl");
+			+ " lvl " + ChatColor.LIGHT_PURPLE + "%lvl"),
+	HIGH_EFFECT("highEggEffect", ChatColor.GREEN + "You are now " + ChatColor.GOLD + "HIGH"
+			+ ChatColor.GREEN + ", prepare to see ... the world differently !");
 
 	private final String key;
 	private final String locale;
@@ -77,6 +79,16 @@ public enum LocaleHelper {
 	 */
 	public void sendLocale(CommandSender sender, Map<String, String> replace) {
 		Utils.sI18n(sender, this, replace);
+	}
+
+	/**
+	 * Send the locale the the CommandSender
+	 * 
+	 * @param sender
+	 *            CommandSender that will get the messages
+	 */
+	public void sendLocale(CommandSender sender) {
+		Utils.sI18n(sender, this);
 	}
 
 	/**

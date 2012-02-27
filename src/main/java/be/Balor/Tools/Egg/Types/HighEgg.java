@@ -16,43 +16,37 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.server.DamageSource;
-import net.minecraft.server.EntityLiving;
-
-import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.RadiusEgg;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class KillerEgg extends RadiusEgg<Integer> {
+public class HighEgg extends RadiusEgg<Integer> {
 
 	/**
-	 * 
+	 * @param defaultRadius
+	 * @param maxRadius
 	 */
-	private static final long serialVersionUID = -7763897329319981939L;
-
-	/**
-	 * 
-	 */
-	public KillerEgg() {
-		super(ConfigEnum.DEGG_KILL_RADIUS.getInt(), ConfigEnum.MAXEGG_KILL_RADIUS.getInt());
+	public HighEgg() {
+		super(ConfigEnum.DEGG_HIGH_RADIUS.getInt(), ConfigEnum.MAXEGG_HIGH_RADIUS.getInt());
 	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7809379720699540380L;
 
 	/*
 	 * (non-Javadoc)
@@ -62,39 +56,20 @@ public class KillerEgg extends RadiusEgg<Integer> {
 	 */
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
-		event.setHatching(false);
-		final Location loc = event.getEgg().getLocation();
 		event.getEgg().remove();
-		final List<EntityLiving> entities = new ArrayList<EntityLiving>();
-		final CraftPlayer p = (CraftPlayer) event.getPlayer();
-		final World w = p.getWorld();
+		event.setHatching(false);
+		Location loc = event.getEgg().getLocation();
 		final int radius = value * value;
-		for (Object entity : ((CraftWorld) w).getHandle().entityList)
-			if (entity instanceof EntityLiving)
-				entities.add((EntityLiving) entity);
-		w.playEffect(loc, Effect.SMOKE, 1, value);
-		w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt() * Utils.secInTick;
+		for (Player player : Utils.getOnlinePlayers()) {
+			if (player.getLocation().distanceSquared(loc) > radius)
+				continue;
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, timeout, 5));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, timeout, 100));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, timeout, 10));
+			LocaleHelper.HIGH_EFFECT.sendLocale(player);
+		}
 
-					@Override
-					public void run() {
-						int count = 0;
-						for (EntityLiving entity : entities) {
-							if (entity.equals(p.getHandle())) {
-								continue;
-							}
-							Location entityLoc = new Location(w, entity.locX, entity.locY,
-									entity.locZ, entity.yaw, entity.pitch);
-							if (entityLoc.distanceSquared(loc) > radius)
-								continue;
-							entity.die(DamageSource.playerAttack(p.getHandle()));
-							entity.die();
-							count++;
-						}
-						p.sendMessage(String.valueOf(count) + " killed.");
-					}
-				});
 	}
 
 	/*

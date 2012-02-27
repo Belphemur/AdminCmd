@@ -20,7 +20,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -36,6 +35,13 @@ public class FreezerEgg extends BlockEgg {
 	 */
 	private static final long serialVersionUID = 6781269132940660439L;
 
+	/**
+	 * 
+	 */
+	public FreezerEgg() {
+		super(ConfigEnum.DEGG_FREEZE_RADIUS.getInt(), ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -45,18 +51,9 @@ public class FreezerEgg extends BlockEgg {
 	 */
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		int radius = ConfigEnum.DEGG_FREEZE_RADIUS.getInt();
-		String valFlag = args.getValueFlag('r');
-		if (valFlag != null)
-			try {
-				radius = Integer.parseInt(valFlag);
-			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", valFlag);
-				return;
-			}
-		value = new BlockChangeInfo(Material.ICE.getId(),
-				radius > ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt() ? ConfigEnum.MAXEGG_FREEZE_RADIUS
-						.getInt() : radius);
+		int radius = getRadius(sender, args);
+
+		value = new BlockChangeInfo(Material.ICE.getId(), radius);
 
 	}
 

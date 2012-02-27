@@ -35,7 +35,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.BlockRemanenceFactory;
 import be.Balor.Tools.Egg.BlockChangeInfo;
-import be.Balor.Tools.Egg.EggType;
+import be.Balor.Tools.Egg.RadiusEgg;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -47,7 +47,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class BlockEgg extends EggType<BlockChangeInfo> {
+public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 
 	/**
 	 * 
@@ -56,6 +56,21 @@ public class BlockEgg extends EggType<BlockChangeInfo> {
 	private int eggNb = 0;
 	private final Map<Integer, SynchronizedStack<BlockRemanence>> blocksPerEvent = Collections
 			.synchronizedMap(new HashMap<Integer, SynchronizedStack<BlockRemanence>>());
+
+	/**
+	 * 
+	 */
+	public BlockEgg() {
+		super(ConfigEnum.DEGG_BLOCK_RADIUS.getInt(), ConfigEnum.MAXEGG_BLOCK_RADIUS.getInt());
+	}
+
+	/**
+	 * @param defaultRadius
+	 * @param maxRadius
+	 */
+	public BlockEgg(int defaultRadius, int maxRadius) {
+		super(defaultRadius, maxRadius);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -128,21 +143,11 @@ public class BlockEgg extends EggType<BlockChangeInfo> {
 		String block = args.getValueFlag('b');
 		if (block == null)
 			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
-		String valFlag = args.getValueFlag('r');
-		int radius = ConfigEnum.DEGG_BLOCK_RADIUS.getInt();
-		if (valFlag != null)
-			try {
-				radius = Integer.parseInt(valFlag);
-			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", valFlag);
-				return;
-			}
+		int radius = getRadius(sender, args);
 		MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
 		if (mat.isNull())
 			return;
-		value = new BlockChangeInfo(mat.getMaterial().getId(),
-				radius > ConfigEnum.MAXEGG_BLOCK_RADIUS.getInt() ? ConfigEnum.MAXEGG_BLOCK_RADIUS
-						.getInt() : radius);
+		value = new BlockChangeInfo(mat.getMaterial().getId(), radius);
 
 	}
 
