@@ -78,6 +78,7 @@ import be.Balor.Manager.Commands.Player.NoPickup;
 import be.Balor.Manager.Commands.Player.Played;
 import be.Balor.Manager.Commands.Player.PlayerList;
 import be.Balor.Manager.Commands.Player.PlayerLocation;
+import be.Balor.Manager.Commands.Player.Potion;
 import be.Balor.Manager.Commands.Player.Presentation;
 import be.Balor.Manager.Commands.Player.PrivateMessage;
 import be.Balor.Manager.Commands.Player.Reply;
@@ -386,6 +387,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		CommandManager.getInstance().registerCommand(GetItemId.class);
 		CommandManager.getInstance().registerCommand(Enchant.class);
+		CommandManager.getInstance().registerCommand(Potion.class);
 	}
 
 	@Override

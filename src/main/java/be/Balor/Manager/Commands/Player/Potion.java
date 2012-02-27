@@ -108,7 +108,7 @@ public class Potion extends PlayerCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 3;
+		return args != null && args.length >= 1;
 	}
 
 }

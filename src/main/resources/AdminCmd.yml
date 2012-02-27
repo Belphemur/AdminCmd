@@ -677,3 +677,10 @@ acitemenchant:
     plugin: AdminCmd
     permissions: admincmd.item.enchant
     cmdname: bal_enchant
+    
+acplayerpotion:
+    command: potion [-P player] potion duration amplifier
+    description: "Add the effect of the potion for the wanted duration with the wanted amplifier to the player"
+    plugin: AdminCmd
+    permissions: admincmd.player.potion
+    cmdname: bal_potion

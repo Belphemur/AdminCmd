@@ -402,3 +402,7 @@ commands:
     description: Enchant the item in hand with the wanted enchant.
     aliases: [enchant, iench]
     usage: /<command> <-P player> enchantement lvl
+  bal_potion:
+    description: Add the potion power to the player.
+    aliases: [potion, pot]
+    usage: /<command> <-P player> potion <duration> <amplifier>
