@@ -14,33 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg.Types;
+package be.Balor.Tools.Egg;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
-import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class FreezerEgg extends BlockEgg {
+public abstract class SimpleRadiusEgg extends RadiusEgg<Integer> {
 
 	/**
-	 * 
+	 * @param defaultRadius
+	 * @param maxRadius
 	 */
-	private static final long serialVersionUID = 6781269132940660439L;
-
-	/**
-	 * 
-	 */
-	public FreezerEgg() {
-		super(ConfigEnum.DEGG_FREEZE_RADIUS.getInt(), ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt());
+	public SimpleRadiusEgg(int defaultRadius, int maxRadius) {
+		super(defaultRadius, maxRadius);
 	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7867915319728073263L;
 
 	/*
 	 * (non-Javadoc)
@@ -52,30 +50,9 @@ public class FreezerEgg extends BlockEgg {
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
 		int radius = getRadius(sender, args);
-		if(radius == -1)
+		if (radius == -1)
 			return;
-		value = new BlockChangeInfo(Material.ICE.getId(), radius);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Tools.Egg.Types.BlockEgg#blockTimeOut()
-	 */
-	@Override
-	protected int blockTimeOut() {
-		return ConfigEnum.EGG_FREEZE_TIMEOUT.getInt();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "FreezerEgg = " + value.getRadius();
+		value = radius;
 	}
 
 }

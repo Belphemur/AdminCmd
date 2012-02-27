@@ -27,12 +27,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Egg.RadiusEgg;
-import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.Tools.Egg.SimpleRadiusEgg;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -40,7 +37,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class KillerEgg extends RadiusEgg<Integer> {
+public class KillerEgg extends SimpleRadiusEgg {
 
 	/**
 	 * 
@@ -95,18 +92,6 @@ public class KillerEgg extends RadiusEgg<Integer> {
 						p.sendMessage(String.valueOf(count) + " killed.");
 					}
 				});
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Tools.Egg.EggType#processArguments(org.bukkit.entity.Player,
-	 * be.Balor.Manager.Commands.CommandArgs)
-	 */
-	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		value = getRadius(sender, args);
 	}
 
 }

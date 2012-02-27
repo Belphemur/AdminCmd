@@ -22,10 +22,8 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Egg.RadiusEgg;
-import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.Tools.Egg.SimpleRadiusEgg;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -33,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class HighEgg extends RadiusEgg<Integer> {
+public class HighEgg extends SimpleRadiusEgg {
 
 	/**
 	 * @param defaultRadius
@@ -70,18 +68,6 @@ public class HighEgg extends RadiusEgg<Integer> {
 			LocaleHelper.HIGH_EFFECT.sendLocale(player);
 		}
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Tools.Egg.EggType#processArguments(org.bukkit.entity.Player,
-	 * be.Balor.Manager.Commands.CommandArgs)
-	 */
-	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		value = getRadius(sender, args);
 	}
 
 }
