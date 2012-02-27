@@ -48,8 +48,9 @@ public enum LocaleHelper {
 			+ " lvl " + ChatColor.LIGHT_PURPLE + "%lvl"),
 	HIGH_EFFECT("highEggEffect", ChatColor.GREEN + "You are now " + ChatColor.GOLD + "HIGH"
 			+ ChatColor.GREEN + ", prepare to see ... the world differently !"),
-	POTION_EFFECT("potionEffect", ChatColor.AQUA + "%player" + ChatColor.MAGIC
-			+ " had drink the potion" + ChatColor.GOLD + " %potion !");
+	POTION_EFFECT("potionEffect", ChatColor.MAGIC + "magic" + ChatColor.AQUA + "%player"
+			+ ChatColor.LIGHT_PURPLE + " had drink the potion" + ChatColor.GOLD + " %potion !"
+			+ ChatColor.MAGIC + "magic");
 
 	private final String key;
 	private final String locale;
