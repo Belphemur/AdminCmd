@@ -66,7 +66,8 @@ public class Enchant extends ItemCommand {
 
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
-			sender.sendMessage(ChatColor.GOLD + Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
+			sender.sendMessage(ChatColor.GOLD
+					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
 			return;
 		}
 		String enchantString = args.getString(0);
@@ -76,16 +77,17 @@ public class Enchant extends ItemCommand {
 		} catch (NumberFormatException e) {
 			lvl = 1;
 		}
-		Enchantment enchantment = Enchantment
-				.getByName(Str.matchString(enchantList, enchantString));
+		String found = Str.matchString(enchantList, enchantString);
 		HashMap<String, String> replace = new HashMap<String, String>();
-		if (enchantment == null) {
+		if (found == null) {
 			replace.put("enchant", enchantString);
 			LocaleHelper.ECHANT_DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
-			sender.sendMessage(ChatColor.GOLD + Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
+			sender.sendMessage(ChatColor.GOLD
+					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
 			return;
 		}
+		Enchantment enchantment = Enchantment.getByName(found);
 		ItemStack itemInHand = target.getItemInHand();
 		if (!enchantment.canEnchantItem(itemInHand)) {
 			replace.put("item", itemInHand.getType().toString());
