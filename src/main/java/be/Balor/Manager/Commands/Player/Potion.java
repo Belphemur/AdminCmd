@@ -42,7 +42,8 @@ public class Potion extends PlayerCommand {
 	private final static List<String> potions = new ArrayList<String>();
 	static {
 		for (PotionEffectType type : PotionEffectType.values())
-			potions.add(type.getName());
+			if (type != null && type.getName() != null)
+				potions.add(type.getName());
 	}
 
 	/**
