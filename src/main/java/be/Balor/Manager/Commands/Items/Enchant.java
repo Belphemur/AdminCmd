@@ -80,8 +80,9 @@ public class Enchant extends ItemCommand {
 		String found = Str.matchString(enchantList, enchantString);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		if (found == null) {
-			replace.put("enchant", enchantString);
-			LocaleHelper.ECHANT_DONT_EXISTS.sendLocale(sender, replace);
+			replace.put("value", enchantString);
+			replace.put("type", "enchantment");
+			LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD
 					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());

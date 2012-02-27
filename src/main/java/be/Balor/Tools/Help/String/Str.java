@@ -306,6 +306,8 @@ public class Str extends OutputStream {
 	 */
 	public static String matchString(Collection<String> container, String search) {
 		String found = null;
+		if (search == null)
+			return found;
 		String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
 		for (String str : container) {
