@@ -58,6 +58,7 @@ public enum LocaleHelper {
 	private LocaleHelper(String key, String locale) {
 		this.key = key;
 		this.locale = locale;
+		
 	}
 
 	/**
