@@ -59,7 +59,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public String getAddonName() {
 		return name;
 	}
 
