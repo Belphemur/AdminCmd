@@ -82,43 +82,6 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof AbstractAdminCmdPlugin))
-			return false;
-		AbstractAdminCmdPlugin other = (AbstractAdminCmdPlugin) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (permissionLinker == null) {
-			if (other.permissionLinker != null)
-				return false;
-		} else if (!permissionLinker.equals(other.permissionLinker))
-			return false;
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	@Override

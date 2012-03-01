@@ -148,8 +148,8 @@ public class ACPluginManager {
 	 */
 	protected void registerPlugin(final AbstractAdminCmdPlugin addon)
 			throws IllegalArgumentException {
-		if (!pluginInstances.containsKey(addon.getName())) {
-			pluginInstances.put(addon.getName(), addon);
+		if (!pluginInstances.containsKey(addon.getAddonName())) {
+			pluginInstances.put(addon.getAddonName(), addon);
 			DebugLog.INSTANCE.info("Registering : " + addon);
 			if (corePlugin == null || addon.equals(corePlugin))
 				return;
@@ -162,11 +162,11 @@ public class ACPluginManager {
 
 				@Override
 				public String getColumnName() {
-					return "Addon " + addon.getName();
+					return "Addon " + addon.getAddonName();
 				}
 			});
 		} else
-			throw new IllegalArgumentException("Plugin " + addon.getName() + " Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getAddonName() + " Already registered.");
 	}
 
 	void stopChildrenPlugins() {
@@ -182,7 +182,7 @@ public class ACPluginManager {
 	 * @param addon
 	 */
 	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
-		pluginInstances.remove(addon.getName());
+		pluginInstances.remove(addon.getAddonName());
 		if (!addon.equals(corePlugin))
 			graph.removePlotter(new Plotter() {
 
@@ -193,7 +193,7 @@ public class ACPluginManager {
 
 				@Override
 				public String getColumnName() {
-					return "Addon " + addon.getName();
+					return "Addon " + addon.getAddonName();
 				}
 			});
 	}

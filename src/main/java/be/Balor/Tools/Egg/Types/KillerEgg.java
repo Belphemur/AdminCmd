@@ -22,7 +22,6 @@ import java.util.List;
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.EntityLiving;
 
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
@@ -69,8 +68,6 @@ public class KillerEgg extends SimpleRadiusEgg {
 		for (Object entity : ((CraftWorld) w).getHandle().entityList)
 			if (entity instanceof EntityLiving)
 				entities.add((EntityLiving) entity);
-		w.playEffect(loc, Effect.SMOKE, 1, value);
-		w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 
