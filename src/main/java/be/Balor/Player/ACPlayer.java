@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Files.ObjectContainer;
@@ -397,8 +398,9 @@ public abstract class ACPlayer {
 	 *
 	 * @throws NullPointerException
 	 *             if last command is not defined
+	 * @throws PlayerNotFound 
 	 */
-	public void executeLastCmd() throws NullPointerException {
+	public void executeLastCmd() throws NullPointerException, PlayerNotFound {
 		if (this.lastCmd == null)
 			throw new NullPointerException();
 		this.lastCmd.execute();

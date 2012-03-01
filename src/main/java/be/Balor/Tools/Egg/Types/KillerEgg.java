@@ -22,18 +22,13 @@ import java.util.List;
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.EntityLiving;
 
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
-import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.Tools.Egg.SimpleRadiusEgg;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -41,12 +36,19 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class KillerEgg extends EggType<Integer> {
+public class KillerEgg extends SimpleRadiusEgg {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7763897329319981939L;
+
+	/**
+	 * 
+	 */
+	public KillerEgg() {
+		super(ConfigEnum.DEGG_KILL_RADIUS.getInt(), ConfigEnum.MAXEGG_KILL_RADIUS.getInt());
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -66,8 +68,6 @@ public class KillerEgg extends EggType<Integer> {
 		for (Object entity : ((CraftWorld) w).getHandle().entityList)
 			if (entity instanceof EntityLiving)
 				entities.add((EntityLiving) entity);
-		w.playEffect(loc, Effect.SMOKE, 1, value);
-		w.playEffect(loc, Effect.BLAZE_SHOOT, 0, value);
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 
@@ -89,28 +89,6 @@ public class KillerEgg extends EggType<Integer> {
 						p.sendMessage(String.valueOf(count) + " killed.");
 					}
 				});
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Tools.Egg.EggType#processArguments(org.bukkit.entity.Player,
-	 * be.Balor.Manager.Commands.CommandArgs)
-	 */
-	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		int radius = ConfigEnum.DEGG_KILL_RADIUS.getInt();
-		String valFlag = args.getValueFlag('r');
-		if (valFlag != null)
-			try {
-				radius = Integer.parseInt(valFlag);
-			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", valFlag);
-				return;
-			}
-		value = radius;
-
 	}
 
 }

@@ -16,13 +16,11 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
-import org.bukkit.entity.Egg;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
-import be.Balor.Tools.Egg.EggType;
+import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -30,49 +28,54 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExplosionEgg extends EggType<Float> {
+public class FreezerEgg extends BlockEgg {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 729116147611485304L;
+	private static final long serialVersionUID = 6781269132940660439L;
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see be.Balor.Tools.Egg.EggType#execute(org.bukkit.event.player.
-	 * PlayerEggThrowEvent)
 	 */
-	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
-		Egg egg = event.getEgg();
-		egg.remove();
-		event.setHatching(false);
-		egg.getWorld().createExplosion(egg.getLocation(), value);
+	public FreezerEgg() {
+		super(ConfigEnum.DEGG_FREEZE_RADIUS.getInt(), ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt());
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands
-	 * .CommandArgs)
+	 * be.Balor.Tools.Egg.EggType#processArguments(org.bukkit.entity.Player,
+	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		float power = ConfigEnum.DEGG_EX_RADIUS.getFloat();
-		if (args.hasFlag('p')) {
-			String flag = args.getValueFlag('p');
-			try {
-				power = Float.parseFloat(flag);
-			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", flag);
-				return;
-			}
-		}
-		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getInt() ? ConfigEnum.MAXEGG_EX_RADIUS.getInt()
-				: power;
+		int radius = getRadius(sender, args);
+		if(radius == -1)
+			return;
+		value = new BlockChangeInfo(Material.ICE.getId(), radius);
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Egg.Types.BlockEgg#blockTimeOut()
+	 */
+	@Override
+	protected int blockTimeOut() {
+		return ConfigEnum.EGG_FREEZE_TIMEOUT.getInt();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "FreezerEgg = " + value.getRadius();
 	}
 
 }

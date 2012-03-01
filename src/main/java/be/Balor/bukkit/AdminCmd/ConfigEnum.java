@@ -121,8 +121,20 @@ public enum ConfigEnum {
 			+ "admincmd.tp.world.WORLDNAME (where WORLDNAME is the name of the world where the space are replaced by underscore (_) )"),
 	ARMOR_KIT_OVERRIDE("armorKitOverride", true, "When using an armored kit, if this options is set to true,"
 			+ " it will override what the player is wearing to replace it by the armor of the kit."),
-	DEGG_KILL_RADIUS("defaultEggKillRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command."),
-	USE_PREFIX("usePSfix", true, "Use the prefix and the suffix when displaying names");
+	USE_PREFIX("usePSfix", true, "Use the prefix and the suffix when displaying names"),
+	DEGG_KILL_RADIUS("egg.killer.defaultRadiusInBlock", 15, "When the Killer Egg is used, this radius will be used if no radius is set in the command."),
+	MAXEGG_KILL_RADIUS("egg.killer.maxRadiusInBlock", 30, "When the Killer Egg is used, this radius will be the max radius possible for the command."),
+	EGG_BLOCK_TIMEOUT("egg.block.Timeout", 5, "How much time the new blocks stay (in sec) when using the BlockEgg. Put 0 for never change back."),
+	DEGG_BLOCK_RADIUS("egg.block.defaultRadiusInBlock", 8, "Default freeze radius when using the Block"),
+	MAXEGG_BLOCK_RADIUS("egg.block.maxRadiusInBlock", 12, "Maximum radius for the BlockEgg"),
+	EGG_FREEZE_TIMEOUT("egg.freezer.Timeout", 5, "How much time the ice stay (in sec) when using the FreezerEgg. Put 0 for never change back."),
+	DEGG_FREEZE_RADIUS("egg.freezer.defaultRadiusInBlock", 8, "Default freeze radius when using the FreezerEgg"),
+	MAXEGG_FREEZE_RADIUS("egg.freezer.maxRadiusInBlock", 12, "Maximum radius for the FreezergEgg"),
+	DEGG_EX_RADIUS("egg.explosion.defaultRadiusInBlock", 8, "Default freeze radius when using the ExplosionEgg"),
+	MAXEGG_EX_RADIUS("egg.explosion.maxRadiusInBlock", 12, "Maximum radius for the ExplosionEgg"),
+	EGG_HIGH_TIMEOUT("egg.high.Timeout", 20, "How much time (in sec) the high effect least."),
+	DEGG_HIGH_RADIUS("egg.high.defaultRadiusInBlock", 5, "Default radius when using the HighEgg"),
+	MAXEGG_HIGH_RADIUS("egg.high.maxRadiusInBlock", 12, "Maximum radius for the HighEgg");
 	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;

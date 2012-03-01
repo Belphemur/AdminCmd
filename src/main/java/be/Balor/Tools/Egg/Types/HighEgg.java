@@ -16,62 +16,57 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
-import org.bukkit.entity.Egg;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Egg.EggType;
-import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.Tools.Egg.SimpleRadiusEgg;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExplosionEgg extends EggType<Float> {
+public class HighEgg extends SimpleRadiusEgg {
+
+	/**
+	 * @param defaultRadius
+	 * @param maxRadius
+	 */
+	public HighEgg() {
+		super(ConfigEnum.DEGG_HIGH_RADIUS.getInt(), ConfigEnum.MAXEGG_HIGH_RADIUS.getInt());
+	}
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 729116147611485304L;
+	private static final long serialVersionUID = 7809379720699540380L;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Tools.Egg.EggType#execute(org.bukkit.event.player.
+	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
-		Egg egg = event.getEgg();
-		egg.remove();
+		event.getEgg().remove();
 		event.setHatching(false);
-		egg.getWorld().createExplosion(egg.getLocation(), value);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands
-	 * .CommandArgs)
-	 */
-	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		float power = ConfigEnum.DEGG_EX_RADIUS.getFloat();
-		if (args.hasFlag('p')) {
-			String flag = args.getValueFlag('p');
-			try {
-				power = Float.parseFloat(flag);
-			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", flag);
-				return;
-			}
+		Location loc = event.getEgg().getLocation();
+		final int radius = value * value;
+		int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt() * Utils.secInTick;
+		for (Player player : Utils.getOnlinePlayers()) {
+			if (player.getLocation().distanceSquared(loc) > radius)
+				continue;
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, timeout, 5));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, timeout, 100));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, timeout, 10));
+			LocaleHelper.HIGH_EFFECT.sendLocale(player);
 		}
-		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getInt() ? ConfigEnum.MAXEGG_EX_RADIUS.getInt()
-				: power;
 
 	}
 

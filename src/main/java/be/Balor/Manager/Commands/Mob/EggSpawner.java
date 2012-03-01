@@ -67,13 +67,16 @@ public class EggSpawner extends MobCommand {
 		try {
 			egg = EggType.createEggType(player, args);
 		} catch (ParameterMissingException e) {
-			if (e.getMessage().equals("E")) {
+			if (e.getParam() == 'E') {
 				String list = Joiner.on(", ").skipNulls()
 						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
+				sender.sendMessage(e.getMessage());
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
-			} else
-				Utils.sI18n(sender, "paramMissing", "param", e.getMessage());
+			} else {
+				Utils.sI18n(sender, "paramMissing", "param", String.valueOf(e.getParam()));
+				sender.sendMessage(e.getMessage());
+			}
 			return;
 		} catch (ProcessingArgsException e) {
 			if (e.getType().equals(ExceptionType.NO_CLASS))

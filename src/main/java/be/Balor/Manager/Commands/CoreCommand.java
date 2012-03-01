@@ -23,6 +23,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -99,10 +100,15 @@ public abstract class CoreCommand {
 	/**
 	 * Execute the command
 	 * 
+	 * @param sender
+	 *            sender of the command
 	 * @param args
-	 *            TODO
+	 *            arguments to be processed by the command
+	 * 
+	 * @throws PlayerNotFound
+	 *             the target player of the command is not found
 	 */
-	public abstract void execute(CommandSender sender, CommandArgs args);
+	public abstract void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound;
 
 	/**
 	 * Check if the command can be executed
@@ -198,7 +204,9 @@ public abstract class CoreCommand {
 		return plugin;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -206,6 +214,5 @@ public abstract class CoreCommand {
 		return "CoreCommand [permNode=" + permNode + ", cmdName=" + cmdName + ", plugin=" + plugin
 				+ ", permParent=" + permParent + "]";
 	}
-	
 
 }

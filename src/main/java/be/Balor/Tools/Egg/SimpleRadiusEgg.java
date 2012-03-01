@@ -14,65 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg.Types;
+package be.Balor.Tools.Egg;
 
-import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
-import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
-import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExplosionEgg extends EggType<Float> {
+public abstract class SimpleRadiusEgg extends RadiusEgg<Integer> {
+
+	/**
+	 * @param defaultRadius
+	 * @param maxRadius
+	 */
+	public SimpleRadiusEgg(int defaultRadius, int maxRadius) {
+		super(defaultRadius, maxRadius);
+	}
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 729116147611485304L;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Tools.Egg.EggType#execute(org.bukkit.event.player.
-	 * PlayerEggThrowEvent)
-	 */
-	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
-		Egg egg = event.getEgg();
-		egg.remove();
-		event.setHatching(false);
-		egg.getWorld().createExplosion(egg.getLocation(), value);
-	}
+	private static final long serialVersionUID = 7867915319728073263L;
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands
-	 * .CommandArgs)
+	 * be.Balor.Tools.Egg.EggType#processArguments(org.bukkit.entity.Player,
+	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		float power = ConfigEnum.DEGG_EX_RADIUS.getFloat();
-		if (args.hasFlag('p')) {
-			String flag = args.getValueFlag('p');
-			try {
-				power = Float.parseFloat(flag);
-			} catch (NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", flag);
-				return;
-			}
-		}
-		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getInt() ? ConfigEnum.MAXEGG_EX_RADIUS.getInt()
-				: power;
-
+		int radius = getRadius(sender, args);
+		if (radius == -1)
+			return;
+		value = radius;
 	}
 
 }

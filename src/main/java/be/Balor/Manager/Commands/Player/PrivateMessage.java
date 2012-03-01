@@ -18,7 +18,6 @@ package be.Balor.Manager.Commands.Player;
 
 import java.util.HashMap;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -31,6 +30,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -95,8 +95,7 @@ public class PrivateMessage extends PlayerCommand {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
 				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
-			String spyMsg = "[" + ChatColor.GREEN + "SpyMsg" + ChatColor.WHITE + "] " + senderName
-					+ "-" + buddy.getName() + ": " + parsed;
+			String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
 			for (Player p : ACHelper.getInstance().getSpyPlayers())
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))

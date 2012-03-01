@@ -14,32 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Egg.Exceptions;
+package be.Balor.Manager.Exceptions;
+
+import org.bukkit.command.CommandSender;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ParameterMissingException extends ProcessingArgsException {
+public class PlayerNotFound extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4437719310884213242L;
-	private final char param;
+	private static final long serialVersionUID = -6841087146104592092L;
+	private final CommandSender sender;
 
 	/**
 	 * @param message
 	 */
-	public ParameterMissingException(char param, String message) {
-		super(ExceptionType.MISSING_PARAM, message);
-		this.param = param;
+	public PlayerNotFound(String message, CommandSender sender) {
+		super(message);
+		this.sender = sender;
 	}
 
 	/**
-	 * @return the param
+	 * @return the sender
 	 */
-	public char getParam() {
-		return param;
+	public CommandSender getSender() {
+		return sender;
 	}
+
 }

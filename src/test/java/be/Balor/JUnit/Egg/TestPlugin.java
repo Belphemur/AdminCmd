@@ -28,21 +28,22 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.Configuration;
 
 import com.avaje.ebean.EbeanServer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
-public class TestPlugin implements Plugin {
+public class TestPlugin extends JavaPlugin {
 	private final PluginDescriptionFile pdf = new PluginDescriptionFile("test", "0.1",
 			"be.Blor.JUnit.Egg");
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
@@ -55,7 +56,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDataFolder()
 	 */
 	@Override
@@ -66,7 +67,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDescription()
 	 */
 	@Override
@@ -76,7 +77,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getConfiguration()
 	 */
 	public Configuration getConfiguration() {
@@ -86,7 +87,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getConfig()
 	 */
 	@Override
@@ -97,7 +98,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getResource(java.lang.String)
 	 */
 	@Override
@@ -108,7 +109,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#saveConfig()
 	 */
 	@Override
@@ -119,7 +120,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#saveDefaultConfig()
 	 */
 	@Override
@@ -130,7 +131,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#saveResource(java.lang.String, boolean)
 	 */
 	@Override
@@ -141,7 +142,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#reloadConfig()
 	 */
 	@Override
@@ -152,40 +153,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.bukkit.plugin.Plugin#getPluginLoader()
-	 */
-	@Override
-	public PluginLoader getPluginLoader() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.bukkit.plugin.Plugin#getServer()
-	 */
-	@Override
-	public Server getServer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.bukkit.plugin.Plugin#isEnabled()
-	 */
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	@Override
@@ -196,7 +164,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onLoad()
 	 */
 	@Override
@@ -207,7 +175,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	@Override
@@ -218,29 +186,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
-	 * @see org.bukkit.plugin.Plugin#isNaggable()
-	 */
-	@Override
-	public boolean isNaggable() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.bukkit.plugin.Plugin#setNaggable(boolean)
-	 */
-	@Override
-	public void setNaggable(boolean canNag) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDatabase()
 	 */
 	@Override
@@ -251,7 +197,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDefaultWorldGenerator(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -263,7 +209,7 @@ public class TestPlugin implements Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getLogger()
 	 */
 	@Override

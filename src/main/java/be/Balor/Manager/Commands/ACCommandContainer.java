@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -56,8 +57,9 @@ public class ACCommandContainer {
 
 	/**
 	 * Execute the command
+	 * @throws PlayerNotFound 
 	 */
-	public void execute() {
+	public void execute() throws PlayerNotFound {
 		if (ConfigEnum.LOG_CMD.getBoolean()) {
 			String name = "Console";
 			if (sender instanceof Player)
@@ -84,7 +86,9 @@ public class ACCommandContainer {
 				+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

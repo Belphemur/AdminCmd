@@ -29,6 +29,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Metrics;
+import be.Balor.Tools.Metrics.Graph;
+import be.Balor.Tools.Metrics.Graph.Type;
 import be.Balor.Tools.Metrics.Plotter;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -42,8 +44,8 @@ public class ACPluginManager {
 	private final Map<String, AbstractAdminCmdPlugin> pluginInstances = Collections
 			.synchronizedMap(new HashMap<String, AbstractAdminCmdPlugin>());
 	private final static Server server = Bukkit.getServer();
-	public static Metrics metrics = null;
 	private static AbstractAdminCmdPlugin corePlugin;
+	private static Graph graph = null;
 
 	/**
 	 * @return the instance
@@ -117,7 +119,7 @@ public class ACPluginManager {
 	 *            the metrics to set
 	 */
 	static void setMetrics(Metrics metrics) {
-		ACPluginManager.metrics = metrics;
+		ACPluginManager.graph = metrics.createGraph(corePlugin, Type.Column, "Plugins");
 	}
 
 	public static void unRegisterACPlugin(Plugin addon) {
@@ -146,12 +148,12 @@ public class ACPluginManager {
 	 */
 	protected void registerPlugin(final AbstractAdminCmdPlugin addon)
 			throws IllegalArgumentException {
-		if (!pluginInstances.containsKey(addon.getName())) {
-			pluginInstances.put(addon.getName(), addon);
+		if (!pluginInstances.containsKey(addon.getAddonName())) {
+			pluginInstances.put(addon.getAddonName(), addon);
 			DebugLog.INSTANCE.info("Registering : " + addon);
 			if (corePlugin == null || addon.equals(corePlugin))
 				return;
-			metrics.addCustomData(corePlugin, new Plotter() {
+			graph.addPlotter(new Plotter() {
 
 				@Override
 				public int getValue() {
@@ -160,11 +162,11 @@ public class ACPluginManager {
 
 				@Override
 				public String getColumnName() {
-					return "Addon " + addon.getName();
+					return "Addon " + addon.getAddonName();
 				}
 			});
 		} else
-			throw new IllegalArgumentException("Plugin " + addon.getName() + " Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getAddonName() + " Already registered.");
 	}
 
 	void stopChildrenPlugins() {
@@ -180,9 +182,9 @@ public class ACPluginManager {
 	 * @param addon
 	 */
 	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
-		pluginInstances.remove(addon.getName());
+		pluginInstances.remove(addon.getAddonName());
 		if (!addon.equals(corePlugin))
-			metrics.removeCustomData(corePlugin, new Plotter() {
+			graph.removePlotter(new Plotter() {
 
 				@Override
 				public int getValue() {
@@ -191,7 +193,7 @@ public class ACPluginManager {
 
 				@Override
 				public String getColumnName() {
-					return "Addon " + addon.getName();
+					return "Addon " + addon.getAddonName();
 				}
 			});
 	}

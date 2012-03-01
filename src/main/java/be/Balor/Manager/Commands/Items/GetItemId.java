@@ -14,69 +14,59 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Tp;
+package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.Location;
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Threads.TeleportTask;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpLoc extends TeleportCommand {
+public class GetItemId extends ItemCommand {
 
 	/**
 	 * 
 	 */
-	public TpLoc() {
-		permNode = "admincmd.tp.location";
-		cmdName = "bal_tpthere";
+	public GetItemId() {
+		cmdName = "bal_itemid";
+		permNode = "admincmd.item.id";
 		other = true;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		final Player target = Utils.getUserParam(sender, args, permNode);
-		if(target == null)
-			return;
-		final double x;
-		final double y;
-		final double z;
-		try {
-			x = args.getDouble(0);
-			y = args.getDouble(1);
-			z = args.getDouble(2);
-		} catch (Exception e) {
-			Utils.sI18n(sender, "errorLocation");
-			return;
-		}
-		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
-				target.getWorld(), x, y, z)));
-
+		Player target = Utils.getUserParam(sender, args, permNode);
+		HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", Utils.getPlayerName(target));
+		ItemStack inHand = target.getItemInHand();
+		replace.put("item", String.valueOf(inHand.getTypeId()));
+		replace.put("data", String.valueOf(inHand.getData().getData()));
+		LocaleHelper.ITEMID.sendLocale(sender, replace);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args != null && args.length >= 3;
+		return args != null;
 	}
 
 }

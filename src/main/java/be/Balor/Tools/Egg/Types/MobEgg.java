@@ -28,6 +28,7 @@ import be.Balor.Tools.Egg.CreaturesInEgg;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -64,7 +65,7 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 	@Override
 	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
 		if (!args.hasFlag('m'))
-			throw new ParameterMissingException("m");
+			throw new ParameterMissingException('m', LocaleHelper.EGG_PARAM_MOB.getLocale());
 		int nbre = 1;
 		String valFlag = args.getValueFlag('n');
 		String mob = args.getValueFlag('m');
