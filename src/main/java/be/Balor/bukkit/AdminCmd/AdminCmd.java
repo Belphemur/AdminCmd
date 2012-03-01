@@ -729,7 +729,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
 		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
 		Utils.addLocale("noPlayerToReply", ChatColor.RED
-				+ "You can't reply to a message if noone did send you a private message.");
+				+ "You can't reply to a message if none did send you a private message.");
 		Utils.addLocale("mustBePlayer", "[AdminCmd] You must be a player to use this command.");
 		Utils.addLocale("errorInsufficientArguments",
 				"You have to specify a %argument to use this command from the command line.");

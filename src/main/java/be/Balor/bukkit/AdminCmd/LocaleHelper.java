@@ -50,7 +50,10 @@ public enum LocaleHelper {
 			+ ChatColor.GREEN + ", prepare to see ... the world differently !"),
 	POTION_EFFECT("potionEffect", ChatColor.MAGIC + "magic" + ChatColor.AQUA + "%player"
 			+ ChatColor.LIGHT_PURPLE + " had drink the potion" + ChatColor.GOLD + " %potion !"
-			+ ChatColor.MAGIC + "magic");
+			+ ChatColor.MAGIC + "magic"),
+	SPYMSG_TITLE("spymsgTitle", ChatColor.GREEN + "[SpyMsg]" + ChatColor.WHITE),
+	SPYMSG_HEADER("spymsgMessageHeader", "#spymsgTitle# " + "%sender" + "-" + "%receiver"
+			+ ChatColor.WHITE + ": ");
 
 	private final String key;
 	private final String locale;
@@ -58,7 +61,6 @@ public enum LocaleHelper {
 	private LocaleHelper(String key, String locale) {
 		this.key = key;
 		this.locale = locale;
-		
 	}
 
 	/**
