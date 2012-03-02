@@ -134,7 +134,8 @@ public enum ConfigEnum {
 	MAXEGG_EX_RADIUS("egg.explosion.maxRadiusInBlock", 12, "Maximum radius for the ExplosionEgg"),
 	EGG_HIGH_TIMEOUT("egg.high.Timeout", 20, "How much time (in sec) the high effect least."),
 	DEGG_HIGH_RADIUS("egg.high.defaultRadiusInBlock", 5, "Default radius when using the HighEgg"),
-	MAXEGG_HIGH_RADIUS("egg.high.maxRadiusInBlock", 12, "Maximum radius for the HighEgg");
+	MAXEGG_HIGH_RADIUS("egg.high.maxRadiusInBlock", 12, "Maximum radius for the HighEgg"),
+	MAX_FLY("maxFlyValue", 2F, "Maximum value for the fly commands");
 	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;
