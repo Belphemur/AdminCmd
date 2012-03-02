@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class HelpEntry {
+class HelpEntry {
 	private final String command;
 	private final String description;
 	private final List<String> permissions;
@@ -42,7 +42,7 @@ public class HelpEntry {
 	 * @param permissions
 	 * @param commandName
 	 */
-	public HelpEntry(String command, String description, List<String> permissions,
+	HelpEntry(String command, String description, List<String> permissions,
 			String commandName) {
 		super();
 		this.command = command;
@@ -132,5 +132,12 @@ public class HelpEntry {
 	 */
 	public String getCommandName() {
 		return commandName;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
 	}
 }

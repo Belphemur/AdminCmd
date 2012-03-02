@@ -38,17 +38,17 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class HelpList {
+class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 	private String pluginName;
 	private CommandSender lastCommandSender;
 	private List<HelpEntry> lastHelpEntries;
-	private HelpEntry lastCommandSearched;
+	private CmdMatch lastCommandSearched;
 
 	/**
 	 * 
 	 */
-	public HelpList(String plugin) {
+	HelpList(String plugin) {
 		this.pluginName = plugin;
 	}
 
@@ -173,43 +173,30 @@ public class HelpList {
 	 *            sender of the command (used for checking the permission)
 	 * @return the chat String to display to the user, <b>null</b> if not found
 	 */
-	public String getCommand(String cmd, CommandSender sender) {
-		HelpEntry found = null;
+	public List<HelpEntry> getCommandMatch(String cmd, CommandSender sender) {
+		List<HelpEntry> result = new ArrayList<HelpEntry>();
 		if (cmd == null)
 			return null;
-		if (lastCommandSearched != null
-				&& lastCommandSearched.getCommand().toLowerCase().startsWith(cmd.toLowerCase()))
-			return lastCommandSearched.chatString();
+		if (lastCommandSearched != null && lastCommandSearched.getCmd().equals(cmd))
+			return lastCommandSearched.getResult();
 		String lowerSearch = cmd.toLowerCase().trim();
-		int delta = Integer.MAX_VALUE;
 		for (HelpEntry entry : pluginHelp) {
 			String str = entry.getCommand().trim();
-			if (str.toLowerCase().startsWith(lowerSearch)) {
-				int curDelta = str.length() - lowerSearch.length();
-				if (curDelta < delta) {
-					found = entry;
-					delta = curDelta;
-				}
-				if (curDelta == 0)
-					break;
-			}
-		}
-		if (found == null) {
-			for (HelpEntry entry : pluginHelp) {
-				if (entry.getDescription().toLowerCase().contains(lowerSearch)) {
-					found = entry;
-					break;
-				}
-			}
-		}
-		if (found == null) {
-			return null;
-		}
-		if (!found.hasPerm(sender))
-			return null;
+			if (str.toLowerCase().startsWith(lowerSearch) && entry.hasPerm(sender))
+				result.add(entry);
 
-		lastCommandSearched = found;
-		return found.chatString();
+		}
+		if (result.isEmpty()) {
+			for (HelpEntry entry : pluginHelp) {
+				if (entry.hasPerm(sender)
+						&& entry.getDescription().toLowerCase().contains(lowerSearch))
+					result.add(entry);
+
+			}
+		}
+
+		lastCommandSearched = new CmdMatch(cmd, result);
+		return result;
 	}
 
 	private static class EntryNameComparator implements Comparator<HelpEntry> {

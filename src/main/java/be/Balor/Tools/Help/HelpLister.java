@@ -21,10 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Help.String.Str;
 
 /**
@@ -158,24 +160,39 @@ public class HelpLister {
 	 * @return true if the command is found, else if not found.
 	 */
 	public boolean sendHelpCmd(String pluginName, String command, CommandSender sender) {
-		String chat = null;
+		List<HelpEntry> chat = null;
+		boolean found = false;
 		if (pluginName == null) {
 			for (HelpList plugin : plugins.values()) {
-				chat = plugin.getCommand(command, sender);
-				if (chat == null)
+				chat = plugin.getCommandMatch(command, sender);
+				if (chat.isEmpty())
 					continue;
+				displayHelpMessage(chat, plugin.getPluginName(), sender);
+				found = true;
 			}
+			return found;
 		} else {
 			HelpList plugin = matchPlugin(pluginName);
 			if (plugin == null)
 				return false;
-			chat = plugin.getCommand(command, sender);
+			chat = plugin.getCommandMatch(command, sender);
+			if (chat.isEmpty())
+				return false;
+			displayHelpMessage(chat, plugin.getPluginName(), sender);
 		}
-		if (chat == null)
-			return false;
-		for (String l : chat.split("\n"))
-			sender.sendMessage(l);
 		return true;
 
+	}
+
+	private void displayHelpMessage(List<HelpEntry> list, String pluginName, CommandSender sender) {
+		String format = ChatColor.AQUA
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " %s "
+						+ ChatColor.AQUA, '=') + "\n";
+		sender.sendMessage(String.format(format, pluginName));
+		for (HelpEntry entry : list) {
+			String chat = entry.chatString();
+			for (String l : chat.split("\n"))
+				sender.sendMessage(l);
+		}
 	}
 }
