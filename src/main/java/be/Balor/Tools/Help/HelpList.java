@@ -43,6 +43,7 @@ public class HelpList {
 	private String pluginName;
 	private CommandSender lastCommandSender;
 	private List<HelpEntry> lastHelpEntries;
+	private HelpEntry lastCommandSearched;
 
 	/**
 	 * 
@@ -176,6 +177,9 @@ public class HelpList {
 		HelpEntry found = null;
 		if (cmd == null)
 			return null;
+		if (lastCommandSearched != null
+				&& lastCommandSearched.getCommand().toLowerCase().startsWith(cmd.toLowerCase()))
+			return lastCommandSearched.chatString();
 		String lowerSearch = cmd.toLowerCase();
 		int delta = Integer.MAX_VALUE;
 		for (HelpEntry entry : pluginHelp) {
@@ -194,6 +198,7 @@ public class HelpList {
 			return null;
 		if (!found.hasPerm(sender))
 			return null;
+		lastCommandSearched = found;
 		return found.chatString();
 	}
 
