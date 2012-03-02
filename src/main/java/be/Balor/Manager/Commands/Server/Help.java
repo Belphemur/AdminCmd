@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -23,6 +25,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -50,7 +53,8 @@ public class Help extends ServerCommand {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", 1, sender);
 			return;
 		}
-		if (args.getString(0).equalsIgnoreCase("list") || args.getString(0).equalsIgnoreCase("plugins")) {
+		if (args.getString(0).equalsIgnoreCase("list")
+				|| args.getString(0).equalsIgnoreCase("plugins")) {
 			String msg = "";
 			sender.sendMessage(ChatColor.DARK_AQUA
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.WHITE + " Plugins "
@@ -62,6 +66,15 @@ public class Help extends ServerCommand {
 					msg = msg.substring(0, msg.lastIndexOf(","));
 				sender.sendMessage(msg);
 			}
+			return;
+		}
+		String cmd = args.getValueFlag('s');
+		if (cmd != null) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("type", "command");
+			replace.put("value", cmd);
+			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd, sender))
+				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			return;
 		}
 		int page = 1;
