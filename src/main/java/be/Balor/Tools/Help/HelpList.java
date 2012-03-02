@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -72,7 +73,7 @@ public class HelpList {
 
 	public HelpList(Plugin plugin) throws IllegalArgumentException {
 		TreeSet<HelpEntry> list = new TreeSet<HelpEntry>(new EntryNameComparator());
-		final  Map<String, Map<String, Object>> cmds = plugin.getDescription().getCommands();
+		final Map<String, Map<String, Object>> cmds = plugin.getDescription().getCommands();
 		this.pluginName = plugin.getDescription().getName();
 		if (cmds == null)
 			throw new IllegalArgumentException(pluginName + " don't have any commands to list");
@@ -93,7 +94,7 @@ public class HelpList {
 			}
 			this.pluginHelp = list;
 		} catch (Exception e) {
-			System.out.print("[AdminCmd] Problem with permissions of " + pluginName);
+			ACLogger.warning("[HELP] Problem with commands of " + pluginName);
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
 
@@ -159,6 +160,41 @@ public class HelpList {
 		}
 		return helpList;
 
+	}
+
+	/**
+	 * Get the command help of the wanted command by matching it in the list of
+	 * avaible commands.
+	 * 
+	 * @param cmd
+	 *            command to search
+	 * @param sender
+	 *            sender of the command (used for checking the permission)
+	 * @return the chat String to display to the user, <b>null</b> if not found
+	 */
+	public String getCommand(String cmd, CommandSender sender) {
+		HelpEntry found = null;
+		if (cmd == null)
+			return null;
+		String lowerSearch = cmd.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		for (HelpEntry entry : pluginHelp) {
+			String str = entry.getCommand();
+			if (str.toLowerCase().startsWith(lowerSearch)) {
+				int curDelta = str.length() - lowerSearch.length();
+				if (curDelta < delta) {
+					found = entry;
+					delta = curDelta;
+				}
+				if (curDelta == 0)
+					break;
+			}
+		}
+		if (found == null)
+			return null;
+		if (!found.hasPerm(sender))
+			return null;
+		return found.chatString();
 	}
 
 	private static class EntryNameComparator implements Comparator<HelpEntry> {

@@ -25,6 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -102,9 +103,8 @@ public class HelpLister {
 
 	public boolean removeHelpEntry(String plugin, String commandName) {
 		HelpList help = plugins.get(plugin);
-		if (help == null)
-		{
-			DebugLog.INSTANCE.severe("Plugin "+plugin+" not found.");
+		if (help == null) {
+			DebugLog.INSTANCE.severe("Plugin " + plugin + " not found.");
 			return false;
 		}
 		return help.removeEntry(commandName);
@@ -122,7 +122,7 @@ public class HelpLister {
 	 * @return
 	 */
 	public boolean sendHelpPage(String plugin, int page, CommandSender sender) {
-		HelpList help = plugins.get(plugin);
+		HelpList help = matchPlugin(plugin);
 		if (help == null)
 			return false;
 		List<String> toDisplay = help.getPage(page, sender);
@@ -130,6 +130,18 @@ public class HelpLister {
 			for (String l : send.split("\n"))
 				sender.sendMessage(l);
 		return true;
+
+	}
+
+	private HelpList matchPlugin(String plugin) {
+		HelpList help = plugins.get(plugin);
+		if (help == null) {
+			String keyFound = Str.matchString(plugins.keySet(), plugin);
+			if (keyFound == null)
+				return null;
+			help = plugins.get(keyFound);
+		}
+		return help;
 
 	}
 }
