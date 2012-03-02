@@ -144,4 +144,38 @@ public class HelpLister {
 		return help;
 
 	}
+
+	/**
+	 * Send the help of the given command to the command sender.
+	 * 
+	 * @param pluginName
+	 *            name of the plugin where to search for the command. If
+	 *            <b>NULL</b> search in every plugins.
+	 * @param command
+	 *            command to look for.
+	 * @param sender
+	 *            sender of the command.
+	 * @return true if the command is found, else if not found.
+	 */
+	public boolean sendHelpCmd(String pluginName, String command, CommandSender sender) {
+		String chat = null;
+		if (pluginName == null) {
+			for (HelpList plugin : plugins.values()) {
+				chat = plugin.getCommand(command, sender);
+				if (chat == null)
+					continue;
+			}
+		} else {
+			HelpList plugin = matchPlugin(pluginName);
+			if (plugin == null)
+				return false;
+			chat = plugin.getCommand(command, sender);
+		}
+		if (chat == null)
+			return false;
+		for (String l : chat.split("\n"))
+			sender.sendMessage(l);
+		return true;
+
+	}
 }
