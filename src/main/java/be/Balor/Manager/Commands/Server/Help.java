@@ -50,7 +50,7 @@ public class Help extends ServerCommand {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", 1, sender);
 			return;
 		}
-		if (args.getString(0).equals("list")) {
+		if (args.getString(0).equalsIgnoreCase("list") || args.getString(0).equalsIgnoreCase("plugins")) {
 			String msg = "";
 			sender.sendMessage(ChatColor.DARK_AQUA
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.WHITE + " Plugins "
