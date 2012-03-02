@@ -195,13 +195,19 @@ public class HelpList {
 			}
 		}
 		if (found == null) {
-			DebugLog.INSTANCE.warning(pluginName + " : " + cmd + " not found.");
+			for (HelpEntry entry : pluginHelp) {
+				if (entry.getDescription().toLowerCase().contains(lowerSearch)) {
+					found = entry;
+					break;
+				}
+			}
+		}
+		if (found == null) {
 			return null;
 		}
-
 		if (!found.hasPerm(sender))
 			return null;
-		
+
 		lastCommandSearched = found;
 		return found.chatString();
 	}
