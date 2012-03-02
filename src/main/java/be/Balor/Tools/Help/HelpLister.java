@@ -185,10 +185,9 @@ public class HelpLister {
 	}
 
 	private void displayHelpMessage(List<HelpEntry> list, String pluginName, CommandSender sender) {
-		String format = ChatColor.AQUA
-				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " %s "
-						+ ChatColor.AQUA, '=') + "\n";
-		sender.sendMessage(String.format(format, pluginName));
+		sender.sendMessage(ChatColor.AQUA
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
+						+ pluginName + " " + ChatColor.AQUA, '=') + "\n");
 		for (HelpEntry entry : list) {
 			String chat = entry.chatString();
 			for (String l : chat.split("\n"))
