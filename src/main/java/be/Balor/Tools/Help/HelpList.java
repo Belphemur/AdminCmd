@@ -180,10 +180,10 @@ public class HelpList {
 		if (lastCommandSearched != null
 				&& lastCommandSearched.getCommand().toLowerCase().startsWith(cmd.toLowerCase()))
 			return lastCommandSearched.chatString();
-		String lowerSearch = cmd.toLowerCase();
+		String lowerSearch = cmd.toLowerCase().trim();
 		int delta = Integer.MAX_VALUE;
 		for (HelpEntry entry : pluginHelp) {
-			String str = entry.getCommand();
+			String str = entry.getCommand().trim();
 			if (str.toLowerCase().startsWith(lowerSearch)) {
 				int curDelta = str.length() - lowerSearch.length();
 				if (curDelta < delta) {
@@ -194,10 +194,14 @@ public class HelpList {
 					break;
 			}
 		}
-		if (found == null)
+		if (found == null) {
+			DebugLog.INSTANCE.warning(pluginName + " : " + cmd + " not found.");
 			return null;
+		}
+
 		if (!found.hasPerm(sender))
 			return null;
+		
 		lastCommandSearched = found;
 		return found.chatString();
 	}
