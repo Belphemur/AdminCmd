@@ -92,7 +92,7 @@ public class Fly extends PlayerCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
-				power = power > ConfigEnum.MAX_FLY.getInt() ? ConfigEnum.MAX_FLY.getInt() : power;
+				power = power > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat() : power;
 				acp.setPower(Type.FLY, power);
 				player.setAllowFlight(true);
 				// MC 1.8 creative hack
