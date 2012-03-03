@@ -85,7 +85,7 @@ public class EggSpawner extends MobCommand {
 				Utils.sI18n(sender, "entityDontExists", "entity", e.getMessage());
 			else if (e.getType().equals(ExceptionType.CUSTOM)) {
 				Map<String, String> replace = new HashMap<String, String>();
-				replace.put("egg", egg.getClass().getSimpleName());
+				replace.put("egg", args.getValueFlag('E'));
 				replace.put("error", e.getMessage());
 				Utils.sI18n(sender, "eggCustomError", replace);
 			} else
