@@ -22,7 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -66,7 +66,7 @@ public class ChangeMobSpawner extends MobCommand {
 				if (name == null) {
 					return;
 				}
-				final CreatureType type = CreatureType.fromName(name);
+				final EntityType type = EntityType.fromName(name);
 				if (type == null) {
 					replace.put("mob", args.getString(0));
 					Utils.sI18n(sender, "errorMob", replace);
@@ -75,7 +75,7 @@ public class ChangeMobSpawner extends MobCommand {
 				ACPluginManager.scheduleSyncTask(new Runnable() {
 					@Override
 					public void run() {
-						spawner.setCreatureType(type);
+						spawner.setCreatureTypeByName(type.getName());
 
 					}
 				});
@@ -102,7 +102,7 @@ public class ChangeMobSpawner extends MobCommand {
 				Utils.sI18n(sender, "spawnerSetDelay", replace);
 			} else if (args.hasFlag('g')) {
 				int delay = spawner.getDelay();
-				String type = spawner.getCreatureType().getName();
+				String type = spawner.getCreatureTypeName();
 				replace.put("mob", type);
 				replace.put("delay", String.valueOf(delay));
 				Utils.sI18n(sender, "spawnerGetData", replace);

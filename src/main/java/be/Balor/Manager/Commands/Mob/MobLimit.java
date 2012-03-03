@@ -19,7 +19,7 @@ package be.Balor.Manager.Commands.Mob;
 import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -60,7 +60,7 @@ public class MobLimit extends MobCommand {
 				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
-			CreatureType ct = CreatureType.fromName(name);
+			EntityType ct = EntityType.fromName(name);
 			if (ct == null) {
 				Utils.sI18n(sender, "errorMob", "mob", name);
 				return;
