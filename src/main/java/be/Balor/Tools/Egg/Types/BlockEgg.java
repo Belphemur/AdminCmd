@@ -94,7 +94,9 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 						if (block.getTypeId() != Material.AIR.getId()
 								&& block.getTypeId() != Material.SNOW.getId())
 							continue;
-						block.setTypeId(value.getBlockTypeId());
+						BlockRemanenceFactory.FACTORY.createBlockRemanence(
+								new SimplifiedLocation(w, x, y, z)).setBlockType(
+								value.getBlockTypeId());
 					}
 			return;
 		}
@@ -144,7 +146,7 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		if (block == null)
 			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
 		int radius = getRadius(sender, args);
-		if(radius == -1)
+		if (radius == -1)
 			return;
 		MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
 		if (mat.isNull())
