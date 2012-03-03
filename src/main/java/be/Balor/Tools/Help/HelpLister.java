@@ -21,10 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
+import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -102,9 +105,8 @@ public class HelpLister {
 
 	public boolean removeHelpEntry(String plugin, String commandName) {
 		HelpList help = plugins.get(plugin);
-		if (help == null)
-		{
-			DebugLog.INSTANCE.severe("Plugin "+plugin+" not found.");
+		if (help == null) {
+			DebugLog.INSTANCE.severe("Plugin " + plugin + " not found.");
 			return false;
 		}
 		return help.removeEntry(commandName);
@@ -122,7 +124,7 @@ public class HelpLister {
 	 * @return
 	 */
 	public boolean sendHelpPage(String plugin, int page, CommandSender sender) {
-		HelpList help = plugins.get(plugin);
+		HelpList help = matchPlugin(plugin);
 		if (help == null)
 			return false;
 		List<String> toDisplay = help.getPage(page, sender);
@@ -131,5 +133,65 @@ public class HelpLister {
 				sender.sendMessage(l);
 		return true;
 
+	}
+
+	private HelpList matchPlugin(String plugin) {
+		HelpList help = plugins.get(plugin);
+		if (help == null) {
+			String keyFound = Str.matchString(plugins.keySet(), plugin);
+			if (keyFound == null)
+				return null;
+			help = plugins.get(keyFound);
+		}
+		return help;
+
+	}
+
+	/**
+	 * Send the help of the given command to the command sender.
+	 * 
+	 * @param pluginName
+	 *            name of the plugin where to search for the command. If
+	 *            <b>NULL</b> search in every plugins.
+	 * @param command
+	 *            command to look for.
+	 * @param sender
+	 *            sender of the command.
+	 * @return true if the command is found, else if not found.
+	 */
+	public boolean sendHelpCmd(String pluginName, String command, CommandSender sender) {
+		List<HelpEntry> chat = null;
+		boolean found = false;
+		if (pluginName == null) {
+			for (HelpList plugin : plugins.values()) {
+				chat = plugin.getCommandMatch(command, sender);
+				if (chat.isEmpty())
+					continue;
+				displayHelpMessage(chat, plugin.getPluginName(), sender);
+				found = true;
+			}
+			return found;
+		} else {
+			HelpList plugin = matchPlugin(pluginName);
+			if (plugin == null)
+				return false;
+			chat = plugin.getCommandMatch(command, sender);
+			if (chat.isEmpty())
+				return false;
+			displayHelpMessage(chat, plugin.getPluginName(), sender);
+		}
+		return true;
+
+	}
+
+	private void displayHelpMessage(List<HelpEntry> list, String pluginName, CommandSender sender) {
+		sender.sendMessage(ChatColor.AQUA
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
+						+ pluginName + " " + ChatColor.AQUA, '=') + "\n");
+		for (HelpEntry entry : list) {
+			String chat = entry.chatString();
+			for (String l : chat.split("\n"))
+				sender.sendMessage(l);
+		}
 	}
 }

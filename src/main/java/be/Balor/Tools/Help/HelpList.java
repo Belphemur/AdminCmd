@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -37,16 +38,17 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class HelpList {
+class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 	private String pluginName;
 	private CommandSender lastCommandSender;
 	private List<HelpEntry> lastHelpEntries;
+	private CmdMatch lastCommandSearched;
 
 	/**
 	 * 
 	 */
-	public HelpList(String plugin) {
+	HelpList(String plugin) {
 		this.pluginName = plugin;
 	}
 
@@ -72,7 +74,7 @@ public class HelpList {
 
 	public HelpList(Plugin plugin) throws IllegalArgumentException {
 		TreeSet<HelpEntry> list = new TreeSet<HelpEntry>(new EntryNameComparator());
-		final  Map<String, Map<String, Object>> cmds = plugin.getDescription().getCommands();
+		final Map<String, Map<String, Object>> cmds = plugin.getDescription().getCommands();
 		this.pluginName = plugin.getDescription().getName();
 		if (cmds == null)
 			throw new IllegalArgumentException(pluginName + " don't have any commands to list");
@@ -93,7 +95,7 @@ public class HelpList {
 			}
 			this.pluginHelp = list;
 		} catch (Exception e) {
-			System.out.print("[AdminCmd] Problem with permissions of " + pluginName);
+			ACLogger.warning("[HELP] Problem with commands of " + pluginName);
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
 
@@ -159,6 +161,42 @@ public class HelpList {
 		}
 		return helpList;
 
+	}
+
+	/**
+	 * Get the command help of the wanted command by matching it in the list of
+	 * avaible commands.
+	 * 
+	 * @param cmd
+	 *            command to search
+	 * @param sender
+	 *            sender of the command (used for checking the permission)
+	 * @return the chat String to display to the user, <b>null</b> if not found
+	 */
+	public List<HelpEntry> getCommandMatch(String cmd, CommandSender sender) {
+		List<HelpEntry> result = new ArrayList<HelpEntry>();
+		if (cmd == null)
+			return null;
+		if (lastCommandSearched != null && lastCommandSearched.getCmd().equals(cmd))
+			return lastCommandSearched.getResult();
+		String lowerSearch = cmd.toLowerCase().trim();
+		for (HelpEntry entry : pluginHelp) {
+			String str = entry.getCommand().trim();
+			if (str.toLowerCase().startsWith(lowerSearch) && entry.hasPerm(sender))
+				result.add(entry);
+
+		}
+		if (result.isEmpty()) {
+			for (HelpEntry entry : pluginHelp) {
+				if (entry.hasPerm(sender)
+						&& entry.getDescription().toLowerCase().contains(lowerSearch))
+					result.add(entry);
+
+			}
+		}
+
+		lastCommandSearched = new CmdMatch(cmd, result);
+		return result;
 	}
 
 	private static class EntryNameComparator implements Comparator<HelpEntry> {
