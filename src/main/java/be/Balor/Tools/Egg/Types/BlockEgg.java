@@ -36,6 +36,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.BlockRemanenceFactory;
 import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.RadiusEgg;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -149,8 +150,13 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		if (radius == -1)
 			return;
 		MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
-		if (mat.isNull())
-			return;
+		if (mat.isNull()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("type", LocaleHelper.TYPE_MAT.getLocale());
+			replace.put("value", block);
+			throw new ProcessingArgsException(ExceptionType.CUSTOM,
+					LocaleHelper.DONT_EXISTS.getLocale(replace));
+		}
 		value = new BlockChangeInfo(mat.getMaterial().getId(), radius);
 
 	}

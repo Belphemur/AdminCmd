@@ -81,7 +81,7 @@ public class Enchant extends ItemCommand {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		if (found == null) {
 			replace.put("value", enchantString);
-			replace.put("type", "enchantment");
+			replace.put("type", LocaleHelper.TYPE_ENCHANTMENT.getLocale());
 			LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD

@@ -53,7 +53,11 @@ public enum LocaleHelper {
 			+ ChatColor.MAGIC + "magic"),
 	SPYMSG_TITLE("spymsgTitle", ChatColor.GREEN + "[SpyMsg]" + ChatColor.WHITE),
 	SPYMSG_HEADER("spymsgMessageHeader", "#spymsgTitle# " + "%sender" + "-" + "%receiver"
-			+ ChatColor.WHITE + ": ");
+			+ ChatColor.WHITE + ": "),
+	TYPE_ENCHANTMENT("dontExistsType.enchant", "enchantment"),
+	TYPE_POTION("dontExistsType.potion", "potion"),
+	TYPE_CMD("dontExistsType.cmd", "command"),
+	TYPE_MAT("dontExistsType.mat", "material");
 
 	private final String key;
 	private final String locale;

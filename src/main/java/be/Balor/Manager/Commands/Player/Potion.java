@@ -68,7 +68,7 @@ public class Potion extends PlayerCommand {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		if (potionFound == null) {
 			replace.put("value", potion);
-			replace.put("type", "potion");
+			replace.put("type", LocaleHelper.TYPE_POTION.getLocale());
 			LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.GREEN + "Potion list :");
 			sender.sendMessage(Joiner.on(", ").skipNulls().join(potions).toLowerCase());

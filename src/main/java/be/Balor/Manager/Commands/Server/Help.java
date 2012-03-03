@@ -71,7 +71,7 @@ public class Help extends ServerCommand {
 		String cmd = args.getValueFlag('s');
 		if (cmd != null) {
 			HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("type", "command");
+			replace.put("type", LocaleHelper.TYPE_CMD.getLocale());
 			replace.put("value", cmd);
 			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd, sender))
 				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
