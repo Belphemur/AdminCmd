@@ -22,36 +22,40 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 
+import com.google.common.base.Joiner;
+
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Broadcast extends CoreCommand {
 
-	public Broadcast () {
+	public Broadcast() {
 		permNode = "admincmd.server.broadcast";
 		cmdName = "bal_broadcast";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
 		HashMap<String, String> replace = new HashMap<String, String>();
-		String message = "";
-		for (int i = 0; i < args.length; i++) {
-			message += args.getString(i) + " ";
-		}
+		String message = Joiner.on(" ").skipNulls().join(args);
 		replace.put("message", message);
 		Utils.broadcastMessage(Utils.I18n("broadcast", replace));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
