@@ -45,7 +45,7 @@ public class Broadcast extends CoreCommand {
 		HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		for (int i = 0; i < args.length; i++) {
-			message += args.getString(i);
+			message += args.getString(i) + " ";
 		}
 		replace.put("message", message);
 		Utils.broadcastMessage(Utils.I18n("broadcast", replace));
