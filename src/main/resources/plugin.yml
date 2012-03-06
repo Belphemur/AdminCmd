@@ -397,7 +397,7 @@ commands:
   bal_itemid:
     description: Get the id and the data of the item in hand
     aliases: [data, getid]
-    usage: /<command> <-P player> 
+    usage: /<command> <-P player>
   bal_enchant:
     description: Enchant the item in hand with the wanted enchant.
     aliases: [enchant, iench]
@@ -406,3 +406,7 @@ commands:
     description: Add the potion power to the player.
     aliases: [potion, pot]
     usage: /<command> <-P player> potion <duration> <amplifier>
+  bal_quit:
+    description: Lets you quit the game and give a reason why, the reason can be omitted.
+    aliases: [quit]
+    usage: /<command> <reason>

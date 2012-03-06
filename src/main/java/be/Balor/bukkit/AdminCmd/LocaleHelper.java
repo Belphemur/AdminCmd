@@ -59,7 +59,9 @@ public enum LocaleHelper {
 	TYPE_CMD("dontExistsType.cmd", "command"),
 	TYPE_MAT("dontExistsType.mat", "material"),
 	PLAYER_KICKED("playerKicked", ChatColor.GOLD + "%player " + ChatColor.YELLOW + "has been kicked from the Server, reason:"
-			+ ChatColor.RED + " %reason");
+			+ ChatColor.RED + " %reason"),
+	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " +ChatColor.YELLOW + "left the game: %reason");
+
 
 	private final String key;
 	private final String locale;
