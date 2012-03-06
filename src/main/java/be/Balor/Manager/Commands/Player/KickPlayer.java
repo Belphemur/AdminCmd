@@ -25,10 +25,11 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class KickPlayer extends PlayerCommand {
 
@@ -42,7 +43,7 @@ public class KickPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -68,7 +69,7 @@ public class KickPlayer extends PlayerCommand {
 			for (int i = 1; i < args.length; i++)
 				message += args.getString(i) + " ";
 		if (message == null || (message != null && message.isEmpty())) {
-			message = "You have been kick by ";
+			message = "You have been kicked by ";
 			if (!Utils.isPlayer(sender, false))
 				message += "Server Admin";
 			else
@@ -87,11 +88,13 @@ public class KickPlayer extends PlayerCommand {
 			}
 		});
 
+		replace.put("reason", finalmsg);
+		Utils.broadcastMessage(LocaleHelper.PLAYER_KICKED.getLocale(replace));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
