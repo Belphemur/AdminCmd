@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -95,11 +95,11 @@ public class SpawnMob extends MobCommand {
 								.toLocation(player.getWorld(), playerLoc.getYaw(),
 										playerLoc.getPitch())).add(0, 1D, 0);
 			}
-			CreatureType ct = null;
+			EntityType ct = null;
 			if (name.contains(":")) {
 				String[] creatures = name.split(":");
-				ct = CreatureType.fromName(creatures[0]);
-				CreatureType ct2 = CreatureType.fromName(creatures[1]);
+				ct = EntityType.fromName(creatures[0]);
+				EntityType ct2 = EntityType.fromName(creatures[1]);
 				if (ct == null) {
 					replace.put("mob", creatures[0]);
 					Utils.sI18n(sender, "errorMob", replace);
@@ -112,7 +112,7 @@ public class SpawnMob extends MobCommand {
 					return;
 				ACPluginManager.scheduleSyncTask(new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
 			} else {
-				ct = CreatureType.fromName(name);
+				ct = EntityType.fromName(name);
 				if (ct == null) {
 					Utils.sI18n(sender, "errorMob", replace);
 					return;
@@ -137,14 +137,14 @@ public class SpawnMob extends MobCommand {
 	protected class NormalMob implements Runnable {
 		protected Location loc;
 		protected int nb;
-		protected CreatureType ct;
+		protected EntityType ct;
 		protected Player player;
 		protected CommandSender sender;
 
 		/**
 		 *
 		 */
-		public NormalMob(Location loc, int nb, CreatureType ct, Player player, CommandSender sender) {
+		public NormalMob(Location loc, int nb, EntityType ct, Player player, CommandSender sender) {
 			this.loc = loc;
 			this.nb = nb;
 			this.ct = ct;
@@ -170,7 +170,7 @@ public class SpawnMob extends MobCommand {
 	}
 
 	protected class PassengerMob extends NormalMob {
-		protected CreatureType passenger;
+		protected EntityType passenger;
 
 		/**
 		 * @param loc
@@ -178,7 +178,7 @@ public class SpawnMob extends MobCommand {
 		 * @param ct
 		 * @param player
 		 */
-		public PassengerMob(Location loc, int nb, CreatureType mount, CreatureType passenger,
+		public PassengerMob(Location loc, int nb, EntityType mount, EntityType passenger,
 				Player player, CommandSender sender) {
 			super(loc, nb, mount, player, sender);
 			this.passenger = passenger;

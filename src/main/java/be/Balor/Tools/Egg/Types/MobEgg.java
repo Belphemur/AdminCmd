@@ -18,7 +18,7 @@ package be.Balor.Tools.Egg.Types;
 
 import java.util.HashMap;
 
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
@@ -50,7 +50,7 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 	@Override
 	public void onEvent(PlayerEggThrowEvent event) {
 		event.setHatching(true);
-		event.setHatchType(value.getType());
+		event.setHatchingType(value.getType());
 		event.setNumHatches(value.getNb());
 
 	}
@@ -76,9 +76,9 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
-		CreatureType ct = null;
+		EntityType ct = null;
 
-		ct = CreatureType.fromName(mob);
+		ct = EntityType.fromName(mob);
 		if (ct == null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", mob);

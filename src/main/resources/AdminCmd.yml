@@ -105,6 +105,20 @@ acitemkit:
     permissions: admincmd.item.kit.help
     cmdname: bal_kit
 
+acitemid:
+    command: getid [-P player]
+    description: "Get the id and the data of the item in hand. If player is defined, get the information from that player."
+    plugin: AdminCmd
+    permissions: admincmd.item.id
+    cmdname: bal_itemid
+
+acitemenchant:
+    command: enchant [-P player] enchantment lvl
+    description: "Enchant the item in hand with the wanted enchant. If player is defined, set the enchantment for that player."
+    plugin: AdminCmd
+    permissions: admincmd.item.enchant
+    cmdname: bal_enchant
+
 actpto:
     command: tp [player]
     description: Teleports you to [player].
@@ -412,6 +426,20 @@ acplayerpres:
     permissions: admincmd.player.pres
     cmdname: bal_pres
 
+acplayerpotion:
+    command: potion [-P player] potion duration amplifier
+    description: "Add the effect of the potion for the wanted duration with the wanted amplifier to the player"
+    plugin: AdminCmd
+    permissions: admincmd.player.potion
+    cmdname: bal_potion
+
+acplayerquit:
+    command: quit [message]
+    description: "Lets you quit the game with giving a reason. Reason can be omitted though."
+    plugin: AdminCmd
+    permissions: admincmd.player.quit
+    cmdname: bal_quit
+
 acweatherclear:
     command: wclear
     description: Clear the weather.
@@ -663,24 +691,3 @@ acserverbroadcast:
     plugin: AdminCmd
     permissions: admincmd.server.broadcast
     cmdname: bal_broadcast
-
-acitemid:
-    command: getid [-P player]
-    description: "Get the id and the data of the item in hand. If player is defined, get the information from that player."
-    plugin: AdminCmd
-    permissions: admincmd.item.id
-    cmdname: bal_itemid
-    
-acitemenchant:
-    command: enchant [-P player] enchantment lvl
-    description: "Enchant the item in hand with the wanted enchant. If player is defined, set the enchantment for that player."
-    plugin: AdminCmd
-    permissions: admincmd.item.enchant
-    cmdname: bal_enchant
-    
-acplayerpotion:
-    command: potion [-P player] potion duration amplifier
-    description: "Add the effect of the potion for the wanted duration with the wanted amplifier to the player"
-    plugin: AdminCmd
-    permissions: admincmd.player.potion
-    cmdname: bal_potion

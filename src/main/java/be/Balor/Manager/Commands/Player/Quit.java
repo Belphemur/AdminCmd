@@ -1,4 +1,4 @@
-/************************************************************************* *
+/*************************************************************************
  * This file is part of AdminCmd.
  *
  * AdminCmd is free software: you can redistribute it and/or modify
@@ -13,28 +13,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd. If not, see <http://www.gnu.org/licenses/>.
- *
  **************************************************************************/
 
-package be.Balor.Manager.Commands.Server;
+package be.Balor.Manager.Commands.Player;
 
 import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class Broadcast extends CoreCommand {
+public class Quit extends PlayerCommand {
 
-	public Broadcast () {
-		permNode = "admincmd.server.broadcast";
-		cmdName = "bal_broadcast";
+	public Quit() {
+		cmdName = "bal_quit";
+		permNode = "admincmd.player.quit";
 	}
 
 	/* (non-Javadoc)
@@ -42,13 +42,20 @@ public class Broadcast extends CoreCommand {
 	 */
 	@Override
 	public void execute(CommandSender sender, CommandArgs args) {
-		HashMap<String, String> replace = new HashMap<String, String>();
-		String message = "";
-		for (int i = 0; i < args.length; i++) {
-			message += args.getString(i) + " ";
+		if (Utils.isPlayer(sender, true)) {
+			Player quitting = (Player) sender;
+			HashMap<String, String> replace = new HashMap<String, String>();
+			String reason = "";
+			if (args == null || args.length == 0)
+				reason = "disconnect:quitting";
+			else
+				for (int i = 0; i < args.length; i++)
+					reason += args.getString(i) + " ";
+			replace.put("reason", reason);
+			replace.put("player", Utils.getPlayerName(quitting));
+			quitting.kickPlayer("Disconnected");
+			Utils.broadcastMessage(LocaleHelper.PLAYER_QUITCMD_MSG.getLocale(replace));
 		}
-		replace.put("message", message);
-		Utils.broadcastMessage(Utils.I18n("broadcast", replace));
 	}
 
 	/* (non-Javadoc)
@@ -56,7 +63,7 @@ public class Broadcast extends CoreCommand {
 	 */
 	@Override
 	public boolean argsCheck(String... args) {
-		return args.length >= 1;
+		return true;
 	}
 
 }

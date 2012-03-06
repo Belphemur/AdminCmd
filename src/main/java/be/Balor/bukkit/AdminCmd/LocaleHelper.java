@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -53,7 +53,15 @@ public enum LocaleHelper {
 			+ ChatColor.MAGIC + "magic"),
 	SPYMSG_TITLE("spymsgTitle", ChatColor.GREEN + "[SpyMsg]" + ChatColor.WHITE),
 	SPYMSG_HEADER("spymsgMessageHeader", "#spymsgTitle# " + "%sender" + "-" + "%receiver"
-			+ ChatColor.WHITE + ": ");
+			+ ChatColor.WHITE + ": "),
+	TYPE_ENCHANTMENT("dontExistsType.enchant", "enchantment"),
+	TYPE_POTION("dontExistsType.potion", "potion"),
+	TYPE_CMD("dontExistsType.cmd", "command"),
+	TYPE_MAT("dontExistsType.mat", "material"),
+	PLAYER_KICKED("playerKicked", ChatColor.GOLD + "%player " + ChatColor.YELLOW + "has been kicked from the Server, reason:"
+			+ ChatColor.RED + " %reason"),
+	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " +ChatColor.YELLOW + "left the game: %reason");
+
 
 	private final String key;
 	private final String locale;
@@ -77,7 +85,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -89,7 +97,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -99,7 +107,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 * 
+	 *
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -110,7 +118,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 * 
+	 *
 	 * @return the locale
 	 */
 	public String getLocale() {

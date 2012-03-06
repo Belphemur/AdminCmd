@@ -149,7 +149,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -569,7 +569,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("afkTitle", ChatColor.BLUE + "[AFK]" + ChatColor.WHITE);
 		Utils.addLocale("ip", ChatColor.YELLOW + "IP adress of " + ChatColor.WHITE
 				+ "%player - %ip");
-		Utils.addLocale("ban", ChatColor.YELLOW + "%player has been banned.");
+		Utils.addLocale("ban", ChatColor.YELLOW + "%player has been banned, reason: "
+				+ ChatColor.RED + "%reason");
 		Utils.addLocale("unban", ChatColor.YELLOW + "%player is now unbanned.");
 		Utils.addLocale("killMob", ChatColor.RED + "Killing mobs (" + ChatColor.WHITE + "%type"
 				+ ChatColor.RED + ") of worlds : " + ChatColor.DARK_PURPLE + "%worlds");
@@ -582,7 +583,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("npDisabledTarget", ChatColor.GOLD + "No Pickup mode disabled for %player");
 		Utils.addLocale("npEnabled", ChatColor.GOLD + "No Pickup mode enabled.");
 		Utils.addLocale("npEnabledTarget", ChatColor.GOLD + "No Pickup mode enabled for %player");
-		Utils.addLocale("afkKick", "You have been kick because you were AFK");
+		Utils.addLocale("afkKick", "You have been kicked because you were AFK");
 		Utils.addLocale("freezeDisabled", ChatColor.DARK_GREEN + "You can now move again.");
 		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN
 				+ "Freeze mode disabled for %player");

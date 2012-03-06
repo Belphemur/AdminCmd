@@ -18,7 +18,7 @@ package be.Balor.Tools.Egg;
 
 import java.io.Serializable;
 
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -30,14 +30,14 @@ public class CreaturesInEgg implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3337151993591119472L;
-	private CreatureType type;
+	private EntityType type;
 	private byte nb;
 
 	/**
 	 * @param type
 	 * @param nb
 	 */
-	public CreaturesInEgg(CreatureType type, byte nb) {
+	public CreaturesInEgg(EntityType type, byte nb) {
 		super();
 		this.type = type;
 		this.nb = nb;
@@ -53,7 +53,7 @@ public class CreaturesInEgg implements Serializable {
 	/**
 	 * @return the type
 	 */
-	public CreatureType getType() {
+	public EntityType getType() {
 		return type;
 	}
 
@@ -68,7 +68,7 @@ public class CreaturesInEgg implements Serializable {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(CreatureType type) {
+	public void setType(EntityType type) {
 		this.type = type;
 	}
 

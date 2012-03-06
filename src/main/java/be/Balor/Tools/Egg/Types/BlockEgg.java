@@ -36,6 +36,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.BlockRemanenceFactory;
 import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.RadiusEgg;
+import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -94,7 +95,9 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 						if (block.getTypeId() != Material.AIR.getId()
 								&& block.getTypeId() != Material.SNOW.getId())
 							continue;
-						block.setTypeId(value.getBlockTypeId());
+						BlockRemanenceFactory.FACTORY.createBlockRemanence(
+								new SimplifiedLocation(w, x, y, z)).setBlockType(
+								value.getBlockTypeId());
 					}
 			return;
 		}
@@ -144,11 +147,16 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		if (block == null)
 			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
 		int radius = getRadius(sender, args);
-		if(radius == -1)
+		if (radius == -1)
 			return;
 		MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
-		if (mat.isNull())
-			return;
+		if (mat.isNull()) {
+			HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("type", LocaleHelper.TYPE_MAT.getLocale());
+			replace.put("value", block);
+			throw new ProcessingArgsException(ExceptionType.CUSTOM,
+					LocaleHelper.DONT_EXISTS.getLocale(replace));
+		}
 		value = new BlockChangeInfo(mat.getMaterial().getId(), radius);
 
 	}

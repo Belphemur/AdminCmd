@@ -70,7 +70,7 @@ public class ExplosionEgg extends EggType<Float> {
 				return;
 			}
 		}
-		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getInt() ? ConfigEnum.MAXEGG_EX_RADIUS.getInt()
+		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getFloat() ? ConfigEnum.MAXEGG_EX_RADIUS.getFloat()
 				: power;
 
 	}

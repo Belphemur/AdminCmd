@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class BanPlayer extends PlayerCommand {
 
@@ -45,7 +45,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -104,6 +104,7 @@ public class BanPlayer extends PlayerCommand {
 		}
 		message = message.trim();
 		replace.put("player", banPlayerString);
+		replace.put("reason", message);
 		if (toBan != null) {
 			final String finalmsg = message;
 			final Player finalToKick = toBan;
@@ -126,7 +127,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
