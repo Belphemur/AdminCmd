@@ -98,6 +98,7 @@ public class LocaleManager {
 	}
 
 	public void addLocale(String key, String value, boolean override) {
+		value = value.replaceAll("§", "&");
 		if (override)
 			localesFiles.get(PRIMARY_LOCALE).set(key, value);
 		else
