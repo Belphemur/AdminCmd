@@ -48,6 +48,7 @@ public class BukkitPermissions extends SuperPermissions {
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
+	 * 
 	 */
 	@Override
 	public boolean isInGroup(String groupName, Player player) {

@@ -24,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -89,14 +88,12 @@ public class Spawn extends SpawnCommand {
 		@Override
 		public void run() {
 			if (!ConfigEnum.CHECKTP.getBoolean()) {
-				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				ACHelper.getInstance().spawn((Player) sender);
 				sendMessage(sender, target, "spawn");
 				return;
 			}
 
 			if (locBefore.equals(target.getLocation())) {
-				ACPlayer.getPlayer(target).setLastLocation(target.getLocation());
 				ACHelper.getInstance().spawn((Player) sender);
 				sendMessage(sender, target, "spawn");
 			} else {

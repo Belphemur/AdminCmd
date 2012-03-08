@@ -28,7 +28,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Warp;
 import be.Balor.World.ACWorld;
@@ -156,11 +155,9 @@ public class TpToWarp extends WarpCommand {
 		@Override
 		public void run() {
 			if (locBefore.equals(target.getLocation()) && ConfigEnum.CHECKTP.getBoolean()) {
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else if (!ConfigEnum.CHECKTP.getBoolean()) {
-				ACPlayer.getPlayer(target.getName()).setLastLocation(target.getLocation());
 				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else {

@@ -20,7 +20,6 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 
-import be.Balor.Player.ACPlayer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -52,7 +51,6 @@ public class TpRequest {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					ACPlayer.getPlayer(from).setLastLocation(from.getLocation());
 					from.teleport(to);
 					HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("fromPlayer", fromName);

@@ -56,7 +56,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -223,7 +223,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 *
+			 * 
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -324,13 +324,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if (event.isCancelled())
 			return;
-		final Location from = event.getFrom();
-		final Location to = event.getTo();
-		final boolean otherWorld = !from.getWorld().equals(to.getWorld());
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (otherWorld) {
-			player.setLastLocation(from);
-		}
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 			return;

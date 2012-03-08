@@ -440,6 +440,13 @@ acplayerquit:
     permissions: admincmd.player.quit
     cmdname: bal_quit
 
+acplayerexperience:
+    command: xp <flags> <player> <amount>
+    description: "Modify the experience of a player or view it. -l: Change level. -a: Add xp to the player(subtract wih neg numbers). -p: Sets progression of current level (0.0-1.0). -d: Drops xp near a player. -t: Views current total xp"
+    plugin: AdminCmd
+    permissions: admincmd.player.experience
+    cmdname: bal_exp
+
 acweatherclear:
     command: wclear
     description: Clear the weather.

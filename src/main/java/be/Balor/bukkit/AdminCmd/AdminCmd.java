@@ -26,6 +26,7 @@ import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACNoDropListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
+import be.Balor.Listeners.Commands.ACTeleportBackListener;
 import be.Balor.Listeners.Commands.ACThorListener;
 import be.Balor.Listeners.Commands.ACTpAtSeeListener;
 import be.Balor.Listeners.Commands.ACVulcanListener;
@@ -149,7 +150,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -353,7 +354,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Kit.class);
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
-		CommandManager.getInstance().registerCommand(LastLocation.class);
+		if (CommandManager.getInstance().registerCommand(LastLocation.class))
+			pm.registerEvents(new ACTeleportBackListener(), this);
 		if (CommandManager.getInstance().registerCommand(SuperBreaker.class))
 			pm.registerEvents(new ACSuperBreaker(), this);
 		CommandManager.getInstance().registerCommand(Help.class);
