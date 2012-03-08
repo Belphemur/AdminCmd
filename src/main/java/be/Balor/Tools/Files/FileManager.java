@@ -546,14 +546,15 @@ public class FileManager implements DataManager {
 		return result;
 	}
 
-
 	private Map<String, BannedPlayer> importBannedPlayerTXT(Map<String, BannedPlayer> result) {
 		Set<OfflinePlayer> banned = ACPluginManager.getServer().getBannedPlayers();
 		Iterator<OfflinePlayer> it = banned.iterator();
 		while (it.hasNext()) {
 			OfflinePlayer op = it.next();
-			BannedPlayer bp = new BannedPlayer(op.getName(), "Import from banned-players.txt");
-			result.put(op.getName(), bp);
+			String name = op.getName();
+			BannedPlayer bp = new BannedPlayer(name, "Import from banned-players.txt");
+			if (!result.containsKey(name))
+				result.put(name, bp);
 		}
 		return result;
 	}
