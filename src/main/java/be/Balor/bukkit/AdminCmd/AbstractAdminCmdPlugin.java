@@ -23,7 +23,6 @@ import be.Balor.Manager.Permissions.PermissionLinker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
  */
 public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	protected final PermissionLinker permissionLinker;
