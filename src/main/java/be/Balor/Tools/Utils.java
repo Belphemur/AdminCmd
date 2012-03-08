@@ -1198,7 +1198,6 @@ public class Utils {
 			return;
 		}
 		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
 			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
@@ -1234,7 +1233,6 @@ public class Utils {
 			Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 		} else {
-			ACPlayer.getPlayer(pFrom).setLastLocation(pFrom.getLocation());
 			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
