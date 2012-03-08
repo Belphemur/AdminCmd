@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -54,13 +56,14 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.google.common.io.Files;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class FileManager implements DataManager {
 	protected File pathFile;
@@ -92,7 +95,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Get a txt-file and return its content in a String
-	 * 
+	 *
 	 * @param fileName
 	 *            - The name of the file to be loaded
 	 * @return The content of the file
@@ -151,7 +154,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the ExtendedConfiguration object
-	 * 
+	 *
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
@@ -172,7 +175,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the File object
-	 * 
+	 *
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
@@ -211,7 +214,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * To write a text file on the AdminCmd folder.
-	 * 
+	 *
 	 * @param filename
 	 * @param toSet
 	 */
@@ -237,7 +240,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Write the alias in the yml file
-	 * 
+	 *
 	 * @param alias
 	 * @param mc
 	 */
@@ -263,7 +266,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Remove the alias from the yml fileF
-	 * 
+	 *
 	 * @param alias
 	 */
 	public void removeAlias(String alias) {
@@ -284,7 +287,7 @@ public class FileManager implements DataManager {
 	/**
 	 * Get a file in the jar, copy it in the choose directory inside the plugin
 	 * folder, open it and return it
-	 * 
+	 *
 	 * @param filename
 	 * @return
 	 */
@@ -392,7 +395,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Create a flat file with the location informations
-	 * 
+	 *
 	 * @param loc
 	 * @param filename
 	 * @param directory
@@ -414,7 +417,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Return the location after parsing the flat file
-	 * 
+	 *
 	 * @param property
 	 * @param filename
 	 * @param directory
@@ -444,7 +447,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Remove the given location from the file
-	 * 
+	 *
 	 * @param property
 	 * @param filename
 	 * @param directory
@@ -461,7 +464,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Return a string Set containing all locations names
-	 * 
+	 *
 	 * @param filename
 	 * @param directory
 	 * @return
@@ -477,7 +480,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Parse String to create a location
-	 * 
+	 *
 	 * @param property
 	 * @param conf
 	 * @return
@@ -509,7 +512,7 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load the map
-	 * 
+	 *
 	 * @param type
 	 * @param directory
 	 * @param filename
@@ -536,12 +539,28 @@ public class FileManager implements DataManager {
 				result.put(key, (BannedPlayer) node.get(key));
 
 		}
+		if (ConfigEnum.IMPORT_BAN_TXT.getBoolean()) {
+			result = importBannedPlayerTXT(result);
+			ConfigEnum.IMPORT_BAN_TXT.setValue(false);
+		}
+		return result;
+	}
+
+
+	private Map<String, BannedPlayer> importBannedPlayerTXT(Map<String, BannedPlayer> result) {
+		Set<OfflinePlayer> banned = ACPluginManager.getServer().getBannedPlayers();
+		Iterator<OfflinePlayer> it = banned.iterator();
+		while (it.hasNext()) {
+			OfflinePlayer op = it.next();
+			BannedPlayer bp = new BannedPlayer(op.getName(), "Import from banned-players.txt");
+			result.put(op.getName(), bp);
+		}
 		return result;
 	}
 
 	/**
 	 * Load all the kits
-	 * 
+	 *
 	 * @return
 	 */
 	public Map<String, KitInstance> loadKits() {
@@ -637,7 +656,7 @@ public class FileManager implements DataManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Tools.Files.DataManager#addBannedPlayer(be.Balor.Player.BannedPlayer
 	 * )
@@ -655,7 +674,7 @@ public class FileManager implements DataManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
 	 */
 	@Override
