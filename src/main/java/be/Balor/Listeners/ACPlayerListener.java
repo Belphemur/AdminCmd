@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -56,7 +57,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -223,7 +224,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -238,6 +239,18 @@ public class ACPlayerListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (player.hasPower(Type.NO_PICKUP))
 			event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onPlayerKick(PlayerKickEvent event) {
+		if (event.isCancelled())
+			return;
+		Player p = event.getPlayer();
+		ACPlayer player = ACPlayer.getPlayer(p);
+		if (player != null && player.hasPower(Type.KICKED)) {
+			event.setLeaveMessage(null);
+			player.removePower(Type.KICKED);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)

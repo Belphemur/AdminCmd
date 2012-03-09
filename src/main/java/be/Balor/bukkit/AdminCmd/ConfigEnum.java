@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -27,7 +27,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum ConfigEnum {
 
@@ -135,7 +135,8 @@ public enum ConfigEnum {
 	EGG_HIGH_TIMEOUT("egg.high.Timeout", 20, "How much time (in sec) the high effect least."),
 	DEGG_HIGH_RADIUS("egg.high.defaultRadiusInBlock", 5, "Default radius when using the HighEgg"),
 	MAXEGG_HIGH_RADIUS("egg.high.maxRadiusInBlock", 12, "Maximum radius for the HighEgg"),
-	MAX_FLY("maxFlyValue", 2F, "Maximum value for the fly commands");
+	MAX_FLY("maxFlyValue", 2F, "Maximum value for the fly commands"),
+	IMPORT_BAN_TXT("importBannedPlayersTXT", false, "If set to true, this will import any player which does not exist in the banned.yml, afterwards it will be set to false!");
 	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;
@@ -181,6 +182,10 @@ public enum ConfigEnum {
 
 	public List<String> getStringList() {
 		return config.getStringList(confVal);
+	}
+
+	public void setValue(Object value) {
+		config.set(confVal, value);
 	}
 
 	/**

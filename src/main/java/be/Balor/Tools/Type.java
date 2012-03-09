@@ -31,6 +31,7 @@ public enum Type {
 	GOD(Category.SUPER_POWER),
 	THOR(Category.SUPER_POWER),
 	BANNED(Category.SANCTION),
+	KICKED(Category.SANCTION),
 	FIREBALL(Category.SUPER_POWER),
 	SPYMSG(Category.OTHER),
 	FROZEN(Category.SANCTION),

@@ -23,8 +23,10 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.TempBannedPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -105,6 +107,7 @@ public class BanPlayer extends PlayerCommand {
 		message = message.trim();
 		replace.put("player", banPlayerString);
 		replace.put("reason", message);
+		ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
 		if (toBan != null) {
 			final String finalmsg = message;
 			final Player finalToKick = toBan;
