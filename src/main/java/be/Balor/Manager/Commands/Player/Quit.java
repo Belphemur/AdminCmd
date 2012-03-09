@@ -23,6 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -53,6 +55,7 @@ public class Quit extends PlayerCommand {
 					reason += args.getString(i) + " ";
 			replace.put("reason", reason);
 			replace.put("player", Utils.getPlayerName(quitting));
+			ACPlayer.getPlayer(quitting).setPower(Type.KICKED);
 			quitting.kickPlayer("Disconnected");
 			Utils.broadcastMessage(LocaleHelper.PLAYER_QUITCMD_MSG.getLocale(replace));
 		}

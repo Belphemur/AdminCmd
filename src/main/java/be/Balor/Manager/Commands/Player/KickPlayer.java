@@ -23,6 +23,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -76,6 +78,7 @@ public class KickPlayer extends PlayerCommand {
 				message += Utils.getPlayerName((Player) sender);
 		}
 
+		ACPlayer.getPlayer(toKick).setPower(Type.KICKED);
 		final String finalmsg = message.trim();
 		final Player finalToKick = toKick;
 		replace.put("player", Utils.getPlayerName(toKick));
