@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -42,10 +42,11 @@ import org.yaml.snakeyaml.scanner.ScannerException;
 
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Files.FileManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 @SuppressWarnings("unchecked")
 public class ExtendedConfiguration extends ExFileConfiguration {
@@ -62,7 +63,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 * Any errors loading the Configuration will be logged and then ignored. If
 	 * the specified input is not a valid config, a blank config will be
 	 * returned.
-	 * 
+	 *
 	 * @param file
 	 *            Input file
 	 * @return Resulting configuration
@@ -77,6 +78,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		final ExtendedConfiguration config = new ExtendedConfiguration();
 
 		try {
+			FileManager.getInstance().preParseYamlFile(file);
 			config.load(file);
 		} catch (final FileNotFoundException ex) {
 		} catch (final IOException ex) {
@@ -151,7 +153,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.bukkit.configuration.file.FileConfiguration#loadFromString(java.lang
 	 * .String)
@@ -256,7 +258,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/**
 	 * Reload the configuration file.
-	 * 
+	 *
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 * @throws InvalidConfigurationException
@@ -321,7 +323,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/**
 	 * Saves this {@link ExtendedConfiguration}.
-	 * 
+	 *
 	 * @throws IOException
 	 *             Thrown when the given file cannot be written to for any
 	 *             reason.
@@ -335,7 +337,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.bukkit.configuration.file.FileConfiguration#saveToString()
 	 */
 	@Override

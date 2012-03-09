@@ -21,11 +21,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -206,10 +208,50 @@ public class FileManager implements DataManager {
 				System.out.println("cannot create file " + file.getPath());
 			}
 		}
+		if (filename.contains("yml"))
+			preParseYamlFile(file);
 		lastFile = file;
 		lastDirectory = directory == null ? "" : directory;
 		lastFilename = filename;
 		return file;
+	}
+
+	/**
+	 * Parses a YAML file before it is loaded by the yaml parser
+	 * to catch common errors like tabs instead of spaces
+	 *
+	 *
+	 * @param file
+	 */
+	public void preParseYamlFile(File file) {
+		List<String> input = new ArrayList<String>();
+		try {
+			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
+					file), "UTF8"));
+			String line;
+			while((line = in.readLine()) != null) {
+				line = line.replaceAll("\uFFFD", "?");
+				if (line.contains("\t"))
+						while(line.contains("\t"))
+							line = line.replace("\t", "  ");
+				input.add(line);
+			}
+			in.close();
+			for(int i=0; i<input.size(); i++) {
+				line = input.get(i);
+			}
+			PrintWriter out = new PrintWriter((new FileOutputStream(file)));
+			for(int i=0; i<input.size(); i++) {
+				out.println(input.get(i));
+			}
+			out.close();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
