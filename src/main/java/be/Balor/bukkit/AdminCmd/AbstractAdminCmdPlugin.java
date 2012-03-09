@@ -34,6 +34,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 * 
 	 * @param name
 	 *            the name used for the plugin.
+	 *            
 	 */
 	public AbstractAdminCmdPlugin(String name) {
 		this.name = name;
