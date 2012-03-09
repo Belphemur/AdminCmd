@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -229,7 +230,7 @@ public class FileManager implements DataManager {
 			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
 					file), "UTF8"));
 			String line;
-			while((line = in.readLine()) != null) {
+			while ((line = in.readLine()) != null) {
 				line = line.replaceAll("\uFFFD", "?");
 				if (line.contains("\t"))
 						while(line.contains("\t"))
@@ -237,12 +238,13 @@ public class FileManager implements DataManager {
 				input.add(line);
 			}
 			in.close();
-			for(int i=0; i<input.size(); i++) {
+			for (int i=0; i<input.size(); i++) {
 				line = input.get(i);
 			}
-			PrintWriter out = new PrintWriter((new FileOutputStream(file)));
-			for(int i=0; i<input.size(); i++) {
-				out.println(input.get(i));
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter (new FileOutputStream(
+					file), "UTF8"));
+			for (int i=0; i<input.size(); i++) {
+				out.write(input.get(i));
 			}
 			out.close();
 		} catch (UnsupportedEncodingException e) {
