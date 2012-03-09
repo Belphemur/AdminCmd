@@ -50,16 +50,17 @@ public class SetHome extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player p = ((Player) sender);
-			be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
+			final Player p = ((Player) sender);
+			final be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
 			if (home == null)
 				return;
-			ACPlayer player = ACPlayer.getPlayer(home.player);
-			Set<String> tmp = player.getHomeList();
-			Location loc = p.getLocation();
-			if (!tmp.contains(home.home) && !PermissionManager.hasPerm(p, "admincmd.admin.home", false)
+			final ACPlayer player = ACPlayer.getPlayer(home.player);
+			final Set<String> tmp = player.getHomeList();
+			final Location loc = p.getLocation();
+			if (!tmp.contains(home.home)
+					&& !PermissionManager.hasPerm(p, "admincmd.admin.home", false)
 					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {
 				Utils.sI18n(sender, "homeLimit");
 				return;
@@ -76,7 +77,7 @@ public class SetHome extends HomeCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

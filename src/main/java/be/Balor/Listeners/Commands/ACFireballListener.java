@@ -33,7 +33,7 @@ import be.Balor.Tools.Type;
  */
 public class ACFireballListener implements Listener {
 	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
 				&& (event.getAction() != Action.LEFT_CLICK_AIR))
 			return;

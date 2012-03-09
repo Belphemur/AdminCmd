@@ -54,7 +54,7 @@ public class ACPluginManager {
 		return instance;
 	}
 
-	public static AbstractAdminCmdPlugin getPluginInstance(String name) {
+	public static AbstractAdminCmdPlugin getPluginInstance(final String name) {
 		return getInstance().getPlugin(name);
 	}
 
@@ -74,7 +74,7 @@ public class ACPluginManager {
 		return server;
 	}
 
-	public static void registerACPlugin(AbstractAdminCmdPlugin addon)
+	public static void registerACPlugin(final AbstractAdminCmdPlugin addon)
 			throws IllegalArgumentException {
 		getInstance().registerPlugin(addon);
 	}
@@ -84,7 +84,7 @@ public class ACPluginManager {
 	 * 
 	 * @param clazz
 	 */
-	public static void registerCommand(Class<? extends CoreCommand> clazz)
+	public static void registerCommand(final Class<? extends CoreCommand> clazz)
 			throws IllegalArgumentException {
 		CommandManager.getInstance().registerCommand(clazz);
 	}
@@ -95,7 +95,7 @@ public class ACPluginManager {
 	 * @param task
 	 * @return
 	 */
-	public static int scheduleSyncTask(Runnable task) {
+	public static int scheduleSyncTask(final Runnable task) {
 		return server.getScheduler().scheduleSyncDelayedTask(corePlugin, task);
 	}
 
@@ -103,7 +103,7 @@ public class ACPluginManager {
 	 * @param corePlugin
 	 *            the corePlugin to set
 	 */
-	static void setCorePlugin(AbstractAdminCmdPlugin corePlugin) {
+	static void setCorePlugin(final AbstractAdminCmdPlugin corePlugin) {
 		ACPluginManager.corePlugin = corePlugin;
 	}
 
@@ -118,11 +118,11 @@ public class ACPluginManager {
 	 * @param metrics
 	 *            the metrics to set
 	 */
-	static void setMetrics(Metrics metrics) {
+	static void setMetrics(final Metrics metrics) {
 		ACPluginManager.graph = metrics.createGraph(corePlugin, Type.Column, "Plugins");
 	}
 
-	public static void unRegisterACPlugin(Plugin addon) {
+	public static void unRegisterACPlugin(final Plugin addon) {
 		if (addon instanceof AbstractAdminCmdPlugin)
 			getInstance().unRegisterPlugin((AbstractAdminCmdPlugin) addon);
 	}
@@ -137,7 +137,7 @@ public class ACPluginManager {
 	 *            name of the addon
 	 * @return the addon or null if not registered
 	 */
-	protected AbstractAdminCmdPlugin getPlugin(String name) {
+	protected AbstractAdminCmdPlugin getPlugin(final String name) {
 		return pluginInstances.get(name);
 	}
 
@@ -166,7 +166,8 @@ public class ACPluginManager {
 				}
 			});
 		} else
-			throw new IllegalArgumentException("Plugin " + addon.getAddonName() + " Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getAddonName()
+					+ " Already registered.");
 	}
 
 	void stopChildrenPlugins() {

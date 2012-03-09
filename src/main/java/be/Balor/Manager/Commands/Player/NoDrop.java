@@ -32,7 +32,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class NoDrop extends PlayerCommand {
 	public NoDrop() {
@@ -42,19 +42,19 @@ public class NoDrop extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		String timeOut = args.getValueFlag('t');
-		Player player = Utils.getUserParam(sender, args, permNode);
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final String timeOut = args.getValueFlag('t');
+		final Player player = Utils.getUserParam(sender, args, permNode);
 		if (player == null)
 			return;
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
-		ACPlayer acp = ACPlayer.getPlayer(player);
+		final ACPlayer acp = ACPlayer.getPlayer(player);
 		if (acp.hasPower(Type.NO_DROP)) {
 			acp.removePower(Type.NO_DROP);
 			Utils.sI18n(player, "noDropDisabled");
@@ -70,23 +70,24 @@ public class NoDrop extends PlayerCommand {
 			int timeOutValue;
 			try {
 				timeOutValue = Integer.parseInt(timeOut);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Utils.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-					ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.NO_DROP, sender),
+					ACPluginManager.getCorePlugin(),
+					new RemovePowerTask(acp, Type.NO_DROP, sender),
 					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

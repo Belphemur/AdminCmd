@@ -54,7 +54,7 @@ public class Kill extends PlayerCommand {
 				Utils.setPlayerHealth(sender, args, Health.KILL);
 			}
 		});
-		
+
 	}
 
 	/*
@@ -63,7 +63,7 @@ public class Kill extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

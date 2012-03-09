@@ -36,7 +36,7 @@ public class TempBannedPlayer extends BannedPlayer {
 	 * @param reason
 	 * @param time
 	 */
-	public TempBannedPlayer(String player, String reason, long time) {
+	public TempBannedPlayer(final String player, final String reason, final long time) {
 		super(player, reason);
 		endBan = new Date(System.currentTimeMillis() + time);
 	}
@@ -52,7 +52,7 @@ public class TempBannedPlayer extends BannedPlayer {
 	 * @param endBan
 	 *            the endBan to set
 	 */
-	public void setEndBan(Date endBan) {
+	public void setEndBan(final Date endBan) {
 		this.endBan = endBan;
 	}
 
@@ -84,14 +84,14 @@ public class TempBannedPlayer extends BannedPlayer {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
 		if (!(obj instanceof TempBannedPlayer))
 			return false;
-		TempBannedPlayer other = (TempBannedPlayer) obj;
+		final TempBannedPlayer other = (TempBannedPlayer) obj;
 		if (endBan == null) {
 			if (other.endBan != null)
 				return false;

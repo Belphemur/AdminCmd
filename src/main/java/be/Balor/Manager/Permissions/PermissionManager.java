@@ -36,10 +36,9 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import com.nijiko.permissions.PermissionHandler;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PermissionManager {
 	private static PermissionManager instance = null;
@@ -59,25 +58,25 @@ public class PermissionManager {
 		return instance;
 	}
 
-	public static String getPermissionLimit(Player p, String limit) {
+	public static String getPermissionLimit(final Player p, final String limit) {
 		return permissionHandler.getPermissionLimit(p, limit);
 	}
 
-	public static String getPrefix(Player player) {
+	public static String getPrefix(final Player player) {
 		return permissionHandler.getPrefix(player);
 	}
 
-	public static String getSuffix(Player player) {
+	public static String getSuffix(final Player player) {
 		return permissionHandler.getSuffix(player);
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm)
+	public static boolean hasPerm(final CommandSender player, final Permission perm)
 			throws NullPointerException {
 		return hasPerm(player, perm, true);
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg)
-			throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player, final Permission perm,
+			final boolean errorMsg) throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
 		if (player == null)
@@ -89,7 +88,7 @@ public class PermissionManager {
 	/**
 	 * Check the permission with an error message if the user don't have the
 	 * Permission
-	 *
+	 * 
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -98,13 +97,14 @@ public class PermissionManager {
 	 * @throws NullPointerException
 	 *             when the permission node is null
 	 */
-	public static boolean hasPerm(CommandSender player, String perm) throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player, final String perm)
+			throws NullPointerException {
 		return hasPerm(player, perm, true);
 	}
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
-	 *
+	 * 
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -116,8 +116,8 @@ public class PermissionManager {
 	 * @throws NullPointerException
 	 *             when the permission node is null
 	 */
-	public static boolean hasPerm(CommandSender player, String perm, boolean errorMsg)
-			throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player, final String perm,
+			final boolean errorMsg) throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
 		if (player == null)
@@ -133,7 +133,8 @@ public class PermissionManager {
 		return bPermissions;
 	}
 
-	public static boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin {
+	public static boolean isInGroup(final String groupName, final Player player)
+			throws NoPermissionsPlugin {
 		return permissionHandler.isInGroup(groupName, player);
 	}
 
@@ -160,7 +161,7 @@ public class PermissionManager {
 
 	/**
 	 * Set bPermission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @param infoReader
 	 * @return
@@ -181,11 +182,11 @@ public class PermissionManager {
 
 	/**
 	 * Set PermissionsBukkit Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
-	public static boolean setPermissionsBukkit(PermissionsPlugin plugin) {
+	public static boolean setPermissionsBukkit(final PermissionsPlugin plugin) {
 		if (!permissionsBukkit && !bPermissions && !permissionsEx) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
@@ -203,7 +204,7 @@ public class PermissionManager {
 	 * @param pEX
 	 *            the pEX to set
 	 */
-	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
+	public static boolean setPEX(final ru.tehkode.permissions.PermissionManager pEX) {
 		if (!permissionsEx) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				permissionsEx = true;
@@ -223,11 +224,11 @@ public class PermissionManager {
 
 	/**
 	 * Set Permission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
-	public static boolean setYetiPermissions(PermissionHandler plugin) {
+	public static boolean setYetiPermissions(final PermissionHandler plugin) {
 		if (!yetiPermissions && !permissionsEx) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				yetiPermissions = true;
@@ -253,7 +254,7 @@ public class PermissionManager {
 			permissionHandler = new SuperPermissions();
 	}
 
-	public synchronized boolean addPermissionLinker(PermissionLinker perm) {
+	public synchronized boolean addPermissionLinker(final PermissionLinker perm) {
 		final String name = perm.getName();
 		if (name == null) {
 			throw new NullPointerException();
@@ -277,7 +278,7 @@ public class PermissionManager {
 		return true;
 	}
 
-	PermissionLinker demandPermissionLinker(String name) {
+	PermissionLinker demandPermissionLinker(final String name) {
 		PermissionLinker result = getPermissionLinker(name);
 		if (result == null) {
 			result = new PermissionLinker(name);
@@ -287,7 +288,7 @@ public class PermissionManager {
 		return result;
 	}
 
-	public synchronized PermissionLinker getPermissionLinker(String name) {
+	public synchronized PermissionLinker getPermissionLinker(final String name) {
 		final WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
 		if (ref == null) {
 			return null;

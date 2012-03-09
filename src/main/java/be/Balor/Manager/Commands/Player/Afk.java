@@ -45,9 +45,9 @@ public class Afk extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			if (player != null) {
 				if (AFKWorker.getInstance().isAfk(player))
 					AFKWorker.getInstance().setOnline(player);
@@ -72,7 +72,7 @@ public class Afk extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

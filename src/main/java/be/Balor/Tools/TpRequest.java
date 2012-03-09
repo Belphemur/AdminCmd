@@ -28,19 +28,19 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * 
  */
 public class TpRequest {
-	private Player from, to;
-	private long timeOut;
+	private final Player from, to;
+	private final long timeOut;
 
 	/**
 	 *
 	 */
-	public TpRequest(Player from, Player to) {
+	public TpRequest(final Player from, final Player to) {
 		this.from = from;
 		this.to = to;
 		timeOut = System.currentTimeMillis() + (ConfigEnum.TPR_TIMEOUT.getLong() * 60000);
 	}
 
-	public void teleport(Player sender) {
+	public void teleport(final Player sender) {
 		if (System.currentTimeMillis() > timeOut) {
 			Utils.sI18n(sender, "tpRequestTimeOut");
 			return;
@@ -52,7 +52,7 @@ public class TpRequest {
 				@Override
 				public void run() {
 					from.teleport(to);
-					HashMap<String, String> replace = new HashMap<String, String>();
+					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("fromPlayer", fromName);
 					replace.put("toPlayer", toName);
 					Utils.sI18n(to, "tp", replace);

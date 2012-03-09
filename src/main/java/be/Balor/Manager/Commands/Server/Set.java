@@ -47,11 +47,11 @@ public class Set extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		String message = "";
 		if (args.hasFlag('m')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
-				for (String msg : args)
+				for (final String msg : args)
 					message += msg + " ";
 				message = message.trim();
 				String result = Utils.colorParser(message);
@@ -63,7 +63,7 @@ public class Set extends ServerCommand {
 			}
 		} else if (args.hasFlag('n')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.news")) {
-				for (String msg : args)
+				for (final String msg : args)
 					message += msg + " ";
 				message = message.trim();
 				String result = Utils.colorParser(message);
@@ -75,7 +75,7 @@ public class Set extends ServerCommand {
 			}
 		} else if (args.hasFlag('r')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.rules")) {
-				for (String msg : args)
+				for (final String msg : args)
 					message += msg + " ";
 				message = message.trim();
 				String result = Utils.colorParser(message);
@@ -87,7 +87,7 @@ public class Set extends ServerCommand {
 			}
 		} else if (args.hasFlag('u')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
-				for (String msg : args)
+				for (final String msg : args)
 					message += msg + " ";
 				message = message.trim();
 				String result = Utils.colorParser(message);
@@ -106,7 +106,7 @@ public class Set extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 2;
 	}
 
@@ -130,7 +130,7 @@ public class Set extends ServerCommand {
 	 * .CommandSender)
 	 */
 	@Override
-	public boolean permissionCheck(CommandSender sender) {
+	public boolean permissionCheck(final CommandSender sender) {
 		return true;
 	}
 

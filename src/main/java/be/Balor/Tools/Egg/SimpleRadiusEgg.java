@@ -31,7 +31,7 @@ public abstract class SimpleRadiusEgg extends RadiusEgg<Integer> {
 	 * @param defaultRadius
 	 * @param maxRadius
 	 */
-	public SimpleRadiusEgg(int defaultRadius, int maxRadius) {
+	public SimpleRadiusEgg(final int defaultRadius, final int maxRadius) {
 		super(defaultRadius, maxRadius);
 	}
 
@@ -48,8 +48,9 @@ public abstract class SimpleRadiusEgg extends RadiusEgg<Integer> {
 	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		int radius = getRadius(sender, args);
+	protected void processArguments(final Player sender, final CommandArgs args)
+			throws ProcessingArgsException {
+		final int radius = getRadius(sender, args);
 		if (radius == -1)
 			return;
 		value = radius;

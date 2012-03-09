@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PlayerLocation extends PlayerCommand {
 
@@ -41,13 +41,13 @@ public class PlayerLocation extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		Location loc;
 		String msg;
 		Player target;
@@ -63,13 +63,13 @@ public class PlayerLocation extends PlayerCommand {
 				target = sender.getServer().getPlayer(args.getString(0));
 				loc = target.getLocation();
 				msg = Utils.getPlayerName(target) + " is";
-			} catch (NullPointerException ex) {
+			} catch (final NullPointerException ex) {
 				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;
 			}
 		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
 				+ " H");
-		String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
+		final String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
 		double yaw = ((loc.getYaw() + 22.5) % 360);
 		if (yaw < 0)
 			yaw += 360;
@@ -80,11 +80,11 @@ public class PlayerLocation extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

@@ -48,7 +48,8 @@ public class SynchronizedStack<E> extends Stack<E> {
 
 	}
 
-	public E push(E item) {
+	@Override
+	public E push(final E item) {
 		lock.lock();
 		try {
 			return super.push(item);
@@ -78,7 +79,7 @@ public class SynchronizedStack<E> extends Stack<E> {
 	 * @see java.util.Stack#search(java.lang.Object)
 	 */
 	@Override
-	public synchronized int search(Object o) {
+	public synchronized int search(final Object o) {
 		lock.lock();
 		try {
 			return super.search(o);
@@ -103,7 +104,7 @@ public class SynchronizedStack<E> extends Stack<E> {
 	}
 
 	@Override
-	public synchronized boolean add(E e) {
+	public synchronized boolean add(final E e) {
 		lock.lock();
 		try {
 			return super.add(e);
@@ -118,7 +119,7 @@ public class SynchronizedStack<E> extends Stack<E> {
 	 * @see java.util.Vector#addAll(java.util.Collection)
 	 */
 	@Override
-	public synchronized boolean addAll(Collection<? extends E> c) {
+	public synchronized boolean addAll(final Collection<? extends E> c) {
 		lock.lock();
 		try {
 			return super.addAll(c);
@@ -134,7 +135,7 @@ public class SynchronizedStack<E> extends Stack<E> {
 	 * @see java.util.Vector#addAll(int, java.util.Collection)
 	 */
 	@Override
-	public synchronized boolean addAll(int index, Collection<? extends E> c) {
+	public synchronized boolean addAll(final int index, final Collection<? extends E> c) {
 		lock.lock();
 		try {
 			return super.addAll(index, c);

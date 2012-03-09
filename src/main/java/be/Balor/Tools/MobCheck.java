@@ -29,84 +29,84 @@ import org.bukkit.entity.Zombie;
  * 
  */
 public class MobCheck {
-	public static boolean isMonster(Entity e) {
+	public static boolean isMonster(final Entity e) {
 		return (e instanceof Creeper) || (e instanceof Monster) || (e instanceof Skeleton)
 				|| (e instanceof Spider) || (e instanceof Zombie) || (e instanceof PigZombie)
 				|| (e instanceof Ghast) || (e instanceof Giant) || (e instanceof Slime)
 				|| (e instanceof EnderDragon);
 	}
 
-	public static boolean isAnimal(Entity e) {
+	public static boolean isAnimal(final Entity e) {
 		return (e instanceof Chicken) || (e instanceof Cow) || (e instanceof Sheep)
 				|| (e instanceof Squid) || (e instanceof Pig) || (e instanceof Wolf)
 				|| (e instanceof Animals);
 	}
 
-	public static boolean isNPC(LivingEntity e) {
+	public static boolean isNPC(final LivingEntity e) {
 		return (e instanceof Villager);
 	}
 
-	public static boolean isZombie(LivingEntity e) {
+	public static boolean isZombie(final LivingEntity e) {
 		return (e instanceof Zombie);
 	}
 
-	public static boolean Monster(LivingEntity e) {
+	public static boolean Monster(final LivingEntity e) {
 		return (e instanceof Monster);
 	}
 
-	public static boolean isCreeper(LivingEntity e) {
+	public static boolean isCreeper(final LivingEntity e) {
 		return (e instanceof Creeper);
 	}
 
-	public static boolean isSkeleton(LivingEntity e) {
+	public static boolean isSkeleton(final LivingEntity e) {
 		return (e instanceof Skeleton);
 	}
 
-	public static boolean isSpider(LivingEntity e) {
+	public static boolean isSpider(final LivingEntity e) {
 		return (e instanceof Spider);
 	}
 
-	public static boolean isPigZombie(LivingEntity e) {
+	public static boolean isPigZombie(final LivingEntity e) {
 		return (e instanceof PigZombie);
 	}
 
-	public static boolean isGiant(LivingEntity e) {
+	public static boolean isGiant(final LivingEntity e) {
 		return (e instanceof Giant);
 	}
 
-	public static boolean isSlime(LivingEntity e) {
+	public static boolean isSlime(final LivingEntity e) {
 		return (e instanceof Slime);
 	}
 
-	public static boolean isGhast(LivingEntity e) {
+	public static boolean isGhast(final LivingEntity e) {
 		return (e instanceof Ghast);
 	}
 
-	public static boolean isCow(LivingEntity e) {
+	public static boolean isCow(final LivingEntity e) {
 		return (e instanceof Cow);
 	}
 
-	public static boolean isPig(LivingEntity e) {
+	public static boolean isPig(final LivingEntity e) {
 		return (e instanceof Pig);
 	}
 
-	public static boolean isSheep(LivingEntity e) {
+	public static boolean isSheep(final LivingEntity e) {
 		return (e instanceof Sheep);
 	}
 
-	public static boolean isChicken(LivingEntity e) {
+	public static boolean isChicken(final LivingEntity e) {
 		return (e instanceof Chicken);
 	}
 
-	public static boolean isWolf(LivingEntity e) {
+	public static boolean isWolf(final LivingEntity e) {
 		return (e instanceof Wolf);
 	}
 
-	public static boolean isSquid(LivingEntity e) {
+	public static boolean isSquid(final LivingEntity e) {
 		return (e instanceof Squid);
 	}
 
-	public static boolean isEnderDragon(LivingEntity e) {
+	public static boolean isEnderDragon(final LivingEntity e) {
 		return (e instanceof EnderDragon);
 	}
 }

@@ -11,7 +11,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	private String header = null;
 	private boolean copyHeader = true;
 
-	protected ExFileConfigurationOptions(ExMemoryConfiguration configuration) {
+	protected ExFileConfigurationOptions(final ExMemoryConfiguration configuration) {
 		super(configuration);
 	}
 
@@ -21,7 +21,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	}
 
 	@Override
-	public ExFileConfigurationOptions copyDefaults(boolean value) {
+	public ExFileConfigurationOptions copyDefaults(final boolean value) {
 		super.copyDefaults(value);
 		return this;
 	}
@@ -66,7 +66,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	 *            Whether or not to copy the header
 	 * @return This object, for chaining
 	 */
-	public ExFileConfigurationOptions copyHeader(boolean value) {
+	public ExFileConfigurationOptions copyHeader(final boolean value) {
 		copyHeader = value;
 
 		return this;
@@ -104,13 +104,13 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	 *            New header
 	 * @return This object, for chaining
 	 */
-	public ExFileConfigurationOptions header(String value) {
+	public ExFileConfigurationOptions header(final String value) {
 		this.header = value;
 		return this;
 	}
 
 	@Override
-	public ExFileConfigurationOptions pathSeparator(char value) {
+	public ExFileConfigurationOptions pathSeparator(final char value) {
 		super.pathSeparator(value);
 		return this;
 	}

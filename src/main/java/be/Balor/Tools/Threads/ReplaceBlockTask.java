@@ -35,7 +35,7 @@ public class ReplaceBlockTask implements Runnable {
 	/**
 	 * @param blocks
 	 */
-	public ReplaceBlockTask(Stack<BlockRemanence> blocks) {
+	public ReplaceBlockTask(final Stack<BlockRemanence> blocks) {
 		super();
 		while (!blocks.empty())
 			this.blocks.add(blocks.pop());

@@ -44,14 +44,14 @@ public class SetSpawn extends SpawnCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACHelper.getInstance().setSpawn(sender);
 		if (args.length >= 1 && Utils.isPlayer(sender)) {
 			try {
 				int nbTaped;
 				nbTaped = args.getInt(0);
 				sender.getServer().setSpawnRadius(nbTaped);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Utils.sI18n(sender, "NaN", "number", args.getString(0));
 			}
 
@@ -64,7 +64,7 @@ public class SetSpawn extends SpawnCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

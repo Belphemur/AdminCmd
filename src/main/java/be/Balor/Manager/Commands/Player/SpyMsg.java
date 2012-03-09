@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class SpyMsg extends PlayerCommand {
 
@@ -44,14 +44,14 @@ public class SpyMsg extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		String timeOut = args.getValueFlag('t');
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
 			final ACPlayer acp = ACPlayer.getPlayer(((Player) sender));
 			if (acp.hasPower(Type.SPYMSG)) {
@@ -67,7 +67,7 @@ public class SpyMsg extends PlayerCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
@@ -88,11 +88,11 @@ public class SpyMsg extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

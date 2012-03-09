@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TpAtSee extends TeleportCommand {
 
@@ -45,18 +45,18 @@ public class TpAtSee extends TeleportCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		String timeOut = args.getValueFlag('t');
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
-			Player player = (Player) sender;
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final Player player = (Player) sender;
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.TP_AT_SEE)) {
 				acp.removePower(Type.TP_AT_SEE);
 				Utils.sI18n(player, "tpSeeDisabled");
@@ -68,12 +68,13 @@ public class TpAtSee extends TeleportCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.TP_AT_SEE, sender),
+						ACPluginManager.getCorePlugin(),
+						new RemovePowerTask(acp, Type.TP_AT_SEE, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 
@@ -82,11 +83,11 @@ public class TpAtSee extends TeleportCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

@@ -54,9 +54,9 @@ public class KillMob extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		final List<LivingEntity> mobs = new ArrayList<LivingEntity>();
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		String type = "all";
 		if (args.length >= 1)
 			type = args.getString(0);
@@ -68,7 +68,7 @@ public class KillMob extends MobCommand {
 			Utils.sI18n(sender, "killMob", replace);
 		} else {
 			String worlds = "";
-			for (World w : sender.getServer().getWorlds()) {
+			for (final World w : sender.getServer().getWorlds()) {
 				mobs.addAll(w.getLivingEntities());
 				worlds += w.getName() + ", ";
 			}
@@ -96,14 +96,15 @@ public class KillMob extends MobCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 
-	private void killMobs(List<LivingEntity> mobs, String type, CommandSender sender) {
+	private void killMobs(final List<LivingEntity> mobs, final String type,
+			final CommandSender sender) {
 		int mobKilled = 0;
-		for (Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
-			LivingEntity m = (LivingEntity) iterator.next();
+		for (final Iterator<?> iterator = mobs.iterator(); iterator.hasNext();) {
+			final LivingEntity m = (LivingEntity) iterator.next();
 			if (m instanceof HumanEntity) {
 				continue;
 			}

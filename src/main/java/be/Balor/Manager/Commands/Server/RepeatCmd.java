@@ -46,7 +46,7 @@ public class RepeatCmd extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		try {
 
 			if (Utils.isPlayer(sender, false))
@@ -54,7 +54,7 @@ public class RepeatCmd extends ServerCommand {
 			else
 				ACPlayer.getPlayer("serverConsole").executeLastCmd();
 			Utils.sI18n(sender, "reExec");
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			Utils.sI18n(sender, "noRepeat");
 		}
 
@@ -66,7 +66,7 @@ public class RepeatCmd extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

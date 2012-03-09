@@ -29,13 +29,14 @@ import com.nijiko.permissions.PermissionHandler;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class YetiPermissions implements IPermissionPlugin {
 	protected PermissionHandler permission = null;
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
@@ -43,7 +44,7 @@ public class YetiPermissions implements IPermissionPlugin {
 	/**
 	 *
 	 */
-	public YetiPermissions(PermissionHandler perm) {
+	public YetiPermissions(final PermissionHandler perm) {
 		this.permission = perm;
 	}
 
@@ -55,7 +56,7 @@ public class YetiPermissions implements IPermissionPlugin {
 	}
 
 	@Override
-	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
 		if (permission.has((Player) player, perm)) {
@@ -69,13 +70,13 @@ public class YetiPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
 	 */
 	@Override
-	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
 		if (permission.has((Player) player, perm.getName())) {
@@ -89,45 +90,49 @@ public class YetiPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang.String, org.bukkit.entity.Player)
+	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
+	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, Player player) {
+	public boolean isInGroup(final String groupName, final Player player) {
 		return permission.inGroup(player.getWorld().getName(), player.getName(), groupName);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang.String)
+	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
+	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
-		throw new NoPermissionsPlugin("To use this functionality you need a newer Permissions plugin!");
+	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
+		throw new NoPermissionsPlugin(
+				"To use this functionality you need a newer Permissions plugin!");
 	}
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public String getPermissionLimit(Player p, String type) {
+	public String getPermissionLimit(final Player p, final String type) {
 		Integer limitInteger = null;
 		try {
-			limitInteger = permission.getInfoInteger(p.getWorld().getName(),
-					p.getName(), "admincmd." + type, false);
-		} catch (NoSuchMethodError e) {
+			limitInteger = permission.getInfoInteger(p.getWorld().getName(), p.getName(),
+					"admincmd." + type, false);
+		} catch (final NoSuchMethodError e) {
 			try {
 
-				limitInteger = permission.getPermissionInteger(
-						p.getWorld().getName(), p.getName(), "admincmd." + type);
-			} catch (Throwable e2) {
+				limitInteger = permission.getPermissionInteger(p.getWorld().getName(), p.getName(),
+						"admincmd." + type);
+			} catch (final Throwable e2) {
 				limitInteger = null;
 			}
 		}
@@ -137,45 +142,51 @@ public class YetiPermissions implements IPermissionPlugin {
 			return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
+	 * , java.lang.String)
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public String getPrefix(Player player) {
-		String world = player.getWorld().getName();
-		String pName = player.getName();
-		String prefixstring= null;
+	public String getPrefix(final Player player) {
+		final String world = player.getWorld().getName();
+		final String pName = player.getName();
+		String prefixstring = null;
 		try {
-			prefixstring = permission.safeGetUser(world, pName)
-					.getPrefix();
-		} catch (Exception e) {
-			String group = permission.getGroup(world, pName);
+			prefixstring = permission.safeGetUser(world, pName).getPrefix();
+		} catch (final Exception e) {
+			final String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupPrefix(world, group);
-		} catch (NoSuchMethodError e) {
-			String group = permission.getGroup(world, pName);
+		} catch (final NoSuchMethodError e) {
+			final String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupPrefix(world, group);
 		}
 		return prefixstring;
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity.Player)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
+	 * .Player)
 	 */
 	@Override
 	@SuppressWarnings("deprecation")
-	public String getSuffix(Player player) {
-		String world = player.getWorld().getName();
-		String pName = player.getName();
-		String prefixstring= null;
+	public String getSuffix(final Player player) {
+		final String world = player.getWorld().getName();
+		final String pName = player.getName();
+		String prefixstring = null;
 		try {
-			prefixstring = permission.safeGetUser(world, pName)
-					.getSuffix();
-		} catch (Exception e) {
-			String group = permission.getGroup(world, pName);
+			prefixstring = permission.safeGetUser(world, pName).getSuffix();
+		} catch (final Exception e) {
+			final String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupSuffix(world, group);
-		} catch (NoSuchMethodError e) {
-			String group = permission.getGroup(world, pName);
+		} catch (final NoSuchMethodError e) {
+			final String group = permission.getGroup(world, pName);
 			prefixstring = permission.getGroupSuffix(world, group);
 		}
 		return prefixstring;

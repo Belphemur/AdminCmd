@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class ACSuperBreaker implements Listener {
 	@EventHandler
-	public void onBlockDamage(BlockDamageEvent event) {
+	public void onBlockDamage(final BlockDamageEvent event) {
 		if (event.isCancelled())
 			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());

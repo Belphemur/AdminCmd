@@ -63,12 +63,12 @@ public class FilePlayer extends ACPlayer {
 	/**
  * 
  */
-	public FilePlayer(String directory, String name) {
+	public FilePlayer(final String directory, final String name) {
 		super(name);
-		File pFile = new File(directory, name + ".yml");
+		final File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
@@ -79,12 +79,12 @@ public class FilePlayer extends ACPlayer {
 
 	}
 
-	public FilePlayer(String directory, Player player) {
+	public FilePlayer(final String directory, final Player player) {
 		super(player);
-		File pFile = new File(directory, name + ".yml");
+		final File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
@@ -110,7 +110,7 @@ public class FilePlayer extends ACPlayer {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
 			return;
-		int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
+		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
 		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
@@ -127,8 +127,8 @@ public class FilePlayer extends ACPlayer {
 	}
 
 	@Override
-	public void setHome(String home, Location loc) {
-		ConfigurationSection homeToSet = homes.createSection(home);
+	public void setHome(final String home, final Location loc) {
+		final ConfigurationSection homeToSet = homes.createSection(home);
 		homeToSet.set("world", loc.getWorld().getName());
 		homeToSet.set("x", loc.getX());
 		homeToSet.set("y", loc.getY());
@@ -144,7 +144,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.Data.PlayerDataManager#removeHome(java.lang.String)
 	 */
 	@Override
-	public void removeHome(String home) {
+	public void removeHome(final String home) {
 		homes.set(home, null);
 		writeFile();
 	}
@@ -155,10 +155,10 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.Data.PlayerDataManager#getHome(java.lang.String)
 	 */
 	@Override
-	public Location getHome(String home) {
-		ConfigurationSection homeSection = homes.getConfigurationSection(home);
+	public Location getHome(final String home) {
+		final ConfigurationSection homeSection = homes.getConfigurationSection(home);
 		if (homeSection == null) {
-			String found = Str.matchString(homes.getKeys(false), home);
+			final String found = Str.matchString(homes.getKeys(false), home);
 			if (found == null)
 				return null;
 			return getLocation(homes.getConfigurationSection(found));
@@ -174,7 +174,7 @@ public class FilePlayer extends ACPlayer {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setInformation(String info, Object value) {
+	public void setInformation(final String info, final Object value) {
 		informations.set(info, value);
 		writeFile();
 	}
@@ -187,7 +187,7 @@ public class FilePlayer extends ACPlayer {
 	 * )
 	 */
 	@Override
-	public void removeInformation(String info) {
+	public void removeInformation(final String info) {
 		informations.remove(info);
 		writeFile();
 	}
@@ -199,7 +199,7 @@ public class FilePlayer extends ACPlayer {
 	 * be.Balor.Player.Data.PlayerDataManager#getInformation(java.lang.String)
 	 */
 	@Override
-	public ObjectContainer getInformation(String info) {
+	public ObjectContainer getInformation(final String info) {
 		Object infoObject;
 		infoObject = informations.get(info);
 		return new ObjectContainer(infoObject);
@@ -213,7 +213,7 @@ public class FilePlayer extends ACPlayer {
 	 * )
 	 */
 	@Override
-	public void setLastLocation(Location loc) {
+	public void setLastLocation(final Location loc) {
 		if (loc == null)
 			return;
 		lastLoc.set("world", loc.getWorld().getName());
@@ -238,8 +238,8 @@ public class FilePlayer extends ACPlayer {
 		return loc;
 	}
 
-	private Location getLocation(ConfigurationSection node) throws WorldNotLoaded {
-		World w = ACPluginManager.getServer().getWorld(node.getString("world"));
+	private Location getLocation(final ConfigurationSection node) throws WorldNotLoaded {
+		final World w = ACPluginManager.getServer().getWorld(node.getString("world"));
 		if (w != null)
 			return new Location(w, node.getDouble("x", 0), node.getDouble("y", 0), node.getDouble(
 					"z", 0), Float.parseFloat(node.getString("yaw")), Float.parseFloat(node
@@ -256,7 +256,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 
 	@Override
-	public void setPower(Type power, Object value) {
+	public void setPower(final Type power, final Object value) {
 		powers.set(power.toString(), value);
 		writeFile();
 
@@ -269,7 +269,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 
 	@Override
-	public ObjectContainer getPower(Type power) {
+	public ObjectContainer getPower(final Type power) {
 		Object result;
 		result = powers.get(power.toString());
 		return new ObjectContainer(result);
@@ -281,7 +281,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#hasPower(be.Balor.Tools.Type)
 	 */
 	@Override
-	public boolean hasPower(Type power) {
+	public boolean hasPower(final Type power) {
 		boolean contain = false;
 		contain = powers.contains(power.toString());
 		return contain;
@@ -295,7 +295,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 
 	@Override
-	public void removePower(Type power) {
+	public void removePower(final Type power) {
 		powers.set(power.toString(), null);
 		writeFile();
 	}
@@ -327,7 +327,7 @@ public class FilePlayer extends ACPlayer {
 		try {
 			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			ACLogger.severe("Problem while saving Player file of " + getName(), e);
 		}
 	}
@@ -339,8 +339,8 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeAllSuperPower() {
-		for (String power : powers.getKeys(false)) {
-			Type matched = Type.matchType(power);
+		for (final String power : powers.getKeys(false)) {
+			final Type matched = Type.matchType(power);
 			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
 				powers.set(power, null);
 		}
@@ -355,7 +355,7 @@ public class FilePlayer extends ACPlayer {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setCustomPower(String power, Object value) {
+	public void setCustomPower(final String power, final Object value) {
 		Type.addCustomPower(power);
 		powers.set(power, value);
 		writeFile();
@@ -367,7 +367,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getCustomPower(java.lang.String)
 	 */
 	@Override
-	public ObjectContainer getCustomPower(String power) {
+	public ObjectContainer getCustomPower(final String power) {
 		Object powerObject;
 		powerObject = powers.get(power);
 		return new ObjectContainer(powerObject);
@@ -379,7 +379,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#hasCustomPower(java.lang.String)
 	 */
 	@Override
-	public boolean hasCustomPower(String power) {
+	public boolean hasCustomPower(final String power) {
 		return !getCustomPower(power).isNull();
 	}
 
@@ -389,7 +389,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removeCustomPower(java.lang.String)
 	 */
 	@Override
-	public void removeCustomPower(String power) {
+	public void removeCustomPower(final String power) {
 		powers.set(power, null);
 		writeFile();
 
@@ -402,8 +402,8 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public Map<String, String> getPowers() {
-		TreeMap<String, String> result = new TreeMap<String, String>();
-		for (Entry<String, Object> entry : powers.getValues(false).entrySet())
+		final TreeMap<String, String> result = new TreeMap<String, String>();
+		for (final Entry<String, Object> entry : powers.getValues(false).entrySet())
 			result.put(entry.getKey(), entry.getValue().toString());
 		return result;
 	}
@@ -414,7 +414,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
 	 */
 	@Override
-	public long getLastKitUse(String kit) {
+	public long getLastKitUse(final String kit) {
 		long use = 0L;
 		use = kitsUse.getLong(kit, 0L);
 		return use;
@@ -426,7 +426,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#setPresentation(java.lang.String)
 	 */
 	@Override
-	public void setPresentation(String presentation) {
+	public void setPresentation(final String presentation) {
 		informations.set("presentation", presentation);
 		writeFile();
 	}
@@ -469,7 +469,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#setLastKitUse(java.lang.String, long)
 	 */
 	@Override
-	public void setLastKitUse(String kit, long timestamp) {
+	public void setLastKitUse(final String kit, final long timestamp) {
 		kitsUse.set(kit, timestamp);
 		writeFile();
 	}

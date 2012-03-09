@@ -31,13 +31,13 @@ import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PlayerManager {
-	private ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
+	private final ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
 			.weakValues().makeMap();
-	private ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8)
-			.makeMap();
+	private final ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(
+			8).makeMap();
 	private final static PlayerManager instance = new PlayerManager();
 	private IPlayerFactory playerFactory;
 
@@ -45,7 +45,7 @@ public class PlayerManager {
 	 *
 	 */
 	private PlayerManager() {
-		EmptyPlayer console = new EmptyPlayer("serverConsole");
+		final EmptyPlayer console = new EmptyPlayer("serverConsole");
 		onlinePlayers.put(console, true);
 		addPlayer(console);
 	}
@@ -61,40 +61,40 @@ public class PlayerManager {
 	 * @param playerFactory
 	 *            the playerFactory to set
 	 */
-	public void setPlayerFactory(IPlayerFactory playerFactory) {
+	public void setPlayerFactory(final IPlayerFactory playerFactory) {
 		this.playerFactory = playerFactory;
 	}
 
 	/**
 	 * Convert the ACPlayer
-	 *
+	 * 
 	 * @param playerFactory
 	 */
-	public void convertFactory(IPlayerFactory factory) {
+	public void convertFactory(final IPlayerFactory factory) {
 		ACLogger.info("Converting player to the new type.");
-		for (String name : this.playerFactory.getExistingPlayers()) {
+		for (final String name : this.playerFactory.getExistingPlayers()) {
 			factory.addExistingPlayer(name);
-			ACPlayer oldPlayer = playerFactory.createPlayer(name);
-			ACPlayer newPlayer = factory.createPlayer(name);
+			final ACPlayer oldPlayer = playerFactory.createPlayer(name);
+			final ACPlayer newPlayer = factory.createPlayer(name);
 			newPlayer.setLastLocation(oldPlayer.getLastLocation());
 			newPlayer.setPresentation(oldPlayer.getPresentation());
 
-			for (String home : oldPlayer.getHomeList())
+			for (final String home : oldPlayer.getHomeList())
 				newPlayer.setHome(home, oldPlayer.getHome(home));
-			for (Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
-				Type power = Type.matchType(entry.getKey());
+			for (final Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
+				final Type power = Type.matchType(entry.getKey());
 				if (power != null)
 					newPlayer.setPower(power, oldPlayer.getPower(power).getObj());
 				else
 					newPlayer.setCustomPower(entry.getKey(),
 							oldPlayer.getCustomPower(entry.getKey()).getObj());
 			}
-			for (String info : oldPlayer.getInformationsList()) {
+			for (final String info : oldPlayer.getInformationsList()) {
 				if (info.equals("lastLoc") || info.equals("presentation"))
 					continue;
 				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
 			}
-			for (String kit : oldPlayer.getKitUseList())
+			for (final String kit : oldPlayer.getKitUseList())
 				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
 			newPlayer.forceSave();
 		}
@@ -104,16 +104,16 @@ public class PlayerManager {
 
 	/**
 	 * Add a new player
-	 *
+	 * 
 	 * @param player
 	 */
-	private synchronized boolean addPlayer(ACPlayer player) {
+	private synchronized boolean addPlayer(final ACPlayer player) {
 		final String name = player.getName();
 		if (name == null) {
 			throw new NullPointerException();
 		}
 
-		ACPlayer ref = players.get(name);
+		final ACPlayer ref = players.get(name);
 		if (ref != null)
 			return false;
 		players.put(name, player);
@@ -122,7 +122,7 @@ public class PlayerManager {
 
 	/**
 	 * Return online AC players
-	 *
+	 * 
 	 * @return
 	 */
 	public List<ACPlayer> getOnlineACPlayers() {
@@ -131,13 +131,13 @@ public class PlayerManager {
 
 	/**
 	 * Get Online Bukkit Player
-	 *
+	 * 
 	 * @return
 	 */
 	public List<Player> getOnlinePlayers() {
-		ArrayList<Player> list = new ArrayList<Player>(onlinePlayers.size());
-		for (ACPlayer p : onlinePlayers.keySet()) {
-			Player handler = p.getHandler();
+		final ArrayList<Player> list = new ArrayList<Player>(onlinePlayers.size());
+		for (final ACPlayer p : onlinePlayers.keySet()) {
+			final Player handler = p.getHandler();
 			if (handler != null)
 				list.add(handler);
 		}
@@ -146,13 +146,13 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted custom power
-	 *
+	 * 
 	 * @param power
 	 * @return
 	 */
-	List<ACPlayer> getACPlayerHavingPower(String power) {
-		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
-		for (ACPlayer p : getExistingPlayers()) {
+	List<ACPlayer> getACPlayerHavingPower(final String power) {
+		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
+		for (final ACPlayer p : getExistingPlayers()) {
 			if (p.hasCustomPower(power))
 				list.add(p);
 		}
@@ -161,13 +161,13 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted power
-	 *
+	 * 
 	 * @param power
 	 * @return
 	 */
-	List<ACPlayer> getACPlayerHavingPower(Type power) {
-		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
-		for (ACPlayer p : getExistingPlayers()) {
+	List<ACPlayer> getACPlayerHavingPower(final Type power) {
+		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
+		for (final ACPlayer p : getExistingPlayers()) {
 			if (p.hasPower(power))
 				list.add(p);
 		}
@@ -175,9 +175,9 @@ public class PlayerManager {
 	}
 
 	private List<ACPlayer> getExistingPlayers() {
-		ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
-		for (String name : playerFactory.getExistingPlayers()) {
-			ACPlayer player = demandACPlayer(name);
+		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
+		for (final String name : playerFactory.getExistingPlayers()) {
+			final ACPlayer player = demandACPlayer(name);
 			if (!(player instanceof EmptyPlayer))
 				list.add(player);
 		}
@@ -186,42 +186,42 @@ public class PlayerManager {
 
 	/**
 	 * Get the wanted player
-	 *
+	 * 
 	 * @param name
 	 *            name of the player
 	 * @return the ACPlayer if found, else null
 	 */
-	private synchronized ACPlayer getPlayer(String name) {
-		ACPlayer result = players.get(name);
+	private synchronized ACPlayer getPlayer(final String name) {
+		final ACPlayer result = players.get(name);
 		if (result != null)
 			result.reloadHandler();
 		return result;
 	}
-	
+
 	/**
 	 * Set Offline an online player. The player will lost his strong reference,
 	 * when the gc will be called, the reference will be deleted.
-	 *
+	 * 
 	 * @param player
 	 *            player to setOffline
 	 * @return
 	 */
-	public boolean setOffline(ACPlayer player) {
+	public boolean setOffline(final ACPlayer player) {
 		player.updatePlayedTime();
 		player.forceSave();
 		player.setOnline(false);
 		return onlinePlayers.remove(player) != null;
 	}
 
-	public ACPlayer setOnline(Player player) {
+	public ACPlayer setOnline(final Player player) {
 		playerFactory.addExistingPlayer(player.getName());
-		ACPlayer acPlayer = demandACPlayer(player);
+		final ACPlayer acPlayer = demandACPlayer(player);
 		onlinePlayers.put(acPlayer, true);
 		DebugLog.INSTANCE.info(player.getName() + " is put online.");
 		return acPlayer;
 	}
 
-	ACPlayer demandACPlayer(String name) {
+	ACPlayer demandACPlayer(final String name) {
 		if (name == null)
 			return getPlayer("serverConsole");
 		ACPlayer result = getPlayer(name);
@@ -230,7 +230,7 @@ public class PlayerManager {
 			addPlayer(result);
 			result = getPlayer(name);
 		} else if (result instanceof EmptyPlayer) {
-			ACPlayer tmp = playerFactory.createPlayer(name);
+			final ACPlayer tmp = playerFactory.createPlayer(name);
 			if (tmp instanceof EmptyPlayer)
 				return result;
 			players.remove(name);
@@ -242,17 +242,17 @@ public class PlayerManager {
 		return result;
 	}
 
-	ACPlayer demandACPlayer(Player player) {
+	ACPlayer demandACPlayer(final Player player) {
 		if (player == null)
 			return getPlayer("serverConsole");
-		String playerName = player.getName();
+		final String playerName = player.getName();
 		ACPlayer result = getPlayer(playerName);
 		if (result == null) {
 			result = playerFactory.createPlayer(player);
 			addPlayer(result);
 			result = getPlayer(playerName);
 		} else if (result instanceof EmptyPlayer) {
-			ACPlayer tmp = playerFactory.createPlayer(playerName);
+			final ACPlayer tmp = playerFactory.createPlayer(playerName);
 			if (tmp instanceof EmptyPlayer)
 				return result;
 			players.remove(playerName);

@@ -43,9 +43,9 @@ public class BanConvert extends ServerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		List<ACPlayer> toConvert = ACPlayer.getPlayers(Type.BANNED);
-		for (ACPlayer player : toConvert) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final List<ACPlayer> toConvert = ACPlayer.getPlayers(Type.BANNED);
+		for (final ACPlayer player : toConvert) {
 			ACHelper.getInstance().addBannedPlayer(
 					new BannedPlayer(player.getName(), player.getPower(Type.BANNED).getString()));
 			player.removePower(Type.BANNED);
@@ -59,7 +59,7 @@ public class BanConvert extends ServerCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

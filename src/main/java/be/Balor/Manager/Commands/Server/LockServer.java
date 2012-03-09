@@ -48,12 +48,12 @@ public class LockServer extends ServerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (ACHelper.getInstance().isServerLocked()) {
 			ACHelper.getInstance().setServerLocked(false);
 			Utils.sI18n(sender, "serverUnlock");
 		} else {
-			String bcast = Utils.I18n("serverLock");
+			final String bcast = Utils.I18n("serverLock");
 			if (bcast != null) {
 				Utils.broadcastMessage(bcast);
 				ACLogger.info(bcast);
@@ -63,7 +63,7 @@ public class LockServer extends ServerCommand {
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable() {
 				@Override
 				public void run() {
-					for (Player p : onlinePlayers) {
+					for (final Player p : onlinePlayers) {
 						if (PermissionManager.hasPerm(p, "admincmd.server.lockdown"))
 							continue;
 						p.kickPlayer(Utils.I18n("serverLockMessage"));
@@ -80,7 +80,7 @@ public class LockServer extends ServerCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

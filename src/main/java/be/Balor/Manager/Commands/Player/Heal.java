@@ -54,7 +54,7 @@ public class Heal extends PlayerCommand {
 				Utils.setPlayerHealth(sender, args, Health.HEAL);
 			}
 		});
-		
+
 	}
 
 	/*
@@ -63,7 +63,7 @@ public class Heal extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		// TODO Auto-generated method stub
 		return args != null;
 	}

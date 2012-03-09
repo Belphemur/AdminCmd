@@ -53,13 +53,13 @@ public class ClearInventory extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		if (target == null)
 			return;
 		if (args.length == 1) {
-			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
-					sender, args.getString(0));
+			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
+					args.getString(0));
 			if (mc.isNull())
 				return;
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -75,7 +75,7 @@ public class ClearInventory extends PlayerCommand {
 			final HashMap<Integer, ? extends ItemStack> stacks;
 			final int startAmount = args.getInt(1);
 
-			MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
+			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
 					args.getString(0));
 			if (mc.isNull())
 				return;
@@ -88,7 +88,7 @@ public class ClearInventory extends PlayerCommand {
 					int tempSlot = 0;
 					int amount = startAmount;
 					ItemStack tempStack;
-					for (Map.Entry<Integer, ? extends ItemStack> stacksEntry : stacks
+					for (final Map.Entry<Integer, ? extends ItemStack> stacksEntry : stacks
 							.entrySet()) {
 						current = stacksEntry.getValue().getAmount();
 						tempSlot = stacksEntry.getKey();
@@ -120,7 +120,7 @@ public class ClearInventory extends PlayerCommand {
 			});
 		}
 		if (!sender.equals(target)) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "clearTarget", replace);
 		}
@@ -134,7 +134,7 @@ public class ClearInventory extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

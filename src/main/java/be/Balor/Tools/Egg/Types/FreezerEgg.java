@@ -50,9 +50,10 @@ public class FreezerEgg extends BlockEgg {
 	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		int radius = getRadius(sender, args);
-		if(radius == -1)
+	protected void processArguments(final Player sender, final CommandArgs args)
+			throws ProcessingArgsException {
+		final int radius = getRadius(sender, args);
+		if (radius == -1)
 			return;
 		value = new BlockChangeInfo(Material.ICE.getId(), radius);
 

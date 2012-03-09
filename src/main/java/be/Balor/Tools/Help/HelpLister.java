@@ -35,8 +35,8 @@ import be.Balor.Tools.Help.String.Str;
  */
 public class HelpLister {
 	private static HelpLister instance = null;
-	private HashMap<String, HelpList> plugins = new HashMap<String, HelpList>();
-	private List<String> noCmds = new ArrayList<String>();
+	private final HashMap<String, HelpList> plugins = new HashMap<String, HelpList>();
+	private final List<String> noCmds = new ArrayList<String>();
 
 	private HelpLister() {
 	}
@@ -59,12 +59,12 @@ public class HelpLister {
 	 * 
 	 * @param plugin
 	 */
-	public void addPlugin(Plugin plugin) {
-		String pName = plugin.getDescription().getName();
+	public void addPlugin(final Plugin plugin) {
+		final String pName = plugin.getDescription().getName();
 		if (!plugins.containsKey(pName) && !noCmds.contains(pName))
 			try {
 				plugins.put(pName, new HelpList(plugin));
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				noCmds.add(pName);
 			}
 
@@ -93,8 +93,8 @@ public class HelpLister {
 	 * @param cmdName
 	 *            true name of the command
 	 */
-	public void addHelpEntry(String command, String description, String plugin,
-			List<String> permissions, String cmdName) {
+	public void addHelpEntry(final String command, final String description, final String plugin,
+			final List<String> permissions, final String cmdName) {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
 			help = new HelpList(plugin);
@@ -103,8 +103,8 @@ public class HelpLister {
 		help.addEntry(new HelpEntry(command, description, permissions, cmdName));
 	}
 
-	public boolean removeHelpEntry(String plugin, String commandName) {
-		HelpList help = plugins.get(plugin);
+	public boolean removeHelpEntry(final String plugin, final String commandName) {
+		final HelpList help = plugins.get(plugin);
 		if (help == null) {
 			DebugLog.INSTANCE.severe("Plugin " + plugin + " not found.");
 			return false;
@@ -123,22 +123,22 @@ public class HelpLister {
 	 *            the sender of the command
 	 * @return
 	 */
-	public boolean sendHelpPage(String plugin, int page, CommandSender sender) {
-		HelpList help = matchPlugin(plugin);
+	public boolean sendHelpPage(final String plugin, final int page, final CommandSender sender) {
+		final HelpList help = matchPlugin(plugin);
 		if (help == null)
 			return false;
-		List<String> toDisplay = help.getPage(page, sender);
-		for (String send : toDisplay)
-			for (String l : send.split("\n"))
+		final List<String> toDisplay = help.getPage(page, sender);
+		for (final String send : toDisplay)
+			for (final String l : send.split("\n"))
 				sender.sendMessage(l);
 		return true;
 
 	}
 
-	private HelpList matchPlugin(String plugin) {
+	private HelpList matchPlugin(final String plugin) {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
-			String keyFound = Str.matchString(plugins.keySet(), plugin);
+			final String keyFound = Str.matchString(plugins.keySet(), plugin);
 			if (keyFound == null)
 				return null;
 			help = plugins.get(keyFound);
@@ -159,11 +159,12 @@ public class HelpLister {
 	 *            sender of the command.
 	 * @return true if the command is found, else if not found.
 	 */
-	public boolean sendHelpCmd(String pluginName, String command, CommandSender sender) {
+	public boolean sendHelpCmd(final String pluginName, final String command,
+			final CommandSender sender) {
 		List<HelpEntry> chat = null;
 		boolean found = false;
 		if (pluginName == null) {
-			for (HelpList plugin : plugins.values()) {
+			for (final HelpList plugin : plugins.values()) {
 				chat = plugin.getCommandMatch(command, sender);
 				if (chat.isEmpty())
 					continue;
@@ -172,7 +173,7 @@ public class HelpLister {
 			}
 			return found;
 		} else {
-			HelpList plugin = matchPlugin(pluginName);
+			final HelpList plugin = matchPlugin(pluginName);
 			if (plugin == null)
 				return false;
 			chat = plugin.getCommandMatch(command, sender);
@@ -184,13 +185,14 @@ public class HelpLister {
 
 	}
 
-	private void displayHelpMessage(List<HelpEntry> list, String pluginName, CommandSender sender) {
+	private void displayHelpMessage(final List<HelpEntry> list, final String pluginName,
+			final CommandSender sender) {
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
 						+ pluginName + " " + ChatColor.AQUA, '=') + "\n");
-		for (HelpEntry entry : list) {
-			String chat = entry.chatString();
-			for (String l : chat.split("\n"))
+		for (final HelpEntry entry : list) {
+			final String chat = entry.chatString();
+			for (final String l : chat.split("\n"))
 				sender.sendMessage(l);
 		}
 	}

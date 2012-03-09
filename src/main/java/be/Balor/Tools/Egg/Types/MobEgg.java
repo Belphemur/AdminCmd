@@ -48,7 +48,7 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 		event.setHatching(true);
 		event.setHatchingType(value.getType());
 		event.setNumHatches(value.getNb());
@@ -63,16 +63,17 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 	 * .CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(final Player sender, final CommandArgs args)
+			throws ProcessingArgsException {
 		if (!args.hasFlag('m'))
 			throw new ParameterMissingException('m', LocaleHelper.EGG_PARAM_MOB.getLocale());
 		int nbre = 1;
-		String valFlag = args.getValueFlag('n');
-		String mob = args.getValueFlag('m');
+		final String valFlag = args.getValueFlag('n');
+		final String mob = args.getValueFlag('m');
 		if (args.hasFlag('n'))
 			try {
 				nbre = Integer.parseInt(valFlag);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}

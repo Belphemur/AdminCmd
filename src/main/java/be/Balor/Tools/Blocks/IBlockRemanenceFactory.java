@@ -20,14 +20,17 @@ import org.bukkit.Location;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class IBlockRemanenceFactory {
 	public static IBlockRemanenceFactory FACTORY = new BlockRemanenceFactory();
+
 	/**
 	 * Create a block Remanence
+	 * 
 	 * @param loc
 	 */
 	public abstract BlockRemanence createBlockRemanence(Location loc);
+
 	public abstract void setPlayerName(String playerName);
 }

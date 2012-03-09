@@ -59,14 +59,15 @@ public class TerminalCommandManager {
 	 * @param permissionLinker
 	 *            the perm to set
 	 */
-	public void setPerm(AbstractAdminCmdPlugin plugin) {
+	public void setPerm(final AbstractAdminCmdPlugin plugin) {
 		this.perm = plugin.getPermissionLinker();
-		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
-		File workingDir = scripts.getParentFile();
-		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+		final File scripts = FileManager.getInstance()
+				.getInnerFile("scripts.yml", "scripts", false);
+		final File workingDir = scripts.getParentFile();
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
-			for (String cmdName : conf.getKeys(false)) {
+			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec." + cmdName));
@@ -76,7 +77,7 @@ public class TerminalCommandManager {
 
 		else
 
-			for (String cmdName : conf.getKeys(false)) {
+			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec." + cmdName));
@@ -84,8 +85,8 @@ public class TerminalCommandManager {
 			}
 	}
 
-	public boolean checkCommand(String cmdName, CommandSender sender) {
-		TerminalCommand cmd = commands.get(cmdName);
+	public boolean checkCommand(final String cmdName, final CommandSender sender) {
+		final TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null)
 			return false;
 
@@ -93,13 +94,14 @@ public class TerminalCommandManager {
 	}
 
 	public void reloadScripts() {
-		File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
-		File workingDir = scripts.getParentFile();
-		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+		final File scripts = FileManager.getInstance()
+				.getInnerFile("scripts.yml", "scripts", false);
+		final File workingDir = scripts.getParentFile();
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 		commands.clear();
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows"))
-			for (String cmdName : conf.getKeys(false)) {
+			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly("admincmd.server.exec." + cmdName,
@@ -110,7 +112,7 @@ public class TerminalCommandManager {
 
 		else
 
-			for (String cmdName : conf.getKeys(false)) {
+			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly("admincmd.server.exec." + cmdName,
@@ -127,13 +129,14 @@ public class TerminalCommandManager {
 	 * @return
 	 * @throws CommandNotFound
 	 */
-	public boolean execute(CommandSender sender, String cmdName, boolean reload)
+	public boolean execute(final CommandSender sender, final String cmdName, final boolean reload)
 			throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null || reload) {
-			File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts", false);
-			File workingDir = scripts.getParentFile();
-			ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+			final File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts",
+					false);
+			final File workingDir = scripts.getParentFile();
+			final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 			if (conf.get(cmdName) == null)
 				throw new CommandNotFound(cmdName + " is not registered");
 			if (System.getProperty("os.name").contains("Windows")) {

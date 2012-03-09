@@ -53,11 +53,11 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 		event.getEgg().remove();
 		event.setHatching(false);
-		World w = event.getEgg().getWorld();
-		Location loc = event.getEgg().getLocation();
+		final World w = event.getEgg().getWorld();
+		final Location loc = event.getEgg().getLocation();
 
 		for (int i = 0; i < value.getNb(); i++)
 			w.spawn(loc, value.getEntityClass());
@@ -71,16 +71,17 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		String entityParam = args.getValueFlag('e');
+	protected void processArguments(final Player sender, final CommandArgs args)
+			throws ProcessingArgsException {
+		final String entityParam = args.getValueFlag('e');
 		if (entityParam == null)
 			throw new ParameterMissingException('e', LocaleHelper.EGG_PARAM_ENTITY.getLocale());
-		String valFlag = args.getValueFlag('n');
+		final String valFlag = args.getValueFlag('n');
 		int nbre = 1;
 		int entityNb = 93;
 		try {
 			entityNb = Integer.parseInt(entityParam);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			Utils.sI18n(sender, "NaN", "number", valFlag);
 			return;
 		}
@@ -88,16 +89,16 @@ public class EntityEgg extends EggType<EntityInEgg> {
 			try {
 				nbre = Integer.parseInt(valFlag);
 				entityNb = Integer.parseInt(entityParam);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
 		try {
-			Entity entity = EntityTypes.a(entityNb, ((CraftWorld) sender.getWorld()).getHandle())
-					.getBukkitEntity();
+			final Entity entity = EntityTypes.a(entityNb,
+					((CraftWorld) sender.getWorld()).getHandle()).getBukkitEntity();
 			value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass()
 					.getSimpleName());
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			throw new ProcessingArgsException(ExceptionType.DONT_EXISTS, String.valueOf(entityNb));
 		}
 

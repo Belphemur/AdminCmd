@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class ACFlyListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityDamage(EntityDamageEvent event) {
+	public void onEntityDamage(final EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
 		if (!(event.getEntity() instanceof Player))
@@ -50,7 +50,7 @@ public class ACFlyListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		final Float power = player.getPower(Type.FLY).getFloat(0);
@@ -69,7 +69,7 @@ public class ACFlyListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerKick(PlayerKickEvent event) {
+	public void onPlayerKick(final PlayerKickEvent event) {
 		if (event.isCancelled())
 			return;
 		final Player p = event.getPlayer();

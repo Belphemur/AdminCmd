@@ -31,11 +31,11 @@ public class SimplifiedLocation extends Location {
 	 * @param y
 	 * @param z
 	 */
-	public SimplifiedLocation(World world, double x, double y, double z) {
+	public SimplifiedLocation(final World world, final double x, final double y, final double z) {
 		super(world, x, y, z);
 	}
 
-	public SimplifiedLocation(Location loc) {
+	public SimplifiedLocation(final Location loc) {
 		super(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
 	}
 
@@ -45,15 +45,14 @@ public class SimplifiedLocation extends Location {
 	 * @see org.bukkit.Location#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (!(obj instanceof Location)) {
 			return false;
 		}
 
-		Location other = (Location) obj;
+		final Location other = (Location) obj;
 		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
 				&& other.getBlockZ() == this.getBlockZ();
 	}
-	
 
 }

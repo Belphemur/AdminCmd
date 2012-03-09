@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class UnMute extends PlayerCommand {
 
@@ -42,18 +42,18 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player player = sender.getServer().getPlayer(args.getString(0));
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player player = sender.getServer().getPlayer(args.getString(0));
 
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", args.getString(0));
-		ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
+		final ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 		if (acp.hasPower(Type.MUTED)) {
 			if (!Utils.checkImmunity(sender, acp.getHandler())) {
 				Utils.sI18n(sender, "insufficientLvl");
@@ -85,11 +85,11 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

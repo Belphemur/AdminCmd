@@ -30,37 +30,36 @@ public class ACLogger {
 	protected static final Logger logger = Logger.getLogger("Minecraft");
 	protected static final String prefix = "[AdminCmd] ";
 
-
-	public static void severe(String string, Throwable ex) {
+	public static void severe(final String string, final Throwable ex) {
 		logger.log(Level.SEVERE, prefix + ChatColor.stripColor(ChatColor.stripColor(string)), ex);
 	}
 
-	public static void severe(String string) {
+	public static void severe(final String string) {
 		logger.log(Level.SEVERE, prefix.concat(ChatColor.stripColor(string)));
 	}
 
-	public static void info(String string) {
+	public static void info(final String string) {
 		logger.log(Level.INFO, prefix.concat(ChatColor.stripColor(string)));
 	}
 
-	public static void warning(String string) {
+	public static void warning(final String string) {
 		logger.log(Level.WARNING, prefix.concat(ChatColor.stripColor(string)));
 	}
 
-	public static void Log(String txt) {
+	public static void Log(final String txt) {
 		logger.log(Level.INFO, String.format(prefix + "%s", ChatColor.stripColor(txt)));
 	}
 
-	public static void Log(Level loglevel, String txt) {
+	public static void Log(final Level loglevel, final String txt) {
 		Log(loglevel, txt, true);
 	}
 
-	public static void Log(Level loglevel, String txt, boolean sendReport) {
+	public static void Log(final Level loglevel, final String txt, final boolean sendReport) {
 		logger.log(loglevel,
 				String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)));
 	}
 
-	public static void Log(Level loglevel, String txt, Throwable params) {
+	public static void Log(final Level loglevel, final String txt, final Throwable params) {
 		if (txt == null) {
 			Log(loglevel, params);
 		} else {
@@ -70,7 +69,7 @@ public class ACLogger {
 		}
 	}
 
-	public static void Log(Level loglevel, Throwable err) {
+	public static void Log(final Level loglevel, final Throwable err) {
 		logger.log(
 				loglevel,
 				String.format(prefix + "%s",

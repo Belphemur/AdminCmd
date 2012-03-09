@@ -50,14 +50,14 @@ public class WorldDifficulty extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACWorld world = null;
 		boolean worldGiven = false;
 		int difValue = -1;
 		try {
 			try {
 				difValue = args.getInt(0);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				worldGiven = true;
 			}
 			if (args.length >= 1 && worldGiven)
@@ -65,18 +65,18 @@ public class WorldDifficulty extends ServerCommand {
 			else if (Utils.isPlayer(sender, false))
 				world = ACWorld.getWorld(((Player) sender).getWorld().getName());
 			else {
-				HashMap<String, String> replace = new HashMap<String, String>();
+				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("argument", "world");
 				Utils.sI18n(sender, "errorInsufficientArguments", replace);
 				return;
 			}
-		} catch (WorldNotLoaded e) {
+		} catch (final WorldNotLoaded e) {
 			Utils.sI18n(sender, "worldNotFound");
 			return;
 		}
 
 		Difficulty toSet = Difficulty.NORMAL;
-		Map<String, String> replace = new HashMap<String, String>();
+		final Map<String, String> replace = new HashMap<String, String>();
 		if (args.hasFlag('g')) {
 			replace.put("world", world.getName());
 			replace.put("difficulty", world.getDifficulty().toString());
@@ -104,7 +104,7 @@ public class WorldDifficulty extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

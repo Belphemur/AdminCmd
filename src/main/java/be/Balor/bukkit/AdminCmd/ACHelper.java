@@ -95,15 +95,11 @@ public class ACHelper {
 	private List<Integer> blockBlacklist;
 	private List<String> groups;
 	private AdminCmd coreInstance;
-	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private Map<String, KitInstance> kits = new HashMap<String, KitInstance>();
-	private final ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker()
-			.makeMap();
-	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker()
-			.makeMap();
-	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
 	private static ACHelper instance = new ACHelper();
 	private final ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -112,20 +108,16 @@ public class ACHelper {
 
 	static {
 		materialsColors = new HashMap<Material, String[]>();
-		materialsColors.put(Material.WOOL, new String[] { "White", "Orange",
-				"Magenta", "LightBlue", "Yellow", "LimeGreen", "Pink", "Gray",
-				"LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red",
-				"Black" });
-		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red",
-				"Green", "Brown", "Blue", "Purple", "Cyan", "LightGray",
-				"Gray", "Pink", "LimeGreen", "Yellow", "LightBlue", "Magenta",
-				"Orange", "White" });
-		materialsColors.put(Material.LOG,
-				new String[] { "Oak", "Pine", "Birch" });
-		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone",
-				"Wooden", "Cobblestone" });
-		materialsColors.put(Material.DOUBLE_STEP,
-				materialsColors.get(Material.STEP));
+		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
+				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
+				"Blue", "Brown", "Green", "Red", "Black" });
+		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red", "Green", "Brown",
+				"Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "LimeGreen", "Yellow",
+				"LightBlue", "Magenta", "Orange", "White" });
+		materialsColors.put(Material.LOG, new String[] { "Oak", "Pine", "Birch" });
+		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden",
+				"Cobblestone" });
+		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
 		listOfPossibleRepair = new LinkedList<Integer>();
 		for (int i = 256; i <= 259; i++)
 			listOfPossibleRepair.add(i);
@@ -148,15 +140,14 @@ public class ACHelper {
 
 	private boolean serverLocked = false;
 
-	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
 
 	/**
 	 * Ban a new player
 	 * 
 	 * @param ban
 	 */
-	public void addBannedPlayer(BannedPlayer ban) {
+	public void addBannedPlayer(final BannedPlayer ban) {
 		bannedPlayers.put(ban.getPlayer(), ban);
 		dataManager.addBannedPlayer(ban);
 	}
@@ -167,7 +158,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean addBlackListedBlock(CommandSender sender, String name) {
+	public boolean addBlackListedBlock(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
@@ -197,7 +188,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean addBlackListedItem(CommandSender sender, String name) {
+	public boolean addBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
@@ -221,7 +212,7 @@ public class ACHelper {
 		return false;
 	}
 
-	public void addFakeQuit(Player p) {
+	public void addFakeQuit(final Player p) {
 		fakeQuitPlayers.put(p, new Object());
 	}
 
@@ -230,7 +221,7 @@ public class ACHelper {
 	 * 
 	 * @param blocks
 	 */
-	public void addInUndoQueue(String player, Stack<BlockRemanence> blocks) {
+	public void addInUndoQueue(final String player, final Stack<BlockRemanence> blocks) {
 		if (undoQueue.containsKey(player))
 			undoQueue.get(player).push(blocks);
 		else {
@@ -245,15 +236,12 @@ public class ACHelper {
 		String locale = fManager.getTextFile("motd.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motd.txt. Using default values for the MotD!");
-			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome "
-					+ ChatColor.WHITE + "%player" + ChatColor.GOLD
-					+ ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD
-					+ "%connected //n" + ChatColor.DARK_GREEN
-					+ "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN
-					+ "Your last login was: " + ChatColor.AQUA + "%lastlogin",
-					true);
+			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+					+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
+					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
+					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
+					+ ChatColor.AQUA + "%lastlogin", true);
 		} else {
 			ACLogger.info("motd.txt loaded");
 			Utils.addLocale("MOTD", Utils.colorParser(locale), true);
@@ -261,12 +249,10 @@ public class ACHelper {
 		locale = fManager.getTextFile("motdNewUser.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotDNewUser!");
-			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome "
-					+ ChatColor.WHITE + "%player" + ChatColor.GOLD
-					+ ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD
-					+ "%connected //n" + ChatColor.DARK_GREEN
-					+ "You've played so far : " + ChatColor.AQUA
+			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE
+					+ "%player" + ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
+					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
 					+ "#elapsedTotalTime#", true);
 		} else {
 			ACLogger.info("motdNewUser.txt loaded");
@@ -284,8 +270,7 @@ public class ACHelper {
 		locale = fManager.getTextFile("rules.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
-			Utils.addLocale("Rules", "1. Do not grief! //n"
-					+ "2. Do not use strong language! //n"
+			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
 					+ "3. Be friendly to other players!", true);
 		} else {
 			ACLogger.info("rules.txt loaded");
@@ -294,20 +279,19 @@ public class ACHelper {
 		LocaleManager.getInstance().save();
 	}
 
-	public void addSpy(Player p) {
+	public void addSpy(final Player p) {
 		spyPlayers.put(p, new Object());
 	}
 
-	public boolean alias(CommandSender sender, CommandArgs args) {
+	public boolean alias(final CommandSender sender, final CommandArgs args) {
 		final MaterialContainer m = checkMaterial(sender, args.getString(1));
 		if (m.isNull())
 			return true;
 		final String alias = args.getString(0);
 		this.alias.put(alias, m);
 		this.fManager.addAlias(alias, m);
-		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD
-				+ alias + ChatColor.BLUE + " for the item " + ChatColor.GOLD
-				+ m.display());
+		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
+				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m.display());
 		return true;
 	}
 
@@ -326,8 +310,7 @@ public class ACHelper {
 				return false;
 			} else {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACHelper.getInstance().getCoreInstance(),
-						new Runnable() {
+						ACHelper.getInstance().getCoreInstance(), new Runnable() {
 
 							@Override
 							public void run() {
@@ -347,7 +330,7 @@ public class ACHelper {
 	 * @param mat
 	 * @return Material
 	 */
-	public MaterialContainer checkMaterial(CommandSender sender, String mat) {
+	public MaterialContainer checkMaterial(final CommandSender sender, final String mat) {
 		final MaterialContainer m = Utils.checkMaterial(mat);
 		if (m.isNull()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
@@ -359,19 +342,15 @@ public class ACHelper {
 	}
 
 	private void convertSpawnWarp() {
-		final File spawnFile = fManager.getFile("spawn", "spawnLocations.yml",
-				false);
+		final File spawnFile = fManager.getFile("spawn", "spawnLocations.yml", false);
 		if (spawnFile.exists()) {
-			final ExtendedConfiguration spawn = ExtendedConfiguration
-					.loadConfiguration(spawnFile);
-			final ConfigurationSection spawnPoints = spawn
-					.getConfigurationSection("spawn");
+			final ExtendedConfiguration spawn = ExtendedConfiguration.loadConfiguration(spawnFile);
+			final ConfigurationSection spawnPoints = spawn.getConfigurationSection("spawn");
 			if (spawnPoints != null)
 				for (final String key : spawnPoints.getKeys(false))
 					try {
 						ACWorld.getWorld(key).setSpawn(
-								fManager.getLocation("spawn." + key,
-										"spawnLocations", "spawn"));
+								fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
 					} catch (final WorldNotLoaded e) {
 					}
 
@@ -380,13 +359,10 @@ public class ACHelper {
 		}
 		final File warpFile = fManager.getFile("warp", "warpPoints.yml", false);
 		if (warpFile.exists()) {
-			for (final String key : fManager.getKeys("warp", "warpPoints",
-					"warp")) {
+			for (final String key : fManager.getKeys("warp", "warpPoints", "warp")) {
 				try {
-					final Location loc = fManager.getLocation("warp." + key,
-							"warpPoints", "warp");
-					ACWorld.getWorld(loc.getWorld().getName())
-							.addWarp(key, loc);
+					final Location loc = fManager.getLocation("warp." + key, "warpPoints", "warp");
+					ACWorld.getWorld(loc.getWorld().getName()).addWarp(key, loc);
 				} catch (final WorldNotLoaded e) {
 				}
 			}
@@ -399,7 +375,7 @@ public class ACHelper {
 		return bannedPlayers.size();
 	}
 
-	public MaterialContainer getAlias(String name) {
+	public MaterialContainer getAlias(final String name) {
 		return alias.get(name);
 	}
 
@@ -419,8 +395,8 @@ public class ACHelper {
 	 * @return
 	 */
 	private List<Integer> getBlackListedItems() {
-		return fManager.getYml("blacklist").getIntList("BlackListedItems",
-				new ArrayList<Integer>());
+		return fManager.getYml("blacklist")
+				.getIntList("BlackListedItems", new ArrayList<Integer>());
 	}
 
 	/*
@@ -438,7 +414,7 @@ public class ACHelper {
 
 	// translates a given color value/name into a real color value
 	// also does some checking (error = -1)
-	private short getColor(String name, Material mat) {
+	private short getColor(final String name, final Material mat) {
 		short value = -1;
 		// first try numbered colors
 		try {
@@ -483,8 +459,7 @@ public class ACHelper {
 	 * @return
 	 */
 	private List<String> getGroupNames() {
-		return fManager.getYml("config").getStringList("groupNames",
-				new ArrayList<String>());
+		return fManager.getYml("config").getStringList("groupNames", new ArrayList<String>());
 	}
 
 	/**
@@ -493,7 +468,7 @@ public class ACHelper {
 	 * @param kit
 	 * @return
 	 */
-	public KitInstance getKit(String kit) {
+	public KitInstance getKit(final String kit) {
 		return kits.get(kit);
 	}
 
@@ -502,7 +477,7 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	public String getKitList(CommandSender sender) {
+	public String getKitList(final CommandSender sender) {
 		String kitList = "";
 		final HashSet<String> list = new HashSet<String>();
 		try {
@@ -524,24 +499,22 @@ public class ACHelper {
 		return kitList.trim();
 	}
 
-	public int getLimit(CommandSender sender, String type) {
+	public int getLimit(final CommandSender sender, final String type) {
 		if (sender instanceof ConsoleCommandSender)
 			return Integer.MAX_VALUE;
 		return getLimit((Player) sender, type, type);
 	}
 
-	public int getLimit(Player player, String type) {
+	public int getLimit(final Player player, final String type) {
 		return getLimit(player, type, type);
 	}
 
 	// teleports chosen player to another player
 
-	public int getLimit(Player player, String type, String defaultLvl) {
+	public int getLimit(final Player player, final String type, final String defaultLvl) {
 		Integer limit = null;
-		final String toParse = PermissionManager.getPermissionLimit(player,
-				type);
-		limit = toParse != null && !toParse.isEmpty() ? Integer
-				.parseInt(toParse) : null;
+		final String toParse = PermissionManager.getPermissionLimit(player, type);
+		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1)
 			limit = pluginConfig.getInt(defaultLvl, 0);
 		if (limit == 0 && !type.equals("immunityLvl"))
@@ -567,7 +540,7 @@ public class ACHelper {
 	 *            The player who wants to reply to a message.
 	 * @return
 	 */
-	public Player getReplyPlayer(Player key) {
+	public Player getReplyPlayer(final Player key) {
 		return playersForReplyMessage.get(key);
 	}
 
@@ -575,7 +548,7 @@ public class ACHelper {
 		return spyPlayers.keySet();
 	}
 
-	public void groupSpawn(CommandSender sender) {
+	public void groupSpawn(final CommandSender sender) {
 		if (Utils.isPlayer(sender)) {
 			final Player player = ((Player) sender);
 			Location loc = null;
@@ -591,8 +564,8 @@ public class ACHelper {
 			for (final String groupName : groups) {
 				try {
 					if (PermissionManager.isInGroup(groupName, player))
-						loc = ACWorld.getWorld(worldName).getWarp(
-								"spawn" + groupName.toLowerCase()).loc;
+						loc = ACWorld.getWorld(worldName)
+								.getWarp("spawn" + groupName.toLowerCase()).loc;
 					break;
 				} catch (final NoPermissionsPlugin e) {
 					loc = ACWorld.getWorld(worldName).getSpawn();
@@ -607,9 +580,9 @@ public class ACHelper {
 		}
 	}
 
-	public boolean inBlackListBlock(CommandSender sender, ItemStack mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist",
-				false) && blockBlacklist.contains(mat.getTypeId())) {
+	public boolean inBlackListBlock(final CommandSender sender, final ItemStack mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+				&& blockBlacklist.contains(mat.getTypeId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
 			Utils.sI18n(sender, "inBlacklistBlock", replace);
@@ -618,9 +591,9 @@ public class ACHelper {
 		return false;
 	}
 
-	public boolean inBlackListBlock(CommandSender sender, MaterialContainer mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist",
-				false) && blockBlacklist.contains(mat.getMaterial().getId())) {
+	public boolean inBlackListBlock(final CommandSender sender, final MaterialContainer mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+				&& blockBlacklist.contains(mat.getMaterial().getId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
 			Utils.sI18n(sender, "inBlacklistBlock", replace);
@@ -629,9 +602,9 @@ public class ACHelper {
 		return false;
 	}
 
-	public boolean inBlackListItem(CommandSender sender, ItemStack mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist",
-				false) && itemBlacklist.contains(mat.getTypeId())) {
+	public boolean inBlackListItem(final CommandSender sender, final ItemStack mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+				&& itemBlacklist.contains(mat.getTypeId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
 			Utils.sI18n(sender, "inBlacklistItem", replace);
@@ -640,9 +613,9 @@ public class ACHelper {
 		return false;
 	}
 
-	public boolean inBlackListItem(CommandSender sender, MaterialContainer mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist",
-				false) && itemBlacklist.contains(mat.getMaterial().getId())) {
+	public boolean inBlackListItem(final CommandSender sender, final MaterialContainer mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+				&& itemBlacklist.contains(mat.getMaterial().getId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
 			Utils.sI18n(sender, "inBlacklistItem", replace);
@@ -657,10 +630,8 @@ public class ACHelper {
 	private void init() {
 		AFKWorker.createInstance();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(
-					pluginConfig.getInt("afkTimeInSecond", 60));
-			AFKWorker.getInstance().setKickTime(
-					pluginConfig.getInt("afkKickInMinutes", 3));
+			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
 			this.coreInstance
 					.getServer()
@@ -672,30 +643,24 @@ public class ACHelper {
 				this.coreInstance
 						.getServer()
 						.getScheduler()
-						.scheduleAsyncRepeatingTask(
-								this.coreInstance,
-								AFKWorker.getInstance().getKickChecker(),
-								0,
+						.scheduleAsyncRepeatingTask(this.coreInstance,
+								AFKWorker.getInstance().getKickChecker(), 0,
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 		}
 		InvisibleWorker.createInstance().setMaxRange(
 				pluginConfig.getInt("invisibleRangeInBlock", 512));
-		InvisibleWorker.getInstance().setTickCheck(
-				pluginConfig.getInt("statutCheckInSec", 20));
+		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().addLocaleFile(
 				LocaleManager.PRIMARY_LOCALE,
-				new File(coreInstance.getDataFolder(), "locales"
-						+ File.separator
+				new File(coreInstance.getDataFolder(), "locales" + File.separator
 						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		LocaleManager.getInstance().addLocaleFile("kickMessages",
 				fManager.getInnerFile("kickMessages.yml", "locales", false));
-		LocaleManager.getInstance().setNoMsg(
-				pluginConfig.getBoolean("noMessage", false));
+		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		HelpLoader.load(coreInstance.getDataFolder());
 		CommandManager.createInstance().setCorePlugin(coreInstance);
 		if (pluginConfig.get("pluginStarted") != null) {
-			pluginStarted = Long.parseLong(pluginConfig
-					.getString("pluginStarted"));
+			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.remove("pluginStarted");
 			try {
 				pluginConfig.save();
@@ -712,13 +677,10 @@ public class ACHelper {
 		}
 		for (final World w : coreInstance.getServer().getWorlds()) {
 			final ACWorld world = ACWorld.getWorld(w.getName());
-			int task = world.getInformation(Type.TIME_FREEZED.toString())
-					.getInt(-1);
+			int task = world.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
 			if (task != -1) {
-				task = ACPluginManager.getScheduler()
-						.scheduleAsyncRepeatingTask(
-								ACHelper.getInstance().getCoreInstance(),
-								new Utils.SetTime(w), 0, 10);
+				task = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new Utils.SetTime(w), 0, 10);
 				world.setInformation(Type.TIME_FREEZED.toString(), task);
 			}
 		}
@@ -730,7 +692,7 @@ public class ACHelper {
 	 * @param player
 	 * @return
 	 */
-	public BannedPlayer isBanned(String player) {
+	public BannedPlayer isBanned(final String player) {
 		return bannedPlayers.get(player);
 	}
 
@@ -742,7 +704,7 @@ public class ACHelper {
 	}
 
 	// changes the color of a colorable item in hand
-	public boolean itemColor(CommandSender sender, String color) {
+	public boolean itemColor(final CommandSender sender, final String color) {
 		if (Utils.isPlayer(sender)) {
 			// help?
 			if (color.equalsIgnoreCase("help")) {
@@ -763,15 +725,13 @@ public class ACHelper {
 			if (materialsColors.containsKey(m))
 				value = getColor(color, m);
 			else {
-				sender.sendMessage(ChatColor.RED
-						+ "You must hold a colorable material!");
+				sender.sendMessage(ChatColor.RED + "You must hold a colorable material!");
 				return true;
 			}
 			// error?
 			if (value < 0) {
-				sender.sendMessage(ChatColor.RED + "Color " + ChatColor.WHITE
-						+ color + ChatColor.RED
-						+ " is not usable for what you're holding!");
+				sender.sendMessage(ChatColor.RED + "Color " + ChatColor.WHITE + color
+						+ ChatColor.RED + " is not usable for what you're holding!");
 				return true;
 			}
 
@@ -806,23 +766,18 @@ public class ACHelper {
 
 		if (pluginConfig.getBoolean("verboseLog", true)) {
 			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + itemBlacklist.size()
-							+ " blacklisted items loaded.");
+					"[AdminCmd] " + itemBlacklist.size() + " blacklisted items loaded.");
 			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + blockBlacklist.size()
-							+ " blacklisted blocks loaded.");
+					"[AdminCmd] " + blockBlacklist.size() + " blacklisted blocks loaded.");
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + alias.size() + " alias loaded.");
+			Logger.getLogger("Minecraft").info("[AdminCmd] " + kits.size() + " kits loaded.");
 			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + alias.size() + " alias loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + kits.size() + " kits loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + bannedPlayers.size()
-							+ " banned players loaded.");
+					"[AdminCmd] " + bannedPlayers.size() + " banned players loaded.");
 		}
 	}
 
 	// returns all members of the color name array concatenated with commas
-	private String printColors(Material mat) {
+	private String printColors(final Material mat) {
 		String output = "";
 		for (int i = 0; i < materialsColors.get(mat).length; ++i)
 			output += materialsColors.get(mat)[i] + ", ";
@@ -852,8 +807,7 @@ public class ACHelper {
 		bannedPlayers.clear();
 
 		loadInfos();
-		for (final Player p : InvisibleWorker.getInstance()
-				.getAllInvisiblePlayers())
+		for (final Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
 			InvisibleWorker.getInstance().reappear(p);
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
@@ -865,8 +819,7 @@ public class ACHelper {
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias(coreInstance);
 		if (ConfigEnum.H_ALLPLUGIN.getBoolean())
-			for (final Plugin plugin : coreInstance.getServer()
-					.getPluginManager().getPlugins())
+			for (final Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
 				HelpLister.getInstance().addPlugin(plugin);
 		if (pluginConfig.getBoolean("autoAfk", true)) {
 			for (final Player p : Utils.getOnlinePlayers())
@@ -880,7 +833,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean removeBlackListedBlock(CommandSender sender, String name) {
+	public boolean removeBlackListedBlock(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
@@ -913,7 +866,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean removeBlackListedItem(CommandSender sender, String name) {
+	public boolean removeBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
@@ -938,7 +891,7 @@ public class ACHelper {
 		return false;
 	}
 
-	public void removeDisconnectedPlayer(Player player) {
+	public void removeDisconnectedPlayer(final Player player) {
 		AFKWorker.getInstance().removePlayer(player);
 		fakeQuitPlayers.remove(player);
 		playersForReplyMessage.remove(player);
@@ -947,7 +900,7 @@ public class ACHelper {
 
 	}
 
-	public void removeFakeQuit(Player p) {
+	public void removeFakeQuit(final Player p) {
 		fakeQuitPlayers.remove(p);
 	}
 
@@ -956,23 +909,23 @@ public class ACHelper {
 	 * 
 	 * @param key
 	 */
-	public void removeReplyPlayer(Player key) {
+	public void removeReplyPlayer(final Player key) {
 		if (key == null)
 			return;
 		playersForReplyMessage.remove(key);
 	}
 
-	public void removeSpy(Player p) {
+	public void removeSpy(final Player p) {
 		if (p == null)
 			return;
 		spyPlayers.remove(p);
 	}
 
-	public boolean repairable(int id) {
+	public boolean repairable(final int id) {
 		return listOfPossibleRepair.contains(id);
 	}
 
-	public boolean rmAlias(CommandSender sender, String alias) {
+	public boolean rmAlias(final CommandSender sender, final String alias) {
 		this.fManager.removeAlias(alias);
 		this.alias.remove(alias);
 		sender.sendMessage(ChatColor.GOLD + alias + ChatColor.RED + " removed");
@@ -994,32 +947,29 @@ public class ACHelper {
 	 * @param pluginInstance
 	 *            the pluginInstance to set
 	 */
-	public void setCoreInstance(AdminCmd pluginInstance) {
+	public void setCoreInstance(final AdminCmd pluginInstance) {
 		ACPluginManager.setCorePlugin(pluginInstance);
 		this.coreInstance = pluginInstance;
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
 		PlayerManager.getInstance().setPlayerFactory(
-				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "userData"));
+				new FilePlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
+						+ "userData"));
 		WorldManager.getInstance().setWorldFactory(
-				new FileWorldFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "worldData"));
+				new FileWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
+						+ "worldData"));
 		// convertBannedMuted();
 		convertSpawnWarp();
 		fManager.getInnerFile("kits.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
-		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
-				+ "AdminCmd", true);
-		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator
-				+ "AdminCmd", true);
-		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(
-				coreInstance.getDataFolder(), "config.yml"));
+		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
+		fManager.getInnerFile("acmotd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
+		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(coreInstance
+				.getDataFolder(), "config.yml"));
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
-		pluginConfig.options().copyDefaults(true)
-				.header(ConfigEnum.getHeader());
+		pluginConfig.options().copyDefaults(true).header(ConfigEnum.getHeader());
 		pluginConfig.addDefaults(ConfigEnum.getDefaultvalues());
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
@@ -1028,17 +978,13 @@ public class ACHelper {
 			pluginConfig.remove("disabledCommands");
 		}
 		if (pluginConfig.get("prioritizedCommands") != null) {
-			priority = pluginConfig.getStringList("prioritizedCommands",
-					priority);
+			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.remove("prioritizedCommands");
 		}
 		if (pluginConfig.get("glinding") != null) {
-			pluginConfig.add("gliding.multiplicator",
-					ConfigEnum.G_MULT.getFloat());
-			pluginConfig.add("gliding.YvelocityCheckToGlide",
-					ConfigEnum.G_VELCHECK.getFloat());
-			pluginConfig.add("gliding.newYvelocity",
-					ConfigEnum.G_NEWYVEL.getFloat());
+			pluginConfig.add("gliding.multiplicator", ConfigEnum.G_MULT.getFloat());
+			pluginConfig.add("gliding.YvelocityCheckToGlide", ConfigEnum.G_VELCHECK.getFloat());
+			pluginConfig.add("gliding.newYvelocity", ConfigEnum.G_NEWYVEL.getFloat());
 			pluginConfig.remove("glinding");
 
 		} else {
@@ -1054,13 +1000,11 @@ public class ACHelper {
 		}
 		if (!pluginConfig.getBoolean("debug"))
 			DebugLog.stopLogging();
-		final ExtendedConfiguration commands = ExtendedConfiguration
-				.loadConfiguration(new File(coreInstance.getDataFolder(),
-						"commands.yml"));
+		final ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
+				coreInstance.getDataFolder(), "commands.yml"));
 		commands.add("disabledCommands", disabled);
 		commands.add("prioritizedCommands",
-				priority.isEmpty() ? Arrays.asList("reload", "/", "stop")
-						: priority);
+				priority.isEmpty() ? Arrays.asList("reload", "/", "stop") : priority);
 		commands.add("alias.god", Arrays.asList("gg", "gd"));
 		try {
 			commands.save();
@@ -1077,7 +1021,7 @@ public class ACHelper {
 	 * @param value
 	 *            The Player who sent the message.
 	 */
-	public void setReplyPlayer(Player key, Player value) {
+	public void setReplyPlayer(final Player key, final Player value) {
 		playersForReplyMessage.put(key, value);
 	}
 
@@ -1085,7 +1029,7 @@ public class ACHelper {
 	 * @param serverLocked
 	 *            the serverLocked to set
 	 */
-	public void setServerLocked(boolean serverLocked) {
+	public void setServerLocked(final boolean serverLocked) {
 		this.serverLocked = serverLocked;
 	}
 
@@ -1099,8 +1043,7 @@ public class ACHelper {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-							loc.getBlockZ());
+					w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 				}
 			});
 
@@ -1109,7 +1052,7 @@ public class ACHelper {
 		}
 	}
 
-	public void spawn(Player player) {
+	public void spawn(final Player player) {
 		Location loc = null;
 		final String worldName = player.getWorld().getName();
 		loc = ACWorld.getWorld(worldName).getSpawn();
@@ -1123,12 +1066,12 @@ public class ACHelper {
 	 * 
 	 * @param player
 	 */
-	public void unBanPlayer(String player) {
+	public void unBanPlayer(final String player) {
 		bannedPlayers.remove(player);
 		dataManager.unBanPlayer(player);
 	}
 
-	public int undoLastModification(String player) throws EmptyStackException {
+	public int undoLastModification(final String player) throws EmptyStackException {
 		if (!undoQueue.containsKey(player))
 			throw new EmptyStackException();
 		final Stack<Stack<BlockRemanence>> blockQueue = undoQueue.get(player);
@@ -1141,8 +1084,8 @@ public class ACHelper {
 			while (!undo.isEmpty()) {
 				undoCache.push(undo.pop());
 				if (undoCache.size() == Utils.MAX_BLOCKS)
-					ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-							coreInstance, new UndoBlockTask(undoCache), 1);
+					ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
+							new UndoBlockTask(undoCache), 1);
 				i++;
 			}
 
@@ -1150,8 +1093,8 @@ public class ACHelper {
 			ACLogger.severe(e.getMessage(), e);
 			return i;
 		} finally {
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					coreInstance, new UndoBlockTask(undoCache), 1);
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
+					new UndoBlockTask(undoCache), 1);
 		}
 		return i;
 	}

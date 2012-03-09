@@ -43,7 +43,7 @@ public class AddAlias extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACHelper.getInstance().alias(sender, args);
 	}
 
@@ -53,7 +53,7 @@ public class AddAlias extends ItemCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 2;
 	}
 

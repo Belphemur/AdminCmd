@@ -52,7 +52,7 @@ public abstract class CoreCommand {
 	 * @param perm
 	 *            permission needed by the player to execute the command
 	 */
-	public CoreCommand(String name, String perm) {
+	public CoreCommand(final String name, final String perm) {
 		this.permNode = perm;
 		this.cmdName = name;
 		this.plugin = ACPluginManager.getCorePlugin();
@@ -72,7 +72,7 @@ public abstract class CoreCommand {
 	 * @param plugin
 	 *            name of the AdminCmd plugin that the command belong to.
 	 */
-	public CoreCommand(String name, String perm, String plugin) {
+	public CoreCommand(final String name, final String perm, final String plugin) {
 		this.permNode = perm;
 		this.cmdName = name;
 		this.plugin = ACPluginManager.getPluginInstance(plugin);
@@ -90,7 +90,8 @@ public abstract class CoreCommand {
 	 * @param parent
 	 *            PermParent used to register the permission of the command
 	 */
-	public CoreCommand(String name, String perm, String plugin, PermParent parent) {
+	public CoreCommand(final String name, final String perm, final String plugin,
+			final PermParent parent) {
 		this.permNode = perm;
 		this.cmdName = name;
 		this.plugin = ACPluginManager.getPluginInstance(plugin);
@@ -124,7 +125,7 @@ public abstract class CoreCommand {
 	 * @param sender
 	 * @return
 	 */
-	public boolean permissionCheck(CommandSender sender) {
+	public boolean permissionCheck(final CommandSender sender) {
 		if (permNode != null && !permNode.isEmpty())
 			return PermissionManager.hasPerm(sender, bukkitPerm);
 		else
@@ -151,7 +152,7 @@ public abstract class CoreCommand {
 	public void registerBukkitPerm() {
 		if (permNode != null && !permNode.isEmpty()) {
 			if (permParent != null) {
-				PermChild child = new PermChild(permNode, bukkitDefault);
+				final PermChild child = new PermChild(permNode, bukkitDefault);
 				permParent.addChild(child);
 				bukkitPerm = child.getBukkitPerm();
 				if (other)

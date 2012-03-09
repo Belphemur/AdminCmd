@@ -32,12 +32,12 @@ import be.Balor.Player.ACPlayer;
  * 
  */
 public class PermissionsEx extends SuperPermissions {
-	private PermissionManager PEX;
+	private final PermissionManager PEX;
 
 	/**
 	 *
 	 */
-	public PermissionsEx(PermissionManager PEX) {
+	public PermissionsEx(final PermissionManager PEX) {
 		this.PEX = PEX;
 	}
 
@@ -76,12 +76,12 @@ public class PermissionsEx extends SuperPermissions {
 	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, Player player) {
+	public boolean isInGroup(final String groupName, final Player player) {
 		PermissionGroup[] groups;
 		groups = PEX.getUser(player).getGroups(player.getWorld().getName());
 		if (groups.length == 0)
 			return false;
-		for (PermissionGroup group : groups)
+		for (final PermissionGroup group : groups)
 			if (group.getName().equalsIgnoreCase(groupName))
 				return true;
 		return false;
@@ -95,13 +95,13 @@ public class PermissionsEx extends SuperPermissions {
 	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
 		PermissionUser[] users = null;
 		users = PEX.getUsers(groupName);
-		Set<Player> players = new HashSet<Player>();
+		final Set<Player> players = new HashSet<Player>();
 		if (users != null) {
 			Player player = null;
-			for (PermissionUser user : users) {
+			for (final PermissionUser user : users) {
 				player = ACPlayer.getPlayer(user.getName()).getHandler();
 				if (player == null)
 					continue;
@@ -120,7 +120,7 @@ public class PermissionsEx extends SuperPermissions {
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(Player p, String limit) {
+	public String getPermissionLimit(final Player p, final String limit) {
 		String permLimit = PEX.getUser(p).getOption("admincmd." + limit);
 		if (permLimit == null || (permLimit != null && permLimit.isEmpty()))
 			permLimit = super.getPermissionLimit(p, limit);
@@ -135,13 +135,13 @@ public class PermissionsEx extends SuperPermissions {
 	 * entity.Player)
 	 */
 	@Override
-	public String getPrefix(Player player) {
-		PermissionUser user = PEX.getUser(player);
+	public String getPrefix(final Player player) {
+		final PermissionUser user = PEX.getUser(player);
 		if (user != null)
 			return user.getPrefix() == null ? "" : user.getPrefix();
 
 		String prefix = "";
-		for (PermissionGroup group : PEX.getUser(player).getGroups())
+		for (final PermissionGroup group : PEX.getUser(player).getGroups())
 			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty())
 				break;
 		return prefix;
@@ -155,13 +155,13 @@ public class PermissionsEx extends SuperPermissions {
 	 * .Player)
 	 */
 	@Override
-	public String getSuffix(Player player) {
-		PermissionUser user = PEX.getUser(player);
+	public String getSuffix(final Player player) {
+		final PermissionUser user = PEX.getUser(player);
 		if (user != null)
 			return user.getSuffix() == null ? "" : user.getSuffix();
 
 		String suffix = "";
-		for (PermissionGroup group : PEX.getUser(player).getGroups())
+		for (final PermissionGroup group : PEX.getUser(player).getGroups())
 			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty())
 				break;
 		return suffix;

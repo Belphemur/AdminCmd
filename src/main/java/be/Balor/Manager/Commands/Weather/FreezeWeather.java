@@ -16,12 +16,12 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Weather;
 
-
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -44,7 +44,7 @@ public class FreezeWeather extends WeatherCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		Utils.weather(sender, Type.Weather.FREEZE, args);
 	}
 
@@ -54,7 +54,7 @@ public class FreezeWeather extends WeatherCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

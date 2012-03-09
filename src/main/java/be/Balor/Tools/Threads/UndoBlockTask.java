@@ -22,16 +22,19 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class UndoBlockTask extends ReplaceBlockTask {
 	/**
 	 * @param blocks
 	 */
-	public UndoBlockTask(Stack<BlockRemanence> blocks) {
+	public UndoBlockTask(final Stack<BlockRemanence> blocks) {
 		super(blocks);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Tools.Threads.ReplaceBlockTask#run()
 	 */
 	@Override

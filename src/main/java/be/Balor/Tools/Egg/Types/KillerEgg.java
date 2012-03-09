@@ -57,7 +57,7 @@ public class KillerEgg extends SimpleRadiusEgg {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 		event.setHatching(false);
 		final Location loc = event.getEgg().getLocation();
 		event.getEgg().remove();
@@ -65,7 +65,7 @@ public class KillerEgg extends SimpleRadiusEgg {
 		final CraftPlayer p = (CraftPlayer) event.getPlayer();
 		final World w = p.getWorld();
 		final int radius = value * value;
-		for (Object entity : ((CraftWorld) w).getHandle().entityList)
+		for (final Object entity : ((CraftWorld) w).getHandle().entityList)
 			if (entity instanceof EntityLiving)
 				entities.add((EntityLiving) entity);
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
@@ -74,11 +74,11 @@ public class KillerEgg extends SimpleRadiusEgg {
 					@Override
 					public void run() {
 						int count = 0;
-						for (EntityLiving entity : entities) {
+						for (final EntityLiving entity : entities) {
 							if (entity.equals(p.getHandle())) {
 								continue;
 							}
-							Location entityLoc = new Location(w, entity.locX, entity.locY,
+							final Location entityLoc = new Location(w, entity.locX, entity.locY,
 									entity.locZ, entity.yaw, entity.pitch);
 							if (entityLoc.distanceSquared(loc) > radius)
 								continue;

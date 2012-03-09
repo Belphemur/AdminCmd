@@ -46,8 +46,9 @@ public class CheckingBlockTask implements Runnable {
 	 * @param limitZ
 	 * @param mat
 	 */
-	public CheckingBlockTask(Semaphore sema, List<SimplifiedLocation> okBlocks, Block block, int radius,
-			int limitY, int limitX, int limitZ, List<Material> mat) {
+	public CheckingBlockTask(final Semaphore sema, final List<SimplifiedLocation> okBlocks,
+			final Block block, final int radius, final int limitY, final int limitX,
+			final int limitZ, final List<Material> mat) {
 		super();
 		this.sema = sema;
 		this.okBlocks = okBlocks;

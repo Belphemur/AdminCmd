@@ -30,7 +30,7 @@ public class DontHaveThePermissionException extends Exception {
 	/**
 	 * 
 	 */
-	public DontHaveThePermissionException(String message) {
+	public DontHaveThePermissionException(final String message) {
 		super(message);
 	}
 

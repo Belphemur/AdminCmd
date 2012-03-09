@@ -43,7 +43,7 @@ public class RemoveAlias extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACHelper.getInstance().rmAlias(sender, args.getString(0));
 	}
 
@@ -53,7 +53,7 @@ public class RemoveAlias extends ItemCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

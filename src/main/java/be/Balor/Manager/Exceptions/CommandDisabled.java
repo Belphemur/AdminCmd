@@ -20,7 +20,7 @@ import org.bukkit.command.CommandException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class CommandDisabled extends CommandException {
 
@@ -39,7 +39,7 @@ public class CommandDisabled extends CommandException {
 	/**
 	 * @param msg
 	 */
-	public CommandDisabled(String msg) {
+	public CommandDisabled(final String msg) {
 		super(msg);
 		// TODO Auto-generated constructor stub
 	}
@@ -48,7 +48,7 @@ public class CommandDisabled extends CommandException {
 	 * @param msg
 	 * @param cause
 	 */
-	public CommandDisabled(String msg, Throwable cause) {
+	public CommandDisabled(final String msg, final Throwable cause) {
 		super(msg, cause);
 		// TODO Auto-generated constructor stub
 	}

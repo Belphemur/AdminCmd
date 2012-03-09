@@ -42,7 +42,7 @@ class ExtendedRepresenter extends Representer {
 
 	protected class EmptyRepresentNull implements Represent {
 		@Override
-		public Node representData(Object data) {
+		public Node representData(final Object data) {
 			return representScalar(Tag.NULL, ""); // Changed "null" to "" so as
 													// to avoid writing nulls
 		}
@@ -50,14 +50,14 @@ class ExtendedRepresenter extends Representer {
 
 	private class RepresentConfigurationSection extends RepresentMap {
 		@Override
-		public Node representData(Object data) {
+		public Node representData(final Object data) {
 			return super.representData(((ConfigurationSection) data).getValues(false));
 		}
 	}
 
 	private class RepresentConfigurationSerializable extends RepresentMap {
 		@Override
-		public Node representData(Object data) {
+		public Node representData(final Object data) {
 			final ConfigurationSerializable serializable = (ConfigurationSerializable) data;
 			final Map<String, Object> values = new LinkedHashMap<String, Object>();
 			values.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY,
@@ -70,7 +70,7 @@ class ExtendedRepresenter extends Representer {
 
 	private class RepresentTpRequest implements Represent {
 		@Override
-		public Node representData(Object data) {
+		public Node representData(final Object data) {
 			final TpRequest tpRequest = (TpRequest) data;
 			final String value = tpRequest.getFrom() + ";" + tpRequest.getTo();
 			return representScalar(new Tag("!tpRequest"), value);
@@ -89,8 +89,8 @@ class ExtendedRepresenter extends Representer {
 	// Code borrowed from snakeyaml
 	// (http://code.google.com/p/snakeyaml/source/browse/src/test/java/org/yaml/snakeyaml/issues/issue60/SkipBeanTest.java)
 	@Override
-	protected NodeTuple representJavaBeanProperty(Object javaBean, Property property,
-			Object propertyValue, Tag customTag) {
+	protected NodeTuple representJavaBeanProperty(final Object javaBean, final Property property,
+			final Object propertyValue, final Tag customTag) {
 		final NodeTuple tuple = super.representJavaBeanProperty(javaBean, property, propertyValue,
 				customTag);
 		final Node valueNode = tuple.getValueNode();

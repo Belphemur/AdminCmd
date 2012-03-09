@@ -36,7 +36,8 @@ public class UnixTerminalCommand extends TerminalCommand {
 	 * @param args
 	 * @param workingDir
 	 */
-	public UnixTerminalCommand(String commandName, String execution, String args, File workingDir) {
+	public UnixTerminalCommand(final String commandName, final String execution, final String args,
+			final File workingDir) {
 		super(commandName, execution, args, workingDir);
 	}
 
@@ -46,7 +47,8 @@ public class UnixTerminalCommand extends TerminalCommand {
 	 * @param args
 	 * @param workingDir
 	 */
-	public UnixTerminalCommand(String commandName, String execution, String args, String workingDir) {
+	public UnixTerminalCommand(final String commandName, final String execution, final String args,
+			final String workingDir) {
 		super(commandName, execution, args, workingDir);
 	}
 
@@ -58,7 +60,7 @@ public class UnixTerminalCommand extends TerminalCommand {
 	 * CommandSender)
 	 */
 	@Override
-	public void execute(CommandSender sender) {
+	public void execute(final CommandSender sender) {
 		try {
 			ProcessBuilder pb;
 			if (args != null)
@@ -67,13 +69,13 @@ public class UnixTerminalCommand extends TerminalCommand {
 				pb = new ProcessBuilder(execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
-			Process p = pb.start();
-			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			final Process p = pb.start();
+			final BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null) {
 				sender.sendMessage(line);
 			}
-		} catch (Throwable e) {
+		} catch (final Throwable e) {
 			sender.sendMessage("CMD ERROR : " + e.getMessage());
 			e.printStackTrace();
 		}

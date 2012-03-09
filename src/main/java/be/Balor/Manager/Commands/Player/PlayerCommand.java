@@ -20,7 +20,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class PlayerCommand extends CoreCommand {
 	/**
@@ -35,7 +35,7 @@ public abstract class PlayerCommand extends CoreCommand {
 	 * @param string
 	 * @param string2
 	 */
-	public PlayerCommand(String cmd, String permNode) {
+	public PlayerCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
 		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
 	}

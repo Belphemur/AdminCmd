@@ -31,26 +31,26 @@ public abstract class RadiusEgg<T> extends EggType<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = -8375423945536370931L;
-	private int defaultRadius;
-	private int maxRadius;
+	private final int defaultRadius;
+	private final int maxRadius;
 
 	/**
 	 * @param defaultRadius
 	 * @param maxRadius
 	 */
-	public RadiusEgg(int defaultRadius, int maxRadius) {
+	public RadiusEgg(final int defaultRadius, final int maxRadius) {
 		super();
 		this.defaultRadius = defaultRadius;
 		this.maxRadius = maxRadius;
 	}
 
-	protected int getRadius(Player sender, CommandArgs args) {
+	protected int getRadius(final Player sender, final CommandArgs args) {
 		int radius = defaultRadius;
-		String valFlag = args.getValueFlag('r');
+		final String valFlag = args.getValueFlag('r');
 		if (valFlag != null)
 			try {
 				radius = Integer.parseInt(valFlag);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return -1;
 			}

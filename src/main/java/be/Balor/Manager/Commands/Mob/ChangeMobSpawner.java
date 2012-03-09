@@ -51,18 +51,18 @@ public class ChangeMobSpawner extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			Player player = (Player) sender;
-			Block block = player.getTargetBlock(null, 100);
+			final Player player = (Player) sender;
+			final Block block = player.getTargetBlock(null, 100);
 			if (block.getTypeId() != Material.MOB_SPAWNER.getId()) {
 				player.sendMessage("Not a Mob Spawner");
 				return;
 			}
 			final CreatureSpawner spawner = (CreatureSpawner) block.getState();
 			if (args.hasFlag('m')) {
-				String name = args.getString(0);
+				final String name = args.getString(0);
 				if (name == null) {
 					return;
 				}
@@ -85,7 +85,7 @@ public class ChangeMobSpawner extends MobCommand {
 				int delay;
 				try {
 					delay = args.getInt(0);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "spawnerNaN");
 					return;
 				}
@@ -101,8 +101,8 @@ public class ChangeMobSpawner extends MobCommand {
 				replace.put("delay", String.valueOf(args.getInt(0)));
 				Utils.sI18n(sender, "spawnerSetDelay", replace);
 			} else if (args.hasFlag('g')) {
-				int delay = spawner.getDelay();
-				String type = spawner.getCreatureTypeName();
+				final int delay = spawner.getDelay();
+				final String type = spawner.getCreatureTypeName();
 				replace.put("mob", type);
 				replace.put("delay", String.valueOf(delay));
 				Utils.sI18n(sender, "spawnerGetData", replace);
@@ -116,7 +116,7 @@ public class ChangeMobSpawner extends MobCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 }

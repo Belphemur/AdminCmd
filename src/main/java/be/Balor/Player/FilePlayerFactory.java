@@ -29,30 +29,32 @@ import be.Balor.Tools.Files.YmlFilter;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class FilePlayerFactory implements IPlayerFactory{
+public class FilePlayerFactory implements IPlayerFactory {
 	final String directory;
 	private final Set<String> existingPlayers = new HashSet<String>();
 
 	/**
 	 * 
 	 */
-	public FilePlayerFactory(String directory) {
+	public FilePlayerFactory(final String directory) {
 		this.directory = directory;
-		File[] players = YmlFilter.listRecursively(new File(directory), 1);
-		StringBuffer files = new StringBuffer();
-		for (File player : players) {
-			String name = player.getName();
+		final File[] players = YmlFilter.listRecursively(new File(directory), 1);
+		final StringBuffer files = new StringBuffer();
+		for (final File player : players) {
+			final String name = player.getName();
 			existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
 			files.append(name + " ");
 		}
 		DebugLog.INSTANCE.info("User's file found : " + files.toString().trim());
 	}
 
-	public void addExistingPlayer(String player) {
+	@Override
+	public void addExistingPlayer(final String player) {
 		existingPlayers.add(player);
 	}
 
-	public ACPlayer createPlayer(String playername) {
+	@Override
+	public ACPlayer createPlayer(final String playername) {
 		if (!existingPlayers.contains(playername))
 			return new EmptyPlayer(playername);
 		else if (directory != null)
@@ -61,7 +63,8 @@ public class FilePlayerFactory implements IPlayerFactory{
 			return null;
 	}
 
-	public ACPlayer createPlayer(Player player) {
+	@Override
+	public ACPlayer createPlayer(final Player player) {
 		if (!existingPlayers.contains(player.getName()))
 			return new EmptyPlayer(player);
 		else if (directory != null)
@@ -73,6 +76,7 @@ public class FilePlayerFactory implements IPlayerFactory{
 	/**
 	 * @return the existingPlayers
 	 */
+	@Override
 	public Set<String> getExistingPlayers() {
 		return existingPlayers;
 	}

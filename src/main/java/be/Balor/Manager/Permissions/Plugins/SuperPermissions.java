@@ -16,9 +16,9 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import in.mDev.MiracleM4n.mChatSuite.api.InfoType;
 import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
-import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class SuperPermissions implements IPermissionPlugin {
 	protected static MInfoReader mChatInfo = null;
@@ -54,7 +54,7 @@ public class SuperPermissions implements IPermissionPlugin {
 	 * @param mChatSuite
 	 *            the mChatAPI to set
 	 */
-	public static void setmChatapi(mChatSuite mChatSuite) {
+	public static void setmChatapi(final mChatSuite mChatSuite) {
 		if (SuperPermissions.mChatInfo == null && mChatSuite != null)
 			mChatInfo = mChatSuite.getInfoReader();
 	}
@@ -68,13 +68,13 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
 	 */
 	@Override
-	public boolean hasPerm(CommandSender player, String perm, boolean errorMsg) {
+	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
 		if (player.hasPermission(perm))
@@ -89,13 +89,13 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
 	 */
 	@Override
-	public boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg) {
+	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
 		if (!(player instanceof Player))
 			return true;
 		if (player.hasPermission(perm))
@@ -109,42 +109,44 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String group, Player player) throws NoPermissionsPlugin {
+	public boolean isInGroup(final String group, final Player player) throws NoPermissionsPlugin {
 		throw new NoPermissionsPlugin("To use this functionality you need a Permission Plugin");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
 	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
+	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
 		throw new NoPermissionsPlugin("To use this functionality you need a Permission Plugin");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(final Player p, String limit) {
+	public String getPermissionLimit(final Player p, final String limit) {
 		String result = null;
 		if (mChatInfo != null)
-			result = mChatInfo.getInfo(p.getName(), InfoType.USER ,p.getWorld().getName(), "admincmd." + limit);
+			result = mChatInfo.getInfo(p.getName(), InfoType.USER, p.getWorld().getName(),
+					"admincmd." + limit);
 		if (result == null || (result != null && result.isEmpty())) {
-			Pattern regex = Pattern.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
+			final Pattern regex = Pattern
+					.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
 			final Set<PermissionAttachmentInfo> perms = new LinkedHashSet<PermissionAttachmentInfo>();
 			final CountDownLatch countDown = new CountDownLatch(1);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -158,12 +160,12 @@ public class SuperPermissions implements IPermissionPlugin {
 			});
 			try {
 				countDown.await();
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				DebugLog.INSTANCE.log(Level.WARNING,
 						"Problem to get Permission of the user " + p.getName(), e);
 			}
-			for (PermissionAttachmentInfo info : perms) {
-				Matcher regexMatcher = regex.matcher(info.getPermission());
+			for (final PermissionAttachmentInfo info : perms) {
+				final Matcher regexMatcher = regex.matcher(info.getPermission());
 				if (regexMatcher.find())
 					return info.getPermission().split("\\.")[2];
 
@@ -175,30 +177,32 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
 	 */
 	@Override
-	public String getPrefix(Player player) {
+	public String getPrefix(final Player player) {
 		if (mChatInfo != null)
-			return mChatInfo.getPrefix(player.getName(), InfoType.USER, player.getWorld().getName());
+			return mChatInfo
+					.getPrefix(player.getName(), InfoType.USER, player.getWorld().getName());
 		else
 			return "";
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
 	 * .Player)
 	 */
 	@Override
-	public String getSuffix(Player player) {
+	public String getSuffix(final Player player) {
 		if (mChatInfo != null)
-			return mChatInfo.getSuffix(player.getName(), InfoType.USER, player.getWorld().getName());
+			return mChatInfo
+					.getSuffix(player.getName(), InfoType.USER, player.getWorld().getName());
 		else
 			return "";
 	}

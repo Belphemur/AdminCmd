@@ -47,12 +47,11 @@ public class RemoveWarp extends WarpCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		if(Utils.isPlayer(sender))
-		{
-			Player p = (Player) sender;
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		if (Utils.isPlayer(sender)) {
+			final Player p = (Player) sender;
 			ACWorld.getWorld(p.getWorld().getName()).removeWarp(args.getString(0));
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", args.getString(0));
 			Utils.sI18n(sender, "rmWarp", replace);
 		}
@@ -65,7 +64,7 @@ public class RemoveWarp extends WarpCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

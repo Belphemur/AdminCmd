@@ -45,10 +45,10 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @param delay
 	 * @param items
 	 */
-	public ArmoredKitInstance(String name, int delay, List<MaterialContainer> items,
-			Map<Type.ArmorPart, MaterialContainer> armor) {
+	public ArmoredKitInstance(final String name, final int delay,
+			final List<MaterialContainer> items, final Map<Type.ArmorPart, MaterialContainer> armor) {
 		super(name, delay, items);
-		for (Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet()) {
+		for (final Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet()) {
 			if (!e.getKey().isValid(e.getValue().getMaterial().getId()))
 				continue;
 			this.armor.put(e.getKey(), e.getValue());
@@ -56,7 +56,7 @@ public class ArmoredKitInstance extends KitInstance {
 
 	}
 
-	public ArmoredKitInstance(KitInstance kit) {
+	public ArmoredKitInstance(final KitInstance kit) {
 		super(kit.name, kit.delay, kit.items);
 	}
 
@@ -66,8 +66,8 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @param part
 	 * @return itemstack containing the part of the armor
 	 */
-	public ItemStack getArmorPart(Type.ArmorPart part) {
-		MaterialContainer mat = armor.get(part);
+	public ItemStack getArmorPart(final Type.ArmorPart part) {
+		final MaterialContainer mat = armor.get(part);
 		if (mat == null)
 			return null;
 		return mat.getItemStack();
@@ -80,12 +80,12 @@ public class ArmoredKitInstance extends KitInstance {
 	 *            player to change the armor's inventory.
 	 * @return contain the Part of the armor that couldn't be setted.
 	 */
-	public ArmorPart[] setPlayerArmorParts(Player p) {
-		List<ArmorPart> armorParts = new ArrayList<Type.ArmorPart>(ArmorPart.values().length);
+	public ArmorPart[] setPlayerArmorParts(final Player p) {
+		final List<ArmorPart> armorParts = new ArrayList<Type.ArmorPart>(ArmorPart.values().length);
 		final ItemStack[] armors = new ItemStack[ArmorPart.values().length];
 		final PlayerInventory inventory = p.getInventory();
 		if (ConfigEnum.ARMOR_KIT_OVERRIDE.getBoolean()) {
-			for (ArmorPart part : ArmorPart.values()) {
+			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
 				if (toadd == null) {
 					toadd = inventory.getItem(inventory.getSize() + part.getPlaceInInventory());
@@ -94,7 +94,7 @@ public class ArmoredKitInstance extends KitInstance {
 				armors[part.getPlaceInInventory()] = toadd;
 			}
 		} else {
-			for (ArmorPart part : ArmorPart.values()) {
+			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
 				if (inventory.getItem(inventory.getSize() + part.getPlaceInInventory()) != null)
 					continue;
@@ -123,12 +123,12 @@ public class ArmoredKitInstance extends KitInstance {
 	 * )
 	 */
 	@Override
-	public void addParent(KitInstance parent) {
+	public void addParent(final KitInstance parent) {
 		super.addParent(parent);
 		if (!(parent instanceof ArmoredKitInstance))
 			return;
-		ArmoredKitInstance armoredParent = (ArmoredKitInstance) parent;
-		for (ArmorPart part : ArmorPart.values()) {
+		final ArmoredKitInstance armoredParent = (ArmoredKitInstance) parent;
+		for (final ArmorPart part : ArmorPart.values()) {
 			if (armor.get(part) == null)
 				armor.put(part, armoredParent.armor.get(part));
 		}

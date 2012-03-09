@@ -50,20 +50,20 @@ public class ListHomes extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			String msg = "";
 			String player = "serverConsole";
 			if (Utils.isPlayer(sender, false))
 				player = ((Player) sender).getName();
 			if (args.length >= 1) {
-				if(!PermissionManager.hasPerm(sender, "admincmd.admin.home"))
+				if (!PermissionManager.hasPerm(sender, "admincmd.admin.home"))
 					return;
 				player = args.getString(0);
-			}			
-			Set<String> homes = ACPlayer.getPlayer(player).getHomeList();
+			}
+			final Set<String> homes = ACPlayer.getPlayer(player).getHomeList();
 			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE + homes.size());
-			for (String name : homes) {
+			for (final String name : homes) {
 				msg += name + ", ";
 				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
 					sender.sendMessage(msg);
@@ -85,7 +85,7 @@ public class ListHomes extends HomeCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

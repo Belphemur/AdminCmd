@@ -32,11 +32,11 @@ import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACCreatureSpawnListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
+	public void onCreatureSpawn(final CreatureSpawnEvent event) {
 		if (event.isCancelled())
 			return;
 		final Entity e = event.getEntity();

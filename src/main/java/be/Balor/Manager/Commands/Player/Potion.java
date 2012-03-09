@@ -26,13 +26,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.google.common.base.Joiner;
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -41,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 public class Potion extends PlayerCommand {
 	private final static List<String> potions = new ArrayList<String>();
 	static {
-		for (PotionEffectType type : PotionEffectType.values())
+		for (final PotionEffectType type : PotionEffectType.values())
 			if (type != null && type.getName() != null)
 				potions.add(type.getName());
 	}
@@ -61,11 +61,11 @@ public class Potion extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		Player target = Utils.getUserParam(sender, args, permNode);
-		String potion = args.getString(0);
-		String potionFound = Str.matchString(potions, potion);
-		HashMap<String, String> replace = new HashMap<String, String>();
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final Player target = Utils.getUserParam(sender, args, permNode);
+		final String potion = args.getString(0);
+		final String potionFound = Str.matchString(potions, potion);
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (potionFound == null) {
 			replace.put("value", potion);
 			replace.put("type", LocaleHelper.TYPE_POTION.getLocale());
@@ -74,21 +74,21 @@ public class Potion extends PlayerCommand {
 			sender.sendMessage(Joiner.on(", ").skipNulls().join(potions).toLowerCase());
 			return;
 		}
-		String potionDurationString = args.getString(1);
-		String potionAmplifierString = args.getString(2);
+		final String potionDurationString = args.getString(1);
+		final String potionAmplifierString = args.getString(2);
 		int amplifier = 5;
 		int duration = 20 * Utils.secInTick;
 		if (potionAmplifierString != null)
 			try {
 				amplifier = Integer.parseInt(potionAmplifierString);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", potionAmplifierString);
 				return;
 			}
 		if (potionDurationString != null)
 			try {
 				duration = Integer.parseInt(potionDurationString);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", potionDurationString);
 				return;
 			}
@@ -108,7 +108,7 @@ public class Potion extends PlayerCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

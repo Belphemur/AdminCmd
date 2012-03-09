@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum Type {
 	FLY(Category.SUPER_POWER),
@@ -56,18 +56,18 @@ public enum Type {
 
 	@Override
 	public String toString() {
-		String s = super.toString();
+		final String s = super.toString();
 		return s.toLowerCase();
 	}
 
 	public String display() {
-		String s = super.toString();
+		final String s = super.toString();
 		return s.substring(0, 1) + s.substring(1).toLowerCase().replaceAll("_", " ");
 	}
 
 	private final Category category;
 
-	private Type(Category category) {
+	private Type(final Category category) {
 		this.category = category;
 	}
 
@@ -79,7 +79,7 @@ public enum Type {
 	 * Attempts to match the Type with the given name. This is a match lookup;
 	 * names will be converted to uppercase, then stripped of special characters
 	 * in an attempt to format it like the enum
-	 *
+	 * 
 	 * @param name
 	 *            Name of the type to get
 	 * @return Type if found, or null
@@ -99,14 +99,14 @@ public enum Type {
 	}
 
 	static {
-		for (Type type : values()) {
+		for (final Type type : values()) {
 			lookupName.put(type.name(), type);
 		}
 	}
 
 	/**
 	 * Gets the Category assigned to this type
-	 *
+	 * 
 	 * @return Category of this Type
 	 */
 	public Category getCategory() {
@@ -134,7 +134,7 @@ public enum Type {
 		PLAYERS;
 		@Override
 		public String toString() {
-			String s = super.toString();
+			final String s = super.toString();
 			return s.toLowerCase().replaceAll("_", " ");
 		}
 	}
@@ -144,7 +144,7 @@ public enum Type {
 		LOGIN("lastConnection");
 		private final String val;
 
-		private Whois(String val) {
+		private Whois(final String val) {
 			this.val = val;
 		}
 
@@ -168,7 +168,7 @@ public enum Type {
 		/**
 		 * @param placeInInventory
 		 */
-		private ArmorPart(int placeInInventory, int firstPossible) {
+		private ArmorPart(final int placeInInventory, final int firstPossible) {
 			this.placeInInventory = placeInInventory;
 			for (int i = 0; i < nbEquipment; i++)
 				possibleId.add((i * 4) + firstPossible);
@@ -181,17 +181,18 @@ public enum Type {
 			return placeInInventory;
 		}
 
+		@Override
 		public String toString() {
 			return super.toString().toLowerCase();
 		}
 
 		/**
 		 * Check if the id is valid for that ArmorPart
-		 *
+		 * 
 		 * @param toCheck
 		 * @return
 		 */
-		public boolean isValid(int toCheck) {
+		public boolean isValid(final int toCheck) {
 			return possibleId.contains(toCheck);
 		}
 	}

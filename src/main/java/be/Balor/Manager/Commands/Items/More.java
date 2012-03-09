@@ -50,9 +50,9 @@ public class More extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			ItemStack hand = ((Player) sender).getItemInHand();
+			final ItemStack hand = ((Player) sender).getItemInHand();
 			if (hand == null || hand.getType() == Material.AIR) {
 				Utils.sI18n(sender, "errorHolding");
 				return;
@@ -65,24 +65,22 @@ public class More extends ItemCommand {
 				int toAdd;
 				try {
 					toAdd = Integer.parseInt(args.getString(0));
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					return;
 				}
 				if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {
-					int inInventory = (hand.getAmount() + toAdd)
-							- hand.getMaxStackSize();
-					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand,
-							hand.getMaxStackSize()));
+					final int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
+					ACPluginManager
+							.scheduleSyncTask(new HandSetAmount(hand, hand.getMaxStackSize()));
 					((Player) sender).getInventory().addItem(
-							new ItemStack(hand.getType(), inInventory, hand
-									.getDurability()));
-					HashMap<String, String> replace = new HashMap<String, String>();
+							new ItemStack(hand.getType(), inInventory, hand.getDurability()));
+					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("amount", String.valueOf(inInventory));
 					Utils.sI18n(sender, "moreTooMuch", replace);
 
 				} else
-					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand,
-							hand.getAmount() + toAdd));
+					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand, hand.getAmount()
+							+ toAdd));
 			}
 		}
 	}
@@ -93,7 +91,7 @@ public class More extends ItemCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 
@@ -105,7 +103,7 @@ public class More extends ItemCommand {
 		 * @param hand
 		 * @param amount
 		 */
-		public HandSetAmount(ItemStack hand, int amount) {
+		public HandSetAmount(final ItemStack hand, final int amount) {
 			super();
 			this.hand = hand;
 			this.amount = amount;

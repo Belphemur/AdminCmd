@@ -37,14 +37,16 @@ public abstract class TerminalCommand {
 	/**
 	 * 
 	 */
-	public TerminalCommand(String commandName, String execution, String args, File workingDir) {
+	public TerminalCommand(final String commandName, final String execution, final String args,
+			final File workingDir) {
 		this.commandName = commandName;
 		this.execution = execution;
 		this.args = args;
 		this.workingDir = workingDir;
 	}
 
-	public TerminalCommand(String commandName, String execution, String args, String workingDir) {
+	public TerminalCommand(final String commandName, final String execution, final String args,
+			final String workingDir) {
 		this(commandName, execution, args, new File(workingDir));
 	}
 
@@ -52,7 +54,7 @@ public abstract class TerminalCommand {
 	 * @param bukkitPerm
 	 *            the bukkitPerm to set
 	 */
-	public void setBukkitPerm(Permission bukkitPerm) {
+	public void setBukkitPerm(final Permission bukkitPerm) {
 		this.bukkitPerm = bukkitPerm;
 	}
 
@@ -63,11 +65,11 @@ public abstract class TerminalCommand {
 	 * @param msg
 	 * @return
 	 */
-	public boolean permCheck(CommandSender sender, boolean msg) {
+	public boolean permCheck(final CommandSender sender, final boolean msg) {
 		return PermissionManager.hasPerm(sender, bukkitPerm, msg);
 	}
 
-	public boolean permCheck(CommandSender sender) {
+	public boolean permCheck(final CommandSender sender) {
 		return PermissionManager.hasPerm(sender, bukkitPerm, false);
 	}
 

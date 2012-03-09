@@ -46,13 +46,13 @@ public class Played extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode);
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player target = Utils.getUser(sender, args, permNode);
 		if (target != null) {
-			String playername = Utils.getPlayerName(target, sender);
-			long total = ACPlayer.getPlayer(target).getCurrentPlayedTime();
-			Long[] time = Utils.transformToElapsedTime(total);
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final String playername = Utils.getPlayerName(target, sender);
+			final long total = ACPlayer.getPlayer(target).getCurrentPlayedTime();
+			final Long[] time = Utils.transformToElapsedTime(total);
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("d", time[0].toString());
 			replace.put("h", time[1].toString());
 			replace.put("m", time[2].toString());
@@ -69,7 +69,7 @@ public class Played extends PlayerCommand {
 	 * @see be.Balor.Manager.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

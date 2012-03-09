@@ -29,7 +29,7 @@ import be.Balor.Player.ACPlayer;
  */
 public class ACTeleportBackListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
+	public void onPlayerTeleport(final PlayerTeleportEvent event) {
 		if (event.isCancelled())
 			return;
 		ACPlayer.getPlayer(event.getPlayer()).setLastLocation(event.getFrom());

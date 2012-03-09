@@ -21,20 +21,20 @@ import org.bukkit.block.Block;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BlockRemanence {
 	protected Location loc;
-	private int oldType;
+	private final int oldType;
 	private byte data = 0;
 	private boolean useData;
 
 	/**
 	 *
 	 */
-	public BlockRemanence(Location loc) {
+	public BlockRemanence(final Location loc) {
 		this.loc = loc;
-		Block b = loc.getWorld().getBlockAt(loc);
+		final Block b = loc.getWorld().getBlockAt(loc);
 		this.oldType = b.getTypeId();
 		if ((useData = usesData(oldType)))
 			data = b.getState().getRawData();
@@ -42,7 +42,7 @@ public class BlockRemanence {
 	}
 
 	public Block returnToThePast() {
-		Block b = loc.getWorld().getBlockAt(loc);
+		final Block b = loc.getWorld().getBlockAt(loc);
 		if (useData)
 			b.setTypeIdAndData(oldType, data, true);
 		else
@@ -50,7 +50,7 @@ public class BlockRemanence {
 		return b;
 	}
 
-	public void setBlockType(int type) {
+	public void setBlockType(final int type) {
 		loc.getWorld().getBlockAt(loc).setTypeId(type, true);
 	}
 
@@ -70,11 +70,11 @@ public class BlockRemanence {
 
 	/**
 	 * Block types. From worldEdit
-	 *
+	 * 
 	 * @author sk89q
 	 */
 	// TODO: Needs update
-	private static boolean usesData(int id) {
+	private static boolean usesData(final int id) {
 		return id == 6 // Saplings
 				|| id == 8 // Water
 				|| id == 9 // Water

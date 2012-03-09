@@ -27,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Strike extends WeatherCommand {
 
@@ -42,21 +42,21 @@ public class Strike extends WeatherCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		final Player p = Utils.getUser(sender, args, permNode);
 		if (p != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
-			ACPluginManager.scheduleSyncTask(new Runnable() {				
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
 					p.getWorld().strikeLightning(p.getLocation());
-					
+
 				}
 			});
 			replace.put("player", Utils.getPlayerName(p));
@@ -67,11 +67,11 @@ public class Strike extends WeatherCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

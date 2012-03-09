@@ -18,7 +18,7 @@ package be.Balor.Manager.Exceptions;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class NoPermissionsPlugin extends Exception {
 
@@ -30,20 +30,20 @@ public class NoPermissionsPlugin extends Exception {
 	/**
 	 *
 	 */
-	public NoPermissionsPlugin(){
+	public NoPermissionsPlugin() {
 	}
 
 	/**
 	 * @param s
 	 */
-	public NoPermissionsPlugin(String s) {
+	public NoPermissionsPlugin(final String s) {
 		super(s);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public NoPermissionsPlugin(Throwable cause) {
+	public NoPermissionsPlugin(final Throwable cause) {
 		super(cause);
 	}
 
@@ -51,7 +51,7 @@ public class NoPermissionsPlugin extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public NoPermissionsPlugin(String message, Throwable cause) {
+	public NoPermissionsPlugin(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 }

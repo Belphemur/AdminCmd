@@ -37,10 +37,11 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class TpToWarp extends WarpCommand {
 	private PermChild tpAll;
+
 	/**
 	 *
 	 */
@@ -48,38 +49,38 @@ public class TpToWarp extends WarpCommand {
 		permNode = "admincmd.warp.tp";
 		cmdName = "bal_tpwarp";
 		other = true;
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode, 1, true);
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player target = Utils.getUser(sender, args, permNode, 1, true);
 		if (Utils.isPlayer(sender)) {
-			Player p = (Player) sender;
+			final Player p = (Player) sender;
 			Location loc = null;
 			if (target != null) {
-				HashMap<String, String> replace = new HashMap<String, String>();
+				final HashMap<String, String> replace = new HashMap<String, String>();
 
 				if (args.getString(0).contains(":")) {
 					if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm()))
 						return;
-					String[] split = args.getString(0).split(":");
-					String world = split[0];
-					String warp = split[1];
+					final String[] split = args.getString(0).split(":");
+					final String world = split[0];
+					final String warp = split[1];
 					replace.put("name", world + ":" + warp);
 					try {
-						ACWorld acWorld = ACWorld.getWorld(world);
-						Warp warpPoint = acWorld.getWarp(warp);
+						final ACWorld acWorld = ACWorld.getWorld(world);
+						final Warp warpPoint = acWorld.getWarp(warp);
 						loc = warpPoint.loc;
 						replace.put("name", acWorld.getName() + ":" + warpPoint.name);
-					} catch (WorldNotLoaded e) {
+					} catch (final WorldNotLoaded e) {
 						Utils.sI18n(sender, "worldNotFound", "world", world);
 						return;
 					}
@@ -87,7 +88,7 @@ public class TpToWarp extends WarpCommand {
 					replace.put("name", args.getString(0));
 
 					try {
-						Warp warpPoint = ACWorld.getWorld(p.getWorld().getName()).getWarp(
+						final Warp warpPoint = ACWorld.getWorld(p.getWorld().getName()).getWarp(
 								args.getString(0));
 						if (warpPoint == null) {
 							replace.put("name", args.getString(0));
@@ -96,7 +97,7 @@ public class TpToWarp extends WarpCommand {
 						}
 						loc = warpPoint.loc;
 						replace.put("name", warpPoint.name);
-					} catch (WorldNotLoaded e) {
+					} catch (final WorldNotLoaded e) {
 					}
 				}
 				if (loc == null) {
@@ -116,11 +117,11 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 
@@ -143,8 +144,9 @@ public class TpToWarp extends WarpCommand {
 		protected HashMap<String, String> replace;
 		protected CommandSender sender;
 
-		public DelayedTeleport(Location locBefore, Location teleportLoc, Player target,
-				HashMap<String, String> replace, CommandSender sender) {
+		public DelayedTeleport(final Location locBefore, final Location teleportLoc,
+				final Player target, final HashMap<String, String> replace,
+				final CommandSender sender) {
 			this.target = target;
 			this.locBefore = locBefore;
 			this.teleportToLoc = teleportLoc;

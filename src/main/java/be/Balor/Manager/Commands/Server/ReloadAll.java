@@ -46,9 +46,9 @@ public class ReloadAll extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACHelper.getInstance().saveElapsedTime();
-		boolean bcast = ConfigEnum.BSRELOAD.getBoolean();
+		final boolean bcast = ConfigEnum.BSRELOAD.getBoolean();
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
@@ -67,7 +67,7 @@ public class ReloadAll extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

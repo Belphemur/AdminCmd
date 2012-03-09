@@ -26,13 +26,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.base.Joiner;
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -41,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 public class Enchant extends ItemCommand {
 	private final static List<String> enchantList = new ArrayList<String>();
 	static {
-		for (Enchantment enchant : Enchantment.values())
+		for (final Enchantment enchant : Enchantment.values())
 			enchantList.add(enchant.getName());
 	}
 
@@ -61,8 +61,8 @@ public class Enchant extends ItemCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		Player target = Utils.getUserParam(sender, args, permNode);
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final Player target = Utils.getUserParam(sender, args, permNode);
 
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
@@ -70,15 +70,15 @@ public class Enchant extends ItemCommand {
 					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
 			return;
 		}
-		String enchantString = args.getString(0);
+		final String enchantString = args.getString(0);
 		int lvl;
 		try {
 			lvl = args.getInt(1);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			lvl = 1;
 		}
-		String found = Str.matchString(enchantList, enchantString);
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final String found = Str.matchString(enchantList, enchantString);
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (found == null) {
 			replace.put("value", enchantString);
 			replace.put("type", LocaleHelper.TYPE_ENCHANTMENT.getLocale());
@@ -88,8 +88,8 @@ public class Enchant extends ItemCommand {
 					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
 			return;
 		}
-		Enchantment enchantment = Enchantment.getByName(found);
-		ItemStack itemInHand = target.getItemInHand();
+		final Enchantment enchantment = Enchantment.getByName(found);
+		final ItemStack itemInHand = target.getItemInHand();
 		if (!enchantment.canEnchantItem(itemInHand)) {
 			replace.put("item", itemInHand.getType().toString());
 			replace.put("enchant", enchantment.getName());
@@ -111,7 +111,7 @@ public class Enchant extends ItemCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

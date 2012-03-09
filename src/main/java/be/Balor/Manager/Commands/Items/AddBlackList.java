@@ -24,7 +24,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 /**
  * @author Balor (aka Antoine Aflalo)
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class AddBlackList extends ItemCommand {
 
@@ -38,13 +38,13 @@ public class AddBlackList extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (args.hasFlag('i'))
 			ACHelper.getInstance().addBlackListedItem(sender, args.getString(0));
 		else if (args.hasFlag('b'))
@@ -53,11 +53,11 @@ public class AddBlackList extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		// TODO Auto-generated method stub
 		return args != null && args.length >= 1;
 	}
