@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 
 public class FakeQuit extends PlayerCommand {
@@ -46,18 +46,18 @@ public class FakeQuit extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player player = Utils.getUser(sender, args, permNode);
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.FAKEQUIT)) {
 				acp.removePower(Type.FAKEQUIT);
 				Utils.broadcastFakeJoin(player);
@@ -80,11 +80,11 @@ public class FakeQuit extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 }

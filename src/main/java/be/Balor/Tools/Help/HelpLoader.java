@@ -21,20 +21,20 @@ public class HelpLoader {
 	private static Logger HelpLogger = Logger.getLogger("Minecraft");
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static void load(File dataFolder) {
-		File helpFolder = new File(dataFolder, "HelpFiles");
+	public static void load(final File dataFolder) {
+		final File helpFolder = new File(dataFolder, "HelpFiles");
 		if (!helpFolder.exists()) {
 			helpFolder.mkdirs();
 		} else if (helpFolder.isDirectory()) {
 			int count = 0;
 			// File files[] = helpFolder.listFiles(new YmlFilter());
-			File files[] = YmlFilter.listRecursively(helpFolder, 1);
-			String folder = helpFolder.getAbsolutePath() + File.separator;
+			final File files[] = YmlFilter.listRecursively(helpFolder, 1);
+			final String folder = helpFolder.getAbsolutePath() + File.separator;
 			if (files == null) {
 				return;
 			}
-			HashMap<String, Integer> filesLoaded = new HashMap<String, Integer>();
-			for (File insideFile : files) {
+			final HashMap<String, Integer> filesLoaded = new HashMap<String, Integer>();
+			for (final File insideFile : files) {
 				String fileName, fn = insideFile.getAbsolutePath();
 				if (fn.length() > folder.length()) {
 					fn = fn.substring(folder.length());
@@ -57,9 +57,10 @@ public class HelpLoader {
 						System.out.println("The file " + fn + " is empty");
 						continue;
 					}
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					// HelpLogger.severe("Error!", ex);
-					String err = Str.getStackStr(ex), er = ex.getStackTrace()[0].toString();
+					String err = Str.getStackStr(ex);
+					final String er = ex.getStackTrace()[0].toString();
 					if (err.contains(er)) {
 						err = err.substring(0, err.indexOf(er));
 					}
@@ -72,14 +73,15 @@ public class HelpLoader {
 					if (input != null) {
 						try {
 							input.close();
-						} catch (IOException ex) {
+						} catch (final IOException ex) {
 						}
 					}
 				}
 				if (root != null) {
 					int num = 0;
-					for (String helpKey : root.keySet()) {
-						Map<String, Object> helpNode = (Map<String, Object>) root.get(helpKey);
+					for (final String helpKey : root.keySet()) {
+						final Map<String, Object> helpNode = (Map<String, Object>) root
+								.get(helpKey);
 
 						if (!helpNode.containsKey("command")) {
 							HelpLogger.warning("Help entry node \"" + helpKey
@@ -91,22 +93,22 @@ public class HelpLoader {
 									+ "\" is missing a description in " + fn);
 							continue;
 						}
-						String command = helpNode.get("command").toString();
+						final String command = helpNode.get("command").toString();
 						String description = "";
 						try {
 							description = helpNode.get("description").toString();
-						} catch (NullPointerException e) {
+						} catch (final NullPointerException e) {
 
 						}
-						String commandName = helpNode.containsKey("cmdname") ? helpNode.get(
+						final String commandName = helpNode.containsKey("cmdname") ? helpNode.get(
 								"cmdname").toString() : helpKey;
-						String plugin = helpNode.containsKey("plugin") ? helpNode.get("plugin")
-								.toString() : fileName;
-						ArrayList<String> permissions = new ArrayList<String>();
+						final String plugin = helpNode.containsKey("plugin") ? helpNode.get(
+								"plugin").toString() : fileName;
+						final ArrayList<String> permissions = new ArrayList<String>();
 
 						if (helpNode.containsKey("permissions")) {
 							if (helpNode.get("permissions") instanceof List) {
-								for (Object permission : (List) helpNode.get("permissions")) {
+								for (final Object permission : (List) helpNode.get("permissions")) {
 									permissions.add(permission.toString());
 								}
 							} else {
@@ -127,7 +129,7 @@ public class HelpLoader {
 				}
 			}
 			String loaded = "";
-			for (String f : filesLoaded.keySet()) { // Arrays.sort()
+			for (final String f : filesLoaded.keySet()) { // Arrays.sort()
 				loaded += String.format("%s(%d), ", f, filesLoaded.get(f));
 			}
 			// HelpLogger.info(count + " extra help entries loaded" +

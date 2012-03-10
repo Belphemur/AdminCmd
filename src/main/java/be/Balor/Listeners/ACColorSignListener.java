@@ -29,7 +29,7 @@ import be.Balor.Tools.Utils;
  */
 public class ACColorSignListener implements Listener {
 	@EventHandler
-	public void onSignChange(SignChangeEvent event) {
+	public void onSignChange(final SignChangeEvent event) {
 		if (event.isCancelled())
 			return;
 		String parsed = null;

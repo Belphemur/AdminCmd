@@ -47,7 +47,7 @@ public class Experience extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		float amount = 0;
 		Player target = null;
 		boolean self = false;
@@ -58,8 +58,8 @@ public class Experience extends PlayerCommand {
 				if (!args.hasFlag('t'))
 					try {
 						amount = args.getFloat(0);
-					} catch (NumberFormatException e) {
-						HashMap<String, String> replace = new HashMap<String, String>();
+					} catch (final NumberFormatException e) {
+						final HashMap<String, String> replace = new HashMap<String, String>();
 						replace.put("number", args.getString(0));
 						Utils.I18n("NaN", replace);
 						return;
@@ -71,8 +71,8 @@ public class Experience extends PlayerCommand {
 			if (!args.hasFlag('t'))
 				try {
 					amount = args.getFloat(1);
-				} catch (NumberFormatException e) {
-					HashMap<String, String> replace = new HashMap<String, String>();
+				} catch (final NumberFormatException e) {
+					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("number", args.getString(0));
 					Utils.I18n("NaN", replace);
 					return;
@@ -80,7 +80,7 @@ public class Experience extends PlayerCommand {
 		}
 		if (target == null)
 			return;
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(amount));
 		final Player taskTarget = target;
 		final float amountXp = amount;
@@ -90,8 +90,7 @@ public class Experience extends PlayerCommand {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					taskTarget.getLocation().getWorld()
-							.spawn(loc, ExperienceOrb.class)
+					taskTarget.getLocation().getWorld().spawn(loc, ExperienceOrb.class)
 							.setExperience((int) amountXp);
 				}
 			});
@@ -104,7 +103,7 @@ public class Experience extends PlayerCommand {
 				sender.sendMessage(Utils.I18n("expDroppedTarget", replace));
 			}
 		} else if (args.hasFlag('a')) {
-			
+
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
@@ -132,8 +131,7 @@ public class Experience extends PlayerCommand {
 			} else {
 				replace.put("target", Utils.getPlayerName(target));
 				target.sendMessage(Utils.I18n("expProgressionSet", replace));
-				sender.sendMessage(Utils.I18n("expProgressionSetTarget",
-						replace));
+				sender.sendMessage(Utils.I18n("expProgressionSetTarget", replace));
 			}
 		} else if (args.hasFlag('l')) {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -166,7 +164,7 @@ public class Experience extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args.length >= 1;
 	}
 

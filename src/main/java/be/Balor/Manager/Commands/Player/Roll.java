@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Roll extends PlayerCommand {
 
@@ -41,25 +41,25 @@ public class Roll extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		int dice = 6;
 		if (args.length >= 1) {
 			try {
 				dice = args.getInt(0);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 			}
 		}
 
-		Random rand = new Random();
+		final Random rand = new Random();
 		if (dice < 1)
 			dice = rand.nextInt(19) + 1;
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("face", String.valueOf(dice));
 		if (Utils.isPlayer(sender, false))
 			replace.put("player", Utils.getPlayerName((Player) sender));
@@ -72,11 +72,11 @@ public class Roll extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

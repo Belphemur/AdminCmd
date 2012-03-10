@@ -31,7 +31,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Invisible extends PlayerCommand {
 
@@ -46,19 +46,19 @@ public class Invisible extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode);
-		boolean noPickUp = ConfigEnum.NPINVISIBLE.getBoolean();
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player target = Utils.getUser(sender, args, permNode);
+		final boolean noPickUp = ConfigEnum.NPINVISIBLE.getBoolean();
 		if (target != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));
-			ACPlayer acp = ACPlayer.getPlayer(target);
+			final ACPlayer acp = ACPlayer.getPlayer(target);
 			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
 				InvisibleWorker.getInstance().vanish(target);
 				Utils.sI18n(target, "invisibleEnabled");
@@ -94,17 +94,17 @@ public class Invisible extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
 	 */
 	@Override
@@ -112,8 +112,8 @@ public class Invisible extends PlayerCommand {
 		super.registerBukkitPerm();
 		plugin.getPermissionLinker().addPermChild("admincmd.invisible.notatarget",
 				PermissionDefault.OP);
-		plugin.getPermissionLinker().addPermChild("admincmd.invisible.cansee",
-				PermissionDefault.OP);
+		plugin.getPermissionLinker()
+				.addPermChild("admincmd.invisible.cansee", PermissionDefault.OP);
 	}
 
 }

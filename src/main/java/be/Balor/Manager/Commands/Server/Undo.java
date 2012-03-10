@@ -45,13 +45,13 @@ public class Undo extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			int count = 0;
 			try {
 				count = ACHelper.getInstance().undoLastModification(((Player) sender).getName());
 				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Utils.sI18n(sender, "nothingToUndo");
 			}
 		}
@@ -63,7 +63,7 @@ public class Undo extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

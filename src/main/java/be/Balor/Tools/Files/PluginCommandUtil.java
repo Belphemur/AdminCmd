@@ -31,26 +31,26 @@ import org.bukkit.plugin.Plugin;
  */
 public class PluginCommandUtil {
 	@SuppressWarnings("unchecked")
-	public static List<Command> parse(Plugin plugin) {
+	public static List<Command> parse(final Plugin plugin) {
 		try {
 			return PluginCommandYamlParser.parse(plugin);
-		} catch (NoClassDefFoundError e) {
-			List<Command> pluginCmds = new ArrayList<Command>();
-			Object object = plugin.getDescription().getCommands();
+		} catch (final NoClassDefFoundError e) {
+			final List<Command> pluginCmds = new ArrayList<Command>();
+			final Object object = plugin.getDescription().getCommands();
 
 			if (object == null) {
 				return pluginCmds;
 			}
 
-			Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) object;
+			final Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) object;
 
 			if (map != null) {
-				for (Entry<String, Map<String, Object>> entry : map.entrySet()) {
-					Command newCmd = new FakePluginCommand(entry.getKey(), plugin);
-					Object description = entry.getValue().get("description");
-					Object usage = entry.getValue().get("usage");
-					Object aliases = entry.getValue().get("aliases");
-					Object permission = entry.getValue().get("permission");
+				for (final Entry<String, Map<String, Object>> entry : map.entrySet()) {
+					final Command newCmd = new FakePluginCommand(entry.getKey(), plugin);
+					final Object description = entry.getValue().get("description");
+					final Object usage = entry.getValue().get("usage");
+					final Object aliases = entry.getValue().get("aliases");
+					final Object permission = entry.getValue().get("permission");
 
 					if (description != null) {
 						newCmd.setDescription(description.toString());
@@ -61,10 +61,10 @@ public class PluginCommandUtil {
 					}
 
 					if (aliases != null) {
-						List<String> aliasList = new ArrayList<String>();
+						final List<String> aliasList = new ArrayList<String>();
 
 						if (aliases instanceof List) {
-							for (Object o : (List<Object>) aliases) {
+							for (final Object o : (List<Object>) aliases) {
 								aliasList.add(o.toString());
 							}
 						} else {

@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class SpawnMob extends MobCommand {
 
@@ -44,13 +44,13 @@ public class SpawnMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final String name = args.getString(0);
@@ -59,12 +59,12 @@ public class SpawnMob extends MobCommand {
 			int distance = 0;
 			try {
 				nbTaped = args.getInt(1);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				nbTaped = 1;
 			}
 			try {
 				distance = args.getInt(2);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				distance = 0;
 			}
 
@@ -77,7 +77,7 @@ public class SpawnMob extends MobCommand {
 			if (distance == 0 && player.equals(sender))
 				loc = player.getTargetBlock(null, 100).getLocation().add(0, 1, 0);
 			else if (distance == 0) {
-				Location playerLoc = player.getLocation();
+				final Location playerLoc = player.getLocation();
 				loc = playerLoc.add(
 						playerLoc
 								.getDirection()
@@ -86,7 +86,7 @@ public class SpawnMob extends MobCommand {
 								.toLocation(player.getWorld(), playerLoc.getYaw(),
 										playerLoc.getPitch())).add(0, 1D, 0);
 			} else {
-				Location playerLoc = player.getLocation();
+				final Location playerLoc = player.getLocation();
 				loc = playerLoc.add(
 						playerLoc
 								.getDirection()
@@ -97,9 +97,9 @@ public class SpawnMob extends MobCommand {
 			}
 			EntityType ct = null;
 			if (name.contains(":")) {
-				String[] creatures = name.split(":");
+				final String[] creatures = name.split(":");
 				ct = EntityType.fromName(creatures[0]);
-				EntityType ct2 = EntityType.fromName(creatures[1]);
+				final EntityType ct2 = EntityType.fromName(creatures[1]);
 				if (ct == null) {
 					replace.put("mob", creatures[0]);
 					Utils.sI18n(sender, "errorMob", replace);
@@ -110,7 +110,8 @@ public class SpawnMob extends MobCommand {
 				}
 				if (ct == null || ct2 == null)
 					return;
-				ACPluginManager.scheduleSyncTask(new PassengerMob(loc, nbTaped, ct, ct2, player, sender));
+				ACPluginManager.scheduleSyncTask(new PassengerMob(loc, nbTaped, ct, ct2, player,
+						sender));
 			} else {
 				ct = EntityType.fromName(name);
 				if (ct == null) {
@@ -126,11 +127,11 @@ public class SpawnMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 
@@ -144,7 +145,8 @@ public class SpawnMob extends MobCommand {
 		/**
 		 *
 		 */
-		public NormalMob(Location loc, int nb, EntityType ct, Player player, CommandSender sender) {
+		public NormalMob(final Location loc, final int nb, final EntityType ct,
+				final Player player, final CommandSender sender) {
 			this.loc = loc;
 			this.nb = nb;
 			this.ct = ct;
@@ -178,8 +180,8 @@ public class SpawnMob extends MobCommand {
 		 * @param ct
 		 * @param player
 		 */
-		public PassengerMob(Location loc, int nb, EntityType mount, EntityType passenger,
-				Player player, CommandSender sender) {
+		public PassengerMob(final Location loc, final int nb, final EntityType mount,
+				final EntityType passenger, final Player player, final CommandSender sender) {
 			super(loc, nb, mount, player, sender);
 			this.passenger = passenger;
 		}

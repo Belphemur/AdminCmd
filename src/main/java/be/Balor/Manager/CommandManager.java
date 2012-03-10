@@ -63,7 +63,7 @@ public class CommandManager implements CommandExecutor {
 	private class NormalCommand implements Runnable {
 		protected final ACCommandContainer acc;
 
-		public NormalCommand(ACCommandContainer acc) {
+		public NormalCommand(final ACCommandContainer acc) {
 			this.acc = acc;
 		}
 
@@ -87,7 +87,7 @@ public class CommandManager implements CommandExecutor {
 			} catch (final WorldNotLoaded e) {
 				ACLogger.severe("World not Loaded", e);
 				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
-			} catch (PlayerNotFound e) {
+			} catch (final PlayerNotFound e) {
 				e.getSender().sendMessage(e.getMessage());
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
@@ -110,7 +110,7 @@ public class CommandManager implements CommandExecutor {
 
 	private class SyncCommand extends NormalCommand {
 
-		public SyncCommand(ACCommandContainer acc) {
+		public SyncCommand(final ACCommandContainer acc) {
 			super(acc);
 		}
 
@@ -193,7 +193,7 @@ public class CommandManager implements CommandExecutor {
 	/**
 	 * Check if some alias have been disabled for the registered commands
 	 */
-	public void checkAlias(AbstractAdminCmdPlugin plugin) {
+	public void checkAlias(final AbstractAdminCmdPlugin plugin) {
 		if (ConfigEnum.VERBOSE.getBoolean()) {
 			final HashMap<String, Command> commands = pluginCommands.get(plugin);
 			if (commands != null)
@@ -246,7 +246,8 @@ public class CommandManager implements CommandExecutor {
 	 * @param args
 	 * @return
 	 */
-	private boolean executeCommand(CommandSender sender, CoreCommand cmd, String[] args) {
+	private boolean executeCommand(final CommandSender sender, final CoreCommand cmd,
+			final String[] args) {
 		ACCommandContainer container = null;
 		try {
 			if (!cmd.permissionCheck(sender))
@@ -289,8 +290,9 @@ public class CommandManager implements CommandExecutor {
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	private Object getPrivateField(Object object, String field) throws SecurityException,
-			NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+	private Object getPrivateField(final Object object, final String field)
+			throws SecurityException, NoSuchFieldException, IllegalArgumentException,
+			IllegalAccessException {
 		final Class<?> clazz = object.getClass();
 		final Field objectField = clazz.getDeclaredField(field);
 		objectField.setAccessible(true);
@@ -303,7 +305,8 @@ public class CommandManager implements CommandExecutor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String label,
+			final String[] args) {
 		CoreCommand cmd = null;
 		if ((cmd = registeredCommands.get(command)) != null)
 			return executeCommand(sender, cmd, args);
@@ -311,7 +314,7 @@ public class CommandManager implements CommandExecutor {
 			return false;
 	}
 
-	public boolean processCommandString(CommandSender sender, String command) {
+	public boolean processCommandString(final CommandSender sender, final String command) {
 		final String[] split = command.split("\\s+");
 		if (split.length == 0)
 			return false;
@@ -330,7 +333,7 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 * @param plugin
 	 */
-	public void registerACPlugin(AbstractAdminCmdPlugin plugin) {
+	public void registerACPlugin(final AbstractAdminCmdPlugin plugin) {
 		final HashMap<String, Command> commands = new HashMap<String, Command>();
 		for (final Command cmd : PluginCommandUtil.parse(plugin))
 			commands.put(cmd.getName(), cmd);
@@ -343,7 +346,7 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 * @param clazz
 	 */
-	public boolean registerCommand(Class<? extends CoreCommand> clazz) {
+	public boolean registerCommand(final Class<? extends CoreCommand> clazz) {
 		CoreCommand command = null;
 		try {
 			DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
@@ -409,7 +412,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param plugin
 	 *            the plugin to set
 	 */
-	public void setCorePlugin(AdminCmd plugin) {
+	public void setCorePlugin(final AdminCmd plugin) {
 		this.corePlugin = plugin;
 		final ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
@@ -438,7 +441,7 @@ public class CommandManager implements CommandExecutor {
 	 * 
 	 * @param cmd
 	 */
-	private void unRegisterBukkitCommand(PluginCommand cmd) {
+	private void unRegisterBukkitCommand(final PluginCommand cmd) {
 		try {
 			final Object result = getPrivateField(corePlugin.getServer().getPluginManager(),
 					"commandMap");
@@ -471,8 +474,8 @@ public class CommandManager implements CommandExecutor {
 	 *            plugin that want the command to be unregister. It has to be
 	 *            the same that belong to the command.
 	 */
-	public boolean unRegisterCommand(Class<? extends CoreCommand> clazz,
-			AbstractAdminCmdPlugin plugin) {
+	public boolean unRegisterCommand(final Class<? extends CoreCommand> clazz,
+			final AbstractAdminCmdPlugin plugin) {
 		try {
 			final CoreCommand command = clazz.newInstance();
 			if (plugin.equals(command.getPlugin())) {

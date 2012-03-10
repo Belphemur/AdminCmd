@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Repair extends ItemCommand {
 	/**
@@ -43,22 +43,21 @@ public class Repair extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player player = Utils.getUser(sender, args, permNode);
+			final Player player = Utils.getUser(sender, args, permNode);
 			if (player == null)
 				return;
 			final ItemStack item = player.getItemInHand();
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
-			if (item != null
-					&& ACHelper.getInstance().repairable(item.getTypeId())) {
+			if (item != null && ACHelper.getInstance().repairable(item.getTypeId())) {
 				ACPluginManager.scheduleSyncTask(new Runnable() {
 					@Override
 					public void run() {
@@ -76,11 +75,11 @@ public class Repair extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

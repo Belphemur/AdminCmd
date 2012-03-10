@@ -32,7 +32,7 @@ import be.Balor.Tools.Type;
  */
 public class ACGodListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityDamage(EntityDamageEvent event) {
+	public void onEntityDamage(final EntityDamageEvent event) {
 		if (event.isCancelled())
 			return;
 		if (!(event.getEntity() instanceof Player))

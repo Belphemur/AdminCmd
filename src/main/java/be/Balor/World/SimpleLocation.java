@@ -37,11 +37,11 @@ public class SimpleLocation {
 	private float pitch;
 	private float yaw;
 
-	public SimpleLocation(Location loc) {
+	public SimpleLocation(final Location loc) {
 		setLocationValue(loc);
 	}
 
-	public void setLocationValue(Location loc) {
+	public void setLocationValue(final Location loc) {
 		x = loc.getX();
 		y = loc.getY();
 		z = loc.getZ();
@@ -51,7 +51,7 @@ public class SimpleLocation {
 	}
 
 	public Location getLocation() throws WorldNotLoaded {
-		World w = ACPluginManager.getServer().getWorld(world);
+		final World w = ACPluginManager.getServer().getWorld(world);
 		if (w == null)
 			throw new WorldNotLoaded(world);
 		else {
@@ -111,7 +111,7 @@ public class SimpleLocation {
 	 * @param world
 	 *            the world to set
 	 */
-	public void setWorld(String world) {
+	public void setWorld(final String world) {
 		this.world = world;
 	}
 
@@ -119,7 +119,7 @@ public class SimpleLocation {
 	 * @param x
 	 *            the x to set
 	 */
-	public void setX(double x) {
+	public void setX(final double x) {
 		this.x = x;
 	}
 
@@ -127,7 +127,7 @@ public class SimpleLocation {
 	 * @param y
 	 *            the y to set
 	 */
-	public void setY(double y) {
+	public void setY(final double y) {
 		this.y = y;
 	}
 
@@ -135,7 +135,7 @@ public class SimpleLocation {
 	 * @param z
 	 *            the z to set
 	 */
-	public void setZ(double z) {
+	public void setZ(final double z) {
 		this.z = z;
 	}
 
@@ -143,7 +143,7 @@ public class SimpleLocation {
 	 * @param pitch
 	 *            the pitch to set
 	 */
-	public void setPitch(float pitch) {
+	public void setPitch(final float pitch) {
 		this.pitch = pitch;
 	}
 
@@ -151,7 +151,7 @@ public class SimpleLocation {
 	 * @param yaw
 	 *            the yaw to set
 	 */
-	public void setYaw(float yaw) {
+	public void setYaw(final float yaw) {
 		this.yaw = yaw;
 	}
 
@@ -183,14 +183,14 @@ public class SimpleLocation {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (!(obj instanceof SimpleLocation))
 			return false;
-		SimpleLocation other = (SimpleLocation) obj;
+		final SimpleLocation other = (SimpleLocation) obj;
 		if (Float.floatToIntBits(pitch) != Float.floatToIntBits(other.pitch))
 			return false;
 		if (world == null) {

@@ -47,15 +47,15 @@ public class TpToggle extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player player = (Player) sender;
-			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			final Player player = (Player) sender;
+			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)
 					&& args.getString(0).equalsIgnoreCase("yes")) {
 				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow"))
 					return;
-				TpRequest request = acp.getTpRequest();
+				final TpRequest request = acp.getTpRequest();
 				if (request != null) {
 					request.teleport(player);
 					acp.removeTpRequest();
@@ -83,7 +83,8 @@ public class TpToggle extends TeleportCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		PermParent parent = plugin.getPermissionLinker().getPermParent("admincmd.tp.toggle.*");
+		final PermParent parent = plugin.getPermissionLinker()
+				.getPermParent("admincmd.tp.toggle.*");
 		parent.addChild("admincmd.tp.toggle.allow").addChild("admincmd.tp.toggle.use");
 	}
 
@@ -93,7 +94,7 @@ public class TpToggle extends TeleportCommand {
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

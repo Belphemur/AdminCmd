@@ -46,14 +46,14 @@ public class Home extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			be.Balor.Tools.Home home = null;
 			home = Utils.getHome(sender, args.getString(0));
 			if (home == null)
 				return;
-			Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
+			final Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
 			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
@@ -72,7 +72,7 @@ public class Home extends HomeCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 
@@ -84,8 +84,8 @@ public class Home extends HomeCommand {
 		protected be.Balor.Tools.Home home;
 		protected CommandSender sender;
 
-		public DelayedTeleport(Location teleportLoc, Player target,
-				be.Balor.Tools.Home home, CommandSender sender) {
+		public DelayedTeleport(final Location teleportLoc, final Player target,
+				final be.Balor.Tools.Home home, final CommandSender sender) {
 			this.target = target;
 			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.teleportToLoc = teleportLoc;

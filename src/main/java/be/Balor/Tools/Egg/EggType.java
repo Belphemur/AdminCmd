@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.Mob.EggSpawner;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
@@ -77,8 +78,8 @@ public abstract class EggType<T> implements Serializable {
 	 *             when the player don't have the permission, with the message
 	 *             to display to the user
 	 */
-	protected boolean checkPermission(Player player) throws DontHaveThePermissionException {
-		Permission perm = EggPermissionManager.INSTANCE.getPermission(this);
+	protected boolean checkPermission(final Player player) throws DontHaveThePermissionException {
+		final Permission perm = EggPermissionManager.INSTANCE.getPermission(this);
 		if (!PermissionManager.hasPerm(player, perm, false))
 			throw new DontHaveThePermissionException(
 					Utils.I18n("errorNotPerm", "p", perm.getName()));
@@ -89,7 +90,7 @@ public abstract class EggType<T> implements Serializable {
 		return value;
 	}
 
-	public void setValue(T value) {
+	public void setValue(final T value) {
 		this.value = value;
 	}
 
@@ -109,19 +110,19 @@ public abstract class EggType<T> implements Serializable {
 	 * @throws DontHaveThePermissionException
 	 *             if the player don't have the permission to use that egg
 	 */
-	public static EggType<?> createEggType(Player player, CommandArgs args)
+	public static EggType<?> createEggType(final Player player, final CommandArgs args)
 			throws ProcessingArgsException, DontHaveThePermissionException {
 		if (!args.hasFlag('E'))
-			throw new ParameterMissingException('E',LocaleHelper.EGG_PARAM.getLocale());
+			throw new ParameterMissingException('E', LocaleHelper.EGG_PARAM.getLocale());
 		EggType<?> eggType;
-		String className = args.getValueFlag('E');
+		final String className = args.getValueFlag('E');
 		try {
 			eggType = matchEggClass(className);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			throw new ProcessingArgsException(ExceptionType.NO_CLASS, className, e);
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			throw new ProcessingArgsException(ExceptionType.INSTANCE, className, e);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new ProcessingArgsException(ExceptionType.ILLEGAL_ACCESS, className, e);
 		}
 		eggType.checkPermission(player);
@@ -130,9 +131,10 @@ public abstract class EggType<T> implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static EggType<?> matchEggClass(String name) throws ClassNotFoundException,
+	private static EggType<?> matchEggClass(final String name) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
-		Class<? extends EggType<?>> c = (Class<? extends EggType<?>>) eggTypeLoader.loadClass(name);
+		final Class<? extends EggType<?>> c = (Class<? extends EggType<?>>) eggTypeLoader
+				.loadClass(name);
 		return c.newInstance();
 	}
 
@@ -166,14 +168,14 @@ public abstract class EggType<T> implements Serializable {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (!(obj instanceof EggType))
 			return false;
-		EggType other = (EggType) obj;
+		final EggType other = (EggType) obj;
 		if (value == null) {
 			if (other.value != null)
 				return false;

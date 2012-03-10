@@ -33,7 +33,7 @@ public class LogBlockRemanenceFactory extends IBlockRemanenceFactory {
 	 * .bukkit.Location)
 	 */
 	@Override
-	public BlockRemanence createBlockRemanence(Location loc) {
+	public BlockRemanence createBlockRemanence(final Location loc) {
 		return new LogBlockRemanence(loc, playerName);
 	}
 
@@ -42,7 +42,7 @@ public class LogBlockRemanenceFactory extends IBlockRemanenceFactory {
 	 *            the playerName to set
 	 */
 	@Override
-	public void setPlayerName(String playerName) {
+	public void setPlayerName(final String playerName) {
 		this.playerName = playerName;
 	}
 

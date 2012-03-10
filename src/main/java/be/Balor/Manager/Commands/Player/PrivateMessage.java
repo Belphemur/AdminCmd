@@ -56,14 +56,14 @@ public class PrivateMessage extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender, false)
 				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
 				&& ConfigEnum.MUTEDPM.getBoolean()) {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
-		Player buddy = sender.getServer().getPlayer(args.getString(0));
+		final Player buddy = sender.getServer().getPlayer(args.getString(0));
 		if (buddy != null) {
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
@@ -74,7 +74,7 @@ public class PrivateMessage extends PlayerCommand {
 			String msg = "";
 			String senderName = "Server Admin";
 			if (Utils.isPlayer(sender, false)) {
-				Player pSender = (Player) sender;
+				final Player pSender = (Player) sender;
 				senderName = pSender.getName();
 				senderPm = Utils.getPlayerName(pSender, buddy);
 				ACHelper.getInstance().setReplyPlayer(buddy, pSender);
@@ -87,7 +87,7 @@ public class PrivateMessage extends PlayerCommand {
 			String parsed = Utils.colorParser(msg);
 			if (parsed == null)
 				parsed = msg;
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Utils.getPlayerName(buddy));
 			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
@@ -95,8 +95,8 @@ public class PrivateMessage extends PlayerCommand {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
 				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
-			String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
-			for (Player p : ACHelper.getInstance().getSpyPlayers())
+			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
+			for (final Player p : ACHelper.getInstance().getSpyPlayers())
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))
 					p.sendMessage(spyMsg);
@@ -113,7 +113,7 @@ public class PrivateMessage extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 2;
 	}
 

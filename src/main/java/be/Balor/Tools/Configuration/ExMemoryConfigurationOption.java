@@ -24,7 +24,7 @@ import org.bukkit.configuration.ConfigurationOptions;
  */
 public class ExMemoryConfigurationOption extends ConfigurationOptions {
 
-	protected ExMemoryConfigurationOption(ExMemoryConfiguration configuration) {
+	protected ExMemoryConfigurationOption(final ExMemoryConfiguration configuration) {
 		super(configuration);
 	}
 
@@ -34,13 +34,13 @@ public class ExMemoryConfigurationOption extends ConfigurationOptions {
 	}
 
 	@Override
-	public ExMemoryConfigurationOption copyDefaults(boolean value) {
+	public ExMemoryConfigurationOption copyDefaults(final boolean value) {
 		super.copyDefaults(value);
 		return this;
 	}
 
 	@Override
-	public ExMemoryConfigurationOption pathSeparator(char value) {
+	public ExMemoryConfigurationOption pathSeparator(final char value) {
 		super.pathSeparator(value);
 		return this;
 	}

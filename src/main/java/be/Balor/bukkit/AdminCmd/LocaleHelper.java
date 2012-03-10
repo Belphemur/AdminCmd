@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -58,15 +58,15 @@ public enum LocaleHelper {
 	TYPE_POTION("dontExistsType.potion", "potion"),
 	TYPE_CMD("dontExistsType.cmd", "command"),
 	TYPE_MAT("dontExistsType.mat", "material"),
-	PLAYER_KICKED("playerKicked", ChatColor.GOLD + "%player " + ChatColor.YELLOW + "has been kicked from the Server, reason:"
-			+ ChatColor.RED + " %reason"),
-	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " +ChatColor.YELLOW + "left the game: %reason");
-
+	PLAYER_KICKED("playerKicked", ChatColor.GOLD + "%player " + ChatColor.YELLOW
+			+ "has been kicked from the Server, reason:" + ChatColor.RED + " %reason"),
+	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " + ChatColor.YELLOW
+			+ "left the game: %reason");
 
 	private final String key;
 	private final String locale;
 
-	private LocaleHelper(String key, String locale) {
+	private LocaleHelper(final String key, final String locale) {
 		this.key = key;
 		this.locale = locale;
 	}
@@ -79,46 +79,46 @@ public enum LocaleHelper {
 	}
 
 	public static void addAllLocales() {
-		for (LocaleHelper lh : values())
+		for (final LocaleHelper lh : values())
 			LocaleManager.getInstance().addLocale(lh.key, lh.locale);
 	}
 
 	/**
 	 * Send the locale the the CommandSender
-	 *
+	 * 
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
 	 *            Replacement variables
 	 */
-	public void sendLocale(CommandSender sender, Map<String, String> replace) {
+	public void sendLocale(final CommandSender sender, final Map<String, String> replace) {
 		Utils.sI18n(sender, this, replace);
 	}
 
 	/**
 	 * Send the locale the the CommandSender
-	 *
+	 * 
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
-	public void sendLocale(CommandSender sender) {
+	public void sendLocale(final CommandSender sender) {
 		Utils.sI18n(sender, this);
 	}
 
 	/**
 	 * Get the locale with replacement variables
-	 *
+	 * 
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
 	 */
-	public String getLocale(Map<String, String> replace) {
+	public String getLocale(final Map<String, String> replace) {
 		return Utils.I18n(this, replace);
 	}
 
 	/**
 	 * Get the locale without replacement variables
-	 *
+	 * 
 	 * @return the locale
 	 */
 	public String getLocale() {

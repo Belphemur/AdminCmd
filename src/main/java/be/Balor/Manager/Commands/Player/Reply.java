@@ -49,7 +49,7 @@ public class Reply extends PlayerCommand {
 	}
 
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (!Utils.isPlayer(sender, true))
 			return;
 
@@ -59,8 +59,8 @@ public class Reply extends PlayerCommand {
 			Utils.sI18n(sender, "muteEnabled");
 			return;
 		}
-		Player pSender = (Player) sender;
-		Player buddy = ACHelper.getInstance().getReplyPlayer(pSender);
+		final Player pSender = (Player) sender;
+		final Player buddy = ACHelper.getInstance().getReplyPlayer(pSender);
 		if (buddy != null) {
 			if (!buddy.isOnline()) {
 				Utils.sI18n(sender, "offline");
@@ -78,13 +78,13 @@ public class Reply extends PlayerCommand {
 			senderName = pSender.getName();
 			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
 
-			for (String arg : args)
+			for (final String arg : args)
 				msg += arg + " ";
 			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);
 			if (parsed == null)
 				parsed = msg;
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Utils.getPlayerName(buddy));
 			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
@@ -93,8 +93,8 @@ public class Reply extends PlayerCommand {
 				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
 			} else
 				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
-			String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace)+ parsed;
-			for (Player p : ACHelper.getInstance().getSpyPlayers())
+			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
+			for (final Player p : ACHelper.getInstance().getSpyPlayers())
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName()))
 					p.sendMessage(spyMsg);
@@ -110,7 +110,7 @@ public class Reply extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

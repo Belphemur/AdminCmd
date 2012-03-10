@@ -52,12 +52,11 @@ public class Spawn extends SpawnCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender, true)) {
-			Player target = (Player) sender;
+			final Player target = (Player) sender;
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(),
-					new DelayedTeleport(target, sender),
+					ACHelper.getInstance().getCoreInstance(), new DelayedTeleport(target, sender),
 					ConfigEnum.TP_DELAY.getLong());
 		}
 	}
@@ -68,7 +67,7 @@ public class Spawn extends SpawnCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 
@@ -79,7 +78,7 @@ public class Spawn extends SpawnCommand {
 		protected HashMap<String, String> replace;
 		protected CommandSender sender;
 
-		public DelayedTeleport(Player target, CommandSender sender) {
+		public DelayedTeleport(final Player target, final CommandSender sender) {
 			this.target = target;
 			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.sender = sender;

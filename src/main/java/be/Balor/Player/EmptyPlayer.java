@@ -37,7 +37,7 @@ public class EmptyPlayer extends ACPlayer {
 	/**
 	 * @param name
 	 */
-	protected EmptyPlayer(String name) {
+	protected EmptyPlayer(final String name) {
 		super(name);
 		DebugLog.INSTANCE.severe("Empty Player instancied with name : " + name);
 	}
@@ -45,7 +45,7 @@ public class EmptyPlayer extends ACPlayer {
 	/**
 	 * @param name
 	 */
-	protected EmptyPlayer(Player name) {
+	protected EmptyPlayer(final Player name) {
 		super(name);
 		DebugLog.INSTANCE.severe("Empty Player instancied with name : " + name.getName());
 	}
@@ -67,7 +67,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * org.bukkit.Location)
 	 */
 	@Override
-	public void setHome(String home, Location loc) {
+	public void setHome(final String home, final Location loc) {
 
 	}
 
@@ -77,7 +77,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removeHome(java.lang.String)
 	 */
 	@Override
-	public void removeHome(String home) {
+	public void removeHome(final String home) {
 
 	}
 
@@ -87,7 +87,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getHome(java.lang.String)
 	 */
 	@Override
-	public Location getHome(String home) {
+	public Location getHome(final String home) {
 
 		return null;
 	}
@@ -109,7 +109,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setInformation(String info, Object value) {
+	public void setInformation(final String info, final Object value) {
 
 	}
 
@@ -119,7 +119,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removeInformation(java.lang.String)
 	 */
 	@Override
-	public void removeInformation(String info) {
+	public void removeInformation(final String info) {
 
 	}
 
@@ -129,7 +129,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getInformation(java.lang.String)
 	 */
 	@Override
-	public ObjectContainer getInformation(String info) {
+	public ObjectContainer getInformation(final String info) {
 		return new ObjectContainer(null);
 	}
 
@@ -139,7 +139,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#setLastLocation(org.bukkit.Location)
 	 */
 	@Override
-	public void setLastLocation(Location loc) {
+	public void setLastLocation(final Location loc) {
 
 	}
 
@@ -160,7 +160,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setPower(Type power, Object value) {
+	public void setPower(final Type power, final Object value) {
 
 	}
 
@@ -170,7 +170,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getPower(be.Balor.Tools.Type)
 	 */
 	@Override
-	public ObjectContainer getPower(Type power) {
+	public ObjectContainer getPower(final Type power) {
 		return new ObjectContainer(null);
 	}
 
@@ -180,7 +180,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#hasPower(be.Balor.Tools.Type)
 	 */
 	@Override
-	public boolean hasPower(Type power) {
+	public boolean hasPower(final Type power) {
 		return false;
 	}
 
@@ -190,7 +190,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removePower(be.Balor.Tools.Type)
 	 */
 	@Override
-	public void removePower(Type power) {
+	public void removePower(final Type power) {
 
 	}
 
@@ -221,7 +221,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setCustomPower(String power, Object value) {
+	public void setCustomPower(final String power, final Object value) {
 
 	}
 
@@ -231,7 +231,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getCustomPower(java.lang.String)
 	 */
 	@Override
-	public ObjectContainer getCustomPower(String power) {
+	public ObjectContainer getCustomPower(final String power) {
 		return new ObjectContainer(null);
 	}
 
@@ -241,7 +241,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#hasCustomPower(java.lang.String)
 	 */
 	@Override
-	public boolean hasCustomPower(String power) {
+	public boolean hasCustomPower(final String power) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -252,7 +252,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removeCustomPower(java.lang.String)
 	 */
 	@Override
-	public void removeCustomPower(String power) {
+	public void removeCustomPower(final String power) {
 		// TODO Auto-generated method stub
 
 	}
@@ -273,7 +273,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#updateLastKitUse(java.lang.String)
 	 */
 	@Override
-	public void updateLastKitUse(String kit) {
+	public void updateLastKitUse(final String kit) {
 
 	}
 
@@ -283,7 +283,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getLastKitUse(java.lang.String)
 	 */
 	@Override
-	public long getLastKitUse(String kit) {
+	public long getLastKitUse(final String kit) {
 		return 0;
 	}
 
@@ -293,7 +293,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#setPresentation(java.lang.String)
 	 */
 	@Override
-	public void setPresentation(String presentation) {
+	public void setPresentation(final String presentation) {
 
 	}
 
@@ -317,7 +317,9 @@ public class EmptyPlayer extends ACPlayer {
 		return new HashSet<String>();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#getKitUseList()
 	 */
 	@Override
@@ -325,12 +327,14 @@ public class EmptyPlayer extends ACPlayer {
 		return new HashSet<String>();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.ACPlayer#setLastKitUse(java.lang.String, long)
 	 */
 	@Override
-	public void setLastKitUse(String kit, long timestamp) {
-		
+	public void setLastKitUse(final String kit, final long timestamp) {
+
 	}
 
 }

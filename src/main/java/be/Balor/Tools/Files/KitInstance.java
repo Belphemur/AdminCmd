@@ -18,7 +18,7 @@ public class KitInstance {
 	private static final PermissionLinker perm = ACPluginManager.getCorePlugin()
 			.getPermissionLinker();
 
-	public KitInstance(String name, int delay, List<MaterialContainer> items) {
+	public KitInstance(final String name, final int delay, final List<MaterialContainer> items) {
 		this.name = name;
 		this.delay = delay;
 		this.items = items;
@@ -32,12 +32,12 @@ public class KitInstance {
 	 * @return
 	 */
 	public List<ItemStack> getItemStacks() {
-		ArrayList<ItemStack> result = new ArrayList<ItemStack>();
+		final ArrayList<ItemStack> result = new ArrayList<ItemStack>();
 		try {
 			// return Utils.oddItem.getItemGroup(kit, -1));
-		} catch (Throwable e) {
+		} catch (final Throwable e) {
 		}
-		for (MaterialContainer mc : items)
+		for (final MaterialContainer mc : items)
 			result.add(mc.getItemStack());
 		return result;
 	}
@@ -47,13 +47,13 @@ public class KitInstance {
 	 * 
 	 * @param parent
 	 */
-	public void addParent(KitInstance parent) {
-		for (MaterialContainer mc : parent.items) {
-			int index = items.indexOf(mc);
+	public void addParent(final KitInstance parent) {
+		for (final MaterialContainer mc : parent.items) {
+			final int index = items.indexOf(mc);
 			if (index == -1)
 				items.add(mc);
 			else {
-				MaterialContainer mat = items.get(index);
+				final MaterialContainer mat = items.get(index);
 				mat.setAmount(mat.getAmount() + mc.getAmount());
 			}
 		}
@@ -70,13 +70,15 @@ public class KitInstance {
 		return name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "KitInstance [name=" + name + ", delay=" + delay + ", items=" + Arrays.toString(items.toArray()) + "]";
+		return "KitInstance [name=" + name + ", delay=" + delay + ", items="
+				+ Arrays.toString(items.toArray()) + "]";
 	}
-	
 
 }

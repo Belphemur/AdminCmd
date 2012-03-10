@@ -92,7 +92,7 @@ public class Utils {
 		/**
 		 *
 		 */
-		public SetTime(World w) {
+		public SetTime(final World w) {
 			this.w = w;
 			this.time = w.getTime();
 		}
@@ -101,7 +101,7 @@ public class Utils {
 		 * @param w
 		 * @param time
 		 */
-		public SetTime(World w, Long time) {
+		public SetTime(final World w, final Long time) {
 			this.w = w;
 			this.time = time;
 		}
@@ -150,11 +150,11 @@ public class Utils {
 
 	public final static int MAX_BLOCKS = 512;
 
-	public static void addLocale(String key, String value) {
+	public static void addLocale(final String key, final String value) {
 		LocaleManager.getInstance().addLocale(key, value);
 	}
 
-	public static void addLocale(String key, String value, boolean override) {
+	public static void addLocale(final String key, final String value, final boolean override) {
 		LocaleManager.getInstance().addLocale(key, value, true);
 	}
 
@@ -164,18 +164,18 @@ public class Utils {
 	 * @param player
 	 *            player to remove
 	 */
-	public static void addPlayerInOnlineList(Player player) {
+	public static void addPlayerInOnlineList(final Player player) {
 		((CraftServer) player.getServer()).getHandle().sendAll(
 				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, true, 1000));
 	}
 
-	public static void addPlayerInOnlineList(Player toAdd, Player fromPlayer) {
+	public static void addPlayerInOnlineList(final Player toAdd, final Player fromPlayer) {
 		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
 				((CraftPlayer) toAdd).getHandle().listName, true, 1000));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T[] Arrays_copyOfRange(T[] original, int start, int end) {
+	public static <T> T[] Arrays_copyOfRange(final T[] original, final int start, final int end) {
 		if (original.length >= start && 0 <= start) {
 			if (start <= end) {
 				final int length = end - start;
@@ -197,7 +197,7 @@ public class Utils {
 	 * @param player
 	 *            that fake join.
 	 */
-	public static void broadcastFakeJoin(Player player) {
+	public static void broadcastFakeJoin(final Player player) {
 		if (mChatApi != null)
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ mChatApi.getEventMessage("Join"));
@@ -212,7 +212,7 @@ public class Utils {
 	 * @param player
 	 *            that fake quit.
 	 */
-	public static void broadcastFakeQuit(Player player) {
+	public static void broadcastFakeQuit(final Player player) {
 		if (mChatApi != null)
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ mChatApi.getEventMessage("Quit"));
@@ -226,7 +226,7 @@ public class Utils {
 	 * 
 	 * @param message
 	 */
-	public static void broadcastMessage(String message) {
+	public static void broadcastMessage(final String message) {
 		for (final Player p : getOnlinePlayers())
 			p.sendMessage(message);
 		// new ColouredConsoleSender((CraftServer)
@@ -246,7 +246,8 @@ public class Utils {
 	 * @return true if the sender have the right to execute the command, else
 	 *         false with displaying an error message to the sender.
 	 */
-	public static boolean checkImmunity(CommandSender sender, CommandArgs args, int index) {
+	public static boolean checkImmunity(final CommandSender sender, final CommandArgs args,
+			final int index) {
 		final Player target = sender.getServer().getPlayer(args.getString(index));
 		if (target != null)
 			if (checkImmunity(sender, target))
@@ -291,7 +292,7 @@ public class Utils {
 	 * @return true if the sender have the right to execute the command, else
 	 *         false.
 	 */
-	public static boolean checkImmunity(CommandSender sender, Player target) {
+	public static boolean checkImmunity(final CommandSender sender, final Player target) {
 		if (!ConfigEnum.IMMUNITY.getBoolean())
 			return true;
 		if (!isPlayer(sender, false))
@@ -323,7 +324,7 @@ public class Utils {
 	 * @param mat
 	 * @return Material
 	 */
-	public static MaterialContainer checkMaterial(String mat) {
+	public static MaterialContainer checkMaterial(final String mat) {
 		MaterialContainer mc = new MaterialContainer();
 		try {
 			if (oddItem != null) {
@@ -356,7 +357,7 @@ public class Utils {
 	 * @param toParse
 	 * @return
 	 */
-	public static String colorParser(String toParse) {
+	public static String colorParser(final String toParse) {
 		String ResultString = null;
 		try {
 			Matcher regexMatcher = regexColorParser.matcher(toParse);
@@ -386,7 +387,8 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> drainFluid(String playername, Block block, int radius) {
+	private static Stack<BlockRemanence> drainFluid(final String playername, final Block block,
+			final int radius) {
 		final Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		final Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
 		BlockRemanence current = null;
@@ -452,7 +454,8 @@ public class Utils {
 	 *            permission node to execute the command
 	 * @return null if the ACPlayer can't be get else the ACPlayer
 	 */
-	public static ACPlayer getACPlayer(CommandSender sender, CommandArgs args, String permNode) {
+	public static ACPlayer getACPlayer(final CommandSender sender, final CommandArgs args,
+			final String permNode) {
 		final Player target = Utils.getUser(sender, args, permNode, 0,
 				!Utils.isPlayer(sender, false));
 		ACPlayer actarget;
@@ -476,7 +479,7 @@ public class Utils {
 		return actarget;
 	}
 
-	public static double getDistanceSquared(Player player1, Player player2) {
+	public static double getDistanceSquared(final Player player1, final Player player2) {
 		if (!player1.getWorld().getName().equals(player2.getWorld().getName()))
 			return Double.MAX_VALUE;
 		final Location loc1 = player1.getLocation();
@@ -490,7 +493,7 @@ public class Utils {
 	 * @param start
 	 * @return
 	 */
-	public static Long[] getElapsedTime(long start) {
+	public static Long[] getElapsedTime(final long start) {
 		return transformToElapsedTime(System.currentTimeMillis() - start);
 	}
 
@@ -503,7 +506,7 @@ public class Utils {
 	 *            what args was send
 	 * @return the home containing the player and the home name
 	 */
-	public static Home getHome(CommandSender sender, String toParse) {
+	public static Home getHome(final CommandSender sender, final String toParse) {
 		final Home result = new Home();
 		if (toParse != null && toParse.contains(":")) {
 			try {
@@ -541,7 +544,7 @@ public class Utils {
 		return PlayerManager.getInstance().getOnlinePlayers();
 	}
 
-	public static Player getPlayer(String name) {
+	public static Player getPlayer(final String name) {
 		final Player[] players = ACPluginManager.getServer().getOnlinePlayers();
 
 		Player found = null;
@@ -568,7 +571,7 @@ public class Utils {
 
 	}
 
-	public static String getPlayerName(Player player) {
+	public static String getPlayerName(final Player player) {
 		return getPlayerName(player, null);
 	}
 
@@ -580,7 +583,8 @@ public class Utils {
 	 * @param withPrefix
 	 * @return
 	 */
-	public static String getPlayerName(Player player, CommandSender sender, boolean withPrefix) {
+	public static String getPlayerName(final Player player, final CommandSender sender,
+			final boolean withPrefix) {
 		return getPlayerName(player, sender);
 	}
 
@@ -593,7 +597,7 @@ public class Utils {
 	 *            sender that want the name
 	 * @return the complete player name with prefix
 	 */
-	public static String getPlayerName(Player player, CommandSender sender) {
+	public static String getPlayerName(final Player player, final CommandSender sender) {
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
 			String prefix = colorParser(getPrefix(player, sender));
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
@@ -617,7 +621,7 @@ public class Utils {
 	 * @param player
 	 * @return
 	 */
-	private static String getPrefix(Player player, CommandSender sender) {
+	private static String getPrefix(final Player player, final CommandSender sender) {
 		boolean isInv = false;
 		String prefixstring = "";
 		String statusPrefix = "";
@@ -644,7 +648,7 @@ public class Utils {
 	 *            The wanted GMT offset
 	 * @return serverTime Represents the time read from the server
 	 */
-	public static Date getServerRealTime(String gmt) {
+	public static Date getServerRealTime(final String gmt) {
 		Date serverTime;
 		final TimeZone tz = TimeZone.getTimeZone(gmt);
 		final Calendar cal = Calendar.getInstance(tz);
@@ -653,7 +657,8 @@ public class Utils {
 		return serverTime;
 	}
 
-	public static Player getUser(CommandSender sender, CommandArgs args, String permNode) {
+	public static Player getUser(final CommandSender sender, final CommandArgs args,
+			final String permNode) {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
@@ -667,8 +672,8 @@ public class Utils {
 	 * @param errorMsg
 	 * @return
 	 */
-	public static Player getUser(CommandSender sender, CommandArgs args, String permNode,
-			int index, boolean errorMsg) {
+	public static Player getUser(final CommandSender sender, final CommandArgs args,
+			final String permNode, final int index, final boolean errorMsg) {
 		Player target = null;
 		if (args.length >= index + 1) {
 			target = getPlayer(args.getString(index));
@@ -714,8 +719,8 @@ public class Utils {
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
 	 */
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode)
-			throws PlayerNotFound {
+	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
+			final String permNode) throws PlayerNotFound {
 		return getUserParam(sender, args, permNode, true);
 	}
 
@@ -735,8 +740,8 @@ public class Utils {
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
 	 */
-	public static Player getUserParam(CommandSender sender, CommandArgs args, String permNode,
-			boolean errorMsg) throws PlayerNotFound {
+	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
+			final String permNode, final boolean errorMsg) throws PlayerNotFound {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
 		if (playerName != null) {
@@ -767,27 +772,27 @@ public class Utils {
 		return target;
 	}
 
-	public static String I18n(String key) {
+	public static String I18n(final String key) {
 		return I18n(key, null);
 	}
 
-	public static String I18n(String key, Map<String, String> replace) {
+	public static String I18n(final String key, final Map<String, String> replace) {
 		return LocaleManager.getInstance().get(key, replace);
 	}
 
-	public static String I18n(String key, String alias, String toReplace) {
+	public static String I18n(final String key, final String alias, final String toReplace) {
 		return LocaleManager.getInstance().get(key, alias, toReplace);
 	}
 
-	public static String I18n(LocaleHelper key) {
+	public static String I18n(final LocaleHelper key) {
 		return I18n(key.getKey(), null);
 	}
 
-	public static String I18n(LocaleHelper key, Map<String, String> replace) {
+	public static String I18n(final LocaleHelper key, final Map<String, String> replace) {
 		return LocaleManager.getInstance().get(key.getKey(), replace);
 	}
 
-	public static String I18n(LocaleHelper key, String alias, String toReplace) {
+	public static String I18n(final LocaleHelper key, final String alias, final String toReplace) {
 		return LocaleManager.getInstance().get(key.getKey(), alias, toReplace);
 	}
 
@@ -797,7 +802,7 @@ public class Utils {
 	 * @param loc
 	 * @return
 	 */
-	private static boolean isFluid(Location loc) {
+	private static boolean isFluid(final Location loc) {
 		final Block b = loc.getWorld().getBlockAt(loc);
 		if (b == null)
 			return false;
@@ -810,11 +815,11 @@ public class Utils {
 	 * 
 	 * @return
 	 */
-	public static boolean isPlayer(CommandSender sender) {
+	public static boolean isPlayer(final CommandSender sender) {
 		return isPlayer(sender, true);
 	}
 
-	public static boolean isPlayer(CommandSender sender, boolean msg) {
+	public static boolean isPlayer(final CommandSender sender, final boolean msg) {
 		if (sender instanceof Player)
 			return true;
 		else {
@@ -830,20 +835,20 @@ public class Utils {
 	 * @param player
 	 *            player to remove
 	 */
-	public static void removePlayerFromOnlineList(Player player) {
+	public static void removePlayerFromOnlineList(final Player player) {
 		((CraftServer) player.getServer()).getHandle().sendAll(
 				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, false, 9999));
 	}
 
-	public static void removePlayerFromOnlineList(Player toRemove, Player fromPlayer) {
+	public static void removePlayerFromOnlineList(final Player toRemove, final Player fromPlayer) {
 		if (toRemove == null || fromPlayer == null)
 			return;
 		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
 				((CraftPlayer) toRemove).getHandle().listName, false, 9999));
 	}
 
-	public static Integer replaceBlockByAir(CommandSender sender, CommandArgs args,
-			List<Material> mat, int defaultRadius) {
+	public static Integer replaceBlockByAir(final CommandSender sender, final CommandArgs args,
+			final List<Material> mat, final int defaultRadius) {
 		if (Utils.isPlayer(sender)) {
 			int radius = defaultRadius;
 			if (args.length >= 1) {
@@ -891,7 +896,7 @@ public class Utils {
 		return timeFormatted;
 	}
 
-	public static String replaceDateAndTimeFormat(ACPlayer player, Type.Whois type) {
+	public static String replaceDateAndTimeFormat(final ACPlayer player, final Type.Whois type) {
 		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
@@ -909,8 +914,8 @@ public class Utils {
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> replaceInCuboid(String playername, List<Material> mat,
-			Block block, int radius) {
+	private static Stack<BlockRemanence> replaceInCuboid(final String playername,
+			final List<Material> mat, final Block block, final int radius) {
 		final Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
 		final Stack<BlockRemanence> blocksCache = new SynchronizedStack<BlockRemanence>();
 		final int limitX = block.getX() + radius;
@@ -940,12 +945,13 @@ public class Utils {
 		return blocks;
 	}
 
-	public static void sendMessage(CommandSender sender, CommandSender player, String key) {
+	public static void sendMessage(final CommandSender sender, final CommandSender player,
+			final String key) {
 		sendMessage(sender, player, key, null);
 	}
 
-	public static void sendMessage(CommandSender sender, CommandSender player, String key,
-			Map<String, String> replace) {
+	public static void sendMessage(final CommandSender sender, final CommandSender player,
+			final String key, final Map<String, String> replace) {
 		final String msg = I18n(key, replace);
 		if (msg != null && !msg.isEmpty()) {
 			if (!sender.equals(player))
@@ -959,7 +965,7 @@ public class Utils {
 	 * @param logBlock
 	 *            the logBlock to set
 	 */
-	public static void setLogBlock(Consumer logBlock) {
+	public static void setLogBlock(final Consumer logBlock) {
 		Utils.logBlock = logBlock;
 		IBlockRemanenceFactory.FACTORY = new LogBlockRemanenceFactory();
 	}
@@ -970,7 +976,8 @@ public class Utils {
 	 * @param name
 	 * @return
 	 */
-	public static boolean setPlayerHealth(CommandSender sender, CommandArgs name, Type.Health toDo) {
+	public static boolean setPlayerHealth(final CommandSender sender, final CommandArgs name,
+			final Type.Health toDo) {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		Hero hero = null;
 		if (target == null)
@@ -1003,7 +1010,7 @@ public class Utils {
 		return true;
 	}
 
-	private static void setTime(CommandSender sender, World w, String arg) {
+	private static void setTime(final CommandSender sender, final World w, final String arg) {
 		final long curtime = w.getTime();
 		long newtime = curtime - (curtime % 24000);
 		final HashMap<String, String> replace = new HashMap<String, String>();
@@ -1045,39 +1052,43 @@ public class Utils {
 				new SetTime(w, newtime));
 	}
 
-	public static void sI18n(CommandSender sender, String key) {
+	public static void sI18n(final CommandSender sender, final String key) {
 		sI18n(sender, key, null);
 	}
 
-	public static void sI18n(CommandSender sender, String key, Map<String, String> replace) {
+	public static void sI18n(final CommandSender sender, final String key,
+			final Map<String, String> replace) {
 		final String locale = I18n(key, replace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
 
-	public static void sI18n(CommandSender sender, String key, String alias, String toReplace) {
+	public static void sI18n(final CommandSender sender, final String key, final String alias,
+			final String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
 
-	public static void sI18n(CommandSender sender, LocaleHelper key) {
+	public static void sI18n(final CommandSender sender, final LocaleHelper key) {
 		sI18n(sender, key, null);
 	}
 
-	public static void sI18n(CommandSender sender, LocaleHelper key, Map<String, String> replace) {
+	public static void sI18n(final CommandSender sender, final LocaleHelper key,
+			final Map<String, String> replace) {
 		final String locale = I18n(key, replace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
 
-	public static void sI18n(CommandSender sender, LocaleHelper key, String alias, String toReplace) {
+	public static void sI18n(final CommandSender sender, final LocaleHelper key,
+			final String alias, final String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
 		if (locale != null && !locale.isEmpty())
 			sender.sendMessage(locale);
 	}
 
-	public static void sParsedLocale(Player p, String locale) {
+	public static void sParsedLocale(final Player p, final String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", p.getName());
 		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
@@ -1114,7 +1125,7 @@ public class Utils {
 
 	}
 
-	public static boolean timeSet(CommandSender sender, String time) {
+	public static boolean timeSet(final CommandSender sender, final String time) {
 		return timeSet(sender, time, null);
 	}
 
@@ -1122,7 +1133,7 @@ public class Utils {
 	// false then means to show the default handle
 	// ! make sure the player variable IS a player!
 	// set world time to a new value
-	public static boolean timeSet(CommandSender sender, String time, String world) {
+	public static boolean timeSet(final CommandSender sender, final String time, final String world) {
 		if (isPlayer(sender, false) && world == null) {
 			final Player p = (Player) sender;
 			setTime(sender, p.getWorld(), time);
@@ -1143,7 +1154,8 @@ public class Utils {
 
 	}
 
-	public static void tpP2P(CommandSender sender, String nFrom, String nTo, Type.Tp type) {
+	public static void tpP2P(final CommandSender sender, final String nFrom, final String nTo,
+			final Type.Tp type) {
 		boolean found = true;
 		final Player pFrom = ACPluginManager.getServer().getPlayer(nFrom);
 		final Player pTo = ACPluginManager.getServer().getPlayer(nTo);
@@ -1262,7 +1274,8 @@ public class Utils {
 		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
 	}
 
-	public static boolean weather(CommandSender sender, Type.Weather type, CommandArgs duration) {
+	public static boolean weather(final CommandSender sender, final Type.Weather type,
+			final CommandArgs duration) {
 		if (isPlayer(sender, false)) {
 			if (duration.length >= 2) {
 				final World w = sender.getServer().getWorld(duration.getString(1));
@@ -1311,8 +1324,8 @@ public class Utils {
 		return true;
 	}
 
-	private static void weatherChange(CommandSender sender, World w, Type.Weather type,
-			CommandArgs duration) {
+	private static void weatherChange(final CommandSender sender, final World w,
+			final Type.Weather type, final CommandArgs duration) {
 		if (!type.equals(Type.Weather.FREEZE)
 				&& !ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
 						.isNull()) {
@@ -1404,7 +1417,7 @@ public class Utils {
 	 * @param loc
 	 *            location where the player will be tp
 	 */
-	public static void doTeleportWithChunkCheck(Player player, Location loc) {
+	public static void doTeleportWithChunkCheck(final Player player, final Location loc) {
 		if (!player.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
 			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
 		player.teleport(loc);

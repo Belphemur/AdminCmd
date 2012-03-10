@@ -49,11 +49,11 @@ public class GetItemId extends ItemCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		Player target = Utils.getUserParam(sender, args, permNode);
-		HashMap<String, String> replace = new HashMap<String, String>();
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final Player target = Utils.getUserParam(sender, args, permNode);
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(target));
-		ItemStack inHand = target.getItemInHand();
+		final ItemStack inHand = target.getItemInHand();
 		replace.put("item", String.valueOf(inHand.getTypeId()));
 		replace.put("data", String.valueOf(inHand.getData().getData()));
 		LocaleHelper.ITEMID.sendLocale(sender, replace);
@@ -65,7 +65,7 @@ public class GetItemId extends ItemCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

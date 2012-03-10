@@ -34,11 +34,11 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
  */
 public class BukkitPermissions extends SuperPermissions {
 	protected PermissionsPlugin permBukkit = null;
-	
+
 	/**
 	 *
 	 */
-	public BukkitPermissions(PermissionsPlugin plugin) {
+	public BukkitPermissions(final PermissionsPlugin plugin) {
 		permBukkit = plugin;
 	}
 
@@ -48,19 +48,18 @@ public class BukkitPermissions extends SuperPermissions {
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
-	 * 
 	 */
 	@Override
-	public boolean isInGroup(String groupName, Player player) {
+	public boolean isInGroup(final String groupName, final Player player) {
 		List<Group> groups = new ArrayList<Group>();
 		try {
 			groups = permBukkit.getGroups(player.getName());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return false;
 		}
 		if (groups.isEmpty())
 			return false;
-		for (Group group : groups)
+		for (final Group group : groups)
 			if (group.getName().equalsIgnoreCase(groupName))
 				return true;
 		return false;
@@ -74,16 +73,16 @@ public class BukkitPermissions extends SuperPermissions {
 	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(String groupName) {
-		Set<Player> players = new HashSet<Player>();
+	public Set<Player> getUsers(final String groupName) {
+		final Set<Player> players = new HashSet<Player>();
 		List<String> playersString;
 		try {
 			playersString = permBukkit.getGroup(groupName).getPlayers();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return players;
 		}
 		if (playersString != null) {
-			for (String player : playersString) {
+			for (final String player : playersString) {
 				players.add(ACPlayer.getPlayer(player).getHandler());
 			}
 			return players;

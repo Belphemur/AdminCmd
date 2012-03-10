@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class SuperBreaker extends PlayerCommand {
 
@@ -45,19 +45,19 @@ public class SuperBreaker extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		String timeOut = args.getValueFlag('t');
-		Player player = Utils.getUser(sender, args, permNode);
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final String timeOut = args.getValueFlag('t');
+		final Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player);
+			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.SUPER_BREAKER)) {
 				acp.removePower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Disabled");
@@ -73,12 +73,13 @@ public class SuperBreaker extends PlayerCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.SUPER_BREAKER, sender),
+						ACPluginManager.getCorePlugin(),
+						new RemovePowerTask(acp, Type.SUPER_BREAKER, sender),
 						Utils.secInTick * 60 * timeOutValue);
 			}
 		}
@@ -86,11 +87,11 @@ public class SuperBreaker extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

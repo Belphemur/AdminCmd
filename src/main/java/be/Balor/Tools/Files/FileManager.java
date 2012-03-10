@@ -21,13 +21,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -65,7 +63,7 @@ import com.google.common.io.Files;
 /**
  * @author Balor (aka Antoine Aflalo)
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class FileManager implements DataManager {
 	protected File pathFile;
@@ -77,11 +75,11 @@ public class FileManager implements DataManager {
 	private static String fileVersion = null;
 	static {
 		try {
-			Properties gitVersion = new Properties();
+			final Properties gitVersion = new Properties();
 			gitVersion.load(FileManager.class.getResourceAsStream("/git.properties"));
 			fileVersion = (String) gitVersion.get("git.commit.id");
 			DebugLog.INSTANCE.info("Git Version : " + fileVersion);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -97,12 +95,12 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Get a txt-file and return its content in a String
-	 *
+	 * 
 	 * @param fileName
 	 *            - The name of the file to be loaded
 	 * @return The content of the file
 	 */
-	public String getTextFile(String fileName) {
+	public String getTextFile(final String fileName) {
 		final StringBuffer result = new StringBuffer();
 		try {
 			final File fileDir = getInnerFile(fileName);
@@ -133,20 +131,20 @@ public class FileManager implements DataManager {
 	 * @param path
 	 *            the path to set
 	 */
-	public void setPath(String path) {
+	public void setPath(final String path) {
 		pathFile = new File(path);
 		if (!pathFile.exists()) {
 			try {
 				Files.createParentDirs(pathFile);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		File spawn = getFile(null, "spawnLocations.yml", false);
-		File homeDir = new File(this.pathFile, "home");
+		final File spawn = getFile(null, "spawnLocations.yml", false);
+		final File homeDir = new File(this.pathFile, "home");
 		if (spawn.exists()) {
-			File dir = new File(this.pathFile, "spawn");
+			final File dir = new File(this.pathFile, "spawn");
 			dir.mkdir();
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
@@ -156,43 +154,43 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Open the file and return the ExtendedConfiguration object
-	 *
+	 * 
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
 	 */
-	public ExtendedConfiguration getYml(String filename, String directory) {
+	public ExtendedConfiguration getYml(final String filename, final String directory) {
 		if (lastLoadedConf != null && lastDirectory.equals(directory == null ? "" : directory)
 				&& lastFilename.equals(filename))
 			return lastLoadedConf;
-		ExtendedConfiguration config = ExtendedConfiguration.loadConfiguration(getFile(directory,
-				filename + ".yml"));
+		final ExtendedConfiguration config = ExtendedConfiguration.loadConfiguration(getFile(
+				directory, filename + ".yml"));
 		lastLoadedConf = config;
 		return config;
 	}
 
-	public ExtendedConfiguration getYml(String filename) {
+	public ExtendedConfiguration getYml(final String filename) {
 		return getYml(filename, null);
 	}
 
 	/**
 	 * Open the file and return the File object
-	 *
+	 * 
 	 * @param directory
 	 * @param filename
 	 * @return the configuration file
 	 */
-	public File getFile(String directory, String filename) {
+	public File getFile(final String directory, final String filename) {
 		return getFile(directory, filename, true);
 	}
 
-	public File getFile(String directory, String filename, boolean create) {
+	public File getFile(final String directory, final String filename, final boolean create) {
 		if (lastFile != null && lastDirectory.equals(directory == null ? "" : directory)
 				&& lastFilename.equals(filename))
 			return lastFile;
 		File file = null;
 		if (directory != null) {
-			File directoryFile = new File(this.pathFile, directory);
+			final File directoryFile = new File(this.pathFile, directory);
 			if (!directoryFile.exists() && create) {
 				directoryFile.mkdir();
 			}
@@ -204,12 +202,10 @@ public class FileManager implements DataManager {
 
 			try {
 				file.createNewFile();
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				System.out.println("cannot create file " + file.getPath());
 			}
 		}
-		if (filename.contains("yml"))
-			preParseYamlFile(file);
 		lastFile = file;
 		lastDirectory = directory == null ? "" : directory;
 		lastFilename = filename;
@@ -217,64 +213,25 @@ public class FileManager implements DataManager {
 	}
 
 	/**
-	 * Parses a YAML file before it is loaded by the yaml parser
-	 * to catch common errors like tabs instead of spaces
-	 *
-	 *
-	 * @param file
-	 */
-	public void preParseYamlFile(File file) {
-		List<String> input = new ArrayList<String>();
-		try {
-			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
-					file), "UTF8"));
-			String line;
-			while ((line = in.readLine()) != null) {
-				line = line.replaceAll("\uFFFD", "?");
-				if (line.contains("\t"))
-						while(line.contains("\t"))
-							line = line.replace("\t", "  ");
-				input.add(line);
-			}
-			in.close();
-			for (int i=0; i<input.size(); i++) {
-				line = input.get(i);
-			}
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter (new FileOutputStream(
-					file), "UTF8"));
-			for (int i=0; i<input.size(); i++) {
-				out.write(input.get(i));
-			}
-			out.close();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * To write a text file on the AdminCmd folder.
-	 *
+	 * 
 	 * @param filename
 	 * @param toSet
 	 */
-	public void setTxtFile(String filename, String toSet) {
-		File txt = getFile(null, filename + ".txt");
+	public void setTxtFile(final String filename, final String toSet) {
+		final File txt = getFile(null, filename + ".txt");
 		FileWriter fstream = null;
 		try {
 			fstream = new FileWriter(txt);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			ACLogger.severe("Can't write the txt file : " + filename, e);
 			return;
 		}
-		BufferedWriter out = new BufferedWriter(fstream);
+		final BufferedWriter out = new BufferedWriter(fstream);
 		try {
 			out.write(toSet);
 			out.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			ACLogger.severe("Can't write the txt file : " + filename, e);
 			return;
 		}
@@ -283,17 +240,17 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Write the alias in the yml file
-	 *
+	 * 
 	 * @param alias
 	 * @param mc
 	 */
-	public void addAlias(String alias, MaterialContainer mc) {
-		ExtendedConfiguration conf = getYml("Alias");
+	public void addAlias(final String alias, final MaterialContainer mc) {
+		final ExtendedConfiguration conf = getYml("Alias");
 
-		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
-		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
+		final List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		final List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		if (aliasList.contains(alias)) {
-			int index = aliasList.indexOf(alias);
+			final int index = aliasList.indexOf(alias);
 			aliasList.remove(index);
 			idList.remove(index);
 		}
@@ -303,45 +260,45 @@ public class FileManager implements DataManager {
 		conf.set("ids", idList);
 		try {
 			conf.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
 	/**
 	 * Remove the alias from the yml fileF
-	 *
+	 * 
 	 * @param alias
 	 */
-	public void removeAlias(String alias) {
-		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
-		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
-		int index = aliasList.indexOf(alias);
+	public void removeAlias(final String alias) {
+		final ExtendedConfiguration conf = getYml("Alias");
+		final List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		final List<String> idList = conf.getStringList("ids", new ArrayList<String>());
+		final int index = aliasList.indexOf(alias);
 		aliasList.remove(index);
 		idList.remove(index);
 		conf.set("alias", aliasList);
 		conf.set("ids", idList);
 		try {
 			conf.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
 	/**
 	 * Get a file in the jar, copy it in the choose directory inside the plugin
 	 * folder, open it and return it
-	 *
+	 * 
 	 * @param filename
 	 * @return
 	 */
-	public File getInnerFile(String filename) {
+	public File getInnerFile(final String filename) {
 		return getInnerFile(filename, null, false);
 	}
 
-	public File getInnerFile(String filename, String directory, boolean replace) {
+	public File getInnerFile(final String filename, final String directory, final boolean replace) {
 		final File file;
 		if (directory != null) {
-			File directoryFile = new File(this.pathFile, directory);
+			final File directoryFile = new File(this.pathFile, directory);
 			if (!directoryFile.exists()) {
 				directoryFile.mkdirs();
 			}
@@ -353,10 +310,10 @@ public class FileManager implements DataManager {
 
 			try {
 				reader = new BufferedReader(new FileReader(file));
-			} catch (FileNotFoundException e) {
+			} catch (final FileNotFoundException e) {
 			}
 			try {
-				String version = reader.readLine();
+				final String version = reader.readLine();
 				final String versioncheck = version.substring(10);
 				if (!versioncheck.equals(fileVersion)) {
 					reader.close();
@@ -364,13 +321,13 @@ public class FileManager implements DataManager {
 					DebugLog.INSTANCE.info("Delete file : " + file);
 				} else
 					return file;
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				file.delete();
 			}
 
 			try {
 				reader.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 
 		}
@@ -383,19 +340,19 @@ public class FileManager implements DataManager {
 					tx.write(i);
 				}
 				tx.flush();
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				ex.printStackTrace();
 				return file;
 			} finally {
 				try {
 					res.close();
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 				}
 				try {
 					if (tx != null) {
 						tx.close();
 					}
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 				}
 			}
 		}
@@ -403,33 +360,34 @@ public class FileManager implements DataManager {
 	}
 
 	public HashMap<String, MaterialContainer> getAlias() {
-		HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
-		ExtendedConfiguration conf = getYml("Alias");
-		List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
-		List<String> idList = conf.getStringList("ids", new ArrayList<String>());
+		final HashMap<String, MaterialContainer> result = new HashMap<String, MaterialContainer>();
+		final ExtendedConfiguration conf = getYml("Alias");
+		final List<String> aliasList = conf.getStringList("alias", new ArrayList<String>());
+		final List<String> idList = conf.getStringList("ids", new ArrayList<String>());
 		int i = 0;
 		try {
-			CSVReader csv = new CSVReader(new FileReader(getInnerFile("items.csv", null, true)));
+			final CSVReader csv = new CSVReader(new FileReader(
+					getInnerFile("items.csv", null, true)));
 			String[] alias;
 			while ((alias = csv.readNext()) != null) {
 				try {
 					result.put(alias[0], new MaterialContainer(alias[1], alias[2]));
-				} catch (ArrayIndexOutOfBoundsException e) {
+				} catch (final ArrayIndexOutOfBoundsException e) {
 					try {
 						result.put(alias[0], new MaterialContainer(alias[1]));
-					} catch (ArrayIndexOutOfBoundsException e2) {
+					} catch (final ArrayIndexOutOfBoundsException e2) {
 					}
 
 				}
 
 			}
 
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		for (String alias : aliasList) {
+		for (final String alias : aliasList) {
 			result.put(alias, new MaterialContainer(idList.get(i)));
 			i++;
 		}
@@ -438,14 +396,15 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Create a flat file with the location informations
-	 *
+	 * 
 	 * @param loc
 	 * @param filename
 	 * @param directory
 	 */
 	@Override
-	public void writeLocation(Location loc, String name, String filename, String directory) {
-		ExtendedConfiguration conf = getYml(filename, directory);
+	public void writeLocation(final Location loc, final String name, final String filename,
+			final String directory) {
+		final ExtendedConfiguration conf = getYml(filename, directory);
 		conf.set(name + ".world", loc.getWorld().getName());
 		conf.set(name + ".x", loc.getX());
 		conf.set(name + ".y", loc.getY());
@@ -454,29 +413,30 @@ public class FileManager implements DataManager {
 		conf.set(name + ".pitch", loc.getPitch());
 		try {
 			conf.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
 	/**
 	 * Return the location after parsing the flat file
-	 *
+	 * 
 	 * @param property
 	 * @param filename
 	 * @param directory
 	 * @return
 	 */
 	@Override
-	public Location getLocation(String property, String filename, String directory)
+	public Location getLocation(final String property, final String filename, final String directory)
 			throws WorldNotLoaded {
-		ExtendedConfiguration conf = getYml(filename, directory);
+		final ExtendedConfiguration conf = getYml(filename, directory);
 		if (conf.get(property + ".world") == null) {
-			Location loc = parseLocation(property, conf);
+			final Location loc = parseLocation(property, conf);
 			if (loc != null)
 				writeLocation(loc, property, filename, directory);
 			return loc;
 		} else {
-			World w = ACPluginManager.getServer().getWorld(conf.getString(property + ".world"));
+			final World w = ACPluginManager.getServer().getWorld(
+					conf.getString(property + ".world"));
 			if (w != null)
 				return new Location(w, conf.getDouble(property + ".x", 0), conf.getDouble(property
 						+ ".y", 0), conf.getDouble(property + ".z", 0), Float.parseFloat(conf
@@ -490,31 +450,32 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Remove the given location from the file
-	 *
+	 * 
 	 * @param property
 	 * @param filename
 	 * @param directory
 	 */
 	@Override
-	public void removeKey(String property, String filename, String directory) {
-		ExtendedConfiguration conf = getYml(filename, directory);
+	public void removeKey(final String property, final String filename, final String directory) {
+		final ExtendedConfiguration conf = getYml(filename, directory);
 		conf.set(property, null);
 		try {
 			conf.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
 	/**
 	 * Return a string Set containing all locations names
-	 *
+	 * 
 	 * @param filename
 	 * @param directory
 	 * @return
 	 */
 	@Override
-	public Set<String> getKeys(String info, String filename, String directory) {
-		Set<String> keys = getYml(filename, directory).getConfigurationSection(info).getKeys(false);
+	public Set<String> getKeys(final String info, final String filename, final String directory) {
+		final Set<String> keys = getYml(filename, directory).getConfigurationSection(info).getKeys(
+				false);
 		if (keys == null)
 			return new HashSet<String>();
 		else
@@ -523,30 +484,30 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Parse String to create a location
-	 *
+	 * 
 	 * @param property
 	 * @param conf
 	 * @return
 	 */
-	private Location parseLocation(String property, ExtendedConfiguration conf) {
-		String toParse = conf.getString(property, null);
+	private Location parseLocation(final String property, final ExtendedConfiguration conf) {
+		final String toParse = conf.getString(property, null);
 		if (toParse == null)
 			return null;
 		if (toParse.isEmpty())
 			return null;
-		Double coords[] = new Double[3];
-		Float direction[] = new Float[2];
-		String[] infos = toParse.split(";");
+		final Double coords[] = new Double[3];
+		final Float direction[] = new Float[2];
+		final String[] infos = toParse.split(";");
 		for (int i = 0; i < coords.length; i++)
 			try {
 				coords[i] = Double.parseDouble(infos[i]);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				return null;
 			}
 		for (int i = 3; i < infos.length - 1; i++)
 			try {
 				direction[i - 3] = Float.parseFloat(infos[i]);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				return null;
 			}
 		return new Location(ACPluginManager.getServer().getWorld(infos[5]), coords[0], coords[1],
@@ -555,18 +516,19 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load the map
-	 *
+	 * 
 	 * @param type
 	 * @param directory
 	 * @param filename
 	 * @return
 	 */
-	public Map<String, Object> loadMap(Type type, String directory, String filename) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		ExtendedConfiguration conf = getYml(filename, directory);
-		ConfigurationSection confSection = conf.getConfigurationSection(type.toString());
+	public Map<String, Object> loadMap(final Type type, final String directory,
+			final String filename) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		final ExtendedConfiguration conf = getYml(filename, directory);
+		final ConfigurationSection confSection = conf.getConfigurationSection(type.toString());
 		if (confSection != null) {
-			for (String key : confSection.getKeys(false))
+			for (final String key : confSection.getKeys(false))
 				result.put(key, confSection.get(key));
 		}
 		return result;
@@ -575,10 +537,10 @@ public class FileManager implements DataManager {
 	@Override
 	public Map<String, BannedPlayer> loadBan() {
 		Map<String, BannedPlayer> result = new HashMap<String, BannedPlayer>();
-		ExtendedConfiguration conf = getYml("banned");
+		final ExtendedConfiguration conf = getYml("banned");
 		if (conf.get("bans") != null) {
-			ConfigurationSection node = conf.getConfigurationSection("bans");
-			for (String key : node.getKeys(false))
+			final ConfigurationSection node = conf.getConfigurationSection("bans");
+			for (final String key : node.getKeys(false))
 				result.put(key, (BannedPlayer) node.get(key));
 
 		}
@@ -589,13 +551,13 @@ public class FileManager implements DataManager {
 		return result;
 	}
 
-	private Map<String, BannedPlayer> importBannedPlayerTXT(Map<String, BannedPlayer> result) {
-		Set<OfflinePlayer> banned = ACPluginManager.getServer().getBannedPlayers();
-		Iterator<OfflinePlayer> it = banned.iterator();
+	private Map<String, BannedPlayer> importBannedPlayerTXT(final Map<String, BannedPlayer> result) {
+		final Set<OfflinePlayer> banned = ACPluginManager.getServer().getBannedPlayers();
+		final Iterator<OfflinePlayer> it = banned.iterator();
 		while (it.hasNext()) {
-			OfflinePlayer op = it.next();
-			String name = op.getName();
-			BannedPlayer bp = new BannedPlayer(name, "Import from banned-players.txt");
+			final OfflinePlayer op = it.next();
+			final String name = op.getName();
+			final BannedPlayer bp = new BannedPlayer(name, "Import from banned-players.txt");
 			if (!result.containsKey(name))
 				result.put(name, bp);
 		}
@@ -604,25 +566,25 @@ public class FileManager implements DataManager {
 
 	/**
 	 * Load all the kits
-	 *
+	 * 
 	 * @return
 	 */
 	public Map<String, KitInstance> loadKits() {
-		Map<String, KitInstance> result = new LinkedHashMap<String, KitInstance>();
-		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
-		ExtendedConfiguration kits = getYml("kits");
-		Map<String, List<String>> kitParents = new HashMap<String, List<String>>();
-		Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
+		final Map<String, KitInstance> result = new LinkedHashMap<String, KitInstance>();
+		final List<MaterialContainer> items = new ArrayList<MaterialContainer>();
+		final ExtendedConfiguration kits = getYml("kits");
+		final Map<String, List<String>> kitParents = new HashMap<String, List<String>>();
+		final Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 				ArmorPart.class);
 
-		ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
+		final ConfigurationSection kitNodes = kits.getConfigurationSection("kits");
 		if (kitNodes == null) {
 			ACLogger.severe("A problem happen when wanting to load the kits. Please check your kits.yml file.");
 			return result;
 		}
-		for (String kitName : kitNodes.getKeys(false)) {
+		for (final String kitName : kitNodes.getKeys(false)) {
 			int delay = 0;
-			ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
+			final ConfigurationSection kitNode = kitNodes.getConfigurationSection(kitName);
 			ConfigurationSection kitItems = null;
 			ConfigurationSection armorItems = null;
 			List<String> parents = null;
@@ -630,14 +592,14 @@ public class FileManager implements DataManager {
 				kitItems = kitNode.getConfigurationSection("items");
 				armorItems = kitNode.getConfigurationSection("armor");
 				parents = kitNode.getStringList("parents");
-			} catch (NullPointerException e) {
+			} catch (final NullPointerException e) {
 				DebugLog.INSTANCE.warning("Problem with kit " + kitName);
 				continue;
 			}
 
 			if (kitItems != null)
-				for (String item : kitItems.getKeys(false)) {
-					MaterialContainer m = Utils.checkMaterial(item);
+				for (final String item : kitItems.getKeys(false)) {
+					final MaterialContainer m = Utils.checkMaterial(item);
 					m.setAmount(kitItems.getInt(item, 1));
 					if (!m.isNull())
 						items.add(m);
@@ -655,11 +617,11 @@ public class FileManager implements DataManager {
 			 * true; }
 			 */
 			if (armorItems != null) {
-				for (ArmorPart part : ArmorPart.values()) {
-					String partId = armorItems.getString(part.toString());
+				for (final ArmorPart part : ArmorPart.values()) {
+					final String partId = armorItems.getString(part.toString());
 					if (partId == null)
 						continue;
-					MaterialContainer m = Utils.checkMaterial(partId);
+					final MaterialContainer m = Utils.checkMaterial(partId);
 					if (!m.isNull())
 						armor.put(part, m);
 				}
@@ -678,10 +640,10 @@ public class FileManager implements DataManager {
 			items.clear();
 			armor.clear();
 		}
-		for (Entry<String, List<String>> entry : kitParents.entrySet()) {
+		for (final Entry<String, List<String>> entry : kitParents.entrySet()) {
 			KitInstance kit = result.get(entry.getKey());
-			for (String parent : entry.getValue()) {
-				KitInstance parentKit = result.get(parent);
+			for (final String parent : entry.getValue()) {
+				final KitInstance parentKit = result.get(parent);
 				if (parentKit == null)
 					continue;
 				if (parentKit instanceof ArmoredKitInstance && !(kit instanceof ArmoredKitInstance)) {
@@ -700,35 +662,35 @@ public class FileManager implements DataManager {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Tools.Files.DataManager#addBannedPlayer(be.Balor.Player.BannedPlayer
 	 * )
 	 */
 	@Override
-	public void addBannedPlayer(BannedPlayer player) {
-		ExtendedConfiguration banFile = getYml("banned");
-		ConfigurationSection bans = banFile.addSection("bans");
+	public void addBannedPlayer(final BannedPlayer player) {
+		final ExtendedConfiguration banFile = getYml("banned");
+		final ConfigurationSection bans = banFile.addSection("bans");
 		bans.set(player.getPlayer(), player);
 		try {
 			banFile.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
 	 */
 	@Override
-	public void unBanPlayer(String player) {
-		ExtendedConfiguration banFile = getYml("banned");
-		ConfigurationSection bans = banFile.addSection("bans");
+	public void unBanPlayer(final String player) {
+		final ExtendedConfiguration banFile = getYml("banned");
+		final ConfigurationSection bans = banFile.addSection("bans");
 		bans.set(player, null);
 		try {
 			banFile.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 
 	}

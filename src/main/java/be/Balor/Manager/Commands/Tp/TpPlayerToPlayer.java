@@ -45,9 +45,9 @@ public class TpPlayerToPlayer extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player from = sender.getServer().getPlayer(args.getString(0));
-		Player to = sender.getServer().getPlayer(args.getString(1));
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player from = sender.getServer().getPlayer(args.getString(0));
+		final Player to = sender.getServer().getPlayer(args.getString(1));
 		if (from != null && from.equals(sender))
 			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.TO);
 		else if (to != null && to.equals(sender))
@@ -62,7 +62,7 @@ public class TpPlayerToPlayer extends TeleportCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 2;
 	}
 

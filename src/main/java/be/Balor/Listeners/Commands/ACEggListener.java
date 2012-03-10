@@ -31,11 +31,11 @@ import be.Balor.Tools.Egg.EggType;
 public class ACEggListener implements Listener {
 
 	@EventHandler
-	void eggThrown(PlayerEggThrowEvent event) {
-		ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+	void eggThrown(final PlayerEggThrowEvent event) {
+		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (!player.hasPower(Type.EGG))
 			return;
-		EggType<?> eggPower = player.getPower(Type.EGG).getEggType();
+		final EggType<?> eggPower = player.getPower(Type.EGG).getEggType();
 		eggPower.onEvent(event);
 	}
 }

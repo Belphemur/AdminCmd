@@ -37,7 +37,7 @@ public class ACCommandContainer {
 	/**
  *
  */
-	public ACCommandContainer(CommandSender sender, CoreCommand cmd, String[] args) {
+	public ACCommandContainer(final CommandSender sender, final CoreCommand cmd, final String[] args) {
 		this.sender = sender;
 		this.cmd = cmd;
 		this.argsStrings = args;
@@ -50,14 +50,15 @@ public class ACCommandContainer {
 		if (args == null)
 			try {
 				args = new CommandArgs(argsStrings);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				ACLogger.severe("Problem in parsing the commandString", e);
 			}
 	}
 
 	/**
 	 * Execute the command
-	 * @throws PlayerNotFound 
+	 * 
+	 * @throws PlayerNotFound
 	 */
 	public void execute() throws PlayerNotFound {
 		if (ConfigEnum.LOG_CMD.getBoolean()) {

@@ -52,15 +52,15 @@ public class Fly extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		Player player = null;
 		float power = ConfigEnum.DFLY.getFloat();
-		String timeOut = args.getValueFlag('t');
+		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = args.getFloat(0);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				power = ConfigEnum.DFLY.getFloat();
 				player = Utils.getUser(sender, args, permNode);
 			}
@@ -69,9 +69,9 @@ public class Fly extends PlayerCommand {
 		} else
 			player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player);
+			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.FLY)) {
 				acp.removePower(Type.FLY);
 				player.setAllowFlight(false);
@@ -92,7 +92,8 @@ public class Fly extends PlayerCommand {
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
-				power = power > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat() : power;
+				power = power > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat()
+						: power;
 				acp.setPower(Type.FLY, power);
 				player.setAllowFlight(true);
 				// MC 1.8 creative hack
@@ -108,7 +109,7 @@ public class Fly extends PlayerCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
@@ -127,7 +128,7 @@ public class Fly extends PlayerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

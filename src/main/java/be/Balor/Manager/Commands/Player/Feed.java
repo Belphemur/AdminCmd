@@ -26,7 +26,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 /**
  * @author Balor (aka Antoine Aflalo)
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Feed extends PlayerCommand {
 
@@ -41,29 +41,29 @@ public class Feed extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		ACPluginManager.scheduleSyncTask(new Runnable() {			
+		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
 				Utils.setPlayerHealth(sender, args, Health.FEED);
 			}
 		});
-		
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

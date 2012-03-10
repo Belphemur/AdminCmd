@@ -34,7 +34,7 @@ public class BlockChangeInfo implements Serializable {
 	 * @param blockTypeId
 	 * @param radius
 	 */
-	public BlockChangeInfo(int blockTypeId, int radius) {
+	public BlockChangeInfo(final int blockTypeId, final int radius) {
 		this.blockTypeId = blockTypeId;
 		this.radius = radius;
 	}
@@ -63,7 +63,7 @@ public class BlockChangeInfo implements Serializable {
 	 * @param blockTypeId
 	 *            the blockTypeId to set
 	 */
-	public void setBlockTypeId(int blockTypeId) {
+	public void setBlockTypeId(final int blockTypeId) {
 		this.blockTypeId = blockTypeId;
 	}
 
@@ -71,7 +71,7 @@ public class BlockChangeInfo implements Serializable {
 	 * @param radius
 	 *            the radius to set
 	 */
-	public void setRadius(int radius) {
+	public void setRadius(final int radius) {
 		this.radius = radius;
 	}
 

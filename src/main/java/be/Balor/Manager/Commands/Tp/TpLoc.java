@@ -49,9 +49,9 @@ public class TpLoc extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		final Player target = Utils.getUserParam(sender, args, permNode);
-		if(target == null)
+		if (target == null)
 			return;
 		final double x;
 		final double y;
@@ -60,12 +60,12 @@ public class TpLoc extends TeleportCommand {
 			x = args.getDouble(0);
 			y = args.getDouble(1);
 			z = args.getDouble(2);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Utils.sI18n(sender, "errorLocation");
 			return;
 		}
-		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
-				target.getWorld(), x, y, z)));
+		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(target.getWorld(),
+				x, y, z)));
 
 	}
 
@@ -75,7 +75,7 @@ public class TpLoc extends TeleportCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 3;
 	}
 

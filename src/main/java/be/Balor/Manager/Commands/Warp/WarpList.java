@@ -53,9 +53,9 @@ public class WarpList extends WarpCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player p = (Player) sender;
+			final Player p = (Player) sender;
 			String msg = "";
 			Set<String> wp;
 			if (args.hasFlag('a')) {
@@ -66,7 +66,7 @@ public class WarpList extends WarpCommand {
 			} else
 				wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
 			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
-			for (String name : wp) {
+			for (final String name : wp) {
 				msg += name + ", ";
 				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
 					sender.sendMessage(msg);
@@ -100,7 +100,7 @@ public class WarpList extends WarpCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

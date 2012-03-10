@@ -42,11 +42,10 @@ import org.yaml.snakeyaml.scanner.ScannerException;
 
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Files.FileManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 @SuppressWarnings("unchecked")
 public class ExtendedConfiguration extends ExFileConfiguration {
@@ -63,14 +62,14 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 * Any errors loading the Configuration will be logged and then ignored. If
 	 * the specified input is not a valid config, a blank config will be
 	 * returned.
-	 *
+	 * 
 	 * @param file
 	 *            Input file
 	 * @return Resulting configuration
 	 * @throws IllegalArgumentException
 	 *             Thrown is file is null
 	 */
-	public static ExtendedConfiguration loadConfiguration(File file) {
+	public static ExtendedConfiguration loadConfiguration(final File file) {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}
@@ -78,7 +77,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		final ExtendedConfiguration config = new ExtendedConfiguration();
 
 		try {
-			FileManager.getInstance().preParseYamlFile(file);
 			config.load(file);
 		} catch (final FileNotFoundException ex) {
 		} catch (final IOException ex) {
@@ -96,7 +94,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return config;
 	}
 
-	public static void setClassLoader(ClassLoader loader) {
+	public static void setClassLoader(final ClassLoader loader) {
 		yaml = new Yaml(new YamlConstructor(loader), yamlRepresenter, yamlOptions);
 	}
 
@@ -138,7 +136,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return builder.toString();
 	}
 
-	protected void convertMapsToSections(Map<Object, Object> input, ConfigurationSection section) {
+	protected void convertMapsToSections(final Map<Object, Object> input,
+			final ConfigurationSection section) {
 		for (final Map.Entry<Object, Object> entry : input.entrySet()) {
 			final String key = entry.getKey().toString();
 			final Object value = entry.getValue();
@@ -153,7 +152,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.bukkit.configuration.file.FileConfiguration#loadFromString(java.lang
 	 * .String)
@@ -168,6 +167,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			}
 
 			Map<Object, Object> input = null;
+			contents = contents.replaceAll("\uFFFD", "?").replaceAll("\t", "    ");
 			try {
 				input = (Map<Object, Object>) yaml.load(contents);
 			} catch (final ScannerException e) {
@@ -230,7 +230,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		return (ExtendedConfigurationOptions) options;
 	}
 
-	protected String parseHeader(String input) {
+	protected String parseHeader(final String input) {
 		final String[] lines = input.split("\r?\n", -1);
 		final StringBuilder result = new StringBuilder();
 		boolean readingHeader = true;
@@ -258,7 +258,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/**
 	 * Reload the configuration file.
-	 *
+	 * 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 * @throws InvalidConfigurationException
@@ -267,7 +267,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		load(file);
 	}
 
-	private void removeLineFromFile(int lineToRemove) {
+	private void removeLineFromFile(final int lineToRemove) {
 		BufferedReader br = null;
 		PrintWriter pw = null;
 		try {
@@ -323,7 +323,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/**
 	 * Saves this {@link ExtendedConfiguration}.
-	 *
+	 * 
 	 * @throws IOException
 	 *             Thrown when the given file cannot be written to for any
 	 *             reason.
@@ -337,7 +337,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.configuration.file.FileConfiguration#saveToString()
 	 */
 	@Override

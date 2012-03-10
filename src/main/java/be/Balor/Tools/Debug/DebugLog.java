@@ -31,38 +31,37 @@ import com.google.common.io.Files;
  */
 public class DebugLog {
 	public static final Logger INSTANCE = Logger.getLogger("AdminCmd");
-	static
-	{
+	static {
 		INSTANCE.setUseParentHandlers(false);
 		INSTANCE.setLevel(Level.ALL);
 	}
 
-	public static void setFile(String path) {
+	public static void setFile(final String path) {
 		FileHandler fh;
 		try {
 			// This block configure the logger with handler and formatter
-			File file = new File(path + File.separator + "debug.log");
+			final File file = new File(path + File.separator + "debug.log");
 			if (file.exists())
 				file.delete();
 			else
 				Files.createParentDirs(file);
-			
+
 			fh = new FileHandler(file.getPath(), true);
-			INSTANCE.addHandler(fh);			
+			INSTANCE.addHandler(fh);
 			fh.setFormatter(new LogFormatter());
 
 			// the following statement is used to log any messages
 			INSTANCE.info("Logger created");
 
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void stopLogging() {
-		for (Handler h : INSTANCE.getHandlers()) {
+		for (final Handler h : INSTANCE.getHandlers()) {
 			h.close();
 			INSTANCE.removeHandler(h);
 		}

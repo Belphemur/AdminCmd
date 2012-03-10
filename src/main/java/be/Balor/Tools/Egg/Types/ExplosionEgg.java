@@ -44,8 +44,8 @@ public class ExplosionEgg extends EggType<Float> {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
-		Egg egg = event.getEgg();
+	public void onEvent(final PlayerEggThrowEvent event) {
+		final Egg egg = event.getEgg();
 		egg.remove();
 		event.setHatching(false);
 		egg.getWorld().createExplosion(egg.getLocation(), value);
@@ -59,19 +59,20 @@ public class ExplosionEgg extends EggType<Float> {
 	 * .CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(final Player sender, final CommandArgs args)
+			throws ProcessingArgsException {
 		float power = ConfigEnum.DEGG_EX_RADIUS.getFloat();
 		if (args.hasFlag('p')) {
-			String flag = args.getValueFlag('p');
+			final String flag = args.getValueFlag('p');
 			try {
 				power = Float.parseFloat(flag);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", flag);
 				return;
 			}
 		}
-		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getFloat() ? ConfigEnum.MAXEGG_EX_RADIUS.getFloat()
-				: power;
+		value = power > ConfigEnum.MAXEGG_EX_RADIUS.getFloat() ? ConfigEnum.MAXEGG_EX_RADIUS
+				.getFloat() : power;
 
 	}
 

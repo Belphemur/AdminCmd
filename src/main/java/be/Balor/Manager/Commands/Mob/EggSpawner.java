@@ -58,17 +58,17 @@ public class EggSpawner extends MobCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (!Utils.isPlayer(sender))
 			return;
-		Player player = (Player) sender;
-		ACPlayer acp = ACPlayer.getPlayer(player);
+		final Player player = (Player) sender;
+		final ACPlayer acp = ACPlayer.getPlayer(player);
 		EggType<?> egg = null;
 		try {
 			egg = EggType.createEggType(player, args);
-		} catch (ParameterMissingException e) {
+		} catch (final ParameterMissingException e) {
 			if (e.getParam() == 'E') {
-				String list = Joiner.on(", ").skipNulls()
+				final String list = Joiner.on(", ").skipNulls()
 						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
 				sender.sendMessage(e.getMessage());
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
@@ -78,20 +78,20 @@ public class EggSpawner extends MobCommand {
 				sender.sendMessage(e.getMessage());
 			}
 			return;
-		} catch (ProcessingArgsException e) {
+		} catch (final ProcessingArgsException e) {
 			if (e.getType().equals(ExceptionType.NO_CLASS))
 				Utils.sI18n(sender, "eggDontExists", "egg", e.getMessage());
 			else if (e.getType().equals(ExceptionType.DONT_EXISTS))
 				Utils.sI18n(sender, "entityDontExists", "entity", e.getMessage());
 			else if (e.getType().equals(ExceptionType.CUSTOM)) {
-				Map<String, String> replace = new HashMap<String, String>();
+				final Map<String, String> replace = new HashMap<String, String>();
 				replace.put("egg", args.getValueFlag('E'));
 				replace.put("error", e.getMessage());
 				Utils.sI18n(sender, "eggCustomError", replace);
 			} else
 				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(), e);
 			return;
-		} catch (DontHaveThePermissionException e) {
+		} catch (final DontHaveThePermissionException e) {
 			sender.sendMessage(e.getMessage());
 			return;
 		}
@@ -113,7 +113,7 @@ public class EggSpawner extends MobCommand {
 	 * .CommandSender)
 	 */
 	@Override
-	public boolean permissionCheck(CommandSender sender) {
+	public boolean permissionCheck(final CommandSender sender) {
 		return true;
 	}
 
@@ -123,7 +123,7 @@ public class EggSpawner extends MobCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

@@ -37,7 +37,7 @@ public class BannedPlayer {
 	 * @param player
 	 * @param reason
 	 */
-	public BannedPlayer(String player, String reason) {
+	public BannedPlayer(final String player, final String reason) {
 		this.player = player;
 		this.reason = reason;
 		date = new Date(System.currentTimeMillis());
@@ -54,7 +54,7 @@ public class BannedPlayer {
 	 * @param player
 	 *            the player to set
 	 */
-	public void setPlayer(String player) {
+	public void setPlayer(final String player) {
 		this.player = player;
 	}
 
@@ -69,7 +69,7 @@ public class BannedPlayer {
 	 * @param reason
 	 *            the reason to set
 	 */
-	public void setReason(String reason) {
+	public void setReason(final String reason) {
 		this.reason = reason;
 	}
 
@@ -84,7 +84,7 @@ public class BannedPlayer {
 	 * @param date
 	 *            the date to set
 	 */
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
 
@@ -109,14 +109,14 @@ public class BannedPlayer {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (!(obj instanceof BannedPlayer))
 			return false;
-		BannedPlayer other = (BannedPlayer) obj;
+		final BannedPlayer other = (BannedPlayer) obj;
 		if (date == null) {
 			if (other.date != null)
 				return false;

@@ -30,7 +30,7 @@ public class Warp {
 	 * @param name
 	 * @param loc
 	 */
-	public Warp(String name, Location loc) {
+	public Warp(final String name, final Location loc) {
 		this.name = name;
 		this.loc = loc;
 	}

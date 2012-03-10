@@ -27,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class MoreAll extends ItemCommand {
 
@@ -41,21 +41,21 @@ public class MoreAll extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final Player p = ((Player) sender);
-			ACPluginManager.scheduleSyncTask(new Runnable() {				
+			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					for (ItemStack is : p.getInventory().getContents())
+					for (final ItemStack is : p.getInventory().getContents())
 						if (is != null && !ACHelper.getInstance().inBlackListItem(p, is))
-							is.setAmount(is.getMaxStackSize());					
+							is.setAmount(is.getMaxStackSize());
 				}
 			});
 			Utils.sI18n(sender, "moreAll");
@@ -65,11 +65,11 @@ public class MoreAll extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

@@ -33,7 +33,7 @@ public class ObjectContainer {
 	/**
  * 
  */
-	public ObjectContainer(Object obj) {
+	public ObjectContainer(final Object obj) {
 		this.obj = obj;
 	}
 
@@ -96,8 +96,8 @@ public class ObjectContainer {
 	 *            default value
 	 * @return int or default
 	 */
-	public int getInt(int def) {
-		Integer o = castInt(obj);
+	public int getInt(final int def) {
+		final Integer o = castInt(obj);
 		if (o == null)
 			return def;
 		return o;
@@ -113,8 +113,8 @@ public class ObjectContainer {
 	 *            default value
 	 * @return float or default
 	 */
-	public float getFloat(float def) {
-		Float o = castFloat(obj);
+	public float getFloat(final float def) {
+		final Float o = castFloat(obj);
 		if (o == null)
 			return def;
 		return o;
@@ -130,8 +130,8 @@ public class ObjectContainer {
 	 *            default value
 	 * @return double or default
 	 */
-	public double getDouble(double def) {
-		Double o = castDouble(obj);
+	public double getDouble(final double def) {
+		final Double o = castDouble(obj);
 		if (o == null)
 			return def;
 		return o;
@@ -146,8 +146,8 @@ public class ObjectContainer {
 	 *            default value
 	 * @return boolean or default
 	 */
-	public boolean getBoolean(boolean def) {
-		Boolean o = castBoolean(obj);
+	public boolean getBoolean(final boolean def) {
+		final Boolean o = castBoolean(obj);
 		if (o == null)
 			return def;
 		return o;
@@ -162,8 +162,8 @@ public class ObjectContainer {
 	 *            default value
 	 * @return boolean or default
 	 */
-	public long getLong(long def) {
-		Long o = castLong(obj);
+	public long getLong(final long def) {
+		final Long o = castLong(obj);
 		if (o == null)
 			return def;
 		return o;
@@ -179,7 +179,7 @@ public class ObjectContainer {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Object> getList() {
-		Object o = obj;
+		final Object o = obj;
 
 		if (o == null) {
 			return null;
@@ -202,16 +202,16 @@ public class ObjectContainer {
 	 *            default value or null for an empty list as default
 	 * @return list of strings
 	 */
-	public List<String> getStringList(List<String> def) {
-		List<Object> raw = getList();
+	public List<String> getStringList(final List<String> def) {
+		final List<Object> raw = getList();
 
 		if (raw == null) {
 			return def != null ? def : new ArrayList<String>();
 		}
 
-		List<String> list = new ArrayList<String>();
+		final List<String> list = new ArrayList<String>();
 
-		for (Object o : raw) {
+		for (final Object o : raw) {
 			if (o == null) {
 				continue;
 			}
@@ -233,17 +233,17 @@ public class ObjectContainer {
 	 *            default value or null for an empty list as default
 	 * @return list of integers
 	 */
-	public List<Integer> getIntList(List<Integer> def) {
-		List<Object> raw = getList();
+	public List<Integer> getIntList(final List<Integer> def) {
+		final List<Object> raw = getList();
 
 		if (raw == null) {
 			return def != null ? def : new ArrayList<Integer>();
 		}
 
-		List<Integer> list = new ArrayList<Integer>();
+		final List<Integer> list = new ArrayList<Integer>();
 
-		for (Object o : raw) {
-			Integer i = castInt(o);
+		for (final Object o : raw) {
+			final Integer i = castInt(o);
 
 			if (i != null) {
 				list.add(i);
@@ -264,17 +264,17 @@ public class ObjectContainer {
 	 *            default value or null for an empty list as default
 	 * @return list of integers
 	 */
-	public List<Double> getDoubleList(List<Double> def) {
-		List<Object> raw = getList();
+	public List<Double> getDoubleList(final List<Double> def) {
+		final List<Object> raw = getList();
 
 		if (raw == null) {
 			return def != null ? def : new ArrayList<Double>();
 		}
 
-		List<Double> list = new ArrayList<Double>();
+		final List<Double> list = new ArrayList<Double>();
 
-		for (Object o : raw) {
-			Double i = castDouble(o);
+		for (final Object o : raw) {
+			final Double i = castDouble(o);
 
 			if (i != null) {
 				list.add(i);
@@ -295,17 +295,17 @@ public class ObjectContainer {
 	 *            default value or null for an empty list as default
 	 * @return list of integers
 	 */
-	public List<Boolean> getBooleanList(List<Boolean> def) {
-		List<Object> raw = getList();
+	public List<Boolean> getBooleanList(final List<Boolean> def) {
+		final List<Object> raw = getList();
 
 		if (raw == null) {
 			return def != null ? def : new ArrayList<Boolean>();
 		}
 
-		List<Boolean> list = new ArrayList<Boolean>();
+		final List<Boolean> list = new ArrayList<Boolean>();
 
-		for (Object o : raw) {
-			Boolean tetsu = castBoolean(o);
+		for (final Object o : raw) {
+			final Boolean tetsu = castBoolean(o);
 
 			if (tetsu != null) {
 				list.add(tetsu);
@@ -321,7 +321,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Integer castInt(Object o) {
+	private static Integer castInt(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Byte) {
@@ -345,7 +345,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Double castDouble(Object o) {
+	private static Double castDouble(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Float) {
@@ -369,7 +369,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Boolean castBoolean(Object o) {
+	private static Boolean castBoolean(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Boolean) {
@@ -385,7 +385,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Long castLong(Object o) {
+	private static Long castLong(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Long) {
@@ -409,7 +409,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Float castFloat(Object o) {
+	private static Float castFloat(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Float) {

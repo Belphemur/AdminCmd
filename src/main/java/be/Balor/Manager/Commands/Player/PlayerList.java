@@ -30,7 +30,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PlayerList extends PlayerCommand {
 
@@ -44,27 +44,27 @@ public class PlayerList extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player[] online = sender.getServer().getOnlinePlayers();
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player[] online = sender.getServer().getOnlinePlayers();
 		int amount = online.length;
 		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 			amount -= InvisibleWorker.getInstance().nbInvisibles();
 		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
 		String buffer = "";
 		for (int i = 0; i < online.length; ++i) {
-			Player p = online[i];
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-					|| ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT))
+			final Player p = online[i];
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) || ACPlayer
+					.getPlayer(p).hasPower(Type.FAKEQUIT))
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
 				continue;
-			String name = Utils.getPlayerName(p, sender);
+			final String name = Utils.getPlayerName(p, sender);
 			if (buffer.length() + name.length() + 2 >= ACMinecraftFontWidthCalculator.chatwidth) {
 				sender.sendMessage(buffer);
 				buffer = "";
@@ -81,11 +81,11 @@ public class PlayerList extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

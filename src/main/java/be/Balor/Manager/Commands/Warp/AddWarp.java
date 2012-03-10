@@ -27,7 +27,7 @@ import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class AddWarp extends WarpCommand {
 
@@ -41,18 +41,19 @@ public class AddWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player p = (Player) sender;
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final Player p = (Player) sender;
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			if (args.hasFlag('g')) {
-				ACWorld.getWorld(p.getWorld().getName()).addWarp("spawn" + args.getString(0).toLowerCase(), p.getLocation());
+				ACWorld.getWorld(p.getWorld().getName()).addWarp(
+						"spawn" + args.getString(0).toLowerCase(), p.getLocation());
 				replace.put("name", args.getString(0));
 				Utils.sI18n(sender, "addSpawnWarp", replace);
 				return;
@@ -66,11 +67,11 @@ public class AddWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 }

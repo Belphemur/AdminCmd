@@ -33,7 +33,7 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class WorldManager {
-	private ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
+	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
 	private IWorldFactory worldFactory;
 	private static WorldManager instance = new WorldManager();
 
@@ -55,13 +55,13 @@ public class WorldManager {
 	 * 
 	 * @param world
 	 */
-	private synchronized boolean addWorld(ACWorld world) {
+	private synchronized boolean addWorld(final ACWorld world) {
 		final String name = world.getName();
 		if (name == null) {
 			throw new NullPointerException();
 		}
 
-		ACWorld ref = worlds.get(name);
+		final ACWorld ref = worlds.get(name);
 		if (ref != null)
 			return false;
 		worlds.put(name, world);
@@ -72,7 +72,7 @@ public class WorldManager {
 	 * @param worldFactory
 	 *            the worldFactory to set
 	 */
-	public void setWorldFactory(IWorldFactory worldFactory) {
+	public void setWorldFactory(final IWorldFactory worldFactory) {
 		if (this.worldFactory == null)
 			this.worldFactory = worldFactory;
 	}
@@ -82,16 +82,16 @@ public class WorldManager {
 	 * 
 	 * @param factory
 	 */
-	public void convertFactory(IWorldFactory factory) {
-		Map<String, ACWorld> newWorlds = new HashMap<String, ACWorld>();
-		for (Entry<String, ACWorld> entry : worlds.entrySet()) {
-			ACWorld newWorld = factory.createWorld(entry.getKey());
-			ACWorld oldWorld = entry.getValue();
+	public void convertFactory(final IWorldFactory factory) {
+		final Map<String, ACWorld> newWorlds = new HashMap<String, ACWorld>();
+		for (final Entry<String, ACWorld> entry : worlds.entrySet()) {
+			final ACWorld newWorld = factory.createWorld(entry.getKey());
+			final ACWorld oldWorld = entry.getValue();
 			newWorld.setDifficulty(oldWorld.getDifficulty());
 			newWorld.setSpawn(oldWorld.getSpawn());
-			for (String mob : oldWorld.getMobLimitList())
+			for (final String mob : oldWorld.getMobLimitList())
 				newWorld.setMobLimit(mob, oldWorld.getMobLimit(mob));
-			for (Entry<String, String> info : oldWorld.getInformations().entrySet())
+			for (final Entry<String, String> info : oldWorld.getInformations().entrySet())
 				newWorld.setInformation(info.getKey(), oldWorld.getInformation(info.getKey())
 						.getObj());
 			newWorlds.put(newWorld.getName(), newWorld);
@@ -101,10 +101,10 @@ public class WorldManager {
 		this.worldFactory = factory;
 	}
 
-	ACWorld demandACWorld(String name) throws WorldNotLoaded {
+	ACWorld demandACWorld(final String name) throws WorldNotLoaded {
 		ACWorld result = worlds.get(name);
 		if (result == null) {
-			String found = Str.matchString(worlds.keySet(), name);
+			final String found = Str.matchString(worlds.keySet(), name);
 			if (found != null)
 				return worlds.get(found);
 			result = worldFactory.createWorld(name);
@@ -120,9 +120,9 @@ public class WorldManager {
 	 * @return
 	 */
 	public Set<String> getAllWarpList() {
-		Set<String> warps = new HashSet<String>();
-		for (ACWorld world : worlds.values())
-			for (String warp : world.getWarpList())
+		final Set<String> warps = new HashSet<String>();
+		for (final ACWorld world : worlds.values())
+			for (final String warp : world.getWarpList())
 				warps.add(world.getName() + ":" + warp);
 		return warps;
 

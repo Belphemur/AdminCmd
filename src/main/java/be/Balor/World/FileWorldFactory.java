@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.World;
 
-
 import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -32,13 +31,13 @@ public class FileWorldFactory implements IWorldFactory {
 	/**
 	 * 
 	 */
-	public FileWorldFactory(String directory) {
+	public FileWorldFactory(final String directory) {
 		this.directory = directory;
 	}
 
-
-	public ACWorld createWorld(String worldName) throws WorldNotLoaded {
-		World w = ACPluginManager.getServer().getWorld(worldName);
+	@Override
+	public ACWorld createWorld(final String worldName) throws WorldNotLoaded {
+		final World w = ACPluginManager.getServer().getWorld(worldName);
 		if (w == null)
 			throw new WorldNotLoaded(worldName);
 		else if (directory != null)

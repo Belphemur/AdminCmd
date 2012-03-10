@@ -20,7 +20,7 @@ import org.bukkit.command.CommandException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class CommandAlreadyExist extends CommandException {
 
@@ -39,7 +39,7 @@ public class CommandAlreadyExist extends CommandException {
 	/**
 	 * @param message
 	 */
-	public CommandAlreadyExist(String message) {
+	public CommandAlreadyExist(final String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -48,7 +48,7 @@ public class CommandAlreadyExist extends CommandException {
 	 * @param message
 	 * @param cause
 	 */
-	public CommandAlreadyExist(String message, Throwable cause) {
+	public CommandAlreadyExist(final String message, final Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}

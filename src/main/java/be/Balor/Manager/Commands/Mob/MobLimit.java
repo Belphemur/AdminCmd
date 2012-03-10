@@ -49,23 +49,23 @@ public class MobLimit extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACWorld world = null;
 		int limit;
 		if (args.hasFlag('m')) {
-			String name = args.getValueFlag('m');
+			final String name = args.getValueFlag('m');
 			try {
 				world = ACWorld.getWorld(args.getString(0));
-			} catch (WorldNotLoaded e) {
+			} catch (final WorldNotLoaded e) {
 				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
-			EntityType ct = EntityType.fromName(name);
+			final EntityType ct = EntityType.fromName(name);
 			if (ct == null) {
 				Utils.sI18n(sender, "errorMob", "mob", name);
 				return;
 			}
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			try {
 				limit = args.getInt(1);
 				world.setMobLimit("Craft" + ct.getName(), limit);
@@ -73,7 +73,7 @@ public class MobLimit extends MobCommand {
 				replace.put("world", world.getName());
 				replace.put("mob", name);
 				Utils.sI18n(sender, "mobLimitPerMob", replace);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				if (args.getString(1).equals("none")) {
 					replace.put("world", world.getName());
 					replace.put("mob", name);
@@ -86,18 +86,18 @@ public class MobLimit extends MobCommand {
 		}
 		try {
 			world = ACWorld.getWorld(args.getString(0));
-		} catch (WorldNotLoaded e) {
+		} catch (final WorldNotLoaded e) {
 			Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 			return;
 		}
 		try {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			limit = args.getInt(1);
 			world.setInformation(Type.MOB_LIMIT.toString(), limit);
 			replace.put("number", args.getString(1));
 			replace.put("world", args.getString(0));
 			Utils.sI18n(sender, "mobLimit", replace);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			if (args.getString(1).equals("none")) {
 				world.removeInformation(Type.MOB_LIMIT.toString());
 				Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
@@ -113,7 +113,7 @@ public class MobLimit extends MobCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 2;
 	}
 }

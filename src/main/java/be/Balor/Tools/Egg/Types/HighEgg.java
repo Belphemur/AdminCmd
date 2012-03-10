@@ -53,13 +53,13 @@ public class HighEgg extends SimpleRadiusEgg {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 		event.getEgg().remove();
 		event.setHatching(false);
-		Location loc = event.getEgg().getLocation();
+		final Location loc = event.getEgg().getLocation();
 		final int radius = value * value;
-		int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt() * Utils.secInTick;
-		for (Player player : Utils.getOnlinePlayers()) {
+		final int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt() * Utils.secInTick;
+		for (final Player player : Utils.getOnlinePlayers()) {
 			if (player.getLocation().distanceSquared(loc) > radius)
 				continue;
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, timeout, 5));

@@ -25,7 +25,7 @@ import org.bukkit.entity.EntityType;
  * 
  */
 public class CreaturesInEgg implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -37,7 +37,7 @@ public class CreaturesInEgg implements Serializable {
 	 * @param type
 	 * @param nb
 	 */
-	public CreaturesInEgg(EntityType type, byte nb) {
+	public CreaturesInEgg(final EntityType type, final byte nb) {
 		super();
 		this.type = type;
 		this.nb = nb;
@@ -68,7 +68,7 @@ public class CreaturesInEgg implements Serializable {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(EntityType type) {
+	public void setType(final EntityType type) {
 		this.type = type;
 	}
 
@@ -76,7 +76,7 @@ public class CreaturesInEgg implements Serializable {
 	 * @param nb
 	 *            the nb to set
 	 */
-	public void setNb(byte nb) {
+	public void setNb(final byte nb) {
 		this.nb = nb;
 	}
 

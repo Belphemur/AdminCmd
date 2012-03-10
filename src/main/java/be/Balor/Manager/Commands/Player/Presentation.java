@@ -46,7 +46,7 @@ public class Presentation extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		ACPlayer actarget = null;
 		String pres = "";
 		if (args.hasFlag('p')) {
@@ -58,7 +58,7 @@ public class Presentation extends PlayerCommand {
 			pres = pres.trim();
 		} else {
 			if (Utils.isPlayer(sender)) {
-				actarget = ACPlayer.getPlayer((Player) sender);				
+				actarget = ACPlayer.getPlayer((Player) sender);
 				for (int i = 0; i < args.length; i++)
 					pres += args.getString(i) + " ";
 				pres = pres.trim();
@@ -66,7 +66,7 @@ public class Presentation extends PlayerCommand {
 		}
 		pres = Utils.colorParser(pres);
 		actarget.setPresentation(pres);
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", actarget.getName());
 		replace.put("pres", pres);
 		Utils.sI18n(sender, "presSet", replace);
@@ -79,7 +79,7 @@ public class Presentation extends PlayerCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

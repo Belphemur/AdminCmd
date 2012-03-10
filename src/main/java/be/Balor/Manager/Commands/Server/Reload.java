@@ -46,7 +46,7 @@ public class Reload extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (args.length >= 1 && !args.getString(0).equals("AdminCmd")) {
 			final Plugin plugin = sender.getServer().getPluginManager()
 					.getPlugin(args.getString(0));
@@ -76,7 +76,7 @@ public class Reload extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

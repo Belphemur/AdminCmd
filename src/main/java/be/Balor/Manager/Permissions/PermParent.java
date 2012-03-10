@@ -25,11 +25,11 @@ import org.bukkit.permissions.PermissionDefault;
 public class PermParent extends PermChild {
 	protected final String compareName;
 
-	public PermParent(String perm) {
+	public PermParent(final String perm) {
 		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1), PermissionDefault.OP);
 	}
 
-	public PermParent(String perm, String compare, PermissionDefault def) {
+	public PermParent(final String perm, final String compare, final PermissionDefault def) {
 		super(perm, def);
 		this.compareName = compare;
 	}
@@ -47,7 +47,7 @@ public class PermParent extends PermChild {
 	 * @param perm
 	 * @return the PermParent (this)
 	 */
-	public PermParent addChild(PermChild perm) throws IllegalArgumentException {
+	public PermParent addChild(final PermChild perm) throws IllegalArgumentException {
 		if (perm.equals(this))
 			throw new IllegalArgumentException("The Child can't be the parent.");
 		perm.bukkitPerm.addParent(bukkitPerm, true);
@@ -60,7 +60,7 @@ public class PermParent extends PermChild {
 	 * @param perm
 	 * @return the PermParent (this)
 	 */
-	public PermParent addChild(String perm) {
+	public PermParent addChild(final String perm) {
 		this.addChild(new PermChild(perm));
 		return this;
 	}
@@ -84,14 +84,14 @@ public class PermParent extends PermChild {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
 		if (!(obj instanceof PermParent))
 			return false;
-		PermParent other = (PermParent) obj;
+		final PermParent other = (PermParent) obj;
 		if (compareName == null) {
 			if (other.compareName != null)
 				return false;

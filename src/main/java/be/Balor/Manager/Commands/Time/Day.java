@@ -23,7 +23,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Day extends TimeCommand {
 
@@ -35,19 +35,25 @@ public class Day extends TimeCommand {
 		cmdName = "bal_timeday";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-			Utils.timeSet(sender, "day", args.getString(0));
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		Utils.timeSet(sender, "day", args.getString(0));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

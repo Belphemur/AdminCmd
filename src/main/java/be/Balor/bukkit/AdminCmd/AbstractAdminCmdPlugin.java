@@ -34,9 +34,9 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 * 
 	 * @param name
 	 *            the name used for the plugin.
-	 *            
+	 * 
 	 */
-	public AbstractAdminCmdPlugin(String name) {
+	public AbstractAdminCmdPlugin(final String name) {
 		this.name = name;
 		permissionLinker = PermissionLinker.getPermissionLinker(name);
 		final int prime = 31;

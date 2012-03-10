@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Eternal extends PlayerCommand {
 	/**
@@ -45,23 +45,23 @@ public class Eternal extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		Player player = null;
-		String timeOut = args.getValueFlag('t');
+		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1)
-				player = Utils.getUser(sender, args, permNode, 0, false);
+			player = Utils.getUser(sender, args, permNode, 0, false);
 		else
 			player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player.getName());
+			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.ETERNAL)) {
 				player.setFoodLevel(acp.getPower(Type.ETERNAL).getInt(20));
 				acp.removePower(Type.ETERNAL);
@@ -79,12 +79,13 @@ public class Eternal extends PlayerCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.ETERNAL, sender),
+						ACPluginManager.getCorePlugin(),
+						new RemovePowerTask(acp, Type.ETERNAL, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
@@ -92,11 +93,11 @@ public class Eternal extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 }

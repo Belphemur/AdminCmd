@@ -9,7 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	private int indent = 2;
 
-	protected ExtendedConfigurationOptions(ExtendedConfiguration configuration) {
+	protected ExtendedConfigurationOptions(final ExtendedConfiguration configuration) {
 		super(configuration);
 	}
 
@@ -19,19 +19,19 @@ public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	}
 
 	@Override
-	public ExtendedConfigurationOptions copyDefaults(boolean value) {
+	public ExtendedConfigurationOptions copyDefaults(final boolean value) {
 		super.copyDefaults(value);
 		return this;
 	}
 
 	@Override
-	public ExtendedConfigurationOptions copyHeader(boolean value) {
+	public ExtendedConfigurationOptions copyHeader(final boolean value) {
 		super.copyHeader(value);
 		return this;
 	}
 
 	@Override
-	public ExtendedConfigurationOptions header(String value) {
+	public ExtendedConfigurationOptions header(final String value) {
 		super.header(value);
 		return this;
 	}
@@ -56,7 +56,7 @@ public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	 *            New indent
 	 * @return This object, for chaining
 	 */
-	public ExtendedConfigurationOptions indent(int value) {
+	public ExtendedConfigurationOptions indent(final int value) {
 		if ((indent < 2) || (value > 9)) {
 			throw new IllegalArgumentException("Indent must be between 1 and 10 characters");
 		}
@@ -66,7 +66,7 @@ public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	}
 
 	@Override
-	public ExtendedConfigurationOptions pathSeparator(char value) {
+	public ExtendedConfigurationOptions pathSeparator(final char value) {
 		super.pathSeparator(value);
 		return this;
 	}

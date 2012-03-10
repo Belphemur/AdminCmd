@@ -31,15 +31,19 @@ public class BlockRemanenceFactory extends IBlockRemanenceFactory {
 	 * .bukkit.Location)
 	 */
 	@Override
-	public BlockRemanence createBlockRemanence(Location loc) {
+	public BlockRemanence createBlockRemanence(final Location loc) {
 		return new BlockRemanence(loc);
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Tools.Blocks.IBlockRemanenceFactory#setPlayerName(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Tools.Blocks.IBlockRemanenceFactory#setPlayerName(java.lang.
+	 * String)
 	 */
 	@Override
-	public void setPlayerName(String playerName) {
-		
+	public void setPlayerName(final String playerName) {
+
 	}
 }

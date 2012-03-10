@@ -47,11 +47,11 @@ public class LastLocation extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			Player player = (Player) sender;
-			ACPlayer p = ACPlayer.getPlayer(player.getName());
-			Location loc = p.getLastLocation();
+			final Player player = (Player) sender;
+			final ACPlayer p = ACPlayer.getPlayer(player.getName());
+			final Location loc = p.getLastLocation();
 			if (loc == null) {
 				Utils.sI18n(sender, "noLastLocation");
 				return;
@@ -69,7 +69,7 @@ public class LastLocation extends TeleportCommand {
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

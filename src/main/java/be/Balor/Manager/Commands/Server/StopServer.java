@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class StopServer extends ServerCommand {
 
@@ -44,18 +44,18 @@ public class StopServer extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		String timeOut = args.getValueFlag('t');
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final String timeOut = args.getValueFlag('t');
 		int timeOutValue;
 		if (timeOut != null)
 			try {
 				timeOutValue = Integer.parseInt(timeOut);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Utils.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
@@ -69,7 +69,7 @@ public class StopServer extends ServerCommand {
 
 					@Override
 					public void run() {
-						for (Player p : onlinePlayers)
+						for (final Player p : onlinePlayers)
 							p.kickPlayer(Utils.I18n("serverStop"));
 						Bukkit.getServer().shutdown();
 					}
@@ -78,11 +78,11 @@ public class StopServer extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

@@ -34,7 +34,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class ACEntityListener implements Listener {
 
 	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event) {
+	public void onEntityDeath(final EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		final Player player = (Player) event.getEntity();
@@ -42,7 +42,7 @@ public class ACEntityListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityTarget(EntityTargetEvent event) {
+	public void onEntityTarget(final EntityTargetEvent event) {
 		if (event.isCancelled())
 			return;
 		if (!(event.getTarget() instanceof Player))

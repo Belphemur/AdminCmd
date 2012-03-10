@@ -20,7 +20,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class HomeCommand extends CoreCommand {
 	/**

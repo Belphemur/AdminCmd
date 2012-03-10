@@ -35,7 +35,7 @@ public abstract class SpawnCommand extends CoreCommand {
 	 * @param string
 	 * @param string2
 	 */
-	public SpawnCommand(String cmd, String permNode) {
+	public SpawnCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
 		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.spawn.*");
 	}

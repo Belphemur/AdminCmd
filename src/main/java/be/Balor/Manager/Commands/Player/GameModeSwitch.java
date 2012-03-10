@@ -47,11 +47,11 @@ public class GameModeSwitch extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		final Player target = Utils.getUser(sender, args, permNode);
 		if (target == null)
 			return;
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(target));
 		if (target.getGameMode() == GameMode.CREATIVE) {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -82,7 +82,7 @@ public class GameModeSwitch extends PlayerCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

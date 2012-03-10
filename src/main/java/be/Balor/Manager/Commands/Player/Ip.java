@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Ip extends PlayerCommand {
 
@@ -42,21 +42,21 @@ public class Ip extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player target = Utils.getUser(sender, args, permNode, 0, false);
-		HashMap<String, String> replace = new HashMap<String, String>();
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player target = Utils.getUser(sender, args, permNode, 0, false);
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (target != null) {
 			replace.put("player", Utils.getPlayerName(target));
 			replace.put("ip", target.getAddress().getAddress().toString());
 			Utils.sI18n(sender, "ip", replace);
 		} else {
-			ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
+			final ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 			if (acp == null) {
 				replace.put("player", args.getString(0));
 				Utils.sI18n(sender, "playerNotFound", replace);
@@ -66,16 +66,15 @@ public class Ip extends PlayerCommand {
 			Utils.sI18n(sender, "ip", replace);
 		}
 
-
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

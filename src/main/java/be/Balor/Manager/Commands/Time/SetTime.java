@@ -24,7 +24,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class SetTime extends TimeCommand {
 
@@ -38,32 +38,34 @@ public class SetTime extends TimeCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		if ((args.getString(0).equalsIgnoreCase("pause")
-				|| args.getString(0).equalsIgnoreCase("unpause"))
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		if ((args.getString(0).equalsIgnoreCase("pause") || args.getString(0).equalsIgnoreCase(
+				"unpause"))
 				&& !(PermissionManager.hasPerm(sender, "admincmd.time.pause")))
 			return;
 
-			Utils.timeSet(sender, args.getString(0), args.getString(1));
+		Utils.timeSet(sender, args.getString(0), args.getString(1));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override

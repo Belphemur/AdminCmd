@@ -31,7 +31,7 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public class IOSaveTask implements Runnable {
-	private LinkedBlockingQueue<ExtendedConfiguration> configurations = new LinkedBlockingQueue<ExtendedConfiguration>();
+	private final LinkedBlockingQueue<ExtendedConfiguration> configurations = new LinkedBlockingQueue<ExtendedConfiguration>();
 	private final Lock lock = new ReentrantLock(true);
 
 	/**
@@ -39,7 +39,7 @@ public class IOSaveTask implements Runnable {
 	 * 
 	 * @param ex
 	 */
-	public void addConfigurationToSave(ExtendedConfiguration ex) {
+	public void addConfigurationToSave(final ExtendedConfiguration ex) {
 		lock.lock();
 		try {
 			if (!configurations.contains(ex)) {
@@ -58,7 +58,7 @@ public class IOSaveTask implements Runnable {
 	 * @param ex
 	 * @return
 	 */
-	public boolean removeConfiguration(ExtendedConfiguration ex) {
+	public boolean removeConfiguration(final ExtendedConfiguration ex) {
 		boolean remove = false;
 		lock.lock();
 		try {
@@ -78,7 +78,7 @@ public class IOSaveTask implements Runnable {
 			while (!configurations.isEmpty())
 				try {
 					configurations.poll().save();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					ACLogger.severe("Problem while saving ExtendedConfiguration file", e);
 					DebugLog.INSTANCE.log(Level.SEVERE, "Problem while saving config files", e);
 				}

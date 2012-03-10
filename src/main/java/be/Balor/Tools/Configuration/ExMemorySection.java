@@ -42,12 +42,12 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * @param exMemorySection
 	 * @param key
 	 */
-	protected ExMemorySection(ConfigurationSection exMemorySection, String key) {
+	protected ExMemorySection(final ConfigurationSection exMemorySection, final String key) {
 		super(exMemorySection, key);
 	}
 
 	@Override
-	public boolean add(String path, Object value) {
+	public boolean add(final String path, final Object value) {
 		if (isSet(path))
 			return false;
 		set(path, value);
@@ -55,7 +55,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	}
 
 	@Override
-	public ExConfigurationSection addSection(String path) {
+	public ExConfigurationSection addSection(final String path) {
 		ExConfigurationSection result = getConfigurationSection(path);
 		if (result == null) {
 			result = createSection(path);
@@ -63,7 +63,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		return result;
 	}
 
-	private long castToLong(Object value) throws NumberFormatException {
+	private long castToLong(final Object value) throws NumberFormatException {
 		if (value instanceof Long)
 			return (Long) value;
 		else if (value instanceof String)
@@ -80,7 +80,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * org.bukkit.configuration.MemorySection#createSection(java.lang.String)
 	 */
 	@Override
-	public ExConfigurationSection createSection(String path) {
+	public ExConfigurationSection createSection(final String path) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		} else if (path.length() == 0) {
@@ -119,12 +119,12 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * java.lang.Object)
 	 */
 	@Override
-	public Object get(String path, Object def) {
+	public Object get(final String path, final Object def) {
 		lock.lock();
 		Object info;
 		try {
 			info = super.get(path, def);
-			//info = newGet(path, def);
+			// info = newGet(path, def);
 
 		} finally {
 			lock.unlock();
@@ -140,7 +140,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .lang.String, java.util.List)
 	 */
 	@Override
-	public List<Boolean> getBooleanList(String path, List<Boolean> def) {
+	public List<Boolean> getBooleanList(final String path, final List<Boolean> def) {
 		final List<Boolean> result = super.getBooleanList(path);
 		if (result == null || (result != null && result.isEmpty()))
 			return def;
@@ -148,7 +148,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	}
 
 	@Override
-	public ExConfigurationSection getConfigurationSection(String path) {
+	public ExConfigurationSection getConfigurationSection(final String path) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		}
@@ -165,7 +165,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .lang.String, java.util.List)
 	 */
 	@Override
-	public List<Double> getDoubleList(String path, List<Double> def) {
+	public List<Double> getDoubleList(final String path, final List<Double> def) {
 		final List<Double> result = super.getDoubleList(path);
 		if (result == null || (result != null && result.isEmpty()))
 			return def;
@@ -180,7 +180,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .String, java.util.List)
 	 */
 	@Override
-	public List<Integer> getIntList(String path, List<Integer> def) {
+	public List<Integer> getIntList(final String path, final List<Integer> def) {
 		final List<Integer> result = getIntegerList(path);
 		if (result == null || (result != null && result.isEmpty()))
 			return def;
@@ -188,7 +188,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	}
 
 	@Override
-	public long getLong(String path, long def) {
+	public long getLong(final String path, final long def) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		}
@@ -204,7 +204,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	}
 
 	@Override
-	public String getString(String path, String def) {
+	public String getString(final String path, final String def) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		}
@@ -222,7 +222,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .lang.String, java.util.List)
 	 */
 	@Override
-	public List<String> getStringList(String path, List<String> def) {
+	public List<String> getStringList(final String path, final List<String> def) {
 		final List<String> result = super.getStringList(path);
 		if (result == null || (result != null && result.isEmpty()))
 			return def;
@@ -236,7 +236,7 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 *            Path to remove the entry at.
 	 */
 	@Override
-	public void remove(String path) {
+	public void remove(final String path) {
 		set(path, null);
 	}
 
@@ -247,11 +247,11 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * java.lang.Object)
 	 */
 	@Override
-	public void set(String path, Object value) {
+	public void set(final String path, final Object value) {
 		lock.lock();
 		try {
 			super.set(path, value);
-			//newSet(path, value);
+			// newSet(path, value);
 		} finally {
 			lock.unlock();
 		}

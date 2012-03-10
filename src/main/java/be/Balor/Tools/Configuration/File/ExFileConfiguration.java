@@ -41,7 +41,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @param defaults
 	 *            Default value provider
 	 */
-	public ExFileConfiguration(Configuration defaults) {
+	public ExFileConfiguration(final Configuration defaults) {
 		super(defaults);
 	}
 
@@ -63,7 +63,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -112,7 +112,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when file is null.
 	 */
-	public void load(File file) throws FileNotFoundException, IOException,
+	public void load(final File file) throws FileNotFoundException, IOException,
 			InvalidConfigurationException {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
@@ -143,7 +143,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when stream is null.
 	 */
-	public void load(InputStream stream) throws IOException, InvalidConfigurationException {
+	public void load(final InputStream stream) throws IOException, InvalidConfigurationException {
 		if (stream == null) {
 			throw new IllegalArgumentException("Stream cannot be null");
 		}
@@ -186,7 +186,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when file is null.
 	 */
-	public void load(String file) throws FileNotFoundException, IOException,
+	public void load(final String file) throws FileNotFoundException, IOException,
 			InvalidConfigurationException {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
@@ -238,8 +238,8 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when file is null.
 	 */
-	public void save(File file) throws IOException {
-		if(corrupted)
+	public void save(final File file) throws IOException {
+		if (corrupted)
 			return;
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
@@ -275,7 +275,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when file is null.
 	 */
-	public void save(String file) throws IOException {
+	public void save(final String file) throws IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}

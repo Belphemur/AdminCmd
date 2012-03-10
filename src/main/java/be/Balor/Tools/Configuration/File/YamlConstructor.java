@@ -38,7 +38,7 @@ class YamlConstructor extends Constructor {
 	private class ConstructCustomObject extends ConstructYamlMap {
 		@SuppressWarnings("unchecked")
 		@Override
-		public Object construct(Node node) {
+		public Object construct(final Node node) {
 			if (node.isTwoStepsConstruction()) {
 				throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
 			}
@@ -62,14 +62,14 @@ class YamlConstructor extends Constructor {
 		}
 
 		@Override
-		public void construct2ndStep(Node node, Object object) {
+		public void construct2ndStep(final Node node, final Object object) {
 			throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
 		}
 	}
 
 	private class ConstructTpRequest extends AbstractConstruct {
 		@Override
-		public Object construct(Node node) {
+		public Object construct(final Node node) {
 			final String val = (String) constructScalar((ScalarNode) node);
 			final String[] split = val.split(";");
 			return new TpRequest(ACPluginManager.getServer().getPlayer(split[0]), ACPluginManager
@@ -82,12 +82,13 @@ class YamlConstructor extends Constructor {
 	/**
 	 * 
 	 */
-	public YamlConstructor(ClassLoader classLoader) {
+	public YamlConstructor(final ClassLoader classLoader) {
 		super();
 		this.yamlConstructors.put(new Tag("!tpRequest"), new ConstructTpRequest());
 		this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());
 		this.pluginClassLoader = classLoader;
 	}
+
 	/*
 	 * This is a modified version of the Constructor. Rather than using a class
 	 * loader to get external classes, they are already predefined above. This
@@ -99,7 +100,7 @@ class YamlConstructor extends Constructor {
 	 * .snakeyaml.nodes.Node)
 	 */
 	@Override
-	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
+	protected Class<?> getClassForName(final String name) throws ClassNotFoundException {
 		return Class.forName(name, true, pluginClassLoader);
 	}
 }

@@ -42,7 +42,7 @@ public class EggPermissionManager {
 	private EggPermissionManager() {
 	}
 
-	void addPermission(Class<? extends EggType<?>> clazz, Permission perm) {
+	void addPermission(final Class<? extends EggType<?>> clazz, final Permission perm) {
 		permissions.put(clazz, perm);
 	}
 
@@ -53,9 +53,9 @@ public class EggPermissionManager {
 	 *            used to check the permissions
 	 * @return
 	 */
-	public SortedSet<String> getEggTypeNames(Player player) {
-		SortedSet<String> result = new TreeSet<String>();
-		for (Entry<Class<? extends EggType<?>>, Permission> entry : permissions.entrySet()) {
+	public SortedSet<String> getEggTypeNames(final Player player) {
+		final SortedSet<String> result = new TreeSet<String>();
+		for (final Entry<Class<? extends EggType<?>>, Permission> entry : permissions.entrySet()) {
 			if (entry.getValue() == null) {
 				result.add(entry.getKey().getSimpleName());
 				continue;
@@ -67,7 +67,7 @@ public class EggPermissionManager {
 		return result;
 	}
 
-	Permission getPermission(EggType<?> eggInstance) {
+	Permission getPermission(final EggType<?> eggInstance) {
 		return permissions.get(eggInstance.getClass());
 	}
 }

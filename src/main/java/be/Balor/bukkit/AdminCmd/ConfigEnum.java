@@ -27,7 +27,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum ConfigEnum {
 
@@ -150,7 +150,7 @@ public enum ConfigEnum {
 	 * @param defaultVal
 	 * @param description
 	 */
-	private ConfigEnum(String confVal, Object defaultVal, String description) {
+	private ConfigEnum(final String confVal, final Object defaultVal, final String description) {
 		this.confVal = confVal;
 		this.defaultVal = defaultVal;
 		this.description = description;
@@ -184,7 +184,7 @@ public enum ConfigEnum {
 		return config.getStringList(confVal);
 	}
 
-	public void setValue(Object value) {
+	public void setValue(final Object value) {
 		config.set(confVal, value);
 	}
 
@@ -192,17 +192,17 @@ public enum ConfigEnum {
 	 * @return the defaultvalues
 	 */
 	public static Map<String, Object> getDefaultvalues() {
-		Map<String, Object> values = new LinkedHashMap<String, Object>();
-		for (ConfigEnum ce : values())
+		final Map<String, Object> values = new LinkedHashMap<String, Object>();
+		for (final ConfigEnum ce : values())
 			values.put(ce.confVal, ce.defaultVal);
 		return values;
 	}
 
 	public static String getHeader() {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append("Configuration file of ").append(pluginName).append('\n');
 		buffer.append("Plugin Version: ").append(pluginVersion).append('\n').append('\n');
-		for (ConfigEnum ce : values())
+		for (final ConfigEnum ce : values())
 			buffer.append(ce.confVal).append("\t:\t").append(ce.description).append(" (Default : ")
 					.append(ce.defaultVal).append(')').append('\n');
 		return buffer.toString();
@@ -212,11 +212,11 @@ public enum ConfigEnum {
 	 * @param config
 	 *            the config to set
 	 */
-	public static void setConfig(ConfigurationSection config) {
+	public static void setConfig(final ConfigurationSection config) {
 		ConfigEnum.config = config;
 	}
 
-	public static void setPluginInfos(PluginDescriptionFile pdf) {
+	public static void setPluginInfos(final PluginDescriptionFile pdf) {
 		ConfigEnum.pluginVersion = pdf.getVersion();
 		ConfigEnum.pluginName = pdf.getName();
 	}

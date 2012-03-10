@@ -47,185 +47,186 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Memory extends ServerCommand {
-    private final PermChild full, animal, xp, item, mob, npc, cart, boat, vehicle;
+	private final PermChild full, animal, xp, item, mob, npc, cart, boat, vehicle;
 
-    /**
+	/**
      *
      */
-    public Memory() {
-        permNode = "admincmd.server.memory";
-        cmdName = "bal_memory";
-        full = new PermChild(permNode + ".full");
-        animal = new PermChild(permNode + ".animal");
-        mob = new PermChild(permNode + ".mob");
-        item = new PermChild(permNode + ".item");
-        xp = new PermChild(permNode + ".xp");
-        npc = new PermChild(permNode + ".npc");
-        cart = new PermChild(permNode + ".cart");
-        boat = new PermChild(permNode + ".boat");
-        vehicle = new PermChild(permNode + ".vehicle");
-    }
+	public Memory() {
+		permNode = "admincmd.server.memory";
+		cmdName = "bal_memory";
+		full = new PermChild(permNode + ".full");
+		animal = new PermChild(permNode + ".animal");
+		mob = new PermChild(permNode + ".mob");
+		item = new PermChild(permNode + ".item");
+		xp = new PermChild(permNode + ".xp");
+		npc = new PermChild(permNode + ".npc");
+		cart = new PermChild(permNode + ".cart");
+		boat = new PermChild(permNode + ".boat");
+		vehicle = new PermChild(permNode + ".vehicle");
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-     * java.lang.String[])
-     */
-    @Override
-    public void execute(CommandSender sender, CommandArgs args) {
-        if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full.getBukkitPerm()))
-            return;
-        if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal.getBukkitPerm()))
-            return;
-        if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob.getBukkitPerm()))
-            return;
-        if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item.getBukkitPerm()))
-            return;
-        if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp.getBukkitPerm()))
-            return;
-        if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc.getBukkitPerm()))
-            return;
-        if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cart.getBukkitPerm()))
-            return;
-        if (args.hasFlag('b') && !PermissionManager.hasPerm(sender, boat.getBukkitPerm()))
-            return;
-        if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm()))
-            return;
-        if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
-                || args.hasFlag('a') || args.hasFlag('n')) {
-            int count = 0;
-            final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
-                    sender.getServer().getWorlds().size());
-            final List<World> worlds = sender.getServer().getWorlds();
-            final Semaphore sema = new Semaphore(0);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
+	 */
+	@Override
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full.getBukkitPerm()))
+			return;
+		if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal.getBukkitPerm()))
+			return;
+		if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob.getBukkitPerm()))
+			return;
+		if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item.getBukkitPerm()))
+			return;
+		if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp.getBukkitPerm()))
+			return;
+		if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc.getBukkitPerm()))
+			return;
+		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cart.getBukkitPerm()))
+			return;
+		if (args.hasFlag('b') && !PermissionManager.hasPerm(sender, boat.getBukkitPerm()))
+			return;
+		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm()))
+			return;
+		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
+				|| args.hasFlag('a') || args.hasFlag('n')) {
+			int count = 0;
+			final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
+					sender.getServer().getWorlds().size());
+			final List<World> worlds = sender.getServer().getWorlds();
+			final Semaphore sema = new Semaphore(0);
 
-            ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @SuppressWarnings("unchecked")
-                @Override
-                public void run() {
-                    for (World w : worlds) {
-                        final net.minecraft.server.World cWorld = ((CraftWorld) w).getHandle();
-                        synchronized (cWorld.entityList) {
-                            entityList.put(w.getName(), new ArrayList<Entity>(cWorld.entityList));
-                            sema.release();
-                        }
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				@SuppressWarnings("unchecked")
+				@Override
+				public void run() {
+					for (final World w : worlds) {
+						final net.minecraft.server.World cWorld = ((CraftWorld) w).getHandle();
+						synchronized (cWorld.entityList) {
+							entityList.put(w.getName(), new ArrayList<Entity>(cWorld.entityList));
+							sema.release();
+						}
 
-                    }
-                }
-            });
-            for (World w : worlds) {
-                try {
-                    sema.acquire();
-                } catch (InterruptedException e) {
-                }
-                for (Entity entity : entityList.get(w.getName())) {
-                    if (dontKill(args, entity))
-                        continue;
-                    entity.die();
-                    count++;
-                }
-            }
-            System.gc();
-            sender.sendMessage("Freed Entities : " + count);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-            }
-        }
-        long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
-        sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
-                + Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
-        sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
-        sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE
-                + Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
-        for (World w : sender.getServer().getWorlds()) {
-            sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
-                    + w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
-                    + " entities");
-        }
+					}
+				}
+			});
+			for (final World w : worlds) {
+				try {
+					sema.acquire();
+				} catch (final InterruptedException e) {
+				}
+				for (final Entity entity : entityList.get(w.getName())) {
+					if (dontKill(args, entity))
+						continue;
+					entity.die();
+					count++;
+				}
+			}
+			System.gc();
+			sender.sendMessage("Freed Entities : " + count);
+			try {
+				Thread.sleep(500);
+			} catch (final InterruptedException e) {
+			}
+		}
+		final long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
+		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
+				+ Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
+		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
+		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE
+				+ Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
+		for (final World w : sender.getServer().getWorlds()) {
+			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
+					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
+					+ " entities");
+		}
 
-        // Code for TPS from here on
-        long delay = 40L;
-        if (args.length >= 1)
-            try {
-                delay = args.getLong(0);
-            } catch (NumberFormatException e) {
-                HashMap<String, String> replace = new HashMap<String, String>();
-                replace.put("number", args.getString(0));
-                Utils.sI18n(sender, "NaN", replace);
-                return;
-            }
-        if (delay < 20L)
-            delay = 20L;
-        World world = ACPluginManager.getServer().getWorlds().get(0);
-        ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-                ACHelper.getInstance().getCoreInstance(),
-                new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender), delay);
-    }
+		// Code for TPS from here on
+		long delay = 40L;
+		if (args.length >= 1)
+			try {
+				delay = args.getLong(0);
+			} catch (final NumberFormatException e) {
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("number", args.getString(0));
+				Utils.sI18n(sender, "NaN", replace);
+				return;
+			}
+		if (delay < 20L)
+			delay = 20L;
+		final World world = ACPluginManager.getServer().getWorlds().get(0);
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(),
+				new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender), delay);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-     */
-    @Override
-    public boolean argsCheck(String... args) {
-        return true;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 */
+	@Override
+	public boolean argsCheck(final String... args) {
+		return true;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
-     */
-    @Override
-    public void registerBukkitPerm() {
-        PermParent parent = new PermParent(permNode + ".*");
-        plugin.getPermissionLinker().addChildPermParent(parent, permParent);
-        PermChild child = new PermChild(permNode, bukkitDefault);
-        parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)
-                .addChild(full).addChild(npc).addChild(vehicle).addChild(cart).addChild(boat);
-        bukkitPerm = child.getBukkitPerm();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		final PermParent parent = new PermParent(permNode + ".*");
+		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
+		final PermChild child = new PermChild(permNode, bukkitDefault);
+		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)
+				.addChild(full).addChild(npc).addChild(vehicle).addChild(cart).addChild(boat);
+		bukkitPerm = child.getBukkitPerm();
+	}
 
-    private class CheckTicks implements Runnable {
+	private class CheckTicks implements Runnable {
 
-        protected long oldNanoTime;
-        protected long elapsedNanoTime;
-        protected World world;
-        protected long start;
-        protected double ticksPerSecond;
-        protected long elapsedTicks;
-        protected CommandSender sender;
+		protected long oldNanoTime;
+		protected long elapsedNanoTime;
+		protected World world;
+		protected long start;
+		protected double ticksPerSecond;
+		protected long elapsedTicks;
+		protected CommandSender sender;
 
-        public CheckTicks(long oldNanoTime, World world, long start, CommandSender sender) {
-            this.oldNanoTime = oldNanoTime;
-            this.world = world;
-            this.start = start;
-            this.sender = sender;
-        }
+		public CheckTicks(final long oldNanoTime, final World world, final long start,
+				final CommandSender sender) {
+			this.oldNanoTime = oldNanoTime;
+			this.world = world;
+			this.start = start;
+			this.sender = sender;
+		}
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see java.lang.Runnable#run()
-         */
-        @Override
-        public void run() {
-            elapsedNanoTime = System.nanoTime() - oldNanoTime;
-            elapsedTicks = world.getFullTime() - start;
-            ticksPerSecond = (elapsedTicks * 1000000000.0) / elapsedNanoTime;
-            sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: "
-                    + elapsedTicks + " | Nano Time:" + elapsedNanoTime);
-        }
-    }
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
+		@Override
+		public void run() {
+			elapsedNanoTime = System.nanoTime() - oldNanoTime;
+			elapsedTicks = world.getFullTime() - start;
+			ticksPerSecond = (elapsedTicks * 1000000000.0) / elapsedNanoTime;
+			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: "
+					+ elapsedTicks + " | Nano Time:" + elapsedNanoTime);
+		}
+	}
 
-	private boolean dontKill(CommandArgs args, Entity toKill) {
+	private boolean dontKill(final CommandArgs args, final Entity toKill) {
 		boolean dontKill = true;
 		if (args.hasFlag('f'))
 			dontKill = (toKill instanceof EntityHuman || toKill instanceof EntityPainting);

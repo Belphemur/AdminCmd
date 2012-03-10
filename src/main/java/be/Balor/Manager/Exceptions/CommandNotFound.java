@@ -20,7 +20,7 @@ import org.bukkit.command.CommandException;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class CommandNotFound extends CommandException {
 
@@ -39,7 +39,7 @@ public class CommandNotFound extends CommandException {
 	/**
 	 * @param message
 	 */
-	public CommandNotFound(String message) {
+	public CommandNotFound(final String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -48,7 +48,7 @@ public class CommandNotFound extends CommandException {
 	 * @param message
 	 * @param cause
 	 */
-	public CommandNotFound(String message, Throwable cause) {
+	public CommandNotFound(final String message, final Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}

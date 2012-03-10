@@ -46,10 +46,10 @@ public class Extinguish extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		ArrayList<Material> mats = new ArrayList<Material>();
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(Material.FIRE);
-		Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);
+		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);
 		if (count != null)
 			Utils.sI18n(sender, "extinguish", "nb", String.valueOf(count));
 
@@ -61,7 +61,7 @@ public class Extinguish extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

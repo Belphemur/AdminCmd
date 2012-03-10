@@ -47,7 +47,7 @@ public class Version extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		Plugin plug = ACHelper.getInstance().getCoreInstance();
 		if (args.length >= 1)
 			plug = plug.getServer().getPluginManager().getPlugin(args.getString(0));
@@ -55,8 +55,8 @@ public class Version extends ServerCommand {
 			Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 			return;
 		}
-		PluginDescriptionFile pdf = plug.getDescription();
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final PluginDescriptionFile pdf = plug.getDescription();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("plugin", pdf.getName());
 		replace.put("version", pdf.getVersion());
 		Utils.sI18n(sender, "pluginVersion", replace);
@@ -69,7 +69,7 @@ public class Version extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

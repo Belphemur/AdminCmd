@@ -39,7 +39,7 @@ public abstract class ACWorld {
 	/**
 	 *
 	 */
-	public ACWorld(World world) {
+	public ACWorld(final World world) {
 		final int prime = 37;
 		int result = 5;
 		handler = world;
@@ -72,7 +72,7 @@ public abstract class ACWorld {
 	 * @throws WorldNotLoaded
 	 *             if the world is not loaded in bukkit or don't exist
 	 */
-	public static ACWorld getWorld(String name) throws WorldNotLoaded {
+	public static ACWorld getWorld(final String name) throws WorldNotLoaded {
 		return WorldManager.getInstance().demandACWorld(name);
 	}
 
@@ -233,14 +233,14 @@ public abstract class ACWorld {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (!(obj instanceof ACWorld))
 			return false;
-		ACWorld other = (ACWorld) obj;
+		final ACWorld other = (ACWorld) obj;
 		if (handler == null) {
 			if (other.handler != null)
 				return false;

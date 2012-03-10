@@ -51,18 +51,19 @@ public class EggTypeClassLoader extends ClassLoader {
 	 * @param packageName
 	 */
 	@SuppressWarnings("unchecked")
-	public synchronized static void addPackage(Plugin plugin, String packageName) {
+	public synchronized static void addPackage(final Plugin plugin, final String packageName) {
 
-		for (Class<?> clazz : getClassesInPackage(packageName, plugin.getClass().getClassLoader())) {
+		for (final Class<?> clazz : getClassesInPackage(packageName, plugin.getClass()
+				.getClassLoader())) {
 			Permission perm = null;
 			if (EggType.class.isAssignableFrom(clazz)) {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
-					EggPermission annotation = clazz.getAnnotation(EggPermission.class);
+					final EggPermission annotation = clazz.getAnnotation(EggPermission.class);
 					if (!annotation.permission().isEmpty())
 						perm = PermissionLinker.addOnTheFly(annotation.permission(),
 								annotation.permissionParent());
 				} else {
-					String simpleName = clazz.getSimpleName();
+					final String simpleName = clazz.getSimpleName();
 					perm = PermissionLinker.addOnTheFly(
 							"admincmd.egg."
 									+ simpleName.substring(0, simpleName.length() - 3)
@@ -76,14 +77,15 @@ public class EggTypeClassLoader extends ClassLoader {
 		}
 	}
 
-	private Class<? extends EggType<?>> matchClassName(String search) throws ClassNotFoundException {
+	private Class<? extends EggType<?>> matchClassName(final String search)
+			throws ClassNotFoundException {
 		Class<? extends EggType<?>> found = null;
-		String lowerSearch = search.toLowerCase();
+		final String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
-		for (Entry<String, Class<? extends EggType<?>>> entry : classesSimpleName.entrySet()) {
-			String str = entry.getKey();
+		for (final Entry<String, Class<? extends EggType<?>>> entry : classesSimpleName.entrySet()) {
+			final String str = entry.getKey();
 			if (str.toLowerCase().startsWith(lowerSearch)) {
-				int curDelta = str.length() - lowerSearch.length();
+				final int curDelta = str.length() - lowerSearch.length();
 				if (curDelta < delta) {
 					found = entry.getValue();
 					delta = curDelta;
@@ -103,7 +105,8 @@ public class EggTypeClassLoader extends ClassLoader {
 	 * @see java.lang.ClassLoader#findClass(java.lang.String)
 	 */
 	@Override
-	protected Class<? extends EggType<?>> findClass(String name) throws ClassNotFoundException {
+	protected Class<? extends EggType<?>> findClass(final String name)
+			throws ClassNotFoundException {
 		Class<? extends EggType<?>> clazz = classes.get(name);
 		if (clazz == null)
 			clazz = classesSimpleName.get(name);
@@ -127,26 +130,27 @@ public class EggTypeClassLoader extends ClassLoader {
 	 *            the parent class loader.
 	 * @return
 	 */
-	private static List<Class<?>> getClassesInPackage(String packageName, ClassLoader classLoader) {
+	private static List<Class<?>> getClassesInPackage(final String packageName,
+			final ClassLoader classLoader) {
 		try {
 			assert classLoader != null;
-			String path = packageName.replace('.', '/');
-			Enumeration<URL> resources = classLoader.getResources(path);
-			List<String> dirs = new ArrayList<String>();
+			final String path = packageName.replace('.', '/');
+			final Enumeration<URL> resources = classLoader.getResources(path);
+			final List<String> dirs = new ArrayList<String>();
 			while (resources.hasMoreElements()) {
-				URL resource = resources.nextElement();
+				final URL resource = resources.nextElement();
 				dirs.add(resource.getFile());
 			}
-			SortedSet<String> classes = new TreeSet<String>();
-			for (String directory : dirs) {
+			final SortedSet<String> classes = new TreeSet<String>();
+			for (final String directory : dirs) {
 				classes.addAll(findClasses(directory, packageName));
 			}
-			List<Class<?>> classList = new ArrayList<Class<?>>();
-			for (String clazz : classes) {
+			final List<Class<?>> classList = new ArrayList<Class<?>>();
+			for (final String clazz : classes) {
 				classList.add(Class.forName(clazz, true, classLoader));
 			}
 			return classList;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return new ArrayList<Class<?>>();
 		}
@@ -166,16 +170,17 @@ public class EggTypeClassLoader extends ClassLoader {
 	 *            an optional class name pattern. e.g. .*Test
 	 * @return The classes
 	 */
-	private static SortedSet<String> findClasses(String path, String packageName) throws Exception {
-		TreeSet<String> classes = new TreeSet<String>();
+	private static SortedSet<String> findClasses(final String path, final String packageName)
+			throws Exception {
+		final TreeSet<String> classes = new TreeSet<String>();
 		if (path.startsWith("file:") && path.contains("!")) {
-			String[] split = path.split("!");
-			URL jar = new URL(split[0]);
-			ZipInputStream zip = new ZipInputStream(jar.openStream());
+			final String[] split = path.split("!");
+			final URL jar = new URL(split[0]);
+			final ZipInputStream zip = new ZipInputStream(jar.openStream());
 			ZipEntry entry;
 			while ((entry = zip.getNextEntry()) != null) {
 				if (entry.getName().endsWith(".class")) {
-					String className = entry.getName().replaceAll("[$].*", "")
+					final String className = entry.getName().replaceAll("[$].*", "")
 							.replaceAll("[.]class", "").replace('/', '.');
 					if (className.startsWith(packageName)
 							&& (regex == null || regex.matcher(className).matches()))
@@ -183,18 +188,18 @@ public class EggTypeClassLoader extends ClassLoader {
 				}
 			}
 		}
-		File dir = new File(path);
+		final File dir = new File(path);
 		if (!dir.exists()) {
 			return classes;
 		}
-		File[] files = dir.listFiles();
-		for (File file : files) {
+		final File[] files = dir.listFiles();
+		for (final File file : files) {
 			if (file.isDirectory()) {
 				assert !file.getName().contains(".");
 				classes.addAll(findClasses(file.getAbsolutePath(),
 						packageName + "." + file.getName()));
 			} else if (file.getName().endsWith(".class")) {
-				String className = packageName + '.'
+				final String className = packageName + '.'
 						+ file.getName().substring(0, file.getName().length() - 6);
 				if (regex == null || regex.matcher(className).matches())
 					classes.add(className);
