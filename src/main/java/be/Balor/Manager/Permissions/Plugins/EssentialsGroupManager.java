@@ -34,7 +34,7 @@ public class EssentialsGroupManager extends SuperPermissions {
 
 	private GroupManager groupManager;
 
-	public EssentialsGroupManager(Plugin manager) {
+	public EssentialsGroupManager(final Plugin manager) {
 		groupManager = (GroupManager) manager;
 	}
 
@@ -46,7 +46,7 @@ public class EssentialsGroupManager extends SuperPermissions {
 	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, Player player) {
+	public boolean isInGroup(final String groupName, final Player player) {
 		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
 		if (handler == null)
 			return false;
@@ -61,7 +61,7 @@ public class EssentialsGroupManager extends SuperPermissions {
 	 * entity.Player)
 	 */
 	@Override
-	public String getPrefix(Player base) {
+	public String getPrefix(final Player base) {
 		String prefix = super.getPrefix(base);
 		if (prefix == null || prefix.isEmpty()) {
 			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
@@ -81,7 +81,7 @@ public class EssentialsGroupManager extends SuperPermissions {
 	 * .Player)
 	 */
 	@Override
-	public String getSuffix(Player base) {
+	public String getSuffix(final Player base) {
 		String suffix = super.getSuffix(base);
 		if (suffix == null || suffix.isEmpty()) {
 			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
