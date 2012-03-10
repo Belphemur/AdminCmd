@@ -22,9 +22,11 @@ import java.util.Hashtable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.EssentialsGroupManager;
 import be.Balor.Manager.Permissions.Plugins.IPermissionPlugin;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
@@ -47,6 +49,7 @@ public class PermissionManager {
 	private static boolean yetiPermissions = false;
 	private static boolean bPermissions = false;
 	private static boolean permissionsBukkit = false;
+	private static boolean groupManager = false;
 	private static IPermissionPlugin permissionHandler;
 	private static boolean warningSend = false;
 
@@ -159,6 +162,13 @@ public class PermissionManager {
 	}
 
 	/**
+	 * @return the GroupManager
+	 */
+	public static boolean isGroupManagerSet() {
+		return groupManager;
+	}
+
+	/**
 	 * Set bPermission Plugin
 	 *
 	 * @param plugin
@@ -166,7 +176,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setbPermissions() {
-		if (!bPermissions && !permissionsEx) {
+		if (!bPermissions && !permissionsEx && !groupManager) {
 			bPermissions = true;
 			permissionHandler = new bPermissions();
 			if (!yetiPermissions)
@@ -186,7 +196,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setPermissionsBukkit(PermissionsPlugin plugin) {
-		if (!permissionsBukkit && !bPermissions && !permissionsEx) {
+		if (!permissionsBukkit && !bPermissions && !permissionsEx && !groupManager) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
 			if (!yetiPermissions)
@@ -228,11 +238,36 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setYetiPermissions(PermissionHandler plugin) {
-		if (!yetiPermissions && !permissionsEx) {
+		if (!yetiPermissions && !permissionsEx && !groupManager) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				yetiPermissions = true;
 				permissionHandler = new YetiPermissions(plugin);
 				ACLogger.info("Successfully linked with Yeti's Permissions.");
+			} else if (!warningSend) {
+				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
+				warningSend = true;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Set Permission Plugin
+	 *
+	 * @param plugin
+	 * @return
+	 */
+	public static boolean setGroupManager(Plugin plugin) {
+		if (!groupManager && !permissionsEx) {
+			if (!ConfigEnum.SUPERPERM.getBoolean()) {
+				groupManager = true;
+				permissionHandler = new EssentialsGroupManager(plugin);
+				if (!yetiPermissions)
+					ACLogger.info("Successfully linked with Essantials GroupManager");
+				else
+					ACLogger.info("Use Essantials GroupManager instead of Yeti's Permissions.");
 			} else if (!warningSend) {
 				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
 				warningSend = true;
@@ -300,5 +335,4 @@ public class PermissionManager {
 		}
 		return perm;
 	}
-
 }
