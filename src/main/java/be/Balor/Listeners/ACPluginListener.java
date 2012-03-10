@@ -62,6 +62,14 @@ public class ACPluginListener implements Listener {
 					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 			}
 		}
+		if (!PermissionManager.isGroupManagerSet()) {
+			final Plugin GMplugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("GroupManager");
+			if (GMplugin != null) {
+				if (GMplugin.isEnabled())
+					PermissionManager.setGroupManager(GMplugin);
+			}
+		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
 			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("Permissions");
