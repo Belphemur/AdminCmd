@@ -22,11 +22,11 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 
-import com.google.common.base.Joiner;
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -46,9 +46,9 @@ public class Broadcast extends CoreCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		HashMap<String, String> replace = new HashMap<String, String>();
-		String message = Joiner.on(" ").skipNulls().join(args);
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		final String message = Joiner.on(" ").skipNulls().join(args);
 		replace.put("message", message);
 		Utils.broadcastMessage(Utils.I18n("broadcast", replace));
 	}
@@ -59,7 +59,7 @@ public class Broadcast extends CoreCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args.length >= 1;
 	}
 

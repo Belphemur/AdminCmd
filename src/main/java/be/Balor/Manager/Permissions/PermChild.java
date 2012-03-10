@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class PermChild {
 	protected Permission bukkitPerm;
 
-	public PermChild(String permName) {
+	public PermChild(final String permName) {
 		this(permName, PermissionDefault.OP);
 	}
 
@@ -38,7 +38,7 @@ public class PermChild {
 	 * @param value
 	 * @param permDefault
 	 */
-	public PermChild(String permName, PermissionDefault permDefault) {
+	public PermChild(final String permName, final PermissionDefault permDefault) {
 		if (permName == null)
 			return;
 		if (ACPluginManager.getServer() == null)
@@ -71,7 +71,7 @@ public class PermChild {
 	public Permission getBukkitPerm() {
 		return bukkitPerm;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -91,14 +91,14 @@ public class PermChild {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (!(obj instanceof PermChild))
 			return false;
-		PermChild other = (PermChild) obj;
+		final PermChild other = (PermChild) obj;
 		if (bukkitPerm == null) {
 			if (other.bukkitPerm != null)
 				return false;

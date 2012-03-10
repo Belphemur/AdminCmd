@@ -23,13 +23,12 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Tools.Utils;
-
 import de.bananaco.bpermissions.api.ApiLayer;
-import de.bananaco.bpermissions.api.util.CalculableType;;
+import de.bananaco.bpermissions.api.util.CalculableType;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class bPermissions extends SuperPermissions {
 
@@ -38,19 +37,20 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
-	public boolean isInGroup(String groupName, Player player) {
-		String[] groups = ApiLayer.getGroups(player.getWorld().getName(), CalculableType.USER, player.getName());
+	public boolean isInGroup(final String groupName, final Player player) {
+		final String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
+				CalculableType.USER, player.getName());
 		if (groups == null)
 			return false;
 		if (groups.length == 0)
 			return false;
-		for (String group : groups)
+		for (final String group : groups)
 			if (group.equalsIgnoreCase(groupName))
 				return true;
 		return false;
@@ -58,16 +58,17 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
 	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(String groupName) throws NoPermissionsPlugin {
-		Set<Player> players = new HashSet<Player>();
-		for (Player player : Utils.getOnlinePlayers()) {
-			if (ApiLayer.hasGroup(player.getWorld().getName(), CalculableType.USER, player.getName(), groupName))
+	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
+		final Set<Player> players = new HashSet<Player>();
+		for (final Player player : Utils.getOnlinePlayers()) {
+			if (ApiLayer.hasGroup(player.getWorld().getName(), CalculableType.USER,
+					player.getName(), groupName))
 				players.add(player);
 		}
 		return players;
@@ -75,41 +76,49 @@ public class bPermissions extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
 	 */
 	@Override
-	public String getPermissionLimit(Player p, String limit) {
+	public String getPermissionLimit(final Player p, final String limit) {
 		String result = super.getPermissionLimit(p, limit);
 		if (result == null || result.isEmpty() || result.length() < 1)
-			result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(), limit);
+			result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
+					limit);
 		return result;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
 	 */
 	@Override
-	public String getPrefix(Player player) {
+	public String getPrefix(final Player player) {
 		String prefix = super.getPrefix(player);
 		if (prefix == null || prefix.isEmpty())
-			prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "prefix");
+			prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
+					player.getName(), "prefix");
 		return prefix;
 	}
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Permissions.Plugins.SuperPermissions#getSuffix(org.bukkit.entity.Player)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getSuffix(org.bukkit
+	 * .entity.Player)
 	 */
 	@Override
-	public String getSuffix(Player player) {
+	public String getSuffix(final Player player) {
 		String suffix = super.getSuffix(player);
 		if (suffix == null || suffix.isEmpty())
-			suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "suffix");
+			suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
+					player.getName(), "suffix");
 		return suffix;
 	}
 

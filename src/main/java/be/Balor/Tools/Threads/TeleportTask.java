@@ -31,7 +31,7 @@ public class TeleportTask implements Runnable {
 	 * @param player
 	 * @param loc
 	 */
-	public TeleportTask(Player player, Location loc) {
+	public TeleportTask(final Player player, final Location loc) {
 		super();
 		this.player = player;
 		this.loc = loc;

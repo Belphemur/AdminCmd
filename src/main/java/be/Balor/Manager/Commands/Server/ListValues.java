@@ -48,26 +48,26 @@ public class ListValues extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.DARK_AQUA + "Possibles Types :");
 			sender.sendMessage(Arrays.toString(Type.values()));
 			return;
 		}
 		String arg = "";
-		for (String str : args)
+		for (final String str : args)
 			arg += str + " ";
 		arg = arg.trim();
 		if (Type.matchType(arg) == null) {
 			Utils.sI18n(sender, "emptyList");
 			return;
 		}
-		List<ACPlayer> list = ACPlayer.getPlayers(arg);
+		final List<ACPlayer> list = ACPlayer.getPlayers(arg);
 		if (list != null) {
 			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
 					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");
 			String buffer = "";
-			for (ACPlayer value : list)
+			for (final ACPlayer value : list)
 				buffer += value.getName() + ", ";
 			if (!buffer.equals("")) {
 				if (buffer.endsWith(", "))
@@ -85,7 +85,7 @@ public class ListValues extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

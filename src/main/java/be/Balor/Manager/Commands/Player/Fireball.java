@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Fireball extends PlayerCommand {
 	public Fireball() {
@@ -42,22 +42,22 @@ public class Fireball extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		Player player = null;
 		float power = ConfigEnum.DFB.getFloat();
-		String timeOut = args.getValueFlag('t');
+		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
 			try {
 				player = Utils.getUser(sender, args, permNode, 1, false);
 				power = args.getFloat(0);
-			} catch (NumberFormatException e) {
-				power =  ConfigEnum.DFB.getFloat();
+			} catch (final NumberFormatException e) {
+				power = ConfigEnum.DFB.getFloat();
 				player = Utils.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2)
@@ -65,7 +65,7 @@ public class Fireball extends PlayerCommand {
 		} else
 			player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.FIREBALL)) {
@@ -83,12 +83,13 @@ public class Fireball extends PlayerCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FIREBALL, sender),
+						ACPluginManager.getCorePlugin(),
+						new RemovePowerTask(acp, Type.FIREBALL, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
@@ -97,11 +98,11 @@ public class Fireball extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 }

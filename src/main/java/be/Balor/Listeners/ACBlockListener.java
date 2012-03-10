@@ -35,7 +35,7 @@ public class ACBlockListener implements Listener {
 	 * 
 	 */
 	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) {
+	public void onBlockPlace(final BlockPlaceEvent event) {
 		if (event.isCancelled())
 			return;
 		final Player player = event.getPlayer();

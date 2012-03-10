@@ -22,9 +22,11 @@ import java.util.Hashtable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.EssentialsGroupManager;
 import be.Balor.Manager.Permissions.Plugins.IPermissionPlugin;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
@@ -36,7 +38,6 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import com.nijiko.permissions.PermissionHandler;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-
 /**
  * @author Balor (aka Antoine Aflalo)
  *
@@ -47,6 +48,7 @@ public class PermissionManager {
 	private static boolean yetiPermissions = false;
 	private static boolean bPermissions = false;
 	private static boolean permissionsBukkit = false;
+	private static boolean groupManager = false;
 	private static IPermissionPlugin permissionHandler;
 	private static boolean warningSend = false;
 
@@ -59,25 +61,25 @@ public class PermissionManager {
 		return instance;
 	}
 
-	public static String getPermissionLimit(Player p, String limit) {
+	public static String getPermissionLimit(final Player p, final String limit) {
 		return permissionHandler.getPermissionLimit(p, limit);
 	}
 
-	public static String getPrefix(Player player) {
+	public static String getPrefix(final Player player) {
 		return permissionHandler.getPrefix(player);
 	}
 
-	public static String getSuffix(Player player) {
+	public static String getSuffix(final Player player) {
 		return permissionHandler.getSuffix(player);
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm)
+	public static boolean hasPerm(final CommandSender player, final Permission perm)
 			throws NullPointerException {
 		return hasPerm(player, perm, true);
 	}
 
-	public static boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg)
-			throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player, final Permission perm,
+			final boolean errorMsg) throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
 		if (player == null)
@@ -98,7 +100,8 @@ public class PermissionManager {
 	 * @throws NullPointerException
 	 *             when the permission node is null
 	 */
-	public static boolean hasPerm(CommandSender player, String perm) throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player, final String perm)
+			throws NullPointerException {
 		return hasPerm(player, perm, true);
 	}
 
@@ -116,8 +119,8 @@ public class PermissionManager {
 	 * @throws NullPointerException
 	 *             when the permission node is null
 	 */
-	public static boolean hasPerm(CommandSender player, String perm, boolean errorMsg)
-			throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player, final String perm,
+			final boolean errorMsg) throws NullPointerException {
 		if (perm == null)
 			throw new NullPointerException("The Permission Node can't be NULL");
 		if (player == null)
@@ -133,7 +136,8 @@ public class PermissionManager {
 		return bPermissions;
 	}
 
-	public static boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin {
+	public static boolean isInGroup(final String groupName, final Player player)
+			throws NoPermissionsPlugin {
 		return permissionHandler.isInGroup(groupName, player);
 	}
 
@@ -159,6 +163,13 @@ public class PermissionManager {
 	}
 
 	/**
+	 * @return the GroupManager
+	 */
+	public static boolean isGroupManagerSet() {
+		return groupManager;
+	}
+
+	/**
 	 * Set bPermission Plugin
 	 *
 	 * @param plugin
@@ -166,7 +177,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setbPermissions() {
-		if (!bPermissions && !permissionsEx) {
+		if (!bPermissions && !permissionsEx && !groupManager) {
 			bPermissions = true;
 			permissionHandler = new bPermissions();
 			if (!yetiPermissions)
@@ -186,7 +197,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setPermissionsBukkit(PermissionsPlugin plugin) {
-		if (!permissionsBukkit && !bPermissions && !permissionsEx) {
+		if (!permissionsBukkit && !bPermissions && !permissionsEx && !groupManager) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
 			if (!yetiPermissions)
@@ -203,7 +214,7 @@ public class PermissionManager {
 	 * @param pEX
 	 *            the pEX to set
 	 */
-	public static boolean setPEX(ru.tehkode.permissions.PermissionManager pEX) {
+	public static boolean setPEX(final ru.tehkode.permissions.PermissionManager pEX) {
 		if (!permissionsEx) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				permissionsEx = true;
@@ -228,11 +239,36 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setYetiPermissions(PermissionHandler plugin) {
-		if (!yetiPermissions && !permissionsEx) {
+		if (!yetiPermissions && !permissionsEx && !groupManager) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				yetiPermissions = true;
 				permissionHandler = new YetiPermissions(plugin);
 				ACLogger.info("Successfully linked with Yeti's Permissions.");
+			} else if (!warningSend) {
+				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
+				warningSend = true;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Set Permission Plugin
+	 *
+	 * @param plugin
+	 * @return
+	 */
+	public static boolean setGroupManager(Plugin plugin) {
+		if (!groupManager && !permissionsEx) {
+			if (!ConfigEnum.SUPERPERM.getBoolean()) {
+				groupManager = true;
+				permissionHandler = new EssentialsGroupManager(plugin);
+				if (!yetiPermissions)
+					ACLogger.info("Successfully linked with Essantials GroupManager");
+				else
+					ACLogger.info("Use Essantials GroupManager instead of Yeti's Permissions.");
 			} else if (!warningSend) {
 				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
 				warningSend = true;
@@ -253,7 +289,7 @@ public class PermissionManager {
 			permissionHandler = new SuperPermissions();
 	}
 
-	public synchronized boolean addPermissionLinker(PermissionLinker perm) {
+	public synchronized boolean addPermissionLinker(final PermissionLinker perm) {
 		final String name = perm.getName();
 		if (name == null) {
 			throw new NullPointerException();
@@ -277,7 +313,7 @@ public class PermissionManager {
 		return true;
 	}
 
-	PermissionLinker demandPermissionLinker(String name) {
+	PermissionLinker demandPermissionLinker(final String name) {
 		PermissionLinker result = getPermissionLinker(name);
 		if (result == null) {
 			result = new PermissionLinker(name);
@@ -287,7 +323,7 @@ public class PermissionManager {
 		return result;
 	}
 
-	public synchronized PermissionLinker getPermissionLinker(String name) {
+	public synchronized PermissionLinker getPermissionLinker(final String name) {
 		final WeakReference<PermissionLinker> ref = permissionLinkers.get(name);
 		if (ref == null) {
 			return null;
@@ -300,5 +336,4 @@ public class PermissionManager {
 		}
 		return perm;
 	}
-
 }

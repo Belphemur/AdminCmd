@@ -31,7 +31,7 @@ public class ParameterMissingException extends ProcessingArgsException {
 	/**
 	 * @param message
 	 */
-	public ParameterMissingException(char param, String message) {
+	public ParameterMissingException(final char param, final String message) {
 		super(ExceptionType.MISSING_PARAM, message);
 		this.param = param;
 	}

@@ -42,8 +42,8 @@ class HelpEntry {
 	 * @param permissions
 	 * @param commandName
 	 */
-	HelpEntry(String command, String description, List<String> permissions,
-			String commandName) {
+	HelpEntry(final String command, final String description, final List<String> permissions,
+			final String commandName) {
 		super();
 		this.command = command;
 		this.description = description;
@@ -51,8 +51,8 @@ class HelpEntry {
 		this.commandName = commandName;
 	}
 
-	public boolean hasPerm(CommandSender p) {
-		for (String perm : permissions) {
+	public boolean hasPerm(final CommandSender p) {
+		for (final String perm : permissions) {
 			if (perm.equals("OP"))
 				if (Utils.isPlayer(p, false))
 					return p.isOp();
@@ -74,9 +74,9 @@ class HelpEntry {
 	public String chatString() {
 		String line = getFormatedCmd();
 
-		int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
-		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+		final int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
 		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
 						"]" + ChatColor.WHITE), sizeRemaining, ' ');
@@ -93,11 +93,11 @@ class HelpEntry {
 	}
 
 	public String consoleString() {
-		int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
+		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
 		String line = getFormatedCmd();
 
-		int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
-		int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+		final int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
+		final int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
 		line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
 				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
 						"]" + ChatColor.WHITE), sizeRemaining, ' ');

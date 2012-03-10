@@ -54,7 +54,7 @@ public class Whois extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (args.hasFlag('w')) {
 			ACWorld w;
 			try {
@@ -64,16 +64,16 @@ public class Whois extends PlayerCommand {
 					w = ACWorld.getWorld(((Player) sender).getWorld().getName());
 				else
 					return;
-			} catch (WorldNotLoaded e) {
+			} catch (final WorldNotLoaded e) {
 				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
 			sender.sendMessage(ChatColor.GREEN
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(
 							ChatColor.AQUA + " " + w.getName() + " " + ChatColor.GREEN, '='));
-			for (Entry<String, String> power : w.getInformations().entrySet()) {
+			for (final Entry<String, String> power : w.getInformations().entrySet()) {
 				String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE + " : ";
-				int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+				final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 						- ACMinecraftFontWidthCalculator.getStringWidth(line);
 				line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 						ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');
@@ -81,7 +81,7 @@ public class Whois extends PlayerCommand {
 			}
 			return;
 		}
-		ACPlayer actarget = Utils.getACPlayer(sender, args, permNode);
+		final ACPlayer actarget = Utils.getACPlayer(sender, args, permNode);
 		if (actarget == null)
 			return;
 		sender.sendMessage(ChatColor.AQUA
@@ -89,34 +89,34 @@ public class Whois extends PlayerCommand {
 						+ actarget.getName() + " " + ChatColor.AQUA, '='));
 		// Login
 		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE + " : ";
-		int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+		final int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(loginDate);
 		loginDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget,Type.Whois.LOGIN),
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget, Type.Whois.LOGIN),
 				logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
-		
+
 		// Logout
 		String logoutDate = ChatColor.GOLD + "Last Quit" + ChatColor.WHITE + " : ";
-		int logoutSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+		final int logoutSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(logoutDate);
 		logoutDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget,Type.Whois.LOGOUT),
+				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget, Type.Whois.LOGOUT),
 				logoutSizeRemaining, ' ');
 		sender.sendMessage(logoutDate);
 
 		// Presentation
 		String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE + " : ";
-		int presSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+		final int presSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(presentation);
 		presentation += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN + actarget.getPresentation(), presSizeRemaining, ' ');
 		sender.sendMessage(presentation);
-		
+
 		// Played
-		long total = actarget.getCurrentPlayedTime();
-		Long[] time = Utils.transformToElapsedTime(total);
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final long total = actarget.getCurrentPlayedTime();
+		final Long[] time = Utils.transformToElapsedTime(total);
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());
 		replace.put("m", time[2].toString());
@@ -129,9 +129,10 @@ public class Whois extends PlayerCommand {
 		sender.sendMessage(played);
 
 		// Powers
-		for (Entry<String, String> power : actarget.getPowers().entrySet()) {
-			String line = ChatColor.GOLD + Type.matchType(power.getKey()).display() + ChatColor.WHITE + " : ";
-			int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+		for (final Entry<String, String> power : actarget.getPowers().entrySet()) {
+			String line = ChatColor.GOLD + Type.matchType(power.getKey()).display()
+					+ ChatColor.WHITE + " : ";
+			final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(line);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 					ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');
@@ -139,7 +140,7 @@ public class Whois extends PlayerCommand {
 		}
 		// Invisible
 		String line = ChatColor.GOLD + "invisible" + ChatColor.WHITE + " : ";
-		int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
+		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
 		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN
@@ -149,7 +150,8 @@ public class Whois extends PlayerCommand {
 		sender.sendMessage(line);
 
 		// Immunity Level
-		int level = actarget.getInformation("immunityLvl").getInt(ConfigEnum.DIMMUNITY.getInt());
+		final int level = actarget.getInformation("immunityLvl").getInt(
+				ConfigEnum.DIMMUNITY.getInt());
 		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);
@@ -164,7 +166,7 @@ public class Whois extends PlayerCommand {
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

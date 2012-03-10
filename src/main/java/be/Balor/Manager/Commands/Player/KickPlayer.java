@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class KickPlayer extends PlayerCommand {
 
@@ -45,15 +45,15 @@ public class KickPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		Player toKick = sender.getServer().getPlayer(args.getString(0));
+		final Player toKick = sender.getServer().getPlayer(args.getString(0));
 		if (toKick == null) {
 			replace.put("player", args.getString(0));
 			Utils.sI18n(sender, "playerNotFound", replace);
@@ -97,11 +97,11 @@ public class KickPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

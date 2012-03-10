@@ -54,7 +54,7 @@ public class Kit extends ItemCommand {
 	 * )
 	 */
 	@Override
-	public boolean permissionCheck(CommandSender sender) {
+	public boolean permissionCheck(final CommandSender sender) {
 		return true;
 	}
 
@@ -65,14 +65,14 @@ public class Kit extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		// which material?
 		Player target;
 		if (args.length == 0) {
 			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
 			return;
 		}
-		KitInstance kit = ACHelper.getInstance().getKit(args.getString(0));
+		final KitInstance kit = ACHelper.getInstance().getKit(args.getString(0));
 		if (kit == null) {
 			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
 			return;
@@ -85,10 +85,10 @@ public class Kit extends ItemCommand {
 		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
 			return;
 		}
-		ACPlayer actarget = ACPlayer.getPlayer(target);
+		final ACPlayer actarget = ACPlayer.getPlayer(target);
 		if (!PermissionManager.hasPerm(sender, "admincmd.item.nodelay", false)) {
-			int kitDelay = kit.getDelay();
-			long kitLastUse = actarget.getLastKitUse(kit.getName());
+			final int kitDelay = kit.getDelay();
+			final long kitLastUse = actarget.getLastKitUse(kit.getName());
 			if (kitDelay == -1) {
 				if (kitLastUse == 0)
 					actarget.updateLastKitUse(kit.getName());
@@ -97,17 +97,17 @@ public class Kit extends ItemCommand {
 					return;
 				}
 			} else {
-				long nextuse = kitLastUse + kitDelay * 1000L;
-				long now = System.currentTimeMillis();
+				final long nextuse = kitLastUse + kitDelay * 1000L;
+				final long now = System.currentTimeMillis();
 				if (now < nextuse) {
-					long diff = nextuse - now;
-					Long[] timeLeft = Utils.transformToElapsedTime(diff);
-					HashMap<String, String> replace = new HashMap<String, String>();
+					final long diff = nextuse - now;
+					final Long[] timeLeft = Utils.transformToElapsedTime(diff);
+					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("d", timeLeft[0].toString());
 					replace.put("h", timeLeft[1].toString());
 					replace.put("m", timeLeft[2].toString());
 					replace.put("s", timeLeft[3].toString());
-					String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d",
+					final String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d",
 							timeLeft[0].toString())) : "")
 							+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
 							+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
@@ -119,7 +119,7 @@ public class Kit extends ItemCommand {
 				actarget.updateLastKitUse(kit.getName());
 			}
 		}
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("kit", args.getString(0));
 		if (Utils.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
@@ -169,7 +169,7 @@ public class Kit extends ItemCommand {
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 }

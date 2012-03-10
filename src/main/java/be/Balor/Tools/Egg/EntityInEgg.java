@@ -38,7 +38,7 @@ public class EntityInEgg implements Serializable {
 	 * @param nb
 	 * @param entityName
 	 */
-	public EntityInEgg(String entityClass, int nb, String entityName) {
+	public EntityInEgg(final String entityClass, final int nb, final String entityName) {
 		super();
 		this.entityClass = entityClass;
 		this.nb = nb;
@@ -77,7 +77,7 @@ public class EntityInEgg implements Serializable {
 	 * @param entityClass
 	 *            the entityClass to set
 	 */
-	public void setEntityClass(String entityClass) {
+	public void setEntityClass(final String entityClass) {
 		this.entityClass = entityClass;
 	}
 
@@ -85,7 +85,7 @@ public class EntityInEgg implements Serializable {
 	 * @param nb
 	 *            the nb to set
 	 */
-	public void setNb(int nb) {
+	public void setNb(final int nb) {
 		this.nb = nb;
 	}
 
@@ -93,7 +93,7 @@ public class EntityInEgg implements Serializable {
 	 * @param entityName
 	 *            the entityName to set
 	 */
-	public void setEntityName(String entityName) {
+	public void setEntityName(final String entityName) {
 		this.entityName = entityName;
 	}
 
@@ -101,7 +101,7 @@ public class EntityInEgg implements Serializable {
 	public Class getEntityClass() {
 		try {
 			return Class.forName(entityClass);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			return Chicken.class;
 		}
 	}

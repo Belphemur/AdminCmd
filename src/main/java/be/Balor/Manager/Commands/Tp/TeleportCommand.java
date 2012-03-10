@@ -20,7 +20,7 @@ import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class TeleportCommand extends CoreCommand {
 	/**
@@ -35,7 +35,7 @@ public abstract class TeleportCommand extends CoreCommand {
 	 * @param string
 	 * @param string2
 	 */
-	public TeleportCommand(String cmd, String permNode) {
+	public TeleportCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
 		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.tp.*");
 	}

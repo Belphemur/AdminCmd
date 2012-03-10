@@ -36,7 +36,8 @@ public class WindowsTerminalCommand extends TerminalCommand {
 	 * @param args
 	 * @param workingDir
 	 */
-	public WindowsTerminalCommand(String commandName, String execution, String args, File workingDir) {
+	public WindowsTerminalCommand(final String commandName, final String execution,
+			final String args, final File workingDir) {
 		super(commandName, execution, args, workingDir);
 	}
 
@@ -46,8 +47,8 @@ public class WindowsTerminalCommand extends TerminalCommand {
 	 * @param args
 	 * @param workingDir
 	 */
-	public WindowsTerminalCommand(String commandName, String execution, String args,
-			String workingDir) {
+	public WindowsTerminalCommand(final String commandName, final String execution,
+			final String args, final String workingDir) {
 		super(commandName, execution, args, workingDir);
 	}
 
@@ -59,7 +60,7 @@ public class WindowsTerminalCommand extends TerminalCommand {
 	 * CommandSender)
 	 */
 	@Override
-	public void execute(CommandSender sender) {
+	public void execute(final CommandSender sender) {
 		try {
 			ProcessBuilder pb;
 			if (args != null)
@@ -68,13 +69,13 @@ public class WindowsTerminalCommand extends TerminalCommand {
 				pb = new ProcessBuilder("cmd.exe", "/C", execution);
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
-			Process p = pb.start();
-			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			final Process p = pb.start();
+			final BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null) {
 				sender.sendMessage(line);
 			}
-		} catch (Throwable e) {
+		} catch (final Throwable e) {
 			sender.sendMessage("CMD ERROR : " + e.getMessage());
 			e.printStackTrace();
 		}

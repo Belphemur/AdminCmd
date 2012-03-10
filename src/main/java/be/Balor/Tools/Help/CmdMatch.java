@@ -30,7 +30,7 @@ class CmdMatch {
 	 * @param cmd
 	 * @param result
 	 */
-	CmdMatch(String cmd, List<HelpEntry> result) {
+	CmdMatch(final String cmd, final List<HelpEntry> result) {
 		super();
 		this.cmd = cmd;
 		this.result = result;

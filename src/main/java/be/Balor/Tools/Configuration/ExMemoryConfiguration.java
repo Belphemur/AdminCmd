@@ -45,12 +45,12 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
 	 * @throws IllegalArgumentException
 	 *             Thrown if defaults is null
 	 */
-	public ExMemoryConfiguration(Configuration defaults) {
+	public ExMemoryConfiguration(final Configuration defaults) {
 		this.defaults = defaults;
 	}
 
 	@Override
-	public void addDefault(String path, Object value) {
+	public void addDefault(final String path, final Object value) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path may not be null");
 		}
@@ -63,7 +63,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
 	}
 
 	@Override
-	public void addDefaults(Configuration defaults) {
+	public void addDefaults(final Configuration defaults) {
 		if (defaults == null) {
 			throw new IllegalArgumentException("Defaults may not be null");
 		}
@@ -72,7 +72,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
 	}
 
 	@Override
-	public void addDefaults(Map<String, Object> defaults) {
+	public void addDefaults(final Map<String, Object> defaults) {
 		if (defaults == null) {
 			throw new IllegalArgumentException("Defaults may not be null");
 		}
@@ -102,7 +102,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
 	}
 
 	@Override
-	public void setDefaults(Configuration defaults) {
+	public void setDefaults(final Configuration defaults) {
 		if (defaults == null) {
 			throw new IllegalArgumentException("Defaults may not be null");
 		}

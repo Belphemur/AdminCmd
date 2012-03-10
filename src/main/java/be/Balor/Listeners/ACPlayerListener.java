@@ -57,7 +57,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -66,7 +66,7 @@ public class ACPlayerListener implements Listener {
 		/**
 		 *
 		 */
-		public UpdateInvisibleOnJoin(Player p) {
+		public UpdateInvisibleOnJoin(final Player p) {
 			newPlayer = p;
 		}
 
@@ -87,7 +87,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerChat(PlayerChatEvent event) {
+	public void onPlayerChat(final PlayerChatEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (ConfigEnum.AUTO_AFK.getBoolean()) {
@@ -102,11 +102,11 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (player.hasPower(Type.MUTED_COMMAND)) {
-			String[] split = event.getMessage().split("\\s+");
+			final String[] split = event.getMessage().split("\\s+");
 			if (split.length != 0) {
 				if (split[0].contains("/")) {
 					event.setCancelled(true);
@@ -122,7 +122,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.isCancelled())
 			return;
 		final Player p = event.getPlayer();
@@ -139,7 +139,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
 		player.setInformation("last-ip", p.getAddress().getAddress().toString());
@@ -160,7 +160,7 @@ public class ACPlayerListener implements Listener {
 					public void run() {
 						if (ConfigEnum.AUTO_AFK.getBoolean())
 							AFKWorker.getInstance().updateTimeStamp(p);
-						int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+						final int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
 								"defaultImmunityLvl");
 						player.setInformation("immunityLvl",
 								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
@@ -204,7 +204,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerLogin(PlayerLoginEvent event) {
+	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (event.getResult().equals(Result.ALLOWED))
 			return;
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
@@ -212,7 +212,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
 		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
@@ -224,7 +224,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 *
+			 * 
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
@@ -233,7 +233,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 		if (event.isCancelled())
 			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
@@ -242,11 +242,11 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerKick(PlayerKickEvent event) {
+	public void onPlayerKick(final PlayerKickEvent event) {
 		if (event.isCancelled())
 			return;
-		Player p = event.getPlayer();
-		ACPlayer player = ACPlayer.getPlayer(p);
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (player != null && player.hasPower(Type.KICKED)) {
 			event.setLeaveMessage(null);
 			player.removePower(Type.KICKED);
@@ -254,7 +254,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
@@ -263,7 +263,7 @@ public class ACPlayerListener implements Listener {
 
 					@Override
 					public void run() {
-						int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+						final int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
 								"defaultImmunityLvl");
 						player.setInformation("immunityLvl",
 								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
@@ -284,7 +284,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
+	public void onPlayerRespawn(final PlayerRespawnEvent event) {
 		final Player player = event.getPlayer();
 		playerRespawnOrJoin(player);
 		final String spawn = ConfigEnum.GSPAWN.getString();
@@ -334,7 +334,7 @@ public class ACPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
+	public void onPlayerTeleport(final PlayerTeleportEvent event) {
 		if (event.isCancelled())
 			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
@@ -345,7 +345,7 @@ public class ACPlayerListener implements Listener {
 		playerRespawnOrJoin(event.getPlayer());
 	}
 
-	private boolean playerRespawnOrJoin(Player newPlayer) {
+	private boolean playerRespawnOrJoin(final Player newPlayer) {
 		ACPluginManager
 				.getServer()
 				.getScheduler()

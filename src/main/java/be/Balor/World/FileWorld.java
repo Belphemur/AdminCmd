@@ -52,12 +52,12 @@ public class FileWorld extends ACWorld {
 	/**
 	 * @param name
 	 */
-	public FileWorld(World world, String directory) {
+	public FileWorld(final World world, final String directory) {
 		super(world);
-		File wFile = new File(directory, world.getName() + ".yml");
+		final File wFile = new File(directory, world.getName() + ".yml");
 		try {
 			Files.createParentDirs(wFile);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 		datas = ExtendedConfiguration.loadConfiguration(wFile);
 
@@ -73,7 +73,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#setSpawn(org.bukkit.Location)
 	 */
 	@Override
-	public void setSpawn(Location loc) {
+	public void setSpawn(final Location loc) {
 		datas.set("spawn", new SimpleLocation(loc));
 		writeFile();
 	}
@@ -85,7 +85,7 @@ public class FileWorld extends ACWorld {
 	 */
 	@Override
 	public Location getSpawn() throws WorldNotLoaded {
-		Object spawn = datas.get("spawn");
+		final Object spawn = datas.get("spawn");
 		if (spawn == null)
 			return handler.getSpawnLocation();
 		else if (spawn instanceof SimpleLocation)
@@ -132,7 +132,7 @@ public class FileWorld extends ACWorld {
 	 * org.bukkit.Location)
 	 */
 	@Override
-	public void addWarp(String name, Location loc) {
+	public void addWarp(final String name, final Location loc) {
 		warps.set(name, new SimpleLocation(loc));
 		writeFile();
 	}
@@ -143,7 +143,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Warp getWarp(String name) throws WorldNotLoaded, IllegalArgumentException {
+	public Warp getWarp(final String name) throws WorldNotLoaded, IllegalArgumentException {
 		if (name == null || (name != null && name.isEmpty()))
 			throw new IllegalArgumentException("Name can't be null or Empty");
 		Object warp = warps.get(name);
@@ -174,7 +174,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#removeWarp(java.lang.String)
 	 */
 	@Override
-	public void removeWarp(String name) {
+	public void removeWarp(final String name) {
 		warps.set(name, null);
 		writeFile();
 	}
@@ -186,7 +186,7 @@ public class FileWorld extends ACWorld {
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setInformation(String info, Object value) {
+	public void setInformation(final String info, final Object value) {
 		informations.set(info, value);
 		writeFile();
 	}
@@ -197,7 +197,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#removeInformation(java.lang.String)
 	 */
 	@Override
-	public void removeInformation(String info) {
+	public void removeInformation(final String info) {
 		informations.set(info, null);
 		writeFile();
 	}
@@ -208,7 +208,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getInformation(java.lang.String)
 	 */
 	@Override
-	public ObjectContainer getInformation(String info) {
+	public ObjectContainer getInformation(final String info) {
 		return new ObjectContainer(informations.get(info));
 	}
 
@@ -228,7 +228,7 @@ public class FileWorld extends ACWorld {
 	void forceSave() {
 		try {
 			datas.save();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			ACLogger.severe("Problem when saving the World File of " + getName(), e);
 		}
 	}
@@ -240,10 +240,10 @@ public class FileWorld extends ACWorld {
 	 */
 	@Override
 	public Map<String, String> getInformations() {
-		TreeMap<String, String> result = new TreeMap<String, String>();
-		for (Entry<String, Object> entry : informations.getValues(false).entrySet())
+		final TreeMap<String, String> result = new TreeMap<String, String>();
+		for (final Entry<String, Object> entry : informations.getValues(false).entrySet())
 			result.put(entry.getKey(), entry.getValue().toString());
-		for (Entry<String, Object> entry : mobLimits.getValues(false).entrySet())
+		for (final Entry<String, Object> entry : mobLimits.getValues(false).entrySet())
 			result.put("Limit on " + entry.getKey(), entry.getValue().toString());
 		return result;
 	}
@@ -254,7 +254,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#setMobLimit(java.lang.String, int)
 	 */
 	@Override
-	public void setMobLimit(String mob, int limit) {
+	public void setMobLimit(final String mob, final int limit) {
 		mobLimits.set(mob, limit);
 		writeFile();
 	}
@@ -265,7 +265,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#removeMobLimit(java.lang.String)
 	 */
 	@Override
-	public boolean removeMobLimit(String mob) {
+	public boolean removeMobLimit(final String mob) {
 		if (mobLimits.isSet(mob)) {
 			mobLimits.remove(mob);
 			writeFile();
@@ -280,11 +280,13 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getMobLimit(java.lang.String)
 	 */
 	@Override
-	public int getMobLimit(String mob) {
+	public int getMobLimit(final String mob) {
 		return mobLimits.getInt(mob, -1);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.World.ACWorld#getMobLimitList()
 	 */
 	@Override

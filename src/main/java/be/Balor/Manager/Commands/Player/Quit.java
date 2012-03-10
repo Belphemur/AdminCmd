@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Quit extends PlayerCommand {
 
@@ -39,14 +39,17 @@ public class Quit extends PlayerCommand {
 		permNode = "admincmd.player.quit";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender, true)) {
-			Player quitting = (Player) sender;
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final Player quitting = (Player) sender;
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			String reason = "";
 			if (args == null || args.length == 0)
 				reason = "disconnect:quitting";
@@ -61,11 +64,13 @@ public class Quit extends PlayerCommand {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

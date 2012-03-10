@@ -49,20 +49,21 @@ public class ReplaceBlock extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final MaterialContainer mc = ACHelper.getInstance()
+				.checkMaterial(sender, args.getString(0));
 		if (mc.isNull())
 			return;
-		ArrayList<Material> mats = new ArrayList<Material>();
+		final ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(mc.getMaterial());
 		if (mc.getMaterial().equals(Material.LAVA))
 			mats.add(Material.STATIONARY_LAVA);
 		else if (mc.getMaterial().equals(Material.WATER))
 			mats.add(Material.STATIONARY_WATER);
-		Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
+		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
 		if (count == null)
 			return;
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("nb", String.valueOf(count));
 		replace.put("mat", mc.getMaterial().toString());
 		Utils.sI18n(sender, "replaced", replace);
@@ -74,7 +75,7 @@ public class ReplaceBlock extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

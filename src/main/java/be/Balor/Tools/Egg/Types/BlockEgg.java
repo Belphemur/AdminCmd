@@ -33,7 +33,7 @@ import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.SynchronizedStack;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Blocks.BlockRemanence;
-import be.Balor.Tools.Blocks.BlockRemanenceFactory;
+import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Egg.BlockChangeInfo;
 import be.Balor.Tools.Egg.RadiusEgg;
 import be.Balor.Tools.Egg.Exceptions.ExceptionType;
@@ -69,7 +69,7 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 	 * @param defaultRadius
 	 * @param maxRadius
 	 */
-	public BlockEgg(int defaultRadius, int maxRadius) {
+	public BlockEgg(final int defaultRadius, final int maxRadius) {
 		super(defaultRadius, maxRadius);
 	}
 
@@ -80,22 +80,22 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 		final int radius = value.getRadius() / 2;
 		event.getEgg().remove();
 		event.setHatching(false);
-		Location loc = event.getEgg().getLocation();
-		SynchronizedStack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
-		World w = loc.getWorld();
+		final Location loc = event.getEgg().getLocation();
+		final SynchronizedStack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
+		final World w = loc.getWorld();
 		if (blockTimeOut() == 0) {
 			for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
 				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
 					for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
-						Block block = w.getBlockAt(x, y, z);
+						final Block block = w.getBlockAt(x, y, z);
 						if (block.getTypeId() != Material.AIR.getId()
 								&& block.getTypeId() != Material.SNOW.getId())
 							continue;
-						BlockRemanenceFactory.FACTORY.createBlockRemanence(
+						IBlockRemanenceFactory.FACTORY.createBlockRemanence(
 								new SimplifiedLocation(w, x, y, z)).setBlockType(
 								value.getBlockTypeId());
 					}
@@ -105,10 +105,10 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
 			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
 				for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
-					int blckId = w.getBlockTypeIdAt(x, y, z);
+					final int blckId = w.getBlockTypeIdAt(x, y, z);
 					if (blckId != Material.AIR.getId() && blckId != Material.SNOW.getId())
 						continue;
-					BlockRemanence blk = BlockRemanenceFactory.FACTORY
+					final BlockRemanence blk = IBlockRemanenceFactory.FACTORY
 							.createBlockRemanence(new SimplifiedLocation(w, x, y, z));
 					blk.setBlockType(value.getBlockTypeId());
 					blocks.add(blk);
@@ -120,7 +120,8 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 
 					@Override
 					public void run() {
-						SynchronizedStack<BlockRemanence> blocks = blocksPerEvent.get(eventId);
+						final SynchronizedStack<BlockRemanence> blocks = blocksPerEvent
+								.get(eventId);
 						while (!blocks.empty())
 							blocks.pop().returnToThePast();
 						blocksPerEvent.remove(eventId);
@@ -142,16 +143,17 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 	 * be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player sender, CommandArgs args) throws ProcessingArgsException {
-		String block = args.getValueFlag('b');
+	protected void processArguments(final Player sender, final CommandArgs args)
+			throws ProcessingArgsException {
+		final String block = args.getValueFlag('b');
 		if (block == null)
 			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
-		int radius = getRadius(sender, args);
+		final int radius = getRadius(sender, args);
 		if (radius == -1)
 			return;
-		MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
+		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
 		if (mat.isNull()) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", LocaleHelper.TYPE_MAT.getLocale());
 			replace.put("value", block);
 			throw new ProcessingArgsException(ExceptionType.CUSTOM,

@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Drop extends ItemCommand {
 	/**
@@ -45,13 +45,13 @@ public class Drop extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		// which material?
 		MaterialContainer mat = null;
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
@@ -59,8 +59,7 @@ public class Drop extends ItemCommand {
 			return;
 		if (ACHelper.getInstance().inBlackListItem(sender, mat))
 			return;
-		if(mat.getMaterial().equals(Material.AIR))
-		{
+		if (mat.getMaterial().equals(Material.AIR)) {
 			Utils.sI18n(sender, "airForbidden");
 			return;
 		}
@@ -70,13 +69,14 @@ public class Drop extends ItemCommand {
 		if (args.length >= 2) {
 			try {
 				cnt = args.getInt(1);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				return;
 			}
 			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")
 					&& !(sender.hasPermission("admincmd.item.infinity"))) {
-				HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("limit", String.valueOf(ACHelper.getInstance().getLimit(sender, "maxItemAmount")));
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("limit",
+						String.valueOf(ACHelper.getInstance().getLimit(sender, "maxItemAmount")));
 				Utils.sI18n(sender, "itemLimit", replace);
 				return;
 			}
@@ -94,7 +94,7 @@ public class Drop extends ItemCommand {
 				return;
 		}
 		final ItemStack stack = mat.getItemStack(cnt);
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(cnt));
 		replace.put("material", mat.getMaterial().toString());
 		if (Utils.isPlayer(sender, false)) {
@@ -114,23 +114,22 @@ public class Drop extends ItemCommand {
 			Utils.sI18n(sender, "dropItemCommandSender", replace);
 		}
 		final Player taskTarget = target;
-		ACPluginManager.scheduleSyncTask(new Runnable() {			
+		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
 				taskTarget.getWorld().dropItem(taskTarget.getLocation(), stack);
 			}
 		});
-	
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 }

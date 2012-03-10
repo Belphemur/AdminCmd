@@ -31,7 +31,7 @@ public class FakePluginCommand extends Command {
 	/**
 	 * @param name
 	 */
-	public FakePluginCommand(String name, Plugin plugin) {
+	public FakePluginCommand(final String name, final Plugin plugin) {
 		super(name);
 		owningPlugin = plugin;
 	}
@@ -43,7 +43,8 @@ public class FakePluginCommand extends Command {
 	 * java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+	public boolean execute(final CommandSender sender, final String commandLabel,
+			final String[] args) {
 		return false;
 	}
 

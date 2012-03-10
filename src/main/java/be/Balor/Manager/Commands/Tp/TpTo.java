@@ -45,7 +45,7 @@ public class TpTo extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
 		}
@@ -57,7 +57,7 @@ public class TpTo extends TeleportCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

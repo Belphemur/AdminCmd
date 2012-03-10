@@ -24,7 +24,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class KickAllPlayers extends PlayerCommand {
 
@@ -38,13 +38,13 @@ public class KickAllPlayers extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		String message = "";
 		String playerName = "";
 		if (args.length >= 1)
@@ -59,18 +59,18 @@ public class KickAllPlayers extends PlayerCommand {
 			message += playerName;
 		}
 		message = message.trim();
-		for (Player toKick : Utils.getOnlinePlayers())
+		for (final Player toKick : Utils.getOnlinePlayers())
 			if (!toKick.getName().equals(playerName))
 				toKick.kickPlayer(message);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

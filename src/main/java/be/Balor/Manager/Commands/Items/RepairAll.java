@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class RepairAll extends ItemCommand {
 
@@ -44,31 +44,29 @@ public class RepairAll extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		final Player player = Utils.getUser(sender, args, permNode);
 		if (player == null)
 			return;
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
-				for (ItemStack item : player.getInventory().getContents())
-					if (item != null
-							&& ACHelper.getInstance().repairable(
-									item.getTypeId()))
+				for (final ItemStack item : player.getInventory().getContents())
+					if (item != null && ACHelper.getInstance().repairable(item.getTypeId()))
 						item.setDurability((short) 0);
-				for (ItemStack item : player.getInventory().getArmorContents())
+				for (final ItemStack item : player.getInventory().getArmorContents())
 					if (item != null)
 						item.setDurability((short) 0);
 			}
 		});
 
-		HashMap<String, String> replace = new HashMap<String, String>();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
 		if (!sender.equals(player))
 			Utils.sI18n(sender, "repairAll", replace);
@@ -78,11 +76,11 @@ public class RepairAll extends ItemCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

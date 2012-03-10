@@ -33,7 +33,7 @@ public class PlayerNotFound extends Exception {
 	/**
 	 * @param message
 	 */
-	public PlayerNotFound(String message, CommandSender sender) {
+	public PlayerNotFound(final String message, final CommandSender sender) {
 		super(message);
 		this.sender = sender;
 	}

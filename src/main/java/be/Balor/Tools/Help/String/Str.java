@@ -18,19 +18,19 @@ public class Str extends OutputStream {
 
 	public String text = "";
 
-	public static String argStr(String[] s) {
+	public static String argStr(final String[] s) {
 		return argStr(s, " ", 0);
 	}
 
-	public static String argStr(String[] s, int start) {
+	public static String argStr(final String[] s, final int start) {
 		return argStr(s, " ", start);
 	}
 
-	public static String argStr(String[] s, String sep) {
+	public static String argStr(final String[] s, final String sep) {
 		return argStr(s, sep, 0);
 	}
 
-	public static String argStr(String[] s, String sep, int start) {
+	public static String argStr(final String[] s, final String sep, final int start) {
 		String ret = "";
 		if (s != null) {
 			for (int i = start; i < s.length; ++i) {
@@ -43,7 +43,8 @@ public class Str extends OutputStream {
 		return ret;
 	}
 
-	public static String argStr(String[] s, String sep, int start, int length) {
+	public static String argStr(final String[] s, final String sep, final int start,
+			final int length) {
 		String ret = "";
 		if (s != null) {
 			for (int i = start, j = 0; i < s.length && j < length; ++i, ++j) {
@@ -56,9 +57,9 @@ public class Str extends OutputStream {
 		return ret;
 	}
 
-	public static boolean isIn(String input, String[] check) {
+	public static boolean isIn(String input, final String[] check) {
 		input = input.trim();
-		for (String c : check) {
+		for (final String c : check) {
 			if (input.equalsIgnoreCase(c.trim())) {
 				return true;
 			}
@@ -66,10 +67,10 @@ public class Str extends OutputStream {
 		return false;
 	}
 
-	public static boolean isIn(String input, String check) {
-		String comms[] = check.split(",");
+	public static boolean isIn(String input, final String check) {
+		final String comms[] = check.split(",");
 		input = input.trim();
-		for (String c : comms) {
+		for (final String c : comms) {
 			if (input.equalsIgnoreCase(c.trim())) {
 				return true;
 			}
@@ -77,9 +78,9 @@ public class Str extends OutputStream {
 		return false;
 	}
 
-	public static boolean startIsIn(String input, String check) {
-		String comms[] = check.split(",");
-		for (String c : comms) {
+	public static boolean startIsIn(final String input, final String check) {
+		final String comms[] = check.split(",");
+		for (final String c : comms) {
 			if (input.length() >= c.length()) {
 				if (input.substring(0, c.length()).equalsIgnoreCase(c)) {
 					return true;
@@ -89,8 +90,8 @@ public class Str extends OutputStream {
 		return false;
 	}
 
-	public static boolean startIsIn(String input, String[] check) {
-		for (String c : check) {
+	public static boolean startIsIn(final String input, final String[] check) {
+		for (final String c : check) {
 			if (input.length() >= c.length()) {
 				if (input.substring(0, c.length()).equalsIgnoreCase(c)) {
 					return true;
@@ -100,7 +101,7 @@ public class Str extends OutputStream {
 		return false;
 	}
 
-	public static int count(String str, String find) {
+	public static int count(final String str, final String find) {
 		int c = 0;
 		for (int i = 0; i < str.length() - find.length(); ++i) {
 			if (str.substring(i, i + find.length()).equals(find)) {
@@ -110,7 +111,7 @@ public class Str extends OutputStream {
 		return c;
 	}
 
-	public static int count(String str, char find) {
+	public static int count(final String str, final char find) {
 		int c = 0;
 		for (int i = 0; i < str.length(); ++i) {
 			if (str.charAt(i) == find) {
@@ -120,7 +121,7 @@ public class Str extends OutputStream {
 		return c;
 	}
 
-	public static int countIgnoreCase(String str, String find) {
+	public static int countIgnoreCase(final String str, final String find) {
 		int c = 0;
 		for (int i = 0; i < str.length() - find.length(); ++i) {
 			if (str.substring(i, i + find.length()).equalsIgnoreCase(find)) {
@@ -130,7 +131,7 @@ public class Str extends OutputStream {
 		return c;
 	}
 
-	public static int indexOf(String array[], String search) {
+	public static int indexOf(final String array[], final String search) {
 		if (array != null && array.length > 0) {
 			for (int i = array.length - 1; i >= 0; --i) {
 				if (array[i].equals(search)) {
@@ -141,7 +142,7 @@ public class Str extends OutputStream {
 		return -1;
 	}
 
-	public static int indexOfIgnoreCase(String array[], String search) {
+	public static int indexOfIgnoreCase(final String array[], final String search) {
 		for (int i = array.length - 1; i >= 0; --i) {
 			if (array[i].equalsIgnoreCase(search)) {
 				return i;
@@ -150,12 +151,12 @@ public class Str extends OutputStream {
 		return -1;
 	}
 
-	public static String getStackStr(Exception err) {
+	public static String getStackStr(final Exception err) {
 		if (err == null) {// || err.getCause() == null) {
 			return "";
 		}
-		Str stackoutstream = new Str();
-		PrintWriter stackstream = new PrintWriter(stackoutstream);
+		final Str stackoutstream = new Str();
+		final PrintWriter stackstream = new PrintWriter(stackoutstream);
 		err.printStackTrace(stackstream);
 		stackstream.flush();
 		stackstream.close();
@@ -170,7 +171,7 @@ public class Str extends OutputStream {
 	 * @param len
 	 * @return
 	 */
-	public static String padRight(String str, int len) {
+	public static String padRight(String str, final int len) {
 		for (int i = str.length(); i < len; ++i) {
 			str += ' ';
 		}
@@ -185,7 +186,7 @@ public class Str extends OutputStream {
 	 * @param pad
 	 * @return
 	 */
-	public static String padRight(String str, int len, char pad) {
+	public static String padRight(String str, final int len, final char pad) {
 		for (int i = str.length(); i < len; ++i) {
 			str += pad;
 		}
@@ -199,7 +200,7 @@ public class Str extends OutputStream {
 	 * @param len
 	 * @return
 	 */
-	public static String padLeft(String str, int len) {
+	public static String padLeft(final String str, final int len) {
 		return repeat(' ', len - str.length()) + str;
 	}
 
@@ -211,7 +212,7 @@ public class Str extends OutputStream {
 	 * @param pad
 	 * @return
 	 */
-	public static String padLeft(String str, int len, char pad) {
+	public static String padLeft(final String str, final int len, final char pad) {
 		return repeat(pad, len - str.length()) + str;
 	}
 
@@ -222,9 +223,9 @@ public class Str extends OutputStream {
 	 * @param len
 	 * @return
 	 */
-	public static String padCenter(String str, int len) {
+	public static String padCenter(final String str, int len) {
 		len -= str.length();
-		int prepad = len / 2;
+		final int prepad = len / 2;
 		return repeat(' ', prepad) + str + repeat(' ', len - prepad);
 	}
 
@@ -236,13 +237,13 @@ public class Str extends OutputStream {
 	 * @param pad
 	 * @return
 	 */
-	public static String padCenter(String str, int len, char pad) {
+	public static String padCenter(final String str, int len, final char pad) {
 		len -= str.length();
-		int prepad = len / 2;
+		final int prepad = len / 2;
 		return repeat(pad, prepad) + str + repeat(pad, len - prepad);
 	}
 
-	public static String repeat(char ch, int len) {
+	public static String repeat(final char ch, final int len) {
 		String str = "";
 		for (int i = 0; i < len; ++i) {
 			str += ch;
@@ -257,7 +258,7 @@ public class Str extends OutputStream {
 	 * @param count
 	 * @return
 	 */
-	public static String repeat(String str, int count) {
+	public static String repeat(final String str, final int count) {
 		String retstr = "";
 		for (int i = 0; i < count; ++i) {
 			retstr += str;
@@ -266,12 +267,13 @@ public class Str extends OutputStream {
 	}
 
 	@Override
-	public void write(int b) throws IOException {
+	public void write(final int b) throws IOException {
 		text += (char) b;
 	}
 
-	public static String[] removePortionOfArray(String[] array, int from, int to, String replace) {
-		String[] newArray = new String[from + array.length - to - (replace == null ? 1 : 0)];
+	public static String[] removePortionOfArray(final String[] array, final int from, final int to,
+			final String replace) {
+		final String[] newArray = new String[from + array.length - to - (replace == null ? 1 : 0)];
 		System.arraycopy(array, 0, newArray, 0, from);
 		if (replace != null)
 			newArray[from] = replace;
@@ -280,8 +282,8 @@ public class Str extends OutputStream {
 		return newArray;
 	}
 
-	public static String[] removeCaseOfArray(String[] array, int index) {
-		String[] newArray = new String[array.length - 1];
+	public static String[] removeCaseOfArray(final String[] array, final int index) {
+		final String[] newArray = new String[array.length - 1];
 		for (int i = 0; i < index; i++)
 			newArray[i] = array[i];
 		for (int j = index + 1; j < array.length; j++)
@@ -289,8 +291,8 @@ public class Str extends OutputStream {
 		return newArray;
 	}
 
-	public static String[] concat(String[] A, String[] B) {
-		String[] C = new String[A.length + B.length];
+	public static String[] concat(final String[] A, final String[] B) {
+		final String[] C = new String[A.length + B.length];
 		System.arraycopy(A, 0, C, 0, A.length);
 		System.arraycopy(B, 0, C, A.length, B.length);
 
@@ -304,15 +306,15 @@ public class Str extends OutputStream {
 	 * @param search
 	 * @return
 	 */
-	public static String matchString(Collection<String> container, String search) {
+	public static String matchString(final Collection<String> container, final String search) {
 		String found = null;
 		if (search == null)
 			return found;
-		String lowerSearch = search.toLowerCase();
+		final String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
-		for (String str : container) {
+		for (final String str : container) {
 			if (str.toLowerCase().startsWith(lowerSearch)) {
-				int curDelta = str.length() - lowerSearch.length();
+				final int curDelta = str.length() - lowerSearch.length();
 				if (curDelta < delta) {
 					found = str;
 					delta = curDelta;

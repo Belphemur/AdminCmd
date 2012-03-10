@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class RemovePowerTask implements Runnable {
 
@@ -39,7 +39,7 @@ public class RemovePowerTask implements Runnable {
 	 * @param player
 	 * @param power
 	 */
-	public RemovePowerTask(ACPlayer player, Type power, CommandSender sender) {
+	public RemovePowerTask(final ACPlayer player, final Type power, final CommandSender sender) {
 		super();
 		this.player = player;
 		this.power = power;
@@ -48,17 +48,17 @@ public class RemovePowerTask implements Runnable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
 	public void run() {
 		player.removePower(power);
-		Player handler = player.getHandler();
+		final Player handler = player.getHandler();
 		if (handler != null)
 			Utils.sI18n(handler, "timeOutPower", "power", power.display());
 		if (!sender.equals(handler)) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("power", power.display());
 			replace.put("name", Utils.getPlayerName(handler));
 			Utils.sI18n(sender, "timeOutPowerSender", replace);

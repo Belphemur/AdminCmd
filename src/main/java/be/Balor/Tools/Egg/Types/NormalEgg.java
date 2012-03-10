@@ -43,7 +43,7 @@ public class NormalEgg extends EggType<Object> {
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 
 	}
 
@@ -55,7 +55,8 @@ public class NormalEgg extends EggType<Object> {
 	 * .CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player player, CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(final Player player, final CommandArgs args)
+			throws ProcessingArgsException {
 
 	}
 
@@ -65,7 +66,7 @@ public class NormalEgg extends EggType<Object> {
 	 * @see be.Balor.Tools.Egg.EggType#checkPermission(org.bukkit.entity.Player)
 	 */
 	@Override
-	protected boolean checkPermission(Player player) {
+	protected boolean checkPermission(final Player player) {
 		return true;
 	}
 

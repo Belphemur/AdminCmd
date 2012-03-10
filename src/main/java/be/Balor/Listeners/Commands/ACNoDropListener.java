@@ -42,7 +42,7 @@ public class ACNoDropListener implements Listener {
 	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
 
 	@EventHandler
-	public void onDrop(PlayerDropItemEvent event) {
+	public void onDrop(final PlayerDropItemEvent event) {
 		if (event.isCancelled())
 			return;
 		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.NO_DROP))
@@ -50,15 +50,15 @@ public class ACNoDropListener implements Listener {
 	}
 
 	@EventHandler
-	public void onDeath(EntityDeathEvent event) {
+	public void onDeath(final EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
-		Player p = (Player) event.getEntity();
-		ACPlayer player = ACPlayer.getPlayer(p);
+		final Player p = (Player) event.getEntity();
+		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.NO_DROP))
 			return;
 		final List<ItemStack> items = new ArrayList<ItemStack>();
-		for (ItemStack item : event.getDrops()) {
+		for (final ItemStack item : event.getDrops()) {
 			items.add(item.clone());
 			item.setAmount(0);
 		}
@@ -66,12 +66,12 @@ public class ACNoDropListener implements Listener {
 	}
 
 	@EventHandler
-	public void onRespawn(PlayerRespawnEvent event) {
-		Player p = event.getPlayer();
-		ACPlayer player = ACPlayer.getPlayer(p);
+	public void onRespawn(final PlayerRespawnEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.NO_DROP))
 			return;
-		List<ItemStack> items = itemsDrops.get(p);
+		final List<ItemStack> items = itemsDrops.get(p);
 		if (items == null)
 			return;
 		p.getInventory().addItem(items.toArray(new ItemStack[items.size()]));
@@ -79,7 +79,7 @@ public class ACNoDropListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onQuit(PlayerQuitEvent event) {
+	public void onQuit(final PlayerQuitEvent event) {
 		itemsDrops.remove(event.getPlayer());
 	}
 }

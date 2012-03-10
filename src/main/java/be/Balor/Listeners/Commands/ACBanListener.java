@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  */
 public class ACBanListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
+	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (!event.getResult().equals(Result.ALLOWED))
 			return;
 		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());

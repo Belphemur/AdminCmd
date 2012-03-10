@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
+
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
@@ -42,23 +43,31 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPluginListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPluginDisable(PluginDisableEvent event) {
+	public void onPluginDisable(final PluginDisableEvent event) {
 		ACPluginManager.unRegisterACPlugin(event.getPlugin());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPluginEnable(PluginEnableEvent event) {
+	public void onPluginEnable(final PluginEnableEvent event) {
 		if (!PermissionManager.isPermissionsExSet()) {
 			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsEx");
 			if (Permissions != null) {
 				if (Permissions.isEnabled())
 					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+			}
+		}
+		if (!PermissionManager.isGroupManagerSet()) {
+			final Plugin GMplugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("GroupManager");
+			if (GMplugin != null) {
+				if (GMplugin.isEnabled())
+					PermissionManager.setGroupManager(GMplugin);
 			}
 		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
@@ -75,9 +84,11 @@ public class ACPluginListener implements Listener {
 			if (plugin != null) {
 				String version = plugin.getDescription().getVersion();
 				version = version.replace(".", "");
-				int ver = Integer.parseInt(version);
+				final int ver = Integer.parseInt(version);
 				if (ver < 285) {
-					ACLogger.info("You are using bPermissions v" + plugin.getDescription().getVersion() + ". This is an outdated version, permission support for bPermission will be disabled.");
+					ACLogger.info("You are using bPermissions v"
+							+ plugin.getDescription().getVersion()
+							+ ". This is an outdated version, permission support for bPermission will be disabled.");
 					return;
 				}
 				PermissionManager.setbPermissions();

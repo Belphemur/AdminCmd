@@ -32,7 +32,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  */
 public class ACLockedServerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
+	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (!event.getResult().equals(Result.ALLOWED))
 			return;
 		if (ACHelper.getInstance().isServerLocked()

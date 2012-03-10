@@ -395,29 +395,29 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	@Override
 	protected void registerPermParents() {
 		permissionLinker.addPermParent(new PermParent("admincmd.item.*"));
-		PermParent player = new PermParent("admincmd.player.*");
+		final PermParent player = new PermParent("admincmd.player.*");
 		permissionLinker.addPermParent(player);
 		permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.time.*"));
-		PermParent tp = new PermParent("admincmd.tp.*");
-		PermParent worldTp = new PermParent("admincmd.tp.world.*");
+		final PermParent tp = new PermParent("admincmd.tp.*");
+		final PermParent worldTp = new PermParent("admincmd.tp.world.*");
 		permissionLinker.addPermParent(tp);
 		permissionLinker.addChildPermParent(worldTp, tp);
 		permissionLinker.addChildPermParent(new PermParent("admincmd.tp.toggle.*"), tp);
 		permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));
-		PermParent server = new PermParent("admincmd.server.*");
+		final PermParent server = new PermParent("admincmd.server.*");
 		permissionLinker.addPermParent(server);
-		PermParent sExec = new PermParent("admincmd.server.exec.*");
-		PermParent sSet = new PermParent("admincmd.server.set.*");
+		final PermParent sExec = new PermParent("admincmd.server.exec.*");
+		final PermParent sSet = new PermParent("admincmd.server.set.*");
 		permissionLinker.addChildPermParent(sExec, server);
 		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));
-		PermParent majorPerm = new PermParent("admincmd.*");
+		final PermParent majorPerm = new PermParent("admincmd.*");
 		permissionLinker.setMajorPerm(majorPerm);
 		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.item.noblacklist");
@@ -428,7 +428,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
-		for (World w : this.getServer().getWorlds())
+		for (final World w : this.getServer().getWorlds())
 			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {

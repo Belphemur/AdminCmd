@@ -29,7 +29,7 @@ import be.Balor.World.ACWorld;
  */
 public class ACWeatherListener implements Listener {
 	@EventHandler
-	public void onWeatherChange(WeatherChangeEvent event) {
+	public void onWeatherChange(final WeatherChangeEvent event) {
 		if (!ACWorld.getWorld(event.getWorld().getName())
 				.getInformation(Type.WEATHER_FROZEN.toString()).isNull())
 			event.setCancelled(true);

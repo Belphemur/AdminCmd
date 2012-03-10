@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
  * 
  */
 public class LogBlockRemanence extends BlockRemanence {
-	private String playerName;
+	private final String playerName;
 
 	/**
 	 * @param loc
@@ -36,21 +36,21 @@ public class LogBlockRemanence extends BlockRemanence {
 	 * @param playerName
 	 * @param logblock
 	 */
-	public LogBlockRemanence(Location loc, String playerName) {
+	public LogBlockRemanence(final Location loc, final String playerName) {
 		super(loc);
 		this.playerName = playerName;
 	}
 
 	@Override
 	public Block returnToThePast() {
-		Block result = super.returnToThePast();
+		final Block result = super.returnToThePast();
 		Utils.logBlock.queueBlockPlace(playerName, result.getState());
 		return result;
 	}
 
 	@Override
-	public void setBlockType(int type) {
-		Block current = loc.getWorld().getBlockAt(loc);
+	public void setBlockType(final int type) {
+		final Block current = loc.getWorld().getBlockAt(loc);
 		Utils.logBlock.queueBlockBreak(playerName, current.getState());
 		current.setTypeId(type, true);
 	}

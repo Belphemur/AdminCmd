@@ -44,10 +44,10 @@ public class DeleteHome extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
-			be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
-			if(home == null)
+			final be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
+			if (home == null)
 				return;
 			ACPlayer.getPlayer(home.player).removeHome(home.home);
 			Utils.sI18n(sender, "rmHome", "home", home.home);
@@ -61,7 +61,7 @@ public class DeleteHome extends HomeCommand {
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 }

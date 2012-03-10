@@ -36,16 +36,16 @@ public class CommandArgs implements Iterable<String> {
 	protected final Set<Character> booleanFlags = new HashSet<Character>();
 	public int length;
 
-	public CommandArgs(String args) {
+	public CommandArgs(final String args) {
 		this(args.split(" "));
 	}
 
 	/**
 		 * 
 		 */
-	public CommandArgs(String[] args) {
-		List<Integer> argIndexList = new ArrayList<Integer>(args.length);
-		List<String> argList = new ArrayList<String>(args.length);
+	public CommandArgs(final String[] args) {
+		final List<Integer> argIndexList = new ArrayList<Integer>(args.length);
+		final List<String> argList = new ArrayList<String>(args.length);
 		for (int i = 0; i < args.length; ++i) {
 			String arg = args[i];
 			if (arg.length() == 0) {
@@ -90,16 +90,16 @@ public class CommandArgs implements Iterable<String> {
 		}
 		// Then flags
 
-		List<Integer> originalArgIndices = new ArrayList<Integer>(argIndexList.size());
+		final List<Integer> originalArgIndices = new ArrayList<Integer>(argIndexList.size());
 		this.parsedArgs = new ArrayList<String>(argList.size());
 
 		for (int nextArg = 0; nextArg < argList.size();) {
 			// Fetch argument
-			String arg = argList.get(nextArg++);
+			final String arg = argList.get(nextArg++);
 
 			if (arg.charAt(0) == '-' && arg.length() > 1 && arg.matches("^-[a-zA-Z]+$")) {
 				for (int i = 1; i < arg.length(); ++i) {
-					char flagName = arg.charAt(i);
+					final char flagName = arg.charAt(i);
 					if (this.valueFlags.containsKey(flagName)) {
 						continue;
 					}
@@ -119,10 +119,10 @@ public class CommandArgs implements Iterable<String> {
 		this.length = parsedArgs.size();
 	}
 
-	public String getString(int index) {
+	public String getString(final int index) {
 		try {
 			return parsedArgs.get(index);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (final IndexOutOfBoundsException e) {
 			return null;
 		}
 
@@ -135,7 +135,7 @@ public class CommandArgs implements Iterable<String> {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public int getInt(int index) throws NumberFormatException {
+	public int getInt(final int index) throws NumberFormatException {
 		return Integer.parseInt(getString(index));
 	}
 
@@ -146,7 +146,7 @@ public class CommandArgs implements Iterable<String> {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public float getFloat(int index) throws NumberFormatException {
+	public float getFloat(final int index) throws NumberFormatException {
 		return Float.parseFloat(getString(index));
 	}
 
@@ -157,7 +157,7 @@ public class CommandArgs implements Iterable<String> {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public double getDouble(int index) throws NumberFormatException {
+	public double getDouble(final int index) throws NumberFormatException {
 		return Double.parseDouble(getString(index));
 	}
 
@@ -168,7 +168,7 @@ public class CommandArgs implements Iterable<String> {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public long getLong(int index) throws NumberFormatException {
+	public long getLong(final int index) throws NumberFormatException {
 		return Long.parseLong(getString(index));
 	}
 
@@ -179,7 +179,7 @@ public class CommandArgs implements Iterable<String> {
 	 *            flag to be searched
 	 * @return true if found.
 	 */
-	public boolean hasFlag(char ch) {
+	public boolean hasFlag(final char ch) {
 		return booleanFlags.contains(ch) || valueFlags.containsKey(ch);
 	}
 
@@ -190,8 +190,8 @@ public class CommandArgs implements Iterable<String> {
 	 *            flag to look for.
 	 * @return null if not found else the value of the flag
 	 */
-	public String getValueFlag(char ch) {
-		String result = valueFlags.get(ch);
+	public String getValueFlag(final char ch) {
+		final String result = valueFlags.get(ch);
 		if (result == null)
 			return null;
 		if (parsedArgs.remove(result))
@@ -212,8 +212,8 @@ public class CommandArgs implements Iterable<String> {
 	}
 
 	private String valueFlagsToString() {
-		StringBuffer buffer = new StringBuffer();
-		for (Entry<Character, String> entry : valueFlags.entrySet()) {
+		final StringBuffer buffer = new StringBuffer();
+		for (final Entry<Character, String> entry : valueFlags.entrySet()) {
 			buffer.append(entry.getKey()).append("->").append(entry.getValue()).append(", ");
 		}
 		buffer.deleteCharAt(buffer.length() - 1).deleteCharAt(buffer.length() - 1);

@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Freeze extends PlayerCommand {
 
@@ -45,19 +45,19 @@ public class Freeze extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		String timeOut = args.getValueFlag('t');
-		Player player = sender.getServer().getPlayer(args.getString(0));
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final String timeOut = args.getValueFlag('t');
+		final Player player = sender.getServer().getPlayer(args.getString(0));
 		if (player != null) {
-			HashMap<String, String> replace = new HashMap<String, String>();
+			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
-			ACPlayer acp = ACPlayer.getPlayer(player);
+			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.FROZEN)) {
 				acp.removePower(Type.FROZEN);
 				Utils.sI18n(player, "freezeDisabled");
@@ -73,12 +73,13 @@ public class Freeze extends PlayerCommand {
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FROZEN, sender),
+						ACPluginManager.getCorePlugin(),
+						new RemovePowerTask(acp, Type.FROZEN, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
@@ -87,11 +88,11 @@ public class Freeze extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

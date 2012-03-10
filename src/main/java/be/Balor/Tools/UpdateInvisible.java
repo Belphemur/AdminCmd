@@ -30,13 +30,13 @@ public class UpdateInvisible implements Runnable {
 	/**
 	 * 
 	 */
-	public UpdateInvisible(Player p) {
+	public UpdateInvisible(final Player p) {
 		toVanish = p;
 	}
 
 	@Override
 	public void run() {
-		for (Player p : Utils.getOnlinePlayers())
+		for (final Player p : Utils.getOnlinePlayers())
 			InvisibleWorker.getInstance().invisible(toVanish, p);
 	}
 }

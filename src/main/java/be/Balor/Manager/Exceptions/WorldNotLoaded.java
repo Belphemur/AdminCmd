@@ -18,7 +18,7 @@ package be.Balor.Manager.Exceptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class WorldNotLoaded extends IllegalArgumentException {
 
@@ -36,14 +36,14 @@ public class WorldNotLoaded extends IllegalArgumentException {
 	/**
 	 * @param s
 	 */
-	public WorldNotLoaded(String s) {
+	public WorldNotLoaded(final String s) {
 		super(s);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public WorldNotLoaded(Throwable cause) {
+	public WorldNotLoaded(final Throwable cause) {
 		super(cause);
 	}
 
@@ -51,7 +51,7 @@ public class WorldNotLoaded extends IllegalArgumentException {
 	 * @param message
 	 * @param cause
 	 */
-	public WorldNotLoaded(String message, Throwable cause) {
+	public WorldNotLoaded(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 

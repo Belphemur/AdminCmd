@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BanPlayer extends PlayerCommand {
 
@@ -47,15 +47,15 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Player toBan = sender.getServer().getPlayer(args.getString(0));
-		HashMap<String, String> replace = new HashMap<String, String>();
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Player toBan = sender.getServer().getPlayer(args.getString(0));
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		String banPlayerString;
 		if (toBan != null) {
@@ -78,7 +78,7 @@ public class BanPlayer extends PlayerCommand {
 			}
 			try {
 				tmpBan = args.getInt(args.length - 1);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				if (!args.hasFlag('m'))
 					message += args.getString(args.length - 1);
 			}
@@ -91,7 +91,7 @@ public class BanPlayer extends PlayerCommand {
 							@Override
 							public void run() {
 								ACHelper.getInstance().unBanPlayer(unban);
-								String unbanMsg = Utils.I18n("unban", "player", unban);
+								final String unbanMsg = Utils.I18n("unban", "player", unban);
 								if (unbanMsg != null)
 									Utils.broadcastMessage(unbanMsg);
 							}
@@ -130,11 +130,11 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 

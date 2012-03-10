@@ -45,9 +45,9 @@ public class Uptime extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) {
-		Long[] time = ACHelper.getElapsedTime();
-		HashMap<String, String> replace = new HashMap<String, String>();
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final Long[] time = ACHelper.getElapsedTime();
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());
 		replace.put("h", time[1].toString());
 		replace.put("m", time[2].toString());
@@ -61,7 +61,7 @@ public class Uptime extends ServerCommand {
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 
