@@ -20,7 +20,9 @@ import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import in.mDev.MiracleM4n.mChatSuite.api.InfoType;
 import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
@@ -164,10 +166,15 @@ public class SuperPermissions implements IPermissionPlugin {
 				DebugLog.INSTANCE.log(Level.WARNING,
 						"Problem to get Permission of the user " + p.getName(), e);
 			}
+			int max = Integer.MIN_VALUE;
 			for (final PermissionAttachmentInfo info : perms) {
 				final Matcher regexMatcher = regex.matcher(info.getPermission());
-				if (regexMatcher.find())
-					return info.getPermission().split("\\.")[2];
+				if (!regexMatcher.find())
+					continue;
+				int current = Integer.parseInt(info.getPermission().split("\\.")[2]);
+				if (current < max)
+					continue;
+				max = current;
 
 			}
 		} else
