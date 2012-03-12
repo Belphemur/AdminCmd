@@ -175,6 +175,8 @@ public class SuperPermissions implements IPermissionPlugin {
 				max = current;
 
 			}
+			if(max != Integer.MIN_VALUE)
+			    return String.valueOf(max);
 		} else
 			return result;
 		return null;
