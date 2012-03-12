@@ -43,6 +43,7 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.UpdateInvisible;
@@ -57,7 +58,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -207,7 +208,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (event.getResult().equals(Result.ALLOWED))
 			return;
-		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false))
+		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false) && event.getResult() == Result.KICK_FULL)
 			event.allow();
 	}
 
@@ -224,7 +225,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
+			 *
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
