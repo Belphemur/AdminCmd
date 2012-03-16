@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -40,12 +40,12 @@ import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class EggSpawner extends MobCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public EggSpawner() {
 		this.cmdName = "bal_egg";
@@ -53,7 +53,7 @@ public class EggSpawner extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -94,6 +94,18 @@ public class EggSpawner extends MobCommand {
 		} catch (final DontHaveThePermissionException e) {
 			sender.sendMessage(e.getMessage());
 			return;
+		} catch (final NullPointerException e) {
+			if (args.hasFlag('E')) {
+				final String list = Joiner.on(", ").skipNulls()
+						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
+				sender.sendMessage(e.getMessage());
+				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
+				sender.sendMessage(ChatColor.YELLOW + list);
+			} else {
+				Utils.sI18n(sender, "eggNoParamGiven");
+				sender.sendMessage(e.getMessage());
+			}
+			return;
 		}
 		if (egg instanceof NormalEgg) {
 			acp.removePower(Type.EGG);
@@ -107,7 +119,7 @@ public class EggSpawner extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
 	 * .CommandSender)
@@ -119,7 +131,7 @@ public class EggSpawner extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
