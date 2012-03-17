@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -57,7 +57,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class CommandManager implements CommandExecutor {
 	private class NormalCommand implements Runnable {
@@ -74,7 +74,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -98,7 +98,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -116,7 +116,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -134,7 +134,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -184,7 +184,7 @@ public class CommandManager implements CommandExecutor {
 	private final HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
 
 	/**
-	 * 
+	 *
 	 */
 	private CommandManager() {
 
@@ -218,7 +218,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Check the command if it have alias, prioritized or disabled.
-	 * 
+	 *
 	 * @param command
 	 * @throws CommandDisabled
 	 */
@@ -240,7 +240,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Used to execute ACCommands
-	 * 
+	 *
 	 * @param sender
 	 * @param cmd
 	 * @param args
@@ -274,14 +274,14 @@ public class CommandManager implements CommandExecutor {
 			ACLogger.severe(container != null ? container.debug() : "The container is null", t);
 			Utils.broadcastMessage("[AdminCmd] " + container != null ? container.debug()
 					: cmd.getCmdName()
-							+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/");
+							+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/");
 			return false;
 		}
 	}
 
 	/**
 	 * Getting the private field of a another class;
-	 * 
+	 *
 	 * @param object
 	 * @param field
 	 * @return
@@ -330,7 +330,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Register command from plugin
-	 * 
+	 *
 	 * @param plugin
 	 */
 	public void registerACPlugin(final AbstractAdminCmdPlugin plugin) {
@@ -343,7 +343,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Register command
-	 * 
+	 *
 	 * @param clazz
 	 */
 	public boolean registerCommand(final Class<? extends CoreCommand> clazz) {
@@ -438,7 +438,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Unregister a command from bukkit.
-	 * 
+	 *
 	 * @param cmd
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand cmd) {
@@ -467,7 +467,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * UnRegister command
-	 * 
+	 *
 	 * @param clazz
 	 *            command to unregister
 	 * @param plugin
