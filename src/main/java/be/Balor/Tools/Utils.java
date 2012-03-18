@@ -1090,7 +1090,7 @@ public class Utils {
 
 	public static void sParsedLocale(final Player p, final String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", p.getName());
+		replace.put("player", getPlayerName(p));
 		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
 		final long total = acPlayer.getCurrentPlayedTime();
 		final Long[] time = Utils.transformToElapsedTime(total);
