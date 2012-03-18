@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -61,7 +61,8 @@ public enum LocaleHelper {
 	PLAYER_KICKED("playerKicked", ChatColor.GOLD + "%player " + ChatColor.YELLOW
 			+ "has been kicked from the Server, reason:" + ChatColor.RED + " %reason"),
 	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " + ChatColor.YELLOW
-			+ "left the game: %reason");
+			+ "left the game: %reason"),
+	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED + "The world you wanted to teleport to is not loaded!");
 
 	private final String key;
 	private final String locale;
@@ -85,7 +86,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -97,7 +98,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -107,7 +108,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 * 
+	 *
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -118,7 +119,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 * 
+	 *
 	 * @return the locale
 	 */
 	public String getLocale() {
