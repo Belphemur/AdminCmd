@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -28,25 +28,28 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 class HelpEntry {
 	private final String command;
 	private final String description;
+	private final String detailedDesc;
 	private final List<String> permissions;
 	private final String commandName;
 
 	/**
 	 * @param command
 	 * @param description
+	 * @param detailedDesc
 	 * @param permissions
 	 * @param commandName
 	 */
-	HelpEntry(final String command, final String description, final List<String> permissions,
-			final String commandName) {
+	HelpEntry(final String command, final String description, final String detailedDesc,
+			final List<String> permissions,	final String commandName) {
 		super();
 		this.command = command;
 		this.description = description;
+		this.detailedDesc = detailedDesc;
 		this.permissions = permissions;
 		this.commandName = commandName;
 	}
@@ -71,15 +74,23 @@ class HelpEntry {
 				.replace("]", "]" + ChatColor.GOLD);
 	}
 
-	public String chatString() {
+	public String chatString(boolean detailed) {
 		String line = getFormatedCmd();
 
 		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
-		final int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
-		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
-						"]" + ChatColor.WHITE), sizeRemaining, ' ');
+		int descriptionSize;
+		if (detailed && !detailedDesc.equals("")) {
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(detailedDesc);
+			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
+					detailedDesc.replace("[", ChatColor.DARK_RED + "[").replace("]",
+							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+		} else {
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
+					description.replace("[", ChatColor.DARK_RED + "[").replace("]",
+							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strChatTrim(line);
@@ -92,15 +103,23 @@ class HelpEntry {
 		}
 	}
 
-	public String consoleString() {
+	public String consoleString(boolean detailed) {
 		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
 		String line = getFormatedCmd();
 
 		final int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
-		final int descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
-		line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-				description.replace("[", ChatColor.DARK_RED + "[").replace("]",
-						"]" + ChatColor.WHITE), sizeRemaining, ' ');
+		int descriptionSize;
+		if (detailed && !detailedDesc.equals("")) {
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(detailedDesc);
+			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
+					detailedDesc.replace("[", ChatColor.DARK_RED + "[").replace("]",
+							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+		} else {
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
+					description.replace("[", ChatColor.DARK_RED + "[").replace("]",
+							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strTrim(line, width);
@@ -139,5 +158,12 @@ class HelpEntry {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * @return the detailed description
+	 */
+	public String getDetailedDesc() {
+		return detailedDesc;
 	}
 }

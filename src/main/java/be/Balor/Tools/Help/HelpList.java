@@ -89,8 +89,8 @@ class HelpList {
 						&& !(value.get("permissions").equals("")))
 					perms.add(value.get("permissions").toString());
 				final String desc = value.get("description").toString();
-				list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, new ArrayList<String>(
-						perms), k.getKey()));
+				list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, "",
+						new ArrayList<String>(perms), k.getKey()));
 				perms.clear();
 			}
 			this.pluginHelp = list;
@@ -137,9 +137,11 @@ class HelpList {
 	 *            int the wanted page
 	 * @param sender
 	 *            CommandSender the sender of the command
+	 * @param detailed
+	 *            If true the detailed description will be displayed if one exists
 	 * @return
 	 */
-	public List<String> getPage(int page, final CommandSender sender) {
+	public List<String> getPage(int page, final CommandSender sender, final boolean detailed) {
 		final int entryPerPage = ConfigEnum.H_ENTRY.getInt();
 		final List<String> helpList = new ArrayList<String>();
 		checkPermissions(sender);
@@ -155,16 +157,19 @@ class HelpList {
 		if (Utils.isPlayer(sender, false)) {
 			for (int i = start; i < end; i++) {
 				final HelpEntry he = array[i];
-				helpList.add(he.chatString());
+				helpList.add(he.chatString(detailed));
 			}
 		} else {
 			for (int i = start; i < end; i++) {
 				final HelpEntry he = array[i];
-				helpList.add(he.consoleString());
+				helpList.add(he.consoleString(detailed));
 			}
 		}
 		return helpList;
+	}
 
+	public List<String> getPage(int page, final CommandSender sender) {
+			return getPage(page, sender, false);
 	}
 
 	/**
@@ -175,9 +180,12 @@ class HelpList {
 	 *            command to search
 	 * @param sender
 	 *            sender of the command (used for checking the permission)
+	 * @param detailed
+	 *            If true the detailed description will be displayed if one exists
 	 * @return the chat String to display to the user, <b>null</b> if not found
 	 */
-	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender) {
+	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender,
+			final boolean detailed) {
 		final List<HelpEntry> result = new ArrayList<HelpEntry>();
 		if (cmd == null)
 			return null;
@@ -201,6 +209,10 @@ class HelpList {
 
 		lastCommandSearched = new CmdMatch(cmd, result);
 		return result;
+	}
+
+	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender) {
+		return getCommandMatch(cmd, sender, false);
 	}
 
 	private static class EntryNameComparator implements Comparator<HelpEntry> {
