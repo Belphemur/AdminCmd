@@ -14,33 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners.Commands;
+package be.Balor.Listeners.Events;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import be.Balor.Listeners.Events.ACTeleportEvent;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Debug.DebugLog;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
-public class ACTeleportBackListener implements Listener {
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerTeleport(final PlayerTeleportEvent event) {
-		if (event.isCancelled())
-			return;
-		if (event instanceof ACTeleportEvent) {
-			DebugLog.INSTANCE.info("Custom teleport event used");
-			return;
-		}
-		if (event.getCause() != TeleportCause.PLUGIN)
-			return;
-		ACPlayer.getPlayer(event.getPlayer()).setLastLocation(event.getFrom());
+public class ACTeleportEvent extends PlayerTeleportEvent {
+
+	/**
+	 * @param player
+	 * @param from
+	 * @param to
+	 */
+	public ACTeleportEvent(Player player, Location from, Location to) {
+		super(player, from, to);
 	}
+
+	/**
+	 * @param player
+	 * @param from
+	 * @param to
+	 * @param cause
+	 */
+	public ACTeleportEvent(Player player, Location from, Location to, TeleportCause cause) {
+		super(player, from, to, cause);
+	}
+
 }

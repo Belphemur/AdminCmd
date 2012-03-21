@@ -1058,7 +1058,7 @@ public class ACHelper {
 		loc = ACWorld.getWorld(worldName).getSpawn();
 		if (loc == null)
 			loc = player.getWorld().getSpawnLocation();
-		Utils.doTeleportWithChunkCheck(player, loc);
+		Utils.teleportWithChunkCheck(player, loc);
 	}
 
 	/**

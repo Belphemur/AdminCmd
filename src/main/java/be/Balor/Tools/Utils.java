@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
@@ -50,8 +51,11 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -82,7 +86,7 @@ import de.diddiz.LogBlock.Consumer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static class SetTime implements Runnable {
@@ -108,7 +112,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -145,7 +149,7 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	public final static int MAX_BLOCKS = 512;
@@ -160,7 +164,7 @@ public class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -193,7 +197,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
@@ -208,7 +212,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -223,7 +227,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(final String message) {
@@ -236,7 +240,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -284,7 +288,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -320,7 +324,7 @@ public class Utils {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 */
@@ -352,7 +356,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -382,7 +386,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -445,7 +449,7 @@ public class Utils {
 
 	/**
 	 * Get the ACPlayer, useful when working with only the AC user informations
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -489,7 +493,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -499,7 +503,7 @@ public class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -537,7 +541,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -577,7 +581,7 @@ public class Utils {
 
 	/**
 	 * For compatibility
-	 *
+	 * 
 	 * @param player
 	 * @param sender
 	 * @param withPrefix
@@ -590,7 +594,7 @@ public class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -617,7 +621,7 @@ public class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -642,7 +646,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -664,7 +668,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -708,7 +712,7 @@ public class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -727,7 +731,7 @@ public class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -798,7 +802,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -812,7 +816,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(final CommandSender sender) {
@@ -831,7 +835,7 @@ public class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -882,7 +886,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -908,7 +912,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -972,7 +976,7 @@ public class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -1255,7 +1259,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -1411,15 +1415,34 @@ public class Utils {
 
 	/**
 	 * Check if the chunk is loaded before teleport the player to the location
-	 *
+	 * 
 	 * @param player
 	 *            player to be teleported
 	 * @param loc
 	 *            location where the player will be tp
 	 */
-	public static void doTeleportWithChunkCheck(final Player player, final Location loc) {
+	public static void teleportWithChunkCheck(final Player player, final Location loc) {
+		CraftServer server = ((CraftServer) player.getServer());
+		PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
+				TeleportCause.COMMAND);
+		server.getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			return;
 		if (!loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
 			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
-		player.teleport(loc);
+		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
+		WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
+		WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
+		EntityPlayer entity = ((CraftPlayer) player).getHandle();
+		// Check if the fromWorld and toWorld are the same.
+		if (fromWorld == toWorld) {
+			entity.netServerHandler.teleport(loc);
+		} else {
+			// Close any foreign inventory
+			if (entity.activeContainer != entity.defaultContainer) {
+				entity.closeInventory();
+			}
+			server.getHandle().moveToWorld(entity, toWorld.dimension, true, loc);
+		}
 	}
 }

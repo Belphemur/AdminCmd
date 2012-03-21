@@ -44,7 +44,7 @@ public class TeleportTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		Utils.doTeleportWithChunkCheck(player, loc);
+		Utils.teleportWithChunkCheck(player, loc);
 	}
 
 }

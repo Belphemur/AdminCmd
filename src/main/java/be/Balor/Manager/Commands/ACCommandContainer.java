@@ -26,7 +26,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACCommandContainer {
 	private final CommandSender sender;
@@ -57,7 +57,7 @@ public class ACCommandContainer {
 
 	/**
 	 * Execute the command
-	 *
+	 * 
 	 * @throws PlayerNotFound
 	 */
 	public void execute() throws PlayerNotFound {
@@ -72,7 +72,7 @@ public class ACCommandContainer {
 
 	/**
 	 * Debug display
-	 *
+	 * 
 	 * @return
 	 */
 	public String debug() {
@@ -87,9 +87,16 @@ public class ACCommandContainer {
 				+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/";
 	}
 
+	/**
+	 * @return the sender
+	 */
+	public CommandSender getSender() {
+		return sender;
+	}
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

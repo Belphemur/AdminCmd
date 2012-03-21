@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class LastLocation extends TeleportCommand {
 
@@ -44,7 +44,7 @@ public class LastLocation extends TeleportCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
@@ -54,12 +54,7 @@ public class LastLocation extends TeleportCommand {
 			final Player player = (Player) sender;
 			Location loc = null;
 			final ACPlayer p = ACPlayer.getPlayer(player.getName());
-			try {
-				loc = p.getLastLocation();
-			} catch (WorldNotLoaded e) {
-				LocaleHelper.WORLD_NOT_LOADED.sendLocale(sender);
-				return;
-			}
+			loc = p.getLastLocation();
 			if (loc == null) {
 				Utils.sI18n(sender, "noLastLocation");
 				return;
@@ -74,7 +69,7 @@ public class LastLocation extends TeleportCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
