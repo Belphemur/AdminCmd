@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
@@ -46,7 +46,7 @@ class HelpList {
 	private CmdMatch lastCommandSearched;
 
 	/**
-	 * 
+	 *
 	 */
 	HelpList(final String plugin) {
 		this.pluginName = plugin;
@@ -96,6 +96,10 @@ class HelpList {
 			this.pluginHelp = list;
 		} catch (final Exception e) {
 			ACLogger.warning("[HELP] Problem with commands of " + pluginName);
+			DebugLog.INSTANCE.warning("[HELP] " + e.toString());
+			StackTraceElement[] trace = e.getStackTrace();
+			for (StackTraceElement element : trace)
+				DebugLog.INSTANCE.warning("[HELP] " + element.toString());
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
 
@@ -111,7 +115,7 @@ class HelpList {
 	/**
 	 * Process all help to check get only the command that the player have
 	 * access
-	 * 
+	 *
 	 * @param sender
 	 */
 	private void checkPermissions(final CommandSender sender) {
@@ -128,7 +132,7 @@ class HelpList {
 	/**
 	 * Get a list of the string to display for the wanted page, and the given
 	 * user
-	 * 
+	 *
 	 * @param page
 	 *            int the wanted page
 	 * @param sender
@@ -166,7 +170,7 @@ class HelpList {
 	/**
 	 * Get the command help of the wanted command by matching it in the list of
 	 * avaible commands.
-	 * 
+	 *
 	 * @param cmd
 	 *            command to search
 	 * @param sender
