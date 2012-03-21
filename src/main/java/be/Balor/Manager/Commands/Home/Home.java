@@ -96,12 +96,12 @@ public class Home extends HomeCommand {
 		@Override
 		public void run() {
 			if (!ConfigEnum.CHECKTP.getBoolean()) {
-				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
+				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
 				return;
 			}
 			if (locBefore.equals(target.getLocation())) {
-				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
+				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
 			} else {
 				Utils.sI18n(sender, "errorMoved", "cmdname", "Home");

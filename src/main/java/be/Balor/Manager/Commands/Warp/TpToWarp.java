@@ -162,10 +162,10 @@ public class TpToWarp extends WarpCommand {
 		@Override
 		public void run() {
 			if (locBefore.equals(target.getLocation()) && ConfigEnum.CHECKTP.getBoolean()) {
-				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
+				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else if (!ConfigEnum.CHECKTP.getBoolean()) {
-				Utils.doTeleportWithChunkCheck(target, teleportToLoc);
+				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else {
 				replace.clear();

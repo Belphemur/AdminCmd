@@ -1421,7 +1421,7 @@ public class Utils {
 	 * @param loc
 	 *            location where the player will be tp
 	 */
-	public static void doTeleportWithChunkCheck(final Player player, final Location loc) {
+	public static void teleportWithChunkCheck(final Player player, final Location loc) {
 		CraftServer server = ((CraftServer) player.getServer());
 		PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
 				TeleportCause.COMMAND);
