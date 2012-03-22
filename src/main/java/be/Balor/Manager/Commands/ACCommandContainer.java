@@ -84,7 +84,14 @@ public class ACCommandContainer {
 				+ (cmd != null ? cmd.getCmdName() : "command=null")
 				+ " "
 				+ (args != null ? args.toString() : "args=null")
-				+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/";
+				+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/";
+	}
+
+	/**
+	 * @return the sender
+	 */
+	public CommandSender getSender() {
+		return sender;
 	}
 
 	/*

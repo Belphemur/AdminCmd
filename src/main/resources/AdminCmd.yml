@@ -589,7 +589,8 @@ acserverrules:
 
 acserverset:
     command: set [-m|-r|-n|-u] [message]
-    description: "Change the message of motd|rules|news|motd for new user.\n Format options are the same for all 3, see acsetformat for more info."
+    description: "Change the message of motd|rules|news|motd for new user.\n Format options are the same for all 3, see /help -d set for more info."
+    detailed: "Format info for MOTD, NEWS and Rules:\n %player = new connected player's name, %nb = (number of player connected\n - invisibles players), %connected - name of all connected\n players not invisible, %time - current time. You can use color by\n typing & before the number of the color. The newline character is //n.\n Displaying the time a user has spent on your server is also\n possible with the following variables: %d %h %m %s."
     plugin: AdminCmd
     permissions: admincmd.server.set.*
     cmdname: bal_set

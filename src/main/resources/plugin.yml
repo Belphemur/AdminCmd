@@ -1,8 +1,8 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
 version: ${project.version} (BUILD ${git.build.time})
-authors: [Balor,Lathanael]
-softdepend: [MultiVerse,Permissions,BLAH,mChatSuite,OddItem,Spout,mcMMO,VirtualChest,HeroChat]
+authors: [Balor, Lathanael]
+softdepend: [MultiVerse,Permissions,mChatSuite,OddItem,Spout,mcMMO,VirtualChest,HeroChat,XrayInformer,HomeSpawnPlus,LogBlock,XXX]
 description: >
              This plugin implements the basic commands for running a server.
 commands:
@@ -317,7 +317,7 @@ commands:
   bal_help:
     description: Help command
     aliases: [help,ah]
-    usage: /<command> [Plugin] [#]
+    usage: "/<command> [Plugin] [#] <-s|-d> <cmdName>"
   bal_played:
     description: How many time the player have played on the server.
     aliases: [played, ptime]

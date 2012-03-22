@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
@@ -50,8 +51,11 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -1090,7 +1094,7 @@ public class Utils {
 
 	public static void sParsedLocale(final Player p, final String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", p.getName());
+		replace.put("player", getPlayerName(p));
 		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
 		final long total = acPlayer.getCurrentPlayedTime();
 		final Long[] time = Utils.transformToElapsedTime(total);
@@ -1417,9 +1421,28 @@ public class Utils {
 	 * @param loc
 	 *            location where the player will be tp
 	 */
-	public static void doTeleportWithChunkCheck(final Player player, final Location loc) {
-		if (!player.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
+	public static void teleportWithChunkCheck(final Player player, final Location loc) {
+		CraftServer server = ((CraftServer) player.getServer());
+		PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
+				TeleportCause.COMMAND);
+		server.getPluginManager().callEvent(event);
+		if (event.isCancelled())
+			return;
+		if (!loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
 			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
-		player.teleport(loc);
+		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
+		WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
+		WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
+		EntityPlayer entity = ((CraftPlayer) player).getHandle();
+		// Check if the fromWorld and toWorld are the same.
+		if (fromWorld == toWorld) {
+			entity.netServerHandler.teleport(loc);
+		} else {
+			// Close any foreign inventory
+			if (entity.activeContainer != entity.defaultContainer) {
+				entity.closeInventory();
+			}
+			server.getHandle().moveToWorld(entity, toWorld.dimension, true, loc);
+		}
 	}
 }

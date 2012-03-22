@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -31,7 +31,7 @@ import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class HelpLister {
 	private static HelpLister instance = null;
@@ -56,7 +56,7 @@ public class HelpLister {
 
 	/**
 	 * Add a plugin to the lister
-	 * 
+	 *
 	 * @param plugin
 	 */
 	public void addPlugin(final Plugin plugin) {
@@ -71,7 +71,7 @@ public class HelpLister {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the list of all registered plugin
 	 */
 	public Set<String> getPluginList() {
@@ -81,7 +81,7 @@ public class HelpLister {
 	/**
 	 * Add a new helpEntry for the wanted plugin. If the plugin is not found,
 	 * add it in the database.
-	 * 
+	 *
 	 * @param command
 	 *            command
 	 * @param description
@@ -93,14 +93,14 @@ public class HelpLister {
 	 * @param cmdName
 	 *            true name of the command
 	 */
-	public void addHelpEntry(final String command, final String description, final String plugin,
-			final List<String> permissions, final String cmdName) {
+	public void addHelpEntry(final String command, final String description, final String detailedDesc,
+			final String plugin, final List<String> permissions, final String cmdName) {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
 			help = new HelpList(plugin);
 			plugins.put(plugin, help);
 		}
-		help.addEntry(new HelpEntry(command, description, permissions, cmdName));
+		help.addEntry(new HelpEntry(command, description, detailedDesc, permissions, cmdName));
 	}
 
 	public boolean removeHelpEntry(final String plugin, final String commandName) {
@@ -114,7 +114,7 @@ public class HelpLister {
 
 	/**
 	 * Send the help for the given plugin.
-	 * 
+	 *
 	 * @param plugin
 	 *            name of the plugin
 	 * @param page
@@ -149,7 +149,7 @@ public class HelpLister {
 
 	/**
 	 * Send the help of the given command to the command sender.
-	 * 
+	 *
 	 * @param pluginName
 	 *            name of the plugin where to search for the command. If
 	 *            <b>NULL</b> search in every plugins.
@@ -160,7 +160,7 @@ public class HelpLister {
 	 * @return true if the command is found, else if not found.
 	 */
 	public boolean sendHelpCmd(final String pluginName, final String command,
-			final CommandSender sender) {
+			final CommandSender sender, final boolean detailed) {
 		List<HelpEntry> chat = null;
 		boolean found = false;
 		if (pluginName == null) {
@@ -168,7 +168,7 @@ public class HelpLister {
 				chat = plugin.getCommandMatch(command, sender);
 				if (chat.isEmpty())
 					continue;
-				displayHelpMessage(chat, plugin.getPluginName(), sender);
+				displayHelpMessage(chat, plugin.getPluginName(), sender, detailed);
 				found = true;
 			}
 			return found;
@@ -179,19 +179,30 @@ public class HelpLister {
 			chat = plugin.getCommandMatch(command, sender);
 			if (chat.isEmpty())
 				return false;
-			displayHelpMessage(chat, plugin.getPluginName(), sender);
+			displayHelpMessage(chat, plugin.getPluginName(), sender, detailed);
 		}
 		return true;
+	}
 
+	public boolean sendHelpCmd(final String pluginName, final String command,
+			final CommandSender sender) {
+		return sendHelpCmd(pluginName, command, sender, false);
 	}
 
 	private void displayHelpMessage(final List<HelpEntry> list, final String pluginName,
-			final CommandSender sender) {
+			final CommandSender sender, final boolean detailed) {
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
 						+ pluginName + " " + ChatColor.AQUA, '=') + "\n");
+		if (detailed) {
+			final HelpEntry entry = list.get(0);
+			final String chat = entry.chatString(detailed);
+			for (final String l : chat.split("\n"))
+				sender.sendMessage(l);
+			return;
+		}
 		for (final HelpEntry entry : list) {
-			final String chat = entry.chatString();
+			final String chat = entry.chatString(detailed);
 			for (final String l : chat.split("\n"))
 				sender.sendMessage(l);
 		}

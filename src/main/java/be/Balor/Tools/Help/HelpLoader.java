@@ -100,6 +100,12 @@ public class HelpLoader {
 						} catch (final NullPointerException e) {
 
 						}
+						String detailedDescription = "";
+						try {
+							detailedDescription = helpNode.get("detailed").toString();
+						} catch (NullPointerException e) {
+
+						}
 						final String commandName = helpNode.containsKey("cmdname") ? helpNode.get(
 								"cmdname").toString() : helpKey;
 						final String plugin = helpNode.containsKey("plugin") ? helpNode.get(
@@ -115,8 +121,8 @@ public class HelpLoader {
 								permissions.add(helpNode.get("permissions").toString());
 							}
 						}
-						HelpLister.getInstance().addHelpEntry(command, description, plugin,
-								permissions, commandName);
+						HelpLister.getInstance().addHelpEntry(command, description, detailedDescription,
+								plugin, permissions, commandName);
 						++num;
 						++count;
 					}

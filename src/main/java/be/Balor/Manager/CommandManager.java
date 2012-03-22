@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -54,6 +54,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -85,8 +86,7 @@ public class CommandManager implements CommandExecutor {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
 						new SyncCommand(acc));
 			} catch (final WorldNotLoaded e) {
-				ACLogger.severe("World not Loaded", e);
-				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
+				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender());
 			} catch (final PlayerNotFound e) {
 				e.getSender().sendMessage(e.getMessage());
 			} catch (final Throwable t) {
@@ -184,7 +184,7 @@ public class CommandManager implements CommandExecutor {
 	private final HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
 
 	/**
-	 * 
+	 *
 	 */
 	private CommandManager() {
 
@@ -274,7 +274,7 @@ public class CommandManager implements CommandExecutor {
 			ACLogger.severe(container != null ? container.debug() : "The container is null", t);
 			Utils.broadcastMessage("[AdminCmd] " + container != null ? container.debug()
 					: cmd.getCmdName()
-							+ " throw an Exception please report the log in a ticket : http://dev.bukkit.org/server-mods/admincmd/tickets/");
+							+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/");
 			return false;
 		}
 	}

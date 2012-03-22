@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
@@ -46,7 +46,7 @@ class HelpList {
 	private CmdMatch lastCommandSearched;
 
 	/**
-	 * 
+	 *
 	 */
 	HelpList(final String plugin) {
 		this.pluginName = plugin;
@@ -89,13 +89,17 @@ class HelpList {
 						&& !(value.get("permissions").equals("")))
 					perms.add(value.get("permissions").toString());
 				final String desc = value.get("description").toString();
-				list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, new ArrayList<String>(
-						perms), k.getKey()));
+				list.add(new HelpEntry(k.getKey(), desc == null ? "" : desc, "",
+						new ArrayList<String>(perms), k.getKey()));
 				perms.clear();
 			}
 			this.pluginHelp = list;
 		} catch (final Exception e) {
 			ACLogger.warning("[HELP] Problem with commands of " + pluginName);
+			DebugLog.INSTANCE.warning("[HELP] " + e.toString());
+			StackTraceElement[] trace = e.getStackTrace();
+			for (StackTraceElement element : trace)
+				DebugLog.INSTANCE.warning("[HELP] " + element.toString());
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
 
@@ -111,7 +115,7 @@ class HelpList {
 	/**
 	 * Process all help to check get only the command that the player have
 	 * access
-	 * 
+	 *
 	 * @param sender
 	 */
 	private void checkPermissions(final CommandSender sender) {
@@ -128,14 +132,16 @@ class HelpList {
 	/**
 	 * Get a list of the string to display for the wanted page, and the given
 	 * user
-	 * 
+	 *
 	 * @param page
 	 *            int the wanted page
 	 * @param sender
 	 *            CommandSender the sender of the command
+	 * @param detailed
+	 *            If true the detailed description will be displayed if one exists
 	 * @return
 	 */
-	public List<String> getPage(int page, final CommandSender sender) {
+	public List<String> getPage(int page, final CommandSender sender, final boolean detailed) {
 		final int entryPerPage = ConfigEnum.H_ENTRY.getInt();
 		final List<String> helpList = new ArrayList<String>();
 		checkPermissions(sender);
@@ -151,29 +157,35 @@ class HelpList {
 		if (Utils.isPlayer(sender, false)) {
 			for (int i = start; i < end; i++) {
 				final HelpEntry he = array[i];
-				helpList.add(he.chatString());
+				helpList.add(he.chatString(detailed));
 			}
 		} else {
 			for (int i = start; i < end; i++) {
 				final HelpEntry he = array[i];
-				helpList.add(he.consoleString());
+				helpList.add(he.consoleString(detailed));
 			}
 		}
 		return helpList;
+	}
 
+	public List<String> getPage(int page, final CommandSender sender) {
+			return getPage(page, sender, false);
 	}
 
 	/**
 	 * Get the command help of the wanted command by matching it in the list of
 	 * avaible commands.
-	 * 
+	 *
 	 * @param cmd
 	 *            command to search
 	 * @param sender
 	 *            sender of the command (used for checking the permission)
+	 * @param detailed
+	 *            If true the detailed description will be displayed if one exists
 	 * @return the chat String to display to the user, <b>null</b> if not found
 	 */
-	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender) {
+	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender,
+			final boolean detailed) {
 		final List<HelpEntry> result = new ArrayList<HelpEntry>();
 		if (cmd == null)
 			return null;
@@ -197,6 +209,10 @@ class HelpList {
 
 		lastCommandSearched = new CmdMatch(cmd, result);
 		return result;
+	}
+
+	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender) {
+		return getCommandMatch(cmd, sender, false);
 	}
 
 	private static class EntryNameComparator implements Comparator<HelpEntry> {

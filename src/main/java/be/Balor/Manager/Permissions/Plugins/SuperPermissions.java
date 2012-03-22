@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class SuperPermissions implements IPermissionPlugin {
 	protected static MInfoReader mChatInfo = null;
@@ -68,7 +68,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, java.lang.String, boolean)
@@ -89,7 +89,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
@@ -109,7 +109,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
@@ -121,7 +121,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
 	 * .String)
@@ -133,7 +133,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
 	 * .bukkit.entity.Player, java.lang.String)
@@ -164,12 +164,19 @@ public class SuperPermissions implements IPermissionPlugin {
 				DebugLog.INSTANCE.log(Level.WARNING,
 						"Problem to get Permission of the user " + p.getName(), e);
 			}
+			int max = Integer.MIN_VALUE;
 			for (final PermissionAttachmentInfo info : perms) {
-				final Matcher regexMatcher = regex.matcher(info.getPermission());
-				if (regexMatcher.find())
-					return info.getPermission().split("\\.")[2];
+				final Matcher regexMatcher = regex.matcher(info.getPermission().toLowerCase());
+				if (!regexMatcher.find())
+					continue;
+				int current = Integer.parseInt(info.getPermission().split("\\.")[2]);
+				if (current < max)
+					continue;
+				max = current;
 
 			}
+			if(max != Integer.MIN_VALUE)
+			    return String.valueOf(max);
 		} else
 			return result;
 		return null;
@@ -177,7 +184,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(java.lang.String
 	 * , java.lang.String)
@@ -193,7 +200,7 @@ public class SuperPermissions implements IPermissionPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
 	 * .Player)

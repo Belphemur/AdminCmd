@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -29,12 +29,12 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Help extends ServerCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public Help() {
 		permNode = "admincmd.server.help";
@@ -43,7 +43,7 @@ public class Help extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
@@ -77,6 +77,15 @@ public class Help extends ServerCommand {
 				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			return;
 		}
+		final String cmd2 = args.getValueFlag('d');
+		if (cmd2 != null) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("type", LocaleHelper.TYPE_CMD.getLocale());
+			replace.put("value", cmd2);
+			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd2, sender, true))
+				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
+			return;
+		}
 		int page = 1;
 		try {
 			page = args.getInt(0);
@@ -99,7 +108,7 @@ public class Help extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

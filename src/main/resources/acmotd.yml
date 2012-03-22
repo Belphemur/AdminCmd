@@ -1,8 +1,0 @@
-#version: ${git.commit.id}
-#Made by Lathanael
-acsetformat:
-    command: acsetformat
-    description: "Format info for MOTD, NEWS and Rules:\n %player = new connected player's name, %nb = (number of player connected\n - invisibles players), %connected - name of all connected\n players not invisible, %time - current time. You can use color by\n typing & before the number of the color. The newline character is //n.\n Displaying the time a user has spent on your server is also\n posibble with the following variables: %d %h %m %s."
-    plugin: AdminCmd
-    permissions: admincmd.server.set
-    main: false

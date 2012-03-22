@@ -47,7 +47,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Memory extends ServerCommand {
 	private final PermChild full, animal, xp, item, mob, npc, cart, boat, vehicle;
@@ -71,7 +71,7 @@ public class Memory extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -97,7 +97,8 @@ public class Memory extends ServerCommand {
 		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm()))
 			return;
 		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
-				|| args.hasFlag('a') || args.hasFlag('n')) {
+				|| args.hasFlag('a') || args.hasFlag('n') || args.hasFlag('v') || args.hasFlag('c')
+				|| args.hasFlag('b')) {
 			int count = 0;
 			final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
 					sender.getServer().getWorlds().size());
@@ -170,7 +171,7 @@ public class Memory extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -180,7 +181,7 @@ public class Memory extends ServerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
@@ -213,7 +214,7 @@ public class Memory extends ServerCommand {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
