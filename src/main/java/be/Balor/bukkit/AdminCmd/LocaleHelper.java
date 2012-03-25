@@ -63,7 +63,7 @@ public enum LocaleHelper {
 	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " + ChatColor.YELLOW
 			+ "left the game: %reason"),
 	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED
-			+ "The world you wanted to teleport to is not loaded!");
+			+ "This World is not loaded !");
 
 	private final String key;
 	private final String locale;
