@@ -166,7 +166,15 @@ public class PermissionsEx extends SuperPermissions {
 	 */
 	@Override
 	public String getPrefix(final Player player) {
-		final PermissionUser user = PEX.getUser(player);
+		PermissionUser user = null;
+		try {
+			user = PEX.getUser(player);
+		} catch (Exception e) {
+			DebugLog.INSTANCE.log(Level.SEVERE,
+					"Problem when trying to get the prefix of the user " + player.getName(), e);
+			return "";
+		}
+
 		if (user != null)
 			return user.getPrefix() == null ? "" : user.getPrefix();
 
