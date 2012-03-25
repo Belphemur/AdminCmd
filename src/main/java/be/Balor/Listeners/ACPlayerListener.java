@@ -172,7 +172,7 @@ public class ACPlayerListener implements Listener {
 						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
 							Utils.sParsedLocale(p, "Rules");
 						if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
-								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle", false))
+								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle.allow", false))
 							player.setPower(Type.TP_REQUEST);
 
 					}
