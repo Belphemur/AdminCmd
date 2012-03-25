@@ -22,7 +22,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACTeleportEvent extends PlayerTeleportEvent {
 
@@ -31,7 +31,7 @@ public class ACTeleportEvent extends PlayerTeleportEvent {
 	 * @param from
 	 * @param to
 	 */
-	public ACTeleportEvent(Player player, Location from, Location to) {
+	public ACTeleportEvent(final Player player, final Location from, final Location to) {
 		super(player, from, to);
 	}
 
@@ -41,7 +41,8 @@ public class ACTeleportEvent extends PlayerTeleportEvent {
 	 * @param to
 	 * @param cause
 	 */
-	public ACTeleportEvent(Player player, Location from, Location to, TeleportCause cause) {
+	public ACTeleportEvent(final Player player, final Location from, final Location to,
+			final TeleportCause cause) {
 		super(player, from, to, cause);
 	}
 

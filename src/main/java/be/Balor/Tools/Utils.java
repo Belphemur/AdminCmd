@@ -1422,8 +1422,8 @@ public class Utils {
 	 *            location where the player will be tp
 	 */
 	public static void teleportWithChunkCheck(final Player player, final Location loc) {
-		CraftServer server = ((CraftServer) player.getServer());
-		PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
+		final CraftServer server = ((CraftServer) player.getServer());
+		final PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
 				TeleportCause.COMMAND);
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled())
@@ -1431,9 +1431,9 @@ public class Utils {
 		if (!loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
 			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
-		WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
-		WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
-		EntityPlayer entity = ((CraftPlayer) player).getHandle();
+		final WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
+		final WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
+		final EntityPlayer entity = ((CraftPlayer) player).getHandle();
 		// Check if the fromWorld and toWorld are the same.
 		if (fromWorld == toWorld) {
 			entity.netServerHandler.teleport(loc);

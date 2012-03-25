@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class LastLocation extends TeleportCommand {
 
@@ -42,7 +42,7 @@ public class LastLocation extends TeleportCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
@@ -67,7 +67,7 @@ public class LastLocation extends TeleportCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

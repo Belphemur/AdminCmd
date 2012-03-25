@@ -40,7 +40,7 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class PermissionManager {
 	private static PermissionManager instance = null;
@@ -91,7 +91,7 @@ public class PermissionManager {
 	/**
 	 * Check the permission with an error message if the user don't have the
 	 * Permission
-	 *
+	 * 
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -107,7 +107,7 @@ public class PermissionManager {
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
-	 *
+	 * 
 	 * @param player
 	 *            player to check the permission
 	 * @param perm
@@ -171,7 +171,7 @@ public class PermissionManager {
 
 	/**
 	 * Set bPermission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @param infoReader
 	 * @return
@@ -192,11 +192,11 @@ public class PermissionManager {
 
 	/**
 	 * Set PermissionsBukkit Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
-	public static boolean setPermissionsBukkit(PermissionsPlugin plugin) {
+	public static boolean setPermissionsBukkit(final PermissionsPlugin plugin) {
 		if (!permissionsBukkit && !bPermissions && !permissionsEx && !groupManager) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
@@ -234,11 +234,11 @@ public class PermissionManager {
 
 	/**
 	 * Set Permission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
-	public static boolean setYetiPermissions(PermissionHandler plugin) {
+	public static boolean setYetiPermissions(final PermissionHandler plugin) {
 		if (!yetiPermissions && !permissionsEx && !groupManager) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				yetiPermissions = true;
@@ -256,11 +256,11 @@ public class PermissionManager {
 
 	/**
 	 * Set Permission Plugin
-	 *
+	 * 
 	 * @param plugin
 	 * @return
 	 */
-	public static boolean setGroupManager(Plugin plugin) {
+	public static boolean setGroupManager(final Plugin plugin) {
 		if (!groupManager && !permissionsEx) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				groupManager = true;

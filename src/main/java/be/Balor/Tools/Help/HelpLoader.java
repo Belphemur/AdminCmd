@@ -103,7 +103,7 @@ public class HelpLoader {
 						String detailedDescription = "";
 						try {
 							detailedDescription = helpNode.get("detailed").toString();
-						} catch (NullPointerException e) {
+						} catch (final NullPointerException e) {
 
 						}
 						final String commandName = helpNode.containsKey("cmdname") ? helpNode.get(
@@ -121,8 +121,8 @@ public class HelpLoader {
 								permissions.add(helpNode.get("permissions").toString());
 							}
 						}
-						HelpLister.getInstance().addHelpEntry(command, description, detailedDescription,
-								plugin, permissions, commandName);
+						HelpLister.getInstance().addHelpEntry(command, description,
+								detailedDescription, plugin, permissions, commandName);
 						++num;
 						++count;
 					}

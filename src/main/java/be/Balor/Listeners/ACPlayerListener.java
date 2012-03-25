@@ -57,7 +57,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -138,7 +138,7 @@ public class ACPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
@@ -207,7 +207,8 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (event.getResult().equals(Result.ALLOWED))
 			return;
-		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false) && event.getResult() == Result.KICK_FULL)
+		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false)
+				&& event.getResult() == Result.KICK_FULL)
 			event.allow();
 	}
 
@@ -224,7 +225,7 @@ public class ACPlayerListener implements Listener {
 			// event.setCancelled(true);
 			/**
 			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 *
+			 * 
 			 * @author Evenprime
 			 */
 			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());

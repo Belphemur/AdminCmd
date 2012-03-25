@@ -37,7 +37,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class TpToWarp extends WarpCommand {
 	private PermChild tpAll;
@@ -54,7 +54,7 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -122,7 +122,7 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -132,7 +132,7 @@ public class TpToWarp extends WarpCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override

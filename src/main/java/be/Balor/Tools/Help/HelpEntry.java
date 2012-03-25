@@ -28,7 +28,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 class HelpEntry {
 	private final String command;
@@ -45,7 +45,7 @@ class HelpEntry {
 	 * @param commandName
 	 */
 	HelpEntry(final String command, final String description, final String detailedDesc,
-			final List<String> permissions,	final String commandName) {
+			final List<String> permissions, final String commandName) {
 		super();
 		this.command = command;
 		this.description = description;
@@ -74,7 +74,7 @@ class HelpEntry {
 				.replace("]", "]" + ChatColor.GOLD);
 	}
 
-	public String chatString(boolean detailed) {
+	public String chatString(final boolean detailed) {
 		String line = getFormatedCmd();
 
 		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
@@ -103,7 +103,7 @@ class HelpEntry {
 		}
 	}
 
-	public String consoleString(boolean detailed) {
+	public String consoleString(final boolean detailed) {
 		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
 		String line = getFormatedCmd();
 

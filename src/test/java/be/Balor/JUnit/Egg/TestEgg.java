@@ -25,32 +25,33 @@ import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class TestEgg extends EggType<Boolean> {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Tools.Egg.EggType#onEvent(org.bukkit.event.player.
 	 * PlayerEggThrowEvent)
 	 */
 	@Override
-	public void onEvent(PlayerEggThrowEvent event) {
+	public void onEvent(final PlayerEggThrowEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Tools.Egg.EggType#processArguments(be.Balor.Manager.Commands
 	 * .CommandArgs)
 	 */
 	@Override
-	protected void processArguments(Player player, CommandArgs args) throws ProcessingArgsException {
+	protected void processArguments(final Player player, final CommandArgs args)
+			throws ProcessingArgsException {
 		if (args.hasFlag('t'))
 			value = true;
 		else
@@ -60,11 +61,11 @@ public class TestEgg extends EggType<Boolean> {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Tools.Egg.EggType#checkPermission(org.bukkit.entity.Player)
 	 */
 	@Override
-	protected boolean checkPermission(Player player) {
+	protected boolean checkPermission(final Player player) {
 		return true;
 	}
 

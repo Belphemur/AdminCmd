@@ -40,7 +40,7 @@ import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class EggSpawner extends MobCommand {
 
@@ -53,7 +53,7 @@ public class EggSpawner extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -119,7 +119,7 @@ public class EggSpawner extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Commands.CoreCommand#permissionCheck(org.bukkit.command
 	 * .CommandSender)
@@ -131,7 +131,7 @@ public class EggSpawner extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
