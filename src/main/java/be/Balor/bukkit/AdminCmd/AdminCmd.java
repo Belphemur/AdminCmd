@@ -150,7 +150,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -797,7 +797,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("eggEnabled", ChatColor.DARK_AQUA + "EGG " + ChatColor.GOLD + "(%egg)"
 				+ ChatColor.AQUA + " mode enabled.");
 		Utils.addLocale("eggNormal", ChatColor.GREEN + "EGG return to normality.");
-		Utils.addLocale("eggNoParamGiven", ChatColor.RED + "You need to specify an egg-type for the /egg -E command.");
+		Utils.addLocale("eggNoParamGiven", ChatColor.RED
+				+ "You need to specify an egg-type for the /egg -E command.");
 		Utils.addLocale("entityDontExists", ChatColor.RED + "The Entity id " + ChatColor.GOLD
 				+ "%entity" + ChatColor.RED + " don't exists.");
 		Utils.addLocale("eggCustomError", ChatColor.RED + "Problem with the egg " + ChatColor.GOLD

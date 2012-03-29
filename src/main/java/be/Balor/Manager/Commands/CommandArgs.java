@@ -28,7 +28,7 @@ import java.util.Set;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class CommandArgs implements Iterable<String> {
 	protected final List<String> parsedArgs;
@@ -130,7 +130,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/**
 	 * Try to parse the argument to an int
-	 *
+	 * 
 	 * @param index
 	 * @return
 	 * @throws NumberFormatException
@@ -141,7 +141,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/**
 	 * Try to parse the argument to a float
-	 *
+	 * 
 	 * @param index
 	 * @return
 	 * @throws NumberFormatException
@@ -152,7 +152,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/**
 	 * Try to parse the argument to a double
-	 *
+	 * 
 	 * @param index
 	 * @return
 	 * @throws NumberFormatException
@@ -163,7 +163,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/**
 	 * Try to parse the argument to a long
-	 *
+	 * 
 	 * @param index
 	 * @return
 	 * @throws NumberFormatException
@@ -174,7 +174,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/**
 	 * Check if the arguments contain the wanted flagF
-	 *
+	 * 
 	 * @param ch
 	 *            flag to be searched
 	 * @return true if found.
@@ -184,9 +184,9 @@ public class CommandArgs implements Iterable<String> {
 	}
 
 	/**
-	 * Get the Value associated with the given flag
-	 * and remove the flag from the normal arguments.
-	 *
+	 * Get the Value associated with the given flag and remove the flag from the
+	 * normal arguments.
+	 * 
 	 * @param flag
 	 *            flag to look for.
 	 * @return null if not found else the value of the flag
@@ -202,7 +202,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -223,7 +223,7 @@ public class CommandArgs implements Iterable<String> {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Iterable#iterator()
 	 */
 	@Override

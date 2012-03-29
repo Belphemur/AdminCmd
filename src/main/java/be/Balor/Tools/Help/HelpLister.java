@@ -31,7 +31,7 @@ import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class HelpLister {
 	private static HelpLister instance = null;
@@ -56,7 +56,7 @@ public class HelpLister {
 
 	/**
 	 * Add a plugin to the lister
-	 *
+	 * 
 	 * @param plugin
 	 */
 	public void addPlugin(final Plugin plugin) {
@@ -71,7 +71,7 @@ public class HelpLister {
 	}
 
 	/**
-	 *
+	 * 
 	 * @return the list of all registered plugin
 	 */
 	public Set<String> getPluginList() {
@@ -81,7 +81,7 @@ public class HelpLister {
 	/**
 	 * Add a new helpEntry for the wanted plugin. If the plugin is not found,
 	 * add it in the database.
-	 *
+	 * 
 	 * @param command
 	 *            command
 	 * @param description
@@ -93,8 +93,9 @@ public class HelpLister {
 	 * @param cmdName
 	 *            true name of the command
 	 */
-	public void addHelpEntry(final String command, final String description, final String detailedDesc,
-			final String plugin, final List<String> permissions, final String cmdName) {
+	public void addHelpEntry(final String command, final String description,
+			final String detailedDesc, final String plugin, final List<String> permissions,
+			final String cmdName) {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
 			help = new HelpList(plugin);
@@ -114,7 +115,7 @@ public class HelpLister {
 
 	/**
 	 * Send the help for the given plugin.
-	 *
+	 * 
 	 * @param plugin
 	 *            name of the plugin
 	 * @param page
@@ -149,7 +150,7 @@ public class HelpLister {
 
 	/**
 	 * Send the help of the given command to the command sender.
-	 *
+	 * 
 	 * @param pluginName
 	 *            name of the plugin where to search for the command. If
 	 *            <b>NULL</b> search in every plugins.

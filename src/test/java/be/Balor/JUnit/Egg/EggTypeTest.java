@@ -16,7 +16,8 @@
  ************************************************************************/
 package be.Balor.JUnit.Egg;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,9 +52,9 @@ public class EggTypeTest {
 	public void serializationOfEggType() throws IOException, InvalidConfigurationException,
 			ProcessingArgsException, DontHaveThePermissionException {
 		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
-		EggType<?> egg = EggType.createEggType(null, new CommandArgs("-E Test -t"));
-		File test = new File("testEgg.yml");
-		ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(test);
+		final EggType<?> egg = EggType.createEggType(null, new CommandArgs("-E Test -t"));
+		final File test = new File("testEgg.yml");
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(test);
 		conf.set("egg", egg);
 		conf.set("egg2", EggType.createEggType(null, new CommandArgs("-E Test")));
 		conf.save();

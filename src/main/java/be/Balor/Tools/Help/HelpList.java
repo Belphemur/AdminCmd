@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
@@ -97,8 +97,8 @@ class HelpList {
 		} catch (final Exception e) {
 			ACLogger.warning("[HELP] Problem with commands of " + pluginName);
 			DebugLog.INSTANCE.warning("[HELP] " + e.toString());
-			StackTraceElement[] trace = e.getStackTrace();
-			for (StackTraceElement element : trace)
+			final StackTraceElement[] trace = e.getStackTrace();
+			for (final StackTraceElement element : trace)
 				DebugLog.INSTANCE.warning("[HELP] " + element.toString());
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
@@ -115,7 +115,7 @@ class HelpList {
 	/**
 	 * Process all help to check get only the command that the player have
 	 * access
-	 *
+	 * 
 	 * @param sender
 	 */
 	private void checkPermissions(final CommandSender sender) {
@@ -132,13 +132,14 @@ class HelpList {
 	/**
 	 * Get a list of the string to display for the wanted page, and the given
 	 * user
-	 *
+	 * 
 	 * @param page
 	 *            int the wanted page
 	 * @param sender
 	 *            CommandSender the sender of the command
 	 * @param detailed
-	 *            If true the detailed description will be displayed if one exists
+	 *            If true the detailed description will be displayed if one
+	 *            exists
 	 * @return
 	 */
 	public List<String> getPage(int page, final CommandSender sender, final boolean detailed) {
@@ -168,20 +169,21 @@ class HelpList {
 		return helpList;
 	}
 
-	public List<String> getPage(int page, final CommandSender sender) {
-			return getPage(page, sender, false);
+	public List<String> getPage(final int page, final CommandSender sender) {
+		return getPage(page, sender, false);
 	}
 
 	/**
 	 * Get the command help of the wanted command by matching it in the list of
 	 * avaible commands.
-	 *
+	 * 
 	 * @param cmd
 	 *            command to search
 	 * @param sender
 	 *            sender of the command (used for checking the permission)
 	 * @param detailed
-	 *            If true the detailed description will be displayed if one exists
+	 *            If true the detailed description will be displayed if one
+	 *            exists
 	 * @return the chat String to display to the user, <b>null</b> if not found
 	 */
 	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender,

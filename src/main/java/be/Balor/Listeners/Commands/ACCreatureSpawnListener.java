@@ -20,13 +20,13 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import be.Balor.Tools.MobCheck;
 import be.Balor.Tools.Type;
 import be.Balor.World.ACWorld;
 
@@ -40,7 +40,7 @@ public class ACCreatureSpawnListener implements Listener {
 		if (event.isCancelled())
 			return;
 		final Entity e = event.getEntity();
-		if (!MobCheck.isMonster(e) && !MobCheck.isAnimal(e))
+		if (e instanceof HumanEntity)
 			return;
 		final World world = e.getWorld();
 		final ACWorld acWorld = ACWorld.getWorld(world.getName());

@@ -34,7 +34,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public abstract class EggType<T> implements Serializable {
 	/**
@@ -49,7 +49,7 @@ public abstract class EggType<T> implements Serializable {
 	/**
 	 * This function will be executed by the listener when the player have the
 	 * power Egg with this EggType
-	 *
+	 * 
 	 * @param event
 	 *            triggered when the player throw an egg.
 	 */
@@ -57,12 +57,12 @@ public abstract class EggType<T> implements Serializable {
 
 	/**
 	 * Will be called by the command {@link EggSpawner} to set the value
-	 *
+	 * 
 	 * @param sender
 	 *            Player that send the command.
 	 * @param args
 	 *            argument that will be used to set the EggType.
-	 *
+	 * 
 	 * @throws ProcessingArgsException
 	 *             when there is a problem in the arguments
 	 */
@@ -71,7 +71,7 @@ public abstract class EggType<T> implements Serializable {
 
 	/**
 	 * Check if the user have the permission to use this Egg
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 * @throws DontHaveThePermissionException
@@ -98,7 +98,7 @@ public abstract class EggType<T> implements Serializable {
 	 * Will create the Egg that can be assigned later to the player. This method
 	 * check if the player has the permission to use that egg and if the
 	 * arguments of the command are right.
-	 *
+	 * 
 	 * @param player
 	 *            That execute the EggSpawn command.
 	 * @param args
@@ -142,7 +142,7 @@ public abstract class EggType<T> implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -152,7 +152,7 @@ public abstract class EggType<T> implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -165,7 +165,7 @@ public abstract class EggType<T> implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@SuppressWarnings("rawtypes")

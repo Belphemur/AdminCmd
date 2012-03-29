@@ -36,7 +36,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Whois extends PlayerCommand {
 	/**
@@ -49,7 +49,7 @@ public class Whois extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -85,8 +85,10 @@ public class Whois extends PlayerCommand {
 		if (actarget == null)
 			return;
 		sender.sendMessage(ChatColor.AQUA
-				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
-						+ Utils.getPlayerName(actarget.getHandler(), sender) + " " + ChatColor.AQUA, '='));
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(
+						ChatColor.DARK_GREEN + " "
+								+ Utils.getPlayerName(actarget.getHandler(), sender) + " "
+								+ ChatColor.AQUA, '='));
 		// Login
 		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE + " : ";
 		final int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
@@ -162,7 +164,7 @@ public class Whois extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

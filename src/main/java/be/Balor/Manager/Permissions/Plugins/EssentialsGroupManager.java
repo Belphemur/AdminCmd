@@ -22,17 +22,16 @@ package be.Balor.Manager.Permissions.Plugins;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class EssentialsGroupManager extends SuperPermissions {
 
-	private GroupManager groupManager;
+	private final GroupManager groupManager;
 
 	public EssentialsGroupManager(final Plugin manager) {
 		groupManager = (GroupManager) manager;
@@ -40,14 +39,15 @@ public class EssentialsGroupManager extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
 	 * .String, org.bukkit.entity.Player)
 	 */
 	@Override
 	public boolean isInGroup(final String groupName, final Player player) {
-		AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
+				player);
 		if (handler == null)
 			return false;
 		return handler.inGroup(player.getName(), groupName);
@@ -55,16 +55,17 @@ public class EssentialsGroupManager extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(org.bukkit.
 	 * entity.Player)
 	 */
 	@Override
 	public String getPrefix(final Player base) {
-		String prefix = super.getPrefix(base);
+		final String prefix = super.getPrefix(base);
 		if (prefix == null || prefix.isEmpty()) {
-			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
+					.getWorldPermissions(base);
 			if (handler == null) {
 				return "";
 			}
@@ -75,16 +76,17 @@ public class EssentialsGroupManager extends SuperPermissions {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
 	 * .Player)
 	 */
 	@Override
 	public String getSuffix(final Player base) {
-		String suffix = super.getSuffix(base);
+		final String suffix = super.getSuffix(base);
 		if (suffix == null || suffix.isEmpty()) {
-			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(base);
+			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
+					.getWorldPermissions(base);
 			if (handler == null) {
 				return "";
 			}

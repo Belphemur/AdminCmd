@@ -22,17 +22,17 @@ import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.configuration.Configuration;
 
 import com.avaje.ebean.EbeanServer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class TestPlugin extends JavaPlugin {
 	private final PluginDescriptionFile pdf = new PluginDescriptionFile("test", "0.1",
@@ -40,20 +40,21 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String label,
+			final String[] args) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDataFolder()
 	 */
 	@Override
@@ -64,7 +65,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDescription()
 	 */
 	@Override
@@ -74,7 +75,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getConfiguration()
 	 */
 	public Configuration getConfiguration() {
@@ -84,7 +85,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getConfig()
 	 */
 	@Override
@@ -95,18 +96,18 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getResource(java.lang.String)
 	 */
 	@Override
-	public InputStream getResource(String filename) {
+	public InputStream getResource(final String filename) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#saveConfig()
 	 */
 	@Override
@@ -117,7 +118,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#saveDefaultConfig()
 	 */
 	@Override
@@ -128,18 +129,18 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#saveResource(java.lang.String, boolean)
 	 */
 	@Override
-	public void saveResource(String resourcePath, boolean replace) {
+	public void saveResource(final String resourcePath, final boolean replace) {
 		// TODO Auto-generated method stub
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#reloadConfig()
 	 */
 	@Override
@@ -150,7 +151,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	@Override
@@ -161,7 +162,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onLoad()
 	 */
 	@Override
@@ -172,7 +173,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
 	@Override
@@ -183,7 +184,7 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDatabase()
 	 */
 	@Override
@@ -194,19 +195,19 @@ public class TestPlugin extends JavaPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getDefaultWorldGenerator(java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+	public ChunkGenerator getDefaultWorldGenerator(final String worldName, final String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.bukkit.plugin.Plugin#getLogger()
 	 */
 	@Override

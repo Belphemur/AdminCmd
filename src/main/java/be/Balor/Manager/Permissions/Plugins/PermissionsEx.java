@@ -16,8 +16,11 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions.Plugins;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
@@ -26,6 +29,8 @@ import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Balor, Lathanael
@@ -121,7 +126,32 @@ public class PermissionsEx extends SuperPermissions {
 	 */
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
-		String permLimit = PEX.getUser(p).getOption("admincmd." + limit);
+		String permLimit = null;
+		try {
+			permLimit = PEX.getUser(p).getOption("admincmd." + limit);
+		} catch (final ConcurrentModificationException e) {
+			final CountDownLatch countDown = new CountDownLatch(1);
+			final String[] limitString = new String[1];
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						limitString[0] = PEX.getUser(p).getOption("admincmd." + limit);
+					} catch (final Exception e2) {
+						DebugLog.INSTANCE.log(Level.SEVERE, "Cant' get the limit " + limit
+								+ " for the user " + p.getName(), e2);
+					}
+
+					countDown.countDown();
+				}
+			});
+			try {
+				countDown.await();
+			} catch (final InterruptedException e1) {
+			}
+			permLimit = limitString[0];
+		}
+
 		if (permLimit == null || (permLimit != null && permLimit.isEmpty()))
 			permLimit = super.getPermissionLimit(p, limit);
 		return permLimit;
@@ -136,7 +166,15 @@ public class PermissionsEx extends SuperPermissions {
 	 */
 	@Override
 	public String getPrefix(final Player player) {
-		final PermissionUser user = PEX.getUser(player);
+		PermissionUser user = null;
+		try {
+			user = PEX.getUser(player);
+		} catch (Exception e) {
+			DebugLog.INSTANCE.log(Level.SEVERE,
+					"Problem when trying to get the prefix of the user " + player.getName(), e);
+			return "";
+		}
+
 		if (user != null)
 			return user.getPrefix() == null ? "" : user.getPrefix();
 
