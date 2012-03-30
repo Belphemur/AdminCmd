@@ -19,6 +19,7 @@ package belgium.Balor.Workers;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -169,7 +170,7 @@ final public class AFKWorker {
 	 * @param sender
 	 * @param buddy
 	 */
-	public void sendAfkMessage(final Player sender, final Player buddy) {
+	public void sendAfkMessage(final CommandSender sender, final Player buddy) {
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
 				|| ACPlayer.getPlayer(buddy.getName()).hasPower(Type.FAKEQUIT))
 			return;
