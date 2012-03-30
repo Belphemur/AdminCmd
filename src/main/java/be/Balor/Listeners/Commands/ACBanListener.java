@@ -34,7 +34,7 @@ public class ACBanListener implements Listener {
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (!event.getResult().equals(Result.ALLOWED))
 			return;
-		final BannedPlayer player = ACHelper.getInstance().isBanned(event.getPlayer().getName());
+		final BannedPlayer player = ACHelper.getInstance().getBan(event.getPlayer().getName());
 		if (player != null)
 			event.disallow(Result.KICK_BANNED, player.getReason());
 	}

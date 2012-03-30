@@ -687,12 +687,13 @@ public class ACHelper {
 	}
 
 	/**
-	 * Is the player banned.
+	 * Return the ban of the player
 	 * 
 	 * @param player
-	 * @return
+	 *            player's name
+	 * @return the ban if the player have one, else return null
 	 */
-	public BannedPlayer isBanned(final String player) {
+	public BannedPlayer getBan(final String player) {
 		return bannedPlayers.get(player);
 	}
 

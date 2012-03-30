@@ -27,10 +27,13 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -86,8 +89,10 @@ public class Whois extends PlayerCommand {
 			return;
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(
-						ChatColor.DARK_GREEN + " "
-								+ Utils.getPlayerName(actarget.getHandler(), sender) + " "
+						ChatColor.DARK_GREEN
+								+ " "
+								+ (actarget.getHandler() != null ? Utils.getPlayerName(
+										actarget.getHandler(), sender) : actarget.getName()) + " "
 								+ ChatColor.AQUA, '='));
 		// Login
 		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE + " : ";
@@ -129,7 +134,17 @@ public class Whois extends PlayerCommand {
 		played += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN + Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
 		sender.sendMessage(played);
-
+		// Banned
+		BannedPlayer ban = ACHelper.getInstance().getBan(actarget.getName());
+		if (ban != null) {
+			String banned = ChatColor.GOLD + "Banned" + ChatColor.WHITE + " : ";
+			int banSizeRem = ACMinecraftFontWidthCalculator.chatwidth
+					- ACMinecraftFontWidthCalculator.getStringWidth(banned);
+			banned += ACMinecraftFontWidthCalculator.strPadLeftChat(ChatColor.GREEN
+					+ (ban instanceof TempBannedPlayer ? ((TempBannedPlayer) ban).getEndBan()
+							.toString() : "Permanent"), banSizeRem, ' ');
+			sender.sendMessage(banned);
+		}
 		// Powers
 		for (final Entry<String, String> power : actarget.getPowers().entrySet()) {
 			String line = ChatColor.GOLD + Type.matchType(power.getKey()).display()
