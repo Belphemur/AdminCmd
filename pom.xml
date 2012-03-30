@@ -328,5 +328,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>5.12.1-SNAPSHOT</version>
+	<version>5.12.1</version>
 </project>
