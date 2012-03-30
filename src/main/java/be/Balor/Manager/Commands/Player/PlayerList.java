@@ -16,17 +16,16 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
+import java.util.Collection;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
-import belgium.Balor.Workers.InvisibleWorker;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -52,30 +51,17 @@ public class PlayerList extends PlayerCommand {
 
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		final Player[] online = sender.getServer().getOnlinePlayers();
-		int amount = online.length;
-		if (!PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
-			amount -= InvisibleWorker.getInstance().nbInvisibles();
-		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + amount);
-		String buffer = "";
-		for (int i = 0; i < online.length; ++i) {
-			final Player p = online[i];
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) || ACPlayer
-					.getPlayer(p).hasPower(Type.FAKEQUIT))
-					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
-				continue;
-			final String name = Utils.getPlayerName(p, sender);
-			if (buffer.length() + name.length() + 2 >= ACMinecraftFontWidthCalculator.chatwidth) {
-				sender.sendMessage(buffer);
-				buffer = "";
-			}
-			buffer += name + ", ";
+
+		final Collection<String> list = Utils.getPlayerList(sender);
+		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + list.size());
+		final String toDisplay = Joiner.on(", ").join(list);
+		if (toDisplay.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
+			sender.sendMessage(toDisplay.substring(0, ACMinecraftFontWidthCalculator.chatwidth));
+			sender.sendMessage(toDisplay.substring(ACMinecraftFontWidthCalculator.chatwidth,
+					toDisplay.length()));
+			return;
 		}
-		if (!buffer.equals("")) {
-			if (buffer.endsWith(", "))
-				buffer = buffer.substring(0, buffer.lastIndexOf(","));
-			sender.sendMessage(buffer);
-		}
+		sender.sendMessage(toDisplay);
 
 	}
 

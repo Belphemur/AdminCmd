@@ -24,6 +24,8 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -68,6 +71,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
@@ -79,6 +83,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
+import com.google.common.base.Joiner;
 import com.herocraftonline.dev.heroes.Heroes;
 import com.herocraftonline.dev.heroes.hero.Hero;
 
@@ -1107,13 +1112,13 @@ public class Utils {
 				"nb",
 				String.valueOf(p.getServer().getOnlinePlayers().length
 						- InvisibleWorker.getInstance().nbInvisibles()));
-		String connected = "";
-		for (final Player player : p.getServer().getOnlinePlayers())
-			if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
-				connected += getPrefix(player, p) + player.getName() + ", ";
-		if (!connected.equals("")) {
-			if (connected.endsWith(", "))
-				connected = connected.substring(0, connected.lastIndexOf(","));
+		final Collection<String> list = Utils.getPlayerList(p);
+		String connected = Joiner.on(", ").join(list);
+		if (connected.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
+			final String tmp = connected.substring(0, ACMinecraftFontWidthCalculator.chatwidth);
+			final String tmp2 = connected.substring(ACMinecraftFontWidthCalculator.chatwidth,
+					connected.length());
+			connected = tmp + "//n" + tmp2;
 		}
 		replace.put("connected", connected);
 		final String serverTime = replaceDateAndTimeFormat();
@@ -1445,5 +1450,25 @@ public class Utils {
 			}
 			server.getHandle().moveToWorld(entity, toWorld.dimension, true, loc);
 		}
+	}
+
+	/**
+	 * Get the player list ordered by group and alphabetically for the sender
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @return a Collection containing what to display
+	 */
+	public static Collection<String> getPlayerList(final CommandSender sender) {
+		final List<Player> online = Utils.getOnlinePlayers();
+		final Map<Player, String> players = new TreeMap<Player, String>(new PlayerComparator());
+		for (final Player p : online) {
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) || ACPlayer
+					.getPlayer(p).hasPower(Type.FAKEQUIT))
+					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
+				continue;
+			players.put(p, Utils.getPlayerName(p, sender));
+		}
+		return Collections.unmodifiableCollection(players.values());
 	}
 }
