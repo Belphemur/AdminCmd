@@ -602,6 +602,7 @@ public class Utils {
 	 * @return the complete player name with prefix
 	 */
 	public static String getPlayerName(final Player player, final CommandSender sender) {
+		assert (player != null);
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
 			String prefix = colorParser(getPrefix(player, sender));
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
