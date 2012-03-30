@@ -89,4 +89,17 @@ public class BukkitPermissions extends SuperPermissions {
 		}
 		return null;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getGroup(org.bukkit
+	 * .entity.Player)
+	 */
+	@Override
+	public String getGroup(final Player player) {
+		final List<Group> groups = permBukkit.getGroups(player.getName());
+		return groups.get(groups.size() - 1).getName();
+	}
 }

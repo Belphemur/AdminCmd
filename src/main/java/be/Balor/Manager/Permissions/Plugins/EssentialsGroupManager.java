@@ -94,4 +94,18 @@ public class EssentialsGroupManager extends SuperPermissions {
 		}
 		return suffix;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getGroup(org.bukkit
+	 * .entity.Player)
+	 */
+	@Override
+	public String getGroup(final Player player) {
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
+				player);
+		return handler.getGroup(player.getName());
+	}
 }

@@ -122,4 +122,18 @@ public class bPermissions extends SuperPermissions {
 		return suffix;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getGroup(org.bukkit
+	 * .entity.Player)
+	 */
+	@Override
+	public String getGroup(final Player player) {
+		final String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
+				CalculableType.USER, player.getName());
+		return groups[groups.length - 1];
+	}
+
 }

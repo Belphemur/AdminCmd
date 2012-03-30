@@ -62,8 +62,7 @@ public enum LocaleHelper {
 			+ "has been kicked from the Server, reason:" + ChatColor.RED + " %reason"),
 	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " + ChatColor.YELLOW
 			+ "left the game: %reason"),
-	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED
-			+ "This World is not loaded !");
+	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED + "This World is not loaded !");
 
 	private final String key;
 	private final String locale;

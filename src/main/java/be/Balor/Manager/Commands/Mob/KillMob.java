@@ -144,8 +144,7 @@ public class KillMob extends MobCommand {
 				return;
 			}
 			for (final World w : worlds)
-				for (final org.bukkit.entity.Entity m : w.getEntitiesByClasses(ct
-						.getEntityClass())) {
+				for (final org.bukkit.entity.Entity m : w.getEntitiesByClasses(ct.getEntityClass())) {
 					final Entity entity = ((CraftEntity) m).getHandle();
 					entity.die();
 					mobKilled++;

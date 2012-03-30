@@ -26,10 +26,10 @@ import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
+import be.Balor.Manager.Permissions.Plugins.DinnerPermissions;
 import be.Balor.Manager.Permissions.Plugins.EssentialsGroupManager;
 import be.Balor.Manager.Permissions.Plugins.IPermissionPlugin;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
-import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
 import be.Balor.Tools.Debug.ACLogger;
@@ -71,6 +71,10 @@ public class PermissionManager {
 
 	public static String getSuffix(final Player player) {
 		return permissionHandler.getSuffix(player);
+	}
+
+	public static String getGroup(final Player player) {
+		return permissionHandler.getGroup(player);
 	}
 
 	public static boolean hasPerm(final CommandSender player, final Permission perm)
@@ -286,7 +290,7 @@ public class PermissionManager {
 	 */
 	private PermissionManager() {
 		if (permissionHandler == null)
-			permissionHandler = new SuperPermissions();
+			permissionHandler = new DinnerPermissions();
 	}
 
 	public synchronized boolean addPermissionLinker(final PermissionLinker perm) {

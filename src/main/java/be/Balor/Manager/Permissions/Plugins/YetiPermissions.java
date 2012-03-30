@@ -192,4 +192,16 @@ public class YetiPermissions implements IPermissionPlugin {
 		return prefixstring;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.IPermissionPlugin#getGroup(org.bukkit
+	 * .entity.Player)
+	 */
+	@Override
+	public String getGroup(final Player player) {
+		return "";
+	}
+
 }
