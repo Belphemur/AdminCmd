@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class RemovePowerTask implements Runnable {
 
@@ -48,15 +48,20 @@ public class RemovePowerTask implements Runnable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
 	public void run() {
 		player.removePower(power);
 		final Player handler = player.getHandler();
-		if (handler != null)
+		if (handler != null) {
 			Utils.sI18n(handler, "timeOutPower", "power", power.display());
+			if (power == Type.FLY) {
+				handler.setAllowFlight(false);
+				handler.setFlying(false);
+			}
+		}
 		if (!sender.equals(handler)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("power", power.display());
