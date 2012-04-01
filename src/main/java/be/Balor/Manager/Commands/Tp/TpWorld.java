@@ -60,15 +60,17 @@ public class TpWorld extends TeleportCommand {
 		Player target = Utils.getUserParam(sender, args, permNode);
 		assert (target != null);
 		Map<String, String> replace = new HashMap<String, String>();
-		if (args.length < 1 && PermissionManager.hasPerm(target, permNode + ".list")) {
-			List<World> worlds = ACPluginManager.getServer().getWorlds();
-			String worldList = "";
-			for (World w : worlds) {
-				worldList += w.getName() + ", ";
+		if (args.length < 1) {
+			if (PermissionManager.hasPerm(target, permNode + ".list")) {
+				List<World> worlds = ACPluginManager.getServer().getWorlds();
+				String worldList = "";
+				for (World w : worlds) {
+					worldList += w.getName() + ", ";
+				}
+				worldList = worldList.substring(0, worldList.length() - 2);
+				replace.put("list", worldList);
+				LocaleHelper.TP_DIM_LIST.sendLocale(target, replace);
 			}
-			worldList = worldList.substring(0, worldList.length() - 2);
-			replace.put("list", worldList);
-			LocaleHelper.TP_DIM_LIST.sendLocale(target, replace);
 			return;
 		}
 		if (args.hasFlag('l')) {
