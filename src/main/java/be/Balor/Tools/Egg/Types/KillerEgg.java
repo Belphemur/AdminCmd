@@ -21,11 +21,13 @@ import java.util.List;
 
 import net.minecraft.server.DamageSource;
 import net.minecraft.server.EntityLiving;
+import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Tools.Egg.SimpleRadiusEgg;
@@ -65,9 +67,10 @@ public class KillerEgg extends SimpleRadiusEgg {
 		final CraftPlayer p = (CraftPlayer) event.getPlayer();
 		final World w = p.getWorld();
 		final int radius = value * value;
-		for (final Object entity : ((CraftWorld) w).getHandle().entityList)
+		for (final Object entity : ((CraftWorld) w).getHandle().entityList) {
 			if (entity instanceof EntityLiving)
 				entities.add((EntityLiving) entity);
+		}
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 
@@ -82,6 +85,12 @@ public class KillerEgg extends SimpleRadiusEgg {
 									entity.locZ, entity.yaw, entity.pitch);
 							if (entityLoc.distanceSquared(loc) > radius)
 								continue;
+							if (entity instanceof EntityPlayer) {
+								final Player player = (Player) entity.getBukkitEntity();
+								player.setHealth(0);
+								count++;
+								continue;
+							}
 							entity.die(DamageSource.playerAttack(p.getHandle()));
 							entity.die();
 							count++;
