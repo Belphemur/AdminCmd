@@ -71,6 +71,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
@@ -332,8 +333,10 @@ public class Utils {
 	 * 
 	 * @param mat
 	 * @return Material
+	 * @throws InvalidInputException
+	 *             if the input is invalid
 	 */
-	public static MaterialContainer checkMaterial(final String mat) {
+	public static MaterialContainer checkMaterial(final String mat) throws InvalidInputException {
 		MaterialContainer mc = new MaterialContainer();
 		try {
 			if (oddItem != null) {
@@ -347,6 +350,8 @@ public class Utils {
 		String[] info = new String[2];
 		if (mat.contains(":")) {
 			info = mat.split(":");
+			if (info.length < 2)
+				throw new InvalidInputException(mat);
 			mc = new MaterialContainer(info[0], info[1]);
 		} else {
 			info[0] = mat;
