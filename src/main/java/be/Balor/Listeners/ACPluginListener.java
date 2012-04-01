@@ -35,7 +35,7 @@ import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
-import com.herocraftonline.dev.heroes.Heroes;
+import com.herocraftonline.heroes.Heroes;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
@@ -43,7 +43,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPluginListener implements Listener {
 

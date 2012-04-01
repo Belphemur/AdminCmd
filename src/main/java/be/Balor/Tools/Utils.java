@@ -84,8 +84,8 @@ import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 import com.google.common.base.Joiner;
-import com.herocraftonline.dev.heroes.Heroes;
-import com.herocraftonline.dev.heroes.hero.Hero;
+import com.herocraftonline.heroes.Heroes;
+import com.herocraftonline.heroes.characters.Hero;
 
 import de.diddiz.LogBlock.Consumer;
 
@@ -993,14 +993,14 @@ public class Utils {
 		if (target == null)
 			return false;
 		if (heroes != null) {
-			hero = heroes.getHeroManager().getHero(target);
+			hero = heroes.getCharacterManager().getHero(target);
 		}
 		switch (toDo) {
 		case HEAL:
 			if (hero == null)
 				target.setHealth(20);
 			else
-				hero.setHealth(20D);
+				hero.setHealth(20);
 			target.setFireTicks(0);
 			break;
 		case FEED:
@@ -1010,7 +1010,7 @@ public class Utils {
 			if (hero == null)
 				target.setHealth(0);
 			else
-				hero.setHealth(0D);
+				hero.setHealth(0);
 			if (logBlock != null)
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
 			break;
