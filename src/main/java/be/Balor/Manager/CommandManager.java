@@ -58,7 +58,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class CommandManager implements CommandExecutor {
 	private class NormalCommand implements Runnable {
@@ -75,7 +75,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -90,7 +90,7 @@ public class CommandManager implements CommandExecutor {
 				if (message == null || message == "") {
 					message = "This world is not loaded!";
 				}
-				HashMap<String, String> replace = new HashMap<String, String>();
+				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("message", message);
 				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender(), replace);
 			} catch (final PlayerNotFound e) {
@@ -104,7 +104,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -122,7 +122,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -140,7 +140,7 @@ public class CommandManager implements CommandExecutor {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -224,7 +224,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Check the command if it have alias, prioritized or disabled.
-	 *
+	 * 
 	 * @param command
 	 * @throws CommandDisabled
 	 */
@@ -246,7 +246,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Used to execute ACCommands
-	 *
+	 * 
 	 * @param sender
 	 * @param cmd
 	 * @param args
@@ -287,7 +287,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Getting the private field of a another class;
-	 *
+	 * 
 	 * @param object
 	 * @param field
 	 * @return
@@ -336,7 +336,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Register command from plugin
-	 *
+	 * 
 	 * @param plugin
 	 */
 	public void registerACPlugin(final AbstractAdminCmdPlugin plugin) {
@@ -349,7 +349,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Register command
-	 *
+	 * 
 	 * @param clazz
 	 */
 	public boolean registerCommand(final Class<? extends CoreCommand> clazz) {
@@ -444,7 +444,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * Unregister a command from bukkit.
-	 *
+	 * 
 	 * @param cmd
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand cmd) {
@@ -473,7 +473,7 @@ public class CommandManager implements CommandExecutor {
 
 	/**
 	 * UnRegister command
-	 *
+	 * 
 	 * @param clazz
 	 *            command to unregister
 	 * @param plugin

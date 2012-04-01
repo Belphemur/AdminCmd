@@ -43,7 +43,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPluginListener implements Listener {
 

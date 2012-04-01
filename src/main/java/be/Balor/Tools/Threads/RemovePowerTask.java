@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class RemovePowerTask implements Runnable {
 
@@ -48,7 +48,7 @@ public class RemovePowerTask implements Runnable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
