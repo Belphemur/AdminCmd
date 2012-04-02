@@ -186,20 +186,41 @@ public class ACHelper {
 	}
 
 	/**
-	 * Add an item to the Command BlackList
+	 * Add an item to the BlackList
 	 * 
 	 * @param name
+	 *            string representing the item to blacklist
 	 * @return
 	 */
 	public boolean addBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
-		if (m.isNull()) {
+		return addBlackListedItem(sender, m);
+
+	}
+
+	/**
+	 * Add an item to the BlackList
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param item
+	 *            itemstack to blacklist
+	 * @return
+	 */
+	public boolean addBlackListedItem(final CommandSender sender, final ItemStack item) {
+		final MaterialContainer m = new MaterialContainer(item);
+		return addBlackListedItem(sender, m);
+
+	}
+
+	private boolean addBlackListedItem(final CommandSender sender, final MaterialContainer mat) {
+		if (mat.isNull()) {
 			return false;
 		}
 
-		if (!itemBlacklist.add(m)) {
+		if (!itemBlacklist.add(mat)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("item", m.display());
+			replace.put("item", mat.display());
 			LocaleHelper.BL_ITEM_ALREADY.sendLocale(sender, replace);
 			return false;
 		}
@@ -209,14 +230,11 @@ public class ACHelper {
 			config.save();
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.WARNING, "Can't save the blacklist", e);
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("item", m.display());
-			LocaleHelper.BL_ITEM_PROBLEM.sendLocale(sender, replace);
+			LocaleHelper.BL_ITEM_PROBLEM.sendLocale(sender);
 			return false;
 		}
-		Utils.sI18n(sender, "addBlacklistItem", "material", m.display());
+		Utils.sI18n(sender, "addBlacklistItem", "material", mat.display());
 		return true;
-
 	}
 
 	public void addFakeQuit(final Player p) {
@@ -874,32 +892,53 @@ public class ACHelper {
 	/**
 	 * remove a black listed item
 	 * 
+	 * @param sender
+	 *            sender of the command
 	 * @param name
+	 *            string used to determine the material to blacklist
 	 * @return
 	 */
 	public boolean removeBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
-		if (!m.isNull()) {
-			final ExtendedConfiguration config = fManager.getYml("blacklist");
-			final List<Integer> list = config.getIntList("BlackListedItems",
-					new ArrayList<Integer>());
-			if (!list.isEmpty() && list.contains(m.getMaterial().getId())) {
-				list.remove((Integer) m.getMaterial().getId());
-				config.set("BlackListedItems", list);
-				try {
-					config.save();
-				} catch (final IOException e) {
-				}
-			}
-			if (itemBlacklist != null && !itemBlacklist.isEmpty()
-					&& itemBlacklist.contains(m.getMaterial().getId()))
-				itemBlacklist.remove(m.getMaterial().getId());
+		return removeBlackListedItem(sender, m);
+	}
+
+	/**
+	 * remove a black listed item
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param item
+	 *            itemstack to remove from the blackList
+	 * @return
+	 */
+	public boolean removeBlackListedItem(final CommandSender sender, final ItemStack item) {
+		final MaterialContainer m = new MaterialContainer(item);
+		return removeBlackListedItem(sender, m);
+	}
+
+	private boolean removeBlackListedItem(final CommandSender sender, final MaterialContainer mat) {
+		if (mat.isNull())
+			return false;
+		if (!itemBlacklist.remove(mat)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("material", m.getMaterial().toString());
-			Utils.sI18n(sender, "rmBlacklistItem", replace);
-			return true;
+			replace.put("item", mat.display());
+			LocaleHelper.BL_ITEM_NOT_BLISTED.sendLocale(sender, replace);
+			return false;
 		}
-		return false;
+		final ExtendedConfiguration config = fManager.getYml("blacklist");
+		config.set("BlackListedMaterial", itemBlacklist);
+		try {
+			config.save();
+		} catch (final IOException e) {
+			DebugLog.INSTANCE.log(Level.WARNING, "Can't save the blacklist", e);
+			LocaleHelper.BL_ITEM_PROBLEM.sendLocale(sender);
+			return false;
+		}
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("material", mat.getMaterial().toString());
+		Utils.sI18n(sender, "rmBlacklistItem", replace);
+		return true;
 	}
 
 	public void removeDisconnectedPlayer(final Player player) {

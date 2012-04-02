@@ -71,8 +71,9 @@ public enum LocaleHelper {
 			+ "Worlds which are currently available to teleport to://n" + ChatColor.GOLD + "%list"),
 	BL_ITEM_ALREADY("itemBlAlready", ChatColor.RED + "This item " + ChatColor.GOLD + "%item "
 			+ ChatColor.RED + "is already blacklisted"),
-	BL_ITEM_PROBLEM("blItemProb", ChatColor.GOLD + "Can't add the item " + ChatColor.WHITE
-			+ " %item" + ChatColor.GOLD + " to the black list !");
+	BL_ITEM_PROBLEM("blItemSaveProb", ChatColor.GOLD + "Can't save the blackList file"),
+	BL_ITEM_NOT_BLISTED("blItemNotBl", ChatColor.RED + "This item " + ChatColor.GOLD + "%item"
+			+ ChatColor.RED + " is not black listed.");
 
 	private final String key;
 	private final String locale;
