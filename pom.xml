@@ -31,7 +31,6 @@
 		<developer>
 			<id>Belphemur</id>
 			<name>Belphemur</name>
-			<email>belphemur@admincmd.com</email>
 			<url>http://www.admincmd.com</url>
 			<organization>AdminCmd Team</organization>
 			<organizationUrl>http://www.admincmd.com</organizationUrl>
@@ -39,13 +38,11 @@
 				<role>developer</role>
 			</roles>
 			<properties>
-				<picUrl></picUrl>
 			</properties>
 		</developer>
 		<developer>
 			<id>Lathanael</id>
 			<name>Lathanael</name>
-			<email>lathanael@admincmd.com</email>
 			<url>http://www.admincmd.com</url>
 			<organization>AdminCmd Team</organization>
 			<organizationUrl>http://www.admincmd.com</organizationUrl>
@@ -53,7 +50,7 @@
 				<role>developer</role>
 			</roles>
 			<properties>
-				<picUrl></picUrl>
+				<picUrl>https://de.gravatar.com/userimage/25687290/926b5f0b675ebcf7249ec01aae650afd.png</picUrl>
 			</properties>
 		</developer>
 	</developers>
