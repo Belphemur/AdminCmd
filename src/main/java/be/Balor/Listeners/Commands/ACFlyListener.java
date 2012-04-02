@@ -21,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -32,6 +33,16 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACFlyListener implements Listener {
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onJoin(final PlayerJoinEvent event) {
+		final Player p = event.getPlayer();
+		if (!ACPlayer.getPlayer(p).hasPower(Type.FLY))
+			return;
+		p.setAllowFlight(true);
+		p.setFlying(true);
+
+	}
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player))
