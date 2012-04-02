@@ -17,8 +17,10 @@
 package be.Balor.Manager.Commands.Items;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -45,9 +47,15 @@ public class AddBlackList extends ItemCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		if (args.hasFlag('i'))
-			ACHelper.getInstance().addBlackListedItem(sender, args.getString(0));
-		else if (args.hasFlag('b'))
+		if (args.hasFlag('i')) {
+			if (args.length >= 2)
+				ACHelper.getInstance().addBlackListedItem(sender, args.getString(0));
+			else if (Utils.isPlayer(sender)) {
+				final Player player = (Player) sender;
+				ACHelper.getInstance().addBlackListedItem(sender, player.getItemInHand());
+			}
+
+		} else if (args.hasFlag('b'))
 			ACHelper.getInstance().addBlackListedBlock(sender, args.getString(0));
 	}
 
@@ -58,7 +66,6 @@ public class AddBlackList extends ItemCommand {
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		// TODO Auto-generated method stub
 		return args != null && args.length >= 1;
 	}
 
