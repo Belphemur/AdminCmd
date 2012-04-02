@@ -30,7 +30,7 @@ import be.Balor.Tools.Egg.EggType;
  */
 public class ACEggListener implements Listener {
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void eggThrown(final PlayerEggThrowEvent event) {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (!player.hasPower(Type.EGG))

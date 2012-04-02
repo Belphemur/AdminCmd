@@ -35,10 +35,8 @@ import be.Balor.World.ACWorld;
  * 
  */
 public class ACCreatureSpawnListener implements Listener {
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event) {
-		if (event.isCancelled())
-			return;
 		final Entity e = event.getEntity();
 		if (e instanceof HumanEntity)
 			return;

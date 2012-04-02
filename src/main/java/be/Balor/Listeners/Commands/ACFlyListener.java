@@ -32,10 +32,8 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACFlyListener implements Listener {
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
-		if (event.isCancelled())
-			return;
 		if (!(event.getEntity() instanceof Player))
 			return;
 		final Player player = (Player) event.getEntity();
@@ -46,10 +44,8 @@ public class ACFlyListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerKick(final PlayerKickEvent event) {
-		if (event.isCancelled())
-			return;
 		final Player p = event.getPlayer();
 		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
 				.contains("floating"))

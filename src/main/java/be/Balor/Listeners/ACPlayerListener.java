@@ -121,10 +121,8 @@ public class ACPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if (event.isCancelled())
-			return;
 		final Player p = event.getPlayer();
 		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
@@ -233,19 +231,15 @@ public class ACPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
-		if (event.isCancelled())
-			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (player.hasPower(Type.NO_PICKUP))
 			event.setCancelled(true);
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerKick(final PlayerKickEvent event) {
-		if (event.isCancelled())
-			return;
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (player != null && player.hasPower(Type.KICKED)) {
@@ -334,10 +328,8 @@ public class ACPlayerListener implements Listener {
 
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event) {
-		if (event.isCancelled())
-			return;
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
 		if (player.hasPower(Type.FROZEN)) {
 			event.setCancelled(true);

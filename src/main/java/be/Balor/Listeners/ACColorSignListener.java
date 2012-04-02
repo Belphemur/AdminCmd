@@ -28,10 +28,8 @@ import be.Balor.Tools.Utils;
  * 
  */
 public class ACColorSignListener implements Listener {
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onSignChange(final SignChangeEvent event) {
-		if (event.isCancelled())
-			return;
 		String parsed = null;
 		String line;
 		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]"))

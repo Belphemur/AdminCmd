@@ -31,10 +31,8 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public class ACTeleportBackListener implements Listener {
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerTeleport(final PlayerTeleportEvent event) {
-		if (event.isCancelled())
-			return;
 		if (event instanceof ACTeleportEvent) {
 			DebugLog.INSTANCE.info("Custom teleport event used");
 			return;
