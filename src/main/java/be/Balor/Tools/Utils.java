@@ -71,6 +71,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
@@ -91,7 +92,7 @@ import de.diddiz.LogBlock.Consumer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Utils {
 	public static class SetTime implements Runnable {
@@ -117,7 +118,7 @@ public class Utils {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -154,7 +155,7 @@ public class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 
 	public final static int MAX_BLOCKS = 512;
@@ -169,7 +170,7 @@ public class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -202,7 +203,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
@@ -217,7 +218,7 @@ public class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -232,7 +233,7 @@ public class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(final String message) {
@@ -245,7 +246,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -293,7 +294,7 @@ public class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -329,11 +330,13 @@ public class Utils {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
+	 * @throws InvalidInputException
+	 *             if the input is invalid
 	 */
-	public static MaterialContainer checkMaterial(final String mat) {
+	public static MaterialContainer checkMaterial(final String mat) throws InvalidInputException {
 		MaterialContainer mc = new MaterialContainer();
 		try {
 			if (oddItem != null) {
@@ -347,6 +350,8 @@ public class Utils {
 		String[] info = new String[2];
 		if (mat.contains(":")) {
 			info = mat.split(":");
+			if (info.length < 2)
+				throw new InvalidInputException(mat);
 			mc = new MaterialContainer(info[0], info[1]);
 		} else {
 			info[0] = mat;
@@ -361,7 +366,7 @@ public class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -391,7 +396,7 @@ public class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -454,7 +459,7 @@ public class Utils {
 
 	/**
 	 * Get the ACPlayer, useful when working with only the AC user informations
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -498,7 +503,7 @@ public class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -508,7 +513,7 @@ public class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -546,7 +551,7 @@ public class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -586,7 +591,7 @@ public class Utils {
 
 	/**
 	 * For compatibility
-	 *
+	 * 
 	 * @param player
 	 * @param sender
 	 * @param withPrefix
@@ -599,7 +604,7 @@ public class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -609,10 +614,8 @@ public class Utils {
 	public static String getPlayerName(final Player player, final CommandSender sender) {
 		assert (player != null);
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
-			String prefix = colorParser(getPrefix(player, sender));
+			final String prefix = colorParser(getPrefix(player, sender));
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
-			if (prefix.isEmpty())
-				prefix = ChatColor.WHITE.toString();
 			if (ConfigEnum.DNAME.getBoolean())
 				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 
@@ -620,14 +623,14 @@ public class Utils {
 		}
 
 		if (ConfigEnum.DNAME.getBoolean())
-			return ChatColor.WHITE + player.getDisplayName();
+			return player.getDisplayName();
 
-		return ChatColor.WHITE + player.getName();
+		return player.getName();
 	}
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -652,7 +655,7 @@ public class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -674,7 +677,7 @@ public class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -718,7 +721,7 @@ public class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -737,7 +740,7 @@ public class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -808,7 +811,7 @@ public class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -822,7 +825,7 @@ public class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(final CommandSender sender) {
@@ -841,7 +844,7 @@ public class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -892,7 +895,7 @@ public class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -918,7 +921,7 @@ public class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -982,7 +985,7 @@ public class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -1265,7 +1268,7 @@ public class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -1421,7 +1424,7 @@ public class Utils {
 
 	/**
 	 * Check if the chunk is loaded before teleport the player to the location
-	 *
+	 * 
 	 * @param player
 	 *            player to be teleported
 	 * @param loc
@@ -1454,7 +1457,7 @@ public class Utils {
 
 	/**
 	 * Get the player list ordered by group and alphabetically for the sender
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @return a Collection containing what to display

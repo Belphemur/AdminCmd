@@ -27,7 +27,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum ConfigEnum {
 

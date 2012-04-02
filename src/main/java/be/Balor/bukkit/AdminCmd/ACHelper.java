@@ -48,6 +48,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
@@ -331,7 +332,15 @@ public class ACHelper {
 	 * @return Material
 	 */
 	public MaterialContainer checkMaterial(final CommandSender sender, final String mat) {
-		final MaterialContainer m = Utils.checkMaterial(mat);
+		MaterialContainer m = null;
+		try {
+			m = Utils.checkMaterial(mat);
+		} catch (final InvalidInputException e) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("material", mat);
+			Utils.sI18n(sender, "unknownMat", replace);
+			return new MaterialContainer();
+		}
 		if (m.isNull()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat);

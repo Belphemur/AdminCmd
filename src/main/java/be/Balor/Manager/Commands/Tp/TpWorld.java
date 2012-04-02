@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class TpWorld extends TeleportCommand {
 
@@ -52,19 +52,22 @@ public class TpWorld extends TeleportCommand {
 		list = new PermChild(permNode + ".list");
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		Player target = Utils.getUserParam(sender, args, permNode);
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final Player target = Utils.getUserParam(sender, args, permNode);
 		assert (target != null);
-		Map<String, String> replace = new HashMap<String, String>();
+		final Map<String, String> replace = new HashMap<String, String>();
 		if (args.length < 1) {
 			if (PermissionManager.hasPerm(target, permNode + ".list")) {
-				List<World> worlds = ACPluginManager.getServer().getWorlds();
+				final List<World> worlds = ACPluginManager.getServer().getWorlds();
 				String worldList = "";
-				for (World w : worlds) {
+				for (final World w : worlds) {
 					worldList += w.getName() + ", ";
 				}
 				worldList = worldList.substring(0, worldList.length() - 2);
@@ -74,18 +77,19 @@ public class TpWorld extends TeleportCommand {
 			return;
 		}
 		if (args.hasFlag('l')) {
-			// TODO: Location teleport with safety so one gets not teleported into blocks
+			// TODO: Location teleport with safety so one gets not teleported
+			// into blocks
 			return;
 		}
-		String worldName = args.getString(0);
+		final String worldName = args.getString(0);
 		if (worldName == null || worldName == "") {
 			replace.put("arg", "world");
 			replace.put("cmdName", "/tpd");
 			LocaleHelper.MISSING_ARG.sendLocale(sender, replace);
 			return;
 		}
-		ACWorld world = ACWorld.getWorld(worldName);
-		Location loc = world.getSpawn();
+		final ACWorld world = ACWorld.getWorld(worldName);
+		final Location loc = world.getSpawn();
 		if (loc == null)
 			return;
 		ACPluginManager.scheduleSyncTask(new TeleportTask(target, loc));
@@ -93,17 +97,19 @@ public class TpWorld extends TeleportCommand {
 		LocaleHelper.TP_DIM.sendLocale(target, replace);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override

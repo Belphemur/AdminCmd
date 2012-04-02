@@ -34,9 +34,9 @@ public class PlayerComparator implements Comparator<Player> {
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int compare(Player o1, Player o2) {
-		String g1 = PermissionManager.getGroup(o1);
-		String g2 = PermissionManager.getGroup(o2);
+	public int compare(final Player o1, final Player o2) {
+		final String g1 = PermissionManager.getGroup(o1);
+		final String g2 = PermissionManager.getGroup(o2);
 		if (g1.equals(g2))
 			return Utils.getPlayerName(o1).compareTo(Utils.getPlayerName(o2));
 		return g1.compareTo(g2);

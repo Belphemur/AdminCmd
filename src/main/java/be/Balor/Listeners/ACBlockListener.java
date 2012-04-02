@@ -34,10 +34,8 @@ public class ACBlockListener implements Listener {
 	 * @author Lathanael (aka Philippe Leipold)
 	 * 
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event) {
-		if (event.isCancelled())
-			return;
 		final Player player = event.getPlayer();
 		final Block block = event.getBlock();
 		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(player,
