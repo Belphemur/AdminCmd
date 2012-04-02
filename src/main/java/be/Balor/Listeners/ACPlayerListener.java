@@ -136,7 +136,7 @@ public class ACPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);

@@ -422,7 +422,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		final PermParent majorPerm = new PermParent("admincmd.*");
 		permissionLinker.setMajorPerm(majorPerm);
 		player.addChild("admincmd.player.bypass");
-		permissionLinker.addPermChild("admincmd.item.noblacklist");
+		permissionLinker.addPermChild("admincmd.spec.noblacklist");
 		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		player.addChild("admincmd.player.noafkkick");
@@ -548,8 +548,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
 				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
 		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE
-				+ "%material" + ChatColor.GREEN
-				+ ") added to the Command Black List for i, give and drop.");
+				+ "%material" + ChatColor.GREEN + ") added to the Black List for i, give and drop.");
 		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE
 				+ "%material" + ChatColor.GREEN + ") added to the BlockPlace Black List.");
 		Utils.addLocale("rmBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE

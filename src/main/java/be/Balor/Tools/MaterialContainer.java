@@ -57,11 +57,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 *            the amount to set
 	 */
 	public void setAmount(final int amount) {
-		if (material != null)
-			if (material.getMaxStackSize() >= amount)
-				this.amount = amount;
-			else
-				this.amount = material.getMaxStackSize();
+		this.amount = amount;
 	}
 
 	public MaterialContainer(final String mat, final String damage) {
@@ -104,14 +100,11 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * @param amount
 	 * @return
 	 */
-	public ItemStack getItemStack(final int amount) {
+
+	public ItemStack getItemStack() {
 		final ItemStack toReturn = new ItemStack(material, amount, dmg);
 		toReturn.addUnsafeEnchantments(enchantments);
 		return toReturn;
-	}
-
-	public ItemStack getItemStack() {
-		return getItemStack(amount);
 	}
 
 	@Override
@@ -143,6 +136,36 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		return amount;
 	}
 
+	/**
+	 * @return the dmg
+	 */
+	public short getDmg() {
+		return dmg;
+	}
+
+	/**
+	 * @return the enchantments
+	 */
+	public Map<Enchantment, Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	/**
+	 * @param material
+	 *            the material to set
+	 */
+	public void setMaterial(final Material material) {
+		this.material = material;
+	}
+
+	/**
+	 * @param dmg
+	 *            the dmg to set
+	 */
+	public void setDmg(final short dmg) {
+		this.dmg = dmg;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -150,6 +173,8 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	@Override
 	public int compareTo(final MaterialContainer o) {
+		if (material.equals(o.getMaterial()))
+			return dmg - o.getDmg();
 		return material.compareTo(o.getMaterial());
 	}
 

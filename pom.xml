@@ -6,11 +6,57 @@
 	<artifactId>AdminCmd</artifactId>
 	<name>AdminCmd</name>
 	<url>http://forums.bukkit.org/threads/admn-gen-admincmd-5-4-time-give-tp-repair-heal-kill-item-blacklist-weather-etc-1000.10770/</url>
+	<inceptionYear>2012</inceptionYear>
+	<description>AdminCMD is a powerful plug-in that brings you commands that can give you total management over your server. Featuring the most widely used commands in Bukkit server management such as: inventory management, banishment of bad players, limitation to teleporting, setting spawn and home way points, and much, much more!</description>
 	<scm>
 		<connection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</connection>
 		<url>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</url>
 		<developerConnection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</developerConnection>
 	</scm>
+	<organization>
+		<name>AdminCmd Team</name>
+		<url>http://www.admincmd.com</url>
+	</organization>
+	<issueManagement>
+		<system>MantisBT</system>
+		<url>http://bug.admincmd.com/</url>
+	</issueManagement>
+	<licenses>
+		<license>
+			<name>GNU GPL v3</name>
+			<url>http://www.gnu.org/licenses/gpl.txt</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>Belphemur</id>
+			<name>Belphemur</name>
+			<email>belphemur@admincmd.com</email>
+			<url>http://www.admincmd.com</url>
+			<organization>AdminCmd Team</organization>
+			<organizationUrl>http://www.admincmd.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<properties>
+				<picUrl></picUrl>
+			</properties>
+		</developer>
+		<developer>
+			<id>Lathanael</id>
+			<name>Lathanael</name>
+			<email>lathanael@admincmd.com</email>
+			<url>http://www.admincmd.com</url>
+			<organization>AdminCmd Team</organization>
+			<organizationUrl>http://www.admincmd.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<properties>
+				<picUrl></picUrl>
+			</properties>
+		</developer>
+	</developers>
 	<distributionManagement>
 		<!-- Publish the versioned releases here -->
 		<repository>
@@ -107,6 +153,23 @@
 			</plugin>
 
 			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.5</version>
+				<configuration>
+					<message>Building site for ${project.version}</message>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>1.4</version>
@@ -150,9 +213,33 @@
 								</reportSet>
 							</reportSets>
 						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.2</version>
+							<configuration>
+								<dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+								<dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+								<webAccessUrl>https://github.com/Belphemur/AdminCmd</webAccessUrl>
+								<anonymousConnection>scm:git:git@github.com:Belphemur/AdminCmd.git</anonymousConnection>
+								<developerConnection>scm:git:git@github.com:Belphemur/AdminCmd.git</developerConnection>
+							</configuration>
+							<reportSets>
+								<reportSet>
+									<reports>
+										<report>index</report>
+										<report>dependencies</report>
+										<report>issue-tracking</report>
+										<report>license</report>
+										<report>project-team</report>
+									</reports>
+								</reportSet>
+							</reportSets>
+						</plugin>
 					</reportPlugins>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
