@@ -57,11 +57,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 *            the amount to set
 	 */
 	public void setAmount(final int amount) {
-		if (material != null)
-			if (material.getMaxStackSize() >= amount)
-				this.amount = amount;
-			else
-				this.amount = material.getMaxStackSize();
+		this.amount = amount;
 	}
 
 	public MaterialContainer(final String mat, final String damage) {
