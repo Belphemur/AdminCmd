@@ -177,6 +177,8 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	@Override
 	public int compareTo(final MaterialContainer o) {
+		if (material.equals(o.getMaterial()))
+			return dmg - o.getDmg();
 		return material.compareTo(o.getMaterial());
 	}
 

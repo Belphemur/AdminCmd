@@ -14,7 +14,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -92,7 +94,7 @@ public class ACHelper {
 	}
 
 	private FileManager fManager;
-	private List<Integer> itemBlacklist;
+	private final Set<MaterialContainer> itemBlacklist = new TreeSet<MaterialContainer>();
 	private List<Integer> blockBlacklist;
 	private List<String> groups;
 	private AdminCmd coreInstance;
@@ -191,26 +193,20 @@ public class ACHelper {
 	 */
 	public boolean addBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
-		if (!m.isNull()) {
-			final ExtendedConfiguration config = fManager.getYml("blacklist");
-			List<Integer> list = config.getIntList("BlackListedItems", null);
-			if (list == null)
-				list = new ArrayList<Integer>();
-			list.add(m.getMaterial().getId());
-			config.set("BlackListedItems", list);
-			try {
-				config.save();
-			} catch (final IOException e) {
-			}
-			if (itemBlacklist == null)
-				itemBlacklist = new ArrayList<Integer>();
-			itemBlacklist.add(m.getMaterial().getId());
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("material", m.getMaterial().toString());
-			Utils.sI18n(sender, "addBlacklistItem", replace);
-			return true;
+		if (m.isNull()) {
+			return false;
 		}
-		return false;
+		final ExtendedConfiguration config = fManager.getYml("blacklist");
+		itemBlacklist.add(m);
+		config.set("BlackListedMaterial", itemBlacklist);
+		try {
+			config.save();
+		} catch (final IOException e) {
+			DebugLog.INSTANCE.log(Level.WARNING, "Can't save the blacklist", e);
+			return false;
+		}
+		return true;
+
 	}
 
 	public void addFakeQuit(final Player p) {
@@ -403,9 +399,10 @@ public class ACHelper {
 	 * 
 	 * @return
 	 */
-	private List<Integer> getBlackListedItems() {
-		return fManager.getYml("blacklist")
-				.getIntList("BlackListedItems", new ArrayList<Integer>());
+	@SuppressWarnings("unchecked")
+	private Set<MaterialContainer> getBlackListedItems() {
+		return (Set<MaterialContainer>) fManager.getYml("blacklist").get("BlackListedMaterial",
+				new TreeSet<MaterialContainer>());
 	}
 
 	/*
@@ -759,7 +756,7 @@ public class ACHelper {
 	}
 
 	public synchronized void loadInfos() {
-		itemBlacklist = getBlackListedItems();
+		itemBlacklist.addAll(getBlackListedItems());
 		blockBlacklist = getBlackListedBlocks();
 		groups = getGroupNames();
 
@@ -859,7 +856,7 @@ public class ACHelper {
 			}
 			if (itemBlacklist != null && !itemBlacklist.isEmpty()
 					&& itemBlacklist.contains(m.getMaterial().getId()))
-				itemBlacklist.remove((Integer) m.getMaterial().getId());
+				itemBlacklist.remove(m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
 			Utils.sI18n(sender, "rmBlacklistBlock", replace);
@@ -892,7 +889,7 @@ public class ACHelper {
 			}
 			if (itemBlacklist != null && !itemBlacklist.isEmpty()
 					&& itemBlacklist.contains(m.getMaterial().getId()))
-				itemBlacklist.remove((Integer) m.getMaterial().getId());
+				itemBlacklist.remove(m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
 			Utils.sI18n(sender, "rmBlacklistItem", replace);
