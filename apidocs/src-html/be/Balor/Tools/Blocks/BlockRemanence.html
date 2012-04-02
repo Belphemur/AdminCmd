@@ -1,0 +1,192 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /************************************************************************<a name="line.1"></a>
+<FONT color="green">002</FONT>     * This file is part of AdminCmd.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * AdminCmd is free software: you can redistribute it and/or modify<a name="line.4"></a>
+<FONT color="green">005</FONT>     * it under the terms of the GNU General Public License as published by<a name="line.5"></a>
+<FONT color="green">006</FONT>     * the Free Software Foundation, either version 3 of the License, or<a name="line.6"></a>
+<FONT color="green">007</FONT>     * (at your option) any later version.<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     * AdminCmd is distributed in the hope that it will be useful,<a name="line.9"></a>
+<FONT color="green">010</FONT>     * but WITHOUT ANY WARRANTY; without even the implied warranty of<a name="line.10"></a>
+<FONT color="green">011</FONT>     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<a name="line.11"></a>
+<FONT color="green">012</FONT>     * GNU General Public License for more details.<a name="line.12"></a>
+<FONT color="green">013</FONT>     *<a name="line.13"></a>
+<FONT color="green">014</FONT>     * You should have received a copy of the GNU General Public License<a name="line.14"></a>
+<FONT color="green">015</FONT>     * along with AdminCmd.  If not, see &lt;http://www.gnu.org/licenses/&gt;.<a name="line.15"></a>
+<FONT color="green">016</FONT>     ************************************************************************/<a name="line.16"></a>
+<FONT color="green">017</FONT>    package be.Balor.Tools.Blocks;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.bukkit.Location;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.bukkit.block.Block;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    /**<a name="line.22"></a>
+<FONT color="green">023</FONT>     * @author Balor (aka Antoine Aflalo)<a name="line.23"></a>
+<FONT color="green">024</FONT>     * <a name="line.24"></a>
+<FONT color="green">025</FONT>     */<a name="line.25"></a>
+<FONT color="green">026</FONT>    public class BlockRemanence {<a name="line.26"></a>
+<FONT color="green">027</FONT>            protected Location loc;<a name="line.27"></a>
+<FONT color="green">028</FONT>            private final int oldType;<a name="line.28"></a>
+<FONT color="green">029</FONT>            private byte data = 0;<a name="line.29"></a>
+<FONT color="green">030</FONT>            private boolean useData;<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>            /**<a name="line.32"></a>
+<FONT color="green">033</FONT>             *<a name="line.33"></a>
+<FONT color="green">034</FONT>             */<a name="line.34"></a>
+<FONT color="green">035</FONT>            public BlockRemanence(final Location loc) {<a name="line.35"></a>
+<FONT color="green">036</FONT>                    this.loc = loc;<a name="line.36"></a>
+<FONT color="green">037</FONT>                    final Block b = loc.getWorld().getBlockAt(loc);<a name="line.37"></a>
+<FONT color="green">038</FONT>                    this.oldType = b.getTypeId();<a name="line.38"></a>
+<FONT color="green">039</FONT>                    if ((useData = usesData(oldType)))<a name="line.39"></a>
+<FONT color="green">040</FONT>                            data = b.getState().getRawData();<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>            }<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>            public Block returnToThePast() {<a name="line.44"></a>
+<FONT color="green">045</FONT>                    final Block b = loc.getWorld().getBlockAt(loc);<a name="line.45"></a>
+<FONT color="green">046</FONT>                    if (useData)<a name="line.46"></a>
+<FONT color="green">047</FONT>                            b.setTypeIdAndData(oldType, data, true);<a name="line.47"></a>
+<FONT color="green">048</FONT>                    else<a name="line.48"></a>
+<FONT color="green">049</FONT>                            b.setTypeId(oldType, true);<a name="line.49"></a>
+<FONT color="green">050</FONT>                    return b;<a name="line.50"></a>
+<FONT color="green">051</FONT>            }<a name="line.51"></a>
+<FONT color="green">052</FONT>    <a name="line.52"></a>
+<FONT color="green">053</FONT>            public void setBlockType(final int type) {<a name="line.53"></a>
+<FONT color="green">054</FONT>                    loc.getWorld().getBlockAt(loc).setTypeId(type, true);<a name="line.54"></a>
+<FONT color="green">055</FONT>            }<a name="line.55"></a>
+<FONT color="green">056</FONT>    <a name="line.56"></a>
+<FONT color="green">057</FONT>            /**<a name="line.57"></a>
+<FONT color="green">058</FONT>             * @return the oldType<a name="line.58"></a>
+<FONT color="green">059</FONT>             */<a name="line.59"></a>
+<FONT color="green">060</FONT>            public int getOldType() {<a name="line.60"></a>
+<FONT color="green">061</FONT>                    return oldType;<a name="line.61"></a>
+<FONT color="green">062</FONT>            }<a name="line.62"></a>
+<FONT color="green">063</FONT>    <a name="line.63"></a>
+<FONT color="green">064</FONT>            /**<a name="line.64"></a>
+<FONT color="green">065</FONT>             * @return the data<a name="line.65"></a>
+<FONT color="green">066</FONT>             */<a name="line.66"></a>
+<FONT color="green">067</FONT>            public byte getData() {<a name="line.67"></a>
+<FONT color="green">068</FONT>                    return data;<a name="line.68"></a>
+<FONT color="green">069</FONT>            }<a name="line.69"></a>
+<FONT color="green">070</FONT>    <a name="line.70"></a>
+<FONT color="green">071</FONT>            /**<a name="line.71"></a>
+<FONT color="green">072</FONT>             * Block types. From worldEdit<a name="line.72"></a>
+<FONT color="green">073</FONT>             * <a name="line.73"></a>
+<FONT color="green">074</FONT>             * @author sk89q<a name="line.74"></a>
+<FONT color="green">075</FONT>             */<a name="line.75"></a>
+<FONT color="green">076</FONT>            // TODO: Needs update<a name="line.76"></a>
+<FONT color="green">077</FONT>            private static boolean usesData(final int id) {<a name="line.77"></a>
+<FONT color="green">078</FONT>                    return id == 6 // Saplings<a name="line.78"></a>
+<FONT color="green">079</FONT>                                    || id == 8 // Water<a name="line.79"></a>
+<FONT color="green">080</FONT>                                    || id == 9 // Water<a name="line.80"></a>
+<FONT color="green">081</FONT>                                    || id == 10 // Lava<a name="line.81"></a>
+<FONT color="green">082</FONT>                                    || id == 11 // Lava<a name="line.82"></a>
+<FONT color="green">083</FONT>                                    || id == 17 // Wood<a name="line.83"></a>
+<FONT color="green">084</FONT>                                    || id == 18 // Leaves<a name="line.84"></a>
+<FONT color="green">085</FONT>                                    || id == 23 // Dispenser<a name="line.85"></a>
+<FONT color="green">086</FONT>                                    || id == 25 // Note Block<a name="line.86"></a>
+<FONT color="green">087</FONT>                                    || id == 26 // Bed<a name="line.87"></a>
+<FONT color="green">088</FONT>                                    || id == 27 // Powered rails<a name="line.88"></a>
+<FONT color="green">089</FONT>                                    || id == 28 // Detector rails<a name="line.89"></a>
+<FONT color="green">090</FONT>                                    || id == 29 // Sticky piston<a name="line.90"></a>
+<FONT color="green">091</FONT>                                    || id == 31 // Tall grass<a name="line.91"></a>
+<FONT color="green">092</FONT>                                    || id == 33 // Piston<a name="line.92"></a>
+<FONT color="green">093</FONT>                                    || id == 34 // Piston extension<a name="line.93"></a>
+<FONT color="green">094</FONT>                                    || id == 35 // Wool<a name="line.94"></a>
+<FONT color="green">095</FONT>                                    || id == 43 // Double slab<a name="line.95"></a>
+<FONT color="green">096</FONT>                                    || id == 44 // Slab<a name="line.96"></a>
+<FONT color="green">097</FONT>                                    || id == 50 // Torch<a name="line.97"></a>
+<FONT color="green">098</FONT>                                    || id == 53 // Wooden stairs<a name="line.98"></a>
+<FONT color="green">099</FONT>                                    || id == 55 // Redstone wire<a name="line.99"></a>
+<FONT color="green">100</FONT>                                    || id == 59 // Crops<a name="line.100"></a>
+<FONT color="green">101</FONT>                                    || id == 60 // Soil<a name="line.101"></a>
+<FONT color="green">102</FONT>                                    || id == 61 // Furnace<a name="line.102"></a>
+<FONT color="green">103</FONT>                                    || id == 62 // Furnace<a name="line.103"></a>
+<FONT color="green">104</FONT>                                    || id == 63 // Sign post<a name="line.104"></a>
+<FONT color="green">105</FONT>                                    || id == 64 // Wooden door<a name="line.105"></a>
+<FONT color="green">106</FONT>                                    || id == 65 // Ladder<a name="line.106"></a>
+<FONT color="green">107</FONT>                                    || id == 66 // Minecart track<a name="line.107"></a>
+<FONT color="green">108</FONT>                                    || id == 67 // Cobblestone stairs<a name="line.108"></a>
+<FONT color="green">109</FONT>                                    || id == 68 // Wall sign<a name="line.109"></a>
+<FONT color="green">110</FONT>                                    || id == 69 // Lever<a name="line.110"></a>
+<FONT color="green">111</FONT>                                    || id == 70 // Stone pressure plate<a name="line.111"></a>
+<FONT color="green">112</FONT>                                    || id == 71 // Iron door<a name="line.112"></a>
+<FONT color="green">113</FONT>                                    || id == 72 // Wooden pressure plate<a name="line.113"></a>
+<FONT color="green">114</FONT>                                    || id == 75 // Redstone torch (off)<a name="line.114"></a>
+<FONT color="green">115</FONT>                                    || id == 76 // Redstone torch (on)<a name="line.115"></a>
+<FONT color="green">116</FONT>                                    || id == 77 // Stone button<a name="line.116"></a>
+<FONT color="green">117</FONT>                                    || id == 78 // Snow tile<a name="line.117"></a>
+<FONT color="green">118</FONT>                                    || id == 81 // Cactus<a name="line.118"></a>
+<FONT color="green">119</FONT>                                    || id == 86 // Pumpkin<a name="line.119"></a>
+<FONT color="green">120</FONT>                                    || id == 91 // Jack-o-lantern<a name="line.120"></a>
+<FONT color="green">121</FONT>                                    || id == 92 // Cake<a name="line.121"></a>
+<FONT color="green">122</FONT>                                    || id == 93 // Redstone repeater (off)<a name="line.122"></a>
+<FONT color="green">123</FONT>                                    || id == 94 // Redstone repeater (on)<a name="line.123"></a>
+<FONT color="green">124</FONT>                                    || id == 96; // Trap door<a name="line.124"></a>
+<FONT color="green">125</FONT>            }<a name="line.125"></a>
+<FONT color="green">126</FONT>    }<a name="line.126"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
