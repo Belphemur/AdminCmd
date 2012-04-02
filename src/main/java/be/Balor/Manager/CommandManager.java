@@ -86,7 +86,13 @@ public class CommandManager implements CommandExecutor {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
 						new SyncCommand(acc));
 			} catch (final WorldNotLoaded e) {
-				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender());
+				String message = e.getMessage();
+				if (message == null || message == "") {
+					message = "This world is not loaded!";
+				}
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("message", message);
+				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender(), replace);
 			} catch (final PlayerNotFound e) {
 				e.getSender().sendMessage(e.getMessage());
 			} catch (final Throwable t) {

@@ -14,28 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners.Commands;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Egg.EggType;
+package be.Balor.Tools.Exceptions;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACEggListener implements Listener {
+public class InvalidInputException extends Exception {
 
-	@EventHandler(ignoreCancelled = true)
-	void eggThrown(final PlayerEggThrowEvent event) {
-		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (!player.hasPower(Type.EGG))
-			return;
-		final EggType<?> eggPower = player.getPower(Type.EGG).getEggType();
-		eggPower.onEvent(event);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2704740483298449995L;
+
+	/**
+	 * 
+	 */
+	public InvalidInputException() {
 	}
+
+	/**
+	 * @param message
+	 */
+	public InvalidInputException(final String message) {
+		super(message);
+	}
+
+	/**
+	 * @param cause
+	 */
+	public InvalidInputException(final Throwable cause) {
+		super(cause);
+	}
+
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public InvalidInputException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
+
 }

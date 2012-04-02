@@ -51,4 +51,12 @@ public interface IPermissionPlugin {
 	public abstract boolean hasPerm(CommandSender player, String perm, boolean errorMsg);
 
 	public abstract boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin;
+
+	/**
+	 * Get the group of the player
+	 * 
+	 * @param player
+	 * @return
+	 */
+	String getGroup(Player player);
 }

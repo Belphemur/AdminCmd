@@ -14,28 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners.Commands;
+package be.Balor.Manager.Permissions.Plugins;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Egg.EggType;
+import org.bukkit.entity.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACEggListener implements Listener {
+public class DinnerPermissions extends SuperPermissions {
 
-	@EventHandler(ignoreCancelled = true)
-	void eggThrown(final PlayerEggThrowEvent event) {
-		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (!player.hasPower(Type.EGG))
-			return;
-		final EggType<?> eggPower = player.getPower(Type.EGG).getEggType();
-		eggPower.onEvent(event);
+	/**
+	 * 
+	 */
+	public DinnerPermissions() {
+		// TODO Auto-generated constructor stub
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.IPermissionPlugin#getGroup(org.bukkit
+	 * .entity.Player)
+	 */
+	@Override
+	public String getGroup(final Player player) {
+		return "";
+	}
+
 }

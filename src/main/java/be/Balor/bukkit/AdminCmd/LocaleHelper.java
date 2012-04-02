@@ -62,8 +62,13 @@ public enum LocaleHelper {
 			+ "has been kicked from the Server, reason:" + ChatColor.RED + " %reason"),
 	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " + ChatColor.YELLOW
 			+ "left the game: %reason"),
-	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED
-			+ "This World is not loaded !");
+	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED + "%message"),
+	MISSING_ARG("missingArg", ChatColor.RED + "You must provide a %arg as an argument to use the"
+			+ " command " + ChatColor.AQUA + "%cmdName"),
+	TP_DIM("dimensionTeleport", ChatColor.GREEN
+			+ "You were successfully teleported to world %world!"),
+	TP_DIM_LIST("dimTpList", ChatColor.GREEN
+			+ "Worlds which are currently available to teleport to://n" + ChatColor.GOLD + "%list");
 
 	private final String key;
 	private final String locale;

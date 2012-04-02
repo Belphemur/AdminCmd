@@ -41,13 +41,11 @@ public class ACEntityListener implements Listener {
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityTarget(final EntityTargetEvent event) {
-		if (event.isCancelled())
-			return;
-		if (!(event.getTarget() instanceof Player))
-			return;
 		final Player p = (Player) event.getTarget();
+		if (!(p instanceof Player))
+			return;
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false))
 			event.setCancelled(true);

@@ -24,6 +24,8 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -68,6 +71,8 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Exceptions.InvalidInputException;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.TeleportTask;
@@ -79,8 +84,9 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.herocraftonline.dev.heroes.Heroes;
-import com.herocraftonline.dev.heroes.hero.Hero;
+import com.google.common.base.Joiner;
+import com.herocraftonline.heroes.Heroes;
+import com.herocraftonline.heroes.characters.Hero;
 
 import de.diddiz.LogBlock.Consumer;
 
@@ -327,8 +333,10 @@ public class Utils {
 	 * 
 	 * @param mat
 	 * @return Material
+	 * @throws InvalidInputException
+	 *             if the input is invalid
 	 */
-	public static MaterialContainer checkMaterial(final String mat) {
+	public static MaterialContainer checkMaterial(final String mat) throws InvalidInputException {
 		MaterialContainer mc = new MaterialContainer();
 		try {
 			if (oddItem != null) {
@@ -342,6 +350,8 @@ public class Utils {
 		String[] info = new String[2];
 		if (mat.contains(":")) {
 			info = mat.split(":");
+			if (info.length < 2)
+				throw new InvalidInputException(mat);
 			mc = new MaterialContainer(info[0], info[1]);
 		} else {
 			info[0] = mat;
@@ -602,11 +612,10 @@ public class Utils {
 	 * @return the complete player name with prefix
 	 */
 	public static String getPlayerName(final Player player, final CommandSender sender) {
+		assert (player != null);
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
-			String prefix = colorParser(getPrefix(player, sender));
+			final String prefix = colorParser(getPrefix(player, sender));
 			final String suffix = colorParser(PermissionManager.getSuffix(player));
-			if (prefix.isEmpty())
-				prefix = ChatColor.WHITE.toString();
 			if (ConfigEnum.DNAME.getBoolean())
 				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 
@@ -614,9 +623,9 @@ public class Utils {
 		}
 
 		if (ConfigEnum.DNAME.getBoolean())
-			return ChatColor.WHITE + player.getDisplayName();
+			return player.getDisplayName();
 
-		return ChatColor.WHITE + player.getName();
+		return player.getName();
 	}
 
 	/**
@@ -987,14 +996,14 @@ public class Utils {
 		if (target == null)
 			return false;
 		if (heroes != null) {
-			hero = heroes.getHeroManager().getHero(target);
+			hero = heroes.getCharacterManager().getHero(target);
 		}
 		switch (toDo) {
 		case HEAL:
 			if (hero == null)
 				target.setHealth(20);
 			else
-				hero.setHealth(20D);
+				hero.setHealth(20);
 			target.setFireTicks(0);
 			break;
 		case FEED:
@@ -1004,7 +1013,7 @@ public class Utils {
 			if (hero == null)
 				target.setHealth(0);
 			else
-				hero.setHealth(0D);
+				hero.setHealth(0);
 			if (logBlock != null)
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
 			break;
@@ -1106,13 +1115,13 @@ public class Utils {
 				"nb",
 				String.valueOf(p.getServer().getOnlinePlayers().length
 						- InvisibleWorker.getInstance().nbInvisibles()));
-		String connected = "";
-		for (final Player player : p.getServer().getOnlinePlayers())
-			if (!InvisibleWorker.getInstance().hasInvisiblePowers(player.getName()))
-				connected += getPrefix(player, p) + player.getName() + ", ";
-		if (!connected.equals("")) {
-			if (connected.endsWith(", "))
-				connected = connected.substring(0, connected.lastIndexOf(","));
+		final Collection<String> list = Utils.getPlayerList(p);
+		String connected = Joiner.on(", ").join(list);
+		if (connected.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
+			final String tmp = connected.substring(0, ACMinecraftFontWidthCalculator.chatwidth);
+			final String tmp2 = connected.substring(ACMinecraftFontWidthCalculator.chatwidth,
+					connected.length());
+			connected = tmp + "//n" + tmp2;
 		}
 		replace.put("connected", connected);
 		final String serverTime = replaceDateAndTimeFormat();
@@ -1429,7 +1438,7 @@ public class Utils {
 		if (event.isCancelled())
 			return;
 		if (!loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
-			player.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
+			loc.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 		final WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
 		final WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
@@ -1444,5 +1453,25 @@ public class Utils {
 			}
 			server.getHandle().moveToWorld(entity, toWorld.dimension, true, loc);
 		}
+	}
+
+	/**
+	 * Get the player list ordered by group and alphabetically for the sender
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @return a Collection containing what to display
+	 */
+	public static Collection<String> getPlayerList(final CommandSender sender) {
+		final List<Player> online = Utils.getOnlinePlayers();
+		final Map<Player, String> players = new TreeMap<Player, String>(new PlayerComparator());
+		for (final Player p : online) {
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) || ACPlayer
+					.getPlayer(p).hasPower(Type.FAKEQUIT))
+					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false))
+				continue;
+			players.put(p, Utils.getPlayerName(p, sender));
+		}
+		return Collections.unmodifiableCollection(players.values());
 	}
 }

@@ -55,6 +55,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -599,10 +600,14 @@ public class FileManager implements DataManager {
 
 			if (kitItems != null)
 				for (final String item : kitItems.getKeys(false)) {
-					final MaterialContainer m = Utils.checkMaterial(item);
-					m.setAmount(kitItems.getInt(item, 1));
-					if (!m.isNull())
-						items.add(m);
+					try {
+						final MaterialContainer m = Utils.checkMaterial(item);
+						m.setAmount(kitItems.getInt(item, 1));
+						if (!m.isNull())
+							items.add(m);
+					} catch (final InvalidInputException e) {
+						DebugLog.INSTANCE.log(Level.WARNING, "Problem with kit : " + item, e);
+					}
 				}
 			delay = kitNode.getInt("delay", 0);
 			/*
@@ -621,9 +626,13 @@ public class FileManager implements DataManager {
 					final String partId = armorItems.getString(part.toString());
 					if (partId == null)
 						continue;
-					final MaterialContainer m = Utils.checkMaterial(partId);
-					if (!m.isNull())
-						armor.put(part, m);
+					try {
+						final MaterialContainer m = Utils.checkMaterial(partId);
+						if (!m.isNull())
+							armor.put(part, m);
+					} catch (final InvalidInputException e) {
+						DebugLog.INSTANCE.log(Level.WARNING, "Problem with kit : " + partId, e);
+					}
 				}
 				result.put(kitName, new ArmoredKitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items),

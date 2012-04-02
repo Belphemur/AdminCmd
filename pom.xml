@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -6,10 +7,10 @@
 	<name>AdminCmd</name>
 	<url>http://forums.bukkit.org/threads/admn-gen-admincmd-5-4-time-give-tp-repair-heal-kill-item-blacklist-weather-etc-1000.10770/</url>
 	<scm>
-        <connection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</connection>
-        <url>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</url>
-        <developerConnection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</developerConnection>
-    </scm>
+		<connection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</connection>
+		<url>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</url>
+		<developerConnection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</developerConnection>
+	</scm>
 	<distributionManagement>
 		<!-- Publish the versioned releases here -->
 		<repository>
@@ -217,7 +218,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -284,7 +285,7 @@
 		<dependency>
 			<groupId>Heroes</groupId>
 			<artifactId>Heroes</artifactId>
-			<version>1.3.2</version>
+			<version>1.4.7</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -313,13 +314,13 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.2.4-R1.0</version>
+			<version>1.2.5-R0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.2.4-R1.0</version>
+			<version>1.2.5-R0.1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -327,5 +328,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>5.12.1-SNAPSHOT</version>
+	<version>5.13-SNAPSHOT</version>
 </project>

@@ -90,7 +90,7 @@ public class Reply extends PlayerCommand {
 			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
 			ACHelper.getInstance().setReplyPlayer(buddy, pSender);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
-				AFKWorker.getInstance().sendAfkMessage((Player) sender, buddy);
+				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
 			} else
 				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
 			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;

@@ -38,7 +38,6 @@ public enum ConfigEnum {
 			+ "(override the above parameter DisplayRulesOnJoin)"),
 	DVULCAN("DefaultVulcanPower", 4.0F, "Default value for Vulcan power"),
 	DFB("DefaultFireBallPower", 1.0F, "Default value for Fireball power"),
-	DFLY("DefaultFlyPower", 1.75F, "Default value for Fly power"),
 	SUPERPERM("forceOfficialBukkitPerm", false, "Only useful when using bridge with SuperPerm,\n"
 			+ "to avoid the use of the bridge."),
 	LOCALE("locale", "en_US", "Language of messages displayed in the plugin."),

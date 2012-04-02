@@ -196,6 +196,13 @@ actpback:
     permissions: admincmd.tp.back
     cmdname: bal_back
 
+actpworld:
+    command: tpd <-P playerName> <worldName>
+    description: "Teleports the [target] to the given world, if no arguments are given a list with all possible worlds will be shown"
+    plugin: AdminCmd
+    permissions: admincmd.tp.world
+    cmdname: bal_tpworld
+
 acplayerlist:
     command: playerlist
     description: Lists all online players.

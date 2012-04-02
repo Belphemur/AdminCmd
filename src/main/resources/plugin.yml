@@ -410,3 +410,9 @@ commands:
     description: Lets you quit the game and give a reason why, the reason can be omitted.
     aliases: [quit]
     usage: /<command> <reason>
+  bal_tpworld:
+    description: Lets a player teleport into another world.
+    aliases: [tpd]
+    usage: |
+        /<command> <-P playerName> [worldName]
+        /<command> - This will list all possible worlds if player has permission to do so

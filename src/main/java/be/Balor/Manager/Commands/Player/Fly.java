@@ -54,20 +54,8 @@ public class Fly extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		Player player = null;
-		float power = ConfigEnum.DFLY.getFloat();
 		final String timeOut = args.getValueFlag('t');
-		if (args.length >= 1) {
-			try {
-				player = Utils.getUser(sender, args, permNode, 1, false);
-				power = args.getFloat(0);
-			} catch (final NumberFormatException e) {
-				power = ConfigEnum.DFLY.getFloat();
-				player = Utils.getUser(sender, args, permNode);
-			}
-			if (args.length >= 2)
-				player = Utils.getUser(sender, args, permNode, 1, true);
-		} else
-			player = Utils.getUser(sender, args, permNode);
+		player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
@@ -75,31 +63,15 @@ public class Fly extends PlayerCommand {
 			if (acp.hasPower(Type.FLY)) {
 				acp.removePower(Type.FLY);
 				player.setAllowFlight(false);
+				player.setFlying(false);
 				player.setFallDistance(0.0F);
 				Utils.sI18n(player, "flyDisabled");
-				// MC 1.8 creative hack
-				/*
-				 * ((CraftPlayer)
-				 * player).getHandle().netServerHandler.sendPacket(new
-				 * Packet70Bed(3, 0));
-				 * ((CraftPlayer)player).getHandle().abilities.canInstantlyBuild
-				 * = false;
-				 * ((CraftPlayer)player).getHandle().abilities.isInvulnerable =
-				 * false; ((CraftPlayer)player).getHandle().abilities.canFly =
-				 * false; ((CraftPlayer)player).getHandle().abilities.isFlying =
-				 * false;
-				 */
 				if (!player.equals(sender))
 					Utils.sI18n(sender, "flyDisabledTarget", replace);
 			} else {
-				power = power > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat()
-						: power;
-				acp.setPower(Type.FLY, power);
+				acp.setPower(Type.FLY);
 				player.setAllowFlight(true);
-				// MC 1.8 creative hack
-				// ((CraftPlayer)
-				// player).getHandle().netServerHandler.sendPacket(new
-				// Packet70Bed(3, 1));
+				player.setFlying(true);
 				player.setFallDistance(1F);
 				Utils.sI18n(player, "flyEnabled");
 				if (!player.equals(sender))

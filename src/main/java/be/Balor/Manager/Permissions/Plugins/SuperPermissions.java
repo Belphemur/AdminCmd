@@ -41,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Lathanael (aka Philippe Leipold)
  * 
  */
-public class SuperPermissions implements IPermissionPlugin {
+public abstract class SuperPermissions implements IPermissionPlugin {
 	protected static MInfoReader mChatInfo = null;
 
 	/**

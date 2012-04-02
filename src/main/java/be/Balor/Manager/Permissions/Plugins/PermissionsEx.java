@@ -169,7 +169,7 @@ public class PermissionsEx extends SuperPermissions {
 		PermissionUser user = null;
 		try {
 			user = PEX.getUser(player);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			DebugLog.INSTANCE.log(Level.SEVERE,
 					"Problem when trying to get the prefix of the user " + player.getName(), e);
 			return "";
@@ -203,6 +203,19 @@ public class PermissionsEx extends SuperPermissions {
 			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty())
 				break;
 		return suffix;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getGroup(org.bukkit
+	 * .entity.Player)
+	 */
+	@Override
+	public String getGroup(final Player player) {
+		final String[] groups = PEX.getUser(player).getGroupsNames();
+		return groups[groups.length - 1];
 	}
 
 }

@@ -41,10 +41,8 @@ import be.Balor.Tools.Type;
 public class ACNoDropListener implements Listener {
 	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
-		if (event.isCancelled())
-			return;
 		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.NO_DROP))
 			event.setCancelled(true);
 	}

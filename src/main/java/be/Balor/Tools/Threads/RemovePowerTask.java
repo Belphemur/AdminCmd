@@ -55,8 +55,13 @@ public class RemovePowerTask implements Runnable {
 	public void run() {
 		player.removePower(power);
 		final Player handler = player.getHandler();
-		if (handler != null)
+		if (handler != null) {
 			Utils.sI18n(handler, "timeOutPower", "power", power.display());
+			if (power == Type.FLY) {
+				handler.setAllowFlight(false);
+				handler.setFlying(false);
+			}
+		}
 		if (!sender.equals(handler)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("power", power.display());
