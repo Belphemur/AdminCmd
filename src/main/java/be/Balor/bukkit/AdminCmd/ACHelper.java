@@ -597,7 +597,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackListBlock(final CommandSender sender, final ItemStack mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+		if (!PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false)
 				&& blockBlacklist.contains(mat.getTypeId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
@@ -608,7 +608,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackListBlock(final CommandSender sender, final MaterialContainer mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
+		if (!PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false)
 				&& blockBlacklist.contains(mat.getMaterial().getId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
@@ -623,7 +623,7 @@ public class ACHelper {
 	}
 
 	public boolean inBlackListItem(final CommandSender sender, final MaterialContainer mat) {
-		if (PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false))
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false))
 			return false;
 		if (!itemBlacklist.contains(mat))
 			return false;
