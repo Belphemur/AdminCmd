@@ -204,6 +204,7 @@
 							<version>2.7</version>
 							<configuration>
 								<linksource>true</linksource>
+								<splitindex>true</splitindex>
 							</configuration>
 							<reportSets>
 								<reportSet>
