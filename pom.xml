@@ -30,7 +30,8 @@
 	<developers>
 		<developer>
 			<id>Belphemur</id>
-			<name>Belphemur</name>
+			<name>Antoine Aflalo</name>
+			<email>-</email>
 			<url>http://www.admincmd.com</url>
 			<organization>AdminCmd Team</organization>
 			<organizationUrl>http://www.admincmd.com</organizationUrl>
@@ -43,6 +44,7 @@
 		<developer>
 			<id>Lathanael</id>
 			<name>Lathanael</name>
+			<email>-</email>
 			<url>http://www.admincmd.com</url>
 			<organization>AdminCmd Team</organization>
 			<organizationUrl>http://www.admincmd.com</organizationUrl>
