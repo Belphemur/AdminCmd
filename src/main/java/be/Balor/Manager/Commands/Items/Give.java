@@ -95,7 +95,8 @@ public class Give extends ItemCommand {
 			else
 				return;
 		}
-		final ItemStack stack = mat.getItemStack(cnt);
+		mat.setAmount(cnt);
+		final ItemStack stack = mat.getItemStack();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(cnt));
 		replace.put("material", mat.getMaterial().toString());

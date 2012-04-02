@@ -104,14 +104,11 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * @param amount
 	 * @return
 	 */
-	public ItemStack getItemStack(final int amount) {
+
+	public ItemStack getItemStack() {
 		final ItemStack toReturn = new ItemStack(material, amount, dmg);
 		toReturn.addUnsafeEnchantments(enchantments);
 		return toReturn;
-	}
-
-	public ItemStack getItemStack() {
-		return getItemStack(amount);
 	}
 
 	@Override
@@ -141,6 +138,36 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	public int getAmount() {
 		return amount;
+	}
+
+	/**
+	 * @return the dmg
+	 */
+	public short getDmg() {
+		return dmg;
+	}
+
+	/**
+	 * @return the enchantments
+	 */
+	public Map<Enchantment, Integer> getEnchantments() {
+		return enchantments;
+	}
+
+	/**
+	 * @param material
+	 *            the material to set
+	 */
+	public void setMaterial(final Material material) {
+		this.material = material;
+	}
+
+	/**
+	 * @param dmg
+	 *            the dmg to set
+	 */
+	public void setDmg(final short dmg) {
+		this.dmg = dmg;
 	}
 
 	/*
