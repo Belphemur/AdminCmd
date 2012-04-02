@@ -38,8 +38,6 @@
 			<roles>
 				<role>developer</role>
 			</roles>
-			<properties>
-			</properties>
 		</developer>
 		<developer>
 			<id>Lathanael</id>
@@ -51,9 +49,6 @@
 			<roles>
 				<role>developer</role>
 			</roles>
-			<properties>
-				<picUrl>https://de.gravatar.com/userimage/25687290/926b5f0b675ebcf7249ec01aae650afd.png</picUrl>
-			</properties>
 		</developer>
 	</developers>
 	<distributionManagement>
