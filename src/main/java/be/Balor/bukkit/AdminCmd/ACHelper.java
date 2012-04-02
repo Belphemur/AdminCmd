@@ -339,7 +339,7 @@ public class ACHelper {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat);
 			Utils.sI18n(sender, "unknownMat", replace);
-			return null;
+			return new MaterialContainer();
 		}
 		if (m.isNull()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
