@@ -196,15 +196,25 @@ public class ACHelper {
 		if (m.isNull()) {
 			return false;
 		}
+
+		if (!itemBlacklist.add(m)) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("item", m.display());
+			LocaleHelper.BL_ITEM_ALREADY.sendLocale(sender, replace);
+			return false;
+		}
 		final ExtendedConfiguration config = fManager.getYml("blacklist");
-		itemBlacklist.add(m);
 		config.set("BlackListedMaterial", itemBlacklist);
 		try {
 			config.save();
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.WARNING, "Can't save the blacklist", e);
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("item", m.display());
+			LocaleHelper.BL_ITEM_PROBLEM.sendLocale(sender, replace);
 			return false;
 		}
+		Utils.sI18n(sender, "addBlacklistItem", "material", m.display());
 		return true;
 
 	}
@@ -609,25 +619,19 @@ public class ACHelper {
 	}
 
 	public boolean inBlackListItem(final CommandSender sender, final ItemStack mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
-				&& itemBlacklist.contains(mat.getTypeId())) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("material", mat.getType().toString());
-			Utils.sI18n(sender, "inBlacklistItem", replace);
-			return true;
-		}
-		return false;
+		return inBlackListItem(sender, new MaterialContainer(mat));
 	}
 
 	public boolean inBlackListItem(final CommandSender sender, final MaterialContainer mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false)
-				&& itemBlacklist.contains(mat.getMaterial().getId())) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("material", mat.display());
-			Utils.sI18n(sender, "inBlacklistItem", replace);
-			return true;
-		}
-		return false;
+		if (PermissionManager.hasPerm(sender, "admincmd.item.noblacklist", false))
+			return false;
+		if (!itemBlacklist.contains(mat))
+			return false;
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("material", mat.display());
+		Utils.sI18n(sender, "inBlacklistItem", replace);
+
+		return true;
 	}
 
 	/**

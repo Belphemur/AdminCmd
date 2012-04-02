@@ -548,8 +548,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
 				+ ChatColor.WHITE + " to " + ChatColor.GREEN + "%toPlayer");
 		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE
-				+ "%material" + ChatColor.GREEN
-				+ ") added to the Command Black List for i, give and drop.");
+				+ "%material" + ChatColor.GREEN + ") added to the Black List for i, give and drop.");
 		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block (" + ChatColor.WHITE
 				+ "%material" + ChatColor.GREEN + ") added to the BlockPlace Black List.");
 		Utils.addLocale("rmBlacklistItem", ChatColor.GREEN + "Item (" + ChatColor.WHITE

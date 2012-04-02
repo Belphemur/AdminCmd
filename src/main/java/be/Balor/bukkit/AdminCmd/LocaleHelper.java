@@ -68,7 +68,11 @@ public enum LocaleHelper {
 	TP_DIM("dimensionTeleport", ChatColor.GREEN
 			+ "You were successfully teleported to world %world!"),
 	TP_DIM_LIST("dimTpList", ChatColor.GREEN
-			+ "Worlds which are currently available to teleport to://n" + ChatColor.GOLD + "%list");
+			+ "Worlds which are currently available to teleport to://n" + ChatColor.GOLD + "%list"),
+	BL_ITEM_ALREADY("itemBlAlready", ChatColor.RED + "This item " + ChatColor.GOLD + "%item "
+			+ ChatColor.RED + "is already blacklisted"),
+	BL_ITEM_PROBLEM("blItemProb", ChatColor.GOLD + "Can't add the item " + ChatColor.WHITE
+			+ " %item" + ChatColor.GOLD + " to the black list !");
 
 	private final String key;
 	private final String locale;
