@@ -27,7 +27,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum ConfigEnum {
 
@@ -47,7 +47,7 @@ public enum ConfigEnum {
 	AFK_TIMEOUT("afkTimeInSecond", 60, "Time before setting the player AFK"),
 	AUTO_KICK("autoKickAfkPlayer", false, "Activate the auto kick AFK people after the given time"),
 	KICK_TIMEOUT("afkKickInMinutes", 3, "Time before kicking the AFK player"),
-	STATUS("statutCheckInSec", 20, "After how many seconds the plugin will check\n"
+	STATUS("statusCheckInSec", 20, "After how many seconds the plugin will check\n"
 			+ "if the player didn't move for the AFK\n"
 			+ "Also used to send update about the Invisible status."),
 	MHOME("maxHomeByUser", 0, "How many homes a user can have. 0 = Infinite, max = 150"),
