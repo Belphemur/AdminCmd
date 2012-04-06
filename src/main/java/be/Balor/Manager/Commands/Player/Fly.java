@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Fly extends PlayerCommand {
 
@@ -46,7 +46,7 @@ public class Fly extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -57,46 +57,16 @@ public class Fly extends PlayerCommand {
 		final String timeOut = args.getValueFlag('t');
 		player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
-			final ACPlayer acp = ACPlayer.getPlayer(player);
-			if (acp.hasPower(Type.FLY)) {
-				acp.removePower(Type.FLY);
-				player.setAllowFlight(false);
-				player.setFlying(false);
-				player.setFallDistance(0.0F);
-				Utils.sI18n(player, "flyDisabled");
-				if (!player.equals(sender))
-					Utils.sI18n(sender, "flyDisabledTarget", replace);
-			} else {
-				acp.setPower(Type.FLY);
-				player.setAllowFlight(true);
-				player.setFlying(true);
-				player.setFallDistance(1F);
-				Utils.sI18n(player, "flyEnabled");
-				if (!player.equals(sender))
-					Utils.sI18n(sender, "flyEnabledTarget", replace);
-				if (timeOut == null)
-					return;
-				int timeOutValue;
-				try {
-					timeOutValue = Integer.parseInt(timeOut);
-				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
-					return;
-				}
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.FLY, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
-			}
+			if (args.hasFlag('o'))
+				setFly(sender, player, timeOut, Type.FLY_OLD, 'o', args);
+			else
+				setFly(sender, player, timeOut, Type.FLY, 'n', args);
 		}
-
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -104,4 +74,49 @@ public class Fly extends PlayerCommand {
 		return args != null;
 	}
 
+	private void setFly(final CommandSender sender, final Player player, final String timeOut, final Type power, final char c, final CommandArgs args) {
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", Utils.getPlayerName(player));
+		final ACPlayer acp = ACPlayer.getPlayer(player);
+		final String powerValueString = args.getValueFlag('p');
+		float powerFloat;
+		try {
+			powerFloat = Float.parseFloat(powerValueString);
+		} catch (NumberFormatException e) {
+			powerFloat = ConfigEnum.DFLY.getFloat();
+		}
+		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat() : powerFloat;
+		if (acp.hasPower(power)) {
+			acp.removePower(power);
+			player.setAllowFlight(false);
+			if (c == 'n')
+				player.setFlying(false);
+			player.setFallDistance(0.0F);
+			Utils.sI18n(player, "flyDisabled");
+			if (!player.equals(sender))
+				Utils.sI18n(sender, "flyDisabledTarget", replace);
+		} else {
+			acp.setPower(power, powerFloat);
+			player.setAllowFlight(true);
+			if (c == 'n')
+				player.setFlying(true);
+			player.setFallDistance(1F);
+			Utils.sI18n(player, "flyEnabled");
+			if (!player.equals(sender))
+				Utils.sI18n(sender, "flyEnabledTarget", replace);
+			if (timeOut == null)
+				return;
+			int timeOutValue;
+			try {
+				timeOutValue = Integer.parseInt(timeOut);
+			} catch (final Exception e) {
+				Utils.sI18n(sender, "NaN", "number", timeOut);
+				return;
+			}
+			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+					ACPluginManager.getCorePlugin(),
+					new RemovePowerTask(acp, power, sender),
+					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+		}
+	}
 }

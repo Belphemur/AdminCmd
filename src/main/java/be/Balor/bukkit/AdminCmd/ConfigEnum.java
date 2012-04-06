@@ -59,10 +59,12 @@ public enum ConfigEnum {
 	RINVISIBLE("invisibleRangeInBlock", 312, "Range check for update the invisible status."),
 	FQINVISIBLE("fakeQuitWhenInvisible", true, "Fake quit when you become invisible"),
 	NPINVISIBLE("InvisAndNoPickup", true, "Setting this to true, will disable the auto-picking item when invisible"),
-	GLIDE("glideWhenFallingInFlyMode", true, "Activate the parachute when falling in fly mode"),
-	G_NEWYVEL("gliding.newYvelocity", -0.5D, "New velocity to slower the fall"),
-	G_VELCHECK("gliding.YvelocityCheckToGlide", -0.2D, "Velocity needed to open the parachute"),
-	G_MULT("gliding.multiplicator", 0.1D, "Gliding multiplicator"),
+	DFLY("fly.DefaultFlyPower", 1.75F, "Default value for Fly power"),
+	MAX_FLY("fly.maxFlyValue", 2F, "Maximum value for the fly commands"),
+	GLIDE("fly.glideWhenFallingInFlyMode", true, "Activate the parachute when falling in fly mode"),
+	G_NEWYVEL("fly.gliding.newYvelocity", -0.5D, "New velocity to slower the fall"),
+	G_VELCHECK("fly.gliding.YvelocityCheckToGlide", -0.2D, "Velocity needed to open the parachute"),
+	G_MULT("fly.gliding.multiplicator", 0.1D, "Gliding multiplicator"),
 	COLSIGN("ColoredSign", true, "Activate the color sign, using & to select the color."),
 	MUTEDPM("mutedPlayerCantPm", false, "Disallow muted player to send private message"),
 	RTPSEE("maxRangeForTpAtSee", 312, "Max Range in block for the tp at see."),
@@ -134,7 +136,6 @@ public enum ConfigEnum {
 	EGG_HIGH_TIMEOUT("egg.high.Timeout", 20, "How much time (in sec) the high effect least."),
 	DEGG_HIGH_RADIUS("egg.high.defaultRadiusInBlock", 5, "Default radius when using the HighEgg"),
 	MAXEGG_HIGH_RADIUS("egg.high.maxRadiusInBlock", 12, "Maximum radius for the HighEgg"),
-	MAX_FLY("maxFlyValue", 2F, "Maximum value for the fly commands"),
 	IMPORT_BAN_TXT("importBannedPlayersTXT", false, "If set to true, this will import any player which does not exist in the banned.yml, afterwards it will be set to false!");
 	public final static String PREFIX = "ac_";
 	private final String confVal;
