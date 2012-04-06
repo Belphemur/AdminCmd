@@ -116,6 +116,7 @@ import be.Balor.Manager.Commands.Spawn.Spawn;
 import be.Balor.Manager.Commands.Time.Day;
 import be.Balor.Manager.Commands.Time.SetTime;
 import be.Balor.Manager.Commands.Tp.LastLocation;
+import be.Balor.Manager.Commands.Tp.TpAll;
 import be.Balor.Manager.Commands.Tp.TpAtSee;
 import be.Balor.Manager.Commands.Tp.TpHere;
 import be.Balor.Manager.Commands.Tp.TpLoc;
@@ -151,7 +152,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -392,6 +393,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Enchant.class);
 		CommandManager.getInstance().registerCommand(Potion.class);
 		CommandManager.getInstance().registerCommand(TpWorld.class);
+		CommandManager.getInstance().registerCommand(TpAll.class);
 	}
 
 	@Override

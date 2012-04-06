@@ -416,3 +416,8 @@ commands:
     usage: |
         /<command> <-P playerName> [worldName]
         /<command> - This will list all possible worlds if player has permission to do so
+  bal_tpall:
+    description: Lets you teleport all players to one location or player in a world.
+    aliases: [tpall]
+    usage: |
+        /<command> <worldName> <-s|-w warpName|-l x y z|-p playerName>

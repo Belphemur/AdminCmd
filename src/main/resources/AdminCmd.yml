@@ -203,6 +203,14 @@ actpworld:
     permissions: admincmd.tp.world
     cmdname: bal_tpworld
 
+actpall:
+    command: tpall <worldName> <-s|-w warpName|-l x y z|-p playerName>
+    description: "Teleports all players to one location. For more info see /help -d tpall"
+    detailed: "If no flag is given, all players are teleported to the sender if he is a player\n-s : Teleports all player sto the spawn point of the world\n -w WarpName : Teleports all to the given warp\n -l x y z : Teleports all to the given location in xyz coordinates\n -p teleports all players to the given player"
+    plugin: AdminCmd
+    permissions: admincmd.tp.all
+    cmdname: bal_tpall
+
 acplayerlist:
     command: playerlist
     description: Lists all online players.
