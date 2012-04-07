@@ -75,7 +75,8 @@ public enum LocaleHelper {
 			+ ChatColor.RED + "is already blacklisted"),
 	BL_ITEM_PROBLEM("blItemSaveProb", ChatColor.GOLD + "Can't save the blackList file"),
 	BL_ITEM_NOT_BLISTED("blItemNotBl", ChatColor.RED + "This item " + ChatColor.GOLD + "%item"
-			+ ChatColor.RED + " is not black listed.");
+			+ ChatColor.RED + " is not black listed."),
+	BANLIST("banList", ChatColor.GOLD +"%player, " + ChatColor.AQUA + "Banned for: %reason on %date");
 
 	private final String key;
 	private final String locale;

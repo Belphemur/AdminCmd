@@ -462,6 +462,13 @@ acplayerexperience:
     permissions: admincmd.player.experience
     cmdname: bal_exp
 
+acplayerexperience:
+    command: banlist
+    description: "Displays a alphabetical list of all players who are banned with the reason and the date the ban was executed."
+    plugin: AdminCmd
+    permissions: admincmd.player.banlist
+    cmdname: bal_banlist
+
 acweatherclear:
     command: wclear
     description: Clear the weather.
