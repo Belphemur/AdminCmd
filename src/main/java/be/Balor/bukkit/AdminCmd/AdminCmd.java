@@ -82,6 +82,7 @@ import be.Balor.Manager.Commands.Player.PlayerLocation;
 import be.Balor.Manager.Commands.Player.Potion;
 import be.Balor.Manager.Commands.Player.Presentation;
 import be.Balor.Manager.Commands.Player.PrivateMessage;
+import be.Balor.Manager.Commands.Player.Quit;
 import be.Balor.Manager.Commands.Player.Reply;
 import be.Balor.Manager.Commands.Player.Roll;
 import be.Balor.Manager.Commands.Player.SpyMsg;
@@ -394,6 +395,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Potion.class);
 		CommandManager.getInstance().registerCommand(TpWorld.class);
 		CommandManager.getInstance().registerCommand(TpAll.class);
+		CommandManager.getInstance().registerCommand(Quit.class);
 	}
 
 	@Override
