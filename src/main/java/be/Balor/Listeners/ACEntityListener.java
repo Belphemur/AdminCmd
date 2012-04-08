@@ -29,7 +29,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACEntityListener implements Listener {
 
@@ -43,9 +43,9 @@ public class ACEntityListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityTarget(final EntityTargetEvent event) {
-		final Player p = (Player) event.getTarget();
-		if (!(p instanceof Player))
+		if (!(event.getTarget() instanceof Player))
 			return;
+		final Player p = (Player) event.getTarget();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false))
 			event.setCancelled(true);

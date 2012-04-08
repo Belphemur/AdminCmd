@@ -31,7 +31,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class PlayerManager {
 	private final ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
@@ -67,7 +67,7 @@ public class PlayerManager {
 
 	/**
 	 * Convert the ACPlayer
-	 * 
+	 *
 	 * @param playerFactory
 	 */
 	public void convertFactory(final IPlayerFactory factory) {
@@ -104,7 +104,7 @@ public class PlayerManager {
 
 	/**
 	 * Add a new player
-	 * 
+	 *
 	 * @param player
 	 */
 	private synchronized boolean addPlayer(final ACPlayer player) {
@@ -122,7 +122,7 @@ public class PlayerManager {
 
 	/**
 	 * Return online AC players
-	 * 
+	 *
 	 * @return
 	 */
 	public List<ACPlayer> getOnlineACPlayers() {
@@ -131,7 +131,7 @@ public class PlayerManager {
 
 	/**
 	 * Get Online Bukkit Player
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Player> getOnlinePlayers() {
@@ -146,7 +146,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted custom power
-	 * 
+	 *
 	 * @param power
 	 * @return
 	 */
@@ -161,7 +161,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the list of AC Player having the wanted power
-	 * 
+	 *
 	 * @param power
 	 * @return
 	 */
@@ -174,7 +174,7 @@ public class PlayerManager {
 		return list;
 	}
 
-	private List<ACPlayer> getExistingPlayers() {
+	public List<ACPlayer> getExistingPlayers() {
 		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (final String name : playerFactory.getExistingPlayers()) {
 			final ACPlayer player = demandACPlayer(name);
@@ -186,7 +186,7 @@ public class PlayerManager {
 
 	/**
 	 * Get the wanted player
-	 * 
+	 *
 	 * @param name
 	 *            name of the player
 	 * @return the ACPlayer if found, else null
@@ -201,7 +201,7 @@ public class PlayerManager {
 	/**
 	 * Set Offline an online player. The player will lost his strong reference,
 	 * when the gc will be called, the reference will be deleted.
-	 * 
+	 *
 	 * @param player
 	 *            player to setOffline
 	 * @return

@@ -56,6 +56,7 @@ import be.Balor.Manager.Commands.Mob.KillMob;
 import be.Balor.Manager.Commands.Mob.MobLimit;
 import be.Balor.Manager.Commands.Mob.SpawnMob;
 import be.Balor.Manager.Commands.Player.Afk;
+import be.Balor.Manager.Commands.Player.BanList;
 import be.Balor.Manager.Commands.Player.BanPlayer;
 import be.Balor.Manager.Commands.Player.ClearInventory;
 import be.Balor.Manager.Commands.Player.Eternal;
@@ -82,8 +83,10 @@ import be.Balor.Manager.Commands.Player.PlayerLocation;
 import be.Balor.Manager.Commands.Player.Potion;
 import be.Balor.Manager.Commands.Player.Presentation;
 import be.Balor.Manager.Commands.Player.PrivateMessage;
+import be.Balor.Manager.Commands.Player.Quit;
 import be.Balor.Manager.Commands.Player.Reply;
 import be.Balor.Manager.Commands.Player.Roll;
+import be.Balor.Manager.Commands.Player.Search;
 import be.Balor.Manager.Commands.Player.SpyMsg;
 import be.Balor.Manager.Commands.Player.SuperBreaker;
 import be.Balor.Manager.Commands.Player.UnBan;
@@ -116,6 +119,7 @@ import be.Balor.Manager.Commands.Spawn.Spawn;
 import be.Balor.Manager.Commands.Time.Day;
 import be.Balor.Manager.Commands.Time.SetTime;
 import be.Balor.Manager.Commands.Tp.LastLocation;
+import be.Balor.Manager.Commands.Tp.TpAll;
 import be.Balor.Manager.Commands.Tp.TpAtSee;
 import be.Balor.Manager.Commands.Tp.TpHere;
 import be.Balor.Manager.Commands.Tp.TpLoc;
@@ -151,7 +155,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -392,6 +396,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Enchant.class);
 		CommandManager.getInstance().registerCommand(Potion.class);
 		CommandManager.getInstance().registerCommand(TpWorld.class);
+		CommandManager.getInstance().registerCommand(TpAll.class);
+		CommandManager.getInstance().registerCommand(Quit.class);
+		CommandManager.getInstance().registerCommand(BanList.class);
+		CommandManager.getInstance().registerCommand(Search.class);
 	}
 
 	@Override

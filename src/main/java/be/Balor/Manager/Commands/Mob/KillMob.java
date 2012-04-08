@@ -1,16 +1,16 @@
 /************************************************************************
- * ThMobCheck.is file MobCheck.is part of AdminCmd.									
- *																		
+ * ThMobCheck.is file MobCheck.is part of AdminCmd.
+ *
  * AdminCmd MobCheck.is free software: you can redMobCheck.istribute it and/or modify
- * it under the terms of the GNU General Public License as publMobCheck.ished by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd MobCheck.is dMobCheck.istributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as publMobCheck.ished by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd MobCheck.is dMobCheck.istributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.server.Entity;
+import net.minecraft.server.EntityAnimal;
+import net.minecraft.server.EntityMonster;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -39,12 +41,12 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class KillMob extends MobCommand {
 
 	/**
-	 * 
+	 *
 	 */
 	public KillMob() {
 		permNode = "admincmd.mob.kill";
@@ -53,7 +55,7 @@ public class KillMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -113,7 +115,7 @@ public class KillMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -133,6 +135,24 @@ public class KillMob extends MobCommand {
 					entity.die();
 					mobKilled++;
 
+				}
+		} else if (type.equalsIgnoreCase("monsters")) {
+			for (final World w : worlds)
+				for (final LivingEntity m : w.getLivingEntities()) {
+					if (m instanceof EntityMonster) {
+						final Entity entity = ((CraftLivingEntity) m).getHandle();
+						entity.die();
+						mobKilled++;
+					}
+				}
+		} else if (type.equalsIgnoreCase("animals")) {
+			for (final World w : worlds)
+				for (final LivingEntity m : w.getLivingEntities()) {
+					if (m instanceof EntityAnimal) {
+						final Entity entity = ((CraftLivingEntity) m).getHandle();
+						entity.die();
+						mobKilled++;
+					}
 				}
 		} else {
 			EntityType ct = null;

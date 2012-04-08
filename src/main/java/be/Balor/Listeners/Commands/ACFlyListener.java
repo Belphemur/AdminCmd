@@ -23,14 +23,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACFlyListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
@@ -43,19 +46,43 @@ public class ACFlyListener implements Listener {
 
 	}
 
+	@EventHandler
+	public void onPlayerMove(final PlayerMoveEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		if (player.hasPower(Type.FLY_OLD)) {
+			final Float power = player.getPower(Type.FLY_OLD).getFloat(0);
+			if (power != 0)
+				if (p.isSneaking())
+					p.setVelocity(p.getLocation().getDirection().multiply(power));
+				else if (ConfigEnum.GLIDE.getBoolean()) {
+					final Vector vel = p.getVelocity();
+					vel.add(p.getLocation().getDirection().multiply(ConfigEnum.G_MULT.getFloat())
+							.setY(0));
+					if (vel.getY() < ConfigEnum.G_VELCHECK.getFloat()) {
+						vel.setY(ConfigEnum.G_NEWYVEL.getFloat());
+						p.setVelocity(vel);
+					}
+				}
+		} else if (player.hasPower(Type.FLY)) {
+			final Float power = player.getPower(Type.FLY).getFloat(0);
+			p.setVelocity(p.getLocation().getDirection().multiply(power));
+		}
+	}
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		final Player player = (Player) event.getEntity();
-		if (ACPlayer.getPlayer(player).hasPower(Type.FLY)
+		if ((ACPlayer.getPlayer(player).hasPower(Type.FLY) || ACPlayer.getPlayer(player).hasPower(Type.FLY_OLD))
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);
 		}
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerKick(final PlayerKickEvent event) {
 		final Player p = event.getPlayer();
 		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
