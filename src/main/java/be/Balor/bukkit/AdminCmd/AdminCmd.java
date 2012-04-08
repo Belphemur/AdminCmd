@@ -86,6 +86,7 @@ import be.Balor.Manager.Commands.Player.PrivateMessage;
 import be.Balor.Manager.Commands.Player.Quit;
 import be.Balor.Manager.Commands.Player.Reply;
 import be.Balor.Manager.Commands.Player.Roll;
+import be.Balor.Manager.Commands.Player.Search;
 import be.Balor.Manager.Commands.Player.SpyMsg;
 import be.Balor.Manager.Commands.Player.SuperBreaker;
 import be.Balor.Manager.Commands.Player.UnBan;
@@ -398,6 +399,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(TpAll.class);
 		CommandManager.getInstance().registerCommand(Quit.class);
 		CommandManager.getInstance().registerCommand(BanList.class);
+		CommandManager.getInstance().registerCommand(Search.class);
 	}
 
 	@Override

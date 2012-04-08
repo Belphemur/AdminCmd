@@ -424,3 +424,7 @@ commands:
     description: Displays each banned player, the reason for the ban and the date.
     aliases: [banlist, bl]
     usage: /<command>
+  bal_search:
+    description: "Search for different things associated with a player.(Currently only ips via -i ip)"
+    aliases: [search]
+    usage: /<command> <-i ip>
