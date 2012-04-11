@@ -33,6 +33,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -122,18 +123,31 @@ public class BanPlayer extends PlayerCommand {
 				}
 			});
 		}
-		final Matcher regexMatcher = Utils.REGEX_IP_V4.matcher(banPlayerString);
+		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
+		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4.matcher(banPlayerString);
 		if (tmpBan != null) {
-			if (regexMatcher.find())
+			if (inaccurateIp.find()) {
+				if (!ipv4.find()) {
+					replace.clear();
+					replace.put("ip", banPlayerString);
+					LocaleHelper.INACC_IP.sendLocale(sender, replace);
+					return;
+				}
 				ACHelper.getInstance().addBan(
 						new TempBannedIP(banPlayerString, message, tmpBan * 60 * 1000));
-			else
+			} else
 				ACHelper.getInstance().addBan(
 						new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
 		} else {
-			if (regexMatcher.find())
+			if (inaccurateIp.find()) {
+				if (!ipv4.find()) {
+					replace.clear();
+					replace.put("ip", banPlayerString);
+					LocaleHelper.INACC_IP.sendLocale(sender, replace);
+					return;
+				}
 				ACHelper.getInstance().addBan(new BannedIP(banPlayerString, message));
-			else
+			} else
 				ACHelper.getInstance().addBan(new BannedPlayer(banPlayerString, message));
 		}
 		Utils.broadcastMessage(Utils.I18n("ban", replace));

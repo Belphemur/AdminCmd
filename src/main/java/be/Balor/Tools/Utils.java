@@ -156,6 +156,8 @@ public class Utils {
 			+ delimiter + "1[0-5]|" + delimiter + "[0-9]");
 	public static final Pattern REGEX_IP_V4 = Pattern
 			.compile("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b");
+	public static final Pattern REGEX_INACCURATE_IP_V4 = Pattern
+			.compile("\\b([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\b");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
