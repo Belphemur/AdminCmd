@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -31,9 +32,14 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Fly extends PlayerCommand {
+
+	private enum FlyMode {
+		OLD,
+		NEW;
+	}
 
 	/**
 	 *
@@ -46,7 +52,7 @@ public class Fly extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -55,18 +61,23 @@ public class Fly extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
-		player = Utils.getUser(sender, args, permNode);
+		try {
+			player = Utils.getUserParam(sender, args, permNode);
+		} catch (final PlayerNotFound e) {
+			sender.sendMessage(e.getMessage());
+			return;
+		}
 		if (player != null) {
 			if (args.hasFlag('o'))
-				setFly(sender, player, timeOut, Type.FLY_OLD, 'o', args);
+				setFly(sender, player, timeOut, Type.FLY_OLD, FlyMode.OLD, args);
 			else
-				setFly(sender, player, timeOut, Type.FLY, 'n', args);
+				setFly(sender, player, timeOut, Type.FLY, FlyMode.NEW, args);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -74,32 +85,37 @@ public class Fly extends PlayerCommand {
 		return args != null;
 	}
 
-	private void setFly(final CommandSender sender, final Player player, final String timeOut, final Type power, final char c, final CommandArgs args) {
+	private void setFly(final CommandSender sender, final Player player, final String timeOut,
+			final Type power, final FlyMode c, final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
 		final ACPlayer acp = ACPlayer.getPlayer(player);
 		final String powerValueString = args.getValueFlag('p');
-		float powerFloat;
-		try {
-			powerFloat = Float.parseFloat(powerValueString);
-		} catch (NumberFormatException e) {
-			powerFloat = ConfigEnum.DFLY.getFloat();
-		}
-		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat() : powerFloat;
+		float powerFloat = 0;
+		if (powerValueString != null)
+			try {
+				powerFloat = Float.parseFloat(powerValueString);
+			} catch (final NumberFormatException e) {
+			}
+		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat()
+				: powerFloat;
 		if (acp.hasPower(power)) {
 			acp.removePower(power);
 			player.setAllowFlight(false);
-			if (c == 'n')
+			if (c == FlyMode.NEW)
 				player.setFlying(false);
 			player.setFallDistance(0.0F);
 			Utils.sI18n(player, "flyDisabled");
 			if (!player.equals(sender))
 				Utils.sI18n(sender, "flyDisabledTarget", replace);
 		} else {
-			acp.setPower(power, powerFloat);
 			player.setAllowFlight(true);
-			if (c == 'n')
+			if (c == FlyMode.NEW) {
 				player.setFlying(true);
+				acp.setPower(power, powerFloat);
+			} else {
+				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
+			}
 			player.setFallDistance(1F);
 			Utils.sI18n(player, "flyEnabled");
 			if (!player.equals(sender))
@@ -114,8 +130,7 @@ public class Fly extends PlayerCommand {
 				return;
 			}
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-					ACPluginManager.getCorePlugin(),
-					new RemovePowerTask(acp, power, sender),
+					ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, power, sender),
 					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 		}
 	}

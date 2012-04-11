@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACFlyListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
@@ -46,28 +46,25 @@ public class ACFlyListener implements Listener {
 
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (player.hasPower(Type.FLY_OLD)) {
-			final Float power = player.getPower(Type.FLY_OLD).getFloat(0);
-			if (power != 0)
-				if (p.isSneaking())
-					p.setVelocity(p.getLocation().getDirection().multiply(power));
-				else if (ConfigEnum.GLIDE.getBoolean()) {
-					final Vector vel = p.getVelocity();
-					vel.add(p.getLocation().getDirection().multiply(ConfigEnum.G_MULT.getFloat())
-							.setY(0));
-					if (vel.getY() < ConfigEnum.G_VELCHECK.getFloat()) {
-						vel.setY(ConfigEnum.G_NEWYVEL.getFloat());
-						p.setVelocity(vel);
-					}
+		if (!player.hasPower(Type.FLY_OLD))
+			return;
+		final Float power = player.getPower(Type.FLY_OLD).getFloat(0);
+		if (power != 0)
+			if (p.isSneaking())
+				p.setVelocity(p.getLocation().getDirection().multiply(power));
+			else if (ConfigEnum.GLIDE.getBoolean()) {
+				final Vector vel = p.getVelocity();
+				vel.add(p.getLocation().getDirection().multiply(ConfigEnum.G_MULT.getFloat())
+						.setY(0));
+				if (vel.getY() < ConfigEnum.G_VELCHECK.getFloat()) {
+					vel.setY(ConfigEnum.G_NEWYVEL.getFloat());
+					p.setVelocity(vel);
 				}
-		} else if (player.hasPower(Type.FLY)) {
-			final Float power = player.getPower(Type.FLY).getFloat(0);
-			p.setVelocity(p.getLocation().getDirection().multiply(power));
-		}
+			}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -75,7 +72,8 @@ public class ACFlyListener implements Listener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		final Player player = (Player) event.getEntity();
-		if ((ACPlayer.getPlayer(player).hasPower(Type.FLY) || ACPlayer.getPlayer(player).hasPower(Type.FLY_OLD))
+		if ((ACPlayer.getPlayer(player).hasPower(Type.FLY) || ACPlayer.getPlayer(player).hasPower(
+				Type.FLY_OLD))
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);
