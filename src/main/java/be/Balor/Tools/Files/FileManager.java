@@ -39,6 +39,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -707,11 +708,16 @@ public class FileManager implements DataManager {
 	 */
 	@Override
 	public void unBanPlayer(final String player) {
+		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(player);
 		final ExtendedConfiguration banFile = getYml("banned");
-		ConfigurationSection bans = banFile.addSection("bans");
-		bans.set(player, null);
-		bans = banFile.addSection("IPs");
-		bans.set(String.valueOf(player.hashCode()), null);
+		ConfigurationSection bans;
+		if (ipv4.find()) {
+			bans = banFile.addSection("IPs");
+			bans.set(String.valueOf(player.hashCode()), null);
+		} else {
+			bans = banFile.addSection("bans");
+			bans.set(player, null);
+		}
 		try {
 			banFile.save();
 		} catch (final IOException e) {
