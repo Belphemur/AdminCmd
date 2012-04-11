@@ -16,13 +16,17 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
+import java.util.HashMap;
+
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.Ban;
+import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,17 +53,21 @@ public class UnBan extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final String unban = args.getString(0);
 		final Ban player = ACHelper.getInstance().getBan(unban);
-		if (player != null && player instanceof BannedPlayer) {
-			if (!Utils.checkImmunity(sender, args, 0)) {
+		if (player != null) {
+			if (player instanceof BannedPlayer && !Utils.checkImmunity(sender, args, 0)) {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
+			} else if (player instanceof BannedIP) {
+				ACHelper.getInstance().unBanPlayer(unban);
+				final String unbanMsg = Utils.I18n("unban", "player", unban);
+				if (unbanMsg != null)
+					Utils.broadcastMessage(unbanMsg);
 			}
-			ACHelper.getInstance().unBanPlayer(unban);
-			final String unbanMsg = Utils.I18n("unban", "player", unban);
-			if (unbanMsg != null)
-				Utils.broadcastMessage(unbanMsg);
-		} else
-			Utils.sI18n(sender, "playerNotFound", "player", unban);
+		} else {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("ban", unban);
+			LocaleHelper.NO_BAN_FOUND.sendLocale(sender, replace);
+		}
 
 	}
 

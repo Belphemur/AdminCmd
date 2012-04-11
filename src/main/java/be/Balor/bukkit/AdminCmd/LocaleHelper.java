@@ -79,7 +79,8 @@ public enum LocaleHelper {
 	BANLIST("banList", ChatColor.GOLD + "%player, " + ChatColor.AQUA
 			+ "Banned for: %reason on %date"),
 	INACC_IP("inaccurateIp", ChatColor.RED + "This IP " + ChatColor.GOLD + "%ip " + ChatColor.RED
-			+ "is incorrect !");
+			+ "is incorrect !"),
+	NO_BAN_FOUND("notBanned", ChatColor.GOLD + "No ban found for" + ChatColor.RED + " %ban");
 
 	private final String key;
 	private final String locale;
