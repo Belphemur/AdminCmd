@@ -14,28 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners.Commands;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
-
-import be.Balor.Player.Ban;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+package be.Balor.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACBanListener implements Listener {
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(final PlayerLoginEvent event) {
-		if (!event.getResult().equals(Result.ALLOWED))
-			return;
-		final Ban player = ACHelper.getInstance().getBan(event.getPlayer().getName());
-		if (player != null)
-			event.disallow(Result.KICK_BANNED, player.getReason());
+public class BannedIP extends Ban {
+
+	/**
+	 * 
+	 */
+	public BannedIP() {
+		super();
 	}
+
+	/**
+	 * @param ip
+	 * @param reason
+	 */
+	public BannedIP(final String ip, final String reason) {
+		super(reason, ip);
+	}
+
 }

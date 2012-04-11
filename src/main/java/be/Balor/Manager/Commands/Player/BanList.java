@@ -26,14 +26,14 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.Ban;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class BanList extends PlayerCommand {
 
@@ -41,30 +41,36 @@ public class BanList extends PlayerCommand {
 		cmdName = "bal_banlist";
 		permNode = "admincmd.player.banlist";
 	}
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		final Collection<BannedPlayer> banned = ACHelper.getInstance().getBannedPlayers();
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final Collection<Ban> banned = ACHelper.getInstance().getBannedPlayers();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final TreeSet<String> toSend = new TreeSet<String>();
-		for (BannedPlayer p : banned) {
+		for (final Ban p : banned) {
 			replace.clear();
 			replace.put("player", p.getPlayer());
 			replace.put("reason", p.getReason());
 			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
 			toSend.add(LocaleHelper.BANLIST.getLocale(replace));
 		}
-		for (String s : toSend)
+		for (final String s : toSend)
 			sender.sendMessage(s);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

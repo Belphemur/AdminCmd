@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Player.Ban;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -47,9 +48,9 @@ public class UnBan extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final String unban = args.getString(0);
-		final BannedPlayer player = ACHelper.getInstance().getBan(unban);
-		if (player != null) {
-			if (!Utils.checkImmunity(sender, plugin.getServer().getPlayer(player.getPlayer()))) {
+		final Ban player = ACHelper.getInstance().getBan(unban);
+		if (player != null && player instanceof BannedPlayer) {
+			if (!Utils.checkImmunity(sender, args, 0)) {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
 			}

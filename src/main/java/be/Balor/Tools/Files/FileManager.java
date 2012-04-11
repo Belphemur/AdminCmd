@@ -47,6 +47,8 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import au.com.bytecode.opencsv.CSVReader;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Player.Ban;
+import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -536,8 +538,8 @@ public class FileManager implements DataManager {
 	}
 
 	@Override
-	public Map<String, BannedPlayer> loadBan() {
-		Map<String, BannedPlayer> result = new HashMap<String, BannedPlayer>();
+	public Map<String, Ban> loadBan() {
+		final Map<String, Ban> result = new HashMap<String, Ban>();
 		final ExtendedConfiguration conf = getYml("banned");
 		if (conf.get("bans") != null) {
 			final ConfigurationSection node = conf.getConfigurationSection("bans");
@@ -545,24 +547,36 @@ public class FileManager implements DataManager {
 				result.put(key, (BannedPlayer) node.get(key));
 
 		}
+		if (conf.get("IPs") != null) {
+			final ConfigurationSection node = conf.getConfigurationSection("IPs");
+			for (final String key : node.getKeys(false))
+				result.put(key, (BannedIP) node.get(key));
+
+		}
 		if (ConfigEnum.IMPORT_BAN_TXT.getBoolean()) {
-			result = importBannedPlayerTXT(result);
+			importBannedPlayerTXT(result);
 			ConfigEnum.IMPORT_BAN_TXT.setValue(false);
 		}
 		return result;
 	}
 
-	private Map<String, BannedPlayer> importBannedPlayerTXT(final Map<String, BannedPlayer> result) {
+	private void importBannedPlayerTXT(final Map<String, Ban> result) {
 		final Set<OfflinePlayer> banned = ACPluginManager.getServer().getBannedPlayers();
+		final Set<String> ipBanned = ACPluginManager.getServer().getIPBans();
 		final Iterator<OfflinePlayer> it = banned.iterator();
 		while (it.hasNext()) {
 			final OfflinePlayer op = it.next();
 			final String name = op.getName();
-			final BannedPlayer bp = new BannedPlayer(name, "Import from banned-players.txt");
-			if (!result.containsKey(name))
+			if (!result.containsKey(name)) {
+				final BannedPlayer bp = new BannedPlayer(name, "Import from banned-players.txt");
 				result.put(name, bp);
+			}
 		}
-		return result;
+		for (final String ip : ipBanned) {
+			if (result.containsKey(ip))
+				continue;
+			result.put(ip, new BannedIP(ip, "Import from banned-ip.txt"));
+		}
 	}
 
 	/**
@@ -610,17 +624,7 @@ public class FileManager implements DataManager {
 					}
 				}
 			delay = kitNode.getInt("delay", 0);
-			/*
-			 * Old convertor code, not used anymore TODO: CLEAN IT. } else {
-			 * kitNode.addDefault("items", new HashMap<String, Object>());
-			 * kitItems = kitNode.getConfigurationSection("items"); for (String
-			 * item : kitNode.getKeys(false)) { if (item.equals("items"))
-			 * continue; MaterialContainer m = Utils.checkMaterial(item); int
-			 * amount = kitNode.getInt(item, 1); m.setAmount(amount); if
-			 * (!m.isNull()) { items.add(m); kitItems.set(item, amount);
-			 * kitNode.set(item, null); } } kitNode.set("delay", 0); convert =
-			 * true; }
-			 */
+
 			if (armorItems != null) {
 				for (final ArmorPart part : ArmorPart.values()) {
 					final String partId = armorItems.getString(part.toString());
@@ -677,10 +681,17 @@ public class FileManager implements DataManager {
 	 * )
 	 */
 	@Override
-	public void addBannedPlayer(final BannedPlayer player) {
+	public void addBan(final Ban player) {
 		final ExtendedConfiguration banFile = getYml("banned");
-		final ConfigurationSection bans = banFile.addSection("bans");
-		bans.set(player.getPlayer(), player);
+		ConfigurationSection bans;
+		if (player instanceof BannedPlayer) {
+			bans = banFile.addSection("bans");
+			bans.set(player.getPlayer(), player);
+		} else {
+			bans = banFile.addSection("IPs");
+			bans.set(String.valueOf(player.getPlayer().hashCode()), player);
+		}
+
 		try {
 			banFile.save();
 		} catch (final IOException e) {
@@ -695,13 +706,14 @@ public class FileManager implements DataManager {
 	@Override
 	public void unBanPlayer(final String player) {
 		final ExtendedConfiguration banFile = getYml("banned");
-		final ConfigurationSection bans = banFile.addSection("bans");
+		ConfigurationSection bans = banFile.addSection("bans");
 		bans.set(player, null);
+		bans = banFile.addSection("IPs");
+		bans.set(String.valueOf(player.hashCode()), null);
 		try {
 			banFile.save();
 		} catch (final IOException e) {
 		}
 
 	}
-
 }

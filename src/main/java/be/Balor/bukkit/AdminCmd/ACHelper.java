@@ -39,11 +39,11 @@ import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.Ban;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.TempBannedPlayer;
+import be.Balor.Player.TempBan;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -101,7 +101,7 @@ public class ACHelper {
 	private AdminCmd coreInstance;
 	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private Map<String, KitInstance> kits = new HashMap<String, KitInstance>();
-	private final ConcurrentMap<String, BannedPlayer> bannedPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<String, Ban> bannedPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
 	private static ACHelper instance = new ACHelper();
@@ -151,9 +151,9 @@ public class ACHelper {
 	 * 
 	 * @param ban
 	 */
-	public void addBannedPlayer(final BannedPlayer ban) {
+	public void addBan(final Ban ban) {
 		bannedPlayers.put(ban.getPlayer(), ban);
-		dataManager.addBannedPlayer(ban);
+		dataManager.addBan(ban);
 	}
 
 	/**
@@ -328,9 +328,9 @@ public class ACHelper {
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
-	private boolean checkBan(final BannedPlayer player) {
-		if (player instanceof TempBannedPlayer) {
-			final Long timeLeft = ((TempBannedPlayer) player).timeLeft();
+	private boolean checkBan(final Ban player) {
+		if (player instanceof TempBan) {
+			final Long timeLeft = ((TempBan) player).timeLeft();
 			if (timeLeft <= 0) {
 				unBanPlayer(player.getPlayer());
 				return false;
@@ -343,7 +343,7 @@ public class ACHelper {
 								unBanPlayer(player.getPlayer());
 
 							}
-						}, timeLeft * Utils.secondInMillis * 20);
+						}, timeLeft * Utils.secondInMillis * Utils.secInTick);
 				return true;
 			}
 		} else
@@ -409,7 +409,7 @@ public class ACHelper {
 		return bannedPlayers.size();
 	}
 
-	public Collection<BannedPlayer> getBannedPlayers() {
+	public Collection<Ban> getBannedPlayers() {
 		return bannedPlayers.values();
 	}
 
@@ -728,7 +728,7 @@ public class ACHelper {
 	 *            player's name
 	 * @return the ban if the player have one, else return null
 	 */
-	public BannedPlayer getBan(final String player) {
+	public Ban getBan(final String player) {
 		return bannedPlayers.get(player);
 	}
 
@@ -794,8 +794,8 @@ public class ACHelper {
 		addLocaleFromFile();
 
 		kits = fManager.loadKits();
-		final Map<String, BannedPlayer> bans = dataManager.loadBan();
-		for (final Entry<String, BannedPlayer> ban : bans.entrySet()) {
+		final Map<String, Ban> bans = dataManager.loadBan();
+		for (final Entry<String, Ban> ban : bans.entrySet()) {
 			if (checkBan(ban.getValue()))
 				bannedPlayers.put(ban.getKey(), ban.getValue());
 		}

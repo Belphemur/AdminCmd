@@ -27,8 +27,8 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.BannedPlayer;
-import be.Balor.Player.TempBannedPlayer;
+import be.Balor.Player.Ban;
+import be.Balor.Player.TempBan;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -135,14 +135,14 @@ public class Whois extends PlayerCommand {
 				ChatColor.GREEN + Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
 		sender.sendMessage(played);
 		// Banned
-		final BannedPlayer ban = ACHelper.getInstance().getBan(actarget.getName());
+		final Ban ban = ACHelper.getInstance().getBan(actarget.getName());
 		if (ban != null) {
 			String banned = ChatColor.GOLD + "Banned" + ChatColor.WHITE + " : ";
 			final int banSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(banned);
 			banned += ACMinecraftFontWidthCalculator.strPadLeftChat(ChatColor.GREEN
-					+ (ban instanceof TempBannedPlayer ? ((TempBannedPlayer) ban).getEndBan()
-							.toString() : "Permanent"), banSizeRem, ' ');
+					+ (ban instanceof TempBan ? ((TempBan) ban).getEndBan().toString()
+							: "Permanent"), banSizeRem, ' ');
 			sender.sendMessage(banned);
 		}
 		// Powers

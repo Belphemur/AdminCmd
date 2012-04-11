@@ -22,7 +22,7 @@ import java.util.Set;
 import org.bukkit.Location;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.Ban;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -34,14 +34,14 @@ public interface DataManager {
 	 * 
 	 * @return
 	 */
-	public Map<String, BannedPlayer> loadBan();
+	public Map<String, Ban> loadBan();
 
 	/**
 	 * Added a new ban
 	 * 
 	 * @param player
 	 */
-	public void addBannedPlayer(BannedPlayer player);
+	public void addBan(Ban player);
 
 	/**
 	 * Unban banned player.

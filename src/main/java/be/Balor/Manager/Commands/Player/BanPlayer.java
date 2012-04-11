@@ -17,6 +17,7 @@
 package be.Balor.Manager.Commands.Player;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +25,9 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.TempBannedIP;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -119,11 +122,20 @@ public class BanPlayer extends PlayerCommand {
 				}
 			});
 		}
-		if (tmpBan != null)
-			ACHelper.getInstance().addBannedPlayer(
-					new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
-		else
-			ACHelper.getInstance().addBannedPlayer(new BannedPlayer(banPlayerString, message));
+		final Matcher regexMatcher = Utils.REGEX_IP_V4.matcher(banPlayerString);
+		if (tmpBan != null) {
+			if (regexMatcher.find())
+				ACHelper.getInstance().addBan(
+						new TempBannedIP(banPlayerString, message, tmpBan * 60 * 1000));
+			else
+				ACHelper.getInstance().addBan(
+						new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
+		} else {
+			if (regexMatcher.find())
+				ACHelper.getInstance().addBan(new BannedIP(banPlayerString, message));
+			else
+				ACHelper.getInstance().addBan(new BannedPlayer(banPlayerString, message));
+		}
 		Utils.broadcastMessage(Utils.I18n("ban", replace));
 
 	}

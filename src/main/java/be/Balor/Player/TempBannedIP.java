@@ -22,42 +22,44 @@ import java.sql.Date;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TempBannedPlayer extends BannedPlayer implements TempBan {
+public class TempBannedIP extends BannedIP implements TempBan {
 	private Date endBan;
 
 	/**
 	 * 
 	 */
-	public TempBannedPlayer() {
+	public TempBannedIP() {
 	}
 
 	/**
-	 * @param player
+	 * @param ip
 	 * @param reason
-	 * @param time
 	 */
-	public TempBannedPlayer(final String player, final String reason, final long time) {
-		super(player, reason);
+	public TempBannedIP(final String ip, final String reason, final long time) {
+		super(ip, reason);
 		endBan = new Date(System.currentTimeMillis() + time);
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Player.TempBan#getEndBan()
+	/**
+	 * @return the endBan
 	 */
 	@Override
 	public Date getEndBan() {
 		return endBan;
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Player.TempBan#setEndBan(java.sql.Date)
+	/**
+	 * @param endBan
+	 *            the endBan to set
 	 */
 	@Override
 	public void setEndBan(final Date endBan) {
 		this.endBan = endBan;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.TempBan#timeLeft()
 	 */
 	@Override
@@ -89,9 +91,9 @@ public class TempBannedPlayer extends BannedPlayer implements TempBan {
 			return true;
 		if (!super.equals(obj))
 			return false;
-		if (!(obj instanceof TempBannedPlayer))
+		if (!(obj instanceof TempBannedIP))
 			return false;
-		final TempBannedPlayer other = (TempBannedPlayer) obj;
+		final TempBannedIP other = (TempBannedIP) obj;
 		if (endBan == null) {
 			if (other.endBan != null)
 				return false;
