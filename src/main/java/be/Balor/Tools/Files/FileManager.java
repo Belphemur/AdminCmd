@@ -549,8 +549,10 @@ public class FileManager implements DataManager {
 		}
 		if (conf.get("IPs") != null) {
 			final ConfigurationSection node = conf.getConfigurationSection("IPs");
-			for (final String key : node.getKeys(false))
-				result.put(key, (BannedIP) node.get(key));
+			for (final String key : node.getKeys(false)) {
+				final BannedIP ban = (BannedIP) node.get(key);
+				result.put(ban.getPlayer(), ban);
+			}
 
 		}
 		if (ConfigEnum.IMPORT_BAN_TXT.getBoolean()) {
