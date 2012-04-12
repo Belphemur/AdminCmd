@@ -133,9 +133,11 @@ public class Whois extends PlayerCommand {
 			String banned = ChatColor.GOLD + "Banned" + ChatColor.WHITE + " : ";
 			final int banSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(banned);
-			banned += ACMinecraftFontWidthCalculator.strPadLeftChat(ChatColor.GREEN
-					+ (ban instanceof TempBan ? ((TempBan) ban).getEndBan().toString()
-							: "Permanent"), banSizeRem, ' ');
+			banned += ACMinecraftFontWidthCalculator.strPadLeftChat(
+					ChatColor.GREEN
+							+ (ban instanceof TempBan ? Utils
+									.replaceDateAndTimeFormat(((TempBan) ban).getEndBan())
+									: "Permanent"), banSizeRem, ' ');
 			sender.sendMessage(banned);
 		}
 		// Powers
