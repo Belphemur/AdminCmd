@@ -98,7 +98,6 @@ public class EggSpawner extends MobCommand {
 			if (args.hasFlag('E')) {
 				final String list = Joiner.on(", ").skipNulls()
 						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
-				sender.sendMessage(e.getMessage());
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else {
