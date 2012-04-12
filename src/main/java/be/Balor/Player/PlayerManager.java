@@ -193,8 +193,6 @@ public class PlayerManager {
 	 */
 	private synchronized ACPlayer getPlayer(final String name) {
 		final ACPlayer result = players.get(name);
-		if (result != null)
-			result.reloadHandler();
 		return result;
 	}
 
@@ -217,6 +215,7 @@ public class PlayerManager {
 		playerFactory.addExistingPlayer(player.getName());
 		final ACPlayer acPlayer = demandACPlayer(player);
 		onlinePlayers.put(acPlayer, true);
+		acPlayer.setOnline(true);
 		DebugLog.INSTANCE.info(player.getName() + " is put online.");
 		return acPlayer;
 	}

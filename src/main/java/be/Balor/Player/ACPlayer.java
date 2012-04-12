@@ -378,10 +378,7 @@ public abstract class ACPlayer {
 		this.online = isOnline;
 		if (!this.online)
 			this.handler = null;
-	}
-
-	void reloadHandler() {
-		if (handler == null)
+		else if (handler == null)
 			this.handler = ACPluginManager.getServer().getPlayer(this.name);
 	}
 
