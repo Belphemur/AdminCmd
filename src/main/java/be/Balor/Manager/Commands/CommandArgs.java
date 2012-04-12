@@ -123,10 +123,10 @@ public class CommandArgs implements Iterable<String> {
 		try {
 			final String result = parsedArgs.get(index);
 			if (result == null)
-				return "";
+				return null;
 			return result;
 		} catch (final IndexOutOfBoundsException e) {
-			return "";
+			return null;
 		}
 
 	}
