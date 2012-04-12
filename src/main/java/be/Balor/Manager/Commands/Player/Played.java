@@ -16,10 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import java.util.HashMap;
-
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.ACPlayer;
@@ -47,18 +44,18 @@ public class Played extends PlayerCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		final Player target = Utils.getUser(sender, args, permNode);
+		final ACPlayer target = Utils.getACPlayer(sender, args, permNode);
 		if (target != null) {
-			final String playername = Utils.getPlayerName(target, sender);
-			final long total = ACPlayer.getPlayer(target).getCurrentPlayedTime();
-			final Long[] time = Utils.transformToElapsedTime(total);
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("d", time[0].toString());
-			replace.put("h", time[1].toString());
-			replace.put("m", time[2].toString());
-			replace.put("s", time[3].toString());
-			replace.put("player", playername);
-			Utils.sI18n(sender, "playedTime", replace);
+			final String playername;
+			final long total;
+			if (target.isOnline()) {
+				playername = Utils.getPlayerName(target.getHandler(), sender);
+				total = target.getCurrentPlayedTime();
+			} else {
+				playername = target.getName();
+				total = target.getInformation("totalTime").getLong(0);
+			}
+			Utils.sendPlayedTimeString(playername, sender, total);
 
 		}
 	}

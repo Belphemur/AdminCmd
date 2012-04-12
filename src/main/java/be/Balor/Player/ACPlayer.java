@@ -37,7 +37,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public abstract class ACPlayer {
 	protected final String name;
 	private final int hashCode;
-	protected boolean isOnline = false;
+	protected boolean online = false;
 	protected ACCommandContainer lastCmd = null;
 	protected Player handler = null;
 	protected TpRequest tpRequest = null;
@@ -375,8 +375,8 @@ public abstract class ACPlayer {
 	 *            the isOnline to set
 	 */
 	void setOnline(final boolean isOnline) {
-		this.isOnline = isOnline;
-		if (!this.isOnline)
+		this.online = isOnline;
+		if (!this.online)
 			this.handler = null;
 	}
 
@@ -423,6 +423,13 @@ public abstract class ACPlayer {
 
 	public void removeTpRequest() {
 		tpRequest = null;
+	}
+
+	/**
+	 * @return if the player is online.
+	 */
+	public boolean isOnline() {
+		return online;
 	}
 
 	/*

@@ -94,7 +94,7 @@ import de.diddiz.LogBlock.Consumer;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class Utils {
+public final class Utils {
 	public static class SetTime implements Runnable {
 		private final World w;
 		private final Long time;
@@ -163,6 +163,11 @@ public class Utils {
 	 * @author Balor (aka Antoine Aflalo)
 	 * 
 	 */
+	/**
+	 * 
+	 */
+	private Utils() {
+	}
 
 	public final static int MAX_BLOCKS = 512;
 
@@ -1480,5 +1485,31 @@ public class Utils {
 			players.put(p, Utils.getPlayerName(p, sender));
 		}
 		return Collections.unmodifiableCollection(players.values());
+	}
+
+	private static String timeLongToSring(final Long time) {
+		return time < 10 ? "0" + time : time.toString();
+	}
+
+	/**
+	 * Send the played time of a player to a another one.
+	 * 
+	 * @param playername
+	 *            name of the player that the time belong to
+	 * @param target
+	 *            target of the message
+	 * @param total
+	 *            total time played
+	 */
+	public static void sendPlayedTimeString(final String playername, final CommandSender target,
+			final long total) {
+		final Long[] time = Utils.transformToElapsedTime(total);
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("d", time[0].toString());
+		replace.put("h", timeLongToSring(time[1]));
+		replace.put("m", timeLongToSring(time[2]));
+		replace.put("s", timeLongToSring(time[3]));
+		replace.put("player", playername);
+		Utils.sI18n(target, "playedTime", replace);
 	}
 }
