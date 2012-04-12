@@ -35,8 +35,9 @@ public class ACBanListener implements Listener {
 		if (!event.getResult().equals(Result.ALLOWED))
 			return;
 		Ban player = ACHelper.getInstance().getBan(event.getPlayer().getName());
-		if (player == null)
-			player = ACHelper.getInstance().getBan(event.getPlayer().getAddress().getAddress().toString().substring(1));
+		//This throws an NoSuchMethod error!!
+		//if (player == null)
+			//player = ACHelper.getInstance().getBan(event.getAddress().getAddress().toString().substring(1));
 		if (player != null)
 			event.disallow(Result.KICK_BANNED, player.getReason());
 	}
