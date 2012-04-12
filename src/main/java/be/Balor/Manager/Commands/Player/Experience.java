@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class Experience extends PlayerCommand {
 
@@ -41,7 +41,7 @@ public class Experience extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -50,8 +50,9 @@ public class Experience extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		float amount = 0;
 		Player target = null;
+		final HashMap<String, String> replace = new HashMap<String, String>();
 		boolean self = false;
-		if (args.length < 2) {
+		if (0 < args.length && args.length < 2) {
 			if (Utils.isPlayer(sender, true)) {
 				target = (Player) sender;
 				self = true;
@@ -59,28 +60,35 @@ public class Experience extends PlayerCommand {
 					try {
 						amount = args.getFloat(0);
 					} catch (final NumberFormatException e) {
-						final HashMap<String, String> replace = new HashMap<String, String>();
 						replace.put("number", args.getString(0));
 						Utils.I18n("NaN", replace);
 						return;
 					}
 			} else
 				return;
-		} else {
+		} else if(args.length >=2) {
 			target = Utils.getPlayer(args.getString(0));
 			if (!args.hasFlag('t'))
 				try {
 					amount = args.getFloat(1);
 				} catch (final NumberFormatException e) {
-					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("number", args.getString(0));
 					Utils.I18n("NaN", replace);
 					return;
 				}
+		} else {
+			if (Utils.isPlayer(sender, true)) {
+				if (args.hasFlag('t')) {
+					target = (Player) sender;
+					replace.put("exp", String.valueOf(target.getTotalExperience()));
+					sender.sendMessage(Utils.I18n("expTotal", replace));
+					return;
+				}
+			} else
+				return;
 		}
 		if (target == null)
 			return;
-		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(amount));
 		final Player taskTarget = target;
 		final float amountXp = amount;
@@ -160,12 +168,12 @@ public class Experience extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		return args.length >= 1;
+		return args!= null && args.length >= 1;
 	}
 
 }
