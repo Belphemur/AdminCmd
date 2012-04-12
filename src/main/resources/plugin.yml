@@ -426,5 +426,5 @@ commands:
     usage: /<command>
   bal_search:
     description: "Search for different things associated with a player.(Currently only ips via -i ip)"
-    aliases: [search]
+    aliases: [search,look,sh]
     usage: /<command> <-i ip>
