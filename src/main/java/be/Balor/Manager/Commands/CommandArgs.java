@@ -121,9 +121,12 @@ public class CommandArgs implements Iterable<String> {
 
 	public String getString(final int index) {
 		try {
-			return parsedArgs.get(index);
+			final String result = parsedArgs.get(index);
+			if (result == null)
+				return "";
+			return result;
 		} catch (final IndexOutOfBoundsException e) {
-			return null;
+			return "";
 		}
 
 	}
