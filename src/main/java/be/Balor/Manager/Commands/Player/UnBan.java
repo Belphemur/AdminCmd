@@ -22,7 +22,6 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.Ban;
-import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -57,12 +56,11 @@ public class UnBan extends PlayerCommand {
 			if (player instanceof BannedPlayer && !Utils.checkImmunity(sender, args, 0)) {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
-			} else if (player instanceof BannedIP) {
-				ACHelper.getInstance().unBanPlayer(unban);
-				final String unbanMsg = Utils.I18n("unban", "player", unban);
-				if (unbanMsg != null)
-					Utils.broadcastMessage(unbanMsg);
 			}
+			ACHelper.getInstance().unBanPlayer(unban);
+			final String unbanMsg = Utils.I18n("unban", "player", unban);
+			if (unbanMsg != null)
+				Utils.broadcastMessage(unbanMsg);
 		} else {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("ban", unban);
