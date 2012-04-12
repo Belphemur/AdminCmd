@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
@@ -88,12 +88,10 @@ public class Whois extends PlayerCommand {
 		if (actarget == null)
 			return;
 		sender.sendMessage(ChatColor.AQUA
-				+ ACMinecraftFontWidthCalculator.strPadCenterChat(
-						ChatColor.DARK_GREEN
-								+ " "
-								+ (actarget.getHandler() != null ? Utils.getPlayerName(
-										actarget.getHandler(), sender) : actarget.getName()) + " "
-								+ ChatColor.AQUA, '='));
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN
+						+ " "
+						+ (actarget.isOnline() ? Utils.getPlayerName(actarget.getHandler(), sender)
+								: actarget.getName()) + " " + ChatColor.AQUA, '='));
 		// Login
 		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE + " : ";
 		final int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
@@ -122,12 +120,7 @@ public class Whois extends PlayerCommand {
 
 		// Played
 		final long total = actarget.getCurrentPlayedTime();
-		final Long[] time = Utils.transformToElapsedTime(total);
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("d", time[0].toString());
-		replace.put("h", time[1].toString());
-		replace.put("m", time[2].toString());
-		replace.put("s", time[3].toString());
+		final Map<String, String> replace = Utils.playedTime(actarget.getName(), total);
 		String played = ChatColor.GOLD + "Time Played" + ChatColor.WHITE + " : ";
 		int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(played);

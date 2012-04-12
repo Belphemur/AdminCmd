@@ -1114,14 +1114,9 @@ public final class Utils {
 
 	public static void sParsedLocale(final Player p, final String locale) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", getPlayerName(p));
 		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
 		final long total = acPlayer.getCurrentPlayedTime();
-		final Long[] time = Utils.transformToElapsedTime(total);
-		replace.put("d", time[0].toString());
-		replace.put("h", time[1].toString());
-		replace.put("m", time[2].toString());
-		replace.put("s", time[3].toString());
+		replace.putAll(playedTime(getPlayerName(p), total));
 		replace.put(
 				"nb",
 				String.valueOf(p.getServer().getOnlinePlayers().length
@@ -1496,13 +1491,10 @@ public final class Utils {
 	 * 
 	 * @param playername
 	 *            name of the player that the time belong to
-	 * @param target
-	 *            target of the message
 	 * @param total
 	 *            total time played
 	 */
-	public static void sendPlayedTimeString(final String playername, final CommandSender target,
-			final long total) {
+	public static Map<String, String> playedTime(final String playername, final long total) {
 		final Long[] time = Utils.transformToElapsedTime(total);
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());
@@ -1510,6 +1502,6 @@ public final class Utils {
 		replace.put("m", timeLongToSring(time[2]));
 		replace.put("s", timeLongToSring(time[3]));
 		replace.put("player", playername);
-		Utils.sI18n(target, "playedTime", replace);
+		return replace;
 	}
 }

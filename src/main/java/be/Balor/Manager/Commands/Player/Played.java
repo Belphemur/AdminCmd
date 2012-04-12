@@ -55,7 +55,7 @@ public class Played extends PlayerCommand {
 				playername = target.getName();
 				total = target.getInformation("totalTime").getLong(0);
 			}
-			Utils.sendPlayedTimeString(playername, sender, total);
+			Utils.sI18n(sender, "playedTime", Utils.playedTime(playername, total));
 
 		}
 	}
