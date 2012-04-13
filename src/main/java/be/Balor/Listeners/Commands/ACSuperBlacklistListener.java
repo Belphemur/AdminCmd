@@ -33,7 +33,7 @@ public class ACSuperBlacklistListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
-		if (!ACHelper.getInstance().inBlackListBlock(event.getPlayer(),
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(),
 				event.getItemDrop().getItemStack()))
 			return;
 		event.setCancelled(true);
@@ -43,14 +43,14 @@ public class ACSuperBlacklistListener implements Listener {
 	public void onUse(final PlayerInteractEvent event) {
 		if (event.getItem() == null)
 			return;
-		if (!ACHelper.getInstance().inBlackListBlock(event.getPlayer(), event.getItem()))
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItem()))
 			return;
 		event.setCancelled(true);
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPickup(final PlayerPickupItemEvent event) {
-		if (!ACHelper.getInstance().inBlackListBlock(event.getPlayer(),
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(),
 				event.getItem().getItemStack()))
 			return;
 		event.setCancelled(true);
@@ -58,7 +58,7 @@ public class ACSuperBlacklistListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void specialBucket(final PlayerBucketEmptyEvent event) {
-		if (!ACHelper.getInstance().inBlackListBlock(event.getPlayer(), event.getItemStack()))
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItemStack()))
 			return;
 		event.setCancelled(true);
 	}
