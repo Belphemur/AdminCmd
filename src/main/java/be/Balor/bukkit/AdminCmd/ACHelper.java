@@ -337,7 +337,7 @@ public class ACHelper {
 				return false;
 			} else {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance,
-						new UnBanTask(player.getPlayer(), false),
+						new UnBanTask(player.getPlayer(), true),
 						timeLeft / Utils.secondInMillis * Utils.secInTick);
 				return true;
 			}
