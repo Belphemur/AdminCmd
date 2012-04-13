@@ -428,3 +428,7 @@ commands:
     description: "Search for different things associated with a player.(Currently only ips via -i ip)"
     aliases: [search,look,sh]
     usage: /<command> <-i ip>
+  bal_withdraw:
+    description: "Removes all super powers from a player."
+    aliases: [wtd, withdraw, rmp]
+    usage: /<command> <-P playerName>

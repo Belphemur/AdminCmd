@@ -80,7 +80,11 @@ public enum LocaleHelper {
 			+ "Banned for: %reason on %date"),
 	INACC_IP("inaccurateIp", ChatColor.RED + "This IP " + ChatColor.GOLD + "%ip " + ChatColor.RED
 			+ "is incorrect !"),
-	NO_BAN_FOUND("notBanned", ChatColor.GOLD + "No ban found for" + ChatColor.RED + " %ban");
+	NO_BAN_FOUND("notBanned", ChatColor.GOLD + "No ban found for" + ChatColor.RED + " %ban"),
+	P_CLEARED_SENDER("powersClearedSender", ChatColor.GREEN + "Successfully removed all powers from %target" + "!"),
+	P_CLEARED_TARGET("powersClearedTarget", ChatColor.AQUA + "All of your active powers have been removed by"
+			+ ChatColor.GOLD + " %sender" + ChatColor.AQUA + "!"),
+	P_CLEARED("powersCleared", ChatColor.GREEN + "You have successfully removed all your powers!");
 
 	private final String key;
 	private final String locale;
