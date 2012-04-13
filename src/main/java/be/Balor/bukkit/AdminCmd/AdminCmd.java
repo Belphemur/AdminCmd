@@ -25,6 +25,7 @@ import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACNoDropListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
+import be.Balor.Listeners.Commands.ACSuperBlacklistListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACTeleportBackListener;
 import be.Balor.Listeners.Commands.ACThorListener;
@@ -398,6 +399,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Quit.class);
 		CommandManager.getInstance().registerCommand(BanList.class);
 		CommandManager.getInstance().registerCommand(Search.class);
+		if (ConfigEnum.SUPER_BLACKLIST.getBoolean())
+			pm.registerEvents(new ACSuperBlacklistListener(), this);
 	}
 
 	@Override
