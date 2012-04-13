@@ -25,7 +25,7 @@
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
-package be.Balor.Tools;
+package be.Balor.Tools.Metrics;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,7 +61,7 @@ public class Metrics {
 	/**
 	 * The base url of the metrics domain
 	 */
-	private static final String BASE_URL = "http://metrics.griefcraft.com";
+	private static final String BASE_URL = "http://mcstats.org";
 
 	/**
 	 * The url used to report a server's status

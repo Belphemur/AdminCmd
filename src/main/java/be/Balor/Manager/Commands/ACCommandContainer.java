@@ -94,6 +94,10 @@ public class ACCommandContainer {
 		return sender;
 	}
 
+	public Class<? extends CoreCommand> getCommandClass() {
+		return cmd.getClass();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

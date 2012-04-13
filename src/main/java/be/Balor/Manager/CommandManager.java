@@ -22,6 +22,7 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -50,6 +51,11 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
+import be.Balor.Tools.Metrics.ClassPlotter;
+import be.Balor.Tools.Metrics.IncrementalPlotter;
+import be.Balor.Tools.Metrics.Metrics;
+import be.Balor.Tools.Metrics.Metrics.Graph;
+import be.Balor.Tools.Metrics.Metrics.Graph.Type;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;
@@ -82,6 +88,7 @@ public class CommandManager implements CommandExecutor {
 		public void run() {
 			try {
 				processCmd();
+				plotters.get(acc.getCommandClass()).increment();
 			} catch (final ConcurrentModificationException cme) {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin,
 						new SyncCommand(acc));
@@ -160,6 +167,7 @@ public class CommandManager implements CommandExecutor {
 	private final HashMap<Command, CoreCommand> registeredCommands = new HashMap<Command, CoreCommand>();
 	private final int MAX_THREADS = 8;
 	private static CommandManager instance = new CommandManager();
+	private Graph graph;
 
 	public static CommandManager createInstance() {
 		if (instance == null)
@@ -179,15 +187,12 @@ public class CommandManager implements CommandExecutor {
 	private List<String> disabledCommands;
 
 	private List<String> prioritizedCommands;
-
-	private final HashMap<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
-
-	private final HashMap<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
-
+	private final Map<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
+	private final Map<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
 	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2, MAX_THREADS, 60L,
 			TimeUnit.SECONDS, new SynchronousQueue<Runnable>(true));
-
-	private final HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, HashMap<String, Command>>();
+	private final Map<AbstractAdminCmdPlugin, Map<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, Map<String, Command>>();
+	private final Map<Class<? extends CoreCommand>, IncrementalPlotter> plotters = new HashMap<Class<? extends CoreCommand>, IncrementalPlotter>();
 
 	/**
 	 *
@@ -197,11 +202,19 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	/**
+	 * @param graph
+	 *            the graph to set
+	 */
+	public void setMetrics(final Metrics metrics) {
+		graph = metrics.createGraph(corePlugin, Type.Column, "Commands");
+	}
+
+	/**
 	 * Check if some alias have been disabled for the registered commands
 	 */
 	public void checkAlias(final AbstractAdminCmdPlugin plugin) {
 		if (ConfigEnum.VERBOSE.getBoolean()) {
-			final HashMap<String, Command> commands = pluginCommands.get(plugin);
+			final Map<String, Command> commands = pluginCommands.get(plugin);
 			if (commands != null)
 				for (final String cmdName : commands.keySet()) {
 					final Command cmd = commands.get(cmdName);
@@ -229,7 +242,7 @@ public class CommandManager implements CommandExecutor {
 	 * @throws CommandDisabled
 	 */
 	private void checkCommand(final CoreCommand command) throws CommandDisabled {
-		final HashMap<String, Command> commands = pluginCommands.get(command.getPlugin());
+		final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
 		if (commands != null)
 			for (final String alias : commands.get(command.getCmdName()).getAliases()) {
 				if (disabledCommands.contains(alias))
@@ -362,6 +375,9 @@ public class CommandManager implements CommandExecutor {
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(instance);
 			registeredCommands.put(command.getPluginCommand(), command);
+			final IncrementalPlotter plotter = new ClassPlotter(clazz);
+			graph.addPlotter(plotter);
+			plotters.put(clazz, plotter);
 		} catch (final InstantiationException e) {
 			e.printStackTrace();
 			return false;
@@ -377,7 +393,7 @@ public class CommandManager implements CommandExecutor {
 			return false;
 		} catch (final CommandAlreadyExist e) {
 			boolean disableCommand = true;
-			final HashMap<String, Command> commands = pluginCommands.get(command.getPlugin());
+			final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
 			if (commands != null)
 				for (final String alias : commands.get(command.getCmdName()).getAliases()) {
 					if (prioritizedCommands.contains(alias)) {
@@ -403,6 +419,9 @@ public class CommandManager implements CommandExecutor {
 				command.getPluginCommand().setExecutor(this);
 				registeredCommands.put(command.getPluginCommand(), command);
 				DebugLog.INSTANCE.info("Command Prioritized but already exists");
+				final IncrementalPlotter plotter = new ClassPlotter(clazz);
+				graph.addPlotter(plotter);
+				plotters.put(clazz, plotter);
 				return true;
 			}
 		} catch (final CommandException e) {
