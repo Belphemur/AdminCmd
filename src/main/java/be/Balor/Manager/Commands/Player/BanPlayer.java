@@ -31,6 +31,7 @@ import be.Balor.Player.TempBannedIP;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -90,16 +91,7 @@ public class BanPlayer extends PlayerCommand {
 				message += "(Banned for " + tmpBan + " minutes)";
 				final String unban = banPlayerString;
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
-						new Runnable() {
-
-							@Override
-							public void run() {
-								ACHelper.getInstance().unBanPlayer(unban);
-								final String unbanMsg = Utils.I18n("unban", "player", unban);
-								if (unbanMsg != null)
-									Utils.broadcastMessage(unbanMsg);
-							}
-						}, 20 * 60 * tmpBan);
+						new UnBanTask(unban, true), Utils.secInTick * 60 * tmpBan);
 			}
 		} else {
 			message = "You have been banned by ";

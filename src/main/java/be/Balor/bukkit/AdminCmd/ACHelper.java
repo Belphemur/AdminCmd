@@ -57,6 +57,7 @@ import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
+import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
@@ -335,15 +336,9 @@ public class ACHelper {
 				unBanPlayer(player.getPlayer());
 				return false;
 			} else {
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACHelper.getInstance().getCoreInstance(), new Runnable() {
-
-							@Override
-							public void run() {
-								unBanPlayer(player.getPlayer());
-
-							}
-						}, timeLeft * Utils.secondInMillis * Utils.secInTick);
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance,
+						new UnBanTask(player.getPlayer(), false),
+						timeLeft / Utils.secondInMillis * Utils.secInTick);
 				return true;
 			}
 		} else
