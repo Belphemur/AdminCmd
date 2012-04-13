@@ -156,7 +156,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -231,6 +231,17 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				@Override
 				public int getValue() {
 					return worker.getNbKit();
+				}
+			});
+			metrics.addCustomData(this, new Metrics.Plotter() {
+				@Override
+				public String getColumnName() {
+					return "Total Blacklisted Items";
+				}
+
+				@Override
+				public int getValue() {
+					return worker.countBlackListedItems();
 				}
 			});
 			metrics.addCustomData(this, new Metrics.Plotter() {

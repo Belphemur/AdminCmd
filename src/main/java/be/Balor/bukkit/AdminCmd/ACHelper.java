@@ -404,6 +404,10 @@ public class ACHelper {
 		return bannedPlayers.size();
 	}
 
+	public int countBlackListedItems() {
+		return itemBlacklist.size();
+	}
+
 	public Collection<Ban> getBannedPlayers() {
 		return bannedPlayers.values();
 	}
