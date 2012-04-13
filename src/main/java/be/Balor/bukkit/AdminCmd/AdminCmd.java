@@ -194,18 +194,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
-		super.onEnable();
-		TerminalCommandManager.getInstance().setPerm(this);
-		worker.loadInfos();
-		permissionLinker.registerAllPermParent();
-		pm.registerEvents(new ACBlockListener(), this);
-		pm.registerEvents(new ACEntityListener(), this);
-		pm.registerEvents(new ACPlayerListener(), this);
-		pm.registerEvents(new ACWeatherListener(), this);
-		if (ConfigEnum.COLSIGN.getBoolean())
-			pm.registerEvents(new ACColorSignListener(), this);
-		if (ConfigEnum.RESET_POWERS.getBoolean())
-			pm.registerEvents(new ACResetPowerListener(), this);
 		try {
 			// create a new metrics object
 			final Metrics metrics = new Metrics();
@@ -278,6 +266,19 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
 		}
+		super.onEnable();
+		TerminalCommandManager.getInstance().setPerm(this);
+		worker.loadInfos();
+		permissionLinker.registerAllPermParent();
+		pm.registerEvents(new ACBlockListener(), this);
+		pm.registerEvents(new ACEntityListener(), this);
+		pm.registerEvents(new ACPlayerListener(), this);
+		pm.registerEvents(new ACWeatherListener(), this);
+		if (ConfigEnum.COLSIGN.getBoolean())
+			pm.registerEvents(new ACColorSignListener(), this);
+		if (ConfigEnum.RESET_POWERS.getBoolean())
+			pm.registerEvents(new ACResetPowerListener(), this);
+
 	}
 
 	@Override
