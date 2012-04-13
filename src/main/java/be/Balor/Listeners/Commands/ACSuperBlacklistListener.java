@@ -16,12 +16,16 @@
  ************************************************************************/
 package be.Balor.Listeners.Commands;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -33,10 +37,12 @@ public class ACSuperBlacklistListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
-		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(),
-				event.getItemDrop().getItemStack()))
+		final Player player = event.getPlayer();
+		final ItemStack itemStack = event.getItemDrop().getItemStack();
+		if (!ACHelper.getInstance().inBlackListItem(player, itemStack))
 			return;
 		event.setCancelled(true);
+		player.getInventory().addItem(itemStack);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -61,5 +67,16 @@ public class ACSuperBlacklistListener implements Listener {
 		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItemStack()))
 			return;
 		event.setCancelled(true);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void specialEgg(final PlayerEggThrowEvent event) {
+		final ItemStack egg = new ItemStack(Material.EGG, 1, event.getHatchingType().getTypeId());
+		final Player player = event.getPlayer();
+		if (!ACHelper.getInstance().inBlackListItem(player, egg))
+			return;
+		event.setHatching(false);
+		player.getInventory().addItem(egg);
+
 	}
 }
