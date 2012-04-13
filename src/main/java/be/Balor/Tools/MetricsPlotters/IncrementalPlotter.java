@@ -14,19 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Metrics;
+package be.Balor.Tools.MetricsPlotters;
+
+import be.Balor.Tools.Metrics.Plotter;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ClassPlotter extends IncrementalPlotter {
+public class IncrementalPlotter extends Plotter {
+
+	private int value = 0;
 
 	/**
 	 * @param name
 	 */
-	public ClassPlotter(final Class<?> clazz) {
-		super(clazz.getSimpleName());
+	public IncrementalPlotter(final String name) {
+		super(name);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Metrics.Metrics.Plotter#getValue()
+	 */
+	@Override
+	public int getValue() {
+		return value;
+	}
+
+	public void increment() {
+		value++;
 	}
 
 }
