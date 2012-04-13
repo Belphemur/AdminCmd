@@ -71,7 +71,7 @@ public class ACSuperBlacklistListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void specialEgg(final PlayerEggThrowEvent event) {
-		final ItemStack egg = new ItemStack(Material.EGG, 1, event.getHatchingType().getTypeId());
+		final ItemStack egg = new ItemStack(Material.EGG, 1);
 		final Player player = event.getPlayer();
 		if (!ACHelper.getInstance().inBlackListItem(player, egg))
 			return;
