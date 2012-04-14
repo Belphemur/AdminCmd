@@ -17,6 +17,8 @@
 package be.Balor.Listeners.Commands;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -74,8 +76,11 @@ public class ACSuperBlacklistListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void specialIteractionEntity(final PlayerInteractEntityEvent event) {
-		final ItemStack item = event.getPlayer().getItemInHand();
-		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), item))
+		final Entity entity = event.getRightClicked();
+		if (!(entity instanceof Item))
+			return;
+		final Item item = (Item) entity;
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), item.getItemStack()))
 			return;
 		event.setCancelled(true);
 	}
