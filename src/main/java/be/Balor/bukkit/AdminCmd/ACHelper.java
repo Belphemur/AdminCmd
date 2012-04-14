@@ -50,6 +50,7 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Blocks.BlockRemanence;
+import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -1066,7 +1067,11 @@ public class ACHelper {
 		commands.add("disabledCommands", disabled);
 		commands.add("prioritizedCommands",
 				priority.isEmpty() ? Arrays.asList("reload", "/", "stop") : priority);
-		commands.add("alias.god", Arrays.asList("gg", "gd"));
+		final ExConfigurationSection aliases = commands.addSection("aliases");
+		final ExConfigurationSection god = aliases.addSection("god");
+		final ExConfigurationSection godAlias = god.addSection("aliases");
+		godAlias.add("name", "gg");
+		godAlias.add("parameter", "");
 		try {
 			commands.save();
 		} catch (final IOException e) {
