@@ -17,6 +17,8 @@
 package be.Balor.Listeners.Commands;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,7 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -41,16 +43,6 @@ public class ACSuperBlacklistListener implements Listener {
 		final Player player = event.getPlayer();
 		final ItemStack itemStack = event.getItemDrop().getItemStack();
 		if (!ACHelper.getInstance().inBlackListItem(player, itemStack))
-			return;
-		event.setCancelled(true);
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onUse(final PlayerInteractEvent event) {
-		final ItemStack item = event.getItem();
-		if (item == null)
-			return;
-		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), item))
 			return;
 		event.setCancelled(true);
 	}
@@ -80,5 +72,16 @@ public class ACSuperBlacklistListener implements Listener {
 		event.getEgg().remove();
 		player.getInventory().addItem(egg);
 
+	}
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void specialIteractionEntity(final PlayerInteractEntityEvent event) {
+		final Entity entity = event.getRightClicked();
+		if (!(entity instanceof Item))
+			return;
+		final Item item = (Item) entity;
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), item.getItemStack()))
+			return;
+		event.setCancelled(true);
 	}
 }
