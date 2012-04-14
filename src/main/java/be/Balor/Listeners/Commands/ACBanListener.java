@@ -16,13 +16,14 @@
  ************************************************************************/
 package be.Balor.Listeners.Commands;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
-import be.Balor.Player.Ban;
+import be.Balor.Player.IBan;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -34,11 +35,17 @@ public class ACBanListener implements Listener {
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (!event.getResult().equals(Result.ALLOWED))
 			return;
-		Ban player = ACHelper.getInstance().getBan(event.getPlayer().getName());
-		if (player == null)
-			player = ACHelper.getInstance().getBan(
-					event.getPlayer().getAddress().getAddress().toString().substring(1));
-		if (player != null)
-			event.disallow(Result.KICK_BANNED, player.getReason());
+		final Player player = event.getPlayer();
+		IBan ban = ACHelper.getInstance().getBan(player.getName());
+		// This throws an NoSuchMethod error!!
+		if (ban == null) {
+			try {
+				ban = ACHelper.getInstance().getBan(event.getAddress().toString().substring(1));
+			} catch (final NoSuchMethodError e) {
+			}
+
+		}
+		if (ban != null)
+			event.disallow(Result.KICK_BANNED, ban.getReason());
 	}
 }

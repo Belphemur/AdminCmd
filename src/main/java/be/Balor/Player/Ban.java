@@ -22,7 +22,7 @@ import java.sql.Date;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public abstract class Ban {
+public abstract class Ban implements IBan {
 	private String reason;
 	private Date date;
 	private String player;
@@ -45,9 +45,10 @@ public abstract class Ban {
 		this.player = player;
 	}
 
-	/**
-	 * @return the reason
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.IBan#getReason()
 	 */
+	@Override
 	public String getReason() {
 		return reason;
 	}
@@ -60,9 +61,10 @@ public abstract class Ban {
 		this.reason = reason;
 	}
 
-	/**
-	 * @return the date
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.IBan#getDate()
 	 */
+	@Override
 	public Date getDate() {
 		return date;
 	}
@@ -75,9 +77,10 @@ public abstract class Ban {
 		this.date = date;
 	}
 
-	/**
-	 * @return the player
+	/* (non-Javadoc)
+	 * @see be.Balor.Player.IBan#getPlayer()
 	 */
+	@Override
 	public String getPlayer() {
 		return player;
 	}

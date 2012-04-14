@@ -27,6 +27,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.ITempBan;
 import be.Balor.Player.TempBannedIP;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
@@ -87,12 +88,6 @@ public class BanPlayer extends PlayerCommand {
 				if (!args.hasFlag('m'))
 					message += args.getString(args.length - 1);
 			}
-			if (tmpBan != null) {
-				message += "(Banned for " + tmpBan + " minutes)";
-				final String unban = banPlayerString;
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
-						new UnBanTask(unban, true), Utils.secInTick * 60 * tmpBan);
-			}
 		} else {
 			message = "You have been banned by ";
 			if (!Utils.isPlayer(sender, false))
@@ -118,6 +113,8 @@ public class BanPlayer extends PlayerCommand {
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
 		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4.matcher(banPlayerString);
 		if (tmpBan != null) {
+			message += "(Banned for " + tmpBan + " minutes)";
+			ITempBan ban;
 			if (inaccurateIp.find()) {
 				if (!ipv4.find()) {
 					replace.clear();
@@ -125,11 +122,14 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return;
 				}
-				ACHelper.getInstance().addBan(
-						new TempBannedIP(banPlayerString, message, tmpBan * 60 * 1000));
-			} else
-				ACHelper.getInstance().addBan(
-						new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000));
+				ban = new TempBannedIP(banPlayerString, message, tmpBan * 60 * 1000);
+				ACHelper.getInstance().banPlayer(ban);
+			} else {
+				ban = new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000);
+				ACHelper.getInstance().banPlayer(ban);
+			}
+			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
+					new UnBanTask(ban, true), Utils.secInTick * 60 * tmpBan);
 		} else {
 			if (inaccurateIp.find()) {
 				if (!ipv4.find()) {
@@ -138,9 +138,9 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return;
 				}
-				ACHelper.getInstance().addBan(new BannedIP(banPlayerString, message));
+				ACHelper.getInstance().banPlayer(new BannedIP(banPlayerString, message));
 			} else
-				ACHelper.getInstance().addBan(new BannedPlayer(banPlayerString, message));
+				ACHelper.getInstance().banPlayer(new BannedPlayer(banPlayerString, message));
 		}
 		Utils.broadcastMessage(Utils.I18n("ban", replace));
 

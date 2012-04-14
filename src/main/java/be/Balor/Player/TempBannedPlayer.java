@@ -22,7 +22,7 @@ import java.sql.Date;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TempBannedPlayer extends BannedPlayer implements TempBan {
+public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 	private Date endBan;
 
 	/**

@@ -51,6 +51,7 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.Ban;
 import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.IBan;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.ArmorPart;
@@ -684,7 +685,7 @@ public class FileManager implements DataManager {
 	 * )
 	 */
 	@Override
-	public void addBan(final Ban player) {
+	public void addBan(final IBan player) {
 		final ExtendedConfiguration banFile = getYml("banned");
 		ConfigurationSection bans;
 		if (player instanceof BannedPlayer) {
@@ -707,7 +708,8 @@ public class FileManager implements DataManager {
 	 * @see be.Balor.Tools.Files.DataManager#unbanPlayer(java.lang.String)
 	 */
 	@Override
-	public void unBanPlayer(final String player) {
+	public void unBanPlayer(final IBan ban) {
+		final String player = ban.getPlayer();
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(player);
 		final ExtendedConfiguration banFile = getYml("banned");
 		ConfigurationSection bans;

@@ -23,6 +23,7 @@ import org.bukkit.Location;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.Ban;
+import be.Balor.Player.IBan;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -41,14 +42,14 @@ public interface DataManager {
 	 * 
 	 * @param player
 	 */
-	public void addBan(Ban player);
+	public void addBan(IBan player);
 
 	/**
 	 * Unban banned player.
 	 * 
-	 * @param player
+	 * @param ban
 	 */
-	public void unBanPlayer(String player);
+	public void unBanPlayer(IBan ban);
 
 	/**
 	 * Return a string List containing all locations names

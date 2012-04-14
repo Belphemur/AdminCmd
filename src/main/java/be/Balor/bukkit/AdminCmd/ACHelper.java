@@ -40,10 +40,12 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.Ban;
+import be.Balor.Player.BannedIP;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.FilePlayerFactory;
+import be.Balor.Player.IBan;
+import be.Balor.Player.ITempBan;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.TempBan;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -102,7 +104,7 @@ public class ACHelper {
 	private AdminCmd coreInstance;
 	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private Map<String, KitInstance> kits = new HashMap<String, KitInstance>();
-	private final ConcurrentMap<String, Ban> bannedPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<String, IBan> bannedPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
 	private static ACHelper instance = new ACHelper();
@@ -152,9 +154,12 @@ public class ACHelper {
 	 * 
 	 * @param ban
 	 */
-	public void addBan(final Ban ban) {
+	public void banPlayer(final IBan ban) {
 		bannedPlayers.put(ban.getPlayer(), ban);
 		dataManager.addBan(ban);
+		if (ban instanceof BannedIP) {
+			ACPluginManager.getServer().banIP(ban.getPlayer());
+		}
 	}
 
 	/**
@@ -329,15 +334,16 @@ public class ACHelper {
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
-	private boolean checkBan(final Ban player) {
-		if (player instanceof TempBan) {
-			final Long timeLeft = ((TempBan) player).timeLeft();
+	private boolean checkBan(final IBan player) {
+		if (player instanceof ITempBan) {
+			final ITempBan tempBan = (ITempBan) player;
+			final Long timeLeft = tempBan.timeLeft();
 			if (timeLeft <= 0) {
-				unBanPlayer(player.getPlayer());
+				unBanPlayer(player);
 				return false;
 			} else {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance,
-						new UnBanTask(player.getPlayer(), true),
+						new UnBanTask(tempBan, true),
 						timeLeft / Utils.secondInMillis * Utils.secInTick);
 				return true;
 			}
@@ -408,7 +414,7 @@ public class ACHelper {
 		return itemBlacklist.size();
 	}
 
-	public Collection<Ban> getBannedPlayers() {
+	public Collection<IBan> getBannedPlayers() {
 		return bannedPlayers.values();
 	}
 
@@ -727,7 +733,7 @@ public class ACHelper {
 	 *            player's name
 	 * @return the ban if the player have one, else return null
 	 */
-	public Ban getBan(final String player) {
+	public IBan getBan(final String player) {
 		return bannedPlayers.get(player);
 	}
 
@@ -1119,11 +1125,14 @@ public class ACHelper {
 	/**
 	 * Unban the player
 	 * 
-	 * @param player
+	 * @param ban
 	 */
-	public void unBanPlayer(final String player) {
-		bannedPlayers.remove(player);
-		dataManager.unBanPlayer(player);
+	public void unBanPlayer(final IBan ban) {
+		bannedPlayers.remove(ban.getPlayer());
+		dataManager.unBanPlayer(ban);
+		if (ban instanceof BannedIP) {
+			ACPluginManager.getServer().unbanIP(ban.getPlayer());
+		}
 	}
 
 	public int undoLastModification(final String player) throws EmptyStackException {

@@ -21,8 +21,8 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Player.Ban;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.IBan;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -51,13 +51,13 @@ public class UnBan extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final String unban = args.getString(0);
-		final Ban player = ACHelper.getInstance().getBan(unban);
-		if (player != null) {
-			if (player instanceof BannedPlayer && !Utils.checkImmunity(sender, args, 0)) {
+		final IBan ban = ACHelper.getInstance().getBan(unban);
+		if (ban != null) {
+			if (ban instanceof BannedPlayer && !Utils.checkImmunity(sender, args, 0)) {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
 			}
-			ACHelper.getInstance().unBanPlayer(unban);
+			ACHelper.getInstance().unBanPlayer(ban);
 			final String unbanMsg = Utils.I18n("unban", "player", unban);
 			if (unbanMsg != null)
 				Utils.broadcastMessage(unbanMsg);

@@ -26,7 +26,7 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Player.Ban;
+import be.Balor.Player.IBan;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -50,10 +50,10 @@ public class BanList extends PlayerCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
-		final Collection<Ban> banned = ACHelper.getInstance().getBannedPlayers();
+		final Collection<IBan> banned = ACHelper.getInstance().getBannedPlayers();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final TreeSet<String> toSend = new TreeSet<String>();
-		for (final Ban p : banned) {
+		for (final IBan p : banned) {
 			replace.clear();
 			replace.put("player", p.getPlayer());
 			replace.put("reason", p.getReason());

@@ -14,44 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Tools.Threads;
+package be.Balor.Player;
 
-import be.Balor.Player.ITempBan;
-import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import java.sql.Date;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class UnBanTask implements Runnable {
-
-	private final ITempBan toUnBan;
-	private final boolean bcast;
+public interface ITempBan extends IBan {
 
 	/**
-	 * @param toUnBan
-	 * @param bcast
+	 * @return the endBan
 	 */
-	public UnBanTask(final ITempBan toUnBan, final boolean bcast) {
-		super();
-		this.toUnBan = toUnBan;
-		this.bcast = bcast;
-	}
+	public abstract Date getEndBan();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
+	/**
+	 * @param endBan
+	 *            the endBan to set
 	 */
-	@Override
-	public void run() {
-		ACHelper.getInstance().unBanPlayer(toUnBan);
-		if (!bcast)
-			return;
-		final String unbanMsg = Utils.I18n("unban", "player", toUnBan.getPlayer());
-		if (unbanMsg != null)
-			Utils.broadcastMessage(unbanMsg);
-	}
+	public abstract void setEndBan(final Date endBan);
+
+	/**
+	 * Get the time left before unBan
+	 * 
+	 * @return
+	 */
+	public abstract long timeLeft();
 
 }

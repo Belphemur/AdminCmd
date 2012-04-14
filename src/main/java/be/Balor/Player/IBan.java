@@ -22,24 +22,21 @@ import java.sql.Date;
  * @author Balor (aka Antoine Aflalo)
  *
  */
-public interface TempBan {
+public interface IBan {
 
 	/**
-	 * @return the endBan
+	 * @return the reason
 	 */
-	public abstract Date getEndBan();
+	public abstract String getReason();
 
 	/**
-	 * @param endBan
-	 *            the endBan to set
+	 * @return the date
 	 */
-	public abstract void setEndBan(final Date endBan);
+	public abstract Date getDate();
 
 	/**
-	 * Get the time left before unBan
-	 * 
-	 * @return
+	 * @return the player
 	 */
-	public abstract long timeLeft();
+	public abstract String getPlayer();
 
 }
