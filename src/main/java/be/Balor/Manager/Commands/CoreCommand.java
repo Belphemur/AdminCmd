@@ -216,4 +216,63 @@ public abstract class CoreCommand {
 				+ ", permParent=" + permParent + "]";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bukkitDefault == null) ? 0 : bukkitDefault.hashCode());
+		result = prime * result + ((cmdName == null) ? 0 : cmdName.hashCode());
+		result = prime * result + (other ? 1231 : 1237);
+		result = prime * result + ((permNode == null) ? 0 : permNode.hashCode());
+		result = prime * result + ((permParent == null) ? 0 : permParent.hashCode());
+		result = prime * result + ((plugin == null) ? 0 : plugin.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof CoreCommand))
+			return false;
+		final CoreCommand other = (CoreCommand) obj;
+		if (bukkitDefault != other.bukkitDefault)
+			return false;
+		if (cmdName == null) {
+			if (other.cmdName != null)
+				return false;
+		} else if (!cmdName.equals(other.cmdName))
+			return false;
+		if (this.other != other.other)
+			return false;
+		if (permNode == null) {
+			if (other.permNode != null)
+				return false;
+		} else if (!permNode.equals(other.permNode))
+			return false;
+		if (permParent == null) {
+			if (other.permParent != null)
+				return false;
+		} else if (!permParent.equals(other.permParent))
+			return false;
+		if (plugin == null) {
+			if (other.plugin != null)
+				return false;
+		} else if (!plugin.equals(other.plugin))
+			return false;
+		return true;
+	}
+
 }

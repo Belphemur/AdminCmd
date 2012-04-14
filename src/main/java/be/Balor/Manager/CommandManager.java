@@ -20,9 +20,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -34,9 +37,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
+import be.Balor.Manager.Commands.CommandAlias;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
@@ -44,6 +49,8 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Metrics;
+import be.Balor.Tools.Metrics.Graph;
+import be.Balor.Tools.Metrics.Graph.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -52,8 +59,6 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
-import be.Balor.Tools.Metrics.Graph;
-import be.Balor.Tools.Metrics.Graph.Type;
 import be.Balor.Tools.MetricsPlotters.ClassPlotter;
 import be.Balor.Tools.MetricsPlotters.IncrementalPlotter;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -187,8 +192,8 @@ public class CommandManager implements CommandExecutor {
 	private List<String> disabledCommands;
 
 	private List<String> prioritizedCommands;
-	private final Map<String, List<String>> aliasCommands = new HashMap<String, List<String>>();
-	private final Map<String, CoreCommand> commandReplacer = new HashMap<String, CoreCommand>();
+	private final Map<String, CommandAlias> commandsAliasReplacer = new HashMap<String, CommandAlias>();
+	private final Map<String, Set<CommandAlias>> commandsAlias = new HashMap<String, Set<CommandAlias>>();
 	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2, MAX_THREADS, 60L,
 			TimeUnit.SECONDS, new SynchronousQueue<Runnable>(true));
 	private final Map<AbstractAdminCmdPlugin, Map<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, Map<String, Command>>();
@@ -248,11 +253,16 @@ public class CommandManager implements CommandExecutor {
 				if (disabledCommands.contains(alias))
 					throw new CommandDisabled("Command " + command.getCmdName()
 							+ " selected to be disabled in the configuration file.");
-				if (prioritizedCommands.contains(alias))
-					commandReplacer.put(alias, command);
-				if (aliasCommands.containsKey(alias)) {
-					for (final String cmd : aliasCommands.get(alias))
-						commandReplacer.put(cmd, command);
+				if (prioritizedCommands.contains(alias)) {
+					final CommandAlias cmd = new CommandAlias(command.getCmdName(), alias, "");
+					cmd.setCmd(command);
+					commandsAliasReplacer.put(alias, cmd);
+				}
+				final Set<CommandAlias> commandAliases = commandsAlias.get(alias);
+				if (commandAliases != null) {
+					for (final CommandAlias commandAlias : commandAliases) {
+						commandAlias.setCmd(command);
+					}
 				}
 			}
 	}
@@ -338,11 +348,13 @@ public class CommandManager implements CommandExecutor {
 		if (split.length == 0)
 			return false;
 		final String cmdName = split[0].substring(1).toLowerCase();
-		final CoreCommand cmd = commandReplacer.get(cmdName);
-		if (cmd != null) {
+		final CommandAlias cmdAlias = commandsAliasReplacer.get(cmdName);
+		if (cmdAlias != null) {
 			if (ConfigEnum.VERBOSE.getBoolean())
-				ACLogger.info("Command " + cmdName + " intercepted.");
-			return executeCommand(sender, cmd, Utils.Arrays_copyOfRange(split, 1, split.length));
+				ACLogger.info("Command " + cmdName + " intercepted for "
+						+ cmdAlias.getCommandName());
+			return executeCommand(sender, cmdAlias.getCmd(),
+					cmdAlias.processArguments(Utils.Arrays_copyOfRange(split, 1, split.length)));
 		}
 		return false;
 	}
@@ -392,20 +404,23 @@ public class CommandManager implements CommandExecutor {
 				ACLogger.info(e.getMessage());
 			return false;
 		} catch (final CommandAlreadyExist e) {
-			boolean disableCommand = true;
+			final boolean disableCommand = true;
 			final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
-			if (commands != null)
+			if (commands != null) {
 				for (final String alias : commands.get(command.getCmdName()).getAliases()) {
 					if (prioritizedCommands.contains(alias)) {
-						commandReplacer.put(alias, command);
-						disableCommand = false;
+						final CommandAlias cmd = new CommandAlias(command.getCmdName(), alias, "");
+						cmd.setCmd(command);
+						commandsAliasReplacer.put(alias, cmd);
 					}
-					if (aliasCommands.containsKey(alias)) {
-						for (final String cmd : aliasCommands.get(alias))
-							commandReplacer.put(cmd, command);
-						disableCommand = false;
+					final Set<CommandAlias> commandAliases = commandsAlias.get(alias);
+					if (commandAliases != null) {
+						for (final CommandAlias commandAlias : commandAliases) {
+							commandAlias.setCmd(command);
+						}
 					}
 				}
+			}
 			if (disableCommand) {
 				unRegisterBukkitCommand(command.getPluginCommand());
 				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
@@ -442,10 +457,24 @@ public class CommandManager implements CommandExecutor {
 		final ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
-		final ExConfigurationSection alias = cmds.getConfigurationSection("alias");
-		for (final String cmd : alias.getKeys(false))
-			aliasCommands.put(cmd,
-					new ArrayList<String>(alias.getStringList(cmd, new ArrayList<String>())));
+		final ExConfigurationSection aliases = cmds.getConfigurationSection("aliases");
+		for (final String command : aliases.getKeys(false)) {
+			Set<CommandAlias> setAliasCmd = commandsAlias.get(command);
+			if (setAliasCmd == null) {
+				setAliasCmd = new HashSet<CommandAlias>();
+				commandsAlias.put(command, setAliasCmd);
+			}
+			final ConfigurationSection aliasSection = aliases.getConfigurationSection(command);
+			for (final Entry<String, Object> alias : aliasSection.getValues(false).entrySet()) {
+				final CommandAlias commandAlias = new CommandAlias(command, alias.getKey(), alias
+						.getValue().toString());
+				commandsAliasReplacer.put(alias.getKey(), commandAlias);
+
+				setAliasCmd.add(commandAlias);
+			}
+
+		}
+
 		startThreads();
 	}
 
@@ -508,7 +537,7 @@ public class CommandManager implements CommandExecutor {
 					command.initializeCommand();
 					final PluginCommand pCmd = command.getPluginCommand();
 					registeredCommands.remove(pCmd);
-					commandReplacer.remove(command.getCmdName());
+					removeFromAliasReplacer(command);
 					unRegisterBukkitCommand(pCmd);
 				} catch (final Exception e) {
 					return false;
@@ -523,6 +552,16 @@ public class CommandManager implements CommandExecutor {
 		}
 		return false;
 
+	}
+
+	private void removeFromAliasReplacer(final CoreCommand command) {
+		final List<String> keysToRemove = new ArrayList<String>();
+		for (final Entry<String, CommandAlias> entry : commandsAliasReplacer.entrySet()) {
+			if (entry.getValue().getCmd().equals(command))
+				keysToRemove.add(entry.getKey());
+		}
+		for (final String key : keysToRemove)
+			commandsAliasReplacer.remove(key);
 	}
 
 }

@@ -1069,9 +1069,11 @@ public class ACHelper {
 				priority.isEmpty() ? Arrays.asList("reload", "/", "stop") : priority);
 		final ExConfigurationSection aliases = commands.addSection("aliases");
 		final ExConfigurationSection god = aliases.addSection("god");
-		final ExConfigurationSection godAlias = god.addSection("aliases");
-		godAlias.add("name", "gg");
-		godAlias.add("parameter", "");
+		god.add("gg", "");
+		god.add("gd", "");
+		final ExConfigurationSection fly = aliases.addSection("fly");
+		fly.add("ofly", "-o");
+
 		try {
 			commands.save();
 		} catch (final IOException e) {
