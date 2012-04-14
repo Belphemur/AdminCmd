@@ -404,7 +404,7 @@ public class CommandManager implements CommandExecutor {
 				ACLogger.info(e.getMessage());
 			return false;
 		} catch (final CommandAlreadyExist e) {
-			final boolean disableCommand = true;
+			boolean disableCommand = true;
 			final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
 			if (commands != null) {
 				for (final String alias : commands.get(command.getCmdName()).getAliases()) {
@@ -412,12 +412,14 @@ public class CommandManager implements CommandExecutor {
 						final CommandAlias cmd = new CommandAlias(command.getCmdName(), alias, "");
 						cmd.setCmd(command);
 						commandsAliasReplacer.put(alias, cmd);
+						disableCommand = false;
 					}
 					final Set<CommandAlias> commandAliases = commandsAlias.get(alias);
 					if (commandAliases != null) {
 						for (final CommandAlias commandAlias : commandAliases) {
 							commandAlias.setCmd(command);
 						}
+						disableCommand = false;
 					}
 				}
 			}
