@@ -1073,7 +1073,8 @@ public class ACHelper {
 		god.add("gd", "");
 		final ExConfigurationSection fly = aliases.addSection("fly");
 		fly.add("ofly", "-o");
-
+		final ExConfigurationSection egg = aliases.addSection("egg");
+		egg.add("grenade", "-E ExplosionEgg");
 		try {
 			commands.save();
 		} catch (final IOException e) {
