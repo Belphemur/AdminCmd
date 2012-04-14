@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -36,7 +37,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  */
 public class ACSuperBlacklistListener implements Listener {
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onDrop(final PlayerDropItemEvent event) {
 		final Player player = event.getPlayer();
 		final ItemStack itemStack = event.getItemDrop().getItemStack();
@@ -45,17 +46,25 @@ public class ACSuperBlacklistListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	/**
+	 * THANKS LATHANAEL :D idea of Lathanael of using the right click air to
+	 * check the item in hand.
+	 * 
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onUse(final PlayerInteractEvent event) {
-		final ItemStack item = event.getItem();
-		if (item == null)
+		final Action action = event.getAction();
+		if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK)
 			return;
-		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), item))
+		final Player player = event.getPlayer();
+		final ItemStack item = player.getItemInHand();
+		if (!ACHelper.getInstance().inBlackListItem(player, item))
 			return;
 		event.setCancelled(true);
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPickup(final PlayerPickupItemEvent event) {
 		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(),
 				event.getItem().getItemStack()))
@@ -63,7 +72,7 @@ public class ACSuperBlacklistListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void specialBucket(final PlayerBucketEmptyEvent event) {
 		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItemStack()))
 			return;
