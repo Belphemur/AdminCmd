@@ -26,13 +26,14 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
+import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
- * 
+ *
  */
 public class Spawn extends SpawnCommand {
 
@@ -46,29 +47,35 @@ public class Spawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		if (Utils.isPlayer(sender, true)) {
+		if (args.length >=1 && Utils.isPlayer(sender, true)) {
+			ACWorld w = ACWorld.getWorld(args.getString(0));
 			final Player target = (Player) sender;
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(), new DelayedTeleport(target, sender),
+					ACHelper.getInstance().getCoreInstance(), new DelayedTeleport(target, sender, w),
+					ConfigEnum.TP_DELAY.getLong());
+		} else if (Utils.isPlayer(sender, true)) {
+			final Player target = (Player) sender;
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+					ACHelper.getInstance().getCoreInstance(), new DelayedTeleport(target, sender, null),
 					ConfigEnum.TP_DELAY.getLong());
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		return true;
+		return args != null;
 	}
 
 	private class DelayedTeleport implements Runnable {
@@ -77,23 +84,26 @@ public class Spawn extends SpawnCommand {
 		protected Player target;
 		protected HashMap<String, String> replace;
 		protected CommandSender sender;
+		protected ACWorld world;
 
-		public DelayedTeleport(final Player target, final CommandSender sender) {
+		public DelayedTeleport(final Player target, final CommandSender sender,
+				final ACWorld world) {
 			this.target = target;
 			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.sender = sender;
+			this.world = world;
 		}
 
 		@Override
 		public void run() {
 			if (!ConfigEnum.CHECKTP.getBoolean()) {
-				ACHelper.getInstance().spawn((Player) sender);
+				ACHelper.getInstance().spawn((Player) sender, world);
 				sendMessage(sender, target, "spawn");
 				return;
 			}
 
 			if (locBefore.equals(target.getLocation())) {
-				ACHelper.getInstance().spawn((Player) sender);
+				ACHelper.getInstance().spawn((Player) sender, world);
 				sendMessage(sender, target, "spawn");
 			} else {
 				replace = new HashMap<String, String>();
