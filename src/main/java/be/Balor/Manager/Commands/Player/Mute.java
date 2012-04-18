@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Mute extends PlayerCommand {
 	private final PermChild cmdMute;
@@ -49,14 +49,14 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		final Player player = sender.getServer().getPlayer(args.getString(0));
+		final Player player = Utils.getPlayer(args.getString(0));
 		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cmdMute.getBukkitPerm()))
 			return;
 		if (player != null) {
@@ -149,7 +149,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -159,7 +159,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override

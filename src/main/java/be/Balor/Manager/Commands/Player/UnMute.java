@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class UnMute extends PlayerCommand {
 
@@ -42,14 +42,14 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		final Player player = sender.getServer().getPlayer(args.getString(0));
+		final Player player = Utils.getPlayer(args.getString(0));
 
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", args.getString(0));
@@ -85,7 +85,7 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

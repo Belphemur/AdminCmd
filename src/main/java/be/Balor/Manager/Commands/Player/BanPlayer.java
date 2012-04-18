@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class BanPlayer extends PlayerCommand {
 
@@ -53,14 +53,14 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		final Player toBan = sender.getServer().getPlayer(args.getString(0));
+		final Player toBan = Utils.getPlayer(args.getString(0));
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
 		String banPlayerString;
@@ -148,7 +148,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
