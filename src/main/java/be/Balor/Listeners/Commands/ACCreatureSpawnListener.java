@@ -27,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.World.ACWorld;
 
@@ -41,7 +42,13 @@ public class ACCreatureSpawnListener implements Listener {
 		if (e instanceof HumanEntity)
 			return;
 		final World world = e.getWorld();
-		final ACWorld acWorld = ACWorld.getWorld(world.getName());
+		final ACWorld acWorld;
+		try {
+			acWorld = ACWorld.getWorld(world.getName());
+		} catch (final WorldNotLoaded e2) {
+			return;
+		}
+
 		final List<LivingEntity> livEntities = world.getLivingEntities();
 		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
 		if (limit != -1) {
