@@ -60,6 +60,8 @@ public class HighEgg extends SimpleRadiusEgg {
 		final int radius = value * value;
 		final int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt() * Utils.secInTick;
 		for (final Player player : Utils.getOnlinePlayers()) {
+			if (!player.getWorld().equals(loc.getWorld()))
+				continue;
 			if (player.getLocation().distanceSquared(loc) > radius)
 				continue;
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, timeout, 5));
