@@ -133,6 +133,8 @@ public class bPermissions extends SuperPermissions {
 	public String getGroup(final Player player) {
 		final String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
 				CalculableType.USER, player.getName());
+		if (groups.length == 0)
+			return "";
 		return groups[groups.length - 1];
 	}
 

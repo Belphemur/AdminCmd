@@ -100,6 +100,9 @@ public class BukkitPermissions extends SuperPermissions {
 	@Override
 	public String getGroup(final Player player) {
 		final List<Group> groups = permBukkit.getGroups(player.getName());
+		if (groups.isEmpty())
+			return "";
+
 		return groups.get(groups.size() - 1).getName();
 	}
 }

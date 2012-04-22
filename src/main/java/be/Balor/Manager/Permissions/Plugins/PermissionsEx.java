@@ -215,6 +215,8 @@ public class PermissionsEx extends SuperPermissions {
 	@Override
 	public String getGroup(final Player player) {
 		final String[] groups = PEX.getUser(player).getGroupsNames();
+		if (groups.length == 0)
+			return "";
 		return groups[groups.length - 1];
 	}
 
