@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -129,11 +128,6 @@ public class ACPlayerListener implements Listener {
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
 		}
-		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (player.hasPower(Type.FROZEN)) {
-			event.setCancelled(true);
-			return;
-		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -217,17 +211,6 @@ public class ACPlayerListener implements Listener {
 			AFKWorker.getInstance().updateTimeStamp(p);
 			if (AFKWorker.getInstance().isAfk(p))
 				AFKWorker.getInstance().setOnline(p);
-		}
-		final ACPlayer player = ACPlayer.getPlayer(p.getName());
-		if (player.hasPower(Type.FROZEN)) {
-			// event.setCancelled(true);
-			/**
-			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
-			 * @author Evenprime
-			 */
-			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
-			return;
 		}
 	}
 

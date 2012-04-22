@@ -21,6 +21,7 @@ import be.Balor.Listeners.Commands.ACEggListener;
 import be.Balor.Listeners.Commands.ACFireballListener;
 import be.Balor.Listeners.Commands.ACFlyListener;
 import be.Balor.Listeners.Commands.ACFoodListener;
+import be.Balor.Listeners.Commands.ACFrozenPlayerListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACNoDropListener;
@@ -346,7 +347,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACFlyListener(), this);
 		CommandManager.getInstance().registerCommand(DeleteHome.class);
 		CommandManager.getInstance().registerCommand(ListHomes.class);
-		CommandManager.getInstance().registerCommand(Freeze.class);
+		if (CommandManager.getInstance().registerCommand(Freeze.class))
+			pm.registerEvents(new ACFrozenPlayerListener(), this);
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
 		if (CommandManager.getInstance().registerCommand(MobLimit.class))
