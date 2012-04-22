@@ -426,7 +426,7 @@ commands:
     usage: /<command>
   bal_search:
     description: "Search for different things associated with a player.(Currently only ips via -i ip)"
-    aliases: [search,look,sh]
+    aliases: [search,look]
     usage: /<command> <-i ip>
   bal_withdraw:
     description: "Removes all super powers from a player."
