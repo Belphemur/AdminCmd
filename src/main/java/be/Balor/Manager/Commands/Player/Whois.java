@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Whois extends PlayerCommand {
 	/**
@@ -52,7 +53,7 @@ public class Whois extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -170,11 +171,25 @@ public class Whois extends PlayerCommand {
 		immuLvl += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN + String.valueOf(level), strSizeRem, ' ');
 		sender.sendMessage(immuLvl);
+
+		// GameMode
+		String gameMode = ChatColor.GREEN + "Current GameMode: " + ChatColor.GOLD;
+		String currentMode = "";
+		if (actarget.getHandler().getGameMode().equals(GameMode.CREATIVE)) {
+			currentMode = "Creative";
+		} else {
+			currentMode = "Survival";
+		}
+		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
+				- ACMinecraftFontWidthCalculator.getStringWidth(gameMode);
+		gameMode += ACMinecraftFontWidthCalculator.strPadLeftChat(
+				ChatColor.GREEN + String.valueOf(currentMode), strSizeRem, ' ');
+		sender.sendMessage(gameMode);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
