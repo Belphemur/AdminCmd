@@ -56,7 +56,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 	protected class UpdateInvisibleOnJoin implements Runnable {
@@ -116,7 +116,8 @@ public class ACPlayerListener implements Listener {
 		if (CommandManager.getInstance()
 				.processCommandString(event.getPlayer(), event.getMessage())) {
 			event.setCancelled(true);
-			event.setMessage("/AdminCmd took the control of that command.");
+			if (ConfigEnum.VERBOSE.getBoolean())
+				event.setMessage("/AdminCmd took the control of that command.");
 		}
 	}
 
