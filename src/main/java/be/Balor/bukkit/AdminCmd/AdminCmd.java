@@ -162,6 +162,14 @@ import belgium.Balor.Workers.InvisibleWorker;
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
+	private Metrics metrics;
+
+	/**
+	 * @return the metrics
+	 */
+	public Metrics getMetrics() {
+		return metrics;
+	}
 
 	@Override
 	public void onDisable() {
@@ -196,10 +204,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
 		try {
-			// create a new metrics object
-			final Metrics metrics = new Metrics();
+			metrics = new Metrics();
 			ACPluginManager.setMetrics(metrics);
-			CommandManager.getInstance().setMetrics(metrics);
 
 			metrics.addCustomData(this, new Metrics.Plotter() {
 				@Override

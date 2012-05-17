@@ -48,7 +48,6 @@ import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Metrics.Graph;
 import be.Balor.Tools.Metrics.Graph.Type;
 import be.Balor.Tools.Utils;
@@ -204,14 +203,6 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private CommandManager() {
 
-	}
-
-	/**
-	 * @param graph
-	 *            the graph to set
-	 */
-	public void setMetrics(final Metrics metrics) {
-		graph = metrics.createGraph(corePlugin, Type.Column, "Commands");
 	}
 
 	/**
@@ -456,6 +447,7 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setCorePlugin(final AdminCmd plugin) {
 		this.corePlugin = plugin;
+		graph = plugin.getMetrics().createGraph(corePlugin, Type.Column, "Commands");
 		final ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
