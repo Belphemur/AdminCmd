@@ -28,10 +28,9 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Metrics.Graph;
-import be.Balor.Tools.Metrics.Plotter;
 import be.Balor.Tools.Metrics.Graph.Type;
+import be.Balor.Tools.Metrics.Plotter;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
@@ -103,8 +102,10 @@ public class ACPluginManager {
 	 * @param corePlugin
 	 *            the corePlugin to set
 	 */
-	static void setCorePlugin(final AbstractAdminCmdPlugin corePlugin) {
+	static void setCorePlugin(final AdminCmd corePlugin) {
 		ACPluginManager.corePlugin = corePlugin;
+		ACPluginManager.graph = corePlugin.getMetrics().createGraph(ACPluginManager.corePlugin,
+				Type.Column, "Plugins");
 	}
 
 	/**
@@ -112,14 +113,6 @@ public class ACPluginManager {
 	 */
 	public static AbstractAdminCmdPlugin getCorePlugin() {
 		return corePlugin;
-	}
-
-	/**
-	 * @param metrics
-	 *            the metrics to set
-	 */
-	static void setMetrics(final Metrics metrics) {
-		ACPluginManager.graph = metrics.createGraph(corePlugin, Type.Column, "Plugins");
 	}
 
 	public static void unRegisterACPlugin(final Plugin addon) {

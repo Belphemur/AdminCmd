@@ -199,80 +199,81 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		final PluginManager pm = getServer().getPluginManager();
+
+		try {
+			metrics = new Metrics();
+		} catch (final IOException e1) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e1);
+		}
+		ACPluginManager.setCorePlugin(this);
 		ACLogger.info("Plugin Enabled. (version " + pdfFile.getVersion() + ")");
 		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
-		worker.setCoreInstance(this);
-		try {
-			metrics = new Metrics();
-			ACPluginManager.setMetrics(metrics);
 
-			metrics.addCustomData(this, new Metrics.Plotter() {
-				@Override
-				public String getColumnName() {
-					return "Total Banned Players";
-				}
+		metrics.addCustomData(this, new Metrics.Plotter() {
+			@Override
+			public String getColumnName() {
+				return "Total Banned Players";
+			}
 
-				@Override
-				public int getValue() {
-					return worker.countBannedPlayers();
-				}
-			});
-			metrics.addCustomData(this, new Metrics.Plotter() {
-				@Override
-				public String getColumnName() {
-					return "Total Kits";
-				}
+			@Override
+			public int getValue() {
+				return worker.countBannedPlayers();
+			}
+		});
+		metrics.addCustomData(this, new Metrics.Plotter() {
+			@Override
+			public String getColumnName() {
+				return "Total Kits";
+			}
 
-				@Override
-				public int getValue() {
-					return worker.getNbKit();
-				}
-			});
-			metrics.addCustomData(this, new Metrics.Plotter() {
-				@Override
-				public String getColumnName() {
-					return "Total Blacklisted Items";
-				}
+			@Override
+			public int getValue() {
+				return worker.getNbKit();
+			}
+		});
+		metrics.addCustomData(this, new Metrics.Plotter() {
+			@Override
+			public String getColumnName() {
+				return "Total Blacklisted Items";
+			}
 
-				@Override
-				public int getValue() {
-					return worker.countBlackListedItems();
-				}
-			});
-			metrics.addCustomData(this, new Metrics.Plotter() {
-				@Override
-				public String getColumnName() {
-					return "Total Invisible Players";
-				}
+			@Override
+			public int getValue() {
+				return worker.countBlackListedItems();
+			}
+		});
+		metrics.addCustomData(this, new Metrics.Plotter() {
+			@Override
+			public String getColumnName() {
+				return "Total Invisible Players";
+			}
 
-				@Override
-				public int getValue() {
-					return InvisibleWorker.getInstance().nbInvisibles();
-				}
-			});
-			metrics.addCustomData(this, new Metrics.Plotter() {
-				@Override
-				public String getColumnName() {
-					return "Total Afk Players";
-				}
+			@Override
+			public int getValue() {
+				return InvisibleWorker.getInstance().nbInvisibles();
+			}
+		});
+		metrics.addCustomData(this, new Metrics.Plotter() {
+			@Override
+			public String getColumnName() {
+				return "Total Afk Players";
+			}
 
-				@Override
-				public int getValue() {
-					return AFKWorker.getInstance().nbAfk();
-				}
-			});
-			getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+			@Override
+			public int getValue() {
+				return AFKWorker.getInstance().nbAfk();
+			}
+		});
+		getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
 
-				@Override
-				public void run() {
-					metrics.beginMeasuringPlugin(AdminCmd.this);
-					DebugLog.INSTANCE.info("Stats started");
-				}
-			}, 30 * Utils.secInTick);
-		} catch (final IOException e) {
-			DebugLog.INSTANCE.log(Level.SEVERE, "Stats loggin problem", e);
-		}
+			@Override
+			public void run() {
+				metrics.beginMeasuringPlugin(AdminCmd.this);
+				DebugLog.INSTANCE.info("Stats started");
+			}
+		}, 30 * Utils.secInTick);
+
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
 		worker.loadInfos();
