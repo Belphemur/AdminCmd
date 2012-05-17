@@ -88,6 +88,11 @@ public class BanPlayer extends PlayerCommand {
 				if (!args.hasFlag('m'))
 					message += args.getString(args.length - 1);
 			}
+			message += " You have been banned by ";
+			if (!Utils.isPlayer(sender, false))
+				message += "Server Admin";
+			else
+				message += Utils.getPlayerName((Player) sender);
 		} else {
 			message = "You have been banned by ";
 			if (!Utils.isPlayer(sender, false))
