@@ -18,6 +18,8 @@ package be.Balor.Manager.Permissions.Plugins;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.Permissions.Group;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -39,8 +41,8 @@ public class DinnerPermissions extends SuperPermissions {
 	 * .entity.Player)
 	 */
 	@Override
-	public String getGroup(final Player player) {
-		return "";
+	public Group getGroup(final Player player) {
+		return new Group();
 	}
 
 }

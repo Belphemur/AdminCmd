@@ -25,6 +25,8 @@ import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import be.Balor.Manager.Permissions.Group;
+
 /**
  * @author Lathanael (aka Philippe Leipold)
  * 
@@ -103,9 +105,12 @@ public class EssentialsGroupManager extends SuperPermissions {
 	 * .entity.Player)
 	 */
 	@Override
-	public String getGroup(final Player player) {
+	public Group getGroup(final Player player) {
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
 				player);
-		return handler.getGroup(player.getName());
+		final String group = handler.getGroup(player.getName());
+		if (group == null)
+			return new Group();
+		return new Group(group);
 	}
 }

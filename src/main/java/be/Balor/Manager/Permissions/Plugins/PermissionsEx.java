@@ -30,6 +30,7 @@ import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+import be.Balor.Manager.Permissions.Group;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
@@ -229,11 +230,19 @@ public class PermissionsEx extends SuperPermissions {
 	 * .entity.Player)
 	 */
 	@Override
-	public String getGroup(final Player player) {
-		final String[] groups = PEX.getUser(player).getGroupsNames();
-		if (groups.length == 0)
-			return "";
-		return groups[groups.length - 1];
+	public Group getGroup(final Player player) {
+		int max = Integer.MIN_VALUE;
+		PermissionGroup cur = null;
+		for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
+			final int rank = group.getRank();
+			if (rank > max) {
+				max = rank;
+				cur = group;
+			}
+		}
+		if (cur == null)
+			return new Group();
+		return new Group(cur.getName(), cur.getRank());
 	}
 
 }

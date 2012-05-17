@@ -73,7 +73,7 @@ public class PermissionManager {
 		return permissionHandler.getSuffix(player);
 	}
 
-	public static String getGroup(final Player player) {
+	public static Group getGroup(final Player player) {
 		return permissionHandler.getGroup(player);
 	}
 

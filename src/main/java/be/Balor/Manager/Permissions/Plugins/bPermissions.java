@@ -22,6 +22,7 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+import be.Balor.Manager.Permissions.Group;
 import be.Balor.Tools.Utils;
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
@@ -130,12 +131,12 @@ public class bPermissions extends SuperPermissions {
 	 * .entity.Player)
 	 */
 	@Override
-	public String getGroup(final Player player) {
+	public Group getGroup(final Player player) {
 		final String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
 				CalculableType.USER, player.getName());
 		if (groups.length == 0)
-			return "";
-		return groups[groups.length - 1];
+			return new Group();
+		return new Group(groups[groups.length - 1], 0);
 	}
 
 }

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+import be.Balor.Manager.Permissions.Group;
 import be.Balor.Tools.Utils;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -200,8 +201,8 @@ public class YetiPermissions implements IPermissionPlugin {
 	 * .entity.Player)
 	 */
 	@Override
-	public String getGroup(final Player player) {
-		return "";
+	public Group getGroup(final Player player) {
+		return new Group();
 	}
 
 }

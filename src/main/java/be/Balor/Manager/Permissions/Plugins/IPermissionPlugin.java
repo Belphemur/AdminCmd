@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+import be.Balor.Manager.Permissions.Group;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -58,5 +59,5 @@ public interface IPermissionPlugin {
 	 * @param player
 	 * @return
 	 */
-	String getGroup(Player player);
+	Group getGroup(Player player);
 }

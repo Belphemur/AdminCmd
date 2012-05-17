@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.Permissions.Group;
 import be.Balor.Manager.Permissions.PermissionManager;
 
 /**
@@ -35,8 +36,8 @@ public class PlayerComparator implements Comparator<Player> {
 	 */
 	@Override
 	public int compare(final Player o1, final Player o2) {
-		final String g1 = PermissionManager.getGroup(o1);
-		final String g2 = PermissionManager.getGroup(o2);
+		final Group g1 = PermissionManager.getGroup(o1);
+		final Group g2 = PermissionManager.getGroup(o2);
 		if (g1.equals(g2))
 			return Utils.getPlayerName(o1).compareTo(Utils.getPlayerName(o2));
 		return g1.compareTo(g2);
