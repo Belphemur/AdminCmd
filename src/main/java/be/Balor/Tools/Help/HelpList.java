@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
@@ -95,7 +95,8 @@ class HelpList {
 			}
 			this.pluginHelp = list;
 		} catch (final Exception e) {
-			ACLogger.warning("[HELP] Problem with commands of " + pluginName);
+			if (ConfigEnum.VERBOSE.getBoolean())
+				ACLogger.warning("[HELP] Problem with commands of " + pluginName);
 			DebugLog.INSTANCE.warning("[HELP] " + e.toString());
 			final StackTraceElement[] trace = e.getStackTrace();
 			for (final StackTraceElement element : trace)
@@ -115,7 +116,7 @@ class HelpList {
 	/**
 	 * Process all help to check get only the command that the player have
 	 * access
-	 * 
+	 *
 	 * @param sender
 	 */
 	private void checkPermissions(final CommandSender sender) {
@@ -132,7 +133,7 @@ class HelpList {
 	/**
 	 * Get a list of the string to display for the wanted page, and the given
 	 * user
-	 * 
+	 *
 	 * @param page
 	 *            int the wanted page
 	 * @param sender
@@ -176,7 +177,7 @@ class HelpList {
 	/**
 	 * Get the command help of the wanted command by matching it in the list of
 	 * avaible commands.
-	 * 
+	 *
 	 * @param cmd
 	 *            command to search
 	 * @param sender
