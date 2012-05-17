@@ -1011,6 +1011,7 @@ public class ACHelper {
 	 *            the pluginInstance to set
 	 */
 	public void setCoreInstance(final AdminCmd pluginInstance) {
+		ACPluginManager.setCorePlugin(pluginInstance);
 		this.coreInstance = pluginInstance;
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
