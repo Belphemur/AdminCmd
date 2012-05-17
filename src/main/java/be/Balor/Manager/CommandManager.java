@@ -447,7 +447,6 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setCorePlugin(final AdminCmd plugin) {
 		this.corePlugin = plugin;
-		graph = plugin.getMetrics().createGraph(corePlugin, Type.Column, "Commands");
 		final ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
 		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
@@ -468,7 +467,7 @@ public class CommandManager implements CommandExecutor {
 			}
 
 		}
-
+		graph = plugin.getMetrics().createGraph(corePlugin, Type.Column, "Commands");
 		startThreads();
 	}
 
