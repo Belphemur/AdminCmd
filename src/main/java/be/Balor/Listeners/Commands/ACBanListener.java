@@ -24,11 +24,12 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 import be.Balor.Player.IBan;
+import be.Balor.Player.ITempBan;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACBanListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -37,7 +38,6 @@ public class ACBanListener implements Listener {
 			return;
 		final Player player = event.getPlayer();
 		IBan ban = ACHelper.getInstance().getBan(player.getName());
-		// This throws an NoSuchMethod error!!
 		if (ban == null) {
 			try {
 				ban = ACHelper.getInstance().getBan(event.getAddress().toString().substring(1));
@@ -46,6 +46,10 @@ public class ACBanListener implements Listener {
 
 		}
 		if (ban != null)
-			event.disallow(Result.KICK_BANNED, ban.getReason());
+			if (ban instanceof ITempBan) {
+				ITempBan banTemp = (ITempBan) ban;
+				event.disallow(Result.KICK_BANNED, banTemp.getReason() + " Time left: " + banTemp.timeLeft());
+			} else
+				event.disallow(Result.KICK_BANNED, ban.getReason());
 	}
 }

@@ -98,22 +98,11 @@ public class BanPlayer extends PlayerCommand {
 		message = message.trim();
 		replace.put("player", banPlayerString);
 		replace.put("reason", message);
-		ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
-		if (toBan != null) {
-			final String finalmsg = message;
-			final Player finalToKick = toBan;
-			ACPluginManager.scheduleSyncTask(new Runnable() {
-
-				@Override
-				public void run() {
-					finalToKick.kickPlayer(finalmsg);
-				}
-			});
-		}
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
 		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4.matcher(banPlayerString);
 		if (tmpBan != null) {
 			message += "(Banned for " + tmpBan + " minutes)";
+			replace.put("reason", message);
 			ITempBan ban;
 			if (inaccurateIp.find()) {
 				if (!ipv4.find()) {
@@ -141,6 +130,18 @@ public class BanPlayer extends PlayerCommand {
 				ACHelper.getInstance().banPlayer(new BannedIP(banPlayerString, message));
 			} else
 				ACHelper.getInstance().banPlayer(new BannedPlayer(banPlayerString, message));
+		}
+		ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
+		if (toBan != null) {
+			final String finalmsg = message;
+			final Player finalToKick = toBan;
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					finalToKick.kickPlayer(finalmsg);
+				}
+			});
 		}
 		Utils.broadcastMessage(Utils.I18n("ban", replace));
 
