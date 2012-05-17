@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
@@ -486,9 +487,9 @@ public class CommandManager implements CommandExecutor {
 	/**
 	 * Unregister a command from bukkit.
 	 * 
-	 * @param cmd
+	 * @param pCmd
 	 */
-	private void unRegisterBukkitCommand(final PluginCommand cmd) {
+	private void unRegisterBukkitCommand(final PluginCommand pCmd) {
 		try {
 			final Object result = getPrivateField(corePlugin.getServer().getPluginManager(),
 					"commandMap");
@@ -496,9 +497,24 @@ public class CommandManager implements CommandExecutor {
 			final Object map = getPrivateField(commandMap, "knownCommands");
 			@SuppressWarnings("unchecked")
 			final HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			knownCommands.remove(cmd.getName());
-			for (final String alias : cmd.getAliases())
-				knownCommands.remove(alias);
+			PluginCommand cmd;
+			try {
+				cmd = (PluginCommand) knownCommands.get(pCmd.getName());
+				if (cmd != null && cmd.getExecutor().equals(this))
+					knownCommands.remove(pCmd.getName());
+			} catch (final ClassCastException e) {
+				DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
+			}
+
+			for (final String alias : pCmd.getAliases()) {
+				try {
+					cmd = (PluginCommand) knownCommands.get(alias);
+					if (cmd != null && cmd.getExecutor().equals(this))
+						knownCommands.remove(alias);
+				} catch (final ClassCastException e) {
+					DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
+				}
+			}
 		} catch (final SecurityException e) {
 			ACLogger.severe("Unregistering command problem", e);
 		} catch (final IllegalArgumentException e) {
