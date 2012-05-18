@@ -31,7 +31,6 @@ import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Metrics.Graph;
 import be.Balor.Tools.Metrics.Plotter;
-import be.Balor.Tools.Metrics.Graph.Type;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
@@ -119,7 +118,7 @@ public class ACPluginManager {
 	 *            the metrics to set
 	 */
 	static void setMetrics(final Metrics metrics) {
-		ACPluginManager.graph = metrics.createGraph(corePlugin, Type.Column, "Plugins");
+		ACPluginManager.graph = metrics.createGraph("Plugins");
 	}
 
 	public static void unRegisterACPlugin(final Plugin addon) {

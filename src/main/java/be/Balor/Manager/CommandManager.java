@@ -50,7 +50,6 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Metrics.Graph;
-import be.Balor.Tools.Metrics.Graph.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -468,7 +467,7 @@ public class CommandManager implements CommandExecutor {
 			}
 
 		}
-		graph = plugin.getMetrics().createGraph(corePlugin, Type.Column, "Commands");
+		graph = plugin.getMetrics().createGraph("Commands");
 		startThreads();
 	}
 

@@ -197,7 +197,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
 		try {
-			metrics = new Metrics();
+			metrics = new Metrics(this);
 		} catch (final IOException e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Stats problem", e);
 		}
@@ -211,7 +211,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 		ACPluginManager.setMetrics(metrics);
 
-		metrics.addCustomData(this, new Metrics.Plotter() {
+		metrics.addCustomData(new Metrics.Plotter() {
 			@Override
 			public String getColumnName() {
 				return "Total Banned Players";
@@ -222,7 +222,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				return worker.countBannedPlayers();
 			}
 		});
-		metrics.addCustomData(this, new Metrics.Plotter() {
+		metrics.addCustomData(new Metrics.Plotter() {
 			@Override
 			public String getColumnName() {
 				return "Total Kits";
@@ -233,7 +233,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				return worker.getNbKit();
 			}
 		});
-		metrics.addCustomData(this, new Metrics.Plotter() {
+		metrics.addCustomData(new Metrics.Plotter() {
 			@Override
 			public String getColumnName() {
 				return "Total Blacklisted Items";
@@ -244,7 +244,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				return worker.countBlackListedItems();
 			}
 		});
-		metrics.addCustomData(this, new Metrics.Plotter() {
+		metrics.addCustomData(new Metrics.Plotter() {
 			@Override
 			public String getColumnName() {
 				return "Total Invisible Players";
@@ -255,7 +255,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				return InvisibleWorker.getInstance().nbInvisibles();
 			}
 		});
-		metrics.addCustomData(this, new Metrics.Plotter() {
+		metrics.addCustomData(new Metrics.Plotter() {
 			@Override
 			public String getColumnName() {
 				return "Total Afk Players";
@@ -270,7 +270,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 			@Override
 			public void run() {
-				metrics.beginMeasuringPlugin(AdminCmd.this);
+				metrics.start();
 				DebugLog.INSTANCE.info("Stats started");
 			}
 		}, 30 * Utils.secInTick);
