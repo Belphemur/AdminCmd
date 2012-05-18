@@ -1,6 +1,11 @@
 package be.Balor.bukkit.AdminCmd;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -8,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.PluginClassLoader;
 
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACColorSignListener;
@@ -145,13 +151,16 @@ import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Downloader;
 import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.WebBrowser;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Egg.EggTypeClassLoader;
 import be.Balor.Tools.Help.HelpLister;
+import be.Balor.Tools.Threads.WebBrowsingTask;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -163,6 +172,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 public final class AdminCmd extends AbstractAdminCmdPlugin {
 	private ACHelper worker;
 	private Metrics metrics;
+	private WebBrowser webBrowser;
 
 	/**
 	 * @return the metrics
@@ -174,6 +184,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	@Override
 	public void onDisable() {
 		final PluginDescriptionFile pdfFile = this.getDescription();
+		if (webBrowser != null)
+			webBrowser.shutdownService();
 		getServer().getScheduler().cancelTasks(this);
 		FilePlayer.forceSaveList();
 		for (final ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
@@ -189,6 +201,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		HelpLister.killInstance();
 		DebugLog.stopLogging();
 		System.gc();
+
 		ACLogger.info("Plugin Disabled. (version " + pdfFile.getVersion() + ")");
 	}
 
@@ -196,6 +209,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onEnable() {
 		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
+		loadWebBrowser();
 		try {
 			metrics = new Metrics(this);
 		} catch (final IOException e) {
@@ -841,5 +855,45 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("broadcast", "[BROADCAST] %message");
 		LocaleHelper.addAllLocales();
 		LocaleManager.getInstance().save();
+	}
+
+	private void loadWebBrowser() {
+		final File browserFile = new File("lib", "WebBrowser.jar");
+		final Thread downloader = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Downloader.download("http://www.admincmd.com/WebBrowser.jar", browserFile);
+					try {
+						((PluginClassLoader) AdminCmd.this.getClassLoader()).addURL(new URL(
+								"jar:file:" + "lib/WebBrowser.jar" + "!/"));
+					} catch (final MalformedURLException e3) {
+						e3.printStackTrace();
+					}
+				} catch (final IOException e) {
+					DebugLog.INSTANCE.log(Level.WARNING, "Can't get the WebBrowser", e);
+				}
+			}
+
+		});
+		downloader.start();
+		final Thread browserLoader = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					downloader.join();
+				} catch (final InterruptedException e) {
+				}
+				final List<String> urls = new ArrayList<String>();
+				urls.add("http://wiki.admincmd.com/player_commands.html");
+				urls.add("http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1");
+				webBrowser = new WebBrowser(urls);
+				webBrowser.startService();
+				ACPluginManager.scheduleSyncTask(new WebBrowsingTask(webBrowser));
+			}
+
+		});
+		browserLoader.start();
+
 	}
 }
