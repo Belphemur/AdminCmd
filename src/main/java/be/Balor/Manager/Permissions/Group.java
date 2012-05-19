@@ -56,7 +56,7 @@ public class Group implements Comparable<Group> {
 	public int compareTo(final Group o) {
 		if (rank == o.rank)
 			return name.compareTo(o.name);
-		return rank - o.rank;
+		return (rank - o.rank) * -1;
 	}
 
 	/**
@@ -109,6 +109,16 @@ public class Group implements Comparable<Group> {
 		if (rank != other.rank)
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Group [name=" + name + ", rank=" + rank + "]";
 	}
 
 }
