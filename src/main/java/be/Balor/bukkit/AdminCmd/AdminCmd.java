@@ -889,7 +889,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				urls.add("http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1");
 				webBrowser = new WebBrowser(urls);
 				webBrowser.startService();
-				ACPluginManager.scheduleSyncTask(new WebBrowsingTask(webBrowser));
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(AdminCmd.this,
+						new WebBrowsingTask(webBrowser));
 			}
 
 		});

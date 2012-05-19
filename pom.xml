@@ -130,8 +130,8 @@
 						<manifest>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<!--<addClasspath>true</addClasspath>
-							<classpathPrefix>../lib/</classpathPrefix>-->
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>../lib/</classpathPrefix>
 						</manifest>
 					</archive>
 				</configuration>
