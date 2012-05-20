@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 
 public class UnicodeUtil {
 
+	public static final byte[] UTF8_BOMS = new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
+
 	public static void saveUTF8File(final File file, final String data, final boolean append)
 			throws IOException {
 		BufferedWriter bw = null;
@@ -17,8 +19,7 @@ public class UnicodeUtil {
 		try {
 			// write UTF8 BOM mark if file is empty
 			if (file.length() < 1) {
-				final byte[] bom = new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
-				fos.write(bom);
+				fos.write(UTF8_BOMS);
 			}
 
 			osw = new OutputStreamWriter(fos, "UTF-8");

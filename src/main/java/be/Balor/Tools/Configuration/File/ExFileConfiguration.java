@@ -1,21 +1,18 @@
 package be.Balor.Tools.Configuration.File;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Tools.Configuration.ExMemoryConfiguration;
+import be.Balor.Tools.Configuration.File.Unicode.UnicodeReader;
+import be.Balor.Tools.Configuration.File.Unicode.UnicodeUtil;
 import be.Balor.Tools.Debug.ACLogger;
 
 import com.google.common.io.Files;
@@ -125,7 +122,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		}
 		this.file = file;
 		try {
-			load(new FileInputStream(file));
+			load(new FileInputStream(this.file));
 		} catch (final IllegalArgumentException e) {
 			ACLogger.severe("Problem with File : " + this.file);
 			ACLogger.severe(e.getLocalizedMessage(), e);
@@ -154,7 +151,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 			throw new IllegalArgumentException("Stream cannot be null");
 		}
 		final StringBuilder builder = new StringBuilder();
-		final BufferedReader input = new BufferedReader(new InputStreamReader(stream, "UTF8"));
+		final BufferedReader input = new BufferedReader(new UnicodeReader(stream, "UTF-8"));
 
 		try {
 			String line;
@@ -256,17 +253,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 			file.createNewFile();
 		}
 
-		final String data = saveToString();
-
-		final Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),
-				"UTF8"));
-
-		try {
-			writer.write(data);
-			writer.flush();
-		} finally {
-			writer.close();
-		}
+		UnicodeUtil.saveUTF8File(file, saveToString(), false);
 	}
 
 	/**
