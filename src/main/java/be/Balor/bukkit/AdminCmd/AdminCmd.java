@@ -152,7 +152,6 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Downloader;
-import be.Balor.Tools.Metrics;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.WebBrowser;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -160,7 +159,8 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Egg.EggTypeClassLoader;
 import be.Balor.Tools.Help.HelpLister;
-import be.Balor.Tools.Threads.WebBrowsingTask;
+import be.Balor.Tools.Metrics.Metrics;
+import be.Balor.Tools.Web.WebBrowsingTask;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -859,7 +859,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	private void loadWebBrowser() {
 		final File browserFile = new File("lib", "WebBrowser.jar");
-		final Thread downloader = new Thread(new Runnable() {
+		final Thread webBrowserThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -870,31 +870,21 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					} catch (final MalformedURLException e3) {
 						e3.printStackTrace();
 					}
+					final List<String> urls = new ArrayList<String>();
+					urls.add("http://wiki.admincmd.com/player_commands.html");
+					urls.add("http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1");
+					webBrowser = new WebBrowser(urls);
+					webBrowser.startService();
+					WebBrowser.setDebugLogFile(new File(getDataFolder(), "WebBrowser.log"));
+					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(AdminCmd.this,
+							new WebBrowsingTask(webBrowser));
 				} catch (final IOException e) {
 					DebugLog.INSTANCE.log(Level.WARNING, "Can't get the WebBrowser", e);
 				}
 			}
 
 		});
-		downloader.start();
-		final Thread browserLoader = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					downloader.join();
-				} catch (final InterruptedException e) {
-				}
-				final List<String> urls = new ArrayList<String>();
-				urls.add("http://wiki.admincmd.com/player_commands.html");
-				urls.add("http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1");
-				webBrowser = new WebBrowser(urls);
-				webBrowser.startService();
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(AdminCmd.this,
-						new WebBrowsingTask(webBrowser));
-			}
-
-		});
-		browserLoader.start();
+		webBrowserThread.start();
 
 	}
 }

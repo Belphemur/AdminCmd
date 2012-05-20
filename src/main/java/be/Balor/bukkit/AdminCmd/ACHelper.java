@@ -1060,8 +1060,10 @@ public class ACHelper {
 			pluginConfig.save();
 		} catch (final IOException e) {
 		}
-		if (!pluginConfig.getBoolean("debug"))
+		if (!pluginConfig.getBoolean("debug")) {
 			DebugLog.stopLogging();
+			be.Balor.Tools.Web.DebugLog.stopLogging();
+		}
 		final ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
 				coreInstance.getDataFolder(), "commands.yml"));
 		commands.add("disabledCommands", disabled);

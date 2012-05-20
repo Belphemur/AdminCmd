@@ -28,9 +28,9 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
-import be.Balor.Tools.Metrics;
-import be.Balor.Tools.Metrics.Graph;
-import be.Balor.Tools.Metrics.Plotter;
+import be.Balor.Tools.Metrics.Metrics;
+import be.Balor.Tools.Metrics.Metrics.Graph;
+import be.Balor.Tools.Metrics.Metrics.Plotter;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
