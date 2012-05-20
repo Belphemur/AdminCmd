@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 
@@ -55,7 +56,8 @@ public class ACNoDropListener implements Listener {
 		}
 		final Player p = (Player) event.getEntity();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.NO_DROP)) {
+		if (!player.hasPower(Type.NO_DROP)
+				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
 			return;
 		}
 		final List<ItemStack> items = new ArrayList<ItemStack>();
@@ -70,7 +72,8 @@ public class ACNoDropListener implements Listener {
 	public void onRespawn(final PlayerRespawnEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.NO_DROP)) {
+		if (!player.hasPower(Type.NO_DROP)
+				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
 			return;
 		}
 		final List<ItemStack> items = itemsDrops.get(p);
