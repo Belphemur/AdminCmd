@@ -58,11 +58,11 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
-import be.Balor.Tools.Configuration.File.Unicode.UnicodeReader;
-import be.Balor.Tools.Configuration.File.Unicode.UnicodeUtil;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Exceptions.InvalidInputException;
+import be.Balor.Tools.Files.Unicode.UnicodeReader;
+import be.Balor.Tools.Files.Unicode.UnicodeUtil;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 

@@ -1,49 +1,46 @@
 /**
- version: 1.1 / 2007-01-25
- - changed BOM recognition ordering (longer boms first)
+version: 1.1 / 2007-01-25
+- changed BOM recognition ordering (longer boms first)
 
- Original pseudocode   : Thomas Weidenfeller
- Implementation tweaked: Aki Nieminen
+Original pseudocode   : Thomas Weidenfeller
+Implementation tweaked: Aki Nieminen
 
- http://www.unicode.org/unicode/faq/utf_bom.html
- BOMs:
- 00 00 FE FF    = UTF-32, big-endian
- FF FE 00 00    = UTF-32, little-endian
- EF BB BF       = UTF-8,
- FE FF          = UTF-16, big-endian
- FF FE          = UTF-16, little-endian
+http://www.unicode.org/unicode/faq/utf_bom.html
+BOMs in byte length ordering:
+  00 00 FE FF    = UTF-32, big-endian
+  FF FE 00 00    = UTF-32, little-endian
+  EF BB BF       = UTF-8,
+  FE FF          = UTF-16, big-endian
+  FF FE          = UTF-16, little-endian
 
- Win2k Notepad:
- Unicode format = UTF-16LE
+Win2k Notepad:
+  Unicode format = UTF-16LE
  ***/
-package be.Balor.Tools.Configuration.File.Unicode;
+package be.Balor.Tools.Files.Unicode;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
-import java.io.Reader;
 
 /**
- * Generic unicode textreader, which will use BOM mark to identify the encoding
- * to be used. If BOM is not found then use a given default or system encoding.
+ * This inputstream will recognize unicode BOM marks and will skip bytes if
+ * getEncoding() method is called before any of the read(...) methods.
+ * 
+ * Usage pattern: String enc = "ISO-8859-1"; // or NULL to use systemdefault
+ * FileInputStream fis = new FileInputStream(file); UnicodeInputStream uin = new
+ * UnicodeInputStream(fis, enc); enc = uin.getEncoding(); // check and skip
+ * possible BOM bytes InputStreamReader in; if (enc == null) in = new
+ * InputStreamReader(uin); else in = new InputStreamReader(uin, enc);
  */
-public class UnicodeReader extends Reader {
+public class UnicodeInputStream extends InputStream {
 	PushbackInputStream internalIn;
-	InputStreamReader internalIn2 = null;
+	boolean isInited = false;
 	String defaultEnc;
+	String encoding;
 
 	private static final int BOM_SIZE = 4;
 
-	/**
-	 * 
-	 * @param in
-	 *            inputstream to be read
-	 * @param defaultEnc
-	 *            default encoding if stream does not have BOM marker. Give NULL
-	 *            to use system-level default.
-	 */
-	public UnicodeReader(final InputStream in, final String defaultEnc) {
+	public UnicodeInputStream(final InputStream in, final String defaultEnc) {
 		internalIn = new PushbackInputStream(in, BOM_SIZE);
 		this.defaultEnc = defaultEnc;
 	}
@@ -52,15 +49,17 @@ public class UnicodeReader extends Reader {
 		return defaultEnc;
 	}
 
-	/**
-	 * Get stream encoding or NULL if stream is uninitialized. Call init() or
-	 * read() method to initialize it.
-	 */
 	public String getEncoding() {
-		if (internalIn2 == null) {
-			return null;
+		if (!isInited) {
+			try {
+				init();
+			} catch (final IOException ex) {
+				final IllegalStateException ise = new IllegalStateException("Init method failed.");
+				ise.initCause(ise);
+				throw ise;
+			}
 		}
-		return internalIn2.getEncoding();
+		return encoding;
 	}
 
 	/**
@@ -68,11 +67,10 @@ public class UnicodeReader extends Reader {
 	 * back to the stream, only BOM bytes are skipped.
 	 */
 	protected void init() throws IOException {
-		if (internalIn2 != null) {
+		if (isInited) {
 			return;
 		}
 
-		String encoding;
 		final byte bom[] = new byte[BOM_SIZE];
 		int n, unread;
 		n = internalIn.read(bom, 0, bom.length);
@@ -105,24 +103,20 @@ public class UnicodeReader extends Reader {
 			internalIn.unread(bom, (n - unread), unread);
 		}
 
-		// Use given encoding
-		if (encoding == null) {
-			internalIn2 = new InputStreamReader(internalIn);
-		} else {
-			internalIn2 = new InputStreamReader(internalIn, encoding);
-		}
+		isInited = true;
 	}
 
 	@Override
 	public void close() throws IOException {
-		init();
-		internalIn2.close();
+		// init();
+		isInited = true;
+		internalIn.close();
 	}
 
 	@Override
-	public int read(final char[] cbuf, final int off, final int len) throws IOException {
-		init();
-		return internalIn2.read(cbuf, off, len);
+	public int read() throws IOException {
+		// init();
+		isInited = true;
+		return internalIn.read();
 	}
-
 }

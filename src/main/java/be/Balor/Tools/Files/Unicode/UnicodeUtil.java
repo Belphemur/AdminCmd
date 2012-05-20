@@ -1,4 +1,4 @@
-package be.Balor.Tools.Configuration.File.Unicode;
+package be.Balor.Tools.Files.Unicode;
 
 import java.io.BufferedWriter;
 import java.io.File;

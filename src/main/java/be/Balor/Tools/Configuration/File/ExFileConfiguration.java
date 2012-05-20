@@ -11,9 +11,9 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Tools.Configuration.ExMemoryConfiguration;
-import be.Balor.Tools.Configuration.File.Unicode.UnicodeReader;
-import be.Balor.Tools.Configuration.File.Unicode.UnicodeUtil;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Files.Unicode.UnicodeReader;
+import be.Balor.Tools.Files.Unicode.UnicodeUtil;
 
 import com.google.common.io.Files;
 
