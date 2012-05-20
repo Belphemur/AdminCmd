@@ -38,23 +38,36 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public final class Downloader {
+	/**
+	 * Download the remote file
+	 * 
+	 * @param urlString
+	 *            url to the remote file
+	 * @param downloaded
+	 *            where to download the file
+	 * @throws IOException
+	 *             if something goes wrong in the process of downloading the
+	 *             file
+	 */
 	public static void download(final String urlString, final File downloaded) throws IOException {
 		BufferedOutputStream bout = null;
 		BufferedInputStream in = null;
 		HttpURLConnection connection = null;
+		if (!exists(urlString)) {
+			throw new FileNotFoundException("The remote file " + urlString + " can't be found.");
+		}
 
 		if (downloaded.getParentFile() != null && !downloaded.getParentFile().exists()) {
 			downloaded.getParentFile().mkdirs();
 		}
+
 		if (!checkVersionToDownload(urlString, downloaded)) {
 			return;
 		}
 		if (downloaded.exists()) {
 			downloaded.delete();
 		}
-		if (!exists(urlString)) {
-			throw new FileNotFoundException("The remote file " + urlString + " can't be found");
-		}
+
 		DebugLog.INSTANCE.info("Downloading file : " + urlString);
 		try {
 
@@ -91,6 +104,17 @@ public final class Downloader {
 		DebugLog.INSTANCE.info("File " + urlString + " downloaded");
 	}
 
+	/**
+	 * Check for the presence of a .version file to indicate the version of the
+	 * file to download
+	 * 
+	 * @param fileUrl
+	 *            url to the remote file
+	 * @param download
+	 *            where the file will be downloaded
+	 * @return true if the file can be downloaded else false.
+	 * @throws IOException
+	 */
 	private static final boolean checkVersionToDownload(final String fileUrl, final File download)
 			throws IOException {
 		final String urlString = fileUrl + ".version";
