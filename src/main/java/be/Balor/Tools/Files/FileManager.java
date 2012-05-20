@@ -25,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -59,6 +58,8 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.File.Unicode.UnicodeReader;
+import be.Balor.Tools.Configuration.File.Unicode.UnicodeUtil;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Exceptions.InvalidInputException;
@@ -112,8 +113,8 @@ public class FileManager implements DataManager {
 		final StringBuffer result = new StringBuffer();
 		try {
 			final File fileDir = getInnerFile(fileName);
-			final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(
-					fileDir), "UTF8"));
+			final BufferedReader in = new BufferedReader(new UnicodeReader(new FileInputStream(
+					fileDir), "UTF-8"));
 			String temp;
 			while ((temp = in.readLine()) != null) {
 				result.append(temp + "\n");
@@ -233,29 +234,11 @@ public class FileManager implements DataManager {
 	 */
 	public void setTxtFile(final String filename, final String toSet) {
 		final File txt = getFile(null, filename + ".txt");
-		Writer fstream = null;
 		try {
-			fstream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(txt), "UTF8"));
+			UnicodeUtil.saveUTF8File(txt, toSet, false);
 		} catch (final IOException e) {
-			ACLogger.severe("Can't write the txt file : " + filename, e);
-			return;
+			ACLogger.severe("Can't write the file " + filename, e);
 		}
-		final BufferedWriter out = new BufferedWriter(fstream);
-		try {
-			out.write(toSet);
-			out.flush();
-		} catch (final IOException e) {
-			ACLogger.severe("Can't write the txt file : " + filename, e);
-			return;
-		} finally {
-			try {
-				out.close();
-			} catch (final IOException e2) {
-				ACLogger.severe("Can't close the txt file : " + filename, e2);
-			}
-
-		}
-
 	}
 
 	/**
@@ -330,7 +313,7 @@ public class FileManager implements DataManager {
 			BufferedReader reader = null;
 
 			try {
-				reader = new BufferedReader(new FileReader(file));
+				reader = new BufferedReader(new UnicodeReader(new FileInputStream(file), "UTF-8"));
 			} catch (final FileNotFoundException e) {
 			}
 			try {
@@ -355,9 +338,12 @@ public class FileManager implements DataManager {
 		}
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
+
 			Writer tx = null;
 			try {
-				tx = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF8"));
+				final FileOutputStream fos = new FileOutputStream(file);
+				fos.write(UnicodeUtil.UTF8_BOMS);
+				tx = new BufferedWriter(new OutputStreamWriter(fos, "UTF8"));
 				for (int i = 0; (i = res.read()) > 0;) {
 					tx.write(i);
 				}
