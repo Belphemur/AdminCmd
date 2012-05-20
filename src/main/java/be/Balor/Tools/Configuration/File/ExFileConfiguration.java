@@ -1,6 +1,7 @@
 package be.Balor.Tools.Configuration.File;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +38,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	/**
 	 * Creates an empty {@link ExFileConfiguration} using the specified
 	 * {@link Configuration} as a source for all default values.
-	 *
+	 * 
 	 * @param defaults
 	 *            Default value provider
 	 */
@@ -52,14 +53,14 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * This will use the header from {@link #options()} ->
 	 * {@link ExFileConfigurationOptions#header()}, respecting the rules of
 	 * {@link ExFileConfigurationOptions#copyHeader()} if set.
-	 *
+	 * 
 	 * @return Compiled header
 	 */
 	protected abstract String buildHeader();
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -81,7 +82,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -100,7 +101,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * from the given file.
 	 * <p>
 	 * If the file cannot be loaded for any reason, an exception will be thrown.
-	 *
+	 * 
 	 * @param file
 	 *            File to load from.
 	 * @throws FileNotFoundException
@@ -133,7 +134,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * All the values contained within this configuration will be removed,
 	 * leaving only settings and defaults, and the new values will be loaded
 	 * from the given stream.
-	 *
+	 * 
 	 * @param stream
 	 *            Stream to load from
 	 * @throws IOException
@@ -147,10 +148,8 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 		if (stream == null) {
 			throw new IllegalArgumentException("Stream cannot be null");
 		}
-
-		final InputStreamReader reader = new InputStreamReader(stream, "UTF8");
 		final StringBuilder builder = new StringBuilder();
-		final BufferedReader input = new BufferedReader(reader);
+		final BufferedReader input = new BufferedReader(new InputStreamReader(stream, "UTF8"));
 
 		try {
 			String line;
@@ -174,7 +173,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * from the given file.
 	 * <p>
 	 * If the file cannot be loaded for any reason, an exception will be thrown.
-	 *
+	 * 
 	 * @param file
 	 *            File to load from.
 	 * @throws FileNotFoundException
@@ -204,7 +203,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * from the given string.
 	 * <p>
 	 * If the string is invalid in any way, an exception will be thrown.
-	 *
+	 * 
 	 * @param contents
 	 *            Contents of a Configuration to load.
 	 * @throws InvalidConfigurationException
@@ -229,7 +228,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * If the file does not exist, it will be created. If already exists, it
 	 * will be overwritten. If it cannot be overwritten or created, an exception
 	 * will be thrown.
-	 *
+	 * 
 	 * @param file
 	 *            File to save to.
 	 * @throws IOException
@@ -251,10 +250,12 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 
 		final String data = saveToString();
 
-		final Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+		final Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),
+				"UTF8"));
 
 		try {
 			writer.write(data);
+			writer.flush();
 		} finally {
 			writer.close();
 		}
@@ -266,7 +267,7 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * If the file does not exist, it will be created. If already exists, it
 	 * will be overwritten. If it cannot be overwritten or created, an exception
 	 * will be thrown.
-	 *
+	 * 
 	 * @param file
 	 *            File to save to.
 	 * @throws IOException
@@ -285,14 +286,14 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 
 	/**
 	 * Saves this {@link ExFileConfiguration} to a string, and returns it.
-	 *
+	 * 
 	 * @return String containing this configuration.
 	 */
 	public abstract String saveToString();
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

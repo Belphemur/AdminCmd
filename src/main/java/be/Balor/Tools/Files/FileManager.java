@@ -21,12 +21,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -225,9 +227,9 @@ public class FileManager implements DataManager {
 	 */
 	public void setTxtFile(final String filename, final String toSet) {
 		final File txt = getFile(null, filename + ".txt");
-		FileWriter fstream = null;
+		Writer fstream = null;
 		try {
-			fstream = new FileWriter(txt);
+			fstream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(txt), "UTF8"));
 		} catch (final IOException e) {
 			ACLogger.severe("Can't write the txt file : " + filename, e);
 			return;
@@ -235,10 +237,17 @@ public class FileManager implements DataManager {
 		final BufferedWriter out = new BufferedWriter(fstream);
 		try {
 			out.write(toSet);
-			out.close();
+			out.flush();
 		} catch (final IOException e) {
 			ACLogger.severe("Can't write the txt file : " + filename, e);
 			return;
+		} finally {
+			try {
+				out.close();
+			} catch (final IOException e2) {
+				ACLogger.severe("Can't close the txt file : " + filename, e2);
+			}
+
 		}
 
 	}
@@ -338,9 +347,9 @@ public class FileManager implements DataManager {
 		}
 		if (!file.exists()) {
 			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
-			FileWriter tx = null;
+			Writer tx = null;
 			try {
-				tx = new FileWriter(file);
+				tx = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF8"));
 				for (int i = 0; (i = res.read()) > 0;) {
 					tx.write(i);
 				}
