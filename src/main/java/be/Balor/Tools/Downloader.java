@@ -144,7 +144,7 @@ public final class Downloader {
 
 	}
 
-	private static boolean exists(final String URLName) {
+	private static boolean exists(final String URLName) throws IOException {
 		HttpURLConnection con = null;
 		try {
 			HttpURLConnection.setFollowRedirects(false);
@@ -153,9 +153,6 @@ public final class Downloader {
 			con = (HttpURLConnection) new URL(URLName).openConnection();
 			con.setRequestMethod("HEAD");
 			return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return false;
 		} finally {
 			if (con != null) {
 				con.disconnect();
