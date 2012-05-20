@@ -83,6 +83,7 @@ import be.Balor.Manager.Commands.Player.KickAllPlayers;
 import be.Balor.Manager.Commands.Player.KickPlayer;
 import be.Balor.Manager.Commands.Player.Kill;
 import be.Balor.Manager.Commands.Player.Mute;
+import be.Balor.Manager.Commands.Player.MuteList;
 import be.Balor.Manager.Commands.Player.NoDrop;
 import be.Balor.Manager.Commands.Player.NoPickup;
 import be.Balor.Manager.Commands.Player.Played;
@@ -166,7 +167,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -462,6 +463,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.SUPER_BLACKLIST.getBoolean()) {
 			pm.registerEvents(new ACSuperBlacklistListener(), this);
 		}
+		CommandManager.getInstance().registerCommand(MuteList.class);
 	}
 
 	@Override

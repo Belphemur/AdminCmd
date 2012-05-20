@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Mute extends PlayerCommand {
 	private final PermChild cmdMute;
@@ -49,7 +49,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -78,7 +78,7 @@ public class Mute extends PlayerCommand {
 					if (Utils.isPlayer(sender, false)) {
 						msg = Utils.getPlayerName((Player) sender);
 					}
-					acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg);
+
 					if (!player.equals(sender)) {
 						Utils.sI18n(sender, "commandMuteEnabledTarget", replace);
 					}
@@ -88,6 +88,7 @@ public class Mute extends PlayerCommand {
 							tmpMute = args.getInt(args.length - 1);
 							final String unmute = player.getName();
 							final CommandSender senderFinal = sender;
+							acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg);
 							ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
 									new Runnable() {
 
@@ -103,11 +104,16 @@ public class Mute extends PlayerCommand {
 						} catch (final Exception e) {
 						}
 						if (tmpMute == null) {
+							acp.setPower(Type.MUTED_COMMAND, "Permanently muted(including commands) by " + msg);
 							Utils.sI18n(player, "commandMuteEnabled");
 						} else {
+							acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg + " for " + tmpMute + " minutes");
 							Utils.sI18n(player, "commandTmpMuteEnabled", "minutes",
 									tmpMute.toString());
 						}
+					} else {
+						acp.setPower(Type.MUTED_COMMAND, "Permanently muted(including commands) by " + msg);
+						Utils.sI18n(player, "commandMuteEnabled");
 					}
 				} else {
 					Utils.sI18n(sender, "alreadyCommandMuted");
@@ -119,7 +125,6 @@ public class Mute extends PlayerCommand {
 				if (Utils.isPlayer(sender, false)) {
 					msg = Utils.getPlayerName((Player) sender);
 				}
-				acp.setPower(Type.MUTED, "Muted by " + msg);
 				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "muteEnabledTarget", replace);
 				}
@@ -143,10 +148,15 @@ public class Mute extends PlayerCommand {
 					} catch (final Exception e) {
 					}
 					if (tmpMute == null) {
+						acp.setPower(Type.MUTED, "Permanently muted by " + msg);
 						Utils.sI18n(player, "muteEnabled");
 					} else {
+						acp.setPower(Type.MUTED, "Muted by " + msg + " for " + tmpMute + " minutes");
 						Utils.sI18n(player, "tmpMuteEnabled", "minutes", tmpMute.toString());
 					}
+				} else {
+					acp.setPower(Type.MUTED, "Permanently muted by " + msg);
+					Utils.sI18n(player, "muteEnabled");
 				}
 			} else {
 				Utils.sI18n(sender, "alreadyMuted");
@@ -158,7 +168,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -168,7 +178,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
