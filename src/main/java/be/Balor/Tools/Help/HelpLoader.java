@@ -141,12 +141,13 @@ public class HelpLoader {
 			// HelpLogger.info(count + " extra help entries loaded" +
 			// (filesLoaded.length()>2 ? " from files: " +
 			// filesLoaded.replaceFirst(", $", "") : ""));
-			if (ConfigEnum.VERBOSE.getBoolean())
+			if (ConfigEnum.VERBOSE.getBoolean()) {
 				HelpLogger.info("[AdminCmd] "
 						+ count
 						+ " extra help entries loaded"
 						+ (loaded.length() > 2 ? " from files: "
 								+ loaded.substring(0, loaded.length() - 2) : ""));
+			}
 		} else {
 			HelpLogger.warning("Error: ExtraHelp is a file");
 		}

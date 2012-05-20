@@ -86,12 +86,13 @@ public class FileWorld extends ACWorld {
 	@Override
 	public Location getSpawn() throws WorldNotLoaded {
 		final Object spawn = datas.get("spawn");
-		if (spawn == null)
+		if (spawn == null) {
 			return handler.getSpawnLocation();
-		else if (spawn instanceof SimpleLocation)
+		} else if (spawn instanceof SimpleLocation) {
 			return ((SimpleLocation) spawn).getLocation();
-		else
+		} else {
 			return handler.getSpawnLocation();
+		}
 	}
 
 	/*
@@ -103,8 +104,9 @@ public class FileWorld extends ACWorld {
 	public Difficulty getDifficulty() throws WorldNotLoaded {
 		Difficulty dif;
 		dif = (Difficulty) informations.get("difficulty");
-		if (dif == null)
+		if (dif == null) {
 			return handler.getDifficulty();
+		}
 		return dif;
 	}
 
@@ -144,14 +146,16 @@ public class FileWorld extends ACWorld {
 	 */
 	@Override
 	public Warp getWarp(final String name) throws WorldNotLoaded, IllegalArgumentException {
-		if (name == null || (name != null && name.isEmpty()))
+		if (name == null || (name != null && name.isEmpty())) {
 			throw new IllegalArgumentException("Name can't be null or Empty");
+		}
 		Object warp = warps.get(name);
 		String warpName = name;
 		if (warp == null) {
 			warpName = Str.matchString(warps.getKeys(false), name);
-			if (warpName == null)
+			if (warpName == null) {
 				return null;
+			}
 			warp = warps.get(warpName);
 		}
 
@@ -241,10 +245,12 @@ public class FileWorld extends ACWorld {
 	@Override
 	public Map<String, String> getInformations() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
-		for (final Entry<String, Object> entry : informations.getValues(false).entrySet())
+		for (final Entry<String, Object> entry : informations.getValues(false).entrySet()) {
 			result.put(entry.getKey(), entry.getValue().toString());
-		for (final Entry<String, Object> entry : mobLimits.getValues(false).entrySet())
+		}
+		for (final Entry<String, Object> entry : mobLimits.getValues(false).entrySet()) {
 			result.put("Limit on " + entry.getKey(), entry.getValue().toString());
+		}
 		return result;
 	}
 

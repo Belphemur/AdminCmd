@@ -40,7 +40,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Whois extends PlayerCommand {
 	/**
@@ -53,7 +53,7 @@ public class Whois extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -62,12 +62,13 @@ public class Whois extends PlayerCommand {
 		if (args.hasFlag('w')) {
 			ACWorld w;
 			try {
-				if (args.length >= 1)
+				if (args.length >= 1) {
 					w = ACWorld.getWorld(args.getString(0));
-				else if (Utils.isPlayer(sender))
+				} else if (Utils.isPlayer(sender)) {
 					w = ACWorld.getWorld(((Player) sender).getWorld().getName());
-				else
+				} else {
 					return;
+				}
 			} catch (final WorldNotLoaded e) {
 				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
@@ -86,8 +87,9 @@ public class Whois extends PlayerCommand {
 			return;
 		}
 		final ACPlayer actarget = Utils.getACPlayer(sender, args, permNode);
-		if (actarget == null)
+		if (actarget == null) {
 			return;
+		}
 		sender.sendMessage(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN
 						+ " "
@@ -189,7 +191,7 @@ public class Whois extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

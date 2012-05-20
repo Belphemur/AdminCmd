@@ -50,23 +50,27 @@ public class NoDrop extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Utils.getUserParam(sender, args, permNode);
-		if (player == null)
+		if (player == null) {
 			return;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
 		final ACPlayer acp = ACPlayer.getPlayer(player);
 		if (acp.hasPower(Type.NO_DROP)) {
 			acp.removePower(Type.NO_DROP);
 			Utils.sI18n(player, "noDropDisabled");
-			if (!player.equals(sender))
+			if (!player.equals(sender)) {
 				Utils.sI18n(sender, "noDropDisabledTarget", replace);
+			}
 		} else {
 			acp.setPower(Type.NO_DROP);
 			Utils.sI18n(player, "noDropEnabled");
-			if (!player.equals(sender))
+			if (!player.equals(sender)) {
 				Utils.sI18n(sender, "noDropEnabledTarget", replace);
-			if (timeOut == null)
+			}
+			if (timeOut == null) {
 				return;
+			}
 			int timeOutValue;
 			try {
 				timeOutValue = Integer.parseInt(timeOut);

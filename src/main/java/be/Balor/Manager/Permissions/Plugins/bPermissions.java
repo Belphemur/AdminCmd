@@ -47,13 +47,17 @@ public class bPermissions extends SuperPermissions {
 	public boolean isInGroup(final String groupName, final Player player) {
 		final String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
 				CalculableType.USER, player.getName());
-		if (groups == null)
+		if (groups == null) {
 			return false;
-		if (groups.length == 0)
+		}
+		if (groups.length == 0) {
 			return false;
-		for (final String group : groups)
-			if (group.equalsIgnoreCase(groupName))
+		}
+		for (final String group : groups) {
+			if (group.equalsIgnoreCase(groupName)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -69,8 +73,9 @@ public class bPermissions extends SuperPermissions {
 		final Set<Player> players = new HashSet<Player>();
 		for (final Player player : Utils.getOnlinePlayers()) {
 			if (ApiLayer.hasGroup(player.getWorld().getName(), CalculableType.USER,
-					player.getName(), groupName))
+					player.getName(), groupName)) {
 				players.add(player);
+			}
 		}
 		return players;
 	}
@@ -85,9 +90,10 @@ public class bPermissions extends SuperPermissions {
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
 		String result = super.getPermissionLimit(p, limit);
-		if (result == null || result.isEmpty() || result.length() < 1)
+		if (result == null || result.isEmpty() || result.length() < 1) {
 			result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
 					limit);
+		}
 		return result;
 	}
 
@@ -101,9 +107,10 @@ public class bPermissions extends SuperPermissions {
 	@Override
 	public String getPrefix(final Player player) {
 		String prefix = super.getPrefix(player);
-		if (prefix == null || prefix.isEmpty())
+		if (prefix == null || prefix.isEmpty()) {
 			prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
 					player.getName(), "prefix");
+		}
 		return prefix;
 	}
 
@@ -117,9 +124,10 @@ public class bPermissions extends SuperPermissions {
 	@Override
 	public String getSuffix(final Player player) {
 		String suffix = super.getSuffix(player);
-		if (suffix == null || suffix.isEmpty())
+		if (suffix == null || suffix.isEmpty()) {
 			suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
 					player.getName(), "suffix");
+		}
 		return suffix;
 	}
 
@@ -134,8 +142,9 @@ public class bPermissions extends SuperPermissions {
 	public Group getGroup(final Player player) {
 		final String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
 				CalculableType.USER, player.getName());
-		if (groups.length == 0)
+		if (groups.length == 0) {
 			return new Group();
+		}
 		return new Group(groups[groups.length - 1], 0);
 	}
 

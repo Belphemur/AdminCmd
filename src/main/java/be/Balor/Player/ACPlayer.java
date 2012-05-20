@@ -376,10 +376,11 @@ public abstract class ACPlayer {
 	 */
 	void setOnline(final boolean isOnline) {
 		this.online = isOnline;
-		if (!this.online)
+		if (!this.online) {
 			this.handler = null;
-		else if (handler == null)
+		} else if (handler == null) {
 			this.handler = ACPluginManager.getServer().getPlayer(this.name);
+		}
 	}
 
 	/**
@@ -398,8 +399,9 @@ public abstract class ACPlayer {
 	 * @throws PlayerNotFound
 	 */
 	public void executeLastCmd() throws NullPointerException, PlayerNotFound {
-		if (this.lastCmd == null)
+		if (this.lastCmd == null) {
 			throw new NullPointerException();
+		}
 		this.lastCmd.execute();
 	}
 
@@ -446,18 +448,23 @@ public abstract class ACPlayer {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof ACPlayer))
+		}
+		if (!(obj instanceof ACPlayer)) {
 			return false;
+		}
 		final ACPlayer other = (ACPlayer) obj;
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 

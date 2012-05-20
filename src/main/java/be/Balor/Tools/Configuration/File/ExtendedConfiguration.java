@@ -286,8 +286,9 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			int i = 0;
 			while ((line = br.readLine()) != null) {
 				try {
-					if (i == lineToRemove)
+					if (i == lineToRemove) {
 						continue;
+					}
 					pw.println(line);
 				} finally {
 					i++;
@@ -303,19 +304,22 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			}
 
 			// Rename the new file to the filename the original file had.
-			if (!tempFile.renameTo(inFile))
+			if (!tempFile.renameTo(inFile)) {
 				System.out.println("Could not rename file");
+			}
 
 		} catch (final FileNotFoundException ex) {
 			ex.printStackTrace();
 		} catch (final IOException ex) {
 			ex.printStackTrace();
 		} finally {
-			if (pw != null)
+			if (pw != null) {
 				pw.close();
+			}
 			try {
-				if (br != null)
+				if (br != null) {
 					br.close();
+				}
 			} catch (final IOException e) {
 			}
 		}

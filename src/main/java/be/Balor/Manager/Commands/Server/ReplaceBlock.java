@@ -52,17 +52,20 @@ public class ReplaceBlock extends ServerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final MaterialContainer mc = ACHelper.getInstance()
 				.checkMaterial(sender, args.getString(0));
-		if (mc.isNull())
+		if (mc.isNull()) {
 			return;
+		}
 		final ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(mc.getMaterial());
-		if (mc.getMaterial().equals(Material.LAVA))
+		if (mc.getMaterial().equals(Material.LAVA)) {
 			mats.add(Material.STATIONARY_LAVA);
-		else if (mc.getMaterial().equals(Material.WATER))
+		} else if (mc.getMaterial().equals(Material.WATER)) {
 			mats.add(Material.STATIONARY_WATER);
+		}
 		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
-		if (count == null)
+		if (count == null) {
 			return;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("nb", String.valueOf(count));
 		replace.put("mat", mc.getMaterial().toString());

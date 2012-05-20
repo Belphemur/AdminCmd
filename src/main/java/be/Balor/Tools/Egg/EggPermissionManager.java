@@ -60,8 +60,9 @@ public class EggPermissionManager {
 				result.add(entry.getKey().getSimpleName());
 				continue;
 			}
-			if (!PermissionManager.hasPerm(player, entry.getValue(), false))
+			if (!PermissionManager.hasPerm(player, entry.getValue(), false)) {
 				continue;
+			}
 			result.add(entry.getKey().getSimpleName());
 		}
 		return result;

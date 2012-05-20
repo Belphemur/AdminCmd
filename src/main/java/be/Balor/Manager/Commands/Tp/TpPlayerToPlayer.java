@@ -48,12 +48,13 @@ public class TpPlayerToPlayer extends TeleportCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final Player from = sender.getServer().getPlayer(args.getString(0));
 		final Player to = sender.getServer().getPlayer(args.getString(1));
-		if (from != null && from.equals(sender))
+		if (from != null && from.equals(sender)) {
 			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.TO);
-		else if (to != null && to.equals(sender))
+		} else if (to != null && to.equals(sender)) {
 			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.HERE);
-		else
+		} else {
 			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.PLAYERS);
+		}
 	}
 
 	/*

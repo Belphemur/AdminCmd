@@ -29,7 +29,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Experience extends PlayerCommand {
 
@@ -41,7 +41,7 @@ public class Experience extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -56,7 +56,7 @@ public class Experience extends PlayerCommand {
 			if (Utils.isPlayer(sender, true)) {
 				target = (Player) sender;
 				self = true;
-				if (!args.hasFlag('t'))
+				if (!args.hasFlag('t')) {
 					try {
 						amount = args.getFloat(0);
 					} catch (final NumberFormatException e) {
@@ -64,11 +64,13 @@ public class Experience extends PlayerCommand {
 						Utils.I18n("NaN", replace);
 						return;
 					}
-			} else
+				}
+			} else {
 				return;
-		} else if(args.length >=2) {
+			}
+		} else if (args.length >= 2) {
 			target = Utils.getPlayer(args.getString(0));
-			if (!args.hasFlag('t'))
+			if (!args.hasFlag('t')) {
 				try {
 					amount = args.getFloat(1);
 				} catch (final NumberFormatException e) {
@@ -76,6 +78,7 @@ public class Experience extends PlayerCommand {
 					Utils.I18n("NaN", replace);
 					return;
 				}
+			}
 		} else {
 			if (Utils.isPlayer(sender, true)) {
 				if (args.hasFlag('t')) {
@@ -84,11 +87,13 @@ public class Experience extends PlayerCommand {
 					sender.sendMessage(Utils.I18n("expTotal", replace));
 					return;
 				}
-			} else
+			} else {
 				return;
+			}
 		}
-		if (target == null)
+		if (target == null) {
 			return;
+		}
 		replace.put("amount", String.valueOf(amount));
 		final Player taskTarget = target;
 		final float amountXp = amount;
@@ -168,12 +173,12 @@ public class Experience extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		return args!= null && args.length >= 1;
+		return args != null && args.length >= 1;
 	}
 
 }

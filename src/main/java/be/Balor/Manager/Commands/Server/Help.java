@@ -59,11 +59,13 @@ public class Help extends ServerCommand {
 			sender.sendMessage(ChatColor.DARK_AQUA
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.WHITE + " Plugins "
 							+ ChatColor.DARK_AQUA, '-'));
-			for (final String plugin : HelpLister.getInstance().getPluginList())
+			for (final String plugin : HelpLister.getInstance().getPluginList()) {
 				msg += plugin + ", ";
+			}
 			if (!msg.equals("")) {
-				if (msg.endsWith(", "))
+				if (msg.endsWith(", ")) {
 					msg = msg.substring(0, msg.lastIndexOf(","));
+				}
 				sender.sendMessage(msg);
 			}
 			return;
@@ -73,8 +75,9 @@ public class Help extends ServerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", LocaleHelper.TYPE_CMD.getLocale());
 			replace.put("value", cmd);
-			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd, sender))
+			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd, sender)) {
 				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
+			}
 			return;
 		}
 		final String cmd2 = args.getValueFlag('d');
@@ -82,8 +85,9 @@ public class Help extends ServerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", LocaleHelper.TYPE_CMD.getLocale());
 			replace.put("value", cmd2);
-			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd2, sender, true))
+			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd2, sender, true)) {
 				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
+			}
 			return;
 		}
 		int page = 1;
@@ -92,13 +96,15 @@ public class Help extends ServerCommand {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", page, sender);
 		} catch (final NumberFormatException e) {
 			if (args.length == 1) {
-				if (!HelpLister.getInstance().sendHelpPage(args.getString(0), 1, sender))
+				if (!HelpLister.getInstance().sendHelpPage(args.getString(0), 1, sender)) {
 					Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
+				}
 			} else {
 				try {
 					page = args.getInt(1);
-					if (!HelpLister.getInstance().sendHelpPage(args.getString(0), page, sender))
+					if (!HelpLister.getInstance().sendHelpPage(args.getString(0), page, sender)) {
 						Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
+					}
 				} catch (final NumberFormatException e1) {
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));
 				}

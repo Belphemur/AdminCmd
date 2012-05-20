@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -68,7 +68,8 @@ public enum LocaleHelper {
 	TP_DIM("dimensionTeleport", ChatColor.GREEN
 			+ "You were successfully teleported to world %world!"),
 	TP_DIM_LIST("dimTpList", ChatColor.GREEN
-			+ "Worlds which are currently available to teleport to: " + " //n " + ChatColor.GOLD + "%list"),
+			+ "Worlds which are currently available to teleport to: " + " //n " + ChatColor.GOLD
+			+ "%list"),
 	TP_ALL("tpAll", ChatColor.GREEN + "You have been successfully teleported to " + ChatColor.GOLD
 			+ "%loc" + ChatColor.GREEN + " by " + ChatColor.GOLD + "%sender"),
 	BL_ITEM_ALREADY("itemBlAlready", ChatColor.RED + "This item " + ChatColor.GOLD + "%item "
@@ -81,9 +82,11 @@ public enum LocaleHelper {
 	INACC_IP("inaccurateIp", ChatColor.RED + "This IP " + ChatColor.GOLD + "%ip " + ChatColor.RED
 			+ "is incorrect !"),
 	NO_BAN_FOUND("notBanned", ChatColor.GOLD + "No ban found for" + ChatColor.RED + " %ban"),
-	P_CLEARED_SENDER("powersClearedSender", ChatColor.GREEN + "Successfully removed all powers from %target" + "!"),
-	P_CLEARED_TARGET("powersClearedTarget", ChatColor.AQUA + "All of your active powers have been removed by"
-			+ ChatColor.GOLD + " %sender" + ChatColor.AQUA + "!"),
+	P_CLEARED_SENDER("powersClearedSender", ChatColor.GREEN
+			+ "Successfully removed all powers from %target" + "!"),
+	P_CLEARED_TARGET("powersClearedTarget", ChatColor.AQUA
+			+ "All of your active powers have been removed by" + ChatColor.GOLD + " %sender"
+			+ ChatColor.AQUA + "!"),
 	P_CLEARED("powersCleared", ChatColor.GREEN + "You have successfully removed all your powers!");
 
 	private final String key;
@@ -102,13 +105,14 @@ public enum LocaleHelper {
 	}
 
 	public static void addAllLocales() {
-		for (final LocaleHelper lh : values())
+		for (final LocaleHelper lh : values()) {
 			LocaleManager.getInstance().addLocale(lh.key, lh.locale);
+		}
 	}
 
 	/**
 	 * Send the locale the the CommandSender
-	 *
+	 * 
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -120,7 +124,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 *
+	 * 
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -130,7 +134,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 *
+	 * 
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -141,7 +145,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 *
+	 * 
 	 * @return the locale
 	 */
 	public String getLocale() {

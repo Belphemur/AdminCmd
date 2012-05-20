@@ -59,8 +59,9 @@ public class UnBan extends PlayerCommand {
 			}
 			ACHelper.getInstance().unBanPlayer(ban);
 			final String unbanMsg = Utils.I18n("unban", "player", unban);
-			if (unbanMsg != null)
+			if (unbanMsg != null) {
 				Utils.broadcastMessage(unbanMsg);
+			}
 		} else {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("ban", unban);

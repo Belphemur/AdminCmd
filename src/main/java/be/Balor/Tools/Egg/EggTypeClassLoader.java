@@ -59,9 +59,10 @@ public class EggTypeClassLoader extends ClassLoader {
 			if (EggType.class.isAssignableFrom(clazz)) {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
 					final EggPermission annotation = clazz.getAnnotation(EggPermission.class);
-					if (!annotation.permission().isEmpty())
+					if (!annotation.permission().isEmpty()) {
 						perm = PermissionLinker.addOnTheFly(annotation.permission(),
 								annotation.permissionParent());
+					}
 				} else {
 					final String simpleName = clazz.getSimpleName();
 					perm = PermissionLinker.addOnTheFly(
@@ -90,12 +91,14 @@ public class EggTypeClassLoader extends ClassLoader {
 					found = entry.getValue();
 					delta = curDelta;
 				}
-				if (curDelta == 0)
+				if (curDelta == 0) {
 					break;
+				}
 			}
 		}
-		if (found == null)
+		if (found == null) {
 			throw new ClassNotFoundException("Can't find the class " + search);
+		}
 		return found;
 	}
 
@@ -108,12 +111,15 @@ public class EggTypeClassLoader extends ClassLoader {
 	protected Class<? extends EggType<?>> findClass(final String name)
 			throws ClassNotFoundException {
 		Class<? extends EggType<?>> clazz = classes.get(name);
-		if (clazz == null)
+		if (clazz == null) {
 			clazz = classesSimpleName.get(name);
-		if (clazz == null)
+		}
+		if (clazz == null) {
 			clazz = matchClassName(name);
-		if (clazz == null)
+		}
+		if (clazz == null) {
 			throw new ClassNotFoundException();
+		}
 		return clazz;
 	}
 
@@ -183,8 +189,9 @@ public class EggTypeClassLoader extends ClassLoader {
 					final String className = entry.getName().replaceAll("[$].*", "")
 							.replaceAll("[.]class", "").replace('/', '.');
 					if (className.startsWith(packageName)
-							&& (regex == null || regex.matcher(className).matches()))
+							&& (regex == null || regex.matcher(className).matches())) {
 						classes.add(className);
+					}
 				}
 			}
 		}
@@ -201,8 +208,9 @@ public class EggTypeClassLoader extends ClassLoader {
 			} else if (file.getName().endsWith(".class")) {
 				final String className = packageName + '.'
 						+ file.getName().substring(0, file.getName().length() - 6);
-				if (regex == null || regex.matcher(className).matches())
+				if (regex == null || regex.matcher(className).matches()) {
 					classes.add(className);
+				}
 			}
 		}
 		return classes;

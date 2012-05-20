@@ -55,22 +55,24 @@ public class FilePlayerFactory implements IPlayerFactory {
 
 	@Override
 	public ACPlayer createPlayer(final String playername) {
-		if (!existingPlayers.contains(playername))
+		if (!existingPlayers.contains(playername)) {
 			return new EmptyPlayer(playername);
-		else if (directory != null)
+		} else if (directory != null) {
 			return new FilePlayer(directory, playername);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override
 	public ACPlayer createPlayer(final Player player) {
-		if (!existingPlayers.contains(player.getName()))
+		if (!existingPlayers.contains(player.getName())) {
 			return new EmptyPlayer(player);
-		else if (directory != null)
+		} else if (directory != null) {
 			return new FilePlayer(directory, player);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**

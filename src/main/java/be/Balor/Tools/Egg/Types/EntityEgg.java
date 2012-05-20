@@ -59,8 +59,9 @@ public class EntityEgg extends EggType<EntityInEgg> {
 		final World w = event.getEgg().getWorld();
 		final Location loc = event.getEgg().getLocation();
 
-		for (int i = 0; i < value.getNb(); i++)
+		for (int i = 0; i < value.getNb(); i++) {
 			w.spawn(loc, value.getEntityClass());
+		}
 	}
 
 	/*
@@ -74,8 +75,9 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	protected void processArguments(final Player sender, final CommandArgs args)
 			throws ProcessingArgsException {
 		final String entityParam = args.getValueFlag('e');
-		if (entityParam == null)
+		if (entityParam == null) {
 			throw new ParameterMissingException('e', LocaleHelper.EGG_PARAM_ENTITY.getLocale());
+		}
 		final String valFlag = args.getValueFlag('n');
 		int nbre = 1;
 		int entityNb = 93;
@@ -85,7 +87,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 			Utils.sI18n(sender, "NaN", "number", valFlag);
 			return;
 		}
-		if (args.hasFlag('n'))
+		if (args.hasFlag('n')) {
 			try {
 				nbre = Integer.parseInt(valFlag);
 				entityNb = Integer.parseInt(entityParam);
@@ -93,6 +95,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
+		}
 		try {
 			final Entity entity = EntityTypes.a(entityNb,
 					((CraftWorld) sender.getWorld()).getHandle()).getBukkitEntity();

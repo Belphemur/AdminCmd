@@ -39,8 +39,9 @@ public class UndoBlockTask extends ReplaceBlockTask {
 	 */
 	@Override
 	public void run() {
-		while (!blocks.empty())
+		while (!blocks.empty()) {
 			blocks.pop().returnToThePast();
+		}
 	}
 
 }

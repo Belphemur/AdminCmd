@@ -70,8 +70,9 @@ public class ObjectContainer {
 	 * @return TpRequest or null
 	 */
 	public TpRequest getTpRequest() {
-		if (obj == null || !(obj instanceof TpRequest))
+		if (obj == null || !(obj instanceof TpRequest)) {
 			return null;
+		}
 		return (TpRequest) obj;
 	}
 
@@ -81,8 +82,9 @@ public class ObjectContainer {
 	 * @return EggType or null if not an EggType.
 	 */
 	public EggType<?> getEggType() {
-		if (obj == null || !(obj instanceof EggType<?>))
+		if (obj == null || !(obj instanceof EggType<?>)) {
 			return null;
+		}
 		return (EggType<?>) obj;
 	}
 
@@ -98,8 +100,9 @@ public class ObjectContainer {
 	 */
 	public int getInt(final int def) {
 		final Integer o = castInt(obj);
-		if (o == null)
+		if (o == null) {
 			return def;
+		}
 		return o;
 	}
 
@@ -115,8 +118,9 @@ public class ObjectContainer {
 	 */
 	public float getFloat(final float def) {
 		final Float o = castFloat(obj);
-		if (o == null)
+		if (o == null) {
 			return def;
+		}
 		return o;
 	}
 
@@ -132,8 +136,9 @@ public class ObjectContainer {
 	 */
 	public double getDouble(final double def) {
 		final Double o = castDouble(obj);
-		if (o == null)
+		if (o == null) {
 			return def;
+		}
 		return o;
 	}
 
@@ -148,8 +153,9 @@ public class ObjectContainer {
 	 */
 	public boolean getBoolean(final boolean def) {
 		final Boolean o = castBoolean(obj);
-		if (o == null)
+		if (o == null) {
 			return def;
+		}
 		return o;
 	}
 
@@ -164,8 +170,9 @@ public class ObjectContainer {
 	 */
 	public long getLong(final long def) {
 		final Long o = castLong(obj);
-		if (o == null)
+		if (o == null) {
 			return def;
+		}
 		return o;
 	}
 
@@ -435,8 +442,9 @@ public class ObjectContainer {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public String toString() {
-		if (obj instanceof List<?>)
+		if (obj instanceof List<?>) {
 			return Arrays.toString(((List) obj).toArray(new String[] {}));
+		}
 		return obj.toString();
 	}
 

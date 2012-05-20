@@ -20,7 +20,7 @@ import java.sql.Date;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public interface IBan {
 

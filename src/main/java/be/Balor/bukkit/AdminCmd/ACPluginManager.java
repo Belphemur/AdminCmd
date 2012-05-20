@@ -28,11 +28,11 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Metrics.Metrics;
 import be.Balor.Tools.Metrics.Metrics.Graph;
 import be.Balor.Tools.Metrics.Metrics.Plotter;
-import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Debug.DebugLog;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -122,8 +122,9 @@ public class ACPluginManager {
 	}
 
 	public static void unRegisterACPlugin(final Plugin addon) {
-		if (addon instanceof AbstractAdminCmdPlugin)
+		if (addon instanceof AbstractAdminCmdPlugin) {
 			getInstance().unRegisterPlugin((AbstractAdminCmdPlugin) addon);
+		}
 	}
 
 	private ACPluginManager() {
@@ -150,8 +151,9 @@ public class ACPluginManager {
 		if (!pluginInstances.containsKey(addon.getAddonName())) {
 			pluginInstances.put(addon.getAddonName(), addon);
 			DebugLog.INSTANCE.info("Registering : " + addon);
-			if (corePlugin == null || addon.equals(corePlugin))
+			if (corePlugin == null || addon.equals(corePlugin)) {
 				return;
+			}
 			graph.addPlotter(new Plotter() {
 
 				@Override
@@ -164,16 +166,19 @@ public class ACPluginManager {
 					return "Addon " + addon.getAddonName();
 				}
 			});
-		} else
+		} else {
 			throw new IllegalArgumentException("Plugin " + addon.getAddonName()
 					+ " Already registered.");
+		}
 	}
 
 	void stopChildrenPlugins() {
 		ACLogger.info("Disabling all AdminCmd's plugins");
-		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet())
-			if (plugin.getValue().isEnabled())
+		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet()) {
+			if (plugin.getValue().isEnabled()) {
 				server.getPluginManager().disablePlugin(plugin.getValue());
+			}
+		}
 	}
 
 	/**
@@ -183,7 +188,7 @@ public class ACPluginManager {
 	 */
 	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
 		pluginInstances.remove(addon.getAddonName());
-		if (!addon.equals(corePlugin))
+		if (!addon.equals(corePlugin)) {
 			graph.removePlotter(new Plotter() {
 
 				@Override
@@ -196,6 +201,7 @@ public class ACPluginManager {
 					return "Addon " + addon.getAddonName();
 				}
 			});
+		}
 	}
 
 }

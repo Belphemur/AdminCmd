@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BanPlayer extends PlayerCommand {
 
@@ -53,7 +53,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -70,35 +70,41 @@ public class BanPlayer extends PlayerCommand {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
 			}
-		} else
+		} else {
 			banPlayerString = args.getString(0);
+		}
 		Integer tmpBan = null;
 		if (args.length >= 2) {
-			if (args.hasFlag('m'))
+			if (args.hasFlag('m')) {
 				message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
 						"player", banPlayerString);
+			}
 			if (message == null || (message != null && message.isEmpty())) {
 				message = "";
-				for (int i = 1; i < args.length - 1; i++)
+				for (int i = 1; i < args.length - 1; i++) {
 					message += args.getString(i) + " ";
+				}
 			}
 			try {
 				tmpBan = args.getInt(args.length - 1);
 			} catch (final Exception e) {
-				if (!args.hasFlag('m'))
+				if (!args.hasFlag('m')) {
 					message += args.getString(args.length - 1);
+				}
 			}
 			message += " You have been banned by ";
-			if (!Utils.isPlayer(sender, false))
+			if (!Utils.isPlayer(sender, false)) {
 				message += "Server Admin";
-			else
+			} else {
 				message += Utils.getPlayerName((Player) sender);
+			}
 		} else {
 			message = "You have been banned by ";
-			if (!Utils.isPlayer(sender, false))
+			if (!Utils.isPlayer(sender, false)) {
 				message += "Server Admin";
-			else
+			} else {
 				message += Utils.getPlayerName((Player) sender);
+			}
 		}
 		message = message.trim();
 		replace.put("player", banPlayerString);
@@ -133,8 +139,9 @@ public class BanPlayer extends PlayerCommand {
 					return;
 				}
 				ACHelper.getInstance().banPlayer(new BannedIP(banPlayerString, message));
-			} else
+			} else {
 				ACHelper.getInstance().banPlayer(new BannedPlayer(banPlayerString, message));
+			}
 		}
 		ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
 		if (toBan != null) {
@@ -154,7 +161,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

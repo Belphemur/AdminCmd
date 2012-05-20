@@ -56,8 +56,9 @@ public class PermissionManager {
 	 * @return the instance
 	 */
 	public static PermissionManager getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new PermissionManager();
+		}
 		return instance;
 	}
 
@@ -84,10 +85,12 @@ public class PermissionManager {
 
 	public static boolean hasPerm(final CommandSender player, final Permission perm,
 			final boolean errorMsg) throws NullPointerException {
-		if (perm == null)
+		if (perm == null) {
 			throw new NullPointerException("The Permission Node can't be NULL");
-		if (player == null)
+		}
+		if (player == null) {
 			throw new NullPointerException("The CommandSender can't be NULL");
+		}
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
@@ -125,10 +128,12 @@ public class PermissionManager {
 	 */
 	public static boolean hasPerm(final CommandSender player, final String perm,
 			final boolean errorMsg) throws NullPointerException {
-		if (perm == null)
+		if (perm == null) {
 			throw new NullPointerException("The Permission Node can't be NULL");
-		if (player == null)
+		}
+		if (player == null) {
 			throw new NullPointerException("The CommandSender can't be NULL");
+		}
 		return permissionHandler.hasPerm(player, perm, errorMsg);
 
 	}
@@ -184,10 +189,11 @@ public class PermissionManager {
 		if (!bPermissions && !permissionsEx && !groupManager) {
 			bPermissions = true;
 			permissionHandler = new bPermissions();
-			if (!yetiPermissions)
+			if (!yetiPermissions) {
 				ACLogger.info("Successfully linked with bPermissions.");
-			else
+			} else {
 				ACLogger.info("Successfully linked with bPermissions overpassing the Permission Bridge.");
+			}
 		} else {
 			return false;
 		}
@@ -204,10 +210,11 @@ public class PermissionManager {
 		if (!permissionsBukkit && !bPermissions && !permissionsEx && !groupManager) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
-			if (!yetiPermissions)
+			if (!yetiPermissions) {
 				ACLogger.info("Successfully linked with PermissionsBukkit.");
-			else
+			} else {
 				ACLogger.info("Successfully linked with PermissionsBukkit overpassing the Permission Bridge.");
+			}
 		} else {
 			return false;
 		}
@@ -223,17 +230,19 @@ public class PermissionManager {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				permissionsEx = true;
 				permissionHandler = new PermissionsEx(pEX);
-				if (!yetiPermissions)
+				if (!yetiPermissions) {
 					ACLogger.info("Successfully linked with PermissionsEX");
-				else
+				} else {
 					ACLogger.info("Use PermissionsEX instead of Yeti's Permissions.");
+				}
 			} else if (!warningSend) {
 				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
 				warningSend = true;
 			}
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	/**
@@ -269,10 +278,11 @@ public class PermissionManager {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				groupManager = true;
 				permissionHandler = new EssentialsGroupManager(plugin);
-				if (!yetiPermissions)
+				if (!yetiPermissions) {
 					ACLogger.info("Successfully linked with Essantials GroupManager");
-				else
+				} else {
 					ACLogger.info("Use Essantials GroupManager instead of Yeti's Permissions.");
+				}
 			} else if (!warningSend) {
 				ACLogger.info("Plugin Forced to use Offical Bukkit Permission System");
 				warningSend = true;
@@ -289,8 +299,9 @@ public class PermissionManager {
 	 *
 	 */
 	private PermissionManager() {
-		if (permissionHandler == null)
+		if (permissionHandler == null) {
 			permissionHandler = new DinnerPermissions();
+		}
 	}
 
 	public synchronized boolean addPermissionLinker(final PermissionLinker perm) {

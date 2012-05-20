@@ -53,8 +53,9 @@ public class FreezerEgg extends BlockEgg {
 	protected void processArguments(final Player sender, final CommandArgs args)
 			throws ProcessingArgsException {
 		final int radius = getRadius(sender, args);
-		if (radius == -1)
+		if (radius == -1) {
 			return;
+		}
 		value = new BlockChangeInfo(Material.ICE.getId(), radius);
 
 	}

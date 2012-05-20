@@ -67,15 +67,18 @@ public class KickPlayer extends PlayerCommand {
 		if (args.hasFlag('m')) {
 			message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
 					"player", toKick.getName());
-		} else if (args.length >= 2)
-			for (int i = 1; i < args.length; i++)
+		} else if (args.length >= 2) {
+			for (int i = 1; i < args.length; i++) {
 				message += args.getString(i) + " ";
+			}
+		}
 		if (message == null || (message != null && message.isEmpty())) {
 			message = "You have been kicked by ";
-			if (!Utils.isPlayer(sender, false))
+			if (!Utils.isPlayer(sender, false)) {
 				message += "Server Admin";
-			else
+			} else {
 				message += Utils.getPlayerName((Player) sender);
+			}
 		}
 
 		ACPlayer.getPlayer(toKick).setPower(Type.KICKED);

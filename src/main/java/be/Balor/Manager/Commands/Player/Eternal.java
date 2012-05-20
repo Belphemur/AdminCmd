@@ -54,10 +54,11 @@ public class Eternal extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
-		if (args.length >= 1)
+		if (args.length >= 1) {
 			player = Utils.getUser(sender, args, permNode, 0, false);
-		else
+		} else {
 			player = Utils.getUser(sender, args, permNode);
+		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
@@ -66,16 +67,19 @@ public class Eternal extends PlayerCommand {
 				player.setFoodLevel(acp.getPower(Type.ETERNAL).getInt(20));
 				acp.removePower(Type.ETERNAL);
 				Utils.sI18n(player, "eternalDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "eternalDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.ETERNAL, player.getFoodLevel());
 				player.setFoodLevel(20);
 				Utils.sI18n(player, "eternalEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "eternalEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

@@ -45,8 +45,9 @@ public class IOSaveTask implements Runnable {
 			if (!configurations.contains(ex)) {
 				configurations.add(ex);
 				DebugLog.INSTANCE.fine("Added ExtendedConfiguration : " + ex);
-			} else
+			} else {
 				DebugLog.INSTANCE.info("ALREADY IN ExtendedConfiguration : " + ex);
+			}
 		} finally {
 			lock.unlock();
 		}
@@ -75,13 +76,14 @@ public class IOSaveTask implements Runnable {
 		try {
 			DebugLog.INSTANCE.info("Begin Configuration save with " + configurations.size()
 					+ " file(s)");
-			while (!configurations.isEmpty())
+			while (!configurations.isEmpty()) {
 				try {
 					configurations.poll().save();
 				} catch (final IOException e) {
 					ACLogger.severe("Problem while saving ExtendedConfiguration file", e);
 					DebugLog.INSTANCE.log(Level.SEVERE, "Problem while saving config files", e);
 				}
+			}
 			DebugLog.INSTANCE.info("All Configuration File saved.");
 		} finally {
 			lock.unlock();

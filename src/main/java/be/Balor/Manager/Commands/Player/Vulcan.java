@@ -63,10 +63,12 @@ public class Vulcan extends PlayerCommand {
 				power = ConfigEnum.DVULCAN.getFloat();
 				player = Utils.getUser(sender, args, permNode);
 			}
-			if (args.length >= 2)
+			if (args.length >= 2) {
 				player = Utils.getUser(sender, args, permNode, 1, true);
-		} else
+			}
+		} else {
 			player = Utils.getUser(sender, args, permNode);
+		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
@@ -74,15 +76,18 @@ public class Vulcan extends PlayerCommand {
 			if (acp.hasPower(Type.VULCAN)) {
 				acp.removePower(Type.VULCAN);
 				Utils.sI18n(player, "vulcanDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "vulcanDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.VULCAN, power);
 				Utils.sI18n(player, "vulcanEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "vulcanEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

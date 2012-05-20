@@ -31,8 +31,9 @@ public class ACWeatherListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onWeatherChange(final WeatherChangeEvent event) {
 		if (!ACWorld.getWorld(event.getWorld().getName())
-				.getInformation(Type.WEATHER_FROZEN.toString()).isNull())
+				.getInformation(Type.WEATHER_FROZEN.toString()).isNull()) {
 			event.setCancelled(true);
+		}
 	}
 
 }

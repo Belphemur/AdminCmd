@@ -33,8 +33,9 @@ public class ACSuperBreaker implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockDamage(final BlockDamageEvent event) {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (!player.hasPower(Type.SUPER_BREAKER))
+		if (!player.hasPower(Type.SUPER_BREAKER)) {
 			return;
+		}
 		final ItemStack itemInHand = event.getItemInHand();
 		if (itemInHand != null && itemInHand.getTypeId() == ConfigEnum.SB_ITEM.getInt()) {
 			event.setInstaBreak(true);

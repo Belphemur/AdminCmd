@@ -29,13 +29,14 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACBanListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
-		if (!event.getResult().equals(Result.ALLOWED))
+		if (!event.getResult().equals(Result.ALLOWED)) {
 			return;
+		}
 		final Player player = event.getPlayer();
 		IBan ban = ACHelper.getInstance().getBan(player.getName());
 		if (ban == null) {
@@ -45,11 +46,14 @@ public class ACBanListener implements Listener {
 			}
 
 		}
-		if (ban != null)
+		if (ban != null) {
 			if (ban instanceof ITempBan) {
-				ITempBan banTemp = (ITempBan) ban;
-				event.disallow(Result.KICK_BANNED, banTemp.getReason() + " Time left: " + banTemp.timeLeft());
-			} else
+				final ITempBan banTemp = (ITempBan) ban;
+				event.disallow(Result.KICK_BANNED,
+						banTemp.getReason() + " Time left: " + banTemp.timeLeft());
+			} else {
 				event.disallow(Result.KICK_BANNED, ban.getReason());
+			}
+		}
 	}
 }

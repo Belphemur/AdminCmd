@@ -54,11 +54,13 @@ public class ListHomes extends HomeCommand {
 		if (Utils.isPlayer(sender)) {
 			String msg = "";
 			String player = "serverConsole";
-			if (Utils.isPlayer(sender, false))
+			if (Utils.isPlayer(sender, false)) {
 				player = ((Player) sender).getName();
+			}
 			if (args.length >= 1) {
-				if (!PermissionManager.hasPerm(sender, "admincmd.admin.home"))
+				if (!PermissionManager.hasPerm(sender, "admincmd.admin.home")) {
 					return;
+				}
 				player = args.getString(0);
 			}
 			final Set<String> homes = ACPlayer.getPlayer(player).getHomeList();
@@ -71,8 +73,9 @@ public class ListHomes extends HomeCommand {
 				}
 			}
 			if (!msg.equals("")) {
-				if (msg.endsWith(", "))
+				if (msg.endsWith(", ")) {
 					msg = msg.substring(0, msg.lastIndexOf(","));
+				}
 				sender.sendMessage(msg);
 			}
 		}

@@ -54,8 +54,9 @@ public class SetHome extends HomeCommand {
 		if (Utils.isPlayer(sender)) {
 			final Player p = ((Player) sender);
 			final be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
-			if (home == null)
+			if (home == null) {
 				return;
+			}
 			final ACPlayer player = ACPlayer.getPlayer(home.player);
 			final Set<String> tmp = player.getHomeList();
 			final Location loc = p.getLocation();

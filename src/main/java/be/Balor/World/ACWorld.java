@@ -234,23 +234,30 @@ public abstract class ACWorld {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof ACWorld))
+		}
+		if (!(obj instanceof ACWorld)) {
 			return false;
+		}
 		final ACWorld other = (ACWorld) obj;
 		if (handler == null) {
-			if (other.handler != null)
+			if (other.handler != null) {
 				return false;
-		} else if (!handler.equals(other.handler))
+			}
+		} else if (!handler.equals(other.handler)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 

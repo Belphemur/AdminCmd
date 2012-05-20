@@ -47,13 +47,14 @@ public abstract class RadiusEgg<T> extends EggType<T> {
 	protected int getRadius(final Player sender, final CommandArgs args) {
 		int radius = defaultRadius;
 		final String valFlag = args.getValueFlag('r');
-		if (valFlag != null)
+		if (valFlag != null) {
 			try {
 				radius = Integer.parseInt(valFlag);
 			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", valFlag);
 				return -1;
 			}
+		}
 		return radius > maxRadius ? maxRadius : radius;
 	}
 }

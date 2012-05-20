@@ -61,15 +61,18 @@ public class SuperBreaker extends PlayerCommand {
 			if (acp.hasPower(Type.SUPER_BREAKER)) {
 				acp.removePower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Disabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Enabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

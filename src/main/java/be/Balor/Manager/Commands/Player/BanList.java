@@ -60,8 +60,9 @@ public class BanList extends PlayerCommand {
 			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
 			toSend.add(LocaleHelper.BANLIST.getLocale(replace));
 		}
-		for (final String s : toSend)
+		for (final String s : toSend) {
 			sender.sendMessage(s);
+		}
 	}
 
 	/*

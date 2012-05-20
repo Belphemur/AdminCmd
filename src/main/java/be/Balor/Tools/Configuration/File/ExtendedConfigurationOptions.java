@@ -40,7 +40,7 @@ public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	 * Gets how much spaces should be used to indent each line.
 	 * <p>
 	 * The minimum value this may be is 2, and the maximum is 9.
-	 *
+	 * 
 	 * @return How much to indent by
 	 */
 	public int indent() {
@@ -51,7 +51,7 @@ public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	 * Sets how much spaces should be used to indent each line.
 	 * <p>
 	 * The minimum value this may be is 2, and the maximum is 9.
-	 *
+	 * 
 	 * @param value
 	 *            New indent
 	 * @return This object, for chaining

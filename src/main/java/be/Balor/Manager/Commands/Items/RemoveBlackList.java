@@ -47,16 +47,17 @@ public class RemoveBlackList extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (args.hasFlag('i')) {
-			if (args.length >= 1)
+			if (args.length >= 1) {
 				ACHelper.getInstance().removeBlackListedItem(sender, args.getString(0));
-			else if (Utils.isPlayer(sender)) {
+			} else if (Utils.isPlayer(sender)) {
 				final Player player = (Player) sender;
 				ACHelper.getInstance().removeBlackListedItem(sender, player.getItemInHand());
 			}
 		}
 
-		else if (args.hasFlag('b'))
+		else if (args.hasFlag('b')) {
 			ACHelper.getInstance().removeBlackListedBlock(sender, args.getString(0));
+		}
 	}
 
 	/*

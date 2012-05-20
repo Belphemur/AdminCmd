@@ -51,48 +51,56 @@ public class Set extends ServerCommand {
 		String message = "";
 		if (args.hasFlag('m')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
-				for (final String msg : args)
+				for (final String msg : args) {
 					message += msg + " ";
+				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
-				if (result == null)
+				if (result == null) {
 					result = message;
+				}
 				LocaleManager.getInstance().addLocale("MOTD", result, true);
 				FileManager.getInstance().setTxtFile("motd", result);
 				Utils.sI18n(sender, "MOTDset", "motd", result);
 			}
 		} else if (args.hasFlag('n')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.news")) {
-				for (final String msg : args)
+				for (final String msg : args) {
 					message += msg + " ";
+				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
-				if (result == null)
+				if (result == null) {
 					result = message;
+				}
 				LocaleManager.getInstance().addLocale("NEWS", result, true);
 				FileManager.getInstance().setTxtFile("news", result);
 				Utils.sI18n(sender, "NEWSset", "news", result);
 			}
 		} else if (args.hasFlag('r')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.rules")) {
-				for (final String msg : args)
+				for (final String msg : args) {
 					message += msg + " ";
+				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
-				if (result == null)
+				if (result == null) {
 					result = message;
+				}
 				LocaleManager.getInstance().addLocale("Rules", result, true);
 				FileManager.getInstance().setTxtFile("rules", result);
 				Utils.sI18n(sender, "RulesSet", "rules", result);
 			}
 		} else if (args.hasFlag('u')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
-				for (final String msg : args)
+				for (final String msg : args) {
 					message += msg + " ";
+				}
 				message = message.trim();
 				String result = Utils.colorParser(message);
-				if (result == null)
+				if (result == null) {
 					result = message;
+				}
 				LocaleManager.getInstance().addLocale("MOTDNewUser", result, true);
 				FileManager.getInstance().setTxtFile("motdNewUser", result);
 				Utils.sI18n(sender, "MOTDset", "motd", result);

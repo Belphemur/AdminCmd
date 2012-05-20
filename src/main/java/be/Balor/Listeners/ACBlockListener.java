@@ -40,8 +40,9 @@ public class ACBlockListener implements Listener {
 		final Block block = event.getBlock();
 		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(player,
 				String.valueOf(block.getTypeId()));
-		if (!ACHelper.getInstance().inBlackListBlock(player, mat))
+		if (!ACHelper.getInstance().inBlackListBlock(player, mat)) {
 			return;
+		}
 		event.setCancelled(true);
 	}
 }

@@ -41,10 +41,11 @@ public class DebugLog {
 		try {
 			// This block configure the logger with handler and formatter
 			final File file = new File(path + File.separator + "debug.log");
-			if (file.exists())
+			if (file.exists()) {
 				file.delete();
-			else
+			} else {
 				Files.createParentDirs(file);
+			}
 
 			fh = new FileHandler(file.getPath(), true);
 			INSTANCE.addHandler(fh);

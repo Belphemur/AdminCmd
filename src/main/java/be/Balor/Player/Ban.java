@@ -45,7 +45,9 @@ public abstract class Ban implements IBan {
 		this.player = player;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.IBan#getReason()
 	 */
 	@Override
@@ -61,7 +63,9 @@ public abstract class Ban implements IBan {
 		this.reason = reason;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.IBan#getDate()
 	 */
 	@Override
@@ -77,7 +81,9 @@ public abstract class Ban implements IBan {
 		this.date = date;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.IBan#getPlayer()
 	 */
 	@Override
@@ -115,28 +121,37 @@ public abstract class Ban implements IBan {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof Ban))
+		}
+		if (!(obj instanceof Ban)) {
 			return false;
+		}
 		final Ban other = (Ban) obj;
 		if (date == null) {
-			if (other.date != null)
+			if (other.date != null) {
 				return false;
-		} else if (!date.equals(other.date))
+			}
+		} else if (!date.equals(other.date)) {
 			return false;
+		}
 		if (player == null) {
-			if (other.player != null)
+			if (other.player != null) {
 				return false;
-		} else if (!player.equals(other.player))
+			}
+		} else if (!player.equals(other.player)) {
 			return false;
+		}
 		if (reason == null) {
-			if (other.reason != null)
+			if (other.reason != null) {
 				return false;
-		} else if (!reason.equals(other.reason))
+			}
+		} else if (!reason.equals(other.reason)) {
 			return false;
+		}
 		return true;
 	}
 

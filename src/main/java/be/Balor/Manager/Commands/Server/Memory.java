@@ -78,24 +78,33 @@ public class Memory extends ServerCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full.getBukkitPerm()))
+		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal.getBukkitPerm()))
+		}
+		if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob.getBukkitPerm()))
+		}
+		if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item.getBukkitPerm()))
+		}
+		if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp.getBukkitPerm()))
+		}
+		if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc.getBukkitPerm()))
+		}
+		if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cart.getBukkitPerm()))
+		}
+		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cart.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('b') && !PermissionManager.hasPerm(sender, boat.getBukkitPerm()))
+		}
+		if (args.hasFlag('b') && !PermissionManager.hasPerm(sender, boat.getBukkitPerm())) {
 			return;
-		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm()))
+		}
+		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm())) {
 			return;
+		}
 		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
 				|| args.hasFlag('a') || args.hasFlag('n') || args.hasFlag('v') || args.hasFlag('c')
 				|| args.hasFlag('b')) {
@@ -125,8 +134,9 @@ public class Memory extends ServerCommand {
 				} catch (final InterruptedException e) {
 				}
 				for (final Entity entity : entityList.get(w.getName())) {
-					if (dontKill(args, entity))
+					if (dontKill(args, entity)) {
 						continue;
+					}
 					entity.die();
 					count++;
 				}
@@ -152,7 +162,7 @@ public class Memory extends ServerCommand {
 
 		// Code for TPS from here on
 		long delay = 40L;
-		if (args.length >= 1)
+		if (args.length >= 1) {
 			try {
 				delay = args.getLong(0);
 			} catch (final NumberFormatException e) {
@@ -161,8 +171,10 @@ public class Memory extends ServerCommand {
 				Utils.sI18n(sender, "NaN", replace);
 				return;
 			}
-		if (delay < 20L)
+		}
+		if (delay < 20L) {
 			delay = 20L;
+		}
 		final World world = ACPluginManager.getServer().getWorlds().get(0);
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 				ACHelper.getInstance().getCoreInstance(),
@@ -229,24 +241,33 @@ public class Memory extends ServerCommand {
 
 	private boolean dontKill(final CommandArgs args, final Entity toKill) {
 		boolean dontKill = true;
-		if (args.hasFlag('f'))
+		if (args.hasFlag('f')) {
 			dontKill = (toKill instanceof EntityHuman || toKill instanceof EntityPainting);
-		if (args.hasFlag('x'))
+		}
+		if (args.hasFlag('x')) {
 			dontKill = !(toKill instanceof EntityExperienceOrb);
-		if (args.hasFlag('i'))
+		}
+		if (args.hasFlag('i')) {
 			dontKill = !(toKill instanceof EntityItem);
-		if (args.hasFlag('m'))
+		}
+		if (args.hasFlag('m')) {
 			dontKill = !(toKill instanceof EntityMonster);
-		if (args.hasFlag('a'))
+		}
+		if (args.hasFlag('a')) {
 			dontKill = !(toKill instanceof EntityAnimal);
-		if (args.hasFlag('n'))
+		}
+		if (args.hasFlag('n')) {
 			dontKill = !(toKill instanceof EntityVillager);
-		if (args.hasFlag('c'))
+		}
+		if (args.hasFlag('c')) {
 			dontKill = !(toKill instanceof EntityMinecart);
-		if (args.hasFlag('b'))
+		}
+		if (args.hasFlag('b')) {
 			dontKill = !(toKill instanceof EntityBoat);
-		if (args.hasFlag('v'))
+		}
+		if (args.hasFlag('v')) {
 			dontKill = !(toKill instanceof EntityMinecart || toKill instanceof EntityBoat);
+		}
 		return dontKill;
 	}
 }

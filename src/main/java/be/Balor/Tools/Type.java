@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum Type {
 	FLY(Category.SUPER_POWER),
@@ -80,7 +80,7 @@ public enum Type {
 	 * Attempts to match the Type with the given name. This is a match lookup;
 	 * names will be converted to uppercase, then stripped of special characters
 	 * in an attempt to format it like the enum
-	 *
+	 * 
 	 * @param name
 	 *            Name of the type to get
 	 * @return Type if found, or null
@@ -107,7 +107,7 @@ public enum Type {
 
 	/**
 	 * Gets the Category assigned to this type
-	 *
+	 * 
 	 * @return Category of this Type
 	 */
 	public Category getCategory() {
@@ -171,8 +171,9 @@ public enum Type {
 		 */
 		private ArmorPart(final int placeInInventory, final int firstPossible) {
 			this.placeInInventory = placeInInventory;
-			for (int i = 0; i < nbEquipment; i++)
+			for (int i = 0; i < nbEquipment; i++) {
 				possibleId.add((i * 4) + firstPossible);
+			}
 		}
 
 		/**
@@ -189,7 +190,7 @@ public enum Type {
 
 		/**
 		 * Check if the id is valid for that ArmorPart
-		 *
+		 * 
 		 * @param toCheck
 		 * @return
 		 */

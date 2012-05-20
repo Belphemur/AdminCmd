@@ -58,24 +58,27 @@ public class ACPluginListener implements Listener {
 			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("PermissionsEx");
 			if (Permissions != null) {
-				if (Permissions.isEnabled())
+				if (Permissions.isEnabled()) {
 					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+				}
 			}
 		}
 		if (!PermissionManager.isGroupManagerSet()) {
 			final Plugin GMplugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("GroupManager");
 			if (GMplugin != null) {
-				if (GMplugin.isEnabled())
+				if (GMplugin.isEnabled()) {
 					PermissionManager.setGroupManager(GMplugin);
+				}
 			}
 		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
 			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("Permissions");
 			if (Permissions != null) {
-				if (Permissions.isEnabled())
+				if (Permissions.isEnabled()) {
 					PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
+				}
 			}
 		}
 		if (!PermissionManager.isbPermissionsSet()) {
@@ -128,14 +131,16 @@ public class ACPluginListener implements Listener {
 		}
 		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
 			for (final Plugin plugin : event.getPlugin().getServer().getPluginManager()
-					.getPlugins())
+					.getPlugins()) {
 				HelpLister.getInstance().addPlugin(plugin);
+			}
 		}
 		if (!Utils.signExtention) {
 			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("SignExtensions");
-			if (plugin != null)
+			if (plugin != null) {
 				Utils.signExtention = true;
+			}
 		}
 		if (Utils.heroes == null) {
 			final Plugin plugin = ACPluginManager.getServer().getPluginManager()

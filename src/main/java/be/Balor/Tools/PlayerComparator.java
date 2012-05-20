@@ -38,8 +38,9 @@ public class PlayerComparator implements Comparator<Player> {
 	public int compare(final Player o1, final Player o2) {
 		final Group g1 = PermissionManager.getGroup(o1);
 		final Group g2 = PermissionManager.getGroup(o2);
-		if (g1.equals(g2))
+		if (g1.equals(g2)) {
 			return Utils.getPlayerName(o1).compareTo(Utils.getPlayerName(o2));
+		}
 		return g1.compareTo(g2);
 	}
 

@@ -79,8 +79,9 @@ public class MobLimit extends MobCommand {
 					replace.put("mob", name);
 					ACWorld.getWorld(world.getName()).removeMobLimit("Craft" + ct.getName());
 					Utils.sI18n(sender, "mobLimitRemovedPerMob", replace);
-				} else
+				} else {
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));
+				}
 			}
 			return;
 		}
@@ -101,8 +102,9 @@ public class MobLimit extends MobCommand {
 			if (args.getString(1).equals("none")) {
 				world.removeInformation(Type.MOB_LIMIT.toString());
 				Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
-			} else
+			} else {
 				Utils.sI18n(sender, "NaN", "number", args.getString(1));
+			}
 		}
 
 	}

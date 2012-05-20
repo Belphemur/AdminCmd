@@ -45,10 +45,11 @@ public class MOTD extends ServerCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		if (Utils.isPlayer(sender, false))
+		if (Utils.isPlayer(sender, false)) {
 			Utils.sParsedLocale((Player) sender, "MOTD");
-		else
+		} else {
 			Utils.sI18n(sender, "MOTD");
+		}
 		return;
 	}
 

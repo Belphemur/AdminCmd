@@ -88,32 +88,38 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		final SynchronizedStack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
 		final World w = loc.getWorld();
 		if (blockTimeOut() == 0) {
-			for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
-				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
+			for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++) {
+				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++) {
 					for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
 						final Block block = w.getBlockAt(x, y, z);
 						if (block.getTypeId() != Material.AIR.getId()
-								&& block.getTypeId() != Material.SNOW.getId())
+								&& block.getTypeId() != Material.SNOW.getId()) {
 							continue;
+						}
 						IBlockRemanenceFactory.FACTORY.createBlockRemanence(
 								new SimplifiedLocation(w, x, y, z)).setBlockType(
 								value.getBlockTypeId());
 					}
+				}
+			}
 			return;
 		}
 		final Integer eventId = eggNb++;
-		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++)
-			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++)
+		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++) {
+			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++) {
 				for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
 					final int blckId = w.getBlockTypeIdAt(x, y, z);
-					if (blckId != Material.AIR.getId() && blckId != Material.SNOW.getId())
+					if (blckId != Material.AIR.getId() && blckId != Material.SNOW.getId()) {
 						continue;
+					}
 					final BlockRemanence blk = IBlockRemanenceFactory.FACTORY
 							.createBlockRemanence(new SimplifiedLocation(w, x, y, z));
 					blk.setBlockType(value.getBlockTypeId());
 					blocks.add(blk);
 
 				}
+			}
+		}
 		blocksPerEvent.put(eventId, blocks);
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
@@ -122,8 +128,9 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 					public void run() {
 						final SynchronizedStack<BlockRemanence> blocks = blocksPerEvent
 								.get(eventId);
-						while (!blocks.empty())
+						while (!blocks.empty()) {
 							blocks.pop().returnToThePast();
+						}
 						blocksPerEvent.remove(eventId);
 
 					}
@@ -146,11 +153,13 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 	protected void processArguments(final Player sender, final CommandArgs args)
 			throws ProcessingArgsException {
 		final String block = args.getValueFlag('b');
-		if (block == null)
+		if (block == null) {
 			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
+		}
 		final int radius = getRadius(sender, args);
-		if (radius == -1)
+		if (radius == -1) {
 			return;
+		}
 		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
 		if (mat.isNull()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();

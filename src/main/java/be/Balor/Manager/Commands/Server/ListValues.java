@@ -55,8 +55,9 @@ public class ListValues extends ServerCommand {
 			return;
 		}
 		String arg = "";
-		for (final String str : args)
+		for (final String str : args) {
 			arg += str + " ";
+		}
 		arg = arg.trim();
 		if (Type.matchType(arg) == null) {
 			Utils.sI18n(sender, "emptyList");
@@ -67,15 +68,18 @@ public class ListValues extends ServerCommand {
 			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
 					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");
 			String buffer = "";
-			for (final ACPlayer value : list)
+			for (final ACPlayer value : list) {
 				buffer += value.getName() + ", ";
+			}
 			if (!buffer.equals("")) {
-				if (buffer.endsWith(", "))
+				if (buffer.endsWith(", ")) {
 					buffer = buffer.substring(0, buffer.lastIndexOf(","));
+				}
 				sender.sendMessage(buffer);
 			}
-		} else
+		} else {
 			Utils.sI18n(sender, "emptyList");
+		}
 
 	}
 

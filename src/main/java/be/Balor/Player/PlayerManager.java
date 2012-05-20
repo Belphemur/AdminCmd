@@ -79,23 +79,27 @@ public class PlayerManager {
 			newPlayer.setLastLocation(oldPlayer.getLastLocation());
 			newPlayer.setPresentation(oldPlayer.getPresentation());
 
-			for (final String home : oldPlayer.getHomeList())
+			for (final String home : oldPlayer.getHomeList()) {
 				newPlayer.setHome(home, oldPlayer.getHome(home));
+			}
 			for (final Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
 				final Type power = Type.matchType(entry.getKey());
-				if (power != null)
+				if (power != null) {
 					newPlayer.setPower(power, oldPlayer.getPower(power).getObj());
-				else
+				} else {
 					newPlayer.setCustomPower(entry.getKey(),
 							oldPlayer.getCustomPower(entry.getKey()).getObj());
+				}
 			}
 			for (final String info : oldPlayer.getInformationsList()) {
-				if (info.equals("lastLoc") || info.equals("presentation"))
+				if (info.equals("lastLoc") || info.equals("presentation")) {
 					continue;
+				}
 				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
 			}
-			for (final String kit : oldPlayer.getKitUseList())
+			for (final String kit : oldPlayer.getKitUseList()) {
 				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
+			}
 			newPlayer.forceSave();
 		}
 		this.playerFactory = factory;
@@ -114,8 +118,9 @@ public class PlayerManager {
 		}
 
 		final ACPlayer ref = players.get(name);
-		if (ref != null)
+		if (ref != null) {
 			return false;
+		}
 		players.put(name, player);
 		return true;
 	}
@@ -138,8 +143,9 @@ public class PlayerManager {
 		final ArrayList<Player> list = new ArrayList<Player>(onlinePlayers.size());
 		for (final ACPlayer p : onlinePlayers.keySet()) {
 			final Player handler = p.getHandler();
-			if (handler != null)
+			if (handler != null) {
 				list.add(handler);
+			}
 		}
 		return list;
 	}
@@ -153,8 +159,9 @@ public class PlayerManager {
 	List<ACPlayer> getACPlayerHavingPower(final String power) {
 		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (final ACPlayer p : getExistingPlayers()) {
-			if (p.hasCustomPower(power))
+			if (p.hasCustomPower(power)) {
 				list.add(p);
+			}
 		}
 		return list;
 	}
@@ -168,8 +175,9 @@ public class PlayerManager {
 	List<ACPlayer> getACPlayerHavingPower(final Type power) {
 		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (final ACPlayer p : getExistingPlayers()) {
-			if (p.hasPower(power))
+			if (p.hasPower(power)) {
 				list.add(p);
+			}
 		}
 		return list;
 	}
@@ -178,8 +186,9 @@ public class PlayerManager {
 		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (final String name : playerFactory.getExistingPlayers()) {
 			final ACPlayer player = demandACPlayer(name);
-			if (!(player instanceof EmptyPlayer))
+			if (!(player instanceof EmptyPlayer)) {
 				list.add(player);
+			}
 		}
 		return list;
 	}
@@ -221,8 +230,9 @@ public class PlayerManager {
 	}
 
 	ACPlayer demandACPlayer(final String name) {
-		if (name == null)
+		if (name == null) {
 			return getPlayer("serverConsole");
+		}
 		ACPlayer result = getPlayer(name);
 		if (result == null) {
 			result = playerFactory.createPlayer(name);
@@ -230,8 +240,9 @@ public class PlayerManager {
 			result = getPlayer(name);
 		} else if (result instanceof EmptyPlayer) {
 			final ACPlayer tmp = playerFactory.createPlayer(name);
-			if (tmp instanceof EmptyPlayer)
+			if (tmp instanceof EmptyPlayer) {
 				return result;
+			}
 			players.remove(name);
 			onlinePlayers.remove(result);
 			result = tmp;
@@ -242,8 +253,9 @@ public class PlayerManager {
 	}
 
 	ACPlayer demandACPlayer(final Player player) {
-		if (player == null)
+		if (player == null) {
 			return getPlayer("serverConsole");
+		}
 		final String playerName = player.getName();
 		ACPlayer result = getPlayer(playerName);
 		if (result == null) {
@@ -252,8 +264,9 @@ public class PlayerManager {
 			result = getPlayer(playerName);
 		} else if (result instanceof EmptyPlayer) {
 			final ACPlayer tmp = playerFactory.createPlayer(playerName);
-			if (tmp instanceof EmptyPlayer)
+			if (tmp instanceof EmptyPlayer) {
 				return result;
+			}
 			players.remove(playerName);
 			onlinePlayers.remove(result);
 			result = tmp;

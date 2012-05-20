@@ -47,8 +47,9 @@ public class SetTime extends TimeCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		if ((args.getString(0).equalsIgnoreCase("pause") || args.getString(0).equalsIgnoreCase(
 				"unpause"))
-				&& !(PermissionManager.hasPerm(sender, "admincmd.time.pause")))
+				&& !(PermissionManager.hasPerm(sender, "admincmd.time.pause"))) {
 			return;
+		}
 
 		Utils.timeSet(sender, args.getString(0), args.getString(1));
 	}

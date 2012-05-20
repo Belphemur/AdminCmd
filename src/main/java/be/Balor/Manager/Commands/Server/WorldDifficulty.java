@@ -60,11 +60,11 @@ public class WorldDifficulty extends ServerCommand {
 			} catch (final NumberFormatException e) {
 				worldGiven = true;
 			}
-			if (args.length >= 1 && worldGiven)
+			if (args.length >= 1 && worldGiven) {
 				world = ACWorld.getWorld(args.getString(0));
-			else if (Utils.isPlayer(sender, false))
+			} else if (Utils.isPlayer(sender, false)) {
 				world = ACWorld.getWorld(((Player) sender).getWorld().getName());
-			else {
+			} else {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("argument", "world");
 				Utils.sI18n(sender, "errorInsufficientArguments", replace);
@@ -82,13 +82,15 @@ public class WorldDifficulty extends ServerCommand {
 			replace.put("difficulty", world.getDifficulty().toString());
 			Utils.sI18n(sender, "getDifficulty", replace);
 		} else if (args.hasFlag('s')) {
-			if (args.length >= 2)
+			if (args.length >= 2) {
 				toSet = Difficulty.getByValue(args.getInt(1));
-			else if (difValue != -1)
+			} else if (difValue != -1) {
 				toSet = Difficulty.getByValue(difValue);
+			}
 
-			if (toSet == null)
+			if (toSet == null) {
 				toSet = Difficulty.NORMAL;
+			}
 
 			replace.put("world", world.getName());
 			replace.put("difficulty", toSet.toString());

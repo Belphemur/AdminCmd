@@ -41,9 +41,11 @@ import com.google.common.base.Joiner;
 public class Potion extends PlayerCommand {
 	private final static List<String> potions = new ArrayList<String>();
 	static {
-		for (final PotionEffectType type : PotionEffectType.values())
-			if (type != null && type.getName() != null)
+		for (final PotionEffectType type : PotionEffectType.values()) {
+			if (type != null && type.getName() != null) {
 				potions.add(type.getName());
+			}
+		}
 	}
 
 	/**
@@ -78,27 +80,30 @@ public class Potion extends PlayerCommand {
 		final String potionAmplifierString = args.getString(2);
 		int amplifier = 5;
 		int duration = 20 * Utils.secInTick;
-		if (potionAmplifierString != null)
+		if (potionAmplifierString != null) {
 			try {
 				amplifier = Integer.parseInt(potionAmplifierString);
 			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", potionAmplifierString);
 				return;
 			}
-		if (potionDurationString != null)
+		}
+		if (potionDurationString != null) {
 			try {
 				duration = Integer.parseInt(potionDurationString);
 			} catch (final NumberFormatException e) {
 				Utils.sI18n(sender, "NaN", "number", potionDurationString);
 				return;
 			}
+		}
 		target.addPotionEffect(new PotionEffect(PotionEffectType.getByName(potionFound), duration,
 				amplifier));
 		replace.put("player", Utils.getPlayerName(target, sender));
 		replace.put("potion", potionFound);
 		LocaleHelper.POTION_EFFECT.sendLocale(sender, replace);
-		if (!target.equals(sender))
+		if (!target.equals(sender)) {
 			LocaleHelper.POTION_EFFECT.sendLocale(target, replace);
+		}
 
 	}
 

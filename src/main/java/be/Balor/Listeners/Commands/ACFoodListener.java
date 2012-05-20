@@ -32,10 +32,12 @@ import be.Balor.Tools.Type;
 public class ACFoodListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onFoodLevelChange(final FoodLevelChangeEvent event) {
-		if (!(event.getEntity() instanceof Player))
+		if (!(event.getEntity() instanceof Player)) {
 			return;
+		}
 		final Player player = (Player) event.getEntity();
-		if (ACPlayer.getPlayer(player).hasPower(Type.ETERNAL))
+		if (ACPlayer.getPlayer(player).hasPower(Type.ETERNAL)) {
 			event.setCancelled(true);
+		}
 	}
 }

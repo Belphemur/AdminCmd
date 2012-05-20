@@ -50,19 +50,22 @@ public class ACFrozenPlayerListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onDrop(final PlayerDropItemEvent event) {
-		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN))
+		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onPickup(final PlayerPickupItemEvent event) {
-		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN))
+		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onInteract(final PlayerInteractEvent event) {
-		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN))
+		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
+		}
 	}
 }

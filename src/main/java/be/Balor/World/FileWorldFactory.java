@@ -38,12 +38,13 @@ public class FileWorldFactory implements IWorldFactory {
 	@Override
 	public ACWorld createWorld(final String worldName) throws WorldNotLoaded {
 		final World w = ACPluginManager.getServer().getWorld(worldName);
-		if (w == null)
+		if (w == null) {
 			throw new WorldNotLoaded(worldName);
-		else if (directory != null)
+		} else if (directory != null) {
 			return new FileWorld(w, directory);
-		else
+		} else {
 			return null;
+		}
 	}
 
 }

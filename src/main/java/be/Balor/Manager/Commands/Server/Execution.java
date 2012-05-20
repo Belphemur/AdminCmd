@@ -55,7 +55,7 @@ public class Execution extends ServerCommand {
 				TerminalCommandManager.getInstance().reloadScripts();
 				sender.sendMessage(ChatColor.YELLOW + "All scripts reloaded");
 				sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
-			} else
+			} else {
 				try {
 					TerminalCommandManager.getInstance().execute(sender, args.getString(0), true);
 				} catch (final CommandNotFound e) {
@@ -63,6 +63,7 @@ public class Execution extends ServerCommand {
 
 					sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 				}
+			}
 			return;
 		}
 		try {
@@ -88,9 +89,11 @@ public class Execution extends ServerCommand {
 
 	private String getCmdList(final CommandSender sender) {
 		String cmds = "";
-		for (final String cmd : TerminalCommandManager.getInstance().getCommandList())
-			if (TerminalCommandManager.getInstance().checkCommand(cmd, sender))
+		for (final String cmd : TerminalCommandManager.getInstance().getCommandList()) {
+			if (TerminalCommandManager.getInstance().checkCommand(cmd, sender)) {
 				cmds += cmd + ", ";
+			}
+		}
 		return cmds.trim();
 	}
 

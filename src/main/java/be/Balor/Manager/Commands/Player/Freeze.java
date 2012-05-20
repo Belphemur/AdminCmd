@@ -61,15 +61,18 @@ public class Freeze extends PlayerCommand {
 			if (acp.hasPower(Type.FROZEN)) {
 				acp.removePower(Type.FROZEN);
 				Utils.sI18n(player, "freezeDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "freezeDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.FROZEN);
 				Utils.sI18n(player, "freezeEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "freezeEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

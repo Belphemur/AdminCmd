@@ -59,8 +59,9 @@ final public class AFKWorker {
 	}
 
 	public static AFKWorker createInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new AFKWorker();
+		}
 		return instance;
 	}
 
@@ -90,8 +91,9 @@ final public class AFKWorker {
 	 *            the afkTime to set
 	 */
 	public void setAfkTime(final int afkTime) {
-		if (afkTime > 0)
+		if (afkTime > 0) {
 			this.afkTime = afkTime * 1000;
+		}
 	}
 
 	/**
@@ -99,8 +101,9 @@ final public class AFKWorker {
 	 *            the kickTime to set
 	 */
 	public void setKickTime(final int kickTime) {
-		if (afkTime > 0)
+		if (afkTime > 0) {
 			this.kickTime = kickTime * 1000 * 60;
+		}
 
 	}
 
@@ -152,15 +155,17 @@ final public class AFKWorker {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
 			String afkString = Utils.I18n("afk", "player", Utils.getPlayerName(p, null));
-			if (afkString != null)
+			if (afkString != null) {
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
+			}
 			Utils.broadcastMessage(afkString);
 
 		}
-		if (msg == null || (msg != null && msg.isEmpty()))
+		if (msg == null || (msg != null && msg.isEmpty())) {
 			playersAfk.put(p, Long.valueOf(System.currentTimeMillis()));
-		else
+		} else {
 			playersAfk.put(p, msg);
+		}
 		p.setSleepingIgnored(true);
 	}
 
@@ -172,14 +177,15 @@ final public class AFKWorker {
 	 */
 	public void sendAfkMessage(final CommandSender sender, final Player buddy) {
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
-				|| ACPlayer.getPlayer(buddy.getName()).hasPower(Type.FAKEQUIT))
+				|| ACPlayer.getPlayer(buddy.getName()).hasPower(Type.FAKEQUIT)) {
 			return;
+		}
 		final Object obj = playersAfk.get(buddy);
 		if (obj != null) {
 			Utils.sI18n(sender, "noteAfk", "player", Utils.getPlayerName(buddy, sender));
-			if (obj instanceof String)
+			if (obj instanceof String) {
 				sender.sendMessage((String) obj);
-			else if (obj instanceof Long) {
+			} else if (obj instanceof Long) {
 				final Long[] time = Utils.getElapsedTime((Long) obj);
 				Utils.sI18n(sender, "idleTime", "mins", time[2].toString());
 			}
@@ -196,8 +202,9 @@ final public class AFKWorker {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
 				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
 			final String online = Utils.I18n("online", "player", Utils.getPlayerName(p, null));
-			if (online != null)
+			if (online != null) {
 				Utils.broadcastMessage(online);
+			}
 		}
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
@@ -224,8 +231,9 @@ final public class AFKWorker {
 			final long now = System.currentTimeMillis();
 			for (final Player p : Utils.getOnlinePlayers()) {
 				final Long timeStamp = playerTimeStamp.get(p);
-				if (timeStamp != null && !playersAfk.containsKey(p) && (now - timeStamp) >= afkTime)
+				if (timeStamp != null && !playersAfk.containsKey(p) && (now - timeStamp) >= afkTime) {
 					setAfk(p);
+				}
 			}
 
 		}

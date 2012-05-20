@@ -57,11 +57,14 @@ public class BukkitPermissions extends SuperPermissions {
 		} catch (final Exception e) {
 			return false;
 		}
-		if (groups.isEmpty())
+		if (groups.isEmpty()) {
 			return false;
-		for (final Group group : groups)
-			if (group.getName().equalsIgnoreCase(groupName))
+		}
+		for (final Group group : groups) {
+			if (group.getName().equalsIgnoreCase(groupName)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -100,8 +103,9 @@ public class BukkitPermissions extends SuperPermissions {
 	@Override
 	public be.Balor.Manager.Permissions.Group getGroup(final Player player) {
 		final List<Group> groups = permBukkit.getGroups(player.getName());
-		if (groups.isEmpty())
+		if (groups.isEmpty()) {
 			return new be.Balor.Manager.Permissions.Group();
+		}
 		final Group group = groups.get(groups.size() - 1);
 		return new be.Balor.Manager.Permissions.Group(group.getName(), 0);
 	}

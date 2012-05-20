@@ -43,18 +43,21 @@ public class ACNoDropListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
-		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.NO_DROP))
+		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.NO_DROP)) {
 			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler
 	public void onDeath(final EntityDeathEvent event) {
-		if (!(event.getEntity() instanceof Player))
+		if (!(event.getEntity() instanceof Player)) {
 			return;
+		}
 		final Player p = (Player) event.getEntity();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.NO_DROP))
+		if (!player.hasPower(Type.NO_DROP)) {
 			return;
+		}
 		final List<ItemStack> items = new ArrayList<ItemStack>();
 		for (final ItemStack item : event.getDrops()) {
 			items.add(item.clone());
@@ -67,11 +70,13 @@ public class ACNoDropListener implements Listener {
 	public void onRespawn(final PlayerRespawnEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.NO_DROP))
+		if (!player.hasPower(Type.NO_DROP)) {
 			return;
+		}
 		final List<ItemStack> items = itemsDrops.get(p);
-		if (items == null)
+		if (items == null) {
 			return;
+		}
 		p.getInventory().addItem(items.toArray(new ItemStack[items.size()]));
 		itemsDrops.remove(p);
 	}

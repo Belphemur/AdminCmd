@@ -64,8 +64,9 @@ public class CommandArgs implements Iterable<String> {
 				for (endIndex = i; endIndex < args.length; ++endIndex) {
 					final String arg2 = args[endIndex];
 					if (arg2.charAt(arg2.length() - 1) == quotedChar) {
-						if (endIndex != i)
+						if (endIndex != i) {
 							build.append(' ');
+						}
 						build.append(arg2.substring(endIndex == i ? 1 : 0, arg2.length() - 1));
 						break;
 					} else if (endIndex == i) {
@@ -104,10 +105,11 @@ public class CommandArgs implements Iterable<String> {
 						continue;
 					}
 
-					if (nextArg >= argList.size())
+					if (nextArg >= argList.size()) {
 						this.booleanFlags.add(flagName);
-					else
+					} else {
 						this.valueFlags.put(flagName, argList.get(nextArg));
+					}
 
 				}
 				continue;
@@ -122,8 +124,9 @@ public class CommandArgs implements Iterable<String> {
 	public String getString(final int index) {
 		try {
 			final String result = parsedArgs.get(index);
-			if (result == null)
+			if (result == null) {
 				return null;
+			}
 			return result;
 		} catch (final IndexOutOfBoundsException e) {
 			return null;
@@ -196,10 +199,12 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	public String getValueFlag(final char flag) {
 		final String result = valueFlags.get(flag);
-		if (result == null)
+		if (result == null) {
 			return null;
-		if (parsedArgs.remove(result))
+		}
+		if (parsedArgs.remove(result)) {
 			length--;
+		}
 		return result;
 	}
 

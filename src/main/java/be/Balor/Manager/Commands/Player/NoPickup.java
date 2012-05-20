@@ -62,15 +62,18 @@ public class NoPickup extends PlayerCommand {
 			if (acp.hasPower(Type.NO_PICKUP)) {
 				acp.removePower(Type.NO_PICKUP);
 				Utils.sI18n(player, "npDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "npDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.NO_PICKUP);
 				Utils.sI18n(player, "npEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "npEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

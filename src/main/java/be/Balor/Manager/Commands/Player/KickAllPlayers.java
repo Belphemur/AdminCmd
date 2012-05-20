@@ -47,21 +47,25 @@ public class KickAllPlayers extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		String message = "";
 		String playerName = "";
-		if (args.length >= 1)
-			for (int i = 0; i < args.length; i++)
+		if (args.length >= 1) {
+			for (int i = 0; i < args.length; i++) {
 				message += args.getString(i) + " ";
-		else {
+			}
+		} else {
 			message = "You have been kick by ";
-			if (!Utils.isPlayer(sender, false))
+			if (!Utils.isPlayer(sender, false)) {
 				playerName = "Server Admin";
-			else
+			} else {
 				playerName = Utils.getPlayerName(((Player) sender));
+			}
 			message += playerName;
 		}
 		message = message.trim();
-		for (final Player toKick : Utils.getOnlinePlayers())
-			if (!toKick.getName().equals(playerName))
+		for (final Player toKick : Utils.getOnlinePlayers()) {
+			if (!toKick.getName().equals(playerName)) {
 				toKick.kickPlayer(message);
+			}
+		}
 	}
 
 	/*

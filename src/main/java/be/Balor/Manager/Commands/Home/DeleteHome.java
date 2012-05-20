@@ -47,8 +47,9 @@ public class DeleteHome extends HomeCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
-			if (home == null)
+			if (home == null) {
 				return;
+			}
 			ACPlayer.getPlayer(home.player).removeHome(home.home);
 			Utils.sI18n(sender, "rmHome", "home", home.home);
 		}

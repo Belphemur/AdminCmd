@@ -68,8 +68,9 @@ public class KillerEgg extends SimpleRadiusEgg {
 		final World w = p.getWorld();
 		final int radius = value * value;
 		for (final Object entity : ((CraftWorld) w).getHandle().entityList) {
-			if (entity instanceof EntityLiving)
+			if (entity instanceof EntityLiving) {
 				entities.add((EntityLiving) entity);
+			}
 		}
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
@@ -83,8 +84,9 @@ public class KillerEgg extends SimpleRadiusEgg {
 							}
 							final Location entityLoc = new Location(w, entity.locX, entity.locY,
 									entity.locZ, entity.yaw, entity.pitch);
-							if (entityLoc.distanceSquared(loc) > radius)
+							if (entityLoc.distanceSquared(loc) > radius) {
 								continue;
+							}
 							if (entity instanceof EntityPlayer) {
 								final Player player = (Player) entity.getBukkitEntity();
 								player.setHealth(0);

@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Withdraw extends PlayerCommand {
 
@@ -43,18 +43,22 @@ public class Withdraw extends PlayerCommand {
 		other = true;
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (args.length == 0) {
 			if (Utils.isPlayer(sender, false)) {
-				ACPlayer p = ACPlayer.getPlayer((Player) sender);
-				if (p == null)
+				final ACPlayer p = ACPlayer.getPlayer((Player) sender);
+				if (p == null) {
 					return;
+				}
 				p.removeAllSuperPower();
 				LocaleHelper.P_CLEARED.sendLocale(sender);
 				return;
@@ -66,26 +70,31 @@ public class Withdraw extends PlayerCommand {
 			}
 		}
 		target = Utils.getUserParam(sender, args, permNode);
-		if (target == null)
+		if (target == null) {
 			return;
-		ACPlayer p = ACPlayer.getPlayer(target);
-		if (p == null)
+		}
+		final ACPlayer p = ACPlayer.getPlayer(target);
+		if (p == null) {
 			return;
+		}
 		p.removeAllSuperPower();
 		replace.put("target", Utils.getPlayerName(target));
-		if (Utils.isPlayer(sender, false))
+		if (Utils.isPlayer(sender, false)) {
 			replace.put("sender", Utils.getPlayerName((Player) sender));
-		else
+		} else {
 			replace.put("sender", "Admin");
+		}
 		LocaleHelper.P_CLEARED_SENDER.sendLocale(sender, replace);
 		LocaleHelper.P_CLEARED_TARGET.sendLocale(target, replace);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 

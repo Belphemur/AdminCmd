@@ -63,10 +63,11 @@ public class UnixTerminalCommand extends TerminalCommand {
 	public void execute(final CommandSender sender) {
 		try {
 			ProcessBuilder pb;
-			if (args != null)
+			if (args != null) {
 				pb = new ProcessBuilder(execution, args);
-			else
+			} else {
 				pb = new ProcessBuilder(execution);
+			}
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			final Process p = pb.start();

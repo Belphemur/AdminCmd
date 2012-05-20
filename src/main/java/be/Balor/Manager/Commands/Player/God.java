@@ -62,15 +62,18 @@ public class God extends PlayerCommand {
 			if (acp.hasPower(Type.GOD)) {
 				acp.removePower(Type.GOD);
 				Utils.sI18n(player, "godDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "godDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.GOD);
 				Utils.sI18n(player, "godEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "godEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

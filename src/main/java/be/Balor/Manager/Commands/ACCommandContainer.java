@@ -47,12 +47,13 @@ public class ACCommandContainer {
 	 * Parse the arguments, flags, etc ... by creating the CommandArgs
 	 */
 	public void processArguments() {
-		if (args == null)
+		if (args == null) {
 			try {
 				args = new CommandArgs(argsStrings);
 			} catch (final Exception e) {
 				ACLogger.severe("Problem in parsing the commandString", e);
 			}
+		}
 	}
 
 	/**
@@ -63,8 +64,9 @@ public class ACCommandContainer {
 	public void execute() throws PlayerNotFound {
 		if (ConfigEnum.LOG_CMD.getBoolean()) {
 			String name = "Console";
-			if (sender instanceof Player)
+			if (sender instanceof Player) {
 				name = ((Player) sender).getName();
+			}
 			ACLogger.info(name + " [CMD: " + cmd.getCmdName() + "] (ARGS:" + args.toString() + ")");
 		}
 		cmd.execute(sender, args);

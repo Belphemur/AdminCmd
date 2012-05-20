@@ -40,7 +40,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	 * used.
 	 * <p>
 	 * Defaults to true.
-	 *
+	 * 
 	 * @return Whether or not to copy the header
 	 */
 	public boolean copyHeader() {
@@ -61,7 +61,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	 * used.
 	 * <p>
 	 * Defaults to true.
-	 *
+	 * 
 	 * @param value
 	 *            Whether or not to copy the header
 	 * @return This object, for chaining
@@ -82,7 +82,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	 * <p>
 	 * Null is a valid value which will indicate that no header is to be
 	 * applied. The default value is null.
-	 *
+	 * 
 	 * @return Header
 	 */
 	public String header() {
@@ -99,7 +99,7 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	 * <p>
 	 * Null is a valid value which will indicate that no header is to be
 	 * applied. The default value is null.
-	 *
+	 * 
 	 * @param value
 	 *            New header
 	 * @return This object, for chaining

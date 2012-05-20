@@ -70,13 +70,15 @@ public class CheckingBlockTask implements Runnable {
 		try {
 
 			for (int y = block.getY() - radius; y <= limitY; y++) {
-				for (int x = block.getX() - radius; x <= limitX; x++)
+				for (int x = block.getX() - radius; x <= limitX; x++) {
 					for (int z = block.getZ() - radius; z <= limitZ; z++) {
 						if (!mat.contains(Material.getMaterial(block.getWorld().getBlockTypeIdAt(x,
-								y, z))))
+								y, z)))) {
 							continue;
+						}
 						okBlocks.add(new SimplifiedLocation(block.getWorld(), x, y, z));
 					}
+				}
 			}
 		} finally {
 			sema.release();

@@ -25,17 +25,17 @@ import java.util.TreeSet;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Joiner;
-
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
+import com.google.common.base.Joiner;
+
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class Search extends PlayerCommand {
 
@@ -44,42 +44,50 @@ public class Search extends PlayerCommand {
 		permNode = "admincmd.player.search";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		if (args.hasFlag('i')) {
 			final String ip = args.getValueFlag('i');
-			if (ip == null || ip.equals("") || ip.length() == 0)
+			if (ip == null || ip.equals("") || ip.length() == 0) {
 				return;
+			}
 			final Player[] onPlayers = ACPluginManager.getServer().getOnlinePlayers();
 			final List<ACPlayer> exPlayers = PlayerManager.getInstance().getExistingPlayers();
 			final TreeSet<String> players = new TreeSet<String>();
 			final String on = "[ON] ", off = "[OFF] ";
 			InetAddress ipAdress;
-			for (Player p : onPlayers) {
+			for (final Player p : onPlayers) {
 				ipAdress = p.getAddress().getAddress();
-				if (ipAdress != null && ipAdress.toString().equals(ip))
+				if (ipAdress != null && ipAdress.toString().equals(ip)) {
 					players.add(on + p.getName());
+				}
 			}
 			String ip2;
-			for (ACPlayer p : exPlayers) {
+			for (final ACPlayer p : exPlayers) {
 				ip2 = p.getInformation("last-ip").getString();
-				if (ip2 != null && ip2.toString().equals(ip))
+				if (ip2 != null && ip2.toString().equals(ip)) {
 					players.add(off + p.getName());
+				}
 			}
-			String found = Joiner.on(", ").join(players);
+			final String found = Joiner.on(", ").join(players);
 			sender.sendMessage(found);
 			return;
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 }

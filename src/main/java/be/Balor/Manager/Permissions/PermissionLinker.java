@@ -47,13 +47,15 @@ public class PermissionLinker {
 	 */
 	public static Permission addOnTheFly(final String permNode, final String parentNode) {
 		Permission child;
-		if (ACPluginManager.getServer() == null)
+		if (ACPluginManager.getServer() == null) {
 			return null;
+		}
 		if ((child = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
 			child = new Permission(permNode, PermissionDefault.OP);
 			ACPluginManager.getServer().getPluginManager().addPermission(child);
-			if (parentNode.isEmpty())
+			if (parentNode.isEmpty()) {
 				return child;
+			}
 			Permission parent = ACPluginManager.getServer().getPluginManager()
 					.getPermission(parentNode);
 
@@ -161,25 +163,33 @@ public class PermissionLinker {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof PermissionLinker))
+		}
+		if (!(obj instanceof PermissionLinker)) {
 			return false;
+		}
 		final PermissionLinker other = (PermissionLinker) obj;
 		if (majorPerm == null) {
-			if (other.majorPerm != null)
+			if (other.majorPerm != null) {
 				return false;
-		} else if (!majorPerm.equals(other.majorPerm))
+			}
+		} else if (!majorPerm.equals(other.majorPerm)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
-		if (plId != other.plId)
+		}
+		if (plId != other.plId) {
 			return false;
+		}
 		return true;
 	}
 
@@ -198,8 +208,9 @@ public class PermissionLinker {
 	 */
 	public PermParent getPermParent(final String permNode) {
 		PermParent result = permissions.get(permNode);
-		if (result == null)
+		if (result == null) {
 			result = childrenPermParents.get(permNode);
+		}
 		return result;
 	}
 
@@ -233,8 +244,9 @@ public class PermissionLinker {
 					found = perm;
 					delta = curDelta;
 				}
-				if (curDelta == 0)
+				if (curDelta == 0) {
 					break;
+				}
 			}
 		}
 		return found;
@@ -254,14 +266,16 @@ public class PermissionLinker {
 	 */
 	public void setMajorPerm(final PermParent major) {
 		majorPerm = major;
-		for (final PermParent pp : permissions.values())
+		for (final PermParent pp : permissions.values()) {
 			majorPerm.addChild(pp);
+		}
 	}
 
 	public void setMajorPerm(final String major) {
 		majorPerm = new PermParent(major);
-		for (final PermParent pp : permissions.values())
+		for (final PermParent pp : permissions.values()) {
 			majorPerm.addChild(pp);
+		}
 	}
 
 	/*

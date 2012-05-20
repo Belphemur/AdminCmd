@@ -39,8 +39,9 @@ public class ACCreatureSpawnListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event) {
 		final Entity e = event.getEntity();
-		if (e instanceof HumanEntity)
+		if (e instanceof HumanEntity) {
 			return;
+		}
 		final World world = e.getWorld();
 		final ACWorld acWorld;
 		try {
@@ -52,18 +53,21 @@ public class ACCreatureSpawnListener implements Listener {
 		final List<LivingEntity> livEntities = world.getLivingEntities();
 		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
 		if (limit != -1) {
-			if ((livEntities.size() - world.getPlayers().size()) >= limit)
+			if ((livEntities.size() - world.getPlayers().size()) >= limit) {
 				event.setCancelled(true);
+			}
 		}
 		if (!event.isCancelled()) {
 			final Class<? extends Entity> entityClass = e.getClass();
 			final String entityName = entityClass.getSimpleName();
 			limit = acWorld.getMobLimit(entityName);
-			if (limit == -1)
+			if (limit == -1) {
 				return;
+			}
 			final int count = world.getEntitiesByClass(entityClass).size();
-			if (count >= limit)
+			if (count >= limit) {
 				event.setCancelled(true);
+			}
 
 		}
 	}

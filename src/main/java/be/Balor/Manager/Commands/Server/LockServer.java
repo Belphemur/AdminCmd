@@ -64,8 +64,9 @@ public class LockServer extends ServerCommand {
 				@Override
 				public void run() {
 					for (final Player p : onlinePlayers) {
-						if (PermissionManager.hasPerm(p, "admincmd.server.lockdown"))
+						if (PermissionManager.hasPerm(p, "admincmd.server.lockdown")) {
 							continue;
+						}
 						p.kickPlayer(Utils.I18n("serverLockMessage"));
 					}
 				}

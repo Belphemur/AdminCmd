@@ -49,8 +49,9 @@ public class ArmoredKitInstance extends KitInstance {
 			final List<MaterialContainer> items, final Map<Type.ArmorPart, MaterialContainer> armor) {
 		super(name, delay, items);
 		for (final Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet()) {
-			if (!e.getKey().isValid(e.getValue().getMaterial().getId()))
+			if (!e.getKey().isValid(e.getValue().getMaterial().getId())) {
 				continue;
+			}
 			this.armor.put(e.getKey(), e.getValue());
 		}
 
@@ -68,8 +69,9 @@ public class ArmoredKitInstance extends KitInstance {
 	 */
 	public ItemStack getArmorPart(final Type.ArmorPart part) {
 		final MaterialContainer mat = armor.get(part);
-		if (mat == null)
+		if (mat == null) {
 			return null;
+		}
 		return mat.getItemStack();
 	}
 
@@ -96,8 +98,9 @@ public class ArmoredKitInstance extends KitInstance {
 		} else {
 			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
-				if (inventory.getItem(inventory.getSize() + part.getPlaceInInventory()) != null)
+				if (inventory.getItem(inventory.getSize() + part.getPlaceInInventory()) != null) {
 					continue;
+				}
 				if (toadd == null) {
 					toadd = inventory.getItem(inventory.getSize() + part.getPlaceInInventory());
 					armorParts.add(part);
@@ -125,12 +128,14 @@ public class ArmoredKitInstance extends KitInstance {
 	@Override
 	public void addParent(final KitInstance parent) {
 		super.addParent(parent);
-		if (!(parent instanceof ArmoredKitInstance))
+		if (!(parent instanceof ArmoredKitInstance)) {
 			return;
+		}
 		final ArmoredKitInstance armoredParent = (ArmoredKitInstance) parent;
 		for (final ArmorPart part : ArmorPart.values()) {
-			if (armor.get(part) == null)
+			if (armor.get(part) == null) {
 				armor.put(part, armoredParent.armor.get(part));
+			}
 		}
 
 	}

@@ -49,8 +49,9 @@ public class Version extends ServerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		Plugin plug = ACHelper.getInstance().getCoreInstance();
-		if (args.length >= 1)
+		if (args.length >= 1) {
 			plug = plug.getServer().getPluginManager().getPlugin(args.getString(0));
+		}
 		if (plug == null) {
 			Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 			return;

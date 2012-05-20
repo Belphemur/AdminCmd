@@ -55,8 +55,9 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 *            the mChatAPI to set
 	 */
 	public static void setmChatapi(final mChatSuite mChatSuite) {
-		if (SuperPermissions.mChatInfo == null && mChatSuite != null)
+		if (SuperPermissions.mChatInfo == null && mChatSuite != null) {
 			mChatInfo = mChatSuite.getInfoReader();
+		}
 	}
 
 	/**
@@ -75,13 +76,15 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
 			return true;
-		if (player.hasPermission(perm))
+		}
+		if (player.hasPermission(perm)) {
 			return true;
-		else {
-			if (errorMsg)
+		} else {
+			if (errorMsg) {
 				Utils.sI18n(player, "errorNotPerm", "p", perm);
+			}
 
 			return false;
 		}
@@ -96,13 +99,15 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
 			return true;
-		if (player.hasPermission(perm))
+		}
+		if (player.hasPermission(perm)) {
 			return true;
-		else {
-			if (errorMsg)
+		} else {
+			if (errorMsg) {
 				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
+			}
 			return false;
 		}
 	}
@@ -141,9 +146,10 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
 		String result = null;
-		if (mChatInfo != null)
+		if (mChatInfo != null) {
 			result = mChatInfo.getInfo(p.getName(), InfoType.USER, p.getWorld().getName(),
 					"admincmd." + limit);
+		}
 		if (result == null || (result != null && result.isEmpty())) {
 			final Pattern regex = Pattern
 					.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
@@ -167,18 +173,22 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 			int max = Integer.MIN_VALUE;
 			for (final PermissionAttachmentInfo info : perms) {
 				final Matcher regexMatcher = regex.matcher(info.getPermission().toLowerCase());
-				if (!regexMatcher.find())
+				if (!regexMatcher.find()) {
 					continue;
+				}
 				final int current = Integer.parseInt(info.getPermission().split("\\.")[2]);
-				if (current < max)
+				if (current < max) {
 					continue;
+				}
 				max = current;
 
 			}
-			if (max != Integer.MIN_VALUE)
+			if (max != Integer.MIN_VALUE) {
 				return String.valueOf(max);
-		} else
+			}
+		} else {
 			return result;
+		}
 		return null;
 	}
 
@@ -191,11 +201,12 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public String getPrefix(final Player player) {
-		if (mChatInfo != null)
+		if (mChatInfo != null) {
 			return mChatInfo
 					.getPrefix(player.getName(), InfoType.USER, player.getWorld().getName());
-		else
+		} else {
 			return "";
+		}
 	}
 
 	/*
@@ -207,11 +218,12 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public String getSuffix(final Player player) {
-		if (mChatInfo != null)
+		if (mChatInfo != null) {
 			return mChatInfo
 					.getSuffix(player.getName(), InfoType.USER, player.getWorld().getName());
-		else
+		} else {
 			return "";
+		}
 	}
 
 }

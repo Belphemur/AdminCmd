@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class UnMute extends PlayerCommand {
 
@@ -42,7 +42,7 @@ public class UnMute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -62,10 +62,12 @@ public class UnMute extends PlayerCommand {
 			acp.removePower(Type.MUTED);
 			if (player != null) {
 				Utils.sI18n(player, "muteDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "muteDisabledTarget", replace);
-			} else
+				}
+			} else {
 				Utils.sI18n(sender, "muteDisabledTarget", replace);
+			}
 		} else if (acp.hasPower(Type.MUTED_COMMAND)) {
 			if (!Utils.checkImmunity(sender, acp.getHandler())) {
 				Utils.sI18n(sender, "insufficientLvl");
@@ -74,18 +76,21 @@ public class UnMute extends PlayerCommand {
 			acp.removePower(Type.MUTED_COMMAND);
 			if (player != null) {
 				Utils.sI18n(player, "commandMuteDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
-			} else
+				}
+			} else {
 				Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
-		} else
+			}
+		} else {
 			Utils.sI18n(sender, "playerNotFound", replace);
+		}
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

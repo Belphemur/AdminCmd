@@ -62,8 +62,9 @@ public class WorldManager {
 		}
 
 		final ACWorld ref = worlds.get(name);
-		if (ref != null)
+		if (ref != null) {
 			return false;
+		}
 		worlds.put(name, world);
 		return true;
 	}
@@ -73,8 +74,9 @@ public class WorldManager {
 	 *            the worldFactory to set
 	 */
 	public void setWorldFactory(final IWorldFactory worldFactory) {
-		if (this.worldFactory == null)
+		if (this.worldFactory == null) {
 			this.worldFactory = worldFactory;
+		}
 	}
 
 	/**
@@ -89,11 +91,13 @@ public class WorldManager {
 			final ACWorld oldWorld = entry.getValue();
 			newWorld.setDifficulty(oldWorld.getDifficulty());
 			newWorld.setSpawn(oldWorld.getSpawn());
-			for (final String mob : oldWorld.getMobLimitList())
+			for (final String mob : oldWorld.getMobLimitList()) {
 				newWorld.setMobLimit(mob, oldWorld.getMobLimit(mob));
-			for (final Entry<String, String> info : oldWorld.getInformations().entrySet())
+			}
+			for (final Entry<String, String> info : oldWorld.getInformations().entrySet()) {
 				newWorld.setInformation(info.getKey(), oldWorld.getInformation(info.getKey())
 						.getObj());
+			}
 			newWorlds.put(newWorld.getName(), newWorld);
 		}
 		worlds.clear();
@@ -105,8 +109,9 @@ public class WorldManager {
 		ACWorld result = worlds.get(name);
 		if (result == null) {
 			final String found = Str.matchString(worlds.keySet(), name);
-			if (found != null)
+			if (found != null) {
 				return worlds.get(found);
+			}
 			result = worldFactory.createWorld(name);
 			addWorld(result);
 			result = worlds.get(name);
@@ -121,9 +126,11 @@ public class WorldManager {
 	 */
 	public Set<String> getAllWarpList() {
 		final Set<String> warps = new HashSet<String>();
-		for (final ACWorld world : worlds.values())
-			for (final String warp : world.getWarpList())
+		for (final ACWorld world : worlds.values()) {
+			for (final String warp : world.getWarpList()) {
 				warps.add(world.getName() + ":" + warp);
+			}
+		}
 		return warps;
 
 	}

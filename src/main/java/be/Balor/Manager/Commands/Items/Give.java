@@ -56,10 +56,12 @@ public class Give extends ItemCommand {
 		// which material?
 		MaterialContainer mat = null;
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
-		if (mat.isNull())
+		if (mat.isNull()) {
 			return;
-		if (ACHelper.getInstance().inBlackListItem(sender, mat))
+		}
+		if (ACHelper.getInstance().inBlackListItem(sender, mat)) {
 			return;
+		}
 		if (mat.getMaterial().equals(Material.AIR)) {
 			Utils.sI18n(sender, "airForbidden");
 			return;
@@ -90,10 +92,11 @@ public class Give extends ItemCommand {
 			}
 		}
 		if (target == null) {
-			if (Utils.isPlayer(sender))
+			if (Utils.isPlayer(sender)) {
 				target = ((Player) sender);
-			else
+			} else {
 				return;
+			}
 		}
 		mat.setAmount(cnt);
 		final ItemStack stack = mat.getItemStack();
@@ -107,8 +110,9 @@ public class Give extends ItemCommand {
 				replace.remove("sender");
 				replace.put("target", Utils.getPlayerName(target));
 				Utils.sI18n(sender, "giveItemCommandSender", replace);
-			} else
+			} else {
 				Utils.sI18n(sender, "giveItemYourself", replace);
+			}
 		} else {
 			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "giveItemOtherPlayer", replace);

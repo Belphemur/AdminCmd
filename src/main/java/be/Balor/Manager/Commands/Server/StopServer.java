@@ -52,15 +52,16 @@ public class StopServer extends ServerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final String timeOut = args.getValueFlag('t');
 		int timeOutValue;
-		if (timeOut != null)
+		if (timeOut != null) {
 			try {
 				timeOutValue = Integer.parseInt(timeOut);
 			} catch (final Exception e) {
 				Utils.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
-		else
+		} else {
 			timeOutValue = ConfigEnum.TIME_STOP.getInt();
+		}
 		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec", String.valueOf(timeOutValue)));
 		ACHelper.getInstance().setServerLocked(true);
 		final List<Player> onlinePlayers = Utils.getOnlinePlayers();
@@ -69,8 +70,9 @@ public class StopServer extends ServerCommand {
 
 					@Override
 					public void run() {
-						for (final Player p : onlinePlayers)
+						for (final Player p : onlinePlayers) {
 							p.kickPlayer(Utils.I18n("serverStop"));
+						}
 						Bukkit.getServer().shutdown();
 					}
 				}, Utils.secInTick * timeOutValue);

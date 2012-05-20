@@ -39,10 +39,12 @@ public class PermChild {
 	 * @param permDefault
 	 */
 	public PermChild(final String permName, final PermissionDefault permDefault) {
-		if (permName == null)
+		if (permName == null) {
 			return;
-		if (ACPluginManager.getServer() == null)
+		}
+		if (ACPluginManager.getServer() == null) {
 			return;
+		}
 		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null) {
 			bukkitPerm.setDefault(permDefault);
 			return;
@@ -92,18 +94,23 @@ public class PermChild {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof PermChild))
+		}
+		if (!(obj instanceof PermChild)) {
 			return false;
+		}
 		final PermChild other = (PermChild) obj;
 		if (bukkitPerm == null) {
-			if (other.bukkitPerm != null)
+			if (other.bukkitPerm != null) {
 				return false;
-		} else if (!bukkitPerm.equals(other.bukkitPerm))
+			}
+		} else if (!bukkitPerm.equals(other.bukkitPerm)) {
 			return false;
+		}
 		return true;
 	}
 

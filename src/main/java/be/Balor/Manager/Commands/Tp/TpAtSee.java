@@ -63,8 +63,9 @@ public class TpAtSee extends TeleportCommand {
 			} else {
 				acp.setPower(Type.TP_AT_SEE);
 				Utils.sI18n(player, "tpSeeEnabled");
-				if (timeOut == null)
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

@@ -80,9 +80,10 @@ public abstract class EggType<T> implements Serializable {
 	 */
 	protected boolean checkPermission(final Player player) throws DontHaveThePermissionException {
 		final Permission perm = EggPermissionManager.INSTANCE.getPermission(this);
-		if (!PermissionManager.hasPerm(player, perm, false))
+		if (!PermissionManager.hasPerm(player, perm, false)) {
 			throw new DontHaveThePermissionException(
 					Utils.I18n("errorNotPerm", "p", perm.getName()));
+		}
 		return true;
 	}
 
@@ -112,8 +113,9 @@ public abstract class EggType<T> implements Serializable {
 	 */
 	public static EggType<?> createEggType(final Player player, final CommandArgs args)
 			throws ProcessingArgsException, DontHaveThePermissionException, NullPointerException {
-		if (!args.hasFlag('E'))
+		if (!args.hasFlag('E')) {
 			throw new ParameterMissingException('E', LocaleHelper.EGG_PARAM.getLocale());
+		}
 		EggType<?> eggType;
 		final String className = args.getValueFlag('E');
 		try {
@@ -171,18 +173,23 @@ public abstract class EggType<T> implements Serializable {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof EggType))
+		}
+		if (!(obj instanceof EggType)) {
 			return false;
+		}
 		final EggType other = (EggType) obj;
 		if (value == null) {
-			if (other.value != null)
+			if (other.value != null) {
 				return false;
-		} else if (!value.equals(other.value))
+			}
+		} else if (!value.equals(other.value)) {
 			return false;
+		}
 		return true;
 	}
 

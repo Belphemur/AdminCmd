@@ -52,8 +52,9 @@ public class Repair extends ItemCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		if (Utils.isPlayer(sender)) {
 			final Player player = Utils.getUser(sender, args, permNode);
-			if (player == null)
+			if (player == null) {
 				return;
+			}
 			final ItemStack item = player.getItemInHand();
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
@@ -65,11 +66,13 @@ public class Repair extends ItemCommand {
 					}
 				});
 				replace.put("player", Utils.getPlayerName(player));
-				if (!sender.equals(player))
+				if (!sender.equals(player)) {
 					Utils.sI18n(sender, "repair", replace);
+				}
 				Utils.sI18n(player, "repairTarget", replace);
-			} else
+			} else {
 				Utils.sI18n(sender, "errorRepair", replace);
+			}
 		}
 	}
 

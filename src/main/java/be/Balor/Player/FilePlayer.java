@@ -108,8 +108,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	public static void scheduleAsyncSave() {
 		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
-				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId))
+				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
 			return;
+		}
 		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
 		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
 				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
@@ -121,8 +122,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	public static void stopSavingTask() {
 		if (!ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
-				&& !ACPluginManager.getScheduler().isQueued(ioStackTaskId))
+				&& !ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
 			return;
+		}
 		ACPluginManager.getScheduler().cancelTask(ioStackTaskId);
 	}
 
@@ -159,11 +161,13 @@ public class FilePlayer extends ACPlayer {
 		final ConfigurationSection homeSection = homes.getConfigurationSection(home);
 		if (homeSection == null) {
 			final String found = Str.matchString(homes.getKeys(false), home);
-			if (found == null)
+			if (found == null) {
 				return null;
+			}
 			return getLocation(homes.getConfigurationSection(found));
-		} else
+		} else {
 			return getLocation(homeSection);
+		}
 	}
 
 	/*
@@ -214,8 +218,9 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public void setLastLocation(final Location loc) {
-		if (loc == null)
+		if (loc == null) {
 			return;
+		}
 		lastLoc.set("world", loc.getWorld().getName());
 		lastLoc.set("x", loc.getX());
 		lastLoc.set("y", loc.getY());
@@ -240,12 +245,13 @@ public class FilePlayer extends ACPlayer {
 
 	private Location getLocation(final ConfigurationSection node) throws WorldNotLoaded {
 		final World w = ACPluginManager.getServer().getWorld(node.getString("world"));
-		if (w != null)
+		if (w != null) {
 			return new Location(w, node.getDouble("x", 0), node.getDouble("y", 0), node.getDouble(
 					"z", 0), Float.parseFloat(node.getString("yaw")), Float.parseFloat(node
 					.getString("pitch")));
-		else
+		} else {
 			throw new WorldNotLoaded(node.getString("world"));
+		}
 	}
 
 	/*
@@ -341,8 +347,9 @@ public class FilePlayer extends ACPlayer {
 	public void removeAllSuperPower() {
 		for (final String power : powers.getKeys(false)) {
 			final Type matched = Type.matchType(power);
-			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER))
+			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER)) {
 				powers.set(power, null);
+			}
 		}
 		writeFile();
 
@@ -403,8 +410,9 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<String, String> getPowers() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
-		for (final Entry<String, Object> entry : powers.getValues(false).entrySet())
+		for (final Entry<String, Object> entry : powers.getValues(false).entrySet()) {
 			result.put(entry.getKey(), entry.getValue().toString());
+		}
 		return result;
 	}
 

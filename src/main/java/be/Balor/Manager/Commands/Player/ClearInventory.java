@@ -55,13 +55,15 @@ public class ClearInventory extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		final Player target = Utils.getUserParam(sender, args, permNode);
-		if (target == null)
+		if (target == null) {
 			return;
+		}
 		if (args.length == 1) {
 			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
 					args.getString(0));
-			if (mc.isNull())
+			if (mc.isNull()) {
 				return;
+			}
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 
 				@Override
@@ -77,8 +79,9 @@ public class ClearInventory extends PlayerCommand {
 
 			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
 					args.getString(0));
-			if (mc.isNull())
+			if (mc.isNull()) {
 				return;
+			}
 			stacks = target.getInventory().all(mc.getMaterial());
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 

@@ -275,8 +275,9 @@ public class Str extends OutputStream {
 			final String replace) {
 		final String[] newArray = new String[from + array.length - to - (replace == null ? 1 : 0)];
 		System.arraycopy(array, 0, newArray, 0, from);
-		if (replace != null)
+		if (replace != null) {
 			newArray[from] = replace;
+		}
 		System.arraycopy(array, to + (replace == null ? 0 : 1), newArray, from
 				+ (replace == null ? 0 : 1), array.length - to - 1);
 		return newArray;
@@ -284,10 +285,12 @@ public class Str extends OutputStream {
 
 	public static String[] removeCaseOfArray(final String[] array, final int index) {
 		final String[] newArray = new String[array.length - 1];
-		for (int i = 0; i < index; i++)
+		for (int i = 0; i < index; i++) {
 			newArray[i] = array[i];
-		for (int j = index + 1; j < array.length; j++)
+		}
+		for (int j = index + 1; j < array.length; j++) {
 			newArray[j - 1] = array[j];
+		}
 		return newArray;
 	}
 
@@ -308,8 +311,9 @@ public class Str extends OutputStream {
 	 */
 	public static String matchString(final Collection<String> container, final String search) {
 		String found = null;
-		if (search == null)
+		if (search == null) {
 			return found;
+		}
 		final String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
 		for (final String str : container) {
@@ -319,8 +323,9 @@ public class Str extends OutputStream {
 					found = str;
 					delta = curDelta;
 				}
-				if (curDelta == 0)
+				if (curDelta == 0) {
 					break;
+				}
 			}
 		}
 		return found;

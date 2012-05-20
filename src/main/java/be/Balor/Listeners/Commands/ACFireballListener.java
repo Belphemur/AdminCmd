@@ -35,13 +35,15 @@ public class ACFireballListener implements Listener {
 	@EventHandler
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
-				&& (event.getAction() != Action.LEFT_CLICK_AIR))
+				&& (event.getAction() != Action.LEFT_CLICK_AIR)) {
 			return;
+		}
 		final Player player = event.getPlayer();
 		final ACPlayer acPlayer = ACPlayer.getPlayer(player);
 		Float power;
-		if ((power = acPlayer.getPower(Type.FIREBALL).getFloat(0)) == 0)
+		if ((power = acPlayer.getPower(Type.FIREBALL).getFloat(0)) == 0) {
 			return;
+		}
 		final Location playerLoc = player.getLocation();
 		final Location fbLocation = playerLoc.add(
 				playerLoc.getDirection().normalize().multiply(2)

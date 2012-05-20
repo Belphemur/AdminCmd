@@ -127,16 +127,21 @@ public class ACHelper {
 				"Cobblestone" });
 		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
 		listOfPossibleRepair = new LinkedList<Integer>();
-		for (int i = 256; i <= 259; i++)
+		for (int i = 256; i <= 259; i++) {
 			listOfPossibleRepair.add(i);
-		for (int i = 267; i <= 279; i++)
+		}
+		for (int i = 267; i <= 279; i++) {
 			listOfPossibleRepair.add(i);
-		for (int i = 283; i <= 286; i++)
+		}
+		for (int i = 283; i <= 286; i++) {
 			listOfPossibleRepair.add(i);
-		for (int i = 290; i <= 294; i++)
+		}
+		for (int i = 290; i <= 294; i++) {
 			listOfPossibleRepair.add(i);
-		for (int i = 298; i <= 317; i++)
+		}
+		for (int i = 298; i <= 317; i++) {
 			listOfPossibleRepair.add(i);
+		}
 		listOfPossibleRepair.add(359);
 		listOfPossibleRepair.add(Material.BOW.getId());
 		listOfPossibleRepair.add(Material.FISHING_ROD.getId());
@@ -174,16 +179,18 @@ public class ACHelper {
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
 			List<Integer> list = config.getIntList("BlackListedBlocks", null);
-			if (list == null)
+			if (list == null) {
 				list = new ArrayList<Integer>();
+			}
 			list.add(m.getMaterial().getId());
 			config.set("BlackListedBlocks", list);
 			try {
 				config.save();
 			} catch (final IOException e) {
 			}
-			if (blockBlacklist == null)
+			if (blockBlacklist == null) {
 				blockBlacklist = new ArrayList<Integer>();
+			}
 			blockBlacklist.add(m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
@@ -255,9 +262,9 @@ public class ACHelper {
 	 * @param blocks
 	 */
 	public void addInUndoQueue(final String player, final Stack<BlockRemanence> blocks) {
-		if (undoQueue.containsKey(player))
+		if (undoQueue.containsKey(player)) {
 			undoQueue.get(player).push(blocks);
-		else {
+		} else {
 			final Stack<Stack<BlockRemanence>> blockQueue = new Stack<Stack<BlockRemanence>>();
 			blockQueue.push(blocks);
 			undoQueue.put(player, blockQueue);
@@ -318,8 +325,9 @@ public class ACHelper {
 
 	public boolean alias(final CommandSender sender, final CommandArgs args) {
 		final MaterialContainer m = checkMaterial(sender, args.getString(1));
-		if (m.isNull())
+		if (m.isNull()) {
 			return true;
+		}
 		final String alias = args.getString(0);
 		this.alias.put(alias, m);
 		this.fManager.addAlias(alias, m);
@@ -348,8 +356,9 @@ public class ACHelper {
 						timeLeft / Utils.secondInMillis * Utils.secInTick);
 				return true;
 			}
-		} else
+		} else {
 			return true;
+		}
 	}
 
 	/**
@@ -382,13 +391,15 @@ public class ACHelper {
 		if (spawnFile.exists()) {
 			final ExtendedConfiguration spawn = ExtendedConfiguration.loadConfiguration(spawnFile);
 			final ConfigurationSection spawnPoints = spawn.getConfigurationSection("spawn");
-			if (spawnPoints != null)
-				for (final String key : spawnPoints.getKeys(false))
+			if (spawnPoints != null) {
+				for (final String key : spawnPoints.getKeys(false)) {
 					try {
 						ACWorld.getWorld(key).setSpawn(
 								fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
 					} catch (final WorldNotLoaded e) {
 					}
+				}
+			}
 
 			spawnFile.delete();
 			spawnFile.getParentFile().delete();
@@ -466,15 +477,17 @@ public class ACHelper {
 			value = Short.parseShort(name);
 		} catch (final Exception e) {
 			// try to find the name then
-			for (short i = 0; i < materialsColors.get(mat).length; ++i)
+			for (short i = 0; i < materialsColors.get(mat).length; ++i) {
 				if (materialsColors.get(mat)[i].equalsIgnoreCase(name)) {
 					value = i;
 					break;
 				}
+			}
 		}
 		// is the value OK?
-		if (value < 0 || value >= materialsColors.get(mat).length)
+		if (value < 0 || value >= materialsColors.get(mat).length) {
 			return -1;
+		}
 		return value;
 	}
 
@@ -534,19 +547,22 @@ public class ACHelper {
 		}
 
 		for (final String kit : list) {
-			if (PermissionManager.hasPerm(sender, "admincmd.kit." + kit, false))
+			if (PermissionManager.hasPerm(sender, "admincmd.kit." + kit, false)) {
 				kitList += kit + ", ";
+			}
 		}
 		if (!kitList.equals("")) {
-			if (kitList.endsWith(", "))
+			if (kitList.endsWith(", ")) {
 				kitList = kitList.substring(0, kitList.lastIndexOf(","));
+			}
 		}
 		return kitList.trim();
 	}
 
 	public int getLimit(final CommandSender sender, final String type) {
-		if (sender instanceof ConsoleCommandSender)
+		if (sender instanceof ConsoleCommandSender) {
 			return Integer.MAX_VALUE;
+		}
 		return getLimit((Player) sender, type, type);
 	}
 
@@ -560,10 +576,12 @@ public class ACHelper {
 		Integer limit = null;
 		final String toParse = PermissionManager.getPermissionLimit(player, type);
 		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
-		if (limit == null || limit == -1)
+		if (limit == null || limit == -1) {
 			limit = pluginConfig.getInt(defaultLvl, 0);
-		if (limit == 0 && !type.equals("immunityLvl"))
+		}
+		if (limit == 0 && !type.equals("immunityLvl")) {
 			limit = Integer.MAX_VALUE;
+		}
 		return limit;
 	}
 
@@ -600,17 +618,19 @@ public class ACHelper {
 			final String worldName = player.getWorld().getName();
 			if (groups.isEmpty()) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
-				if (loc == null)
+				if (loc == null) {
 					loc = player.getWorld().getSpawnLocation();
+				}
 				player.teleport(loc);
 				Utils.sI18n(sender, "spawn");
 				return;
 			}
 			for (final String groupName : groups) {
 				try {
-					if (PermissionManager.isInGroup(groupName, player))
+					if (PermissionManager.isInGroup(groupName, player)) {
 						loc = ACWorld.getWorld(worldName)
 								.getWarp("spawn" + groupName.toLowerCase()).loc;
+					}
 					break;
 				} catch (final NoPermissionsPlugin e) {
 					loc = ACWorld.getWorld(worldName).getSpawn();
@@ -618,8 +638,9 @@ public class ACHelper {
 				}
 			}
 
-			if (loc == null)
+			if (loc == null) {
 				loc = player.getWorld().getSpawnLocation();
+			}
 			player.teleport(loc);
 			Utils.sI18n(sender, "spawn");
 		}
@@ -652,10 +673,12 @@ public class ACHelper {
 	}
 
 	public boolean inBlackListItem(final CommandSender sender, final MaterialContainer mat) {
-		if (PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false))
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false)) {
 			return false;
-		if (!itemBlacklist.contains(mat))
+		}
+		if (!itemBlacklist.contains(mat)) {
 			return false;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("material", mat.display());
 		Utils.sI18n(sender, "inBlacklistItem", replace);
@@ -678,13 +701,14 @@ public class ACHelper {
 					.scheduleAsyncRepeatingTask(this.coreInstance,
 							AFKWorker.getInstance().getAfkChecker(), 0,
 							pluginConfig.getInt("statutCheckInSec", 20) * 20);
-			if (pluginConfig.getBoolean("autoKickAfkPlayer", false))
+			if (pluginConfig.getBoolean("autoKickAfkPlayer", false)) {
 				this.coreInstance
 						.getServer()
 						.getScheduler()
 						.scheduleAsyncRepeatingTask(this.coreInstance,
 								AFKWorker.getInstance().getKickChecker(), 0,
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
+			}
 		}
 		InvisibleWorker.createInstance().setMaxRange(
 				pluginConfig.getInt("invisibleRangeInBlock", 512));
@@ -705,16 +729,19 @@ public class ACHelper {
 				pluginConfig.save();
 			} catch (final IOException e) {
 			}
-		} else
+		} else {
 			pluginStarted = System.currentTimeMillis();
-		for (final Player p : coreInstance.getServer().getOnlinePlayers())
+		}
+		for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
 			PlayerManager.getInstance().setOnline(p);
+		}
 		// TODO : Don't forget to check if the admin use a MySQL database or the
 		// file system
 		FilePlayer.scheduleAsyncSave();
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
-			for (final Player p : coreInstance.getServer().getOnlinePlayers())
+			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
 				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
+			}
 		}
 		for (final World w : coreInstance.getServer().getWorlds()) {
 			final ACWorld world = ACWorld.getWorld(w.getName());
@@ -764,9 +791,9 @@ public class ACHelper {
 			short value = -1;
 			final Material m = ((Player) sender).getItemInHand().getType();
 
-			if (materialsColors.containsKey(m))
+			if (materialsColors.containsKey(m)) {
 				value = getColor(color, m);
-			else {
+			} else {
 				sender.sendMessage(ChatColor.RED + "You must hold a colorable material!");
 				return true;
 			}
@@ -802,8 +829,9 @@ public class ACHelper {
 		kits = fManager.loadKits();
 		final Map<String, Ban> bans = dataManager.loadBan();
 		for (final Entry<String, Ban> ban : bans.entrySet()) {
-			if (checkBan(ban.getValue()))
+			if (checkBan(ban.getValue())) {
 				bannedPlayers.put(ban.getKey(), ban.getValue());
+			}
 		}
 
 		if (pluginConfig.getBoolean("verboseLog", true)) {
@@ -821,8 +849,9 @@ public class ACHelper {
 	// returns all members of the color name array concatenated with commas
 	private String printColors(final Material mat) {
 		String output = "";
-		for (int i = 0; i < materialsColors.get(mat).length; ++i)
+		for (int i = 0; i < materialsColors.get(mat).length; ++i) {
 			output += materialsColors.get(mat)[i] + ", ";
+		}
 		return output;
 	}
 
@@ -849,8 +878,9 @@ public class ACHelper {
 		bannedPlayers.clear();
 
 		loadInfos();
-		for (final Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers())
+		for (final Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 			InvisibleWorker.getInstance().reappear(p);
+		}
 		InvisibleWorker.killInstance();
 		AFKWorker.killInstance();
 		CommandManager.killInstance();
@@ -860,12 +890,15 @@ public class ACHelper {
 		CommandManager.getInstance().registerACPlugin(coreInstance);
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias(coreInstance);
-		if (ConfigEnum.H_ALLPLUGIN.getBoolean())
-			for (final Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins())
+		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
+			for (final Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins()) {
 				HelpLister.getInstance().addPlugin(plugin);
+			}
+		}
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			for (final Player p : Utils.getOnlinePlayers())
+			for (final Player p : Utils.getOnlinePlayers()) {
 				AFKWorker.getInstance().updateTimeStamp(p);
+			}
 		}
 	}
 
@@ -890,8 +923,9 @@ public class ACHelper {
 				}
 			}
 			if (itemBlacklist != null && !itemBlacklist.isEmpty()
-					&& itemBlacklist.contains(m.getMaterial().getId()))
+					&& itemBlacklist.contains(m.getMaterial().getId())) {
 				itemBlacklist.remove(m.getMaterial().getId());
+			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
 			Utils.sI18n(sender, "rmBlacklistBlock", replace);
@@ -931,8 +965,9 @@ public class ACHelper {
 	}
 
 	private boolean removeBlackListedItem(final CommandSender sender, final MaterialContainer mat) {
-		if (mat.isNull())
+		if (mat.isNull()) {
 			return false;
+		}
 		if (!itemBlacklist.remove(mat)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("item", mat.display());
@@ -973,14 +1008,16 @@ public class ACHelper {
 	 * @param key
 	 */
 	public void removeReplyPlayer(final Player key) {
-		if (key == null)
+		if (key == null) {
 			return;
+		}
 		playersForReplyMessage.remove(key);
 	}
 
 	public void removeSpy(final Player p) {
-		if (p == null)
+		if (p == null) {
 			return;
+		}
 		spyPlayers.remove(p);
 	}
 
@@ -1054,8 +1091,9 @@ public class ACHelper {
 			pluginConfig.add("gliding.YvelocityCheckToGlide", -0.2F);
 			pluginConfig.add("gliding.newYvelocity", -0.5F);
 		}
-		if (pluginConfig.get("respawnAtSpawnPoint") != null)
+		if (pluginConfig.get("respawnAtSpawnPoint") != null) {
 			pluginConfig.remove("respawnAtSpawnPoint");
+		}
 		try {
 			pluginConfig.save();
 		} catch (final IOException e) {
@@ -1132,10 +1170,12 @@ public class ACHelper {
 		if (world == null) {
 			final String worldName = player.getWorld().getName();
 			loc = ACWorld.getWorld(worldName).getSpawn();
-		} else
+		} else {
 			loc = world.getSpawn();
-		if (loc == null)
+		}
+		if (loc == null) {
 			loc = player.getWorld().getSpawnLocation();
+		}
 		Utils.teleportWithChunkCheck(player, loc);
 	}
 
@@ -1153,20 +1193,23 @@ public class ACHelper {
 	}
 
 	public int undoLastModification(final String player) throws EmptyStackException {
-		if (!undoQueue.containsKey(player))
+		if (!undoQueue.containsKey(player)) {
 			throw new EmptyStackException();
+		}
 		final Stack<Stack<BlockRemanence>> blockQueue = undoQueue.get(player);
-		if (blockQueue.isEmpty())
+		if (blockQueue.isEmpty()) {
 			throw new EmptyStackException();
+		}
 		final Stack<BlockRemanence> undo = blockQueue.pop();
 		final Stack<BlockRemanence> undoCache = new Stack<BlockRemanence>();
 		int i = 0;
 		try {
 			while (!undo.isEmpty()) {
 				undoCache.push(undo.pop());
-				if (undoCache.size() == Utils.MAX_BLOCKS)
+				if (undoCache.size() == Utils.MAX_BLOCKS) {
 					ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
 							new UndoBlockTask(undoCache), 1);
+				}
 				i++;
 			}
 

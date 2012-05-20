@@ -95,8 +95,9 @@ public class FileManager implements DataManager {
 	 * @return the instance
 	 */
 	public static FileManager getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new FileManager();
+		}
 		return instance;
 	}
 
@@ -128,10 +129,11 @@ public class FileManager implements DataManager {
 			// TODO: Better debug code here
 			ACLogger.Log(Level.SEVERE, e.getMessage(), e);
 		}
-		if (result.length() == 0)
+		if (result.length() == 0) {
 			return null;
-		else
+		} else {
 			return result.toString().trim();
+		}
 	}
 
 	/**
@@ -155,8 +157,9 @@ public class FileManager implements DataManager {
 			dir.mkdir();
 			spawn.renameTo(new File(dir, "spawnLocations.yml.old"));
 		}
-		if (homeDir.exists())
+		if (homeDir.exists()) {
 			homeDir.renameTo(new File(this.pathFile, "userData"));
+		}
 	}
 
 	/**
@@ -168,8 +171,9 @@ public class FileManager implements DataManager {
 	 */
 	public ExtendedConfiguration getYml(final String filename, final String directory) {
 		if (lastLoadedConf != null && lastDirectory.equals(directory == null ? "" : directory)
-				&& lastFilename.equals(filename))
+				&& lastFilename.equals(filename)) {
 			return lastLoadedConf;
+		}
 		final ExtendedConfiguration config = ExtendedConfiguration.loadConfiguration(getFile(
 				directory, filename + ".yml"));
 		lastLoadedConf = config;
@@ -193,8 +197,9 @@ public class FileManager implements DataManager {
 
 	public File getFile(final String directory, final String filename, final boolean create) {
 		if (lastFile != null && lastDirectory.equals(directory == null ? "" : directory)
-				&& lastFilename.equals(filename))
+				&& lastFilename.equals(filename)) {
 			return lastFile;
+		}
 		File file = null;
 		if (directory != null) {
 			final File directoryFile = new File(this.pathFile, directory);
@@ -202,8 +207,9 @@ public class FileManager implements DataManager {
 				directoryFile.mkdir();
 			}
 			file = new File(directoryFile, filename);
-		} else
+		} else {
 			file = new File(pathFile, filename);
+		}
 
 		if (!file.exists() && create) {
 
@@ -317,8 +323,9 @@ public class FileManager implements DataManager {
 				directoryFile.mkdirs();
 			}
 			file = new File(directoryFile, filename);
-		} else
+		} else {
 			file = new File(pathFile, filename);
+		}
 		if (file.exists() && replace) {
 			BufferedReader reader = null;
 
@@ -333,8 +340,9 @@ public class FileManager implements DataManager {
 					reader.close();
 					file.delete();
 					DebugLog.INSTANCE.info("Delete file : " + file);
-				} else
+				} else {
 					return file;
+				}
 			} catch (final IOException e) {
 				file.delete();
 			}
@@ -445,19 +453,21 @@ public class FileManager implements DataManager {
 		final ExtendedConfiguration conf = getYml(filename, directory);
 		if (conf.get(property + ".world") == null) {
 			final Location loc = parseLocation(property, conf);
-			if (loc != null)
+			if (loc != null) {
 				writeLocation(loc, property, filename, directory);
+			}
 			return loc;
 		} else {
 			final World w = ACPluginManager.getServer().getWorld(
 					conf.getString(property + ".world"));
-			if (w != null)
+			if (w != null) {
 				return new Location(w, conf.getDouble(property + ".x", 0), conf.getDouble(property
 						+ ".y", 0), conf.getDouble(property + ".z", 0), Float.parseFloat(conf
 						.getString(property + ".yaw")), Float.parseFloat(conf.getString(property
 						+ ".pitch")));
-			else
+			} else {
 				throw new WorldNotLoaded(conf.getString(property + ".world"));
+			}
 
 		}
 	}
@@ -490,10 +500,11 @@ public class FileManager implements DataManager {
 	public Set<String> getKeys(final String info, final String filename, final String directory) {
 		final Set<String> keys = getYml(filename, directory).getConfigurationSection(info).getKeys(
 				false);
-		if (keys == null)
+		if (keys == null) {
 			return new HashSet<String>();
-		else
+		} else {
 			return keys;
+		}
 	}
 
 	/**
@@ -505,25 +516,29 @@ public class FileManager implements DataManager {
 	 */
 	private Location parseLocation(final String property, final ExtendedConfiguration conf) {
 		final String toParse = conf.getString(property, null);
-		if (toParse == null)
+		if (toParse == null) {
 			return null;
-		if (toParse.isEmpty())
+		}
+		if (toParse.isEmpty()) {
 			return null;
+		}
 		final Double coords[] = new Double[3];
 		final Float direction[] = new Float[2];
 		final String[] infos = toParse.split(";");
-		for (int i = 0; i < coords.length; i++)
+		for (int i = 0; i < coords.length; i++) {
 			try {
 				coords[i] = Double.parseDouble(infos[i]);
 			} catch (final NumberFormatException e) {
 				return null;
 			}
-		for (int i = 3; i < infos.length - 1; i++)
+		}
+		for (int i = 3; i < infos.length - 1; i++) {
 			try {
 				direction[i - 3] = Float.parseFloat(infos[i]);
 			} catch (final NumberFormatException e) {
 				return null;
 			}
+		}
 		return new Location(ACPluginManager.getServer().getWorld(infos[5]), coords[0], coords[1],
 				coords[2], direction[0], direction[1]);
 	}
@@ -542,8 +557,9 @@ public class FileManager implements DataManager {
 		final ExtendedConfiguration conf = getYml(filename, directory);
 		final ConfigurationSection confSection = conf.getConfigurationSection(type.toString());
 		if (confSection != null) {
-			for (final String key : confSection.getKeys(false))
+			for (final String key : confSection.getKeys(false)) {
 				result.put(key, confSection.get(key));
+			}
 		}
 		return result;
 	}
@@ -554,8 +570,9 @@ public class FileManager implements DataManager {
 		final ExtendedConfiguration conf = getYml("banned");
 		if (conf.get("bans") != null) {
 			final ConfigurationSection node = conf.getConfigurationSection("bans");
-			for (final String key : node.getKeys(false))
+			for (final String key : node.getKeys(false)) {
 				result.put(key, (BannedPlayer) node.get(key));
+			}
 
 		}
 		if (conf.get("IPs") != null) {
@@ -586,8 +603,9 @@ public class FileManager implements DataManager {
 			}
 		}
 		for (final String ip : ipBanned) {
-			if (result.containsKey(ip))
+			if (result.containsKey(ip)) {
 				continue;
+			}
 			result.put(ip, new BannedIP(ip, "Import from banned-ip.txt"));
 		}
 	}
@@ -625,28 +643,32 @@ public class FileManager implements DataManager {
 				continue;
 			}
 
-			if (kitItems != null)
+			if (kitItems != null) {
 				for (final String item : kitItems.getKeys(false)) {
 					try {
 						final MaterialContainer m = Utils.checkMaterial(item);
 						m.setAmount(kitItems.getInt(item, 1));
-						if (!m.isNull())
+						if (!m.isNull()) {
 							items.add(m);
+						}
 					} catch (final InvalidInputException e) {
 						DebugLog.INSTANCE.log(Level.WARNING, "Problem with kit : " + item, e);
 					}
 				}
+			}
 			delay = kitNode.getInt("delay", 0);
 
 			if (armorItems != null) {
 				for (final ArmorPart part : ArmorPart.values()) {
 					final String partId = armorItems.getString(part.toString());
-					if (partId == null)
+					if (partId == null) {
 						continue;
+					}
 					try {
 						final MaterialContainer m = Utils.checkMaterial(partId);
-						if (!m.isNull())
+						if (!m.isNull()) {
 							armor.put(part, m);
+						}
 					} catch (final InvalidInputException e) {
 						DebugLog.INSTANCE.log(Level.WARNING, "Problem with kit : " + partId, e);
 					}
@@ -654,14 +676,16 @@ public class FileManager implements DataManager {
 				result.put(kitName, new ArmoredKitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items),
 						new EnumMap<Type.ArmorPart, MaterialContainer>(armor)));
-			} else
+			} else {
 				result.put(kitName, new KitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items)));
+			}
 
-			if (parents != null)
+			if (parents != null) {
 				kitParents.put(kitName, parents);
-			else
+			} else {
 				ACLogger.info(kitName + " has no parents");
+			}
 
 			items.clear();
 			armor.clear();
@@ -670,8 +694,9 @@ public class FileManager implements DataManager {
 			KitInstance kit = result.get(entry.getKey());
 			for (final String parent : entry.getValue()) {
 				final KitInstance parentKit = result.get(parent);
-				if (parentKit == null)
+				if (parentKit == null) {
 					continue;
+				}
 				if (parentKit instanceof ArmoredKitInstance && !(kit instanceof ArmoredKitInstance)) {
 					kit = new ArmoredKitInstance(kit);
 					result.put(kit.getName(), kit);

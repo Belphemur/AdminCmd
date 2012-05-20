@@ -27,7 +27,7 @@ public class KitInstance {
 
 	/**
 	 * Get ItemStacks for given kit
-	 *
+	 * 
 	 * @param kit
 	 * @return
 	 */
@@ -37,22 +37,23 @@ public class KitInstance {
 			// return Utils.oddItem.getItemGroup(kit, -1));
 		} catch (final Throwable e) {
 		}
-		for (final MaterialContainer mc : items)
+		for (final MaterialContainer mc : items) {
 			result.add(mc.getItemStack());
+		}
 		return result;
 	}
 
 	/**
 	 * Adding a parent to the kit
-	 *
+	 * 
 	 * @param parent
 	 */
 	public void addParent(final KitInstance parent) {
 		for (final MaterialContainer mc : parent.items) {
 			final int index = items.indexOf(mc);
-			if (index == -1)
+			if (index == -1) {
 				items.add(mc);
-			else {
+			} else {
 				final MaterialContainer mat = items.get(index);
 				mat.setAmount(mat.getAmount() + mc.getAmount());
 			}
@@ -72,7 +73,7 @@ public class KitInstance {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -51,8 +51,9 @@ public class WebBrowsingTask implements Runnable {
 		try {
 
 			DebugLog.INSTANCE.info("WebPage opened");
-			for (final Entry<String, String> entry : browser.openPage().entrySet())
+			for (final Entry<String, String> entry : browser.openPage().entrySet()) {
 				DebugLog.INSTANCE.info(entry.getKey() + " -> " + entry.getValue());
+			}
 		} catch (final Exception e) {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with the web browser", e);
 		}

@@ -63,8 +63,9 @@ public class WarpList extends WarpCommand {
 					return;
 				}
 				wp = WorldManager.getInstance().getAllWarpList();
-			} else
+			} else {
 				wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
+			}
 			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
 			for (final String name : wp) {
 				msg += name + ", ";
@@ -74,8 +75,9 @@ public class WarpList extends WarpCommand {
 				}
 			}
 			if (!msg.equals("")) {
-				if (msg.endsWith(", "))
+				if (msg.endsWith(", ")) {
 					msg = msg.substring(0, msg.lastIndexOf(","));
+				}
 				sender.sendMessage(msg);
 			}
 		}

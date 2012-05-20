@@ -48,8 +48,9 @@ public class PermParent extends PermChild {
 	 * @return the PermParent (this)
 	 */
 	public PermParent addChild(final PermChild perm) throws IllegalArgumentException {
-		if (perm.equals(this))
+		if (perm.equals(this)) {
 			throw new IllegalArgumentException("The Child can't be the parent.");
+		}
 		perm.bukkitPerm.addParent(bukkitPerm, true);
 		return this;
 	}
@@ -85,18 +86,23 @@ public class PermParent extends PermChild {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (!(obj instanceof PermParent))
+		}
+		if (!(obj instanceof PermParent)) {
 			return false;
+		}
 		final PermParent other = (PermParent) obj;
 		if (compareName == null) {
-			if (other.compareName != null)
+			if (other.compareName != null) {
 				return false;
-		} else if (!compareName.equals(other.compareName))
+			}
+		} else if (!compareName.equals(other.compareName)) {
 			return false;
+		}
 		return true;
 	}
 

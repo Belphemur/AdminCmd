@@ -41,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class KillMob extends MobCommand {
 
@@ -55,7 +55,7 @@ public class KillMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -64,31 +64,34 @@ public class KillMob extends MobCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String type = "all";
-		if (args.length >= 1)
+		if (args.length >= 1) {
 			type = args.getString(0);
+		}
 		replace.put("type", type);
 		final String worldString = args.getValueFlag('w');
 		final List<World> worldList = new ArrayList<World>();
 
 		if (Utils.isPlayer(sender, false)) {
 			World w = ((Player) sender).getWorld();
-			if (worldString != null)
+			if (worldString != null) {
 				w = getWorld(worldString);
+			}
 			worldList.add(w);
 			replace.put("worlds", w.getName());
 			Utils.sI18n(sender, "killMob", replace);
 		} else {
-			if (worldString != null)
+			if (worldString != null) {
 				worldList.add(getWorld(worldString));
-			else {
+			} else {
 				String worlds = "";
 				for (final World world : sender.getServer().getWorlds()) {
 					worldList.add(world);
 					worlds += world.getName() + ", ";
 				}
 				if (!worlds.equals("")) {
-					if (worlds.endsWith(", "))
+					if (worlds.endsWith(", ")) {
 						worlds = worlds.substring(0, worlds.lastIndexOf(","));
+					}
 					replace.put("worlds", worlds);
 					Utils.sI18n(sender, "killMob", replace);
 				}
@@ -108,14 +111,15 @@ public class KillMob extends MobCommand {
 
 	private World getWorld(final String name) {
 		final World w = Bukkit.getWorld(name);
-		if (w == null)
+		if (w == null) {
 			throw new WorldNotLoaded("The World " + name + " is not loaded");
+		}
 		return w;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -126,7 +130,7 @@ public class KillMob extends MobCommand {
 	private void killMobs(final List<World> worlds, final String type, final CommandSender sender) {
 		int mobKilled = 0;
 		if (type.equalsIgnoreCase("all")) {
-			for (final World w : worlds)
+			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
 					if (m instanceof HumanEntity) {
 						continue;
@@ -136,8 +140,9 @@ public class KillMob extends MobCommand {
 					mobKilled++;
 
 				}
+			}
 		} else if (type.equalsIgnoreCase("monsters")) {
-			for (final World w : worlds)
+			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
 					if (m instanceof EntityMonster) {
 						final Entity entity = ((CraftLivingEntity) m).getHandle();
@@ -145,8 +150,9 @@ public class KillMob extends MobCommand {
 						mobKilled++;
 					}
 				}
+			}
 		} else if (type.equalsIgnoreCase("animals")) {
-			for (final World w : worlds)
+			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
 					if (m instanceof EntityAnimal) {
 						final Entity entity = ((CraftLivingEntity) m).getHandle();
@@ -154,6 +160,7 @@ public class KillMob extends MobCommand {
 						mobKilled++;
 					}
 				}
+			}
 		} else {
 			EntityType ct = null;
 			ct = EntityType.fromName(type);
@@ -163,12 +170,13 @@ public class KillMob extends MobCommand {
 				Utils.sI18n(sender, "errorMob", replace);
 				return;
 			}
-			for (final World w : worlds)
+			for (final World w : worlds) {
 				for (final org.bukkit.entity.Entity m : w.getEntitiesByClasses(ct.getEntityClass())) {
 					final Entity entity = ((CraftEntity) m).getHandle();
 					entity.die();
 					mobKilled++;
 				}
+			}
 		}
 		Utils.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
 	}

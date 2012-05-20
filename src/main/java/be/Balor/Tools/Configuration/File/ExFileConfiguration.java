@@ -65,18 +65,23 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof ExFileConfiguration))
+		}
+		if (!(obj instanceof ExFileConfiguration)) {
 			return false;
+		}
 		final ExFileConfiguration other = (ExFileConfiguration) obj;
 		if (file == null) {
-			if (other.file != null)
+			if (other.file != null) {
 				return false;
-		} else if (!file.equals(other.file))
+			}
+		} else if (!file.equals(other.file)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -238,15 +243,18 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 *             Thrown when file is null.
 	 */
 	public void save(final File file) throws IOException {
-		if (corrupted)
+		if (corrupted) {
 			return;
+		}
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}
-		if (file.getParentFile() != null && !file.getParentFile().exists())
+		if (file.getParentFile() != null && !file.getParentFile().exists()) {
 			Files.createParentDirs(file);
-		if (!file.exists())
+		}
+		if (!file.exists()) {
 			file.createNewFile();
+		}
 
 		final String data = saveToString();
 

@@ -62,8 +62,9 @@ public class SpyMsg extends PlayerCommand {
 				acp.setPower(Type.SPYMSG);
 				ACHelper.getInstance().addSpy((Player) sender);
 				Utils.sI18n(sender, "spymsgEnabled");
-				if (timeOut == null)
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

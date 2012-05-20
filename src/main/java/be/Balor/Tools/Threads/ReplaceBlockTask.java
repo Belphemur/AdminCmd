@@ -37,8 +37,9 @@ public class ReplaceBlockTask implements Runnable {
 	 */
 	public ReplaceBlockTask(final Stack<BlockRemanence> blocks) {
 		super();
-		while (!blocks.empty())
+		while (!blocks.empty()) {
 			this.blocks.add(blocks.pop());
+		}
 	}
 
 	/*
@@ -48,7 +49,8 @@ public class ReplaceBlockTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		while (!blocks.empty())
+		while (!blocks.empty()) {
 			blocks.pop().setBlockType(0);
+		}
 	}
 }

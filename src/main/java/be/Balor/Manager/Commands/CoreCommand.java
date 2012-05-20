@@ -126,10 +126,11 @@ public abstract class CoreCommand {
 	 * @return
 	 */
 	public boolean permissionCheck(final CommandSender sender) {
-		if (permNode != null && !permNode.isEmpty())
+		if (permNode != null && !permNode.isEmpty()) {
 			return PermissionManager.hasPerm(sender, bukkitPerm);
-		else
+		} else {
 			return true;
+		}
 	}
 
 	/**
@@ -155,14 +156,16 @@ public abstract class CoreCommand {
 				final PermChild child = new PermChild(permNode, bukkitDefault);
 				permParent.addChild(child);
 				bukkitPerm = child.getBukkitPerm();
-				if (other)
+				if (other) {
 					permParent.addChild(new PermChild(permNode + ".other", bukkitDefault));
+				}
 
 				return;
 			}
 			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
-			if (other)
+			if (other) {
 				plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
+			}
 		}
 	}
 
@@ -183,12 +186,14 @@ public abstract class CoreCommand {
 	 * @throws CommandAlreadyExist
 	 */
 	public void initializeCommand() throws CommandNotFound, CommandAlreadyExist {
-		if ((pluginCommand = plugin.getCommand(cmdName)) == null)
+		if ((pluginCommand = plugin.getCommand(cmdName)) == null) {
 			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
+		}
 
-		if (pluginCommand.getAliases().isEmpty())
+		if (pluginCommand.getAliases().isEmpty()) {
 			throw new CommandAlreadyExist(cmdName
 					+ " has all his alias already registered. Command deactivated");
+		}
 	}
 
 	/**
@@ -241,37 +246,50 @@ public abstract class CoreCommand {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof CoreCommand))
+		}
+		if (!(obj instanceof CoreCommand)) {
 			return false;
+		}
 		final CoreCommand other = (CoreCommand) obj;
-		if (bukkitDefault != other.bukkitDefault)
+		if (bukkitDefault != other.bukkitDefault) {
 			return false;
+		}
 		if (cmdName == null) {
-			if (other.cmdName != null)
+			if (other.cmdName != null) {
 				return false;
-		} else if (!cmdName.equals(other.cmdName))
+			}
+		} else if (!cmdName.equals(other.cmdName)) {
 			return false;
-		if (this.other != other.other)
+		}
+		if (this.other != other.other) {
 			return false;
+		}
 		if (permNode == null) {
-			if (other.permNode != null)
+			if (other.permNode != null) {
 				return false;
-		} else if (!permNode.equals(other.permNode))
+			}
+		} else if (!permNode.equals(other.permNode)) {
 			return false;
+		}
 		if (permParent == null) {
-			if (other.permParent != null)
+			if (other.permParent != null) {
 				return false;
-		} else if (!permParent.equals(other.permParent))
+			}
+		} else if (!permParent.equals(other.permParent)) {
 			return false;
+		}
 		if (plugin == null) {
-			if (other.plugin != null)
+			if (other.plugin != null) {
 				return false;
-		} else if (!plugin.equals(other.plugin))
+			}
+		} else if (!plugin.equals(other.plugin)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -49,10 +49,11 @@ public class RepeatCmd extends ServerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		try {
 
-			if (Utils.isPlayer(sender, false))
+			if (Utils.isPlayer(sender, false)) {
 				ACPlayer.getPlayer(((Player) sender).getName()).executeLastCmd();
-			else
+			} else {
 				ACPlayer.getPlayer("serverConsole").executeLastCmd();
+			}
 			Utils.sI18n(sender, "reExec");
 		} catch (final NullPointerException e) {
 			Utils.sI18n(sender, "noRepeat");

@@ -51,11 +51,13 @@ public class Quit extends PlayerCommand {
 			final Player quitting = (Player) sender;
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			String reason = "";
-			if (args == null || args.length == 0)
+			if (args == null || args.length == 0) {
 				reason = "disconnect:quitting";
-			else
-				for (int i = 0; i < args.length; i++)
+			} else {
+				for (int i = 0; i < args.length; i++) {
 					reason += args.getString(i) + " ";
+				}
+			}
 			replace.put("reason", reason);
 			replace.put("player", Utils.getPlayerName(quitting));
 			ACPlayer.getPlayer(quitting).setPower(Type.KICKED);

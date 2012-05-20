@@ -90,9 +90,9 @@ public class Kit extends ItemCommand {
 			final int kitDelay = kit.getDelay();
 			final long kitLastUse = actarget.getLastKitUse(kit.getName());
 			if (kitDelay == -1) {
-				if (kitLastUse == 0)
+				if (kitLastUse == 0) {
 					actarget.updateLastKitUse(kit.getName());
-				else {
+				} else {
 					Utils.sI18n(sender, "kitOnce", "kit", kit.getName());
 					return;
 				}
@@ -128,8 +128,9 @@ public class Kit extends ItemCommand {
 				replace.remove("sender");
 				replace.put("target", Utils.getPlayerName(target));
 				Utils.sI18n(sender, "kitCommandSender", replace);
-			} else
+			} else {
 				Utils.sI18n(sender, "kitYourself", replace);
+			}
 		} else {
 			replace.put("sender", "Server Admin");
 			Utils.sI18n(target, "kitOtherPlayer", replace);
@@ -146,8 +147,9 @@ public class Kit extends ItemCommand {
 
 			}
 		});
-		if (kit instanceof ArmoredKitInstance)
+		if (kit instanceof ArmoredKitInstance) {
 			((ArmoredKitInstance) kit).setPlayerArmorParts(target);
+		}
 
 	}
 

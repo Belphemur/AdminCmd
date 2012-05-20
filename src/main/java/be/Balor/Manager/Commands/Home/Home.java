@@ -51,8 +51,9 @@ public class Home extends HomeCommand {
 			final Player player = (Player) sender;
 			be.Balor.Tools.Home home = null;
 			home = Utils.getHome(sender, args.getString(0));
-			if (home == null)
+			if (home == null) {
 				return;
+			}
 			final Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
 			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);

@@ -56,9 +56,10 @@ public class PlayerLocation extends PlayerCommand {
 				target = (Player) sender;
 				loc = target.getLocation();
 				msg = "You are";
-			} else
+			} else {
 				return;
-		} else
+			}
+		} else {
 			try {
 				target = sender.getServer().getPlayer(args.getString(0));
 				loc = target.getLocation();
@@ -67,12 +68,14 @@ public class PlayerLocation extends PlayerCommand {
 				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;
 			}
+		}
 		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
 				+ " H");
 		final String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
 		double yaw = ((loc.getYaw() + 22.5) % 360);
-		if (yaw < 0)
+		if (yaw < 0) {
 			yaw += 360;
+		}
 		sender.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]
 				+ ChatColor.WHITE + " in World " + ChatColor.AQUA + target.getWorld().getName());
 

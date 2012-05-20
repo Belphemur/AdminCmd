@@ -35,7 +35,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class TpAll extends TeleportCommand {
 
@@ -44,28 +44,32 @@ public class TpAll extends TeleportCommand {
 		permNode = "admincmd.tp.all";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@SuppressWarnings("unused")
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		final Player[] players = ACPluginManager.getServer().getOnlinePlayers();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String teleporter;
-		if (Utils.isPlayer(sender, false))
+		if (Utils.isPlayer(sender, false)) {
 			teleporter = Utils.getPlayerName((Player) sender);
-		else
+		} else {
 			teleporter = "Admin";
+		}
 		ACWorld world;
 		if (args.length == 2) {
 			world = ACWorld.getWorld(args.getString(0));
 		} else if (args.length >= 4) {
 			world = ACWorld.getWorld(args.getString(0));
 		} else {
-			if (sender instanceof Player)
+			if (sender instanceof Player) {
 				world = ACWorld.getWorld(((Player) sender).getWorld().getName());
-			else {
+			} else {
 				replace.put("arg", "world");
 				replace.put("cmdName", "/tpall");
 				LocaleHelper.MISSING_ARG.sendLocale(sender, replace);
@@ -79,16 +83,17 @@ public class TpAll extends TeleportCommand {
 		}
 		Location to = null;
 		if (args.hasFlag('s')) {
-			//TP to Spawn point
+			// TP to Spawn point
 			to = world.getSpawn();
 			replace.put("sender", teleporter);
 			replace.put("loc", "the Spawn of " + world.getName());
 			doTeleportAndMessage(players, replace, to);
 		} else if (args.hasFlag('w')) {
-			//TP to Warp point
+			// TP to Warp point
 			final String value = args.getValueFlag('w');
-			if (value == null)
+			if (value == null) {
 				return;
+			}
 			final Warp w = world.getWarp(value);
 			if (w == null) {
 				replace.clear();
@@ -101,7 +106,7 @@ public class TpAll extends TeleportCommand {
 			replace.put("loc", w.name);
 			doTeleportAndMessage(players, replace, to);
 		} else if (args.hasFlag('p')) {
-			//TP to Player
+			// TP to Player
 			final String value = args.getValueFlag('p');
 			final ACPlayer target = ACPlayer.getPlayer(value);
 			if (target == null) {
@@ -115,7 +120,7 @@ public class TpAll extends TeleportCommand {
 			replace.put("loc", Utils.getPlayerName(target.getHandler()));
 			doTeleportAndMessage(players, replace, to);
 		} else if (args.hasFlag('l')) {
-			//TP to Location
+			// TP to Location
 			String x, y, z;
 			if (args.length == 3) {
 				x = args.getString(0);
@@ -132,7 +137,7 @@ public class TpAll extends TeleportCommand {
 				LocaleHelper.MISSING_ARG.sendLocale(sender, replace);
 				return;
 			}
-			Double locX = null, locY = null, locZ = null;
+			final Double locX = null, locY = null, locZ = null;
 			parseNumber(sender, x, locX);
 			parseNumber(sender, y, locY);
 			parseNumber(sender, z, locZ);
@@ -141,12 +146,12 @@ public class TpAll extends TeleportCommand {
 			}
 			to = new Location(world.getHandler(), locX, locY, locZ);
 			replace.put("sender", teleporter);
-			replace.put("loc", "Location: x=" + x + ", y=" + y + ", z=" + z );
+			replace.put("loc", "Location: x=" + x + ", y=" + y + ", z=" + z);
 			doTeleportAndMessage(players, replace, to);
 		} else {
-			//TP to sender if he is a player
+			// TP to sender if he is a player
 			if (Utils.isPlayer(sender, false)) {
-				Player p = (Player) sender;
+				final Player p = (Player) sender;
 				to = p.getLocation();
 				replace.put("sender", teleporter);
 				replace.put("loc", Utils.getPlayerName((Player) sender));
@@ -160,38 +165,49 @@ public class TpAll extends TeleportCommand {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
 	}
 
-	private void doTeleportAndMessage(final Player[] players, final HashMap<String, String> replace, Location loc) {
-		if (loc == null)
+	private void doTeleportAndMessage(final Player[] players,
+			final HashMap<String, String> replace, final Location loc) {
+		if (loc == null) {
 			return;
-		if (players == null)
+		}
+		if (players == null) {
 			return;
-		for (Player p : players) {
-			if (p == null)
+		}
+		for (final Player p : players) {
+			if (p == null) {
 				continue;
+			}
 			p.teleport(loc);
 			replace.clear();
 			LocaleHelper.TP_ALL.sendLocale(p, replace);
 		}
 	}
 
-	private void doTeleportAndMessage(final Player sender, final Player[] players, final HashMap<String, String> replace, Location loc) {
-		if (loc == null)
+	private void doTeleportAndMessage(final Player sender, final Player[] players,
+			final HashMap<String, String> replace, final Location loc) {
+		if (loc == null) {
 			return;
-		if (players == null)
+		}
+		if (players == null) {
 			return;
-		for (Player p : players) {
-			if (p == null)
+		}
+		for (final Player p : players) {
+			if (p == null) {
 				continue;
-			if (p == sender)
+			}
+			if (p == sender) {
 				continue;
+			}
 			p.teleport(loc);
 			replace.clear();
 			LocaleHelper.TP_ALL.sendLocale(p, replace);
@@ -201,7 +217,7 @@ public class TpAll extends TeleportCommand {
 	private void parseNumber(final CommandSender sender, final String toParse, Double parsed) {
 		try {
 			parsed = (double) Integer.parseInt(toParse);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			Utils.sI18n(sender, "NaN", "number", toParse);
 			return;
 		}

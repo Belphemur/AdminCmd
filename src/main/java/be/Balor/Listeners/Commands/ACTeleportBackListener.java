@@ -37,8 +37,9 @@ public class ACTeleportBackListener implements Listener {
 			DebugLog.INSTANCE.info("Custom teleport event used");
 			return;
 		}
-		if (event.getCause() != TeleportCause.PLUGIN)
+		if (event.getCause() != TeleportCause.PLUGIN) {
 			return;
+		}
 		ACPlayer.getPlayer(event.getPlayer()).setLastLocation(event.getFrom());
 	}
 }

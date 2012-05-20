@@ -32,19 +32,24 @@ public class ACColorSignListener implements Listener {
 	public void onSignChange(final SignChangeEvent event) {
 		String parsed = null;
 		String line;
-		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]"))
+		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]")) {
 			return;
+		}
 		for (int i = 0; i < 4; i++) {
 			line = event.getLine(i);
-			if (line == null || (line != null && line.isEmpty()))
+			if (line == null || (line != null && line.isEmpty())) {
 				continue;
-			if (!Utils.regexColorParser.matcher(line).find())
+			}
+			if (!Utils.regexColorParser.matcher(line).find()) {
 				continue;
-			if (!PermissionManager.hasPerm(event.getPlayer(), "admincmd.coloredsign.create"))
+			}
+			if (!PermissionManager.hasPerm(event.getPlayer(), "admincmd.coloredsign.create")) {
 				return;
+			}
 			parsed = Utils.colorParser(line);
-			if (parsed != null)
+			if (parsed != null) {
 				event.setLine(i, parsed);
+			}
 
 		}
 	}

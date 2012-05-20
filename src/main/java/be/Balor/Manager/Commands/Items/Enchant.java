@@ -41,8 +41,9 @@ import com.google.common.base.Joiner;
 public class Enchant extends ItemCommand {
 	private final static List<String> enchantList = new ArrayList<String>();
 	static {
-		for (final Enchantment enchant : Enchantment.values())
+		for (final Enchantment enchant : Enchantment.values()) {
 			enchantList.add(enchant.getName());
+		}
 	}
 
 	/**
@@ -101,8 +102,9 @@ public class Enchant extends ItemCommand {
 		replace.put("enchant", enchantment.getName());
 		replace.put("lvl", String.valueOf(lvl));
 		LocaleHelper.SUCCESS_ENCHANT.sendLocale(sender, replace);
-		if (!sender.equals(target))
+		if (!sender.equals(target)) {
 			LocaleHelper.SUCCESS_ENCHANT.sendLocale(target, replace);
+		}
 	}
 
 	/*

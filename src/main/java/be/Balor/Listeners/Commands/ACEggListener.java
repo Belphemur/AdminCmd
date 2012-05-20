@@ -33,8 +33,9 @@ public class ACEggListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	void eggThrown(final PlayerEggThrowEvent event) {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (!player.hasPower(Type.EGG))
+		if (!player.hasPower(Type.EGG)) {
 			return;
+		}
 		final EggType<?> eggPower = player.getPower(Type.EGG).getEggType();
 		eggPower.onEvent(event);
 	}

@@ -47,11 +47,13 @@ public class UnBanTask implements Runnable {
 	@Override
 	public void run() {
 		ACHelper.getInstance().unBanPlayer(toUnBan);
-		if (!bcast)
+		if (!bcast) {
 			return;
+		}
 		final String unbanMsg = Utils.I18n("unban", "player", toUnBan.getPlayer());
-		if (unbanMsg != null)
+		if (unbanMsg != null) {
 			Utils.broadcastMessage(unbanMsg);
+		}
 	}
 
 }

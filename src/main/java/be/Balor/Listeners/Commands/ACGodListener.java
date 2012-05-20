@@ -33,13 +33,15 @@ import be.Balor.Tools.Type;
 public class ACGodListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof Player))
+		if (!(event.getEntity() instanceof Player)) {
 			return;
+		}
 		final Player player = (Player) event.getEntity();
 		if (ACPlayer.getPlayer(player).hasPower(Type.GOD)) {
 			if (event.getCause().equals(DamageCause.FIRE)
-					|| event.getCause().equals(DamageCause.FIRE_TICK))
+					|| event.getCause().equals(DamageCause.FIRE_TICK)) {
 				player.setFireTicks(0);
+			}
 			event.setCancelled(true);
 			event.setDamage(0);
 		}

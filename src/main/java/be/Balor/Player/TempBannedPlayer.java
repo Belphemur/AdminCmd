@@ -41,7 +41,9 @@ public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 		endBan = new Date(System.currentTimeMillis() + time);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.TempBan#getEndBan()
 	 */
 	@Override
@@ -49,7 +51,9 @@ public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 		return endBan;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.TempBan#setEndBan(java.sql.Date)
 	 */
 	@Override
@@ -57,7 +61,9 @@ public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 		this.endBan = endBan;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Player.TempBan#timeLeft()
 	 */
 	@Override
@@ -85,18 +91,23 @@ public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (!(obj instanceof TempBannedPlayer))
+		}
+		if (!(obj instanceof TempBannedPlayer)) {
 			return false;
+		}
 		final TempBannedPlayer other = (TempBannedPlayer) obj;
 		if (endBan == null) {
-			if (other.endBan != null)
+			if (other.endBan != null) {
 				return false;
-		} else if (!endBan.equals(other.endBan))
+			}
+		} else if (!endBan.equals(other.endBan)) {
 			return false;
+		}
 		return true;
 	}
 

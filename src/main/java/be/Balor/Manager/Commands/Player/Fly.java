@@ -68,10 +68,11 @@ public class Fly extends PlayerCommand {
 			return;
 		}
 		if (player != null) {
-			if (args.hasFlag('o'))
+			if (args.hasFlag('o')) {
 				setFly(sender, player, timeOut, Type.FLY_OLD, FlyMode.OLD, args);
-			else
+			} else {
 				setFly(sender, player, timeOut, Type.FLY, FlyMode.NEW, args);
+			}
 		}
 	}
 
@@ -92,22 +93,25 @@ public class Fly extends PlayerCommand {
 		final ACPlayer acp = ACPlayer.getPlayer(player);
 		final String powerValueString = args.getValueFlag('p');
 		float powerFloat = 0;
-		if (powerValueString != null)
+		if (powerValueString != null) {
 			try {
 				powerFloat = Float.parseFloat(powerValueString);
 			} catch (final NumberFormatException e) {
 			}
+		}
 		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat()
 				: powerFloat;
 		if (acp.hasPower(power)) {
 			acp.removePower(power);
 			player.setAllowFlight(false);
-			if (c == FlyMode.NEW)
+			if (c == FlyMode.NEW) {
 				player.setFlying(false);
+			}
 			player.setFallDistance(0.0F);
 			Utils.sI18n(player, "flyDisabled");
-			if (!player.equals(sender))
+			if (!player.equals(sender)) {
 				Utils.sI18n(sender, "flyDisabledTarget", replace);
+			}
 		} else {
 			player.setAllowFlight(true);
 			if (c == FlyMode.NEW) {
@@ -118,10 +122,12 @@ public class Fly extends PlayerCommand {
 			}
 			player.setFallDistance(1F);
 			Utils.sI18n(player, "flyEnabled");
-			if (!player.equals(sender))
+			if (!player.equals(sender)) {
 				Utils.sI18n(sender, "flyEnabledTarget", replace);
-			if (timeOut == null)
+			}
+			if (timeOut == null) {
 				return;
+			}
 			int timeOutValue;
 			try {
 				timeOutValue = Integer.parseInt(timeOut);

@@ -56,14 +56,16 @@ final public class InvisibleWorker {
 	 * @return the instance
 	 */
 	public static InvisibleWorker getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new InvisibleWorker();
+		}
 		return instance;
 	}
 
 	public static InvisibleWorker createInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new InvisibleWorker();
+		}
 		return instance;
 	}
 
@@ -97,8 +99,9 @@ final public class InvisibleWorker {
 	 */
 	public LinkedList<Player> getAllInvisiblePlayers() {
 		final LinkedList<Player> result = new LinkedList<Player>();
-		for (final String p : invisblesWithTaskIds.keySet())
+		for (final String p : invisblesWithTaskIds.keySet()) {
 			result.add(ACPluginManager.getServer().getPlayerExact(p));
+		}
 		return result;
 	}
 
@@ -153,8 +156,9 @@ final public class InvisibleWorker {
 							new Runnable() {
 								@Override
 								public void run() {
-									for (final Player p : Utils.getOnlinePlayers())
+									for (final Player p : Utils.getOnlinePlayers()) {
 										uninvisible(toReappear, p);
+									}
 								}
 							});
 			if (ConfigEnum.FQINVISIBLE.getBoolean()) {
@@ -178,13 +182,16 @@ final public class InvisibleWorker {
 		if (hideFrom == null) {
 			return;
 		}
-		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false))
+		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false)) {
 			return;
-		if (hide.getName().equals(hideFrom.getName()))
+		}
+		if (hide.getName().equals(hideFrom.getName())) {
 			return;
+		}
 
-		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange)
+		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange) {
 			return;
+		}
 		final EntityPlayer craftFrom = ((CraftPlayer) hideFrom).getHandle();
 		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(hide.getEntityId()));
 
@@ -197,14 +204,17 @@ final public class InvisibleWorker {
 	 * @param unHideFrom
 	 */
 	private void uninvisible(final Player unHide, final Player unHideFrom) {
-		if (unHide.equals(unHideFrom))
+		if (unHide.equals(unHideFrom)) {
 			return;
+		}
 
-		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange)
+		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange) {
 			return;
+		}
 
-		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false))
+		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false)) {
 			return;
+		}
 		final EntityPlayer craftFrom = ((CraftPlayer) unHideFrom).getHandle();
 		final EntityPlayer UnHidePlayer = ((CraftPlayer) unHide).getHandle();
 		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));

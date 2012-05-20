@@ -39,8 +39,9 @@ public class ACSuperBlacklistListener implements Listener {
 	public void onDrop(final PlayerDropItemEvent event) {
 		final Player player = event.getPlayer();
 		final ItemStack itemStack = event.getItemDrop().getItemStack();
-		if (!ACHelper.getInstance().inBlackListItem(player, itemStack))
+		if (!ACHelper.getInstance().inBlackListItem(player, itemStack)) {
 			return;
+		}
 		event.setCancelled(true);
 	}
 
@@ -53,27 +54,31 @@ public class ACSuperBlacklistListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onUse(final PlayerInteractEvent event) {
 		final Action action = event.getAction();
-		if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK)
+		if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
 			return;
+		}
 		final Player player = event.getPlayer();
 		final ItemStack item = player.getItemInHand();
-		if (!ACHelper.getInstance().inBlackListItem(player, item))
+		if (!ACHelper.getInstance().inBlackListItem(player, item)) {
 			return;
+		}
 		event.setCancelled(true);
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPickup(final PlayerPickupItemEvent event) {
 		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(),
-				event.getItem().getItemStack()))
+				event.getItem().getItemStack())) {
 			return;
+		}
 		event.setCancelled(true);
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void specialBucket(final PlayerBucketEmptyEvent event) {
-		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItemStack()))
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItemStack())) {
 			return;
+		}
 		event.setCancelled(true);
 	}
 }

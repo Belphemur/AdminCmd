@@ -50,8 +50,9 @@ public class Reply extends PlayerCommand {
 
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		if (!Utils.isPlayer(sender, true))
+		if (!Utils.isPlayer(sender, true)) {
 			return;
+		}
 
 		if (Utils.isPlayer(sender, false)
 				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
@@ -78,12 +79,14 @@ public class Reply extends PlayerCommand {
 			senderName = pSender.getName();
 			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
 
-			for (final String arg : args)
+			for (final String arg : args) {
 				msg += arg + " ";
+			}
 			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);
-			if (parsed == null)
+			if (parsed == null) {
 				parsed = msg;
+			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Utils.getPlayerName(buddy));
@@ -91,17 +94,22 @@ public class Reply extends PlayerCommand {
 			ACHelper.getInstance().setReplyPlayer(buddy, pSender);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
-			} else
+			} else {
 				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
+			}
 			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
-			for (final Player p : ACHelper.getInstance().getSpyPlayers())
+			for (final Player p : ACHelper.getInstance().getSpyPlayers()) {
 				if (p != null && !p.getName().equals(senderName)
-						&& !p.getName().equals(buddy.getName()))
+						&& !p.getName().equals(buddy.getName())) {
 					p.sendMessage(spyMsg);
-			if (ConfigEnum.LOG_PM.getBoolean())
+				}
+			}
+			if (ConfigEnum.LOG_PM.getBoolean()) {
 				ACLogger.info(spyMsg);
-		} else
+			}
+		} else {
 			Utils.sI18n(sender, "noPlayerToReply");
+		}
 	}
 
 	/*

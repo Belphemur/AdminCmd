@@ -24,7 +24,7 @@ import org.bukkit.configuration.MemoryConfiguration;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ExMemoryConfiguration extends ExMemorySection implements Configuration {
 	protected Configuration defaults;
@@ -39,7 +39,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
 	/**
 	 * Creates an empty {@link MemoryConfiguration} using the specified
 	 * {@link Configuration} as a source for all default values.
-	 *
+	 * 
 	 * @param defaults
 	 *            Default value provider
 	 * @throws IllegalArgumentException

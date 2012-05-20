@@ -52,9 +52,9 @@ public class SimpleLocation {
 
 	public Location getLocation() throws WorldNotLoaded {
 		final World w = ACPluginManager.getServer().getWorld(world);
-		if (w == null)
+		if (w == null) {
 			throw new WorldNotLoaded(world);
-		else {
+		} else {
 			return new Location(w, x, y, z, yaw, pitch);
 		}
 	}
@@ -184,28 +184,38 @@ public class SimpleLocation {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof SimpleLocation))
+		}
+		if (!(obj instanceof SimpleLocation)) {
 			return false;
+		}
 		final SimpleLocation other = (SimpleLocation) obj;
-		if (Float.floatToIntBits(pitch) != Float.floatToIntBits(other.pitch))
+		if (Float.floatToIntBits(pitch) != Float.floatToIntBits(other.pitch)) {
 			return false;
+		}
 		if (world == null) {
-			if (other.world != null)
+			if (other.world != null) {
 				return false;
-		} else if (!world.equals(other.world))
+			}
+		} else if (!world.equals(other.world)) {
 			return false;
-		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+		}
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x)) {
 			return false;
-		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+		}
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y)) {
 			return false;
-		if (Float.floatToIntBits(yaw) != Float.floatToIntBits(other.yaw))
+		}
+		if (Float.floatToIntBits(yaw) != Float.floatToIntBits(other.yaw)) {
 			return false;
-		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
+		}
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z)) {
 			return false;
+		}
 		return true;
 	}
 

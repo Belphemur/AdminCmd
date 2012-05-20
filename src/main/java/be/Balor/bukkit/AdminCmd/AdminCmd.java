@@ -184,8 +184,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	@Override
 	public void onDisable() {
 		final PluginDescriptionFile pdfFile = this.getDescription();
-		if (webBrowser != null)
+		if (webBrowser != null) {
 			webBrowser.shutdownService();
+		}
 		getServer().getScheduler().cancelTasks(this);
 		FilePlayer.forceSaveList();
 		for (final ACPlayer p : PlayerManager.getInstance().getOnlineACPlayers()) {
@@ -297,10 +298,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACEntityListener(), this);
 		pm.registerEvents(new ACPlayerListener(), this);
 		pm.registerEvents(new ACWeatherListener(), this);
-		if (ConfigEnum.COLSIGN.getBoolean())
+		if (ConfigEnum.COLSIGN.getBoolean()) {
 			pm.registerEvents(new ACColorSignListener(), this);
-		if (ConfigEnum.RESET_POWERS.getBoolean())
+		}
+		if (ConfigEnum.RESET_POWERS.getBoolean()) {
 			pm.registerEvents(new ACResetPowerListener(), this);
+		}
 
 	}
 
@@ -315,10 +318,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(More.class);
 		CommandManager.getInstance().registerCommand(PlayerList.class);
 		CommandManager.getInstance().registerCommand(PlayerLocation.class);
-		if (CommandManager.getInstance().registerCommand(God.class))
+		if (CommandManager.getInstance().registerCommand(God.class)) {
 			pm.registerEvents(new ACGodListener(), this);
-		if (CommandManager.getInstance().registerCommand(Thor.class))
+		}
+		if (CommandManager.getInstance().registerCommand(Thor.class)) {
 			pm.registerEvents(new ACThorListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(Kill.class);
 		CommandManager.getInstance().registerCommand(Heal.class);
 		CommandManager.getInstance().registerCommand(ClearSky.class);
@@ -344,13 +349,15 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
 		CommandManager.getInstance().registerCommand(TpLoc.class);
 		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
-		if (CommandManager.getInstance().registerCommand(Vulcan.class))
+		if (CommandManager.getInstance().registerCommand(Vulcan.class)) {
 			pm.registerEvents(new ACVulcanListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(Drop.class);
 		CommandManager.getInstance().registerCommand(Invisible.class);
 		CommandManager.getInstance().registerCommand(SpyMsg.class);
-		if (CommandManager.getInstance().registerCommand(Fireball.class))
+		if (CommandManager.getInstance().registerCommand(Fireball.class)) {
 			pm.registerEvents(new ACFireballListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(Home.class);
 		CommandManager.getInstance().registerCommand(SetHome.class);
 		CommandManager.getInstance().registerCommand(AddWarp.class);
@@ -358,23 +365,29 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(TpToWarp.class);
 		CommandManager.getInstance().registerCommand(WarpList.class);
 		CommandManager.getInstance().registerCommand(Ip.class);
-		if (CommandManager.getInstance().registerCommand(BanPlayer.class))
+		if (CommandManager.getInstance().registerCommand(BanPlayer.class)) {
 			banCommands = true;
-		if (CommandManager.getInstance().registerCommand(UnBan.class))
+		}
+		if (CommandManager.getInstance().registerCommand(UnBan.class)) {
 			banCommands = true;
-		if (banCommands)
+		}
+		if (banCommands) {
 			pm.registerEvents(new ACBanListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(KillMob.class);
-		if (CommandManager.getInstance().registerCommand(Fly.class))
+		if (CommandManager.getInstance().registerCommand(Fly.class)) {
 			pm.registerEvents(new ACFlyListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(DeleteHome.class);
 		CommandManager.getInstance().registerCommand(ListHomes.class);
-		if (CommandManager.getInstance().registerCommand(Freeze.class))
+		if (CommandManager.getInstance().registerCommand(Freeze.class)) {
 			pm.registerEvents(new ACFrozenPlayerListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(Mute.class);
 		CommandManager.getInstance().registerCommand(UnMute.class);
-		if (CommandManager.getInstance().registerCommand(MobLimit.class))
+		if (CommandManager.getInstance().registerCommand(MobLimit.class)) {
 			pm.registerEvents(new ACCreatureSpawnListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(NoPickup.class);
 		CommandManager.getInstance().registerCommand(FreezeWeather.class);
 		CommandManager.getInstance().registerCommand(MOTD.class);
@@ -391,24 +404,29 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Afk.class);
 		CommandManager.getInstance().registerCommand(MoreAll.class);
 		CommandManager.getInstance().registerCommand(TpToggle.class);
-		if (CommandManager.getInstance().registerCommand(TpAtSee.class))
+		if (CommandManager.getInstance().registerCommand(TpAtSee.class)) {
 			pm.registerEvents(new ACTpAtSeeListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(Uptime.class);
 		CommandManager.getInstance().registerCommand(Kit.class);
 		CommandManager.getInstance().registerCommand(Version.class);
 		CommandManager.getInstance().registerCommand(ListValues.class);
-		if (CommandManager.getInstance().registerCommand(LastLocation.class))
+		if (CommandManager.getInstance().registerCommand(LastLocation.class)) {
 			pm.registerEvents(new ACTeleportBackListener(), this);
-		if (CommandManager.getInstance().registerCommand(SuperBreaker.class))
+		}
+		if (CommandManager.getInstance().registerCommand(SuperBreaker.class)) {
 			pm.registerEvents(new ACSuperBreaker(), this);
+		}
 		CommandManager.getInstance().registerCommand(Help.class);
 		CommandManager.getInstance().registerCommand(Played.class);
-		if (CommandManager.getInstance().registerCommand(LockServer.class))
+		if (CommandManager.getInstance().registerCommand(LockServer.class)) {
 			lockCommand = true;
+		}
 		CommandManager.getInstance().registerCommand(Set.class);
 		CommandManager.getInstance().registerCommand(Rules.class);
-		if (CommandManager.getInstance().registerCommand(Eternal.class))
+		if (CommandManager.getInstance().registerCommand(Eternal.class)) {
 			pm.registerEvents(new ACFoodListener(), this);
+		}
 		CommandManager.getInstance().registerCommand(FakeQuit.class);
 		CommandManager.getInstance().registerCommand(Feed.class);
 		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
@@ -419,12 +437,15 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(Presentation.class);
 		CommandManager.getInstance().registerCommand(Experience.class);
 		CommandManager.getInstance().registerCommand(Broadcast.class);
-		if (CommandManager.getInstance().registerCommand(StopServer.class))
+		if (CommandManager.getInstance().registerCommand(StopServer.class)) {
 			lockCommand = true;
-		if (lockCommand)
+		}
+		if (lockCommand) {
 			pm.registerEvents(new ACLockedServerListener(), this);
-		if (CommandManager.getInstance().registerCommand(NoDrop.class))
+		}
+		if (CommandManager.getInstance().registerCommand(NoDrop.class)) {
 			pm.registerEvents(new ACNoDropListener(), this);
+		}
 		if (CommandManager.getInstance().registerCommand(EggSpawner.class)) {
 			EggTypeClassLoader.addPackage(this, "be.Balor.Tools.Egg.Types");
 			pm.registerEvents(new ACEggListener(), this);
@@ -438,8 +459,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		CommandManager.getInstance().registerCommand(BanList.class);
 		CommandManager.getInstance().registerCommand(Search.class);
 		CommandManager.getInstance().registerCommand(Withdraw.class);
-		if (ConfigEnum.SUPER_BLACKLIST.getBoolean())
+		if (ConfigEnum.SUPER_BLACKLIST.getBoolean()) {
 			pm.registerEvents(new ACSuperBlacklistListener(), this);
+		}
 	}
 
 	@Override
@@ -478,8 +500,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
-		for (final World w : this.getServer().getWorlds())
+		for (final World w : this.getServer().getWorlds()) {
 			worldTp.addChild("admincmd.tp.world." + w.getName().replace(' ', '_'));
+		}
 		majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));
 		for (int i = 0; i <= 150; i++) {
 			new PermChild("admincmd.maxHomeByUser." + i, PermissionDefault.FALSE);

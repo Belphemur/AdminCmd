@@ -53,9 +53,11 @@ public class MoreAll extends ItemCommand {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					for (final ItemStack is : p.getInventory().getContents())
-						if (is != null && !ACHelper.getInstance().inBlackListItem(p, is))
+					for (final ItemStack is : p.getInventory().getContents()) {
+						if (is != null && !ACHelper.getInstance().inBlackListItem(p, is)) {
 							is.setAmount(is.getMaxStackSize());
+						}
+					}
 				}
 			});
 			Utils.sI18n(sender, "moreAll");

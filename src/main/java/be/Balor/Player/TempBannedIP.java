@@ -87,18 +87,23 @@ public class TempBannedIP extends BannedIP implements ITempBan {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (!(obj instanceof TempBannedIP))
+		}
+		if (!(obj instanceof TempBannedIP)) {
 			return false;
+		}
 		final TempBannedIP other = (TempBannedIP) obj;
 		if (endBan == null) {
-			if (other.endBan != null)
+			if (other.endBan != null) {
 				return false;
-		} else if (!endBan.equals(other.endBan))
+			}
+		} else if (!endBan.equals(other.endBan)) {
 			return false;
+		}
 		return true;
 	}
 

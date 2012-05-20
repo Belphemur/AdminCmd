@@ -59,13 +59,15 @@ public class PermissionsEx extends SuperPermissions {
 	 */
 	@Override
 	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
 			return true;
-		if (PEX.has((Player) player, perm))
+		}
+		if (PEX.has((Player) player, perm)) {
 			return true;
-		else {
-			if (errorMsg)
+		} else {
+			if (errorMsg) {
 				Utils.sI18n(player, "errorNotPerm", "p", perm);
+			}
 			return false;
 		}
 	}
@@ -79,13 +81,15 @@ public class PermissionsEx extends SuperPermissions {
 	 */
 	@Override
 	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
 			return true;
-		if (PEX.has((Player) player, perm.getName()))
+		}
+		if (PEX.has((Player) player, perm.getName())) {
 			return true;
-		else {
-			if (errorMsg)
+		} else {
+			if (errorMsg) {
 				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
+			}
 			return false;
 		}
 	}
@@ -101,11 +105,14 @@ public class PermissionsEx extends SuperPermissions {
 	public boolean isInGroup(final String groupName, final Player player) {
 		PermissionGroup[] groups;
 		groups = PEX.getUser(player).getGroups(player.getWorld().getName());
-		if (groups.length == 0)
+		if (groups.length == 0) {
 			return false;
-		for (final PermissionGroup group : groups)
-			if (group.getName().equalsIgnoreCase(groupName))
+		}
+		for (final PermissionGroup group : groups) {
+			if (group.getName().equalsIgnoreCase(groupName)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -125,8 +132,9 @@ public class PermissionsEx extends SuperPermissions {
 			Player player = null;
 			for (final PermissionUser user : users) {
 				player = ACPlayer.getPlayer(user.getName()).getHandler();
-				if (player == null)
+				if (player == null) {
 					continue;
+				}
 				players.add(player);
 			}
 			return players;
@@ -169,8 +177,9 @@ public class PermissionsEx extends SuperPermissions {
 			permLimit = limitString[0];
 		}
 
-		if (permLimit == null || (permLimit != null && permLimit.isEmpty()))
+		if (permLimit == null || (permLimit != null && permLimit.isEmpty())) {
 			permLimit = super.getPermissionLimit(p, limit);
+		}
 		return permLimit;
 	}
 
@@ -192,13 +201,16 @@ public class PermissionsEx extends SuperPermissions {
 			return "";
 		}
 
-		if (user != null)
+		if (user != null) {
 			return user.getPrefix() == null ? "" : user.getPrefix();
+		}
 
 		String prefix = "";
-		for (final PermissionGroup group : PEX.getUser(player).getGroups())
-			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty())
+		for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
+			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty()) {
 				break;
+			}
+		}
 		return prefix;
 	}
 
@@ -212,13 +224,16 @@ public class PermissionsEx extends SuperPermissions {
 	@Override
 	public String getSuffix(final Player player) {
 		final PermissionUser user = PEX.getUser(player);
-		if (user != null)
+		if (user != null) {
 			return user.getSuffix() == null ? "" : user.getSuffix();
+		}
 
 		String suffix = "";
-		for (final PermissionGroup group : PEX.getUser(player).getGroups())
-			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty())
+		for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
+			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty()) {
 				break;
+			}
+		}
 		return suffix;
 	}
 
@@ -240,8 +255,9 @@ public class PermissionsEx extends SuperPermissions {
 				cur = group;
 			}
 		}
-		if (cur == null)
+		if (cur == null) {
 			return new Group();
+		}
 		return new Group(cur.getName(), cur.getRank());
 	}
 

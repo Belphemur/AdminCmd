@@ -48,8 +48,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 
 	@Override
 	public boolean add(final String path, final Object value) {
-		if (isSet(path))
+		if (isSet(path)) {
 			return false;
+		}
 		set(path, value);
 		return true;
 	}
@@ -64,12 +65,13 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	}
 
 	private long castToLong(final Object value) throws NumberFormatException {
-		if (value instanceof Long)
+		if (value instanceof Long) {
 			return (Long) value;
-		else if (value instanceof String)
+		} else if (value instanceof String) {
 			return Long.parseLong((String) value);
-		else if (value instanceof Integer)
+		} else if (value instanceof Integer) {
 			return Long.valueOf(((Integer) value));
+		}
 		throw new NumberFormatException();
 	}
 
@@ -142,8 +144,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	@Override
 	public List<Boolean> getBooleanList(final String path, final List<Boolean> def) {
 		final List<Boolean> result = super.getBooleanList(path);
-		if (result == null || (result != null && result.isEmpty()))
+		if (result == null || (result != null && result.isEmpty())) {
 			return def;
+		}
 		return result;
 	}
 
@@ -167,8 +170,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	@Override
 	public List<Double> getDoubleList(final String path, final List<Double> def) {
 		final List<Double> result = super.getDoubleList(path);
-		if (result == null || (result != null && result.isEmpty()))
+		if (result == null || (result != null && result.isEmpty())) {
 			return def;
+		}
 		return result;
 	}
 
@@ -182,8 +186,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	@Override
 	public List<Integer> getIntList(final String path, final List<Integer> def) {
 		final List<Integer> result = getIntegerList(path);
-		if (result == null || (result != null && result.isEmpty()))
+		if (result == null || (result != null && result.isEmpty())) {
 			return def;
+		}
 		return result;
 	}
 
@@ -209,8 +214,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 			throw new IllegalArgumentException("Path cannot be null");
 		}
 		final Object val = get(path, def);
-		if (val == null)
+		if (val == null) {
 			return def;
+		}
 		return (val instanceof String) ? (String) val : val.toString();
 	}
 
@@ -224,8 +230,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	@Override
 	public List<String> getStringList(final String path, final List<String> def) {
 		final List<String> result = super.getStringList(path);
-		if (result == null || (result != null && result.isEmpty()))
+		if (result == null || (result != null && result.isEmpty())) {
 			return def;
+		}
 		return result;
 	}
 

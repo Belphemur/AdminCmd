@@ -36,17 +36,19 @@ public class BlockRemanence {
 		this.loc = loc;
 		final Block b = loc.getWorld().getBlockAt(loc);
 		this.oldType = b.getTypeId();
-		if ((useData = usesData(oldType)))
+		if ((useData = usesData(oldType))) {
 			data = b.getState().getRawData();
+		}
 
 	}
 
 	public Block returnToThePast() {
 		final Block b = loc.getWorld().getBlockAt(loc);
-		if (useData)
+		if (useData) {
 			b.setTypeIdAndData(oldType, data, true);
-		else
+		} else {
 			b.setTypeId(oldType, true);
+		}
 		return b;
 	}
 

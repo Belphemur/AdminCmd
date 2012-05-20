@@ -41,9 +41,9 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 
 	public MaterialContainer(final String mat) {
 		String[] info = new String[2];
-		if (mat.contains(":"))
+		if (mat.contains(":")) {
 			info = mat.split(":");
-		else {
+		} else {
 			info[0] = mat;
 			info[1] = "0";
 		}
@@ -109,17 +109,19 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 
 	@Override
 	public String toString() {
-		if (material != null)
+		if (material != null) {
 			return material.getId() + ":" + dmg;
-		else
+		} else {
 			return "";
+		}
 	}
 
 	public String display() {
-		if (material != null)
+		if (material != null) {
 			return material + ":" + dmg;
-		else
+		} else {
 			return "";
+		}
 	}
 
 	/**
@@ -173,8 +175,9 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	@Override
 	public int compareTo(final MaterialContainer o) {
-		if (material.equals(o.getMaterial()))
+		if (material.equals(o.getMaterial())) {
 			return dmg - o.getDmg();
+		}
 		return material.compareTo(o.getMaterial());
 	}
 
@@ -199,17 +202,22 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof MaterialContainer))
+		}
+		if (!(obj instanceof MaterialContainer)) {
 			return false;
+		}
 		final MaterialContainer other = (MaterialContainer) obj;
-		if (dmg != other.dmg)
+		if (dmg != other.dmg) {
 			return false;
-		if (material != other.material)
+		}
+		if (material != other.material) {
 			return false;
+		}
 		return true;
 	}
 

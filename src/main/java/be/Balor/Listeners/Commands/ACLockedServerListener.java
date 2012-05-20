@@ -33,8 +33,9 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 public class ACLockedServerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
-		if (!event.getResult().equals(Result.ALLOWED))
+		if (!event.getResult().equals(Result.ALLOWED)) {
 			return;
+		}
 		if (ACHelper.getInstance().isServerLocked()
 				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
 			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));

@@ -50,8 +50,9 @@ public class Extinguish extends ServerCommand {
 		final ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(Material.FIRE);
 		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);
-		if (count != null)
+		if (count != null) {
 			Utils.sI18n(sender, "extinguish", "nb", String.valueOf(count));
+		}
 
 	}
 

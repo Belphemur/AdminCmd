@@ -58,13 +58,15 @@ public class YetiPermissions implements IPermissionPlugin {
 
 	@Override
 	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
 			return true;
+		}
 		if (permission.has((Player) player, perm)) {
 			return true;
 		} else {
-			if (errorMsg)
+			if (errorMsg) {
 				Utils.sI18n(player, "errorNotPerm", "p", perm);
+			}
 			return false;
 		}
 	}
@@ -78,13 +80,15 @@ public class YetiPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
-		if (!(player instanceof Player))
+		if (!(player instanceof Player)) {
 			return true;
+		}
 		if (permission.has((Player) player, perm.getName())) {
 			return true;
 		} else {
-			if (errorMsg)
+			if (errorMsg) {
 				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
+			}
 			return false;
 		}
 	}
@@ -137,10 +141,11 @@ public class YetiPermissions implements IPermissionPlugin {
 				limitInteger = null;
 			}
 		}
-		if (limitInteger != null && limitInteger != -1)
+		if (limitInteger != null && limitInteger != -1) {
 			return limitInteger.toString();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/*

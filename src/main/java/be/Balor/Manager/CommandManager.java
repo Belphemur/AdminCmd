@@ -174,8 +174,9 @@ public class CommandManager implements CommandExecutor {
 	private Graph graph;
 
 	public static CommandManager createInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new CommandManager();
+		}
 		return instance;
 	}
 
@@ -211,7 +212,7 @@ public class CommandManager implements CommandExecutor {
 	public void checkAlias(final AbstractAdminCmdPlugin plugin) {
 		if (ConfigEnum.VERBOSE.getBoolean()) {
 			final Map<String, Command> commands = pluginCommands.get(plugin);
-			if (commands != null)
+			if (commands != null) {
 				for (final String cmdName : commands.keySet()) {
 					final Command cmd = commands.get(cmdName);
 					if (corePlugin.getCommand(cmd.getName()) != null) {
@@ -219,15 +220,18 @@ public class CommandManager implements CommandExecutor {
 						aliasesList.removeAll(corePlugin.getCommand(cmd.getName()).getAliases());
 						aliasesList.removeAll(prioritizedCommands);
 						String aliases = "";
-						for (final String alias : aliasesList)
+						for (final String alias : aliasesList) {
 							aliases += alias + ", ";
-						if (!aliases.isEmpty() && ConfigEnum.VERBOSE.getBoolean())
+						}
+						if (!aliases.isEmpty() && ConfigEnum.VERBOSE.getBoolean()) {
 							Logger.getLogger("Minecraft").info(
 									"[" + corePlugin.getDescription().getName()
 											+ "] Disabled Alias(es) for " + cmd.getName() + " : "
 											+ aliases);
+						}
 					}
 				}
+			}
 		}
 	}
 
@@ -239,11 +243,12 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private void checkCommand(final CoreCommand command) throws CommandDisabled {
 		final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
-		if (commands != null)
+		if (commands != null) {
 			for (final String alias : commands.get(command.getCmdName()).getAliases()) {
-				if (disabledCommands.contains(alias))
+				if (disabledCommands.contains(alias)) {
 					throw new CommandDisabled("Command " + command.getCmdName()
 							+ " selected to be disabled in the configuration file.");
+				}
 				if (prioritizedCommands.contains(alias)) {
 					final CommandAlias cmd = new CommandAlias(command.getCmdName(), alias, "");
 					cmd.setCmd(command);
@@ -256,6 +261,7 @@ public class CommandManager implements CommandExecutor {
 					}
 				}
 			}
+		}
 	}
 
 	/**
@@ -270,10 +276,12 @@ public class CommandManager implements CommandExecutor {
 			final String[] args) {
 		ACCommandContainer container = null;
 		try {
-			if (!cmd.permissionCheck(sender))
+			if (!cmd.permissionCheck(sender)) {
 				return true;
-			if (!cmd.argsCheck(args))
+			}
+			if (!cmd.argsCheck(args)) {
 				return false;
+			}
 			container = new ACCommandContainer(sender, cmd, args);
 			/*
 			 * if (cmd.getCmdName().equals("bal_replace") ||
@@ -284,10 +292,11 @@ public class CommandManager implements CommandExecutor {
 			 */
 			threads.execute(new NormalCommand(container));
 			if (!cmd.getCmdName().equals("bal_repeat")) {
-				if (Utils.isPlayer(sender, false))
+				if (Utils.isPlayer(sender, false)) {
 					ACPlayer.getPlayer(((Player) sender)).setLastCmd(container);
-				else
+				} else {
 					ACPlayer.getPlayer("serverConsole").setLastCmd(container);
+				}
 			}
 			return true;
 		} catch (final Throwable t) {
@@ -328,22 +337,25 @@ public class CommandManager implements CommandExecutor {
 	public boolean onCommand(final CommandSender sender, final Command command, final String label,
 			final String[] args) {
 		CoreCommand cmd = null;
-		if ((cmd = registeredCommands.get(command)) != null)
+		if ((cmd = registeredCommands.get(command)) != null) {
 			return executeCommand(sender, cmd, args);
-		else
+		} else {
 			return false;
+		}
 	}
 
 	public boolean processCommandString(final CommandSender sender, final String command) {
 		final String[] split = command.split("\\s+");
-		if (split.length == 0)
+		if (split.length == 0) {
 			return false;
+		}
 		final String cmdName = split[0].substring(1).toLowerCase();
 		final CommandAlias cmdAlias = commandsAliasReplacer.get(cmdName);
 		if (cmdAlias != null) {
-			if (ConfigEnum.VERBOSE.getBoolean())
+			if (ConfigEnum.VERBOSE.getBoolean()) {
 				ACLogger.info("Command " + cmdName + " intercepted for "
 						+ cmdAlias.getCommandName());
+			}
 			return executeCommand(sender, cmdAlias.getCmd(),
 					cmdAlias.processArguments(Utils.Arrays_copyOfRange(split, 1, split.length)));
 		}
@@ -357,8 +369,9 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void registerACPlugin(final AbstractAdminCmdPlugin plugin) {
 		final HashMap<String, Command> commands = new HashMap<String, Command>();
-		for (final Command cmd : PluginCommandUtil.parse(plugin))
+		for (final Command cmd : PluginCommandUtil.parse(plugin)) {
 			commands.put(cmd.getName(), cmd);
+		}
 
 		pluginCommands.put(plugin, new HashMap<String, Command>(commands));
 	}
@@ -391,8 +404,9 @@ public class CommandManager implements CommandExecutor {
 			unRegisterBukkitCommand(command.getPluginCommand());
 			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 					command.getCmdName());
-			if (ConfigEnum.VERBOSE.getBoolean())
+			if (ConfigEnum.VERBOSE.getBoolean()) {
 				ACLogger.info(e.getMessage());
+			}
 			return false;
 		} catch (final CommandAlreadyExist e) {
 			boolean disableCommand = true;
@@ -418,8 +432,9 @@ public class CommandManager implements CommandExecutor {
 				unRegisterBukkitCommand(command.getPluginCommand());
 				HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(),
 						command.getCmdName());
-				if (ConfigEnum.VERBOSE.getBoolean())
+				if (ConfigEnum.VERBOSE.getBoolean()) {
 					ACLogger.info(e.getMessage());
+				}
 				DebugLog.INSTANCE.info("Command Disabled");
 				return false;
 			} else {
@@ -433,8 +448,9 @@ public class CommandManager implements CommandExecutor {
 				return true;
 			}
 		} catch (final CommandException e) {
-			if (ConfigEnum.VERBOSE.getBoolean())
+			if (ConfigEnum.VERBOSE.getBoolean()) {
 				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
+			}
 			return false;
 		}
 		DebugLog.INSTANCE.info("End registering Command " + clazz.getName());
@@ -499,8 +515,9 @@ public class CommandManager implements CommandExecutor {
 			PluginCommand cmd;
 			try {
 				cmd = (PluginCommand) knownCommands.get(pCmd.getName());
-				if (cmd != null && cmd.getExecutor().equals(this))
+				if (cmd != null && cmd.getExecutor().equals(this)) {
 					knownCommands.remove(pCmd.getName());
+				}
 			} catch (final ClassCastException e) {
 				DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
 			}
@@ -508,8 +525,9 @@ public class CommandManager implements CommandExecutor {
 			for (final String alias : pCmd.getAliases()) {
 				try {
 					cmd = (PluginCommand) knownCommands.get(alias);
-					if (cmd != null && cmd.getExecutor().equals(this))
+					if (cmd != null && cmd.getExecutor().equals(this)) {
 						knownCommands.remove(alias);
+					}
 				} catch (final ClassCastException e) {
 					DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
 				}
@@ -565,11 +583,13 @@ public class CommandManager implements CommandExecutor {
 	private void removeFromAliasReplacer(final CoreCommand command) {
 		final List<String> keysToRemove = new ArrayList<String>();
 		for (final Entry<String, CommandAlias> entry : commandsAliasReplacer.entrySet()) {
-			if (entry.getValue().getCmd().equals(command))
+			if (entry.getValue().getCmd().equals(command)) {
 				keysToRemove.add(entry.getKey());
+			}
 		}
-		for (final String key : keysToRemove)
+		for (final String key : keysToRemove) {
 			commandsAliasReplacer.remove(key);
+		}
 	}
 
 }

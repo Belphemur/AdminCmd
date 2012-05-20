@@ -39,8 +39,9 @@ public class ACFlyListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onJoin(final PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
-		if (!ACPlayer.getPlayer(p).hasPower(Type.FLY))
+		if (!ACPlayer.getPlayer(p).hasPower(Type.FLY)) {
 			return;
+		}
 		p.setAllowFlight(true);
 		p.setFlying(true);
 
@@ -50,13 +51,14 @@ public class ACFlyListener implements Listener {
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.FLY_OLD))
+		if (!player.hasPower(Type.FLY_OLD)) {
 			return;
+		}
 		final Float power = player.getPower(Type.FLY_OLD).getFloat(0);
-		if (power != 0)
-			if (p.isSneaking())
+		if (power != 0) {
+			if (p.isSneaking()) {
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
-			else if (ConfigEnum.GLIDE.getBoolean()) {
+			} else if (ConfigEnum.GLIDE.getBoolean()) {
 				final Vector vel = p.getVelocity();
 				vel.add(p.getLocation().getDirection().multiply(ConfigEnum.G_MULT.getFloat())
 						.setY(0));
@@ -65,12 +67,14 @@ public class ACFlyListener implements Listener {
 					p.setVelocity(vel);
 				}
 			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof Player))
+		if (!(event.getEntity() instanceof Player)) {
 			return;
+		}
 		final Player player = (Player) event.getEntity();
 		if ((ACPlayer.getPlayer(player).hasPower(Type.FLY) || ACPlayer.getPlayer(player).hasPower(
 				Type.FLY_OLD))
@@ -85,7 +89,8 @@ public class ACFlyListener implements Listener {
 		final Player p = event.getPlayer();
 		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
 				.contains("floating"))
-				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed"))
+				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed")) {
 			event.setCancelled(true);
+		}
 	}
 }

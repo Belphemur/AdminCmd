@@ -29,25 +29,28 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDeath(final EntityDeathEvent event) {
-		if (!(event.getEntity() instanceof Player))
+		if (!(event.getEntity() instanceof Player)) {
 			return;
+		}
 		final Player player = (Player) event.getEntity();
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityTarget(final EntityTargetEvent event) {
-		if (!(event.getTarget() instanceof Player))
+		if (!(event.getTarget() instanceof Player)) {
 			return;
+		}
 		final Player p = (Player) event.getTarget();
 		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
-				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false))
+				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false)) {
 			event.setCancelled(true);
+		}
 	}
 }

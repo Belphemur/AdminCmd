@@ -49,8 +49,9 @@ public class GameModeSwitch extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final Player target = Utils.getUser(sender, args, permNode);
-		if (target == null)
+		if (target == null) {
 			return;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(target));
 		if (target.getGameMode() == GameMode.CREATIVE) {

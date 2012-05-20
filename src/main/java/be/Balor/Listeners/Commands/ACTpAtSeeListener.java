@@ -37,11 +37,13 @@ public class ACTpAtSeeListener implements Listener {
 	@EventHandler
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
-				&& (event.getAction() != Action.LEFT_CLICK_AIR))
+				&& (event.getAction() != Action.LEFT_CLICK_AIR)) {
 			return;
+		}
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (!player.hasPower(Type.TP_AT_SEE))
+		if (!player.hasPower(Type.TP_AT_SEE)) {
 			return;
+		}
 		try {
 			final Player p = player.getHandler();
 			final Block toTp = p.getWorld().getBlockAt(

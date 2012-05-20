@@ -55,10 +55,11 @@ public class ReloadAll extends ServerCommand {
 				ACPluginManager.getServer().reload();
 			}
 		});
-		if (bcast)
+		if (bcast) {
 			Utils.broadcastMessage(Utils.I18n("serverReload"));
-		else
+		} else {
 			Utils.sI18n(sender, "serverReload");
+		}
 	}
 
 	/*

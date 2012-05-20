@@ -63,10 +63,12 @@ public class LogFormatter extends Formatter {
 		// load the format from logging.properties
 		final String propName = getClass().getName() + ".format";
 		String format = LogManager.getLogManager().getProperty(propName);
-		if (format == null || format.trim().length() == 0)
+		if (format == null || format.trim().length() == 0) {
 			format = DEFAULT_FORMAT;
-		if (format.contains("{") || format.contains("}"))
+		}
+		if (format.contains("{") || format.contains("}")) {
 			throw new IllegalArgumentException("curly braces not allowed");
+		}
 
 		// convert it into the MessageFormat form
 		format = format.replace("%L", "{0}").replace("%m", "{1}").replace("%M", "{2}")
@@ -121,13 +123,14 @@ public class LogFormatter extends Formatter {
 			arguments[7] = arguments[4];
 		}
 		// %S
-		if (record.getThrown() == null)
+		if (record.getThrown() == null) {
 			arguments[8] = "";
-		else {
-			if (record.getMessage() != null)
+		} else {
+			if (record.getMessage() != null) {
 				arguments[1] += " " + record.getThrown().toString();
-			else
+			} else {
 				arguments[1] = record.getThrown().toString();
+			}
 			String stackTrace = "\n";
 			for (final StackTraceElement st : record.getThrown().getStackTrace()) {
 				stackTrace += "\t" + st.toString() + "\n";

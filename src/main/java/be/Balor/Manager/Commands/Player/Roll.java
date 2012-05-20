@@ -57,14 +57,16 @@ public class Roll extends PlayerCommand {
 		}
 
 		final Random rand = new Random();
-		if (dice < 1)
+		if (dice < 1) {
 			dice = rand.nextInt(19) + 1;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("face", String.valueOf(dice));
-		if (Utils.isPlayer(sender, false))
+		if (Utils.isPlayer(sender, false)) {
 			replace.put("player", Utils.getPlayerName((Player) sender));
-		else
+		} else {
 			replace.put("player", "Server Admin");
+		}
 		replace.put("result", String.valueOf(rand.nextInt(dice) + 1));
 		Utils.broadcastMessage(Utils.I18n("roll", replace));
 

@@ -52,10 +52,11 @@ public class TestEgg extends EggType<Boolean> {
 	@Override
 	protected void processArguments(final Player player, final CommandArgs args)
 			throws ProcessingArgsException {
-		if (args.hasFlag('t'))
+		if (args.hasFlag('t')) {
 			value = true;
-		else
+		} else {
 			value = false;
+		}
 
 	}
 

@@ -194,8 +194,9 @@ public enum ConfigEnum {
 	 */
 	public static Map<String, Object> getDefaultvalues() {
 		final Map<String, Object> values = new LinkedHashMap<String, Object>();
-		for (final ConfigEnum ce : values())
+		for (final ConfigEnum ce : values()) {
 			values.put(ce.confVal, ce.defaultVal);
+		}
 		return values;
 	}
 
@@ -203,9 +204,10 @@ public enum ConfigEnum {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append("Configuration file of ").append(pluginName).append('\n');
 		buffer.append("Plugin Version: ").append(pluginVersion).append('\n').append('\n');
-		for (final ConfigEnum ce : values())
+		for (final ConfigEnum ce : values()) {
 			buffer.append(ce.confVal).append("\t:\t").append(ce.description).append(" (Default : ")
 					.append(ce.defaultVal).append(')').append('\n');
+		}
 		return buffer.toString();
 	}
 

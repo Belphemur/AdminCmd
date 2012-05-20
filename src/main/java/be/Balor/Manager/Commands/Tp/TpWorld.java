@@ -90,8 +90,9 @@ public class TpWorld extends TeleportCommand {
 		}
 		final ACWorld world = ACWorld.getWorld(worldName);
 		final Location loc = world.getSpawn();
-		if (loc == null)
+		if (loc == null) {
 			return;
+		}
 		ACPluginManager.scheduleSyncTask(new TeleportTask(target, loc));
 		replace.put("world", worldName);
 		LocaleHelper.TP_DIM.sendLocale(target, replace);

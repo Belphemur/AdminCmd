@@ -69,14 +69,15 @@ public class SpawnMob extends MobCommand {
 			}
 
 			Player temp = Utils.getUser(sender, args, permNode, 3, false);
-			if (temp == null)
+			if (temp == null) {
 				temp = ((Player) sender);
+			}
 
 			final Player player = temp;
 			Location loc;
-			if (distance == 0 && player.equals(sender))
+			if (distance == 0 && player.equals(sender)) {
 				loc = player.getTargetBlock(null, 100).getLocation().add(0, 1, 0);
-			else if (distance == 0) {
+			} else if (distance == 0) {
 				final Location playerLoc = player.getLocation();
 				loc = playerLoc.add(
 						playerLoc
@@ -108,8 +109,9 @@ public class SpawnMob extends MobCommand {
 					replace.put("mob", creatures[1]);
 					Utils.sI18n(sender, "errorMob", replace);
 				}
-				if (ct == null || ct2 == null)
+				if (ct == null || ct2 == null) {
 					return;
+				}
 				ACPluginManager.scheduleSyncTask(new PassengerMob(loc, nbTaped, ct, ct2, player,
 						sender));
 			} else {
@@ -162,9 +164,9 @@ public class SpawnMob extends MobCommand {
 				loc.getWorld().spawnCreature(loc, ct);
 			}
 			replace.put("nb", String.valueOf(nb));
-			if (player.equals(sender))
+			if (player.equals(sender)) {
 				Utils.sI18n(player, "spawnMob", replace);
-			else {
+			} else {
 				replace.put("player", Utils.getPlayerName((Player) sender));
 				Utils.sI18n(player, "spawnMobOther", replace);
 			}
@@ -195,9 +197,9 @@ public class SpawnMob extends MobCommand {
 						.setPassenger(loc.getWorld().spawnCreature(loc, passenger));
 			}
 			replace.put("nb", String.valueOf(nb));
-			if (player.equals(sender))
+			if (player.equals(sender)) {
 				Utils.sI18n(player, "spawnMob", replace);
-			else {
+			} else {
 				replace.put("player", Utils.getPlayerName((Player) sender));
 				Utils.sI18n(player, "spawnMobOther", replace);
 			}

@@ -50,8 +50,9 @@ public class EssentialsGroupManager extends SuperPermissions {
 	public boolean isInGroup(final String groupName, final Player player) {
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
 				player);
-		if (handler == null)
+		if (handler == null) {
 			return false;
+		}
 		return handler.inGroup(player.getName(), groupName);
 	}
 
@@ -109,8 +110,9 @@ public class EssentialsGroupManager extends SuperPermissions {
 		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
 				player);
 		final String group = handler.getGroup(player.getName());
-		if (group == null)
+		if (group == null) {
 			return new Group();
+		}
 		return new Group(group);
 	}
 }

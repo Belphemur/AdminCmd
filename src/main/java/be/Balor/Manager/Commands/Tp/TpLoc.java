@@ -51,8 +51,9 @@ public class TpLoc extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
 		final Player target = Utils.getUserParam(sender, args, permNode);
-		if (target == null)
+		if (target == null) {
 			return;
+		}
 		final double x;
 		final double y;
 		final double z;

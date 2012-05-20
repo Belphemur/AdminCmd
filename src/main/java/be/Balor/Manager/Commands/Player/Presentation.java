@@ -51,16 +51,19 @@ public class Presentation extends PlayerCommand {
 		String pres = "";
 		if (args.hasFlag('p')) {
 			actarget = Utils.getACPlayer(sender, args, permNode);
-			if (actarget == null)
+			if (actarget == null) {
 				return;
-			for (int i = 1; i < args.length; i++)
+			}
+			for (int i = 1; i < args.length; i++) {
 				pres += args.getString(i) + " ";
+			}
 			pres = pres.trim();
 		} else {
 			if (Utils.isPlayer(sender)) {
 				actarget = ACPlayer.getPlayer((Player) sender);
-				for (int i = 0; i < args.length; i++)
+				for (int i = 0; i < args.length; i++) {
 					pres += args.getString(i) + " ";
+				}
 				pres = pres.trim();
 			}
 		}

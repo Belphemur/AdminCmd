@@ -32,11 +32,13 @@ public class ACThorListener implements Listener {
 	@EventHandler
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if ((event.getAction() != Action.LEFT_CLICK_BLOCK)
-				&& (event.getAction() != Action.LEFT_CLICK_AIR))
+				&& (event.getAction() != Action.LEFT_CLICK_AIR)) {
 			return;
+		}
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (!player.hasPower(Type.THOR))
+		if (!player.hasPower(Type.THOR)) {
 			return;
+		}
 		player.getHandler().getWorld()
 				.strikeLightning(player.getHandler().getTargetBlock(null, 600).getLocation());
 

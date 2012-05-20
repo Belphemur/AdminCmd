@@ -54,8 +54,9 @@ public class Group implements Comparable<Group> {
 	 */
 	@Override
 	public int compareTo(final Group o) {
-		if (rank == o.rank)
+		if (rank == o.rank) {
 			return name.compareTo(o.name);
+		}
 		return (rank - o.rank) * -1;
 	}
 
@@ -94,20 +95,26 @@ public class Group implements Comparable<Group> {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof Group))
+		}
+		if (!(obj instanceof Group)) {
 			return false;
+		}
 		final Group other = (Group) obj;
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
-		if (rank != other.rank)
+		}
+		if (rank != other.rank) {
 			return false;
+		}
 		return true;
 	}
 

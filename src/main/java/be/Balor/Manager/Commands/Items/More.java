@@ -57,11 +57,12 @@ public class More extends ItemCommand {
 				Utils.sI18n(sender, "errorHolding");
 				return;
 			}
-			if (ACHelper.getInstance().inBlackListItem(sender, hand))
+			if (ACHelper.getInstance().inBlackListItem(sender, hand)) {
 				return;
-			if (args.length == 0)
+			}
+			if (args.length == 0) {
 				ACPluginManager.scheduleSyncTask(new HandSetAmount(hand, 64));
-			else {
+			} else {
 				int toAdd;
 				try {
 					toAdd = Integer.parseInt(args.getString(0));
@@ -78,9 +79,10 @@ public class More extends ItemCommand {
 					replace.put("amount", String.valueOf(inInventory));
 					Utils.sI18n(sender, "moreTooMuch", replace);
 
-				} else
+				} else {
 					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand, hand.getAmount()
 							+ toAdd));
+				}
 			}
 		}
 	}

@@ -75,13 +75,15 @@ public class ACPlayerListener implements Listener {
 					+ newPlayer.getName());
 			for (final Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
-				if (ConfigEnum.FQINVISIBLE.getBoolean())
+				if (ConfigEnum.FQINVISIBLE.getBoolean()) {
 					Utils.removePlayerFromOnlineList(toVanish, newPlayer);
+				}
 			}
 			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for "
 					+ newPlayer.getName());
-			for (final Player toFq : ACHelper.getInstance().getFakeQuitPlayers())
+			for (final Player toFq : ACHelper.getInstance().getFakeQuitPlayers()) {
 				Utils.removePlayerFromOnlineList(toFq, newPlayer);
+			}
 		}
 	}
 
@@ -91,8 +93,9 @@ public class ACPlayerListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
-			if (AFKWorker.getInstance().isAfk(p))
+			if (AFKWorker.getInstance().isAfk(p)) {
 				AFKWorker.getInstance().setOnline(p);
+			}
 		}
 		if (player.hasPower(Type.MUTED)) {
 			event.setCancelled(true);
@@ -114,8 +117,7 @@ public class ACPlayerListener implements Listener {
 				}
 			}
 		}
-		if (CommandManager.getInstance()
-				.processCommandString(event.getPlayer(), message)) {
+		if (CommandManager.getInstance().processCommandString(event.getPlayer(), message)) {
 			event.setCancelled(true);
 			event.setMessage("/AdminCmd : " + message);
 		}
@@ -126,8 +128,9 @@ public class ACPlayerListener implements Listener {
 		final Player p = event.getPlayer();
 		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
-			if (AFKWorker.getInstance().isAfk(p))
+			if (AFKWorker.getInstance().isAfk(p)) {
 				AFKWorker.getInstance().setOnline(p);
+			}
 		}
 	}
 
@@ -151,22 +154,27 @@ public class ACPlayerListener implements Listener {
 
 					@Override
 					public void run() {
-						if (ConfigEnum.AUTO_AFK.getBoolean())
+						if (ConfigEnum.AUTO_AFK.getBoolean()) {
 							AFKWorker.getInstance().updateTimeStamp(p);
+						}
 						final int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
 								"defaultImmunityLvl");
 						player.setInformation("immunityLvl",
 								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
-						if (player.hasPower(Type.SPYMSG))
+						if (player.hasPower(Type.SPYMSG)) {
 							ACHelper.getInstance().addSpy(p);
+						}
 						player.setInformation("lastConnection", System.currentTimeMillis());
-						if (ConfigEnum.NEWS.getBoolean())
+						if (ConfigEnum.NEWS.getBoolean()) {
 							Utils.sParsedLocale(p, "NEWS");
-						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean())
+						}
+						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean()) {
 							Utils.sParsedLocale(p, "Rules");
+						}
 						if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
-								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle.allow", false))
+								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle.allow", false)) {
 							player.setPower(Type.TP_REQUEST);
+						}
 
 					}
 				});
@@ -183,26 +191,33 @@ public class ACPlayerListener implements Listener {
 				replace.put("name", Utils.getPlayerName(p, null, true));
 				event.setJoinMessage(Utils.I18n("joinMessageFirstTime", replace));
 			}
-			if (ConfigEnum.FCSPAWN.getBoolean())
+			if (ConfigEnum.FCSPAWN.getBoolean()) {
 				ACHelper.getInstance().spawn(p);
+			}
 			if (!ConfigEnum.FCSPAWN.getBoolean()
-					&& ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group"))
+					&& ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group")) {
 				ACHelper.getInstance().groupSpawn(p);
-			if (ConfigEnum.FJ_RULES.getBoolean())
+			}
+			if (ConfigEnum.FJ_RULES.getBoolean()) {
 				Utils.sParsedLocale(p, "Rules");
-			if (ConfigEnum.MOTD.getBoolean())
+			}
+			if (ConfigEnum.MOTD.getBoolean()) {
 				Utils.sParsedLocale(p, "MOTDNewUser");
-		} else if (ConfigEnum.MOTD.getBoolean())
+			}
+		} else if (ConfigEnum.MOTD.getBoolean()) {
 			Utils.sParsedLocale(p, "MOTD");
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
-		if (event.getResult().equals(Result.ALLOWED))
+		if (event.getResult().equals(Result.ALLOWED)) {
 			return;
+		}
 		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false)
-				&& event.getResult() == Result.KICK_FULL)
+				&& event.getResult() == Result.KICK_FULL) {
 			event.allow();
+		}
 	}
 
 	@EventHandler
@@ -210,16 +225,18 @@ public class ACPlayerListener implements Listener {
 		final Player p = event.getPlayer();
 		if (ConfigEnum.AUTO_AFK.getBoolean()) {
 			AFKWorker.getInstance().updateTimeStamp(p);
-			if (AFKWorker.getInstance().isAfk(p))
+			if (AFKWorker.getInstance().isAfk(p)) {
 				AFKWorker.getInstance().setOnline(p);
+			}
 		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (player.hasPower(Type.NO_PICKUP))
+		if (player.hasPower(Type.NO_PICKUP)) {
 			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -254,10 +271,11 @@ public class ACPlayerListener implements Listener {
 			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setQuitMessage(Utils.I18n("quitMessage", replace));
 		}
-		if (player.hasPower(Type.FAKEQUIT))
+		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setQuitMessage(null);
-		else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()))
+		} else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
 			event.setQuitMessage(null);
+		}
 		PlayerManager.getInstance().setOffline(player);
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
@@ -274,14 +292,16 @@ public class ACPlayerListener implements Listener {
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("home")) {
 			loc = ACPlayer.getPlayer(player).getHome(worldName);
-			if (loc == null)
+			if (loc == null) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
+			}
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("bed")) {
 			try {
 				loc = player.getBedSpawnLocation();
-				if (loc == null)
+				if (loc == null) {
 					loc = ACWorld.getWorld(worldName).getSpawn();
+				}
 			} catch (final NullPointerException e) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
 			}
@@ -292,9 +312,10 @@ public class ACPlayerListener implements Listener {
 			if (!groups.isEmpty()) {
 				for (final String groupName : groups) {
 					try {
-						if (PermissionManager.isInGroup(groupName, player))
+						if (PermissionManager.isInGroup(groupName, player)) {
 							loc = ACWorld.getWorld(worldName).getWarp(
 									"spawn" + groupName.toLowerCase()).loc;
+						}
 						break;
 					} catch (final NoPermissionsPlugin e) {
 						loc = ACWorld.getWorld(worldName).getSpawn();
@@ -302,8 +323,9 @@ public class ACPlayerListener implements Listener {
 					}
 				}
 			}
-			if (loc == null)
+			if (loc == null) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
+			}
 			event.setRespawnLocation(loc);
 		} /*
 		 * else { loc = ACWorld.getWorld(worldName).getSpawn();

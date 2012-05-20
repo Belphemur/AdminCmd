@@ -52,24 +52,30 @@ public class RepairAll extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final Player player = Utils.getUser(sender, args, permNode);
-		if (player == null)
+		if (player == null) {
 			return;
+		}
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
-				for (final ItemStack item : player.getInventory().getContents())
-					if (item != null && ACHelper.getInstance().repairable(item.getTypeId()))
+				for (final ItemStack item : player.getInventory().getContents()) {
+					if (item != null && ACHelper.getInstance().repairable(item.getTypeId())) {
 						item.setDurability((short) 0);
-				for (final ItemStack item : player.getInventory().getArmorContents())
-					if (item != null)
+					}
+				}
+				for (final ItemStack item : player.getInventory().getArmorContents()) {
+					if (item != null) {
 						item.setDurability((short) 0);
+					}
+				}
 			}
 		});
 
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
-		if (!sender.equals(player))
+		if (!sender.equals(player)) {
 			Utils.sI18n(sender, "repairAll", replace);
+		}
 		Utils.sI18n(player, "repairAllTarget");
 
 	}

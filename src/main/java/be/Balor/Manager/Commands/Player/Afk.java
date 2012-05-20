@@ -49,16 +49,18 @@ public class Afk extends PlayerCommand {
 		if (Utils.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			if (player != null) {
-				if (AFKWorker.getInstance().isAfk(player))
+				if (AFKWorker.getInstance().isAfk(player)) {
 					AFKWorker.getInstance().setOnline(player);
-				else {
+				} else {
 					if (args.length >= 1) {
 						String msg = "";
-						for (int i = 0; i < args.length; i++)
+						for (int i = 0; i < args.length; i++) {
 							msg += args.getString(i) + " ";
+						}
 						AFKWorker.getInstance().setAfk(player, msg.trim());
-					} else
+					} else {
 						AFKWorker.getInstance().setAfk(player);
+					}
 				}
 
 			}

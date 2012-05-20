@@ -56,11 +56,13 @@ class HelpEntry {
 
 	public boolean hasPerm(final CommandSender p) {
 		for (final String perm : permissions) {
-			if (perm.equals("OP"))
-				if (Utils.isPlayer(p, false))
+			if (perm.equals("OP")) {
+				if (Utils.isPlayer(p, false)) {
 					return p.isOp();
-				else
+				} else {
 					return true;
+				}
+			}
 			return PermissionManager.hasPerm(p, perm, false);
 		}
 		return true;

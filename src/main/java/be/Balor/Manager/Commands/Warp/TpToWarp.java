@@ -69,8 +69,9 @@ public class TpToWarp extends WarpCommand {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 
 				if (args.getString(0).contains(":")) {
-					if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm()))
+					if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm())) {
 						return;
+					}
 					final String[] split = args.getString(0).split(":");
 					final String world = split[0];
 					final String warp = split[1];

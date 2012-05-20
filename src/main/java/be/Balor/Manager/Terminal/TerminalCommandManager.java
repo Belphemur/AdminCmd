@@ -50,8 +50,9 @@ public class TerminalCommandManager {
 	 * @return the instance
 	 */
 	public static TerminalCommandManager getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new TerminalCommandManager();
+		}
 		return instance;
 	}
 
@@ -66,7 +67,7 @@ public class TerminalCommandManager {
 		final File workingDir = scripts.getParentFile();
 		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 		TerminalCommand toAdd;
-		if (System.getProperty("os.name").contains("Windows"))
+		if (System.getProperty("os.name").contains("Windows")) {
 			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
@@ -74,21 +75,21 @@ public class TerminalCommandManager {
 				commands.put(cmdName, toAdd);
 
 			}
-
-		else
-
+		} else {
 			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
 				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec." + cmdName));
 				commands.put(cmdName, toAdd);
 			}
+		}
 	}
 
 	public boolean checkCommand(final String cmdName, final CommandSender sender) {
 		final TerminalCommand cmd = commands.get(cmdName);
-		if (cmd == null)
+		if (cmd == null) {
 			return false;
+		}
 
 		return cmd.permCheck(sender, false);
 	}
@@ -100,7 +101,7 @@ public class TerminalCommandManager {
 		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
 		commands.clear();
 		TerminalCommand toAdd;
-		if (System.getProperty("os.name").contains("Windows"))
+		if (System.getProperty("os.name").contains("Windows")) {
 			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
@@ -109,9 +110,7 @@ public class TerminalCommandManager {
 				commands.put(cmdName, toAdd);
 
 			}
-
-		else
-
+		} else {
 			for (final String cmdName : conf.getKeys(false)) {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
@@ -119,6 +118,7 @@ public class TerminalCommandManager {
 						"admincmd.server.exec.*"));
 				commands.put(cmdName, toAdd);
 			}
+		}
 	}
 
 	/**
@@ -137,8 +137,9 @@ public class TerminalCommandManager {
 					false);
 			final File workingDir = scripts.getParentFile();
 			final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
-			if (conf.get(cmdName) == null)
+			if (conf.get(cmdName) == null) {
 				throw new CommandNotFound(cmdName + " is not registered");
+			}
 			if (System.getProperty("os.name").contains("Windows")) {
 				commands.put(
 						cmdName,
@@ -157,8 +158,9 @@ public class TerminalCommandManager {
 						"admincmd.server.exec.*"));
 			}
 		}
-		if (!cmd.permCheck(sender, true))
+		if (!cmd.permCheck(sender, true)) {
 			return false;
+		}
 		cmd.execute(sender);
 		return true;
 	}

@@ -53,17 +53,20 @@ public class TpToggle extends TeleportCommand {
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)
 					&& args.getString(0).equalsIgnoreCase("yes")) {
-				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow"))
+				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow")) {
 					return;
+				}
 				final TpRequest request = acp.getTpRequest();
 				if (request != null) {
 					request.teleport(player);
 					acp.removeTpRequest();
-				} else
+				} else {
 					Utils.sI18n(sender, "noTpRequest");
+				}
 			} else {
-				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.use"))
+				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.use")) {
 					return;
+				}
 				if (acp.hasPower(Type.TP_REQUEST)) {
 					acp.removePower(Type.TP_REQUEST);
 					Utils.sI18n(player, "tpRequestOff");

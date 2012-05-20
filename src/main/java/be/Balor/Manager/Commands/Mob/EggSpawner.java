@@ -59,8 +59,9 @@ public class EggSpawner extends MobCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
-		if (!Utils.isPlayer(sender))
+		if (!Utils.isPlayer(sender)) {
 			return;
+		}
 		final Player player = (Player) sender;
 		final ACPlayer acp = ACPlayer.getPlayer(player);
 		EggType<?> egg = null;
@@ -79,17 +80,18 @@ public class EggSpawner extends MobCommand {
 			}
 			return;
 		} catch (final ProcessingArgsException e) {
-			if (e.getType().equals(ExceptionType.NO_CLASS))
+			if (e.getType().equals(ExceptionType.NO_CLASS)) {
 				Utils.sI18n(sender, "eggDontExists", "egg", e.getMessage());
-			else if (e.getType().equals(ExceptionType.DONT_EXISTS))
+			} else if (e.getType().equals(ExceptionType.DONT_EXISTS)) {
 				Utils.sI18n(sender, "entityDontExists", "entity", e.getMessage());
-			else if (e.getType().equals(ExceptionType.CUSTOM)) {
+			} else if (e.getType().equals(ExceptionType.CUSTOM)) {
 				final Map<String, String> replace = new HashMap<String, String>();
 				replace.put("egg", args.getValueFlag('E'));
 				replace.put("error", e.getMessage());
 				Utils.sI18n(sender, "eggCustomError", replace);
-			} else
+			} else {
 				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(), e);
+			}
 			return;
 		} catch (final DontHaveThePermissionException e) {
 			sender.sendMessage(e.getMessage());

@@ -64,16 +64,18 @@ public class FakeQuit extends PlayerCommand {
 				Utils.addPlayerInOnlineList(player);
 				ACHelper.getInstance().removeFakeQuit(player);
 				Utils.sI18n(player, "fakeQuitDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "fakeQuitDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.FAKEQUIT);
 				Utils.sI18n(player, "fakeQuitEnabled");
 				Utils.broadcastFakeQuit(player);
 				ACHelper.getInstance().addFakeQuit(player);
 				Utils.removePlayerFromOnlineList(player);
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "fakeQuitEnabledTarget", replace);
+				}
 			}
 		}
 	}

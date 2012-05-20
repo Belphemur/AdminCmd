@@ -60,10 +60,12 @@ public class Fireball extends PlayerCommand {
 				power = ConfigEnum.DFB.getFloat();
 				player = Utils.getUser(sender, args, permNode);
 			}
-			if (args.length >= 2)
+			if (args.length >= 2) {
 				player = Utils.getUser(sender, args, permNode, 1, true);
-		} else
+			}
+		} else {
 			player = Utils.getUser(sender, args, permNode);
+		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(player));
@@ -71,15 +73,18 @@ public class Fireball extends PlayerCommand {
 			if (acp.hasPower(Type.FIREBALL)) {
 				acp.removePower(Type.FIREBALL);
 				Utils.sI18n(player, "fireballDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "fireballDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.FIREBALL, power);
 				Utils.sI18n(player, "fireballEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "fireballEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

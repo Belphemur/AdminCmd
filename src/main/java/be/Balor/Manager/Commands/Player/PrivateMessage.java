@@ -78,32 +78,40 @@ public class PrivateMessage extends PlayerCommand {
 				senderName = pSender.getName();
 				senderPm = Utils.getPlayerName(pSender, buddy);
 				ACHelper.getInstance().setReplyPlayer(buddy, pSender);
-			} else
+			} else {
 				senderPm = senderName;
+			}
 
-			for (int i = 1; i < args.length; ++i)
+			for (int i = 1; i < args.length; ++i) {
 				msg += args.getString(i) + " ";
+			}
 			msg = msg.trim();
 			String parsed = Utils.colorParser(msg);
-			if (parsed == null)
+			if (parsed == null) {
 				parsed = msg;
+			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Utils.getPlayerName(buddy));
 			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
-			} else
+			} else {
 				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
+			}
 			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
-			for (final Player p : ACHelper.getInstance().getSpyPlayers())
+			for (final Player p : ACHelper.getInstance().getSpyPlayers()) {
 				if (p != null && !p.getName().equals(senderName)
-						&& !p.getName().equals(buddy.getName()))
+						&& !p.getName().equals(buddy.getName())) {
 					p.sendMessage(spyMsg);
-			if (ConfigEnum.LOG_PM.getBoolean() && !(sender instanceof ConsoleCommandSender))
+				}
+			}
+			if (ConfigEnum.LOG_PM.getBoolean() && !(sender instanceof ConsoleCommandSender)) {
 				ACLogger.info(spyMsg);
-		} else
+			}
+		} else {
 			Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
+		}
 
 	}
 

@@ -62,15 +62,18 @@ public class Thor extends WeatherCommand {
 			if (acp.hasPower(Type.THOR)) {
 				acp.removePower(Type.THOR);
 				Utils.sI18n(player, "thorDisabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "thorDisabledTarget", replace);
+				}
 			} else {
 				acp.setPower(Type.THOR);
 				Utils.sI18n(player, "thorEnabled");
-				if (!player.equals(sender))
+				if (!player.equals(sender)) {
 					Utils.sI18n(sender, "thorEnabledTarget", replace);
-				if (timeOut == null)
+				}
+				if (timeOut == null) {
 					return;
+				}
 				int timeOutValue;
 				try {
 					timeOutValue = Integer.parseInt(timeOut);

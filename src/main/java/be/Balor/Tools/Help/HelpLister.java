@@ -45,8 +45,9 @@ public class HelpLister {
 	 * @return the instance
 	 */
 	public static HelpLister getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new HelpLister();
+		}
 		return instance;
 	}
 
@@ -61,12 +62,13 @@ public class HelpLister {
 	 */
 	public void addPlugin(final Plugin plugin) {
 		final String pName = plugin.getDescription().getName();
-		if (!plugins.containsKey(pName) && !noCmds.contains(pName))
+		if (!plugins.containsKey(pName) && !noCmds.contains(pName)) {
 			try {
 				plugins.put(pName, new HelpList(plugin));
 			} catch (final IllegalArgumentException e) {
 				noCmds.add(pName);
 			}
+		}
 
 	}
 
@@ -126,12 +128,15 @@ public class HelpLister {
 	 */
 	public boolean sendHelpPage(final String plugin, final int page, final CommandSender sender) {
 		final HelpList help = matchPlugin(plugin);
-		if (help == null)
+		if (help == null) {
 			return false;
+		}
 		final List<String> toDisplay = help.getPage(page, sender);
-		for (final String send : toDisplay)
-			for (final String l : send.split("\n"))
+		for (final String send : toDisplay) {
+			for (final String l : send.split("\n")) {
 				sender.sendMessage(l);
+			}
+		}
 		return true;
 
 	}
@@ -140,8 +145,9 @@ public class HelpLister {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
 			final String keyFound = Str.matchString(plugins.keySet(), plugin);
-			if (keyFound == null)
+			if (keyFound == null) {
 				return null;
+			}
 			help = plugins.get(keyFound);
 		}
 		return help;
@@ -167,19 +173,22 @@ public class HelpLister {
 		if (pluginName == null) {
 			for (final HelpList plugin : plugins.values()) {
 				chat = plugin.getCommandMatch(command, sender);
-				if (chat.isEmpty())
+				if (chat.isEmpty()) {
 					continue;
+				}
 				displayHelpMessage(chat, plugin.getPluginName(), sender, detailed);
 				found = true;
 			}
 			return found;
 		} else {
 			final HelpList plugin = matchPlugin(pluginName);
-			if (plugin == null)
+			if (plugin == null) {
 				return false;
+			}
 			chat = plugin.getCommandMatch(command, sender);
-			if (chat.isEmpty())
+			if (chat.isEmpty()) {
 				return false;
+			}
 			displayHelpMessage(chat, plugin.getPluginName(), sender, detailed);
 		}
 		return true;
@@ -198,14 +207,16 @@ public class HelpLister {
 		if (detailed) {
 			final HelpEntry entry = list.get(0);
 			final String chat = entry.chatString(detailed);
-			for (final String l : chat.split("\n"))
+			for (final String l : chat.split("\n")) {
 				sender.sendMessage(l);
+			}
 			return;
 		}
 		for (final HelpEntry entry : list) {
 			final String chat = entry.chatString(detailed);
-			for (final String l : chat.split("\n"))
+			for (final String l : chat.split("\n")) {
 				sender.sendMessage(l);
+			}
 		}
 	}
 }
