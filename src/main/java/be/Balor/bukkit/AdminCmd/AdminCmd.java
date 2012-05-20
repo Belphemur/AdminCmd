@@ -886,7 +886,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			@Override
 			public void run() {
 				try {
-					Downloader.download("http://www.admincmd.com/WebBrowser.jar", browserFile);
+					Downloader.download("http://static.admincmd.com/WebBrowser.jar", browserFile);
 					try {
 						((PluginClassLoader) AdminCmd.this.getClassLoader()).addURL(new URL(
 								"jar:file:" + "lib/WebBrowser.jar" + "!/"));

@@ -18,9 +18,16 @@ package be.Balor.Tools;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -31,33 +38,28 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public final class Downloader {
-	/**
-	 * Download a file from a url to the given path.
-	 * 
-	 * @param urlString
-	 * @param downloaded
-	 * @return the downloaded file.
-	 * @throws IOException
-	 */
 	public static void download(final String urlString, final File downloaded) throws IOException {
-		download(urlString, downloaded, false);
-	}
-
-	public static void download(final String urlString, final File downloaded,
-			final boolean override) throws IOException {
 		BufferedOutputStream bout = null;
 		BufferedInputStream in = null;
-		;
+		HttpURLConnection connection = null;
+
 		if (downloaded.getParentFile() != null && !downloaded.getParentFile().exists()) {
 			downloaded.getParentFile().mkdirs();
 		}
-		if (downloaded.exists() && !override)
+		if (!checkVersionToDownload(urlString, downloaded)) {
 			return;
+		}
+		if (downloaded.exists()) {
+			downloaded.delete();
+		}
+		if (!exists(urlString)) {
+			throw new FileNotFoundException("The remote file " + urlString + " can't be found");
+		}
 		DebugLog.INSTANCE.info("Downloading file : " + urlString);
 		try {
 
 			final URL url = new URL(urlString);
-			final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection = (HttpURLConnection) url.openConnection();
 			final int filesize = connection.getContentLength();
 			float totalDataRead = 0;
 			in = new BufferedInputStream(connection.getInputStream());
@@ -76,11 +78,94 @@ public final class Downloader {
 				}
 			}
 		} finally {
-			if (bout != null)
+			if (bout != null) {
 				bout.close();
-			if (in != null)
+			}
+			if (in != null) {
 				in.close();
+			}
+			if (connection != null) {
+				connection.disconnect();
+			}
 		}
 		DebugLog.INSTANCE.info("File " + urlString + " downloaded");
+	}
+
+	private static final boolean checkVersionToDownload(final String fileUrl, final File download)
+			throws IOException {
+		final String urlString = fileUrl + ".version";
+		final File versionFile = new File(download.getParent(), download.getName() + ".version");
+		if (!exists(urlString)) {
+			return true;
+		}
+		HttpURLConnection connection = null;
+		try {
+			connection = (HttpURLConnection) new URL(urlString).openConnection();
+			final String version = readVersion(connection.getInputStream());
+			if (versionFile.exists()) {
+				final String curVersion = readVersion(new FileInputStream(versionFile));
+				if (curVersion.equals(version) && download.exists()) {
+					return false;
+				}
+			}
+			writeVersion(versionFile, version);
+			return true;
+
+		} finally {
+
+			if (connection != null) {
+				connection.disconnect();
+			}
+		}
+
+	}
+
+	private static boolean exists(final String URLName) {
+		HttpURLConnection con = null;
+		try {
+			HttpURLConnection.setFollowRedirects(false);
+			// note : you may also need
+			// HttpURLConnection.setInstanceFollowRedirects(false)
+			con = (HttpURLConnection) new URL(URLName).openConnection();
+			con.setRequestMethod("HEAD");
+			return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+		} catch (final Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (con != null) {
+				con.disconnect();
+			}
+		}
+	}
+
+	private static String readVersion(final InputStream stream) {
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		try {
+			return reader.readLine();
+		} catch (final IOException e) {
+			return null;
+		} finally {
+			try {
+				reader.close();
+			} catch (final IOException e) {
+			}
+		}
+	}
+
+	private static void writeVersion(final File file, final String version) throws IOException {
+		BufferedWriter out = null;
+		try {
+			out = new BufferedWriter(new FileWriter(file));
+			out.write(version);
+			out.flush();
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (final IOException e) {
+			}
+		}
 	}
 }
