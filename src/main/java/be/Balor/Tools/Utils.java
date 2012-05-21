@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
+import in.mDev.MiracleM4n.mChatSuite.types.EventType;
 import info.somethingodd.OddItem.OddItem;
 import info.somethingodd.OddItem.OddItemBase;
 
@@ -87,6 +87,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 import com.google.common.base.Joiner;
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.Hero;
+import com.miraclem4n.mchat.api.Reader;
 
 import de.diddiz.LogBlock.Consumer;
 
@@ -146,7 +147,7 @@ public final class Utils {
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
 	public static Heroes heroes = null;
-	public static MInfoReader mChatApi = null;
+	public static boolean mChatPresent = false;
 	public static boolean signExtention = false;
 	public final static long secondInMillis = 1000;
 	public final static long minuteInMillis = secondInMillis * 60;
@@ -221,9 +222,9 @@ public final class Utils {
 	 *            that fake join.
 	 */
 	public static void broadcastFakeJoin(final Player player) {
-		if (mChatApi != null) {
+		if (mChatPresent) {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
-					+ mChatApi.getEventMessage("Join"));
+					+ Reader.getEventMessage(EventType.JOIN));
 		} else {
 			Utils.broadcastMessage(I18n("joinMessage", "name", getPlayerName(player, null, true)));
 		}
@@ -237,9 +238,9 @@ public final class Utils {
 	 *            that fake quit.
 	 */
 	public static void broadcastFakeQuit(final Player player) {
-		if (mChatApi != null) {
+		if (mChatPresent) {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
-					+ mChatApi.getEventMessage("Quit"));
+					+ Reader.getEventMessage(EventType.QUIT));
 		} else {
 			Utils.broadcastMessage(I18n("quitMessage", "name", getPlayerName(player, null, true)));
 		}

@@ -17,8 +17,7 @@
 package be.Balor.Manager.Permissions.Plugins;
 
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
-import in.mDev.MiracleM4n.mChatSuite.api.InfoType;
-import in.mDev.MiracleM4n.mChatSuite.api.MInfoReader;
+import in.mDev.MiracleM4n.mChatSuite.types.InfoType;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,12 +36,14 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
+import com.miraclem4n.mchat.api.Reader;
+
 /**
  * @author Lathanael (aka Philippe Leipold)
  * 
  */
 public abstract class SuperPermissions implements IPermissionPlugin {
-	protected static MInfoReader mChatInfo = null;
+	private static boolean mChat = false;
 
 	/**
 	 *
@@ -55,8 +56,8 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 *            the mChatAPI to set
 	 */
 	public static void setmChatapi(final mChatSuite mChatSuite) {
-		if (SuperPermissions.mChatInfo == null && mChatSuite != null) {
-			mChatInfo = mChatSuite.getInfoReader();
+		if (!SuperPermissions.mChat && mChatSuite != null) {
+			SuperPermissions.mChat = true;
 		}
 	}
 
@@ -64,7 +65,7 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 * @return the mChatAPI
 	 */
 	public static boolean isApiSet() {
-		return mChatInfo != null;
+		return mChat;
 	}
 
 	/*
@@ -146,9 +147,9 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
 		String result = null;
-		if (mChatInfo != null) {
-			result = mChatInfo.getInfo(p.getName(), InfoType.USER, p.getWorld().getName(),
-					"admincmd." + limit);
+		if (mChat) {
+			result = Reader.getInfo(p.getName(), InfoType.USER, p.getWorld().getName(), "admincmd."
+					+ limit);
 		}
 		if (result == null || (result != null && result.isEmpty())) {
 			final Pattern regex = Pattern
@@ -201,9 +202,8 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public String getPrefix(final Player player) {
-		if (mChatInfo != null) {
-			return mChatInfo
-					.getPrefix(player.getName(), InfoType.USER, player.getWorld().getName());
+		if (mChat) {
+			return Reader.getPrefix(player.getName(), InfoType.USER, player.getWorld().getName());
 		} else {
 			return "";
 		}
@@ -218,9 +218,8 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public String getSuffix(final Player player) {
-		if (mChatInfo != null) {
-			return mChatInfo
-					.getSuffix(player.getName(), InfoType.USER, player.getWorld().getName());
+		if (mChat) {
+			return Reader.getSuffix(player.getName(), InfoType.USER, player.getWorld().getName());
 		} else {
 			return "";
 		}

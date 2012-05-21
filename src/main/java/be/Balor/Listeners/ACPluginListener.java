@@ -117,7 +117,7 @@ public class ACPluginListener implements Listener {
 					.getPlugin("mChatSuite");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
-				Utils.mChatApi = ((mChatSuite) mChatPlugin).getInfoReader();
+				Utils.mChatPresent = true;
 				ACLogger.info("Successfully linked with mChatSuite");
 			}
 		}

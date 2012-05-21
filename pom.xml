@@ -321,6 +321,12 @@
 			<name>BukkitDev</name>
 			<url>http://www.gestdown.info:8888/nexus/content/groups/BukkitDev/</url>
 		</repository>
+		<repository>
+			<snapshots />
+			<id>mDev-s</id>
+			<name>MDev</name>
+			<url>http://nexus.gestdown.info/nexus/content/repositories/mDev-s/</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -359,7 +365,7 @@
 		<dependency>
 			<groupId>in.mDev</groupId>
 			<artifactId>mChatSuite</artifactId>
-			<version>149</version>
+			<version>1.2.5-R3_21</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
