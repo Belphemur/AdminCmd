@@ -130,7 +130,15 @@ public final class Utils {
 			}
 			final long newTime = w.getFullTime() + margin;
 			final WorldServer world = ((CraftWorld) w).getHandle();
-			world.setTime(newTime);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+
+				@Override
+				public void run() {
+					world.setTime(newTime);
+
+				}
+			});
+
 			for (final Player p : getOnlinePlayers()) {
 				if (p == null) {
 					continue;
