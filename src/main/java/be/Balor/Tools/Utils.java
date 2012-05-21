@@ -292,10 +292,7 @@ public final class Utils {
 				return false;
 			}
 		} else {
-			if (!ConfigEnum.IMMUNITY.getBoolean()) {
-				return true;
-			}
-			if (!isPlayer(sender, false)) {
+			if (preImmunityCheck(sender, target)) {
 				return true;
 			}
 			final Player player = (Player) sender;
@@ -303,17 +300,7 @@ public final class Utils {
 					"defaultImmunityLvl");
 			final int tLvl = ACPlayer.getPlayer(args.getString(index))
 					.getInformation("immunityLvl").getInt(0);
-			if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
-					&& pLvl != tLvl) {
-				sI18n(sender, "insufficientLvl");
-				return false;
-			}
-			if (pLvl >= tLvl) {
-				return true;
-			} else {
-				sI18n(sender, "insufficientLvl");
-				return false;
-			}
+			return checkLvl(player, pLvl, tLvl);
 
 		}
 	}
@@ -330,6 +317,49 @@ public final class Utils {
 	 *         false.
 	 */
 	public static boolean checkImmunity(final CommandSender sender, final Player target) {
+		if (preImmunityCheck(sender, target)) {
+			return true;
+		}
+		final Player player = (Player) sender;
+		final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
+				"defaultImmunityLvl");
+		final int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl",
+				"defaultImmunityLvl");
+
+		return checkLvl(player, pLvl, tLvl);
+	}
+
+	public static boolean checkImmunity(final CommandSender sender, final ACPlayer target) {
+		if (preImmunityCheck(sender, target)) {
+			return true;
+		}
+		final Player player = (Player) sender;
+		final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
+				"defaultImmunityLvl");
+		int tLvl = 0;
+		if (target.isOnline()) {
+			tLvl = ACHelper.getInstance().getLimit(target.getHandler(), "immunityLvl",
+					"defaultImmunityLvl");
+		} else {
+			tLvl = target.getInformation("immunityLvl").getInt(0);
+		}
+		return checkLvl(player, pLvl, tLvl);
+
+	}
+
+	private static boolean checkLvl(final Player player, final int pLvl, final int tLvl) {
+		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
+				&& pLvl != tLvl) {
+			return false;
+		}
+		if (pLvl >= tLvl) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean preImmunityCheck(final CommandSender sender, final Object target) {
 		if (!ConfigEnum.IMMUNITY.getBoolean()) {
 			return true;
 		}
@@ -339,25 +369,7 @@ public final class Utils {
 		if (target == null) {
 			return true;
 		}
-		final Player player = (Player) sender;
-		final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
-				"defaultImmunityLvl");
-		final int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl",
-				"defaultImmunityLvl");
-		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
-				&& pLvl != tLvl) {
-			return false;
-		}
-		/*
-		 * ACLogger.info("Immunity Check " + player.getName() + "-" +
-		 * target.getName() + " : " + pLvl + ">=" + tLvl + " = " + (pLvl >=
-		 * tLvl));
-		 */
-		if (pLvl >= tLvl) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	/**
@@ -519,6 +531,7 @@ public final class Utils {
 				return null;
 			}
 			if (!Utils.checkImmunity(sender, args, 0)) {
+				sI18n(sender, "insufficientLvl");
 				return null;
 			}
 		} else {

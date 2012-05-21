@@ -55,7 +55,7 @@ public class UnMute extends PlayerCommand {
 		replace.put("player", args.getString(0));
 		final ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 		if (acp.hasPower(Type.MUTED)) {
-			if (!Utils.checkImmunity(sender, acp.getHandler())) {
+			if (!Utils.checkImmunity(sender, acp)) {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
 			}

@@ -54,6 +54,10 @@ public class MuteList extends PlayerCommand {
 		players.addAll(ACPlayer.getPlayers(Type.MUTED_COMMAND));
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final TreeSet<String> toSend = new TreeSet<String>();
+		if (players.isEmpty()) {
+			LocaleHelper.NO_MUTED.sendLocale(sender);
+			return;
+		}
 		for (final ACPlayer p : players) {
 			replace.clear();
 			if (p.hasPower(Type.MUTED)) {
@@ -68,6 +72,7 @@ public class MuteList extends PlayerCommand {
 				continue;
 			}
 		}
+
 		for (final String s : toSend) {
 			sender.sendMessage(s);
 		}
