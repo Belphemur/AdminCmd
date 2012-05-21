@@ -17,8 +17,9 @@
 
 package be.Balor.Manager.Commands.Player;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.bukkit.command.CommandSender;
@@ -26,14 +27,12 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class MuteList extends PlayerCommand {
 
@@ -42,37 +41,45 @@ public class MuteList extends PlayerCommand {
 		cmdName = "bal_mutelist";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
-		final Collection<ACPlayer> players = PlayerManager.getInstance().getOnlineACPlayers();
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+		final Set<ACPlayer> players = new HashSet<ACPlayer>();
+		players.addAll(ACPlayer.getPlayers(Type.MUTED));
+		players.addAll(ACPlayer.getPlayers(Type.MUTED_COMMAND));
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final TreeSet<String> toSend = new TreeSet<String>();
 		for (final ACPlayer p : players) {
 			replace.clear();
 			if (p.hasPower(Type.MUTED)) {
-				replace.put("player", Utils.getPlayerName(p.getHandler()));
+				replace.put("player", p.getName());
 				replace.put("msg", p.getPower(Type.MUTED).getString());
 				toSend.add(LocaleHelper.MUTELIST.getLocale(replace));
 			} else if (p.hasPower(Type.MUTED_COMMAND)) {
-				replace.put("player", Utils.getPlayerName(p.getHandler()));
+				replace.put("player", p.getName());
 				replace.put("msg", p.getPower(Type.MUTED_COMMAND).getString());
 				toSend.add(LocaleHelper.MUTELIST.getLocale(replace));
-			} else
+			} else {
 				continue;
+			}
 		}
 		for (final String s : toSend) {
 			sender.sendMessage(s);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return true;
 	}
 
