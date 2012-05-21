@@ -211,7 +211,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onEnable() {
 		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
-		loadWebBrowser();
 		try {
 			metrics = new Metrics(this);
 		} catch (final IOException e) {
@@ -224,6 +223,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
+		loadWebBrowser();
 
 		ACPluginManager.setMetrics(metrics);
 
@@ -893,6 +893,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					try {
 						((PluginClassLoader) AdminCmd.this.getClassLoader()).addURL(new URL(
 								"jar:file:" + "lib/WebBrowser.jar" + "!/"));
+
 					} catch (final MalformedURLException e3) {
 						e3.printStackTrace();
 					}
@@ -904,7 +905,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 							"http://wiki.admincmd.com/player_commands.html");
 					webBrowser = new WebBrowser(urls);
 					webBrowser.startService();
-					WebBrowser.setDebugLogFile(new File(getDataFolder(), "WebBrowser.log"));
+					if (!ConfigEnum.DEBUG.getBoolean()) {
+						WebBrowser.stopDebugLog();
+					} else {
+						WebBrowser.setDebugLogFile(new File(getDataFolder(), "WebBrowser.log"));
+					}
+
 					ACPluginManager.getScheduler().scheduleAsyncDelayedTask(AdminCmd.this,
 							new WebBrowsingTask(webBrowser));
 				} catch (final IOException e) {
