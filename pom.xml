@@ -131,7 +131,8 @@
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix>../lib/</classpathPrefix>
+							<classpathLayoutType>custom</classpathLayoutType>
+							<customClasspathLayout>../lib/$${artifact.artifactId}.$${artifact.extension}</customClasspathLayout>
 						</manifest>
 					</archive>
 				</configuration>
