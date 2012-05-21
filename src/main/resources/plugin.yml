@@ -436,3 +436,6 @@ commands:
     description: Displays each muted player and the message
     aliases: [mutelist, mlist]
     usage: /<command>
+  bal_unmuteall:
+    aliases: [unmuteall,umall]
+    usage: /<command>

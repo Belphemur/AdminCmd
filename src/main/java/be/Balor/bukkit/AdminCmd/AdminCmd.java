@@ -100,6 +100,7 @@ import be.Balor.Manager.Commands.Player.SpyMsg;
 import be.Balor.Manager.Commands.Player.SuperBreaker;
 import be.Balor.Manager.Commands.Player.UnBan;
 import be.Balor.Manager.Commands.Player.UnMute;
+import be.Balor.Manager.Commands.Player.UnMuteAll;
 import be.Balor.Manager.Commands.Player.Vulcan;
 import be.Balor.Manager.Commands.Player.Whois;
 import be.Balor.Manager.Commands.Player.Withdraw;
@@ -464,6 +465,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACSuperBlacklistListener(), this);
 		}
 		CommandManager.getInstance().registerCommand(MuteList.class);
+		CommandManager.getInstance().registerCommand(UnMuteAll.class);
 	}
 
 	@Override

@@ -483,6 +483,13 @@ acplayerwithdraw:
     plugin: AdminCmd
     permissions: admincmd.player.withdraw
     cmdname: bal_withdraw
+    
+acplayerunmuteall:
+    command: unmuteall
+    description: "Unmute all muted players"
+    plugin: AdminCmd
+    permissions: admincmd.player.unmuteall
+    cmdname: bal_unmuteall
 
 acweatherclear:
     command: wclear
