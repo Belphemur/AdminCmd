@@ -49,6 +49,7 @@ import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.WebBrowser;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -1100,7 +1101,7 @@ public class ACHelper {
 		}
 		if (!pluginConfig.getBoolean("debug")) {
 			DebugLog.stopLogging();
-			be.Balor.Tools.Web.DebugLog.stopLogging();
+			WebBrowser.stopDebugLog();
 		}
 		final ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
 				coreInstance.getDataFolder(), "commands.yml"));
