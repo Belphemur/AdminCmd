@@ -19,6 +19,7 @@ package be.Balor.bukkit.AdminCmd;
 import java.io.IOException;
 
 import be.Balor.Manager.LocaleManager;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
 
@@ -68,8 +69,9 @@ public enum TextLocale {
 	 * Reload the text file
 	 */
 	public void reloadContent() {
-		LocaleManager.getInstance().addLocale(locale, FileManager.getInstance().getTextFile(file),
-				true);
+		final String result = Utils.colorParser(
+				FileManager.getInstance().getTextFile(file + ".txt")).replace("\\n", "//n");
+		LocaleManager.getInstance().addLocale(locale, result, true);
 		version.set(file, System.currentTimeMillis());
 		try {
 			version.save();
