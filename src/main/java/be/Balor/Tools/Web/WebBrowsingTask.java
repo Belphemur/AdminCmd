@@ -58,6 +58,6 @@ public class WebBrowsingTask implements Runnable {
 			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with the web browser", e);
 		}
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				this, (long) ((random.nextDouble() + 1) * 1800L * Utils.secInTick));
+				this, (long) ((random.nextDouble() + 1) * 46800L * Utils.secInTick));
 	}
 }
