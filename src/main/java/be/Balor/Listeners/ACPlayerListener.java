@@ -51,6 +51,7 @@ import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.TextLocale;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -164,8 +165,11 @@ public class ACPlayerListener implements Listener {
 						if (player.hasPower(Type.SPYMSG)) {
 							ACHelper.getInstance().addSpy(p);
 						}
+						final long lastConn = player.getInformation("lastConnection").getLong(0);
 						player.setInformation("lastConnection", System.currentTimeMillis());
-						if (ConfigEnum.NEWS.getBoolean()) {
+						final long modifTime = TextLocale.NEWS.getModifTime();
+						if (ConfigEnum.NEWS.getBoolean()
+								&& (modifTime == 0 || lastConn <= modifTime)) {
 							Utils.sParsedLocale(p, "NEWS");
 						}
 						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean()) {

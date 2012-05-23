@@ -77,7 +77,7 @@ public enum TextLocale {
 	 * 
 	 * @return milliseconds
 	 */
-	public int getModifTime() {
-		return version.getInt(file, 0);
+	public long getModifTime() {
+		return version.getLong(file, 0);
 	}
 }
