@@ -1066,6 +1066,8 @@ public class ACHelper {
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
 		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(coreInstance
 				.getDataFolder(), "config.yml"));
+		TextLocale.setVersion(ExtendedConfiguration.loadConfiguration(new File(new File(
+				coreInstance.getDataFolder(), "locales"), "textFile.yml")));
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
 		pluginConfig.options().copyDefaults(true).header(ConfigEnum.getHeader());
