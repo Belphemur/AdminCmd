@@ -743,3 +743,10 @@ acserverbroadcast:
     plugin: AdminCmd
     permissions: admincmd.server.broadcast
     cmdname: bal_broadcast
+    
+acserverbroadcast:
+    command: rtxt
+    description: "Reload all the text locale file (News,Rules,Motd)"
+    plugin: AdminCmd
+    permissions: admincmd.server.reloadtxt
+    cmdname: bal_rtxt

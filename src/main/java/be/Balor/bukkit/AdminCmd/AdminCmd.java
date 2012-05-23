@@ -115,6 +115,7 @@ import be.Balor.Manager.Commands.Server.Memory;
 import be.Balor.Manager.Commands.Server.News;
 import be.Balor.Manager.Commands.Server.Reload;
 import be.Balor.Manager.Commands.Server.ReloadAll;
+import be.Balor.Manager.Commands.Server.ReloadTxt;
 import be.Balor.Manager.Commands.Server.RepeatCmd;
 import be.Balor.Manager.Commands.Server.ReplaceBlock;
 import be.Balor.Manager.Commands.Server.Rules;
@@ -314,158 +315,160 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		final PluginManager pm = getServer().getPluginManager();
 		boolean banCommands = false;
 		boolean lockCommand = false;
-		CommandManager.getInstance().registerCommand(Day.class);
-		CommandManager.getInstance().registerCommand(Repair.class);
-		CommandManager.getInstance().registerCommand(RepairAll.class);
-		CommandManager.getInstance().registerCommand(More.class);
-		CommandManager.getInstance().registerCommand(PlayerList.class);
-		CommandManager.getInstance().registerCommand(PlayerLocation.class);
-		if (CommandManager.getInstance().registerCommand(God.class)) {
+		final CommandManager cmdManager = CommandManager.getInstance();
+		cmdManager.registerCommand(Day.class);
+		cmdManager.registerCommand(Repair.class);
+		cmdManager.registerCommand(RepairAll.class);
+		cmdManager.registerCommand(More.class);
+		cmdManager.registerCommand(PlayerList.class);
+		cmdManager.registerCommand(PlayerLocation.class);
+		if (cmdManager.registerCommand(God.class)) {
 			pm.registerEvents(new ACGodListener(), this);
 		}
-		if (CommandManager.getInstance().registerCommand(Thor.class)) {
+		if (cmdManager.registerCommand(Thor.class)) {
 			pm.registerEvents(new ACThorListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(Kill.class);
-		CommandManager.getInstance().registerCommand(Heal.class);
-		CommandManager.getInstance().registerCommand(ClearSky.class);
-		CommandManager.getInstance().registerCommand(Storm.class);
-		CommandManager.getInstance().registerCommand(SetSpawn.class);
-		CommandManager.getInstance().registerCommand(Spawn.class);
-		CommandManager.getInstance().registerCommand(Memory.class);
-		CommandManager.getInstance().registerCommand(SetTime.class);
-		CommandManager.getInstance().registerCommand(ClearInventory.class);
-		CommandManager.getInstance().registerCommand(Give.class);
-		CommandManager.getInstance().registerCommand(AddBlackList.class);
-		CommandManager.getInstance().registerCommand(RemoveBlackList.class);
-		CommandManager.getInstance().registerCommand(TpHere.class);
-		CommandManager.getInstance().registerCommand(TpTo.class);
-		CommandManager.getInstance().registerCommand(Coloring.class);
-		CommandManager.getInstance().registerCommand(Strike.class);
-		CommandManager.getInstance().registerCommand(RemoveAlias.class);
-		CommandManager.getInstance().registerCommand(SpawnMob.class);
+		cmdManager.registerCommand(Kill.class);
+		cmdManager.registerCommand(Heal.class);
+		cmdManager.registerCommand(ClearSky.class);
+		cmdManager.registerCommand(Storm.class);
+		cmdManager.registerCommand(SetSpawn.class);
+		cmdManager.registerCommand(Spawn.class);
+		cmdManager.registerCommand(Memory.class);
+		cmdManager.registerCommand(SetTime.class);
+		cmdManager.registerCommand(ClearInventory.class);
+		cmdManager.registerCommand(Give.class);
+		cmdManager.registerCommand(AddBlackList.class);
+		cmdManager.registerCommand(RemoveBlackList.class);
+		cmdManager.registerCommand(TpHere.class);
+		cmdManager.registerCommand(TpTo.class);
+		cmdManager.registerCommand(Coloring.class);
+		cmdManager.registerCommand(Strike.class);
+		cmdManager.registerCommand(RemoveAlias.class);
+		cmdManager.registerCommand(SpawnMob.class);
 
-		CommandManager.getInstance().registerCommand(KickPlayer.class);
-		CommandManager.getInstance().registerCommand(PrivateMessage.class);
-		CommandManager.getInstance().registerCommand(AddAlias.class);
-		CommandManager.getInstance().registerCommand(TpPlayerToPlayer.class);
-		CommandManager.getInstance().registerCommand(TpLoc.class);
-		CommandManager.getInstance().registerCommand(KickAllPlayers.class);
-		if (CommandManager.getInstance().registerCommand(Vulcan.class)) {
+		cmdManager.registerCommand(KickPlayer.class);
+		cmdManager.registerCommand(PrivateMessage.class);
+		cmdManager.registerCommand(AddAlias.class);
+		cmdManager.registerCommand(TpPlayerToPlayer.class);
+		cmdManager.registerCommand(TpLoc.class);
+		cmdManager.registerCommand(KickAllPlayers.class);
+		if (cmdManager.registerCommand(Vulcan.class)) {
 			pm.registerEvents(new ACVulcanListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(Drop.class);
-		CommandManager.getInstance().registerCommand(Invisible.class);
-		CommandManager.getInstance().registerCommand(SpyMsg.class);
-		if (CommandManager.getInstance().registerCommand(Fireball.class)) {
+		cmdManager.registerCommand(Drop.class);
+		cmdManager.registerCommand(Invisible.class);
+		cmdManager.registerCommand(SpyMsg.class);
+		if (cmdManager.registerCommand(Fireball.class)) {
 			pm.registerEvents(new ACFireballListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(Home.class);
-		CommandManager.getInstance().registerCommand(SetHome.class);
-		CommandManager.getInstance().registerCommand(AddWarp.class);
-		CommandManager.getInstance().registerCommand(RemoveWarp.class);
-		CommandManager.getInstance().registerCommand(TpToWarp.class);
-		CommandManager.getInstance().registerCommand(WarpList.class);
-		CommandManager.getInstance().registerCommand(Ip.class);
-		if (CommandManager.getInstance().registerCommand(BanPlayer.class)) {
+		cmdManager.registerCommand(Home.class);
+		cmdManager.registerCommand(SetHome.class);
+		cmdManager.registerCommand(AddWarp.class);
+		cmdManager.registerCommand(RemoveWarp.class);
+		cmdManager.registerCommand(TpToWarp.class);
+		cmdManager.registerCommand(WarpList.class);
+		cmdManager.registerCommand(Ip.class);
+		if (cmdManager.registerCommand(BanPlayer.class)) {
 			banCommands = true;
 		}
-		if (CommandManager.getInstance().registerCommand(UnBan.class)) {
+		if (cmdManager.registerCommand(UnBan.class)) {
 			banCommands = true;
 		}
 		if (banCommands) {
 			pm.registerEvents(new ACBanListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(KillMob.class);
-		if (CommandManager.getInstance().registerCommand(Fly.class)) {
+		cmdManager.registerCommand(KillMob.class);
+		if (cmdManager.registerCommand(Fly.class)) {
 			pm.registerEvents(new ACFlyListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(DeleteHome.class);
-		CommandManager.getInstance().registerCommand(ListHomes.class);
-		if (CommandManager.getInstance().registerCommand(Freeze.class)) {
+		cmdManager.registerCommand(DeleteHome.class);
+		cmdManager.registerCommand(ListHomes.class);
+		if (cmdManager.registerCommand(Freeze.class)) {
 			pm.registerEvents(new ACFrozenPlayerListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(Mute.class);
-		CommandManager.getInstance().registerCommand(UnMute.class);
-		if (CommandManager.getInstance().registerCommand(MobLimit.class)) {
+		cmdManager.registerCommand(Mute.class);
+		cmdManager.registerCommand(UnMute.class);
+		if (cmdManager.registerCommand(MobLimit.class)) {
 			pm.registerEvents(new ACCreatureSpawnListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(NoPickup.class);
-		CommandManager.getInstance().registerCommand(FreezeWeather.class);
-		CommandManager.getInstance().registerCommand(MOTD.class);
-		CommandManager.getInstance().registerCommand(Execution.class);
-		CommandManager.getInstance().registerCommand(News.class);
-		CommandManager.getInstance().registerCommand(Rain.class);
-		CommandManager.getInstance().registerCommand(Roll.class);
-		CommandManager.getInstance().registerCommand(Extinguish.class);
-		CommandManager.getInstance().registerCommand(Reload.class);
-		CommandManager.getInstance().registerCommand(ReplaceBlock.class);
-		CommandManager.getInstance().registerCommand(Undo.class);
-		CommandManager.getInstance().registerCommand(ReloadAll.class);
-		CommandManager.getInstance().registerCommand(RepeatCmd.class);
-		CommandManager.getInstance().registerCommand(Afk.class);
-		CommandManager.getInstance().registerCommand(MoreAll.class);
-		CommandManager.getInstance().registerCommand(TpToggle.class);
-		if (CommandManager.getInstance().registerCommand(TpAtSee.class)) {
+		cmdManager.registerCommand(NoPickup.class);
+		cmdManager.registerCommand(FreezeWeather.class);
+		cmdManager.registerCommand(MOTD.class);
+		cmdManager.registerCommand(Execution.class);
+		cmdManager.registerCommand(News.class);
+		cmdManager.registerCommand(Rain.class);
+		cmdManager.registerCommand(Roll.class);
+		cmdManager.registerCommand(Extinguish.class);
+		cmdManager.registerCommand(Reload.class);
+		cmdManager.registerCommand(ReplaceBlock.class);
+		cmdManager.registerCommand(Undo.class);
+		cmdManager.registerCommand(ReloadAll.class);
+		cmdManager.registerCommand(RepeatCmd.class);
+		cmdManager.registerCommand(Afk.class);
+		cmdManager.registerCommand(MoreAll.class);
+		cmdManager.registerCommand(TpToggle.class);
+		if (cmdManager.registerCommand(TpAtSee.class)) {
 			pm.registerEvents(new ACTpAtSeeListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(Uptime.class);
-		CommandManager.getInstance().registerCommand(Kit.class);
-		CommandManager.getInstance().registerCommand(Version.class);
-		CommandManager.getInstance().registerCommand(ListValues.class);
-		if (CommandManager.getInstance().registerCommand(LastLocation.class)) {
+		cmdManager.registerCommand(Uptime.class);
+		cmdManager.registerCommand(Kit.class);
+		cmdManager.registerCommand(Version.class);
+		cmdManager.registerCommand(ListValues.class);
+		if (cmdManager.registerCommand(LastLocation.class)) {
 			pm.registerEvents(new ACTeleportBackListener(), this);
 		}
-		if (CommandManager.getInstance().registerCommand(SuperBreaker.class)) {
+		if (cmdManager.registerCommand(SuperBreaker.class)) {
 			pm.registerEvents(new ACSuperBreaker(), this);
 		}
-		CommandManager.getInstance().registerCommand(Help.class);
-		CommandManager.getInstance().registerCommand(Played.class);
-		if (CommandManager.getInstance().registerCommand(LockServer.class)) {
+		cmdManager.registerCommand(Help.class);
+		cmdManager.registerCommand(Played.class);
+		if (cmdManager.registerCommand(LockServer.class)) {
 			lockCommand = true;
 		}
-		CommandManager.getInstance().registerCommand(Set.class);
-		CommandManager.getInstance().registerCommand(Rules.class);
-		if (CommandManager.getInstance().registerCommand(Eternal.class)) {
+		cmdManager.registerCommand(Set.class);
+		cmdManager.registerCommand(Rules.class);
+		if (cmdManager.registerCommand(Eternal.class)) {
 			pm.registerEvents(new ACFoodListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(FakeQuit.class);
-		CommandManager.getInstance().registerCommand(Feed.class);
-		CommandManager.getInstance().registerCommand(GameModeSwitch.class);
-		CommandManager.getInstance().registerCommand(Whois.class);
-		CommandManager.getInstance().registerCommand(ChangeMobSpawner.class);
-		CommandManager.getInstance().registerCommand(Reply.class);
-		CommandManager.getInstance().registerCommand(WorldDifficulty.class);
-		CommandManager.getInstance().registerCommand(Presentation.class);
-		CommandManager.getInstance().registerCommand(Experience.class);
-		CommandManager.getInstance().registerCommand(Broadcast.class);
-		if (CommandManager.getInstance().registerCommand(StopServer.class)) {
+		cmdManager.registerCommand(FakeQuit.class);
+		cmdManager.registerCommand(Feed.class);
+		cmdManager.registerCommand(GameModeSwitch.class);
+		cmdManager.registerCommand(Whois.class);
+		cmdManager.registerCommand(ChangeMobSpawner.class);
+		cmdManager.registerCommand(Reply.class);
+		cmdManager.registerCommand(WorldDifficulty.class);
+		cmdManager.registerCommand(Presentation.class);
+		cmdManager.registerCommand(Experience.class);
+		cmdManager.registerCommand(Broadcast.class);
+		if (cmdManager.registerCommand(StopServer.class)) {
 			lockCommand = true;
 		}
 		if (lockCommand) {
 			pm.registerEvents(new ACLockedServerListener(), this);
 		}
-		if (CommandManager.getInstance().registerCommand(NoDrop.class)) {
+		if (cmdManager.registerCommand(NoDrop.class)) {
 			pm.registerEvents(new ACNoDropListener(), this);
 		}
-		if (CommandManager.getInstance().registerCommand(EggSpawner.class)) {
+		if (cmdManager.registerCommand(EggSpawner.class)) {
 			EggTypeClassLoader.addPackage(this, "be.Balor.Tools.Egg.Types");
 			pm.registerEvents(new ACEggListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(GetItemId.class);
-		CommandManager.getInstance().registerCommand(Enchant.class);
-		CommandManager.getInstance().registerCommand(Potion.class);
-		CommandManager.getInstance().registerCommand(TpWorld.class);
-		CommandManager.getInstance().registerCommand(TpAll.class);
-		CommandManager.getInstance().registerCommand(Quit.class);
-		CommandManager.getInstance().registerCommand(BanList.class);
-		CommandManager.getInstance().registerCommand(Search.class);
-		CommandManager.getInstance().registerCommand(Withdraw.class);
+		cmdManager.registerCommand(GetItemId.class);
+		cmdManager.registerCommand(Enchant.class);
+		cmdManager.registerCommand(Potion.class);
+		cmdManager.registerCommand(TpWorld.class);
+		cmdManager.registerCommand(TpAll.class);
+		cmdManager.registerCommand(Quit.class);
+		cmdManager.registerCommand(BanList.class);
+		cmdManager.registerCommand(Search.class);
+		cmdManager.registerCommand(Withdraw.class);
 		if (ConfigEnum.SUPER_BLACKLIST.getBoolean()) {
 			pm.registerEvents(new ACSuperBlacklistListener(), this);
 		}
-		CommandManager.getInstance().registerCommand(MuteList.class);
-		CommandManager.getInstance().registerCommand(UnMuteAll.class);
+		cmdManager.registerCommand(MuteList.class);
+		cmdManager.registerCommand(UnMuteAll.class);
+		cmdManager.registerCommand(ReloadTxt.class);
 	}
 
 	@Override

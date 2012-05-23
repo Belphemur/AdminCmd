@@ -65,6 +65,20 @@ public enum TextLocale {
 	}
 
 	/**
+	 * Reload the text file
+	 */
+	public void reloadContent() {
+		LocaleManager.getInstance().addLocale(locale, FileManager.getInstance().getTextFile(file),
+				true);
+		version.set(file, System.currentTimeMillis());
+		try {
+			version.save();
+		} catch (final IOException e) {
+		}
+
+	}
+
+	/**
 	 * @param version
 	 *            the version to set
 	 */

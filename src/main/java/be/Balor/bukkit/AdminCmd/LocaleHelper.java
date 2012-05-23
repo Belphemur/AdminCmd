@@ -91,7 +91,9 @@ public enum LocaleHelper {
 	MUTELIST("muteList", ChatColor.GOLD + "%player, " + ChatColor.AQUA + "%msg"),
 	NO_MUTED("noMutedPlayers", ChatColor.RED + "There isn't any muted players."),
 	UNMUTED_PLAYERS("unMutedPlayers", ChatColor.AQUA + "%nb " + ChatColor.GREEN
-			+ "players have been unmuted.");
+			+ "players have been unmuted."),
+	TXT_RELOADED("allTxtReloaded", ChatColor.GREEN
+			+ "All Text File have been successfully reloaded.");
 
 	private final String key;
 	private final String locale;
