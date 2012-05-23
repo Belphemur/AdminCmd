@@ -439,6 +439,6 @@ commands:
   bal_unmuteall:
     aliases: [unmuteall,umall]
     usage: /<command>
-  bal_rtx:
-    aliases: [rtx,reloadtxt]
+  bal_rtxt:
+    aliases: [rtxt,reloadtxt]
     usage: /<command>
