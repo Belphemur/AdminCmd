@@ -69,8 +69,8 @@ public enum TextLocale {
 	 * Reload the text file
 	 */
 	public void reloadContent() {
-		final String result = Utils.colorParser(
-				FileManager.getInstance().getTextFile(file + ".txt")).replace("\\n", "//n");
+		final String result = Utils.colorParser(FileManager.getInstance()
+				.getTextFile(file + ".txt"));
 		LocaleManager.getInstance().addLocale(locale, result, true);
 		version.set(file, System.currentTimeMillis());
 		try {

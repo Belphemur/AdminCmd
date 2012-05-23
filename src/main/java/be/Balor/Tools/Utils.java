@@ -1211,9 +1211,12 @@ public final class Utils {
 		} else {
 			replace.put("lastlogin", date);
 		}
-		final String motd = I18n(locale, replace);
+		final String motd = I18n(locale, replace).replace("\\n", "\n").replace("//n", "\n");
 		if (motd != null) {
-			for (final String toSend : motd.split("//n")) {
+			for (final String toSend : motd.split("\n")) {
+				if (toSend.isEmpty()) {
+					continue;
+				}
 				p.sendMessage(toSend);
 			}
 		}
