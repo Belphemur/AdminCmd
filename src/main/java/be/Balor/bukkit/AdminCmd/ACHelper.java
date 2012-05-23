@@ -1082,17 +1082,6 @@ public class ACHelper {
 			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.remove("prioritizedCommands");
 		}
-		if (pluginConfig.get("glinding") != null) {
-			pluginConfig.add("gliding.multiplicator", ConfigEnum.G_MULT.getFloat());
-			pluginConfig.add("gliding.YvelocityCheckToGlide", ConfigEnum.G_VELCHECK.getFloat());
-			pluginConfig.add("gliding.newYvelocity", ConfigEnum.G_NEWYVEL.getFloat());
-			pluginConfig.remove("glinding");
-
-		} else {
-			pluginConfig.add("gliding.multiplicator", 0.1F);
-			pluginConfig.add("gliding.YvelocityCheckToGlide", -0.2F);
-			pluginConfig.add("gliding.newYvelocity", -0.5F);
-		}
 		if (pluginConfig.get("respawnAtSpawnPoint") != null) {
 			pluginConfig.remove("respawnAtSpawnPoint");
 		}
