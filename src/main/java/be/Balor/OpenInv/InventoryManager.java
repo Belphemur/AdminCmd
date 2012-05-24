@@ -60,8 +60,8 @@ public class InventoryManager {
 		replacedInv.remove(p);
 	}
 
-	public void closeOfflineInv(final Player p) {
-		replacedInv.remove(p);
+	void closeOfflineInv(final Player p) {
+		onQuit(p);
 		p.saveData();
 	}
 
@@ -123,7 +123,6 @@ public class InventoryManager {
 	}
 
 	private void openInv(final Player sender, final Player target, final boolean offline) {
-
 		final ACPlayerInventory inventory = getInventory(target, offline);
 		final EntityPlayer eh = ((CraftPlayer) sender).getHandle();
 		eh.openContainer(inventory);
@@ -132,11 +131,10 @@ public class InventoryManager {
 	private ACPlayerInventory getInventory(final Player player, final boolean offline) {
 		ACPlayerInventory inventory = replacedInv.get(player);
 		if (inventory == null) {
-			final EntityPlayer playerHandle = ((CraftPlayer) player).getHandle();
 			if (offline) {
-				inventory = new ACOfflinePlayerInventory(playerHandle, player);
+				inventory = new ACOfflinePlayerInventory(player);
 			} else {
-				inventory = new ACPlayerInventory(playerHandle);
+				inventory = new ACPlayerInventory(((CraftPlayer) player).getHandle());
 			}
 		}
 		return inventory;

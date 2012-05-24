@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class Mute extends PlayerCommand {
 	private final PermChild cmdMute;
@@ -49,7 +49,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -104,15 +104,18 @@ public class Mute extends PlayerCommand {
 						} catch (final Exception e) {
 						}
 						if (tmpMute == null) {
-							acp.setPower(Type.MUTED_COMMAND, "Permanently muted(including commands) by " + msg);
+							acp.setPower(Type.MUTED_COMMAND,
+									"Permanently muted(including commands) by " + msg);
 							Utils.sI18n(player, "commandMuteEnabled");
 						} else {
-							acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg + " for " + tmpMute + " minutes");
+							acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg
+									+ " for " + tmpMute + " minutes");
 							Utils.sI18n(player, "commandTmpMuteEnabled", "minutes",
 									tmpMute.toString());
 						}
 					} else {
-						acp.setPower(Type.MUTED_COMMAND, "Permanently muted(including commands) by " + msg);
+						acp.setPower(Type.MUTED_COMMAND,
+								"Permanently muted(including commands) by " + msg);
 						Utils.sI18n(player, "commandMuteEnabled");
 					}
 				} else {
@@ -168,7 +171,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -178,7 +181,7 @@ public class Mute extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
 	 */
 	@Override
