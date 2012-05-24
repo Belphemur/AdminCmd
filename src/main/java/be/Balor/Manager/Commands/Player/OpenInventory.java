@@ -23,8 +23,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Tools.Utils;
-import be.Balor.World.OpenInv.InventoryReplacer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -62,7 +62,7 @@ public class OpenInventory extends PlayerCommand {
 			return;
 		}
 		final Player pSender = (Player) sender;
-		InventoryReplacer.INSTANCE.openInv(pSender, target);
+		InventoryManager.INSTANCE.openInv(pSender, target);
 	}
 
 	/*

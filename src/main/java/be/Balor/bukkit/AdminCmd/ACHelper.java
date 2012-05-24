@@ -38,6 +38,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.Ban;
 import be.Balor.Player.BannedIP;
@@ -65,7 +66,6 @@ import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
-import be.Balor.World.OpenInv.InventoryReplacer;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -993,7 +993,7 @@ public class ACHelper {
 		playersForReplyMessage.remove(player);
 		spyPlayers.remove(player);
 		InvisibleWorker.getInstance().onQuitEvent(player);
-		InventoryReplacer.INSTANCE.onQuit(player);
+		InventoryManager.INSTANCE.onQuit(player);
 
 	}
 

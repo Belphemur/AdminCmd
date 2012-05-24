@@ -14,48 +14,48 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.World.OpenInv;
+package be.Balor.OpenInv;
 
-import net.minecraft.server.ContainerPlayer;
-import net.minecraft.server.EntityHuman;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.PlayerInventory;
 
-import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACPlayerInventory extends PlayerInventory {
+public class InventoryManager {
+	public static final InventoryManager INSTANCE = new InventoryManager();
+	private final Map<Player, ACPlayerInventory> replacedInv = new HashMap<Player, ACPlayerInventory>();
 
 	/**
-	 * @param entityhuman
-	 */
-	public ACPlayerInventory(final EntityHuman entityhuman) {
-		super(entityhuman);
+ * 
+ */
+	private InventoryManager() {
 	}
 
-	@Override
-	public boolean a(final EntityHuman entityhuman) {
-		return this.player.dead ? false : true;
+	public void onQuit(final Player p) {
+		replacedInv.remove(p);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.minecraft.server.PlayerInventory#onClose(org.bukkit.craftbukkit.entity
-	 * .CraftHumanEntity)
-	 */
-	@Override
-	public void onClose(final CraftHumanEntity who) {
-		super.onClose(who);
-		if (who.getHandle().equals(player)) {
-			return;
+	public void openInv(final Player sender, final Player target) {
+
+		final ACPlayerInventory inventory = getInventory(target);
+		final EntityPlayer eh = ((CraftPlayer) sender).getHandle();
+		eh.openContainer(inventory);
+	}
+
+	private ACPlayerInventory getInventory(final Player player) {
+		ACPlayerInventory inventory = replacedInv.get(player);
+		if (inventory == null) {
+			inventory = new ACPlayerInventory(((CraftPlayer) player).getHandle());
 		}
-		final EntityPlayer player = (EntityPlayer) this.player;
-		player.updateInventory(new ContainerPlayer(this));
+		return inventory;
+
 	}
 
 }
