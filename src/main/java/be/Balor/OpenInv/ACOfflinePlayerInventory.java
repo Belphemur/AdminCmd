@@ -17,7 +17,6 @@
 package be.Balor.OpenInv;
 
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,15 +25,13 @@ import org.bukkit.entity.Player;
  */
 public class ACOfflinePlayerInventory extends ACPlayerInventory {
 
-	private final Player proprietary;
-
 	/**
 	 * @param entityhuman
 	 * @param proprietary
 	 */
 	ACOfflinePlayerInventory(final Player proprietary) {
-		super(((CraftPlayer) proprietary).getHandle());
-		this.proprietary = proprietary;
+		super(proprietary);
+
 	}
 
 	/*

@@ -19,6 +19,10 @@ import net.minecraft.server.EntityHuman;
 import net.minecraft.server.ItemStack;
 import net.minecraft.server.PlayerInventory;
 
+import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+
 /**
  * @author lishd (Modded by Balor) {@link https://github.com/lishd/OpenInv/}
  * 
@@ -26,14 +30,31 @@ import net.minecraft.server.PlayerInventory;
 public class ACPlayerInventory extends PlayerInventory {
 
 	public final ItemStack[] extra = new ItemStack[5];
+	public final Player proprietary;
 
 	/**
 	 * @param entityhuman
 	 */
-	ACPlayerInventory(final EntityHuman entityhuman) {
-		super(entityhuman);
-		this.armor = entityhuman.inventory.armor;
-		this.items = entityhuman.inventory.items;
+	ACPlayerInventory(final Player proprietary) {
+		super(((CraftPlayer) proprietary).getHandle());
+		this.proprietary = proprietary;
+		this.armor = player.inventory.armor;
+		this.items = player.inventory.items;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.minecraft.server.PlayerInventory#onClose(org.bukkit.craftbukkit.entity
+	 * .CraftHumanEntity)
+	 */
+	@Override
+	public void onClose(final CraftHumanEntity who) {
+		super.onClose(who);
+		if (transaction.isEmpty() && !proprietary.isOnline()) {
+			InventoryManager.INSTANCE.closeOfflineInv(proprietary);
+		}
 	}
 
 	@Override

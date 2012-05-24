@@ -139,7 +139,7 @@ public class InventoryManager {
 			if (offline) {
 				inventory = new ACOfflinePlayerInventory(player);
 			} else {
-				inventory = new ACPlayerInventory(((CraftPlayer) player).getHandle());
+				inventory = new ACPlayerInventory(player);
 			}
 		}
 		return inventory;
