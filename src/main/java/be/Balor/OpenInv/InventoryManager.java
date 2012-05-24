@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.DebugLog;
 
 import com.google.common.collect.MapMaker;
 
@@ -63,6 +64,7 @@ public class InventoryManager {
 	void closeOfflineInv(final Player p) {
 		onQuit(p);
 		p.saveData();
+		DebugLog.INSTANCE.info("Saving Offline Inventory of " + p.getName());
 	}
 
 	/**
