@@ -62,7 +62,8 @@ public enum LocaleHelper {
 			+ "has been kicked from the Server, reason:" + ChatColor.RED + " %reason"),
 	PLAYER_QUITCMD_MSG("quitCmdMsg", ChatColor.GOLD + "%player " + ChatColor.YELLOW
 			+ "left the game: %reason"),
-	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED + "%message"),
+	WORLD_NOT_LOADED("worldNotLoaded", ChatColor.RED + "This World is not loaded :"
+			+ ChatColor.GOLD + " %message"),
 	MISSING_ARG("missingArg", ChatColor.RED + "You must provide a %arg as an argument to use the"
 			+ " command " + ChatColor.AQUA + "%cmdName"),
 	TP_DIM("dimensionTeleport", ChatColor.GREEN
