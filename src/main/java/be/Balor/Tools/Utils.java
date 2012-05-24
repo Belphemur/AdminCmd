@@ -698,7 +698,7 @@ public final class Utils {
 		String prefixstring = "";
 		String statusPrefix = "";
 		if (sender != null) {
-			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())
+			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player)
 					&& PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
 		}
 		if (isInv) {
@@ -1339,14 +1339,14 @@ public final class Utils {
 			return;
 		}
 		if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
-				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo.getName())
+				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo)
 				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
 			replace.put("player", nTo);
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return;
 		}
 		if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-				&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom.getName()) && !PermissionManager
+				&& (InvisibleWorker.getInstance().hasInvisiblePowers(pFrom) && !PermissionManager
 						.hasPerm(pTo, "admincmd.invisible.cansee", false))) {
 			replace.put("player", nFrom);
 			Utils.sI18n(sender, "playerNotFound", replace);
@@ -1603,8 +1603,8 @@ public final class Utils {
 		final List<Player> online = Utils.getOnlinePlayers();
 		final Map<Player, String> players = new TreeMap<Player, String>(new PlayerComparator());
 		for (final Player p : online) {
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p.getName()) || ACPlayer
-					.getPlayer(p).hasPower(Type.FAKEQUIT))
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p) || ACPlayer.getPlayer(p)
+					.hasPower(Type.FAKEQUIT))
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
 				continue;
 			}

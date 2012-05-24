@@ -65,7 +65,7 @@ public class PrivateMessage extends PlayerCommand {
 		}
 		final Player buddy = sender.getServer().getPlayer(args.getString(0));
 		if (buddy != null) {
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
 				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;

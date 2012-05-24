@@ -56,7 +56,6 @@ public enum ConfigEnum {
 			+ "he will be spawn at the spawn point you set"),
 	RESET_POWERS("resetPowerWhenTpAnotherWorld", true, "Fly,God,vulcan, etc ... are power.\n"
 			+ "If true, these power are lost when tp to another world."),
-	RINVISIBLE("invisibleRangeInBlock", 312, "Range check for update the invisible status."),
 	FQINVISIBLE("fakeQuitWhenInvisible", true, "Fake quit when you become invisible"),
 	NPINVISIBLE("InvisAndNoPickup", true, "Setting this to true, will disable the auto-picking item when invisible"),
 	DFLY("fly.DefaultFlyPower", 1.75F, "Default value for Fly power"),

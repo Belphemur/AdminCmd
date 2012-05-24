@@ -59,8 +59,8 @@ public class Invisible extends PlayerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Utils.getPlayerName(target));
 			final ACPlayer acp = ACPlayer.getPlayer(target);
-			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target.getName())) {
-				InvisibleWorker.getInstance().vanish(target);
+			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target)) {
+				InvisibleWorker.getInstance().vanish(target, false);
 				Utils.sI18n(target, "invisibleEnabled");
 				if (noPickUp && !acp.hasPower(Type.NO_PICKUP)) {
 					acp.setPower(Type.NO_PICKUP);

@@ -710,9 +710,6 @@ public class ACHelper {
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 			}
 		}
-		InvisibleWorker.createInstance().setMaxRange(
-				pluginConfig.getInt("invisibleRangeInBlock", 512));
-		InvisibleWorker.getInstance().setTickCheck(pluginConfig.getInt("statutCheckInSec", 20));
 		LocaleManager.getInstance().addLocaleFile(
 				LocaleManager.PRIMARY_LOCALE,
 				new File(coreInstance.getDataFolder(), "locales" + File.separator

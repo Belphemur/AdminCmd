@@ -68,7 +68,7 @@ public class Reply extends PlayerCommand {
 				ACHelper.getInstance().removeReplyPlayer(pSender);
 				return;
 			}
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
+			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
 					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
 				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;

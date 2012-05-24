@@ -44,9 +44,7 @@ import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -60,33 +58,6 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACPlayerListener implements Listener {
-	protected class UpdateInvisibleOnJoin implements Runnable {
-		Player newPlayer;
-
-		/**
-		 *
-		 */
-		public UpdateInvisibleOnJoin(final Player p) {
-			newPlayer = p;
-		}
-
-		@Override
-		public void run() {
-			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (Invisible) for "
-					+ newPlayer.getName());
-			for (final Player toVanish : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
-				InvisibleWorker.getInstance().invisible(toVanish, newPlayer);
-				if (ConfigEnum.FQINVISIBLE.getBoolean()) {
-					Utils.removePlayerFromOnlineList(toVanish, newPlayer);
-				}
-			}
-			DebugLog.INSTANCE.info("Begin UpdateInvisibleOnJoin (FakeQuit) for "
-					+ newPlayer.getName());
-			for (final Player toFq : ACHelper.getInstance().getFakeQuitPlayers()) {
-				Utils.removePlayerFromOnlineList(toFq, newPlayer);
-			}
-		}
-	}
 
 	@EventHandler
 	public void onPlayerChat(final PlayerChatEvent event) {
@@ -139,6 +110,7 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
+		InvisibleWorker.getInstance().makeInvisibleToPlayer(p);
 		player.setInformation("last-ip", p.getAddress().getAddress().toString());
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
@@ -147,8 +119,9 @@ public class ACPlayerListener implements Listener {
 		}
 		if (player.hasPower(Type.INVISIBLE)) {
 			event.setJoinMessage(null);
-			Utils.sI18n(event.getPlayer(), "stillInv");
-			InvisibleWorker.getInstance().onJoinEvent(p);
+			Utils.sI18n(p, "stillInv");
+			InvisibleWorker.getInstance().vanish(p, true);
+
 		}
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
@@ -277,7 +250,7 @@ public class ACPlayerListener implements Listener {
 		}
 		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setQuitMessage(null);
-		} else if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())) {
+		} else if (InvisibleWorker.getInstance().hasInvisiblePowers(p)) {
 			event.setQuitMessage(null);
 		}
 		PlayerManager.getInstance().setOffline(player);
@@ -287,7 +260,6 @@ public class ACPlayerListener implements Listener {
 	@EventHandler
 	public void onPlayerRespawn(final PlayerRespawnEvent event) {
 		final Player player = event.getPlayer();
-		playerRespawnOrJoin(player);
 		final String spawn = ConfigEnum.GSPAWN.getString();
 		Location loc = null;
 		final String worldName = player.getWorld().getName();
@@ -345,25 +317,6 @@ public class ACPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		playerRespawnOrJoin(event.getPlayer());
-	}
-
-	private boolean playerRespawnOrJoin(final Player newPlayer) {
-		ACPluginManager
-				.getServer()
-				.getScheduler()
-				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-						new UpdateInvisibleOnJoin(newPlayer), 15);
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(newPlayer.getName())) {
-			ACPluginManager
-					.getServer()
-					.getScheduler()
-					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-							new UpdateInvisible(newPlayer), 15);
-			Utils.removePlayerFromOnlineList(newPlayer);
-			return true;
-		}
-		return false;
 	}
 
 }

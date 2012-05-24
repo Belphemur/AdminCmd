@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners.Commands;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -32,15 +33,16 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class ACResetPowerListener implements Listener {
 	@EventHandler
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
-		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.noreset", false)) {
+		final Player bPlayer = event.getPlayer();
+		if (PermissionManager.hasPerm(bPlayer, "admincmd.player.noreset", false)) {
 			return;
 		}
-		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
+		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
 		player.removeAllSuperPower();
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(player.getName())) {
-			InvisibleWorker.getInstance().reappear(event.getPlayer());
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(bPlayer)) {
+			InvisibleWorker.getInstance().reappear(bPlayer);
 		}
-		Utils.sI18n(event.getPlayer(), "changedWorld");
+		Utils.sI18n(bPlayer, "changedWorld");
 
 	}
 }

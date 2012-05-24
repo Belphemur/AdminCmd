@@ -48,7 +48,7 @@ public class ACEntityListener implements Listener {
 			return;
 		}
 		final Player p = (Player) event.getTarget();
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& PermissionManager.hasPerm(p, "admincmd.invisible.notatarget", false)) {
 			event.setCancelled(true);
 		}

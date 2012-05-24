@@ -16,20 +16,14 @@
  ************************************************************************/
 package belgium.Balor.Workers;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentMap;
 
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.Packet20NamedEntitySpawn;
-import net.minecraft.server.Packet29DestroyEntity;
-
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.UpdateInvisible;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -41,9 +35,8 @@ import com.google.common.collect.MapMaker;
  */
 final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
-	private final ConcurrentMap<String, Integer> invisblesWithTaskIds = new MapMaker().makeMap();
-	private long maxRange = 262144;
-	private int tickCheck = 400;
+	private final ConcurrentMap<Player, Object> invisiblesPlayers = new MapMaker().makeMap();
+	private static final Object EMPTY = new Object();
 
 	/**
 	 * 
@@ -77,52 +70,12 @@ final public class InvisibleWorker {
 	}
 
 	/**
-	 * @param maxRange
-	 *            the maxRange to set
-	 */
-	public void setMaxRange(final long maxRange) {
-		this.maxRange = maxRange ^ 2;
-	}
-
-	/**
-	 * @param tickCheck
-	 *            the tickCheck to set
-	 */
-	public void setTickCheck(final int tickCheck) {
-		this.tickCheck = tickCheck * 20;
-	}
-
-	/**
 	 * return all invisible Players
 	 * 
 	 * @return
 	 */
-	public LinkedList<Player> getAllInvisiblePlayers() {
-		final LinkedList<Player> result = new LinkedList<Player>();
-		for (final String p : invisblesWithTaskIds.keySet()) {
-			result.add(ACPluginManager.getServer().getPlayerExact(p));
-		}
-		return result;
-	}
-
-	/**
-	 * Adding a player when joining the server after checked if the player have
-	 * the invisible power
-	 * 
-	 * @param toVanish
-	 *            player to vanish.
-	 */
-	public void onJoinEvent(final Player toVanish) {
-		final String name = toVanish.getName();
-		if (!invisblesWithTaskIds.containsKey(name)) {
-			invisblesWithTaskIds.put(
-					name,
-					ACPluginManager
-							.getServer()
-							.getScheduler()
-							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
-									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
-		}
+	public Collection<Player> getAllInvisiblePlayers() {
+		return Collections.unmodifiableCollection(invisiblesPlayers.keySet());
 	}
 
 	/**
@@ -131,11 +84,7 @@ final public class InvisibleWorker {
 	 * @param toReappear
 	 */
 	public void onQuitEvent(final Player toReappear) {
-		final String name = toReappear.getName();
-		if (invisblesWithTaskIds.containsKey(name)) {
-			ACPluginManager.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
-			invisblesWithTaskIds.remove(name);
-		}
+		invisiblesPlayers.remove(toReappear);
 	}
 
 	/**
@@ -144,27 +93,18 @@ final public class InvisibleWorker {
 	 * @param toReappear
 	 */
 	public void reappear(final Player toReappear) {
-		final String name = toReappear.getName();
-		if (invisblesWithTaskIds.containsKey(name)) {
-			ACPluginManager.getServer().getScheduler().cancelTask(invisblesWithTaskIds.get(name));
-			invisblesWithTaskIds.remove(name);
-
-			ACPluginManager
-					.getServer()
-					.getScheduler()
-					.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-							new Runnable() {
-								@Override
-								public void run() {
-									for (final Player p : Utils.getOnlinePlayers()) {
-										uninvisible(toReappear, p);
-									}
-								}
-							});
-			if (ConfigEnum.FQINVISIBLE.getBoolean()) {
-				Utils.broadcastFakeJoin(toReappear);
-				Utils.addPlayerInOnlineList(toReappear);
-			}
+		invisiblesPlayers.remove(toReappear);
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new Runnable() {
+					@Override
+					public void run() {
+						for (final Player p : Utils.getOnlinePlayers()) {
+							uninvisible(toReappear, p);
+						}
+					}
+				});
+		if (ConfigEnum.FQINVISIBLE.getBoolean()) {
+			Utils.broadcastFakeJoin(toReappear);
 		}
 
 	}
@@ -175,7 +115,7 @@ final public class InvisibleWorker {
 	 * @param hide
 	 * @param hideFrom
 	 */
-	public void invisible(final Player hide, final Player hideFrom) {
+	private void invisible(final Player hide, final Player hideFrom) {
 		if (hide == null) {
 			return;
 		}
@@ -185,15 +125,13 @@ final public class InvisibleWorker {
 		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false)) {
 			return;
 		}
-		if (hide.getName().equals(hideFrom.getName())) {
-			return;
-		}
+		ACPluginManager.scheduleSyncTask(new Runnable() {
 
-		if (Utils.getDistanceSquared(hide, hideFrom) > maxRange) {
-			return;
-		}
-		final EntityPlayer craftFrom = ((CraftPlayer) hideFrom).getHandle();
-		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(hide.getEntityId()));
+			@Override
+			public void run() {
+				hideFrom.hidePlayer(hide);
+			}
+		});
 
 	}
 
@@ -204,21 +142,16 @@ final public class InvisibleWorker {
 	 * @param unHideFrom
 	 */
 	private void uninvisible(final Player unHide, final Player unHideFrom) {
-		if (unHide.equals(unHideFrom)) {
-			return;
-		}
-
-		if (Utils.getDistanceSquared(unHide, unHideFrom) > maxRange) {
-			return;
-		}
-
 		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false)) {
 			return;
 		}
-		final EntityPlayer craftFrom = ((CraftPlayer) unHideFrom).getHandle();
-		final EntityPlayer UnHidePlayer = ((CraftPlayer) unHide).getHandle();
-		craftFrom.netServerHandler.sendPacket(new Packet29DestroyEntity(unHide.getEntityId()));
-		craftFrom.netServerHandler.sendPacket(new Packet20NamedEntitySpawn(UnHidePlayer));
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				unHideFrom.showPlayer(unHide);
+			}
+		});
+
 	}
 
 	/**
@@ -227,34 +160,38 @@ final public class InvisibleWorker {
 	 * @param player
 	 * @return
 	 */
-	public boolean hasInvisiblePowers(final String player) {
-		return invisblesWithTaskIds.containsKey(player);
+	public boolean hasInvisiblePowers(final Player player) {
+		if (player == null) {
+			return false;
+		}
+		return invisiblesPlayers.containsKey(player);
 	}
 
 	/**
 	 * Make the player vanish
 	 * 
 	 * @param toVanish
+	 *            player to vanish
+	 * @param onJoinEvent
+	 *            if it's done on join event.
 	 */
-	public void vanish(final Player toVanish) {
-		final String name = toVanish.getName();
-		ACPluginManager
-				.getServer()
-				.getScheduler()
-				.scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
-						new UpdateInvisible(toVanish));
-		if (!invisblesWithTaskIds.containsKey(name)) {
-			invisblesWithTaskIds.put(
-					name,
-					ACPluginManager
-							.getServer()
-							.getScheduler()
-							.scheduleAsyncRepeatingTask(ACHelper.getInstance().getCoreInstance(),
-									new UpdateInvisible(toVanish), tickCheck / 2, tickCheck));
+	public void vanish(final Player toVanish, final boolean onJoinEvent) {
+		if (!invisiblesPlayers.containsKey(toVanish)) {
+			invisiblesPlayers.put(toVanish, EMPTY);
+			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+					ACPluginManager.getCorePlugin(), new Runnable() {
+
+						@Override
+						public void run() {
+							for (final Player p : Utils.getOnlinePlayers()) {
+								invisible(toVanish, p);
+							}
+
+						}
+					});
 		}
-		if (ConfigEnum.FQINVISIBLE.getBoolean()) {
+		if (!onJoinEvent && ConfigEnum.FQINVISIBLE.getBoolean()) {
 			Utils.broadcastFakeQuit(toVanish);
-			Utils.removePlayerFromOnlineList(toVanish);
 		}
 
 	}
@@ -265,7 +202,27 @@ final public class InvisibleWorker {
 	 * @return
 	 */
 	public int nbInvisibles() {
-		return invisblesWithTaskIds.size();
+		return invisiblesPlayers.size();
+	}
+
+	/**
+	 * Make all invisible player invisible to the new connected player.
+	 * 
+	 * @param newPlayer
+	 *            new connected player.
+	 */
+	public void makeInvisibleToPlayer(final Player newPlayer) {
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
+				new Runnable() {
+
+					@Override
+					public void run() {
+						for (final Player inv : invisiblesPlayers.keySet()) {
+							invisible(inv, newPlayer);
+						}
+
+					}
+				});
 	}
 
 }

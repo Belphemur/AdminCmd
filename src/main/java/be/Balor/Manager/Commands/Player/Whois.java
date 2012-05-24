@@ -160,7 +160,7 @@ public class Whois extends PlayerCommand {
 		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
 				ChatColor.GREEN
 						+ String.valueOf((InvisibleWorker.getInstance().hasInvisiblePowers(
-								actarget.getName()) && PermissionManager.hasPerm(sender,
+								actarget.getHandler()) && PermissionManager.hasPerm(sender,
 								"admincmd.invisible.cansee", false))), sizeRemaining, ' ');
 		sender.sendMessage(line);
 

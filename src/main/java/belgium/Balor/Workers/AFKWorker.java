@@ -152,7 +152,7 @@ final public class AFKWorker {
 	 * @param msg
 	 */
 	public void setAfk(final Player p, final String msg) {
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
 			String afkString = Utils.I18n("afk", "player", Utils.getPlayerName(p, null));
 			if (afkString != null) {
@@ -176,7 +176,7 @@ final public class AFKWorker {
 	 * @param buddy
 	 */
 	public void sendAfkMessage(final CommandSender sender, final Player buddy) {
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy.getName())
+		if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
 				|| ACPlayer.getPlayer(buddy.getName()).hasPower(Type.FAKEQUIT)) {
 			return;
 		}
@@ -199,7 +199,7 @@ final public class AFKWorker {
 	 * @param p
 	 */
 	public void setOnline(final Player p) {
-		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p.getName())
+		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
 			final String online = Utils.I18n("online", "player", Utils.getPlayerName(p, null));
 			if (online != null) {
