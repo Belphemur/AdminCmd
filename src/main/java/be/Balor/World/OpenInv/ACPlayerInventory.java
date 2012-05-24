@@ -16,8 +16,12 @@
  ************************************************************************/
 package be.Balor.World.OpenInv;
 
+import net.minecraft.server.ContainerPlayer;
 import net.minecraft.server.EntityHuman;
+import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.PlayerInventory;
+
+import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -35,6 +39,23 @@ public class ACPlayerInventory extends PlayerInventory {
 	@Override
 	public boolean a(final EntityHuman entityhuman) {
 		return this.player.dead ? false : true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.minecraft.server.PlayerInventory#onClose(org.bukkit.craftbukkit.entity
+	 * .CraftHumanEntity)
+	 */
+	@Override
+	public void onClose(final CraftHumanEntity who) {
+		super.onClose(who);
+		if (who.getHandle().equals(player)) {
+			return;
+		}
+		final EntityPlayer player = (EntityPlayer) this.player;
+		player.updateInventory(new ContainerPlayer(this));
 	}
 
 }
