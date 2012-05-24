@@ -370,12 +370,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>Heroes</groupId>
-			<artifactId>Heroes</artifactId>
-			<version>1.4.7</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>de.bananaco</groupId>
 			<artifactId>bPermissions</artifactId>
 			<version>1337-SNAPSHOT</version>

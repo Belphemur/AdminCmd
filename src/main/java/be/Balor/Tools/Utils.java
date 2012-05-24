@@ -54,9 +54,14 @@ import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 
 import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
@@ -85,8 +90,6 @@ import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
 import com.google.common.base.Joiner;
-import com.herocraftonline.heroes.Heroes;
-import com.herocraftonline.heroes.characters.Hero;
 import com.miraclem4n.mchat.api.Reader;
 
 import de.diddiz.LogBlock.Consumer;
@@ -154,7 +157,6 @@ public final class Utils {
 
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
-	public static Heroes heroes = null;
 	public static boolean mChatPresent = false;
 	public static boolean signExtention = false;
 	public final static long secondInMillis = 1000;
@@ -1066,30 +1068,44 @@ public final class Utils {
 	public static boolean setPlayerHealth(final CommandSender sender, final CommandArgs name,
 			final Type.Health toDo) {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
-		Hero hero = null;
 		if (target == null) {
 			return false;
 		}
-		if (heroes != null) {
-			hero = heroes.getCharacterManager().getHero(target);
-		}
+		final PluginManager pluginManager = ACPluginManager.getServer().getPluginManager();
 		switch (toDo) {
 		case HEAL:
-			if (hero == null) {
-				target.setHealth(20);
-			} else {
-				hero.setHealth(20);
+			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(target, 20,
+					RegainReason.CUSTOM);
+			pluginManager.callEvent(heal);
+			if (!heal.isCancelled()) {
+				target.setHealth(heal.getAmount());
+				target.setFireTicks(0);
 			}
-			target.setFireTicks(0);
 			break;
 		case FEED:
-			target.setFoodLevel(20);
+			final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(target, 20);
+			pluginManager.callEvent(foodEvent);
+			if (!foodEvent.isCancelled()) {
+				target.setFoodLevel(foodEvent.getFoodLevel());
+			}
 			break;
 		case KILL:
-			if (hero == null) {
-				target.setHealth(0);
+			if (target.equals(sender)) {
+				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target,
+						EntityDamageEvent.DamageCause.SUICIDE, Short.MAX_VALUE);
+				pluginManager.callEvent(dmgEvent);
+				target.damage(Short.MAX_VALUE);
 			} else {
-				hero.setHealth(0);
+				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target,
+						EntityDamageEvent.DamageCause.CUSTOM, Short.MAX_VALUE);
+				pluginManager.callEvent(dmgEvent);
+				if (!dmgEvent.isCancelled()) {
+					if (isPlayer(sender, false)) {
+						target.damage(dmgEvent.getDamage(), (Player) sender);
+					} else {
+						target.damage(dmgEvent.getDamage());
+					}
+				}
 			}
 			if (logBlock != null) {
 				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);

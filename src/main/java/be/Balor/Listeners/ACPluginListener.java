@@ -35,7 +35,6 @@ import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
-import com.herocraftonline.heroes.Heroes;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
@@ -140,14 +139,6 @@ public class ACPluginListener implements Listener {
 					.getPlugin("SignExtensions");
 			if (plugin != null) {
 				Utils.signExtention = true;
-			}
-		}
-		if (Utils.heroes == null) {
-			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("Heroes");
-			if (plugin != null && plugin.isEnabled()) {
-				Utils.heroes = (Heroes) plugin;
-				ACLogger.info("Successfully linked with Heroes");
 			}
 		}
 	}
