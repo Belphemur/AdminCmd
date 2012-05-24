@@ -43,7 +43,7 @@ public class ACOfflinePlayerInventory extends ACPlayerInventory {
 	 */
 	@Override
 	public void onClose(final CraftHumanEntity who) {
-		super.onClose(who);
+		transaction.remove(who);
 		if (transaction.isEmpty()) {
 			InventoryManager.INSTANCE.closeOfflineInv(proprietary);
 		}
