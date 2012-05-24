@@ -31,10 +31,16 @@ import java.lang.reflect.Field;
 public class ClassUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> T getPrivateField(final Object object, final String field)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
+			throws SecurityException, IllegalArgumentException, IllegalAccessException,
+			NoSuchFieldException {
 		final Class<?> clazz = object.getClass();
-		final Field objectField = clazz.getDeclaredField(field);
+		Field objectField;
+		try {
+			objectField = clazz.getDeclaredField(field);
+		} catch (final NoSuchFieldException e) {
+			final Class<?> superClazz = clazz.getSuperclass();
+			objectField = superClazz.getDeclaredField(field);
+		}
 		objectField.setAccessible(true);
 		final T obj = (T) objectField.get(object);
 		objectField.setAccessible(false);
@@ -42,10 +48,16 @@ public class ClassUtils {
 	}
 
 	public static void setPrivateField(final Object object, final String field, final Object value)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
+			throws SecurityException, IllegalArgumentException, IllegalAccessException,
+			NoSuchFieldException {
 		final Class<?> clazz = object.getClass();
-		final Field objectField = clazz.getDeclaredField(field);
+		Field objectField;
+		try {
+			objectField = clazz.getDeclaredField(field);
+		} catch (final NoSuchFieldException e) {
+			final Class<?> superClazz = clazz.getSuperclass();
+			objectField = superClazz.getDeclaredField(field);
+		}
 		objectField.setAccessible(true);
 		objectField.set(object, value);
 		objectField.setAccessible(false);
