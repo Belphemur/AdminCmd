@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Player;
 
-import java.util.HashMap;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -52,16 +50,16 @@ public class OpenInventory extends PlayerCommand {
 		}
 		final String playerName = args.getString(0);
 		final Player target = Utils.getPlayer(playerName);
+		final Player pSender = (Player) sender;
 		if (target == null) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", playerName);
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
+			InventoryManager.INSTANCE.openOfflineInv(pSender, playerName);
+			return;
 		}
 		if (!Utils.checkImmunity(sender, target)) {
 			Utils.sI18n(sender, "insufficientLvl");
 			return;
 		}
-		final Player pSender = (Player) sender;
+
 		InventoryManager.INSTANCE.openInv(pSender, target);
 	}
 

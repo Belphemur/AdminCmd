@@ -17,6 +17,8 @@
 package be.Balor.OpenInv;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,13 +34,15 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
 
+import com.google.common.collect.MapMaker;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class InventoryManager {
 	public static InventoryManager INSTANCE;
-	private final Map<Player, ACPlayerInventory> replacedInv = new HashMap<Player, ACPlayerInventory>();
+	private final Map<Player, ACPlayerInventory> replacedInv = new MapMaker().makeMap();
 
 	/**
  * 
@@ -84,29 +88,26 @@ public class InventoryManager {
 			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
 		}
 
-		// Find player name
-		for (final File playerfile : playerfolder.listFiles()) {
-			final String filename = playerfile.getName();
-			final String playername = filename.substring(0, filename.length() - 4);
-
-			if (!playername.trim().equalsIgnoreCase(name)) {
-				continue;
-			}
-			// Create an entity to load the player data
-			final MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-			final EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0),
-					playername, new ItemInWorldManager(server.getWorldServer(0)));
-			target = (entity == null) ? null : (Player) entity.getBukkitEntity();
-			if (target != null) {
-				target.loadData();
-				break;
-			} else {
-				throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
-			}
-
+		final String playername = matchUser(Arrays.asList(playerfolder.listFiles()), name);
+		if (playername == null) {
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
 		}
 
-		openInv(sender, target, true);
+		// Create an entity to load the player data
+		final MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
+		final EntityPlayer entity = new EntityPlayer(server, server.getWorldServer(0), playername,
+				new ItemInWorldManager(server.getWorldServer(0)));
+		target = (entity == null) ? null : (Player) entity.getBukkitEntity();
+		if (target != null) {
+			target.loadData();
+		} else {
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
+		}
+		if (Utils.checkImmunity(sender, target)) {
+			openInv(sender, target, true);
+		} else {
+			Utils.sI18n(sender, "insufficientLvl");
+		}
 	}
 
 	/**
@@ -139,6 +140,33 @@ public class InventoryManager {
 			}
 		}
 		return inventory;
+
+	}
+
+	private String matchUser(final Collection<File> container, final String search) {
+		String found = null;
+		if (search == null) {
+			return found;
+		}
+		final String lowerSearch = search.toLowerCase();
+		int delta = Integer.MAX_VALUE;
+		for (final File file : container) {
+			final String filename = file.getName();
+			final String str = filename.substring(0, filename.length() - 4);
+			if (!str.toLowerCase().startsWith(lowerSearch)) {
+				continue;
+			}
+			final int curDelta = str.length() - lowerSearch.length();
+			if (curDelta < delta) {
+				found = str;
+				delta = curDelta;
+			}
+			if (curDelta == 0) {
+				break;
+			}
+
+		}
+		return found;
 
 	}
 
