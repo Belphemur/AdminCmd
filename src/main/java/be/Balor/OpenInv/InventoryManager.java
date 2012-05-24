@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.World.ACWorld;
 
 import com.google.common.collect.MapMaker;
 
@@ -77,7 +78,8 @@ public class InventoryManager {
 	 *         ://github.com/lishd/OpenInv/blob/master/src/lishid
 	 *         /openinv/commands/OpenInvPluginCommand.java}
 	 */
-	public void openOfflineInv(final Player sender, final String name) throws PlayerNotFound {
+	public void openOfflineInv(final Player sender, final String name, final String world)
+			throws PlayerNotFound {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", name);
@@ -85,7 +87,8 @@ public class InventoryManager {
 		// See if the player has data files
 
 		// Find the player folder
-		final File playerfolder = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
+		final ACWorld acworld = ACWorld.getWorld(world);
+		final File playerfolder = new File(acworld.getHandler().getWorldFolder(), "players");
 		if (!playerfolder.exists()) {
 			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
 		}

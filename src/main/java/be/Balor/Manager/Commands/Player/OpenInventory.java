@@ -52,7 +52,11 @@ public class OpenInventory extends PlayerCommand {
 		final Player target = Utils.getPlayer(playerName);
 		final Player pSender = (Player) sender;
 		if (target == null) {
-			InventoryManager.INSTANCE.openOfflineInv(pSender, playerName);
+			String world = args.getValueFlag('w');
+			if (world == null) {
+				world = pSender.getWorld().getName();
+			}
+			InventoryManager.INSTANCE.openOfflineInv(pSender, playerName, world);
 			return;
 		}
 		if (!Utils.checkImmunity(sender, target)) {
