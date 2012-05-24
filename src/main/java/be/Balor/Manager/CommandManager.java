@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -49,6 +48,7 @@ import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.ClassUtils;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -309,28 +309,6 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	/**
-	 * Getting the private field of a another class;
-	 * 
-	 * @param object
-	 * @param field
-	 * @return
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	private Object getPrivateField(final Object object, final String field)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
-		final Class<?> clazz = object.getClass();
-		final Field objectField = clazz.getDeclaredField(field);
-		objectField.setAccessible(true);
-		final Object result = objectField.get(object);
-		objectField.setAccessible(false);
-		return result;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -506,12 +484,10 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand pCmd) {
 		try {
-			final Object result = getPrivateField(corePlugin.getServer().getPluginManager(),
-					"commandMap");
-			final SimpleCommandMap commandMap = (SimpleCommandMap) result;
-			final Object map = getPrivateField(commandMap, "knownCommands");
-			@SuppressWarnings("unchecked")
-			final HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
+			final SimpleCommandMap commandMap = ClassUtils.getPrivateField(corePlugin.getServer()
+					.getPluginManager(), "commandMap");
+			final HashMap<String, Command> knownCommands = ClassUtils.getPrivateField(commandMap,
+					"knownCommands");
 			PluginCommand cmd;
 			try {
 				cmd = (PluginCommand) knownCommands.get(pCmd.getName());
