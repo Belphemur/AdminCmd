@@ -81,17 +81,7 @@ public class PermissionsEx extends SuperPermissions {
 	 */
 	@Override
 	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
-		if (!(player instanceof Player)) {
-			return true;
-		}
-		if (PEX.has((Player) player, perm.getName())) {
-			return true;
-		} else {
-			if (errorMsg) {
-				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
-			}
-			return false;
-		}
+		return hasPerm(player, perm.getName(), errorMsg);
 	}
 
 	/*
