@@ -40,8 +40,7 @@ public class ACPlayerInventory extends PlayerInventory {
 	public ItemStack[] getContents() {
 		final ItemStack[] C = new ItemStack[getSize()];
 		System.arraycopy(items, 0, C, 0, items.length);
-		System.arraycopy(extra, 0, C, items.length, extra.length);
-		System.arraycopy(armor, 0, C, items.length + extra.length, armor.length);
+		System.arraycopy(armor, 0, C, items.length, armor.length);
 		return C;
 	}
 
@@ -57,7 +56,7 @@ public class ACPlayerInventory extends PlayerInventory {
 
 	@Override
 	public boolean a(final EntityHuman entityhuman) {
-		return this.player.dead ? false : true;
+		return true;
 	}
 
 	@Override
@@ -69,8 +68,8 @@ public class ACPlayerInventory extends PlayerInventory {
 	}
 
 	private int getReversedItemSlotNum(final int i) {
-		if (i >= 32) {
-			return i - 32;
+		if (i >= 27) {
+			return i - 27;
 		} else {
 			return i + 9;
 		}
@@ -99,16 +98,15 @@ public class ACPlayerInventory extends PlayerInventory {
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.extra;
+			is = this.armor;
 		} else {
 			i = getReversedItemSlotNum(i);
 		}
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.armor;
-		}
-		if (is == this.armor) {
+			is = this.extra;
+		} else if (is == this.armor) {
 			i = getReversedArmorSlotNum(i);
 		}
 
@@ -121,16 +119,15 @@ public class ACPlayerInventory extends PlayerInventory {
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.extra;
+			is = this.armor;
 		} else {
 			i = getReversedItemSlotNum(i);
 		}
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.armor;
-		}
-		if (is == this.armor) {
+			is = this.extra;
+		} else if (is == this.armor) {
 			i = getReversedArmorSlotNum(i);
 		}
 
@@ -160,16 +157,15 @@ public class ACPlayerInventory extends PlayerInventory {
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.extra;
+			is = this.armor;
 		} else {
 			i = getReversedItemSlotNum(i);
 		}
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.armor;
-		}
-		if (is == this.armor) {
+			is = this.extra;
+		} else if (is == this.armor) {
 			i = getReversedArmorSlotNum(i);
 		}
 
@@ -189,16 +185,15 @@ public class ACPlayerInventory extends PlayerInventory {
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.extra;
+			is = this.armor;
 		} else {
 			i = getReversedItemSlotNum(i);
 		}
 
 		if (i >= is.length) {
 			i -= is.length;
-			is = this.armor;
-		}
-		if (is == this.armor) {
+			is = this.extra;
+		} else if (is == this.armor) {
 			i = getReversedArmorSlotNum(i);
 		}
 		is[i] = itemstack;

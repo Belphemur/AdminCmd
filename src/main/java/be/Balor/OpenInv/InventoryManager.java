@@ -29,13 +29,19 @@ import org.bukkit.entity.Player;
  * 
  */
 public class InventoryManager {
-	public static final InventoryManager INSTANCE = new InventoryManager();
+	public static InventoryManager INSTANCE;
 	private final Map<Player, ACPlayerInventory> replacedInv = new HashMap<Player, ACPlayerInventory>();
 
 	/**
  * 
  */
 	private InventoryManager() {
+	}
+
+	public static void createInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new InventoryManager();
+		}
 	}
 
 	public void onQuit(final Player p) {

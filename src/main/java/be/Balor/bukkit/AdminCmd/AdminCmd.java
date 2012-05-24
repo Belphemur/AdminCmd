@@ -152,6 +152,7 @@ import be.Balor.Manager.Commands.Weather.Thor;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
+import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
@@ -470,7 +471,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(MuteList.class);
 		cmdManager.registerCommand(UnMuteAll.class);
 		cmdManager.registerCommand(ReloadTxt.class);
-		cmdManager.registerCommand(OpenInventory.class);
+		if (cmdManager.registerCommand(OpenInventory.class)) {
+			InventoryManager.createInstance();
+		}
 	}
 
 	@Override
