@@ -65,6 +65,7 @@ import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
+import be.Balor.World.OpenInv.InventoryReplacer;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -992,6 +993,7 @@ public class ACHelper {
 		playersForReplyMessage.remove(player);
 		spyPlayers.remove(player);
 		InvisibleWorker.getInstance().onQuitEvent(player);
+		InventoryReplacer.INSTANCE.onQuit(player);
 
 	}
 
