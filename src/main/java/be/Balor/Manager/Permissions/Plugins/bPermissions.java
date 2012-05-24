@@ -19,7 +19,9 @@ package be.Balor.Manager.Permissions.Plugins;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Group;
@@ -34,6 +36,43 @@ import de.bananaco.bpermissions.api.util.CalculableType;
 public class bPermissions extends SuperPermissions {
 
 	public bPermissions() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#hasPerm(org.bukkit
+	 * .command.CommandSender, java.lang.String, boolean)
+	 */
+	@Override
+	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
+		if (!(player instanceof Player)) {
+			return true;
+		}
+		final Player player2 = (Player) player;
+		if (ApiLayer.hasPermission(player2.getWorld().getName(), CalculableType.USER,
+				player.getName(), perm)) {
+			return true;
+		} else {
+			if (errorMsg) {
+				Utils.sI18n(player, "errorNotPerm", "p", perm);
+			}
+			return false;
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#hasPerm(org.bukkit
+	 * .command.CommandSender, org.bukkit.permissions.Permission, boolean)
+	 */
+	@Override
+	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
+		return hasPerm(player, perm.getName(), errorMsg);
 	}
 
 	/*

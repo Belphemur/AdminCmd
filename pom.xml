@@ -372,7 +372,7 @@
 		<dependency>
 			<groupId>de.bananaco</groupId>
 			<artifactId>bPermissions</artifactId>
-			<version>1337-SNAPSHOT</version>
+			<version>2.9.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
