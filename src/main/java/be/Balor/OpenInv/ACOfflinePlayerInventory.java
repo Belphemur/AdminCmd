@@ -17,9 +17,9 @@
 package be.Balor.OpenInv;
 
 import net.minecraft.server.EntityHuman;
-import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.entity.Player;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -27,11 +27,15 @@ import org.bukkit.craftbukkit.entity.CraftHumanEntity;
  */
 public class ACOfflinePlayerInventory extends ACPlayerInventory {
 
+	private final Player proprietary;
+
 	/**
 	 * @param entityhuman
+	 * @param proprietary
 	 */
-	public ACOfflinePlayerInventory(final EntityHuman entityhuman) {
+	ACOfflinePlayerInventory(final EntityHuman entityhuman, final Player proprietary) {
 		super(entityhuman);
+		this.proprietary = proprietary;
 	}
 
 	/*
@@ -44,7 +48,7 @@ public class ACOfflinePlayerInventory extends ACPlayerInventory {
 	@Override
 	public void onClose(final CraftHumanEntity who) {
 		super.onClose(who);
-		InventoryManager.INSTANCE.closeOfflineInv(((EntityPlayer) this.player).getBukkitEntity());
+		InventoryManager.INSTANCE.closeOfflineInv(proprietary);
 	}
 
 }

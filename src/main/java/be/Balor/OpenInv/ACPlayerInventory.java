@@ -30,7 +30,7 @@ public class ACPlayerInventory extends PlayerInventory {
 	/**
 	 * @param entityhuman
 	 */
-	public ACPlayerInventory(final EntityHuman entityhuman) {
+	ACPlayerInventory(final EntityHuman entityhuman) {
 		super(entityhuman);
 		this.armor = entityhuman.inventory.armor;
 		this.items = entityhuman.inventory.items;
