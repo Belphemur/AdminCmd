@@ -1071,7 +1071,11 @@ public final class Utils {
 		if (target == null) {
 			return false;
 		}
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", getPlayerName(target));
 		final PluginManager pluginManager = ACPluginManager.getServer().getPluginManager();
+		final String newStateLocale = LocaleHelper.NEW_STATE.getLocale();
+		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER.getLocale(replace);
 		switch (toDo) {
 		case HEAL:
 			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(target, 20,
@@ -1080,6 +1084,13 @@ public final class Utils {
 			if (!heal.isCancelled()) {
 				target.setHealth(heal.getAmount());
 				target.setFireTicks(0);
+				final String msg = newStateLocale + LocaleHelper.HEALED.getLocale();
+				target.sendMessage(msg);
+				if (!target.equals(sender)) {
+					final String newStateMsg = newStatePlayerLocale
+							+ LocaleHelper.HEALED.getLocale();
+					sender.sendMessage(newStateMsg);
+				}
 			}
 			break;
 		case FEED:
@@ -1087,6 +1098,13 @@ public final class Utils {
 			pluginManager.callEvent(foodEvent);
 			if (!foodEvent.isCancelled()) {
 				target.setFoodLevel(foodEvent.getFoodLevel());
+				final String msg = newStateLocale + LocaleHelper.FEEDED.getLocale();
+				target.sendMessage(msg);
+				if (!target.equals(sender)) {
+					final String newStateMsg = newStatePlayerLocale
+							+ LocaleHelper.FEEDED.getLocale();
+					sender.sendMessage(newStateMsg);
+				}
 			}
 			break;
 		case KILL:
@@ -1094,7 +1112,10 @@ public final class Utils {
 				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target,
 						EntityDamageEvent.DamageCause.SUICIDE, Short.MAX_VALUE);
 				pluginManager.callEvent(dmgEvent);
-				target.damage(Short.MAX_VALUE);
+				if (!dmgEvent.isCancelled()) {
+					target.damage(Short.MAX_VALUE);
+					LocaleHelper.SUICIDE.sendLocale(target);
+				}
 			} else {
 				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target,
 						EntityDamageEvent.DamageCause.CUSTOM, Short.MAX_VALUE);
@@ -1105,6 +1126,12 @@ public final class Utils {
 					} else {
 						target.damage(dmgEvent.getDamage());
 					}
+					final String msg = newStateLocale + LocaleHelper.KILLED.getLocale();
+					target.sendMessage(msg);
+					final String newStateMsg = newStatePlayerLocale
+							+ LocaleHelper.KILLED.getLocale();
+					sender.sendMessage(newStateMsg);
+
 				}
 			}
 			if (logBlock != null) {

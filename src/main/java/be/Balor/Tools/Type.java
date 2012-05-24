@@ -203,6 +203,11 @@ public enum Type {
 		KILL,
 		HEAL,
 		FEED;
+		@Override
+		public String toString() {
+			return super.toString().toLowerCase();
+		}
+
 	}
 
 }

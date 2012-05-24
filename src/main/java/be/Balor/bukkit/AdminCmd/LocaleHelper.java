@@ -93,7 +93,13 @@ public enum LocaleHelper {
 	UNMUTED_PLAYERS("unMutedPlayers", ChatColor.AQUA + "%nb " + ChatColor.GREEN
 			+ "players have been unmuted."),
 	TXT_RELOADED("allTxtReloaded", ChatColor.GREEN
-			+ "All Text File have been successfully reloaded.");
+			+ "All Text File have been successfully reloaded."),
+	KILLED("kill", ChatColor.RED + "killed"),
+	FEEDED("feed", ChatColor.DARK_PURPLE + "feeded"),
+	HEALED("heal", ChatColor.MAGIC + "aaaa" + ChatColor.GREEN + "healed" + ChatColor.MAGIC + "aaaa"),
+	NEW_STATE("nState", ChatColor.GOLD + "You have been "),
+	NEW_STATE_PLAYER("pNewState", ChatColor.GOLD + "%player have been "),
+	SUICIDE("suicide", ChatColor.RED + "You commited suicide.");
 
 	private final String key;
 	private final String locale;
