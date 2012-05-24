@@ -86,6 +86,7 @@ import be.Balor.Manager.Commands.Player.Mute;
 import be.Balor.Manager.Commands.Player.MuteList;
 import be.Balor.Manager.Commands.Player.NoDrop;
 import be.Balor.Manager.Commands.Player.NoPickup;
+import be.Balor.Manager.Commands.Player.OpenInventory;
 import be.Balor.Manager.Commands.Player.Played;
 import be.Balor.Manager.Commands.Player.PlayerList;
 import be.Balor.Manager.Commands.Player.PlayerLocation;
@@ -469,6 +470,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(MuteList.class);
 		cmdManager.registerCommand(UnMuteAll.class);
 		cmdManager.registerCommand(ReloadTxt.class);
+		cmdManager.registerCommand(OpenInventory.class);
 	}
 
 	@Override

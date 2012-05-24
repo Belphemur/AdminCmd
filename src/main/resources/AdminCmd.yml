@@ -490,6 +490,13 @@ acplayerunmuteall:
     plugin: AdminCmd
     permissions: admincmd.player.unmuteall
     cmdname: bal_unmuteall
+    
+acplayeropeninv:
+    command: openinv [Player]
+    description: "Open the inventory of the target player"
+    plugin: AdminCmd
+    permissions: admincmd.player.openinv
+    cmdname: bal_openinv
 
 acweatherclear:
     command: wclear

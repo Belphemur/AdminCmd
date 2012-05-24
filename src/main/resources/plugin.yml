@@ -442,3 +442,6 @@ commands:
   bal_rtxt:
     aliases: [rtxt,reloadtxt]
     usage: /<command>
+  bal_openinv:
+    aliases: [openinv,oi]
+    usage: /<command> player
