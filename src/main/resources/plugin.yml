@@ -392,7 +392,7 @@ commands:
     usage: /<command> -E eggType <other param depending on the eggType>
   bal_broadcast:
     description: Broadcast a message.
-    aliases: [broadcast, bc]
+    aliases: [broadcast, bc, bcast]
     usage: /<command> [message]
   bal_itemid:
     description: Get the id and the data of the item in hand

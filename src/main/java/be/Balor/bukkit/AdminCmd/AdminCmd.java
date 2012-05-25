@@ -890,7 +890,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%entity" + ChatColor.RED + " don't exists.");
 		Utils.addLocale("eggCustomError", ChatColor.RED + "Problem with the egg " + ChatColor.GOLD
 				+ "%egg" + ChatColor.RED + " : " + ChatColor.YELLOW + "%error");
-		Utils.addLocale("broadcast", "[BROADCAST] %message");
 		LocaleHelper.addAllLocales();
 		LocaleManager.getInstance().save();
 	}

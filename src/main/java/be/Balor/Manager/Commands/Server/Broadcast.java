@@ -25,6 +25,7 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 import com.google.common.base.Joiner;
 
@@ -49,8 +50,8 @@ public class Broadcast extends CoreCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final String message = Joiner.on(" ").skipNulls().join(args);
-		replace.put("message", message);
-		Utils.broadcastMessage(Utils.I18n("broadcast", replace));
+		replace.put("message", Utils.colorParser(message));
+		Utils.broadcastMessage(LocaleHelper.BCAST.getLocale(replace));
 	}
 
 	/*

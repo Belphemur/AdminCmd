@@ -100,7 +100,8 @@ public enum LocaleHelper {
 	HEALED("heal", ChatColor.MAGIC + "aaaa" + ChatColor.GREEN + "healed" + ChatColor.MAGIC + "aaaa"),
 	NEW_STATE("nState", ChatColor.GOLD + "You have been "),
 	NEW_STATE_PLAYER("pNewState", ChatColor.GOLD + "%player have been "),
-	SUICIDE("suicide", ChatColor.RED + "You commited suicide.");
+	SUICIDE("suicide", ChatColor.RED + "You commited suicide."),
+	BCAST("broadcast", ChatColor.YELLOW + "[BROADCAST]" + ChatColor.GOLD + "%message");
 
 	private final String key;
 	private final String locale;
