@@ -69,9 +69,9 @@ public class PlayerLocation extends PlayerCommand {
 				return;
 			}
 		}
-		sender.sendMessage(loc.getBlockX() + " N, " + loc.getBlockZ() + " E, " + loc.getBlockY()
-				+ " H");
-		final String facing[] = { "W", "NW", "N", "NE", "E", "SE", "S", "SW" };
+		sender.sendMessage(loc.getBlockX() + " X, " + loc.getBlockZ() + " Z, " + loc.getBlockY()
+				+ " Y");
+		final String facing[] = { "S", "SW", "W", "NW", "N", "NE", "E", "SE" };
 		double yaw = ((loc.getYaw() + 22.5) % 360);
 		if (yaw < 0) {
 			yaw += 360;
