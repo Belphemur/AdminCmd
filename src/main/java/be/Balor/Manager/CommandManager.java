@@ -334,8 +334,14 @@ public class CommandManager implements CommandExecutor {
 				ACLogger.info("Command " + cmdName + " intercepted for "
 						+ cmdAlias.getCommandName());
 			}
-			return executeCommand(sender, cmdAlias.getCmd(),
-					cmdAlias.processArguments(Utils.Arrays_copyOfRange(split, 1, split.length)));
+			final String[] cmdArgsArray = Utils.Arrays_copyOfRange(split, 1, split.length);
+			final CoreCommand coreCmd = cmdAlias.getCmd();
+			if (!coreCmd.argsCheck(cmdArgsArray)) {
+				sender.sendMessage(coreCmd.getPluginCommand().getUsage()
+						.replace("<command>", cmdName));
+				return false;
+			}
+			return executeCommand(sender, coreCmd, cmdAlias.processArguments(cmdArgsArray));
 		}
 		return false;
 	}
