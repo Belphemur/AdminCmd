@@ -993,7 +993,9 @@ public class ACHelper {
 		playersForReplyMessage.remove(player);
 		spyPlayers.remove(player);
 		InvisibleWorker.getInstance().onQuitEvent(player);
-		InventoryManager.INSTANCE.onQuit(player);
+		if (InventoryManager.INSTANCE != null) {
+			InventoryManager.INSTANCE.onQuit(player);
+		}
 
 	}
 
