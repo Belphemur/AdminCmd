@@ -228,6 +228,22 @@ class HelpList {
 		return result;
 	}
 
+	/**
+	 * Search for the commandName
+	 * 
+	 * @param cmd
+	 * @return
+	 */
+	public HelpEntry getExactCommand(final String cmd) {
+		for (final HelpEntry entry : pluginHelp) {
+			if (!entry.getCommandName().equals(cmd)) {
+				continue;
+			}
+			return entry;
+		}
+		return null;
+	}
+
 	public List<HelpEntry> getCommandMatch(final String cmd, final CommandSender sender) {
 		return getCommandMatch(cmd, sender, false);
 	}

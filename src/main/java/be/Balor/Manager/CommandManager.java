@@ -280,7 +280,11 @@ public class CommandManager implements CommandExecutor {
 				return true;
 			}
 			if (!cmd.argsCheck(args)) {
-				return false;
+				if (!HelpLister.getInstance().displayExactCommandHelp(sender, "AdminCmd",
+						cmd.getCmdName())) {
+					return false;
+				}
+				return true;
 			}
 			container = new ACCommandContainer(sender, cmd, args);
 			/*
@@ -337,9 +341,12 @@ public class CommandManager implements CommandExecutor {
 			final String[] cmdArgsArray = Utils.Arrays_copyOfRange(split, 1, split.length);
 			final CoreCommand coreCmd = cmdAlias.getCmd();
 			if (!coreCmd.argsCheck(cmdArgsArray)) {
-				sender.sendMessage(coreCmd.getPluginCommand().getUsage()
-						.replace("<command>", cmdName));
-				return false;
+				if (!HelpLister.getInstance().displayExactCommandHelp(sender, "AdminCmd",
+						coreCmd.getCmdName())) {
+					sender.sendMessage(coreCmd.getPluginCommand().getUsage()
+							.replace("<command>", cmdName));
+				}
+				return true;
 			}
 			return executeCommand(sender, coreCmd, cmdAlias.processArguments(cmdArgsArray));
 		}

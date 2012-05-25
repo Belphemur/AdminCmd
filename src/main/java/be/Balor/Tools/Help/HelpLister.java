@@ -199,6 +199,32 @@ public class HelpLister {
 		return sendHelpCmd(pluginName, command, sender, false);
 	}
 
+	/**
+	 * Display the help for a specific cmdname
+	 * 
+	 * @param sender
+	 * @param plugin
+	 * @param cmdName
+	 * @return
+	 */
+	public boolean displayExactCommandHelp(final CommandSender sender, final String plugin,
+			final String cmdName) {
+		final HelpList list = plugins.get(plugin);
+		if (list == null) {
+			return false;
+		}
+		final HelpEntry entry = list.getExactCommand(cmdName);
+		if (entry == null) {
+			return false;
+		}
+		final String chat = entry.chatString(false);
+		for (final String l : chat.split("\n")) {
+			sender.sendMessage(l);
+		}
+		return true;
+
+	}
+
 	private void displayHelpMessage(final List<HelpEntry> list, final String pluginName,
 			final CommandSender sender, final boolean detailed) {
 		sender.sendMessage(ChatColor.AQUA
