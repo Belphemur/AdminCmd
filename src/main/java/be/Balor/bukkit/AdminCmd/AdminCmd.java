@@ -31,6 +31,7 @@ import be.Balor.Listeners.Commands.ACFrozenPlayerListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACNoDropListener;
+import be.Balor.Listeners.Commands.ACOpenInvListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBlacklistListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
@@ -473,6 +474,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(ReloadTxt.class);
 		if (cmdManager.registerCommand(OpenInventory.class)) {
 			InventoryManager.createInstance();
+			pm.registerEvents(new ACOpenInvListener(), this);
 		}
 	}
 

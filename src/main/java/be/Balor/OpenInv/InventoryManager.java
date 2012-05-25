@@ -25,10 +25,12 @@ import java.util.Map;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.ItemInWorldManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerInventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -45,6 +47,7 @@ import com.google.common.collect.MapMaker;
 public class InventoryManager {
 	public static InventoryManager INSTANCE;
 	private final Map<Player, ACPlayerInventory> replacedInv = new MapMaker().makeMap();
+	private final Map<String, ACPlayerInventory> offlineInv = new MapMaker().makeMap();
 
 	/**
  * 
@@ -64,8 +67,22 @@ public class InventoryManager {
 
 	void closeOfflineInv(final Player p) {
 		onQuit(p);
+		offlineInv.remove(p.getName());
 		p.saveData();
 		DebugLog.INSTANCE.info("Saving Offline Inventory of " + p.getName());
+	}
+
+	public void onJoin(final Player p) {
+		final ACPlayerInventory inv = offlineInv.get(p.getName());
+		if (inv == null) {
+			return;
+		}
+		if (inv instanceof ACOfflinePlayerInventory) {
+			final CraftPlayer cp = (CraftPlayer) p;
+			final PlayerInventory mcInv = ((CraftInventoryPlayer) cp.getInventory()).getInventory();
+			mcInv.items = inv.items;
+			mcInv.armor = inv.armor;
+		}
 	}
 
 	/**
@@ -138,6 +155,7 @@ public class InventoryManager {
 		if (inventory == null) {
 			if (offline) {
 				inventory = new ACOfflinePlayerInventory(player);
+				offlineInv.put(player.getName(), inventory);
 			} else {
 				inventory = new ACPlayerInventory(player);
 			}

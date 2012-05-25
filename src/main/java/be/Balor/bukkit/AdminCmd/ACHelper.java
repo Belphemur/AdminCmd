@@ -38,7 +38,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.Ban;
 import be.Balor.Player.BannedIP;
@@ -993,10 +992,6 @@ public class ACHelper {
 		playersForReplyMessage.remove(player);
 		spyPlayers.remove(player);
 		InvisibleWorker.getInstance().onQuitEvent(player);
-		if (InventoryManager.INSTANCE != null) {
-			InventoryManager.INSTANCE.onQuit(player);
-		}
-
 	}
 
 	public void removeFakeQuit(final Player p) {
