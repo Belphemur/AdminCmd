@@ -33,6 +33,7 @@ import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACNoDropListener;
 import be.Balor.Listeners.Commands.ACOpenInvListener;
 import be.Balor.Listeners.Commands.ACResetPowerListener;
+import be.Balor.Listeners.Commands.ACSignEditListener;
 import be.Balor.Listeners.Commands.ACSuperBlacklistListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACTeleportBackListener;
@@ -476,6 +477,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			InventoryManager.createInstance();
 			pm.registerEvents(new ACOpenInvListener(), this);
 		}
+		if (ConfigEnum.EDIT_SIGN.getBoolean()) {
+			pm.registerEvents(new ACSignEditListener(), this);
+		}
 	}
 
 	@Override
@@ -513,6 +517,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		permissionLinker.addPermChild("admincmd.spec.noloss");
+		permissionLinker.addPermChild("admincmd.spec.signedit");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (final World w : this.getServer().getWorlds()) {
