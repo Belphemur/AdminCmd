@@ -173,7 +173,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -518,6 +518,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermChild("admincmd.item.infinity");
 		permissionLinker.addPermChild("admincmd.spec.noloss");
 		permissionLinker.addPermChild("admincmd.spec.signedit");
+		permissionLinker.addPermChild("admincmd.spec.ipbroadcast");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (final World w : this.getServer().getWorlds()) {

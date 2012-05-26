@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -102,7 +102,9 @@ public enum LocaleHelper {
 	NEW_STATE_PLAYER("pNewState", ChatColor.GOLD + "%player have been "),
 	SUICIDE("suicide", ChatColor.RED + "You commited suicide."),
 	BCAST("broadcast", ChatColor.YELLOW + "[BROADCAST]" + ChatColor.GOLD + "%message"),
-	UNKNOWN("unknown", "unknown");
+	UNKNOWN("unknown", "unknown"),
+	IP_BROADCAST("ipBroadcast", ChatColor.GOLD + "%player " + ChatColor.RED + "joined from the same IP" +
+			ChatColor.GOLD + " as %player2" + ChatColor.RED + ". The IP is: " + ChatColor.AQUA + "%ip");
 
 	private final String key;
 	private final String locale;
@@ -127,7 +129,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -139,7 +141,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -149,7 +151,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 * 
+	 *
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -160,7 +162,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 * 
+	 *
 	 * @return the locale
 	 */
 	public String getLocale() {
