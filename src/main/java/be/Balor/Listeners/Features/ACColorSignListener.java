@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners;
+package be.Balor.Listeners.Features;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
