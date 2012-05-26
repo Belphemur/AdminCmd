@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools.Lister;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
@@ -95,24 +96,25 @@ public abstract class Lister {
 	 * @throws EmptyListException
 	 *             the list is empty
 	 */
-	public synchronized String[] getPage(int page) throws EmptyListException {
+	public synchronized Collection<String> getPage(int page) throws EmptyListException {
 		final int entryPerPage = ConfigEnum.LISTER_ITEMS.getInt();
 		final Collection<String> list = getList();
+
 		if (list.isEmpty()) {
 			throw new EmptyListException();
 		}
+
 		final int maxPages = (int) Math.ceil(list.size() / (double) entryPerPage);
 		page = page > maxPages ? maxPages : page;
 		final int start = (page - 1) * entryPerPage;
 		final int end = start + entryPerPage > list.size() ? list.size() : start + entryPerPage;
-		final String[] result = new String[(entryPerPage > list.size() ? list.size() : entryPerPage) + 1];
-		result[0] = ChatColor.AQUA
+		final java.util.List<String> result = new ArrayList<String>();
+		result.add(ChatColor.AQUA
 				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
-						+ getType() + " (" + page + "/" + maxPages + ") " + ChatColor.AQUA, '=');
+						+ getType() + " (" + page + "/" + maxPages + ") " + ChatColor.AQUA, '='));
 		final String[] array = list.toArray(new String[] {});
-		int index = 1;
 		for (int i = start; i < end; i++) {
-			result[index++] = array[i];
+			result.add(array[i]);
 		}
 
 		return result;
