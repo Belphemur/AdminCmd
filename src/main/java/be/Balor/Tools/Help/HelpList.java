@@ -17,11 +17,12 @@
 package be.Balor.Tools.Help;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.TreeSet;
 
 import org.bukkit.ChatColor;
@@ -42,7 +43,7 @@ class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 	private final String pluginName;
 	private CommandSender lastCommandSender;
-	private List<HelpEntry> lastHelpEntries;
+	private Queue<HelpEntry> lastHelpEntries;
 	private CmdMatch lastCommandSearched;
 
 	/**
@@ -130,14 +131,14 @@ class HelpList {
 		if (lastCommandSender != null && sender.equals(lastCommandSender)) {
 			return;
 		}
-		lastHelpEntries = new ArrayList<HelpEntry>();
+		lastHelpEntries = new PriorityQueue<HelpEntry>(pluginHelp.size() / 2,
+				new EntryCommandComparator());
 		lastCommandSender = sender;
 		for (final HelpEntry he : pluginHelp) {
 			if (he.hasPerm(sender)) {
 				lastHelpEntries.add(he);
 			}
 		}
-		Collections.sort(lastHelpEntries, new EntryCommandComparator());
 	}
 
 	/**
