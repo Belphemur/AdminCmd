@@ -92,18 +92,22 @@ public class BanPlayer extends PlayerCommand {
 					message += args.getString(args.length - 1);
 				}
 			}
-			message += " You have been banned by ";
+			if (message.isEmpty()) {
+				message += " You have been banned ";
+			}
 			if (!Utils.isPlayer(sender, false)) {
-				message += "Server Admin";
+				message += "by Server Admin";
 			} else {
-				message += Utils.getPlayerName((Player) sender);
+				message += "by " + Utils.getPlayerName((Player) sender);
 			}
 		} else {
-			message = "You have been banned by ";
+			if (message.isEmpty()) {
+				message = "You have been banned ";
+			}
 			if (!Utils.isPlayer(sender, false)) {
-				message += "Server Admin";
+				message += "by Server Admin";
 			} else {
-				message += Utils.getPlayerName((Player) sender);
+				message += "by " + Utils.getPlayerName((Player) sender);
 			}
 		}
 		message = message.trim();
@@ -112,7 +116,7 @@ public class BanPlayer extends PlayerCommand {
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
 		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4.matcher(banPlayerString);
 		if (tmpBan != null) {
-			message += "(Banned for " + tmpBan + " minutes)";
+			message += " (Banned for " + tmpBan + " minutes)";
 			replace.put("reason", message);
 			ITempBan ban;
 			if (inaccurateIp.find()) {
