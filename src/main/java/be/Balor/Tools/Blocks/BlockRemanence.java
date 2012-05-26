@@ -21,7 +21,7 @@ import org.bukkit.block.Block;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class BlockRemanence {
 	protected Location loc;
@@ -72,12 +72,12 @@ public class BlockRemanence {
 
 	/**
 	 * Block types. From worldEdit
-	 * 
+	 *
 	 * @author sk89q
 	 */
-	// TODO: Needs update
 	private static boolean usesData(final int id) {
-		return id == 6 // Saplings
+		return id == 5 // Wooden Planks
+				|| id == 6 // Saplings
 				|| id == 8 // Water
 				|| id == 9 // Water
 				|| id == 10 // Lava
@@ -85,6 +85,7 @@ public class BlockRemanence {
 				|| id == 17 // Wood
 				|| id == 18 // Leaves
 				|| id == 23 // Dispenser
+				|| id == 24 // Sandstone
 				|| id == 25 // Note Block
 				|| id == 26 // Bed
 				|| id == 27 // Powered rails
@@ -97,12 +98,14 @@ public class BlockRemanence {
 				|| id == 43 // Double slab
 				|| id == 44 // Slab
 				|| id == 50 // Torch
+				|| id == 51 // Fire
 				|| id == 53 // Wooden stairs
+				|| id == 54 // Chest
 				|| id == 55 // Redstone wire
 				|| id == 59 // Crops
 				|| id == 60 // Soil
 				|| id == 61 // Furnace
-				|| id == 62 // Furnace
+				|| id == 62 // Burning Furnace
 				|| id == 63 // Sign post
 				|| id == 64 // Wooden door
 				|| id == 65 // Ladder
@@ -118,11 +121,34 @@ public class BlockRemanence {
 				|| id == 77 // Stone button
 				|| id == 78 // Snow tile
 				|| id == 81 // Cactus
+				|| id == 83 // Sugar Cane
+				|| id == 84 // Jukebox
 				|| id == 86 // Pumpkin
 				|| id == 91 // Jack-o-lantern
 				|| id == 92 // Cake
 				|| id == 93 // Redstone repeater (off)
 				|| id == 94 // Redstone repeater (on)
-				|| id == 96; // Trap door
+				|| id == 96 // Trap door
+				|| id == 97 // Monster Egg
+				|| id == 98 // Stone Bricks
+				|| id == 99 // Huge Brown Mushroom
+				|| id == 100 // Huge Red Mushroom
+				|| id == 104 // Pumpkin Stem
+				|| id == 105 // Melon Stem
+				|| id == 106 // Vines
+				|| id == 107 // Fence Gates
+				|| id == 108 // Brick Stairs
+				|| id == 109 // Stone Brick Stairs
+				|| id == 114 // Nether Brick Stairs
+				|| id == 115 // Nether Wart
+				|| id == 116 // Enchantment Table (Tile)
+				|| id == 117 // Brewing Stand
+				|| id == 118 // Cauldron
+				|| id == 119 // End Portal
+				|| id == 120 // End Portal Frame
+				|| id == 125 // Wooden Double Slab
+				|| id == 126 // Wooden Slab
+				|| id == 128 // Sandstone Stairs
+				|| id == 130; // Ender Chest
 	}
 }
