@@ -519,8 +519,7 @@ public final class Utils {
 	 */
 	public static ACPlayer getACPlayer(final CommandSender sender, final CommandArgs args,
 			final String permNode) {
-		final Player target = Utils.getUser(sender, args, permNode, 0,
-				!Utils.isPlayer(sender, false));
+		final Player target = Utils.getUser(sender, args, permNode, 0, false);
 		ACPlayer actarget;
 		if (target == null) {
 			if (args.length == 0) {
