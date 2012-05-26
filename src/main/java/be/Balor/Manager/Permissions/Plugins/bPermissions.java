@@ -184,7 +184,7 @@ public class bPermissions extends SuperPermissions {
 		if (groups.length == 0) {
 			return new Group();
 		}
-		return new Group(groups[groups.length - 1], 0);
+		return new Group(groups[groups.length - 1], player);
 	}
 
 }

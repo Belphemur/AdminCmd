@@ -113,6 +113,6 @@ public class EssentialsGroupManager extends SuperPermissions {
 		if (group == null) {
 			return new Group();
 		}
-		return new Group(group);
+		return new Group(group, player);
 	}
 }
