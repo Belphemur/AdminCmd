@@ -19,8 +19,8 @@ package be.Balor.Tools.Lister;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Map;
+import java.util.TreeMap;
 
 import be.Balor.Player.IBan;
 import be.Balor.Player.ITempBan;
@@ -33,7 +33,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  * 
  */
 public class BanLister extends Lister {
-	private final Queue<String> ban = new PriorityQueue<String>();
+	private final Map<String, String> ban = new TreeMap<String, String>();
 
 	/**
 	 * 
@@ -60,9 +60,9 @@ public class BanLister extends Lister {
 			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
 			if (p instanceof ITempBan) {
 				replace.put("endban", Utils.replaceDateAndTimeFormat(((ITempBan) p).getEndBan()));
-				ban.add(LocaleHelper.TEMP_BANLIST.getLocale(replace));
+				ban.put(p.getPlayer(), LocaleHelper.TEMP_BANLIST.getLocale(replace));
 			} else {
-				ban.add(LocaleHelper.BANLIST.getLocale(replace));
+				ban.put(p.getPlayer(), LocaleHelper.BANLIST.getLocale(replace));
 			}
 		}
 
@@ -75,7 +75,7 @@ public class BanLister extends Lister {
 	 */
 	@Override
 	Collection<String> getList() {
-		return Collections.unmodifiableCollection(ban);
+		return Collections.unmodifiableCollection(ban.values());
 	}
 
 	/*
