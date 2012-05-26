@@ -298,7 +298,7 @@ public final class Utils {
 				return true;
 			}
 			final Player player = (Player) sender;
-			final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
+			final int pLvl = ACHelper.getInstance().getLimit(player, Type.Limit.IMMUNITY,
 					"defaultImmunityLvl");
 			final int tLvl = ACPlayer.getPlayer(args.getString(index))
 					.getInformation("immunityLvl").getInt(0);
@@ -323,9 +323,9 @@ public final class Utils {
 			return true;
 		}
 		final Player player = (Player) sender;
-		final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
+		final int pLvl = ACHelper.getInstance().getLimit(player, Type.Limit.IMMUNITY,
 				"defaultImmunityLvl");
-		final int tLvl = ACHelper.getInstance().getLimit(target, "immunityLvl",
+		final int tLvl = ACHelper.getInstance().getLimit(target, Type.Limit.IMMUNITY,
 				"defaultImmunityLvl");
 
 		return checkLvl(player, pLvl, tLvl);
@@ -336,11 +336,11 @@ public final class Utils {
 			return true;
 		}
 		final Player player = (Player) sender;
-		final int pLvl = ACHelper.getInstance().getLimit(player, "immunityLvl",
+		final int pLvl = ACHelper.getInstance().getLimit(player, Type.Limit.IMMUNITY,
 				"defaultImmunityLvl");
 		int tLvl = 0;
 		if (target.isOnline()) {
-			tLvl = ACHelper.getInstance().getLimit(target.getHandler(), "immunityLvl",
+			tLvl = ACHelper.getInstance().getLimit(target.getHandler(), Type.Limit.IMMUNITY,
 					"defaultImmunityLvl");
 		} else {
 			tLvl = target.getInformation("immunityLvl").getInt(0);

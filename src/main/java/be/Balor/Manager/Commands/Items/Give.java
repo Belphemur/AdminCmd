@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.MaterialContainer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -76,11 +77,11 @@ public class Give extends ItemCommand {
 			} catch (final Exception e) {
 				return;
 			}
-			if (cnt > ACHelper.getInstance().getLimit(sender, "maxItemAmount")
+			if (cnt > ACHelper.getInstance().getLimit(sender, Type.Limit.MAX_ITEMS)
 					&& !(sender.hasPermission("admincmd.item.infinity"))) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("limit",
-						String.valueOf(ACHelper.getInstance().getLimit(sender, "maxItemAmount")));
+				replace.put("limit", String.valueOf(ACHelper.getInstance().getLimit(sender,
+						Type.Limit.MAX_ITEMS)));
 				Utils.sI18n(sender, "itemLimit", replace);
 				return;
 			}

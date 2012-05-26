@@ -210,4 +210,33 @@ public enum Type {
 
 	}
 
+	public enum Limit {
+		IMMUNITY("immunityLvl"),
+		MAX_HOME("maxHomeByUser"),
+		MAX_ITEMS("maxItemAmount");
+		/**
+		 * 
+		 */
+		private final String text;
+
+		/**
+		 * @param text
+		 * @param defaultLimit
+		 */
+		private Limit(final String text) {
+			this.text = text;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Enum#toString()
+		 */
+		@Override
+		public String toString() {
+			return text;
+		}
+
+	}
+
 }

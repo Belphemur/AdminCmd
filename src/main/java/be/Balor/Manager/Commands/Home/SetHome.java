@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -62,7 +63,7 @@ public class SetHome extends HomeCommand {
 			final Location loc = p.getLocation();
 			if (!tmp.contains(home.home)
 					&& !PermissionManager.hasPerm(p, "admincmd.admin.home", false)
-					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, "maxHomeByUser")) {
+					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, Type.Limit.MAX_HOME)) {
 				Utils.sI18n(sender, "homeLimit");
 				return;
 			}

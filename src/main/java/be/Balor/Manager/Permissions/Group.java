@@ -18,6 +18,7 @@ package be.Balor.Manager.Permissions;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -41,7 +42,7 @@ public class Group implements Comparable<Group> {
 	 * @param name
 	 */
 	public Group(final String name, final Player p) {
-		this(name, ACHelper.getInstance().getLimit(p, "immunityLvl", "defaultImmunityLvl"));
+		this(name, ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY, "defaultImmunityLvl"));
 	}
 
 	/**

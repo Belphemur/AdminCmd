@@ -559,27 +559,27 @@ public class ACHelper {
 		return kitList.trim();
 	}
 
-	public int getLimit(final CommandSender sender, final String type) {
+	public int getLimit(final CommandSender sender, final Type.Limit type) {
 		if (sender instanceof ConsoleCommandSender) {
 			return Integer.MAX_VALUE;
 		}
-		return getLimit((Player) sender, type, type);
+		return getLimit((Player) sender, type, type.toString());
 	}
 
-	public int getLimit(final Player player, final String type) {
-		return getLimit(player, type, type);
+	public int getLimit(final Player player, final Type.Limit type) {
+		return getLimit(player, type, type.toString());
 	}
 
 	// teleports chosen player to another player
 
-	public int getLimit(final Player player, final String type, final String defaultLvl) {
+	public int getLimit(final Player player, final Type.Limit type, final String defaultLvl) {
 		Integer limit = null;
-		final String toParse = PermissionManager.getPermissionLimit(player, type);
+		final String toParse = PermissionManager.getPermissionLimit(player, type.toString());
 		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1) {
 			limit = pluginConfig.getInt(defaultLvl, 0);
 		}
-		if (limit == 0 && !type.equals("immunityLvl")) {
+		if (limit == 0 && type != Type.Limit.IMMUNITY) {
 			limit = Integer.MAX_VALUE;
 		}
 		return limit;

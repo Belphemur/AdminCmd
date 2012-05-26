@@ -133,7 +133,7 @@ public class ACPlayerListener implements Listener {
 						if (ConfigEnum.AUTO_AFK.getBoolean()) {
 							AFKWorker.getInstance().updateTimeStamp(p);
 						}
-						final int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+						final int imLvl = ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY,
 								"defaultImmunityLvl");
 						player.setInformation("immunityLvl",
 								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
@@ -239,7 +239,7 @@ public class ACPlayerListener implements Listener {
 
 					@Override
 					public void run() {
-						final int imLvl = ACHelper.getInstance().getLimit(p, "immunityLvl",
+						final int imLvl = ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY,
 								"defaultImmunityLvl");
 						player.setInformation("immunityLvl",
 								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
