@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +56,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 
@@ -111,9 +112,22 @@ public class ACPlayerListener implements Listener {
 		final Player p = event.getPlayer();
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
 		InvisibleWorker.getInstance().makeInvisibleToPlayer(p);
-		player.setInformation("last-ip", p.getAddress().getAddress().toString());
+		InetAddress address = p.getAddress().getAddress();
+		player.setInformation("last-ip", address.toString());
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
+			if (PermissionManager.hasPerm(p, "admincmd.spec.ipbroadcast"))
+				ACHelper.getInstance().addIPBroadcastPlayer(p);
+			Player sameIP = ACHelper.getInstance().addIP(p, address);
+			if (sameIP != null) {
+				replace.put("player", Utils.getPlayerName(p));
+				replace.put("player2", Utils.getPlayerName(sameIP));
+				replace.put("ip", address.toString());
+				Utils.broadcastIP(replace);
+			}
+		}
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.clear();
 			replace.put("name", Utils.getPlayerName(p, null, true));
 			event.setJoinMessage(Utils.I18n("joinMessage", replace));
 		}
@@ -164,7 +178,7 @@ public class ACPlayerListener implements Listener {
 		if (player.getInformation("firstTime").getBoolean(true)) {
 			player.setInformation("firstTime", false);
 			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
-				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.clear();
 				replace.put("name", Utils.getPlayerName(p, null, true));
 				event.setJoinMessage(Utils.I18n("joinMessageFirstTime", replace));
 			}
@@ -224,6 +238,11 @@ public class ACPlayerListener implements Listener {
 			event.setLeaveMessage(null);
 			player.removePower(Type.KICKED);
 		}
+		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
+			if (PermissionManager.hasPerm(p, "admincmd.spec.ipbroadcast"))
+				ACHelper.getInstance().removeIPBroadcastPlayer(p);
+			ACHelper.getInstance().updateIP(p, p.getAddress().getAddress());
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
@@ -243,6 +262,11 @@ public class ACPlayerListener implements Listener {
 
 					}
 				});
+		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
+			if (PermissionManager.hasPerm(p, "admincmd.spec.ipbroadcast"))
+				ACHelper.getInstance().removeIPBroadcastPlayer(p);
+			ACHelper.getInstance().updateIP(p, p.getAddress().getAddress());
+		}
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));

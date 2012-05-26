@@ -3,6 +3,7 @@ package be.Balor.bukkit.AdminCmd;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,7 +73,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -83,7 +84,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -108,6 +109,7 @@ public class ACHelper {
 	private final ConcurrentMap<String, IBan> bannedPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
 	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<String, Player> ips = new MapMaker().makeMap();;
 	private static ACHelper instance = new ACHelper();
 	private final ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -155,9 +157,11 @@ public class ACHelper {
 
 	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
 
+	private final List<Player> ipBroadPlayers = new ArrayList<Player>();
+
 	/**
 	 * Ban a new player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void banPlayer(final IBan ban) {
@@ -170,7 +174,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -202,7 +206,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the BlackList
-	 * 
+	 *
 	 * @param name
 	 *            string representing the item to blacklist
 	 * @return
@@ -215,7 +219,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the BlackList
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param item
@@ -258,7 +262,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 * 
+	 *
 	 * @param blocks
 	 */
 	public void addInUndoQueue(final String player, final Stack<BlockRemanence> blocks) {
@@ -339,7 +343,7 @@ public class ACHelper {
 	/**
 	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
 	 * unBan the player or unban him if his time out.
-	 * 
+	 *
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
@@ -363,7 +367,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -436,7 +440,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
@@ -446,7 +450,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -504,7 +508,7 @@ public class ACHelper {
 
 	/**
 	 * Get List<String> groups.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -513,7 +517,7 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 * 
+	 *
 	 * @return
 	 */
 	private List<String> getGroupNames() {
@@ -522,7 +526,7 @@ public class ACHelper {
 
 	/**
 	 * Get KitInstance for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
@@ -532,7 +536,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getKitList(final CommandSender sender) {
@@ -589,7 +593,7 @@ public class ACHelper {
 
 	/**
 	 * Get the number of kit in the system.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getNbKit() {
@@ -598,7 +602,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 * 
+	 *
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -753,7 +757,7 @@ public class ACHelper {
 
 	/**
 	 * Return the ban of the player
-	 * 
+	 *
 	 * @param player
 	 *            player's name
 	 * @return the ban if the player have one, else return null
@@ -767,6 +771,47 @@ public class ACHelper {
 	 */
 	public boolean isServerLocked() {
 		return serverLocked;
+	}
+
+	/**
+	 * Adds a player to the ip list if his ip is not already in.
+	 *
+	 * @param player
+	 * @param address
+	 * @return The player who also uses this IP or null if there was noone previously
+	 */
+	public Player addIP(final Player player, final InetAddress address) {
+		Player p = ips.putIfAbsent(address.toString(), player);
+		return p;
+	}
+
+	/**
+	 * If a player quits loop through the online players and see if a second player uses
+	 * the same IP and replace the quitting player with the online player. Otherwise
+	 * remove the player from the list!
+	 *
+	 * @param quits
+	 * @param address
+	 */
+	public void updateIP(final Player quits, final InetAddress address) {
+		for (Player p : Utils.getOnlinePlayers()) {
+			if (!p.equals(quits) && p.getAddress().getAddress().equals(address))
+				ips.replace(address.toString(), p);
+			else
+				ips.remove(address.toString());
+		}
+	}
+
+	/**
+	 * Checks if an IP is already in use
+	 *
+	 * @param address
+	 * @return {@code true} if an IP is found, {@code false} otherwise.
+	 */
+	public boolean ipInUse(final InetAddress address) {
+		if (ips.containsKey(address.toString()))
+			return true;
+		return false;
 	}
 
 	// changes the color of a colorable item in hand
@@ -901,7 +946,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -935,7 +980,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param name
@@ -949,7 +994,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param item
@@ -1000,7 +1045,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 * 
+	 *
 	 * @param key
 	 */
 	public void removeReplyPlayer(final Player key) {
@@ -1110,7 +1155,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 * 
+	 *
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -1167,7 +1212,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void unBanPlayer(final IBan ban) {
@@ -1207,5 +1252,20 @@ public class ACHelper {
 					new UndoBlockTask(undoCache), 1);
 		}
 		return i;
+	}
+
+	/**
+	 * Gets a list of all online players with the permission: admincmd.spec.ipbroadcast
+	 */
+	public List<Player> getIPBroadcastPlayers() {
+		return ipBroadPlayers;
+	}
+
+	public void addIPBroadcastPlayer(final Player player) {
+		ipBroadPlayers.add(player);
+	}
+
+	public void removeIPBroadcastPlayer(final Player player) {
+		ipBroadPlayers.remove(player);
 	}
 }
