@@ -23,7 +23,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -33,7 +32,7 @@ import com.google.common.base.Joiner;
  * @author Lathanael (aka Philippe Leipold)
  * 
  */
-public class Broadcast extends CoreCommand {
+public class Broadcast extends ServerCommand {
 
 	public Broadcast() {
 		permNode = "admincmd.server.broadcast";
