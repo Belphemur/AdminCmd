@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import be.Balor.Player.IBan;
-import be.Balor.Player.ITempBan;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -58,12 +57,8 @@ public class BanLister extends Lister {
 			replace.put("player", p.getPlayer());
 			replace.put("reason", p.getReason());
 			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
-			if (p instanceof ITempBan) {
-				replace.put("endban", Utils.replaceDateAndTimeFormat(((ITempBan) p).getEndBan()));
-				ban.put(p.getPlayer(), LocaleHelper.TEMP_BANLIST.getLocale(replace));
-			} else {
-				ban.put(p.getPlayer(), LocaleHelper.BANLIST.getLocale(replace));
-			}
+			ban.put(p.getPlayer(), LocaleHelper.BANLIST.getLocale(replace));
+
 		}
 
 	}

@@ -80,7 +80,6 @@ public enum LocaleHelper {
 			+ ChatColor.RED + " is not black listed."),
 	BANLIST("banList", ChatColor.GOLD + "%player, " + ChatColor.AQUA + "Banned for :"
 			+ ChatColor.GOLD + " %reason on %date"),
-	TEMP_BANLIST("banList", "#banList# " + ChatColor.GRAY + "until %endban"),
 	INACC_IP("inaccurateIp", ChatColor.RED + "This IP " + ChatColor.GOLD + "%ip " + ChatColor.RED
 			+ "is incorrect !"),
 	NO_BAN_FOUND("notBanned", ChatColor.GOLD + "No ban found for" + ChatColor.RED + " %ban"),
