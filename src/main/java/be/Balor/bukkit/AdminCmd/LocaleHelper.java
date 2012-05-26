@@ -101,7 +101,8 @@ public enum LocaleHelper {
 	NEW_STATE("nState", ChatColor.GOLD + "You have been "),
 	NEW_STATE_PLAYER("pNewState", ChatColor.GOLD + "%player have been "),
 	SUICIDE("suicide", ChatColor.RED + "You commited suicide."),
-	BCAST("broadcast", ChatColor.YELLOW + "[BROADCAST]" + ChatColor.GOLD + "%message");
+	BCAST("broadcast", ChatColor.YELLOW + "[BROADCAST]" + ChatColor.GOLD + "%message"),
+	UNKNOWN("unknown", "unknown");
 
 	private final String key;
 	private final String locale;

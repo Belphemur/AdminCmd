@@ -61,7 +61,6 @@ public class GameModeSwitch extends PlayerCommand {
 					target.setGameMode(GameMode.SURVIVAL);
 				}
 			});
-
 			replace.put("gamemode", GameMode.SURVIVAL.toString());
 			Utils.sendMessage(sender, target, "gmSwitch", replace);
 		} else {

@@ -36,6 +36,7 @@ import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -177,11 +178,19 @@ public class Whois extends PlayerCommand {
 		// GameMode
 		String gameMode = ChatColor.GREEN + "Current GameMode: " + ChatColor.GOLD;
 		String currentMode = "";
-		if (actarget.getHandler().getGameMode().equals(GameMode.CREATIVE)) {
-			currentMode = "Creative";
+		if (actarget.isOnline()) {
+			if (actarget.getHandler().getGameMode() == GameMode.CREATIVE) {
+				currentMode = "Creative";
+			} else {
+				currentMode = "Survival";
+			}
 		} else {
-			currentMode = "Survival";
+			currentMode = actarget.getInformation("gameMode").getString();
+			if (currentMode == null) {
+				currentMode = LocaleHelper.UNKNOWN.getLocale();
+			}
 		}
+
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(gameMode);
 		gameMode += ACMinecraftFontWidthCalculator.strPadLeftChat(

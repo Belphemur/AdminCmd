@@ -253,6 +253,7 @@ public class ACPlayerListener implements Listener {
 		} else if (InvisibleWorker.getInstance().hasInvisiblePowers(p)) {
 			event.setQuitMessage(null);
 		}
+		player.setInformation("gameMode", p.getGameMode());
 		PlayerManager.getInstance().setOffline(player);
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
