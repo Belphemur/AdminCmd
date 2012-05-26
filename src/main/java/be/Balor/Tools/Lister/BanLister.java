@@ -23,6 +23,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import be.Balor.Player.IBan;
+import be.Balor.Player.ITempBan;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -54,9 +55,15 @@ public class BanLister extends Lister {
 		for (final IBan p : banned) {
 			replace.clear();
 			replace.put("player", p.getPlayer());
+			replace.put("player", p.getPlayer());
 			replace.put("reason", p.getReason());
 			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
-			ban.add(LocaleHelper.BANLIST.getLocale(replace));
+			if (p instanceof ITempBan) {
+				replace.put("endban", Utils.replaceDateAndTimeFormat(((ITempBan) p).getEndBan()));
+				ban.add(LocaleHelper.TEMP_BANLIST.getLocale(replace));
+			} else {
+				ban.add(LocaleHelper.BANLIST.getLocale(replace));
+			}
 		}
 
 	}
