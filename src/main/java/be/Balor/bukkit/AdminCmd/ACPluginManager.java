@@ -99,6 +99,16 @@ public class ACPluginManager {
 	}
 
 	/**
+	 * Schedule a AsyncDelayedTask
+	 * 
+	 * @param task
+	 * @return
+	 */
+	public static int scheduleAsyncDelayedTask(final Runnable task) {
+		return server.getScheduler().scheduleAsyncDelayedTask(corePlugin, task);
+	}
+
+	/**
 	 * @param corePlugin
 	 *            the corePlugin to set
 	 */

@@ -37,6 +37,7 @@ import be.Balor.Listeners.Commands.ACTpAtSeeListener;
 import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Listeners.Features.ACColorSignListener;
 import be.Balor.Listeners.Features.ACCreatureSpawnListener;
+import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
 import be.Balor.Listeners.Features.ACSignEditListener;
 import be.Balor.Listeners.Features.ACSuperBlacklistListener;
@@ -173,7 +174,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -479,6 +480,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		if (ConfigEnum.EDIT_SIGN.getBoolean()) {
 			pm.registerEvents(new ACSignEditListener(), this);
+		}
+		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
+			pm.registerEvents(new ACIpCheckListener(), this);
 		}
 	}
 
