@@ -17,17 +17,12 @@
 
 package be.Balor.Manager.Commands.Player;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
+import be.Balor.Tools.Lister.EmptyListException;
+import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -49,32 +44,17 @@ public class MuteList extends PlayerCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
-		final Set<ACPlayer> players = new HashSet<ACPlayer>();
-		players.addAll(ACPlayer.getPlayers(Type.MUTED));
-		players.addAll(ACPlayer.getPlayers(Type.MUTED_COMMAND));
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		final TreeSet<String> toSend = new TreeSet<String>();
-		if (players.isEmpty()) {
-			LocaleHelper.NO_MUTED.sendLocale(sender);
-			return;
-		}
-		for (final ACPlayer p : players) {
-			replace.clear();
-			if (p.hasPower(Type.MUTED)) {
-				replace.put("player", p.getName());
-				replace.put("msg", p.getPower(Type.MUTED).getString());
-				toSend.add(LocaleHelper.MUTELIST.getLocale(replace));
-			} else if (p.hasPower(Type.MUTED_COMMAND)) {
-				replace.put("player", p.getName());
-				replace.put("msg", p.getPower(Type.MUTED_COMMAND).getString());
-				toSend.add(LocaleHelper.MUTELIST.getLocale(replace));
-			} else {
-				continue;
-			}
+		int page = 1;
+		if (args.length == 1) {
+			page = args.getInt(0);
 		}
 
-		for (final String s : toSend) {
-			sender.sendMessage(s);
+		try {
+			for (final String s : Lister.getLister(Lister.List.MUTE).getPage(page)) {
+				sender.sendMessage(s);
+			}
+		} catch (final EmptyListException e) {
+			LocaleHelper.NO_MUTED.sendLocale(sender);
 		}
 	}
 
@@ -85,7 +65,7 @@ public class MuteList extends PlayerCommand {
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		return true;
+		return args != null;
 	}
 
 }

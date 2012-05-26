@@ -18,17 +18,12 @@
 
 package be.Balor.Manager.Commands.Player;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.TreeSet;
-
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Player.IBan;
-import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.Tools.Lister.EmptyListException;
+import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -50,18 +45,17 @@ public class BanList extends PlayerCommand {
 	 */
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
-		final Collection<IBan> banned = ACHelper.getInstance().getBannedPlayers();
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		final TreeSet<String> toSend = new TreeSet<String>();
-		for (final IBan p : banned) {
-			replace.clear();
-			replace.put("player", p.getPlayer());
-			replace.put("reason", p.getReason());
-			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
-			toSend.add(LocaleHelper.BANLIST.getLocale(replace));
+		int page = 1;
+		if (args.length == 1) {
+			page = args.getInt(0);
 		}
-		for (final String s : toSend) {
-			sender.sendMessage(s);
+
+		try {
+			for (final String s : Lister.getLister(Lister.List.BAN).getPage(page)) {
+				sender.sendMessage(s);
+			}
+		} catch (final EmptyListException e) {
+			LocaleHelper.NO_BANNED.sendLocale(sender);
 		}
 	}
 
@@ -72,7 +66,7 @@ public class BanList extends PlayerCommand {
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		return true;
+		return args != null;
 	}
 
 }

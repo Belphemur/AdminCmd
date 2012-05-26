@@ -29,6 +29,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -98,6 +99,11 @@ public class Mute extends PlayerCommand {
 													Type.MUTED_COMMAND);
 											Utils.sI18n(senderFinal, "commandMuteDisabledTarget",
 													"player", unmute);
+											final Lister list = Lister.getLister(Lister.List.MUTE,
+													false);
+											if (list != null) {
+												list.update();
+											}
 										}
 									}, 20 * 60 * tmpMute);
 
@@ -145,6 +151,11 @@ public class Mute extends PlayerCommand {
 										ACPlayer.getPlayer(unmute).removePower(Type.MUTED);
 										Utils.sI18n(senderFinal, "muteDisabledTarget", "player",
 												unmute);
+										final Lister list = Lister.getLister(Lister.List.MUTE,
+												false);
+										if (list != null) {
+											list.update();
+										}
 									}
 								}, 20 * 60 * tmpMute);
 
@@ -164,7 +175,10 @@ public class Mute extends PlayerCommand {
 			} else {
 				Utils.sI18n(sender, "alreadyMuted");
 			}
-
+			final Lister list = Lister.getLister(Lister.List.MUTE, false);
+			if (list != null) {
+				list.update();
+			}
 		}
 
 	}

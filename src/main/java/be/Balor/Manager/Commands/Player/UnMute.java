@@ -25,6 +25,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Lister.Lister;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -60,6 +61,10 @@ public class UnMute extends PlayerCommand {
 				return;
 			}
 			acp.removePower(Type.MUTED);
+			final Lister list = Lister.getLister(Lister.List.MUTE, false);
+			if (list != null) {
+				list.update();
+			}
 			if (player != null) {
 				Utils.sI18n(player, "muteDisabled");
 				if (!player.equals(sender)) {
@@ -74,6 +79,10 @@ public class UnMute extends PlayerCommand {
 				return;
 			}
 			acp.removePower(Type.MUTED_COMMAND);
+			final Lister list = Lister.getLister(Lister.List.MUTE, false);
+			if (list != null) {
+				list.update();
+			}
 			if (player != null) {
 				Utils.sI18n(player, "commandMuteDisabled");
 				if (!player.equals(sender)) {

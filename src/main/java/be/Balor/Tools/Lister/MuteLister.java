@@ -14,59 +14,59 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Player;
+package be.Balor.Tools.Lister;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
-import org.bukkit.command.CommandSender;
-
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class UnMuteAll extends PlayerCommand {
+public class MuteLister extends Lister {
+	private final Queue<String> mute = new PriorityQueue<String>();
 
 	/**
 	 * 
 	 */
-	public UnMuteAll() {
-		super("bal_unmuteall", "admincmd.player.unmuteall");
+	MuteLister() {
+		update();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
-	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	 * @see be.Balor.Tools.Lister.Lister#update()
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public synchronized void update() {
+		mute.clear();
 		final Set<ACPlayer> players = new HashSet<ACPlayer>();
 		players.addAll(ACPlayer.getPlayers(Type.MUTED));
 		players.addAll(ACPlayer.getPlayers(Type.MUTED_COMMAND));
-		if (players.isEmpty()) {
-			LocaleHelper.NO_MUTED.sendLocale(sender);
-			return;
-		}
-		for (final ACPlayer p : players) {
-			p.removePower(Type.MUTED);
-			p.removePower(Type.MUTED_COMMAND);
-		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("nb", String.valueOf(players.size()));
-		LocaleHelper.UNMUTED_PLAYERS.sendLocale(sender, replace);
-		final Lister list = Lister.getLister(Lister.List.MUTE, false);
-		if (list != null) {
-			list.update();
+		for (final ACPlayer p : players) {
+			replace.clear();
+			if (p.hasPower(Type.MUTED)) {
+				replace.put("player", p.getName());
+				replace.put("msg", p.getPower(Type.MUTED).getString());
+				mute.add(LocaleHelper.MUTELIST.getLocale(replace));
+			} else if (p.hasPower(Type.MUTED_COMMAND)) {
+				replace.put("player", p.getName());
+				replace.put("msg", p.getPower(Type.MUTED_COMMAND).getString());
+				mute.add(LocaleHelper.MUTELIST.getLocale(replace));
+			} else {
+				continue;
+			}
 		}
 
 	}
@@ -74,11 +74,21 @@ public class UnMuteAll extends PlayerCommand {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
+	 * @see be.Balor.Tools.Lister.Lister#getList()
 	 */
 	@Override
-	public boolean argsCheck(final String... args) {
-		return args != null;
+	Collection<String> getList() {
+		return Collections.unmodifiableCollection(mute);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Lister.Lister#getType()
+	 */
+	@Override
+	List getType() {
+		return List.MUTE;
 	}
 
 }

@@ -60,6 +60,7 @@ import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
+import be.Balor.Tools.Lister.Lister;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
@@ -165,6 +166,10 @@ public class ACHelper {
 		dataManager.addBan(ban);
 		if (ban instanceof BannedIP) {
 			ACPluginManager.getServer().banIP(ban.getPlayer());
+		}
+		final Lister list = Lister.getLister(Lister.List.BAN, false);
+		if (list != null) {
+			list.update();
 		}
 	}
 
@@ -1175,6 +1180,10 @@ public class ACHelper {
 		dataManager.unBanPlayer(ban);
 		if (ban instanceof BannedIP) {
 			ACPluginManager.getServer().unbanIP(ban.getPlayer());
+		}
+		final Lister list = Lister.getLister(Lister.List.BAN, false);
+		if (list != null) {
+			list.update();
 		}
 	}
 

@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -91,6 +91,7 @@ public enum LocaleHelper {
 	P_CLEARED("powersCleared", ChatColor.GREEN + "You have successfully removed all your powers!"),
 	MUTELIST("muteList", ChatColor.GOLD + "%player, " + ChatColor.AQUA + "%msg"),
 	NO_MUTED("noMutedPlayers", ChatColor.RED + "There isn't any muted players."),
+	NO_BANNED("noMutedPlayers", ChatColor.RED + "There isn't any banned players."),
 	UNMUTED_PLAYERS("unMutedPlayers", ChatColor.AQUA + "%nb " + ChatColor.GREEN
 			+ "players have been unmuted."),
 	TXT_RELOADED("allTxtReloaded", ChatColor.GREEN
@@ -103,8 +104,9 @@ public enum LocaleHelper {
 	SUICIDE("suicide", ChatColor.RED + "You commited suicide."),
 	BCAST("broadcast", ChatColor.YELLOW + "[BROADCAST]" + ChatColor.GOLD + "%message"),
 	UNKNOWN("unknown", "unknown"),
-	IP_BROADCAST("ipBroadcast", ChatColor.GOLD + "%player " + ChatColor.RED + "joined from the same IP" +
-			ChatColor.GOLD + " as %player2" + ChatColor.RED + ". The IP is: " + ChatColor.AQUA + "%ip");
+	IP_BROADCAST("ipBroadcast", ChatColor.GOLD + "%player " + ChatColor.RED
+			+ "joined from the same IP" + ChatColor.GOLD + " as %player2" + ChatColor.RED
+			+ ". The IP is: " + ChatColor.AQUA + "%ip");
 
 	private final String key;
 	private final String locale;
@@ -129,7 +131,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 *
+	 * 
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -141,7 +143,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 *
+	 * 
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -151,7 +153,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 *
+	 * 
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -162,7 +164,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 *
+	 * 
 	 * @return the locale
 	 */
 	public String getLocale() {
