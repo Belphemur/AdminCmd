@@ -114,12 +114,15 @@ public class ACIpCheckListener implements Listener {
 			@Override
 			public void run() {
 				for (final Player p : Utils.getOnlinePlayers()) {
-					if (!p.equals(quits) && p.getAddress().getAddress().equals(address)) {
+					if (p.equals(quits)) {
+						continue;
+					}
+					if (p.getAddress().getAddress().equals(address)) {
 						ips.replace(address.toString(), p);
-					} else {
-						ips.remove(address.toString());
+						return;
 					}
 				}
+				ips.remove(address.toString());
 
 			}
 		});
@@ -131,7 +134,7 @@ public class ACIpCheckListener implements Listener {
 	 * 
 	 * @param player
 	 * @param address
-	 * @return The player who also uses this IP or null if there was noone
+	 * @return The player who also uses this IP or null if there was none
 	 *         previously
 	 */
 	private Player addIP(final Player player, final InetAddress address) {
