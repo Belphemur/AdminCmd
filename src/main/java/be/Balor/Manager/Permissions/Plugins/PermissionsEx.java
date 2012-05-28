@@ -24,7 +24,6 @@ import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
@@ -70,40 +69,6 @@ public class PermissionsEx extends SuperPermissions {
 			}
 			return false;
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
-	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
-	 */
-	@Override
-	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
-		return hasPerm(player, perm.getName(), errorMsg);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#isInGroup(org.java.lang
-	 * .String, org.bukkit.entity.Player)
-	 */
-	@Override
-	public boolean isInGroup(final String groupName, final Player player) {
-		PermissionGroup[] groups;
-		groups = PEX.getUser(player).getGroups(player.getWorld().getName());
-		if (groups.length == 0) {
-			return false;
-		}
-		for (final PermissionGroup group : groups) {
-			if (group.getName().equalsIgnoreCase(groupName)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/*
