@@ -51,7 +51,7 @@ public class ACIpCheckListener implements Listener {
 		final Player p = event.getPlayer();
 		final InetAddress address = p.getAddress().getAddress();
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		if (PermissionManager.hasPerm(p, "admincmd.spec.ipbroadcast")) {
+		if (PermissionManager.hasPerm(p, "admincmd.spec.ipbroadcast", false)) {
 			bcastPlayers.add(p);
 		}
 		final Player sameIP = addIP(p, address);
