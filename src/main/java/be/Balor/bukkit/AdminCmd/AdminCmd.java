@@ -511,18 +511,21 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));
-		final PermParent majorPerm = new PermParent("admincmd.*");
-		permissionLinker.setMajorPerm(majorPerm);
+		final PermParent spec = new PermParent("admincmd.spec.*");
+		permissionLinker.addPermParent(spec);
+
 		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.spec.noblacklist");
 		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		player.addChild("admincmd.player.noafkkick");
+		final PermParent majorPerm = new PermParent("admincmd.*");
+
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.item.infinity");
-		permissionLinker.addPermChild("admincmd.spec.noloss");
-		permissionLinker.addPermChild("admincmd.spec.signedit");
-		permissionLinker.addPermChild("admincmd.spec.ipbroadcast");
+		spec.addChild("admincmd.spec.noloss");
+		spec.addChild("admincmd.spec.signedit");
+		spec.addChild("admincmd.spec.ipbroadcast");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (final World w : this.getServer().getWorlds()) {
@@ -534,7 +537,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			new PermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 			new PermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
-
+		permissionLinker.setMajorPerm(majorPerm);
 	}
 
 	@Override
