@@ -184,7 +184,8 @@ public class bPermissions extends SuperPermissions {
 		if (groups.length == 0) {
 			return new Group();
 		}
-		return new Group(groups[groups.length - 1], player);
+		return new Group(groups[groups.length - 1], Integer.parseInt(ApiLayer.getValue(player
+				.getWorld().getName(), CalculableType.USER, player.getName(), "priority")));
 	}
 
 }
