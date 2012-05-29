@@ -90,7 +90,7 @@ public class ACNoDropListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		final List<ItemStack> itemStacks = itemsDrops.remove(player.getUniqueId());
+		final List<ItemStack> itemStacks = itemsDrops.remove(player);
 		if (itemStacks != null && player.isDead()) {
 			itemsOfDeadDisconnected.put(player.getName(), itemStacks);
 		}
@@ -110,7 +110,7 @@ public class ACNoDropListener implements Listener {
 		if (itemStacks == null) {
 			return;
 		}
-		p.getInventory().addItem(itemStacks.toArray(new ItemStack[itemStacks.size()]));
+		itemsDrops.put(p, itemStacks);
 		itemsOfDeadDisconnected.remove(name);
 	}
 }
