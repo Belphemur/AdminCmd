@@ -41,7 +41,6 @@ import java.util.regex.Pattern;
 
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.Packet201PlayerInfo;
-import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
 
 import org.bukkit.ChatColor;
@@ -80,6 +79,7 @@ import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
+import be.Balor.Tools.Threads.SetTimeTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -99,62 +99,6 @@ import de.diddiz.LogBlock.Consumer;
  * 
  */
 public final class Utils {
-	public static class SetTime implements Runnable {
-		private final World w;
-		private final Long time;
-
-		/**
-		 *
-		 */
-		public SetTime(final World w) {
-			this.w = w;
-			this.time = w.getTime();
-		}
-
-		/**
-		 * @param w
-		 * @param time
-		 */
-		public SetTime(final World w, final Long time) {
-			this.w = w;
-			this.time = time;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Runnable#run()
-		 */
-		@Override
-		public void run() {
-			long margin = (time - w.getFullTime()) % 24000;
-			if (margin < 0) {
-				margin += 24000;
-			}
-			final long newTime = w.getFullTime() + margin;
-			final WorldServer world = ((CraftWorld) w).getHandle();
-			ACPluginManager.scheduleSyncTask(new Runnable() {
-
-				@Override
-				public void run() {
-					world.setTime(newTime);
-
-				}
-			});
-
-			for (final Player p : getOnlinePlayers()) {
-				if (p == null) {
-					continue;
-				}
-				final CraftPlayer cp = (CraftPlayer) p;
-				cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp.getHandle()
-						.getPlayerTime()));
-			}
-
-		}
-
-	}
-
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
 	public static boolean mChatPresent = false;
@@ -1159,8 +1103,8 @@ public final class Utils {
 			} else if (arg.equalsIgnoreCase("dawn")) {
 				newtime += 23000;
 			} else if (arg.equalsIgnoreCase("pause")) {
-				final int taskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-						ACHelper.getInstance().getCoreInstance(), new SetTime(w), 0, 10);
+				final int taskId = ACPluginManager.getScheduler().scheduleSyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new SetTimeTask(w), 0, 5L);
 				ACWorld.getWorld(w.getName()).setInformation(Type.TIME_FREEZED.toString(), taskId);
 			} else {
 				// if not a constant, use raw time
@@ -1182,8 +1126,7 @@ public final class Utils {
 			sI18n(sender, "timePaused", "world", w.getName());
 		}
 
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new SetTime(w, newtime));
+		ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
 	}
 
 	public static void sI18n(final CommandSender sender, final String key) {
