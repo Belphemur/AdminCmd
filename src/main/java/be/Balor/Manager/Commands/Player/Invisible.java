@@ -31,7 +31,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class Invisible extends PlayerCommand {
 
@@ -46,7 +46,7 @@ public class Invisible extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -73,6 +73,9 @@ public class Invisible extends PlayerCommand {
 					}
 				}
 				acp.setPower(Type.INVISIBLE);
+				if (Utils.dynmap != null) {
+					Utils.dynmap.setPlayerVisiblity(acp.getHandler(), false);
+				}
 			} else {
 				InvisibleWorker.getInstance().reappear(target);
 				Utils.sI18n(target, "invisibleDisabled");
@@ -88,13 +91,16 @@ public class Invisible extends PlayerCommand {
 
 				}
 				acp.removePower(Type.INVISIBLE);
+				if (Utils.dynmap != null) {
+					Utils.dynmap.setPlayerVisiblity(acp.getHandler(), true);
+				}
 			}
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -104,7 +110,7 @@ public class Invisible extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#registerBukkitPerm()
 	 */
 	@Override

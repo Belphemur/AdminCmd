@@ -61,6 +61,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
+import org.dynmap.DynmapAPI;
 
 import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
@@ -96,11 +97,12 @@ import de.diddiz.LogBlock.Consumer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public final class Utils {
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
+	public static DynmapAPI dynmap = null;
 	public static boolean mChatPresent = false;
 	public static boolean signExtention = false;
 	public final static long secondInMillis = 1000;
@@ -118,7 +120,7 @@ public final class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 * 
+	 *
 	 */
 	/**
 	 *
@@ -138,7 +140,7 @@ public final class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 * 
+	 *
 	 * @param player
 	 *            player to remove
 	 */
@@ -171,7 +173,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 * 
+	 *
 	 * @param player
 	 *            that fake join.
 	 */
@@ -187,7 +189,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 * 
+	 *
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -203,7 +205,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void broadcastMessage(final String message) {
@@ -217,7 +219,7 @@ public final class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 * 
+	 *
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -254,7 +256,7 @@ public final class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 * 
+	 *
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -320,7 +322,7 @@ public final class Utils {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 * @throws InvalidInputException
@@ -357,7 +359,7 @@ public final class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 * 
+	 *
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -387,7 +389,7 @@ public final class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 * 
+	 *
 	 * @param block
 	 * @param radius
 	 * @return
@@ -452,7 +454,7 @@ public final class Utils {
 
 	/**
 	 * Get the ACPlayer, useful when working with only the AC user informations
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -499,7 +501,7 @@ public final class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 * 
+	 *
 	 * @param start
 	 * @return
 	 */
@@ -509,7 +511,7 @@ public final class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 * 
+	 *
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -550,7 +552,7 @@ public final class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -591,7 +593,7 @@ public final class Utils {
 
 	/**
 	 * For compatibility
-	 * 
+	 *
 	 * @param player
 	 * @param sender
 	 * @param withPrefix
@@ -604,7 +606,7 @@ public final class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 * 
+	 *
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -632,7 +634,7 @@ public final class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 * 
+	 *
 	 * @param player
 	 * @return
 	 */
@@ -661,7 +663,7 @@ public final class Utils {
 
 	/**
 	 * Get the real time from the server
-	 * 
+	 *
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -683,7 +685,7 @@ public final class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 * 
+	 *
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -729,7 +731,7 @@ public final class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -748,7 +750,7 @@ public final class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -821,7 +823,7 @@ public final class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 * 
+	 *
 	 * @param loc
 	 * @return
 	 */
@@ -836,7 +838,7 @@ public final class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 * 
+	 *
 	 * @return
 	 */
 	public static boolean isPlayer(final CommandSender sender) {
@@ -856,7 +858,7 @@ public final class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 * 
+	 *
 	 * @param player
 	 *            player to remove
 	 */
@@ -911,7 +913,7 @@ public final class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 * 
+	 *
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -938,7 +940,7 @@ public final class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 * 
+	 *
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -1004,7 +1006,7 @@ public final class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -1342,7 +1344,7 @@ public final class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 * 
+	 *
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -1501,7 +1503,7 @@ public final class Utils {
 
 	/**
 	 * Check if the chunk is loaded before teleport the player to the location
-	 * 
+	 *
 	 * @param player
 	 *            player to be teleported
 	 * @param loc
@@ -1536,7 +1538,7 @@ public final class Utils {
 
 	/**
 	 * Get the player list ordered by group and alphabetically for the sender
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @return a Collection containing what to display
@@ -1561,7 +1563,7 @@ public final class Utils {
 
 	/**
 	 * Send the played time of a player to a another one.
-	 * 
+	 *
 	 * @param playername
 	 *            name of the player that the time belong to
 	 * @param total
@@ -1576,5 +1578,9 @@ public final class Utils {
 		replace.put("s", timeLongToSring(time[3]));
 		replace.put("player", playername);
 		return replace;
+	}
+
+	public static void setDynmap(DynmapAPI dynmap) {
+		Utils.dynmap = dynmap;
 	}
 }
