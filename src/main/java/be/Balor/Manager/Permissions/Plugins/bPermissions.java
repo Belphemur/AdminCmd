@@ -89,10 +89,10 @@ public class bPermissions extends SuperPermissions {
 	 */
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
-		String result = super.getPermissionLimit(p, limit);
-		if (result == null || result.isEmpty() || result.length() < 1) {
-			result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
-					limit);
+		String result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
+				limit);
+		if (result == null || (result != null && result.isEmpty())) {
+			result = super.getPermissionLimit(p, limit);
 		}
 		return result;
 	}
@@ -145,8 +145,24 @@ public class bPermissions extends SuperPermissions {
 		if (groups.length == 0) {
 			return new Group();
 		}
-		return new Group(groups[groups.length - 1], Integer.parseInt(ApiLayer.getValue(player
-				.getWorld().getName(), CalculableType.USER, player.getName(), "priority")));
+		int maxPriority = Integer.MIN_VALUE;
+		String bestGroup = groups[0];
+		for (final String group : groups) {
+			try {
+				final int currentPriority = Integer.parseInt(ApiLayer.getValue(player.getWorld()
+						.getName(), CalculableType.GROUP, group, "priority"));
+				if (currentPriority > maxPriority) {
+					maxPriority = currentPriority;
+					bestGroup = group;
+				}
+			} catch (final NumberFormatException e) {
+			}
+		}
+		final String priority = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
+				player.getName(), "priority");
+		return new Group(bestGroup,
+				priority == null || (priority != null && priority.isEmpty()) ? 0
+						: Integer.parseInt(priority));
 	}
 
 }
