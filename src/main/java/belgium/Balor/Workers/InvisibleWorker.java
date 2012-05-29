@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
+import org.dynmap.DynmapAPI;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
@@ -37,6 +38,7 @@ final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
 	private final ConcurrentMap<Player, Object> invisiblesPlayers = new MapMaker().makeMap();
 	private static final Object EMPTY = new Object();
+	public static DynmapAPI dynmapAPI;
 
 	/**
 	 * 
@@ -94,6 +96,9 @@ final public class InvisibleWorker {
 	 */
 	public void reappear(final Player toReappear) {
 		invisiblesPlayers.remove(toReappear);
+		if (dynmapAPI != null) {
+			dynmapAPI.setPlayerVisiblity(toReappear, true);
+		}
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
 					@Override
@@ -178,6 +183,9 @@ final public class InvisibleWorker {
 	public void vanish(final Player toVanish, final boolean onJoinEvent) {
 		if (!invisiblesPlayers.containsKey(toVanish)) {
 			invisiblesPlayers.put(toVanish, EMPTY);
+			if (dynmapAPI != null) {
+				dynmapAPI.setPlayerVisiblity(toVanish, false);
+			}
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 					ACPluginManager.getCorePlugin(), new Runnable() {
 

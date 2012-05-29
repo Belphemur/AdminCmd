@@ -35,6 +35,7 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import belgium.Balor.Workers.InvisibleWorker;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
@@ -43,7 +44,7 @@ import de.diddiz.LogBlock.LogBlock;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACPluginListener implements Listener {
 
@@ -129,11 +130,11 @@ public class ACPluginListener implements Listener {
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
-		if (Utils.dynmap == null) {
+		if (InvisibleWorker.dynmapAPI == null) {
 			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
 					.getPlugin("dynmap");
 			if (plugin != null && plugin.isEnabled()) {
-				Utils.setDynmap((DynmapAPI) plugin);
+				InvisibleWorker.dynmapAPI = (DynmapAPI) plugin;
 				ACLogger.info("Successfully linked with Dynmap");
 			}
 		}
