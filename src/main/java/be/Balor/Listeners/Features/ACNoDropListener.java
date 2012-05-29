@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +41,7 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACNoDropListener implements Listener {
-	private final Map<UUID, List<ItemStack>> itemsDrops = new HashMap<UUID, List<ItemStack>>();
+	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
 	private final Map<String, List<ItemStack>> itemsOfDeadDisconnected = new HashMap<String, List<ItemStack>>();
 
 	@EventHandler(ignoreCancelled = true)
@@ -68,7 +67,7 @@ public class ACNoDropListener implements Listener {
 			items.add(item.clone());
 			item.setAmount(0);
 		}
-		itemsDrops.put(p.getUniqueId(), items);
+		itemsDrops.put(p, items);
 	}
 
 	@EventHandler
@@ -77,7 +76,7 @@ public class ACNoDropListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.NO_DROP)
 				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
-			itemsDrops.remove(p.getUniqueId());
+			itemsDrops.remove(p);
 			return;
 		}
 		final List<ItemStack> items = itemsDrops.get(p);
@@ -85,7 +84,7 @@ public class ACNoDropListener implements Listener {
 			return;
 		}
 		p.getInventory().addItem(items.toArray(new ItemStack[items.size()]));
-		itemsDrops.remove(p.getUniqueId());
+		itemsDrops.remove(p);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
