@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +42,8 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACNoDropListener implements Listener {
-	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
+	private final Map<UUID, List<ItemStack>> itemsDrops = new HashMap<UUID, List<ItemStack>>();
+	private final Map<String, List<ItemStack>> itemsOfDeadDisconnected = new HashMap<String, List<ItemStack>>();
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
@@ -65,7 +68,7 @@ public class ACNoDropListener implements Listener {
 			items.add(item.clone());
 			item.setAmount(0);
 		}
-		itemsDrops.put(p, items);
+		itemsDrops.put(p.getUniqueId(), items);
 	}
 
 	@EventHandler
@@ -81,11 +84,28 @@ public class ACNoDropListener implements Listener {
 			return;
 		}
 		p.getInventory().addItem(items.toArray(new ItemStack[items.size()]));
-		itemsDrops.remove(p);
+		itemsDrops.remove(p.getUniqueId());
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(final PlayerQuitEvent event) {
-		itemsDrops.remove(event.getPlayer());
+		final Player player = event.getPlayer();
+		final List<ItemStack> itemStacks = itemsDrops.remove(player.getUniqueId());
+		if (itemStacks != null && player.isDead()) {
+			itemsOfDeadDisconnected.put(player.getName(), itemStacks);
+		}
+	}
+
+	@EventHandler
+	public void onJoin(final PlayerJoinEvent event) {
+		final Player player = event.getPlayer();
+		final String name = player.getName();
+		final List<ItemStack> itemStacks = itemsOfDeadDisconnected.get(name);
+		if (itemStacks == null) {
+			return;
+		}
+		player.getInventory()
+				.addItem(itemStacks.toArray(new ItemStack[itemStacks.size()]));
+		itemsOfDeadDisconnected.remove(name);
 	}
 }
