@@ -106,11 +106,10 @@ public class ACNoDropListener implements Listener {
 			itemsOfDeadDisconnected.remove(name);
 			return;
 		}
-		final List<ItemStack> itemStacks = itemsOfDeadDisconnected.get(name);
+		final List<ItemStack> itemStacks = itemsOfDeadDisconnected.remove(name);
 		if (itemStacks == null) {
 			return;
 		}
 		itemsDrops.put(p, itemStacks);
-		itemsOfDeadDisconnected.remove(name);
 	}
 }
