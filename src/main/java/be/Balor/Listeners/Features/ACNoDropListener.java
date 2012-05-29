@@ -77,6 +77,7 @@ public class ACNoDropListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.NO_DROP)
 				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+			itemsDrops.remove(p.getUniqueId());
 			return;
 		}
 		final List<ItemStack> items = itemsDrops.get(p);
@@ -98,14 +99,19 @@ public class ACNoDropListener implements Listener {
 
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event) {
-		final Player player = event.getPlayer();
-		final String name = player.getName();
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		final String name = p.getName();
+		if (!player.hasPower(Type.NO_DROP)
+				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+			itemsOfDeadDisconnected.remove(name);
+			return;
+		}
 		final List<ItemStack> itemStacks = itemsOfDeadDisconnected.get(name);
 		if (itemStacks == null) {
 			return;
 		}
-		player.getInventory()
-				.addItem(itemStacks.toArray(new ItemStack[itemStacks.size()]));
+		p.getInventory().addItem(itemStacks.toArray(new ItemStack[itemStacks.size()]));
 		itemsOfDeadDisconnected.remove(name);
 	}
 }
