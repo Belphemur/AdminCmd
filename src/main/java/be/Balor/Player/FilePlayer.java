@@ -349,6 +349,14 @@ public class FilePlayer extends ACPlayer {
 			final Type matched = Type.matchType(power);
 			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER)) {
 				powers.set(power, null);
+				if (matched != Type.FLY) {
+					continue;
+				}
+				if (handler == null) {
+					continue;
+				}
+				handler.setFlying(false);
+				handler.setAllowFlight(false);
 			}
 		}
 		writeFile();
