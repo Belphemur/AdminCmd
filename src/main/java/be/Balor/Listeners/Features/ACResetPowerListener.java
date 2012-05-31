@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners.Commands;
+package be.Balor.Listeners.Features;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
@@ -31,7 +32,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public class ACResetPowerListener implements Listener {
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
 		final Player bPlayer = event.getPlayer();
 		if (PermissionManager.hasPerm(bPlayer, "admincmd.player.noreset", false)) {
