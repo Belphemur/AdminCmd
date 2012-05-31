@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,9 +39,6 @@ public class ACResetPowerListener implements Listener {
 		}
 		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
 		player.removeAllSuperPower();
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(bPlayer)) {
-			InvisibleWorker.getInstance().reappear(bPlayer);
-		}
 		Utils.sI18n(bPlayer, "changedWorld");
 
 	}

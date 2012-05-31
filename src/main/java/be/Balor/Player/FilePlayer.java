@@ -42,6 +42,7 @@ import be.Balor.Tools.Threads.IOSaveTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import belgium.Balor.Workers.InvisibleWorker;
 
 import com.google.common.io.Files;
 
@@ -358,6 +359,10 @@ public class FilePlayer extends ACPlayer {
 				handler.setFlying(false);
 				handler.setAllowFlight(false);
 			}
+		}
+
+		if (handler != null && InvisibleWorker.getInstance().hasInvisiblePowers(handler)) {
+			InvisibleWorker.getInstance().reappear(handler);
 		}
 		writeFile();
 
