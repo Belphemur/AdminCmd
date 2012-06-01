@@ -22,6 +22,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -48,7 +50,7 @@ public class Help extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", 1, sender);
 			return;

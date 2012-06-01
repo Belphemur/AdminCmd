@@ -22,6 +22,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -50,7 +52,7 @@ public class TpAtSee extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
 			final Player player = (Player) sender;

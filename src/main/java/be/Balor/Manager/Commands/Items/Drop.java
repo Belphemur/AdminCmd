@@ -24,6 +24,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -52,7 +54,7 @@ public class Drop extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		// which material?
 		MaterialContainer mat = null;
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));

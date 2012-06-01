@@ -24,6 +24,7 @@ import org.bukkit.permissions.PermissionDefault;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -105,11 +106,13 @@ public abstract class CoreCommand {
 	 *            sender of the command
 	 * @param args
 	 *            arguments to be processed by the command
-	 * 
+	 * @throws ActionNotPermitedException
+	 *             if the player don't have the permission to do that.
 	 * @throws PlayerNotFound
 	 *             the target player of the command is not found
 	 */
-	public abstract void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound;
+	public abstract void execute(CommandSender sender, CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound;
 
 	/**
 	 * Check if the command can be executed

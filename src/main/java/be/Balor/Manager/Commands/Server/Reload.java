@@ -20,6 +20,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -46,7 +48,7 @@ public class Reload extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length >= 1 && !args.getString(0).equals("AdminCmd")) {
 			final Plugin plugin = sender.getServer().getPluginManager()
 					.getPlugin(args.getString(0));

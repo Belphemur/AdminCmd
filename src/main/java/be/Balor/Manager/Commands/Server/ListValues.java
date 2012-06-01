@@ -23,6 +23,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -48,7 +50,7 @@ public class ListValues extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.DARK_AQUA + "Possibles Types :");
 			sender.sendMessage(Arrays.toString(Type.values()));

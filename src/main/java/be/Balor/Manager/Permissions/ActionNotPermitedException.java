@@ -14,53 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Tp;
+package be.Balor.Manager.Permissions;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TpHere extends TeleportCommand {
+public class ActionNotPermitedException extends Exception {
 
 	/**
 	 * 
 	 */
-	public TpHere() {
-		permNode = "admincmd.tp.here";
-		cmdName = "bal_tphere";
+	private static final long serialVersionUID = -49502752416573412L;
+	private final CommandSender sender;
+
+	/**
+	 * @param message
+	 */
+	public ActionNotPermitedException(final CommandSender sender, final String perm) {
+		super(Utils.I18n("errorNotPerm", "p", perm));
+		this.sender = sender;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
-	 */
-	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
-			Utils.tpP2P(sender, args.getString(0), ((Player) sender).getName(), Type.Tp.HERE);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(final String... args) {
-		return args != null && args.length >= 1;
+	public void sendMessage() {
+		this.sender.sendMessage(this.getMessage());
 	}
 
 }

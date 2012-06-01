@@ -24,6 +24,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
@@ -59,7 +61,7 @@ public class BanPlayer extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player toBan = Utils.getPlayer(args.getString(0));
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";

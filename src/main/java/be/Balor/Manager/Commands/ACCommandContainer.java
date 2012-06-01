@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -61,7 +62,7 @@ public class ACCommandContainer {
 	 * 
 	 * @throws PlayerNotFound
 	 */
-	public void execute() throws PlayerNotFound {
+	public void execute() throws PlayerNotFound, ActionNotPermitedException {
 		if (ConfigEnum.LOG_CMD.getBoolean()) {
 			String name = "Console";
 			if (sender instanceof Player) {

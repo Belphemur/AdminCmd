@@ -19,6 +19,8 @@ package be.Balor.Manager.Commands.Spawn;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
@@ -44,7 +46,7 @@ public class SetSpawn extends SpawnCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		ACHelper.getInstance().setSpawn(sender);
 		if (args.length >= 1 && Utils.isPlayer(sender)) {
 			try {

@@ -66,6 +66,7 @@ import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
@@ -460,9 +461,11 @@ public final class Utils {
 	 * @param permNode
 	 *            permission node to execute the command
 	 * @return null if the ACPlayer can't be get else the ACPlayer
+	 * @throws ActionNotPermitedException
+	 * @throws PlayerNotFound
 	 */
 	public static ACPlayer getACPlayer(final CommandSender sender, final CommandArgs args,
-			final String permNode) {
+			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUser(sender, args, permNode, 0, false);
 		ACPlayer actarget;
 		if (target == null) {
@@ -677,7 +680,7 @@ public final class Utils {
 	}
 
 	public static Player getUser(final CommandSender sender, final CommandArgs args,
-			final String permNode) {
+			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
@@ -690,24 +693,26 @@ public final class Utils {
 	 * @param index
 	 * @param errorMsg
 	 * @return
+	 * @throws PlayerNotFound
+	 * @throws ActionNotPermitedException
 	 */
 	public static Player getUser(final CommandSender sender, final CommandArgs args,
-			final String permNode, final int index, final boolean errorMsg) {
+			final String permNode, final int index, final boolean errorMsg) throws PlayerNotFound,
+			ActionNotPermitedException {
 		Player target = null;
 		if (args.length >= index + 1) {
 			target = getPlayer(args.getString(index));
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
 					if (checkImmunity(sender, target)) {
 						return target;
 					} else {
-						Utils.sI18n(sender, "insufficientLvl");
-						return null;
+						throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 					}
 				} else {
-					return null;
+					throw new ActionNotPermitedException(sender, permNode + ".other");
 				}
 			}
 		} else if (isPlayer(sender, false)) {
@@ -719,8 +724,7 @@ public final class Utils {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", args.getString(index));
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
 		}
 		return target;
 
@@ -739,9 +743,11 @@ public final class Utils {
 	 * @return target player if found
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
+	 * @throws ActionNotPermitedException
+	 *             if the player don't have the permission
 	 */
 	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
-			final String permNode) throws PlayerNotFound {
+			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		return getUserParam(sender, args, permNode, true);
 	}
 
@@ -760,9 +766,12 @@ public final class Utils {
 	 * @return target player if found
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
+	 * @throws ActionNotPermitedException
+	 *             if the player don't have the permission
 	 */
 	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
-			final String permNode, final boolean errorMsg) throws PlayerNotFound {
+			final String permNode, final boolean errorMsg) throws PlayerNotFound,
+			ActionNotPermitedException {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
 		if (playerName != null) {
@@ -770,15 +779,14 @@ public final class Utils {
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
 					if (checkImmunity(sender, target)) {
 						return target;
 					} else {
-						Utils.sI18n(sender, "insufficientLvl");
-						return null;
+						throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 					}
 				} else {
-					return null;
+					throw new ActionNotPermitedException(sender, permNode + ".other");
 				}
 			}
 		} else if (isPlayer(sender, false)) {
@@ -1007,9 +1015,11 @@ public final class Utils {
 	 * 
 	 * @param name
 	 * @return
+	 * @throws ActionNotPermitedException
+	 * @throws PlayerNotFound
 	 */
 	public static boolean setPlayerHealth(final CommandSender sender, final CommandArgs name,
-			final Type.Health toDo) {
+			final Type.Health toDo) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		if (target == null) {
 			return false;

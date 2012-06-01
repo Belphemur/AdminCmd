@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -51,7 +52,7 @@ public class Search extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		if (args.hasFlag('i')) {
 			final String ip = args.getValueFlag('i');
 			if (ip == null || ip.equals("") || ip.length() == 0) {

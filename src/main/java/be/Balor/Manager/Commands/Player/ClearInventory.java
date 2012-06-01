@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -53,7 +54,7 @@ public class ClearInventory extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;

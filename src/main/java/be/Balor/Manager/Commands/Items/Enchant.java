@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -62,7 +63,7 @@ public class Enchant extends ItemCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 
 		if (args.length == 0) {

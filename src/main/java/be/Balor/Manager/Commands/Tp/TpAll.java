@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Warp;
@@ -52,7 +53,7 @@ public class TpAll extends TeleportCommand {
 	 */
 	@SuppressWarnings("unused")
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		final Player[] players = ACPluginManager.getServer().getOnlinePlayers();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String teleporter;

@@ -25,7 +25,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
@@ -60,7 +62,7 @@ public class TpToWarp extends WarpCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Utils.getUser(sender, args, permNode, 1, true);
 		if (Utils.isPlayer(sender)) {
 			final Player p = (Player) sender;

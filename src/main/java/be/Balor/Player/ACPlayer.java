@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Files.ObjectContainer;
@@ -402,7 +403,11 @@ public abstract class ACPlayer {
 		if (this.lastCmd == null) {
 			throw new NullPointerException();
 		}
-		this.lastCmd.execute();
+		try {
+			this.lastCmd.execute();
+		} catch (final ActionNotPermitedException e) {
+			e.sendMessage();
+		}
 	}
 
 	/**

@@ -23,6 +23,8 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -49,7 +51,7 @@ public class ReplaceBlock extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final MaterialContainer mc = ACHelper.getInstance()
 				.checkMaterial(sender, args.getString(0));
 		if (mc.isNull()) {

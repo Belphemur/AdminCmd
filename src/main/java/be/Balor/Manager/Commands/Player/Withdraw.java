@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -50,7 +51,7 @@ public class Withdraw extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (args.length == 0) {

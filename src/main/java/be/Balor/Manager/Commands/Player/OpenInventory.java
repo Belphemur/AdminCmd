@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Tools.Utils;
 
@@ -44,7 +45,7 @@ public class OpenInventory extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		if (!Utils.isPlayer(sender)) {
 			return;
 		}

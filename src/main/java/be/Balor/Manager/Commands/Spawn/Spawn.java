@@ -24,6 +24,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
@@ -53,7 +55,7 @@ public class Spawn extends SpawnCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length >= 1 && Utils.isPlayer(sender, true)) {
 			final ACWorld w = ACWorld.getWorld(args.getString(0));
 			final Player target = (Player) sender;
