@@ -47,6 +47,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -128,33 +129,47 @@ public class ACPlayerListener implements Listener {
 		}
 		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
 				new Runnable() {
-
 					@Override
 					public void run() {
+						DebugLog.INSTANCE.info("ASync Task for optimization for " + p.getName());
+						DebugLog.INSTANCE.info("AFK start");
 						if (ConfigEnum.AUTO_AFK.getBoolean()) {
 							AFKWorker.getInstance().updateTimeStamp(p);
 						}
+						DebugLog.INSTANCE.info("AFK stop");
+						DebugLog.INSTANCE.info("ImmunityLvl start");
 						final int imLvl = ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY,
 								"defaultImmunityLvl");
 						player.setInformation("immunityLvl",
 								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+						DebugLog.INSTANCE.info("ImmunityLvl stop");
+						DebugLog.INSTANCE.info("SPY start");
 						if (player.hasPower(Type.SPYMSG)) {
 							ACHelper.getInstance().addSpy(p);
 						}
+						DebugLog.INSTANCE.info("SPY stop");
+						DebugLog.INSTANCE.info("LastConn start");
 						final long lastConn = player.getInformation("lastConnection").getLong(0);
 						player.setInformation("lastConnection", System.currentTimeMillis());
+						DebugLog.INSTANCE.info("LastConn stop");
+						DebugLog.INSTANCE.info("TextLocale start");
 						final long modifTime = TextLocale.NEWS.getModifTime();
 						if (ConfigEnum.NEWS.getBoolean()
 								&& (modifTime == 0 || lastConn <= modifTime)) {
 							Utils.sParsedLocale(p, "NEWS");
 						}
+						DebugLog.INSTANCE.info("TextLocale stop");
+						DebugLog.INSTANCE.info("Rules start");
 						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean()) {
 							Utils.sParsedLocale(p, "Rules");
 						}
+						DebugLog.INSTANCE.info("Rules stop");
+						DebugLog.INSTANCE.info("TPREQUEST start");
 						if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
 								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle.allow", false)) {
 							player.setPower(Type.TP_REQUEST);
 						}
+						DebugLog.INSTANCE.info("TPREQUEST stop");
 
 					}
 				});
@@ -187,6 +202,7 @@ public class ACPlayerListener implements Listener {
 		} else if (ConfigEnum.MOTD.getBoolean()) {
 			Utils.sParsedLocale(p, "MOTD");
 		}
+		DebugLog.INSTANCE.info("Player " + p.getName() + " joined sucessfully");
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
