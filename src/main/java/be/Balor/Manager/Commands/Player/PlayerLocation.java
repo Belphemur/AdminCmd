@@ -64,7 +64,7 @@ public class PlayerLocation extends PlayerCommand {
 			}
 		} else {
 			try {
-				target = sender.getServer().getPlayer(args.getString(0));
+				target = Utils.getUser(sender, args, permNode);
 				loc = target.getLocation();
 				msg = Utils.getPlayerName(target) + " is";
 			} catch (final NullPointerException ex) {
