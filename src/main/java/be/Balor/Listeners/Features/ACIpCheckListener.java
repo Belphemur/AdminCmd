@@ -18,10 +18,9 @@ package be.Balor.Listeners.Features;
 
 import java.net.InetAddress;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +29,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -43,7 +41,6 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class ACIpCheckListener implements Listener {
-	private final Set<Player> bcastPlayers = new HashSet<Player>();
 	private final ConcurrentMap<String, Player> ips = new MapMaker().makeMap();
 
 	@EventHandler
@@ -51,9 +48,6 @@ public class ACIpCheckListener implements Listener {
 		final Player p = event.getPlayer();
 		final InetAddress address = p.getAddress().getAddress();
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		if (PermissionManager.hasPerm(p, "admincmd.spec.ipbroadcast", false)) {
-			bcastPlayers.add(p);
-		}
 		final Player sameIP = addIP(p, address);
 		if (sameIP != null) {
 			replace.put("player", Utils.getPlayerName(p));
@@ -89,15 +83,12 @@ public class ACIpCheckListener implements Listener {
 		if (message == null) {
 			return;
 		}
-		for (final Player p : bcastPlayers) {
-			p.sendMessage(message);
-		}
+		Bukkit.getServer().broadcast(message, "admincmd.spec.ipbroadcast");
 		ACLogger.info(message);
 	}
 
 	private void removePlayer(final PlayerEvent event) {
 		final Player player = event.getPlayer();
-		bcastPlayers.remove(player);
 		updateIP(player, player.getAddress().getAddress());
 	}
 
