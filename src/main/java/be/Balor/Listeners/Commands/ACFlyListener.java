@@ -21,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -112,6 +113,16 @@ public class ACFlyListener implements Listener {
 				.contains("floating"))
 				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed")) {
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
+		final Player bPlayer = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
+		if (player.hasPower(Type.FLY)) {
+			bPlayer.setAllowFlight(true);
+			bPlayer.setFlying(true);
 		}
 	}
 }
