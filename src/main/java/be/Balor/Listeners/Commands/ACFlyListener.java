@@ -79,6 +79,8 @@ public class ACFlyListener implements Listener {
 		if (!ACPlayer.getPlayer(p).hasPower(Type.FLY)) {
 			return;
 		}
+		// Have to set a task to reset the power, since after the event bukkit
+		// is resetting the "abilities",etc ... of the player
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
