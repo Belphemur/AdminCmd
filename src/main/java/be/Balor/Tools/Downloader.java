@@ -142,7 +142,6 @@ public final class Downloader {
 		if (downloaded.getParentFile() != null && !downloaded.getParentFile().exists()) {
 			downloaded.getParentFile().mkdirs();
 		}
-
 		if (!checkVersionToDownload(urlString, downloaded)) {
 			return;
 		}
@@ -188,7 +187,10 @@ public final class Downloader {
 
 	/**
 	 * Check for the presence of a .version file to indicate the version of the
-	 * file to download
+	 * file to download <br />
+	 * Example of version file : <br />
+	 * <blockquote>1.1.1 <br/>
+	 * 9009104 </blockquote>
 	 * 
 	 * @param fileUrl
 	 *            url to the remote file
@@ -196,6 +198,7 @@ public final class Downloader {
 	 *            where the file will be downloaded
 	 * @return true if the file can be downloaded else false.
 	 * @throws IOException
+	 * 
 	 */
 	private static final boolean checkVersionToDownload(final String fileUrl, final File download)
 			throws IOException {
