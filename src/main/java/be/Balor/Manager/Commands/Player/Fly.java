@@ -59,7 +59,8 @@ public class Fly extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
 		try {
@@ -104,8 +105,8 @@ public class Fly extends PlayerCommand {
 				: powerFloat;
 		if (acp.hasPower(power)) {
 			acp.removePower(power);
-			player.setAllowFlight(false);
 			if (c == FlyMode.NEW) {
+				player.setAllowFlight(false);
 				player.setFlying(false);
 			}
 			player.setFallDistance(0.0F);
@@ -114,10 +115,10 @@ public class Fly extends PlayerCommand {
 				Utils.sI18n(sender, "flyDisabledTarget", replace);
 			}
 		} else {
-			player.setAllowFlight(true);
 			if (c == FlyMode.NEW) {
+				player.setAllowFlight(true);
 				player.setFlying(true);
-				acp.setPower(power, powerFloat);
+				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
 			} else {
 				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
 			}

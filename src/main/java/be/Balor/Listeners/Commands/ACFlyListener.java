@@ -24,11 +24,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.util.Vector;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
@@ -36,6 +38,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * 
  */
 public class ACFlyListener implements Listener {
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onJoin(final PlayerJoinEvent event) {
 		final Player p = event.getPlayer();
@@ -48,7 +51,7 @@ public class ACFlyListener implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove(final PlayerMoveEvent event) {
+	public void onOldFly(final PlayerMoveEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.FLY_OLD)) {
@@ -68,6 +71,22 @@ public class ACFlyListener implements Listener {
 				}
 			}
 		}
+	}
+
+	@EventHandler
+	public void onRespawn(final PlayerRespawnEvent event) {
+		final Player p = event.getPlayer();
+		if (!ACPlayer.getPlayer(p).hasPower(Type.FLY)) {
+			return;
+		}
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				p.setAllowFlight(true);
+				p.setFlying(true);
+			}
+		});
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
