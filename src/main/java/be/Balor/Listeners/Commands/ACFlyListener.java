@@ -22,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -42,13 +43,7 @@ public class ACFlyListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onJoin(final PlayerJoinEvent event) {
-		final Player p = event.getPlayer();
-		if (!ACPlayer.getPlayer(p).hasPower(Type.FLY)) {
-			return;
-		}
-		p.setAllowFlight(true);
-		p.setFlying(true);
-
+		setFly(event);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -118,11 +113,17 @@ public class ACFlyListener implements Listener {
 
 	@EventHandler
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
+		setFly(event);
+	}
+
+	private void setFly(final PlayerEvent event) {
 		final Player bPlayer = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
-		if (player.hasPower(Type.FLY)) {
-			bPlayer.setAllowFlight(true);
-			bPlayer.setFlying(true);
+		if (!player.hasPower(Type.FLY)) {
+			return;
 		}
+		bPlayer.setAllowFlight(true);
+		bPlayer.setFlying(true);
+
 	}
 }
