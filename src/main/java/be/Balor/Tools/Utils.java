@@ -1520,7 +1520,7 @@ public final class Utils {
 	public static void teleportWithChunkCheck(final Player player, final Location loc) {
 		final CraftServer server = ((CraftServer) player.getServer());
 		final PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
-				TeleportCause.COMMAND);
+				TeleportCause.PLUGIN);
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;
