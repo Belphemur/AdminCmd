@@ -38,6 +38,88 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public final class Downloader {
+	static final class Version {
+		private final String version;
+		private final long size;
+
+		/**
+		 * @param version
+		 * @param size
+		 */
+		Version(final String version, final long size) {
+			super();
+			this.version = version;
+			this.size = size;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + (int) (size ^ (size >>> 32));
+			result = prime * result + ((version == null) ? 0 : version.hashCode());
+			return result;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (!(obj instanceof Version)) {
+				return false;
+			}
+			final Version other = (Version) obj;
+			if (size != other.size) {
+				return false;
+			}
+			if (version == null) {
+				if (other.version != null) {
+					return false;
+				}
+			} else if (!version.equals(other.version)) {
+				return false;
+			}
+			return true;
+		}
+
+		boolean checkSize(final File toCheck) {
+			return size == toCheck.length();
+		}
+
+		void writeOnFile(final File file) throws IOException {
+			BufferedWriter out = null;
+			try {
+				out = new BufferedWriter(new FileWriter(file));
+				out.write(version);
+				out.write("\n");
+				out.write(String.valueOf(size));
+				out.flush();
+			} finally {
+				try {
+					if (out != null) {
+						out.close();
+					}
+				} catch (final IOException e) {
+				}
+			}
+		}
+
+	}
+
 	/**
 	 * Download the remote file
 	 * 
@@ -125,14 +207,14 @@ public final class Downloader {
 		HttpURLConnection connection = null;
 		try {
 			connection = (HttpURLConnection) new URL(urlString).openConnection();
-			final String version = readVersion(connection.getInputStream());
+			final Version version = readVersion(connection.getInputStream());
 			if (versionFile.exists()) {
-				final String curVersion = readVersion(new FileInputStream(versionFile));
-				if (curVersion.equals(version) && download.exists()) {
+				final Version curVersion = readVersion(new FileInputStream(versionFile));
+				if (curVersion.equals(version) && download.exists() && version.checkSize(download)) {
 					return false;
 				}
 			}
-			writeVersion(versionFile, version);
+			version.writeOnFile(versionFile);
 			return true;
 
 		} finally {
@@ -160,10 +242,17 @@ public final class Downloader {
 		}
 	}
 
-	private static String readVersion(final InputStream stream) {
+	private static Version readVersion(final InputStream stream) {
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		try {
-			return reader.readLine();
+			final String version = reader.readLine();
+			Long size;
+			try {
+				size = Long.parseLong(reader.readLine());
+			} catch (final Exception e) {
+				size = 0L;
+			}
+			return new Version(version, size);
 		} catch (final IOException e) {
 			return null;
 		} finally {
@@ -174,19 +263,4 @@ public final class Downloader {
 		}
 	}
 
-	private static void writeVersion(final File file, final String version) throws IOException {
-		BufferedWriter out = null;
-		try {
-			out = new BufferedWriter(new FileWriter(file));
-			out.write(version);
-			out.flush();
-		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-			} catch (final IOException e) {
-			}
-		}
-	}
 }
