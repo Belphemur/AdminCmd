@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Listeners.Commands;
 
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -36,15 +34,10 @@ import be.Balor.Tools.Type;
 public class ACFrozenPlayerListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onMove(final PlayerMoveEvent event) {
-		final Player p = event.getPlayer();
-		if (ACPlayer.getPlayer(p).hasPower(Type.FROZEN)) {
-			/**
-			 * https://github.com/Bukkit/CraftBukkit/pull/434
-			 * 
-			 * @author Evenprime
-			 */
-			((CraftPlayer) p).getHandle().netServerHandler.teleport(event.getFrom());
+		if (!ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
+			return;
 		}
+		event.setCancelled(true);
 
 	}
 
