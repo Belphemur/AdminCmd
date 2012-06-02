@@ -30,9 +30,9 @@ import be.Balor.Tools.Utils;
 public class ACColorSignListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onSignChange(final SignChangeEvent event) {
-		if (!PermissionManager.hasPerm(event.getPlayer(), "admincmd.coloredsign.create")) {
-			return;
-		}
+		final boolean havePerm = PermissionManager.hasPerm(event.getPlayer(),
+				"admincmd.coloredsign.create", false);
+
 		String parsed = null;
 		String line;
 		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]")) {
@@ -45,6 +45,10 @@ public class ACColorSignListener implements Listener {
 			}
 			if (!Utils.regexColorParser.matcher(line).find()) {
 				continue;
+			}
+			if (!havePerm) {
+				Utils.sI18n(event.getPlayer(), "errorNotPerm", "p", "admincmd.coloredsign.create");
+				return;
 			}
 			parsed = Utils.colorParser(line);
 			if (parsed != null) {
