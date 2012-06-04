@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum LocaleHelper {
 	ITEMID("itemId", ChatColor.GOLD + "%player" + ChatColor.GRAY + " is holding " + ChatColor.GREEN
@@ -106,7 +106,15 @@ public enum LocaleHelper {
 	UNKNOWN("unknown", "unknown"),
 	IP_BROADCAST("ipBroadcast", ChatColor.GOLD + "%player " + ChatColor.RED
 			+ "joined from the same IP" + ChatColor.GOLD + " as %player2" + ChatColor.RED
-			+ ". The IP is: " + ChatColor.AQUA + "%ip");
+			+ ". The IP is: " + ChatColor.AQUA + "%ip"),
+	GROUP_SPAWN_SET("groupSpawnSet", ChatColor.GREEN + "Spawn for group" + ChatColor.GOLD
+			+ "%groupName" + ChatColor.GREEN + " set."),
+	GROUP_SPAWN("groupSpawn", ChatColor.GREEN + "You haven been successfully teleported to the"
+			+ " spawn of group: " + ChatColor.GOLD + "%groupName"),
+	NO_GROUP_SPAWN("noGroupSpawn", ChatColor.RED + "The group " + ChatColor.AQUA +"%groupName"
+			+ ChatColor.RED + " does not have a group spawn"),
+	NO_SUCH_GROUP("noSuchGroup", ChatColor.RED + "A group with the name " + ChatColor.AQUA
+			+ "%groupName" + ChatColor.RED + " does not exist.");
 
 	private final String key;
 	private final String locale;
@@ -131,7 +139,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -143,7 +151,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -153,7 +161,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 * 
+	 *
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -164,7 +172,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 * 
+	 *
 	 * @return the locale
 	 */
 	public String getLocale() {

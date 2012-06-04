@@ -445,3 +445,11 @@ commands:
   bal_openinv:
     aliases: [openinv,oi]
     usage: /<command> player
+  bal_groupspawn:
+    description: TP to the spawn location of a group.
+    aliases: [groupspawn,gspawn,gts]
+    usage: /<command> <group> <world>
+  bal_setgroupspawn:
+    description: Sets the spawn location of the given group
+    aliases: [setgroupspawn,gss,sgspawn]
+    usage: /<command> <group>

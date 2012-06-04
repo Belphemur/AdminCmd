@@ -129,6 +129,8 @@ import be.Balor.Manager.Commands.Server.Undo;
 import be.Balor.Manager.Commands.Server.Uptime;
 import be.Balor.Manager.Commands.Server.Version;
 import be.Balor.Manager.Commands.Server.WorldDifficulty;
+import be.Balor.Manager.Commands.Spawn.GroupSpawn;
+import be.Balor.Manager.Commands.Spawn.SetGroupSpawn;
 import be.Balor.Manager.Commands.Spawn.SetSpawn;
 import be.Balor.Manager.Commands.Spawn.Spawn;
 import be.Balor.Manager.Commands.Time.Day;
@@ -174,7 +176,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -298,9 +300,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			}
 		}, 30 * Utils.secInTick);
 
+		worker.loadInfos();
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
-		worker.loadInfos();
 		permissionLinker.registerAllPermParent();
 		pm.registerEvents(new ACBlockListener(), this);
 		pm.registerEvents(new ACEntityListener(), this);
@@ -484,6 +486,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
 			pm.registerEvents(new ACIpCheckListener(), this);
 		}
+		if (ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group")) {
+			cmdManager.registerCommand(SetGroupSpawn.class);
+			cmdManager.registerCommand(GroupSpawn.class);
+		}
 	}
 
 	@Override
@@ -534,7 +540,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			new PermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 			new PermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
-
+		for (final String group : worker.getGroupList()) {
+			permissionLinker.addPermChild("admincmd.respawn." + group);
+		}
+		permissionLinker.addPermChild("admincmd.respawn.admin");
 	}
 
 	@Override
