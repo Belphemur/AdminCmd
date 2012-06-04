@@ -17,18 +17,20 @@
 
 package be.Balor.Manager.Commands.Player;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Lister.EmptyListException;
 import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class MuteList extends PlayerCommand {
 
@@ -39,7 +41,7 @@ public class MuteList extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -47,7 +49,13 @@ public class MuteList extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		int page = 1;
 		if (args.length == 1) {
-			page = args.getInt(0);
+			try {
+				page = args.getInt(0);
+			} catch(NumberFormatException e) {
+				String msg = Utils.I18n("NaN", "number", args.getString(0));
+				sender.sendMessage(msg + ChatColor.RED + " Used default page 1!");
+				page = 1;
+			}
 		}
 
 		try {
@@ -61,7 +69,7 @@ public class MuteList extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
