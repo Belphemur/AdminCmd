@@ -1106,10 +1106,7 @@ public class ACHelper {
 		if (pluginConfig.get("respawnAtSpawnPoint") != null) {
 			pluginConfig.remove("respawnAtSpawnPoint");
 		}
-		try {
-			pluginConfig.save();
-		} catch (final IOException e) {
-		}
+		saveConfig();
 		if (!pluginConfig.getBoolean("debug")) {
 			DebugLog.stopLogging();
 		}
@@ -1236,5 +1233,12 @@ public class ACHelper {
 					new UndoBlockTask(undoCache), 1);
 		}
 		return i;
+	}
+
+	public void saveConfig() {
+		try {
+			pluginConfig.save();
+		} catch (final IOException e) {
+		}
 	}
 }

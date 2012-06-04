@@ -37,6 +37,7 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
@@ -72,6 +73,7 @@ public class EssentialsImport implements IImport {
 		ACLogger.info("Text files imported.\n Import finished successfully, deactivating" +
 				"import-option in the configuration file...");
 		ConfigEnum.IMPORT_ESSENTIALS.setValue(false);
+		ACHelper.getInstance().saveConfig();
 		ACLogger.info("Import deactivated, have fun with your old data in AdminCmd.");
 	}
 
