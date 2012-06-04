@@ -207,6 +207,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		ACPluginManager.getInstance().stopChildrenPlugins();
 		CommandManager.getInstance().stopAllExecutorThreads();
+		worker.saveConfig();
 		worker = null;
 		ACHelper.killInstance();
 		InvisibleWorker.killInstance();
