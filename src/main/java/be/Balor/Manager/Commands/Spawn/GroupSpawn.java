@@ -20,6 +20,7 @@ package be.Balor.Manager.Commands.Spawn;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,6 +29,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Warp;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -55,7 +57,21 @@ public class GroupSpawn extends SpawnCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final Player p = (Player) sender;
 			if (args.hasFlag('l')) {
-				// TODO: List all possible groups.
+				p.sendMessage(ChatColor.GREEN + "Possible Group Names are:");
+				String msg = "";
+				for (String gName : ACHelper.getInstance().getGroupList()) {
+					msg += gName + ", ";
+					if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
+						sender.sendMessage(ChatColor.AQUA + msg);
+						msg = "";
+					}
+				}
+				if (!msg.equals("")) {
+					if (msg.endsWith(", ")) {
+						msg = msg.substring(0, msg.lastIndexOf(","));
+					}
+					sender.sendMessage(ChatColor.AQUA + msg);
+				}
 				return;
 			}
 			if (args.length < 1) {
