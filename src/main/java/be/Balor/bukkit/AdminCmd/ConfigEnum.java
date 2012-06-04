@@ -27,7 +27,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum ConfigEnum {
 
@@ -89,7 +89,7 @@ public enum ConfigEnum {
 	DNAME("useDisplayName", true, "Use the DisplayName of the player when using the player name"),
 	DEBUG("debug", false, "To activate the debug log (debug.log file)"),
 	GSPAWN("globalRespawnSetting", "globalSpawn", "To change the global Respawn point\n"
-			+ "Can be : globalSpawn, bed, home, none"),
+			+ "Can be : globalSpawn, bed, home, group, none"),
 	CHECKTP("checkTeleportLocation", false, "When using a Spawn/Home command, the plugin will check\n"
 			+ "if the player didn't moved"),
 	TP_DELAY("teleportDelay", 0, "Delay before teleporting (Spawn/Home) in ticks (20 Ticks = 1 Sec)"),
@@ -139,7 +139,9 @@ public enum ConfigEnum {
 	SUPER_BLACKLIST("supBlacklist", false, "With this mode, the users that don't have the admincmd.spec.noblacklist can't pickup/drop/use any blacklisted items."),
 	EDIT_SIGN("editSignRightClick", true, "When true, when you right click a sign, you'll be able to edit it. If you delete every lines, the sign will be deleted and droped."),
 	LOG_SAME_IP("logSameIP", false, "When set to true all players joining from the same IP will be loged in the console and a message is sent to all players with the permission: admincmd.spec.ipbroadcast"),
-	LISTER_ITEMS("nbItemsPerPageInList", 8, "How many items are displayed per page in banlist/mutelist etc ...");
+	LISTER_ITEMS("nbItemsPerPageInList", 8, "How many items are displayed per page in banlist/mutelist etc ..."),
+	IMPORT_ESSENTIALS("importFrom.essentials", true, "If set to true AdminCmd will look for Essential datas the next time the server starts, import them if they exist and deactivate this feature.");
+
 	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;

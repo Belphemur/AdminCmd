@@ -483,14 +483,14 @@ acplayerwithdraw:
     plugin: AdminCmd
     permissions: admincmd.player.withdraw
     cmdname: bal_withdraw
-    
+
 acplayerunmuteall:
     command: unmuteall
     description: "Unmute all muted players"
     plugin: AdminCmd
     permissions: admincmd.player.unmuteall
     cmdname: bal_unmuteall
-    
+
 acplayeropeninv:
     command: openinv [Player]
     description: "Open the inventory of the target player"
@@ -609,6 +609,20 @@ acspawn:
     plugin: AdminCmd
     permissions: admincmd.spawn.tp
     cmdname: bal_spawn
+
+acsetgroupspawn:
+    command: setgroupspawn <groupname>
+    description: "Set the spawn location of a given group or\n the players group in the given or current world."
+    plugin: AdminCmd
+    permissions: admincmd.spawn.gset
+    cmdname: bal_setgroupspawn
+
+acgroupspawn:
+    command: groupspawn <groupname> <world>
+    description: "Teleport yourself to a spawn loaction of a group.."
+    plugin: AdminCmd
+    permissions: admincmd.spawn.gtp
+    cmdname: bal_groupspawn
 
 acservermemory:
     command: memory [-a,-f,-m,-n,-x,-i,-c,-b,-v]
@@ -750,7 +764,7 @@ acserverbroadcast:
     plugin: AdminCmd
     permissions: admincmd.server.broadcast
     cmdname: bal_broadcast
-    
+
 acserverbroadcast:
     command: rtxt
     description: "Reload all the text locale file (News,Rules,Motd)"

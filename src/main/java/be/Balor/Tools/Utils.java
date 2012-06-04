@@ -858,6 +858,13 @@ public final class Utils {
 		return isPlayer(sender, true);
 	}
 
+	/**
+	 * Checks if the command sender is a Player. Sends the sender an error message
+	 * if he is not a player.
+	 * @param sender
+	 * @param msg - If {@code true} an error message will be sent.
+	 * @return
+	 */
 	public static boolean isPlayer(final CommandSender sender, final boolean msg) {
 		if (sender instanceof Player) {
 			return true;

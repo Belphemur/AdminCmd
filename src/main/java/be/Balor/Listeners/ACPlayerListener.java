@@ -18,8 +18,6 @@ package be.Balor.Listeners;
 
 import java.net.InetAddress;
 import java.util.HashMap;
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +37,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import be.Balor.Manager.CommandManager;
-import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
@@ -57,7 +54,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACPlayerListener implements Listener {
 
@@ -301,33 +298,11 @@ public class ACPlayerListener implements Listener {
 			} catch (final NullPointerException e) {
 				loc = ACWorld.getWorld(worldName).getSpawn();
 			}
-
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("group")) {
-			final List<String> groups = ACHelper.getInstance().getGroupList();
-			if (!groups.isEmpty()) {
-				for (final String groupName : groups) {
-					try {
-						if (PermissionManager.isInGroup(groupName, player)) {
-							loc = ACWorld.getWorld(worldName).getWarp(
-									"spawn" + groupName.toLowerCase()).loc;
-						}
-						break;
-					} catch (final NoPermissionsPlugin e) {
-						loc = ACWorld.getWorld(worldName).getSpawn();
-						break;
-					}
-				}
-			}
-			if (loc == null) {
-				loc = ACWorld.getWorld(worldName).getSpawn();
-			}
+			loc = ACHelper.getInstance().getGroupSpawnLocation(player);
 			event.setRespawnLocation(loc);
-		} /*
-		 * else { loc = ACWorld.getWorld(worldName).getSpawn();
-		 * event.setRespawnLocation(loc); }
-		 */
-
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true)

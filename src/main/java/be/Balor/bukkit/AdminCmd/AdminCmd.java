@@ -15,6 +15,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.PluginClassLoader;
 
+import be.Balor.Importer.IImport;
+import be.Balor.Importer.ImportTools;
+import be.Balor.Importer.Essentials.EssentialsImport;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
@@ -129,6 +132,8 @@ import be.Balor.Manager.Commands.Server.Undo;
 import be.Balor.Manager.Commands.Server.Uptime;
 import be.Balor.Manager.Commands.Server.Version;
 import be.Balor.Manager.Commands.Server.WorldDifficulty;
+import be.Balor.Manager.Commands.Spawn.GroupSpawn;
+import be.Balor.Manager.Commands.Spawn.SetGroupSpawn;
 import be.Balor.Manager.Commands.Spawn.SetSpawn;
 import be.Balor.Manager.Commands.Spawn.Spawn;
 import be.Balor.Manager.Commands.Time.Day;
@@ -174,7 +179,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -298,9 +303,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			}
 		}, 30 * Utils.secInTick);
 
+		worker.loadInfos();
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
-		worker.loadInfos();
 		permissionLinker.registerAllPermParent();
 		pm.registerEvents(new ACBlockListener(), this);
 		pm.registerEvents(new ACEntityListener(), this);
@@ -311,6 +316,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		if (ConfigEnum.RESET_POWERS.getBoolean()) {
 			pm.registerEvents(new ACResetPowerListener(), this);
+		}
+		IImport importer = null;
+		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+			importer = new EssentialsImport(ImportTools.getPluginsFolder(getDataFolder()));
+			importer.initImport();
 		}
 
 	}
@@ -484,6 +494,10 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
 			pm.registerEvents(new ACIpCheckListener(), this);
 		}
+		if (ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group")) {
+			cmdManager.registerCommand(SetGroupSpawn.class);
+			cmdManager.registerCommand(GroupSpawn.class);
+		}
 	}
 
 	@Override
@@ -537,7 +551,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			new PermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);
 			new PermChild("admincmd.maxItemAmount." + i, PermissionDefault.FALSE);
 		}
+		for (final String group : worker.getGroupList()) {
+			permissionLinker.addPermChild("admincmd.respawn." + group);
+		}
+		permissionLinker.addPermChild("admincmd.respawn.admin");
 		permissionLinker.setMajorPerm(majorPerm);
+
 	}
 
 	@Override
