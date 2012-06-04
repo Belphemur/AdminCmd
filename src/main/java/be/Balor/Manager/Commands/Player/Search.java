@@ -30,13 +30,14 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.base.Joiner;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class Search extends PlayerCommand {
 
@@ -47,7 +48,7 @@ public class Search extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -61,18 +62,20 @@ public class Search extends PlayerCommand {
 			final Player[] onPlayers = ACPluginManager.getServer().getOnlinePlayers();
 			final List<ACPlayer> exPlayers = PlayerManager.getInstance().getExistingPlayers();
 			final TreeSet<String> players = new TreeSet<String>();
+			final TreeSet<String> playersOld = new TreeSet<String>();
 			final String on = "[ON] ", off = "[OFF] ";
 			InetAddress ipAdress;
 			for (final Player p : onPlayers) {
 				ipAdress = p.getAddress().getAddress();
 				if (ipAdress != null && ipAdress.toString().equals(ip)) {
-					players.add(on + p.getName());
+					players.add(on + Utils.getPlayerName(p));
+					playersOld.add(p.getName());
 				}
 			}
 			String ip2;
 			for (final ACPlayer p : exPlayers) {
 				ip2 = p.getInformation("last-ip").getString();
-				if (ip2 != null && ip2.toString().equals(ip)) {
+				if (ip2 != null && ip2.toString().equals(ip) && !playersOld.contains(p.getName())) {
 					players.add(off + p.getName());
 				}
 			}
@@ -84,7 +87,7 @@ public class Search extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
