@@ -19,6 +19,8 @@ package be.Balor.Manager.Commands.Time;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
@@ -44,7 +46,7 @@ public class SetTime extends TimeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if ((args.getString(0).equalsIgnoreCase("pause") || args.getString(0).equalsIgnoreCase(
 				"unpause"))
 				&& !(PermissionManager.hasPerm(sender, "admincmd.time.pause"))) {

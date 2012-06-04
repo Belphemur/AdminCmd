@@ -19,9 +19,7 @@ package be.Balor.Manager.Permissions.Plugins;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Group;
@@ -36,43 +34,6 @@ import de.bananaco.bpermissions.api.util.CalculableType;
 public class bPermissions extends SuperPermissions {
 
 	public bPermissions() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#hasPerm(org.bukkit
-	 * .command.CommandSender, java.lang.String, boolean)
-	 */
-	@Override
-	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
-		if (!(player instanceof Player)) {
-			return true;
-		}
-		final Player player2 = (Player) player;
-		if (ApiLayer.hasPermission(player2.getWorld().getName(), CalculableType.USER,
-				player.getName(), perm)) {
-			return true;
-		} else {
-			if (errorMsg) {
-				Utils.sI18n(player, "errorNotPerm", "p", perm);
-			}
-			return false;
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#hasPerm(org.bukkit
-	 * .command.CommandSender, org.bukkit.permissions.Permission, boolean)
-	 */
-	@Override
-	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
-		return hasPerm(player, perm.getName(), errorMsg);
 	}
 
 	/*
@@ -128,10 +89,10 @@ public class bPermissions extends SuperPermissions {
 	 */
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
-		String result = super.getPermissionLimit(p, limit);
-		if (result == null || result.isEmpty() || result.length() < 1) {
-			result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
-					limit);
+		String result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
+				limit);
+		if (result == null || (result != null && result.isEmpty())) {
+			result = super.getPermissionLimit(p, limit);
 		}
 		return result;
 	}
@@ -184,7 +145,24 @@ public class bPermissions extends SuperPermissions {
 		if (groups.length == 0) {
 			return new Group();
 		}
-		return new Group(groups[groups.length - 1], player);
+		int maxPriority = Integer.MIN_VALUE;
+		String bestGroup = groups[0];
+		for (final String group : groups) {
+			try {
+				final int currentPriority = Integer.parseInt(ApiLayer.getValue(player.getWorld()
+						.getName(), CalculableType.GROUP, group, "priority"));
+				if (currentPriority > maxPriority) {
+					maxPriority = currentPriority;
+					bestGroup = group;
+				}
+			} catch (final NumberFormatException e) {
+			}
+		}
+		final String priority = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
+				player.getName(), "priority");
+		return new Group(bestGroup,
+				priority == null || (priority != null && priority.isEmpty()) ? 0
+						: Integer.parseInt(priority));
 	}
 
 }

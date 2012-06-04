@@ -16,45 +16,30 @@
  ************************************************************************/
 package be.Balor.Listeners.Features;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACColorSignListener implements Listener {
-	@EventHandler(ignoreCancelled = true)
-	public void onSignChange(final SignChangeEvent event) {
-		final boolean havePerm = PermissionManager.hasPerm(event.getPlayer(),
-				"admincmd.coloredsign.create", false);
-
-		String parsed = null;
-		String line;
-		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]")) {
+public class ACResetPowerListener implements Listener {
+	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
+		final Player bPlayer = event.getPlayer();
+		if (PermissionManager.hasPerm(bPlayer, "admincmd.player.noreset", false)) {
 			return;
 		}
-		for (int i = 0; i < 4; i++) {
-			line = event.getLine(i);
-			if (line == null || (line != null && line.isEmpty())) {
-				continue;
-			}
-			if (!Utils.regexColorParser.matcher(line).find()) {
-				continue;
-			}
-			if (!havePerm) {
-				Utils.sI18n(event.getPlayer(), "errorNotPerm", "p", "admincmd.coloredsign.create");
-				return;
-			}
-			parsed = Utils.colorParser(line);
-			if (parsed != null) {
-				event.setLine(i, parsed);
-			}
+		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
+		player.removeAllSuperPower();
+		Utils.sI18n(bPlayer, "changedWorld");
 
-		}
 	}
 }

@@ -41,7 +41,6 @@ import java.util.regex.Pattern;
 
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.Packet201PlayerInfo;
-import net.minecraft.server.Packet4UpdateTime;
 import net.minecraft.server.WorldServer;
 
 import org.bukkit.ChatColor;
@@ -67,6 +66,7 @@ import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
@@ -80,6 +80,7 @@ import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
+import be.Balor.Tools.Threads.SetTimeTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -99,62 +100,6 @@ import de.diddiz.LogBlock.Consumer;
  *
  */
 public final class Utils {
-	public static class SetTime implements Runnable {
-		private final World w;
-		private final Long time;
-
-		/**
-		 *
-		 */
-		public SetTime(final World w) {
-			this.w = w;
-			this.time = w.getTime();
-		}
-
-		/**
-		 * @param w
-		 * @param time
-		 */
-		public SetTime(final World w, final Long time) {
-			this.w = w;
-			this.time = time;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see java.lang.Runnable#run()
-		 */
-		@Override
-		public void run() {
-			long margin = (time - w.getFullTime()) % 24000;
-			if (margin < 0) {
-				margin += 24000;
-			}
-			final long newTime = w.getFullTime() + margin;
-			final WorldServer world = ((CraftWorld) w).getHandle();
-			ACPluginManager.scheduleSyncTask(new Runnable() {
-
-				@Override
-				public void run() {
-					world.setTime(newTime);
-
-				}
-			});
-
-			for (final Player p : getOnlinePlayers()) {
-				if (p == null) {
-					continue;
-				}
-				final CraftPlayer cp = (CraftPlayer) p;
-				cp.getHandle().netServerHandler.sendPacket(new Packet4UpdateTime(cp.getHandle()
-						.getPlayerTime()));
-			}
-
-		}
-
-	}
-
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
 	public static boolean mChatPresent = false;
@@ -516,9 +461,11 @@ public final class Utils {
 	 * @param permNode
 	 *            permission node to execute the command
 	 * @return null if the ACPlayer can't be get else the ACPlayer
+	 * @throws ActionNotPermitedException
+	 * @throws PlayerNotFound
 	 */
 	public static ACPlayer getACPlayer(final CommandSender sender, final CommandArgs args,
-			final String permNode) {
+			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUser(sender, args, permNode, 0, false);
 		ACPlayer actarget;
 		if (target == null) {
@@ -578,6 +525,13 @@ public final class Utils {
 			try {
 				final String[] split = toParse.split(":");
 				result.player = split[0];
+				if (split[1] == null) {
+					final HashMap<String, String> replace = new HashMap<String, String>();
+					replace.put("arg", "home name after the ':'");
+					replace.put("cmdName", "/home");
+					LocaleHelper.MISSING_ARG.sendLocale(sender, replace);
+					return null;
+				}
 				result.home = split[1];
 			} catch (final ArrayIndexOutOfBoundsException e) {
 			}
@@ -733,7 +687,7 @@ public final class Utils {
 	}
 
 	public static Player getUser(final CommandSender sender, final CommandArgs args,
-			final String permNode) {
+			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
@@ -746,24 +700,26 @@ public final class Utils {
 	 * @param index
 	 * @param errorMsg
 	 * @return
+	 * @throws PlayerNotFound
+	 * @throws ActionNotPermitedException
 	 */
 	public static Player getUser(final CommandSender sender, final CommandArgs args,
-			final String permNode, final int index, final boolean errorMsg) {
+			final String permNode, final int index, final boolean errorMsg) throws PlayerNotFound,
+			ActionNotPermitedException {
 		Player target = null;
 		if (args.length >= index + 1) {
 			target = getPlayer(args.getString(index));
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
 					if (checkImmunity(sender, target)) {
 						return target;
 					} else {
-						Utils.sI18n(sender, "insufficientLvl");
-						return null;
+						throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 					}
 				} else {
-					return null;
+					throw new ActionNotPermitedException(sender, permNode + ".other");
 				}
 			}
 		} else if (isPlayer(sender, false)) {
@@ -775,8 +731,7 @@ public final class Utils {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", args.getString(index));
-			Utils.sI18n(sender, "playerNotFound", replace);
-			return target;
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
 		}
 		return target;
 
@@ -795,9 +750,11 @@ public final class Utils {
 	 * @return target player if found
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
+	 * @throws ActionNotPermitedException
+	 *             if the player don't have the permission
 	 */
 	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
-			final String permNode) throws PlayerNotFound {
+			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		return getUserParam(sender, args, permNode, true);
 	}
 
@@ -816,9 +773,12 @@ public final class Utils {
 	 * @return target player if found
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
+	 * @throws ActionNotPermitedException
+	 *             if the player don't have the permission
 	 */
 	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
-			final String permNode, final boolean errorMsg) throws PlayerNotFound {
+			final String permNode, final boolean errorMsg) throws PlayerNotFound,
+			ActionNotPermitedException {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
 		if (playerName != null) {
@@ -826,15 +786,14 @@ public final class Utils {
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode + ".other")) {
+				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
 					if (checkImmunity(sender, target)) {
 						return target;
 					} else {
-						Utils.sI18n(sender, "insufficientLvl");
-						return null;
+						throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 					}
 				} else {
-					return null;
+					throw new ActionNotPermitedException(sender, permNode + ".other");
 				}
 			}
 		} else if (isPlayer(sender, false)) {
@@ -1070,9 +1029,11 @@ public final class Utils {
 	 *
 	 * @param name
 	 * @return
+	 * @throws ActionNotPermitedException
+	 * @throws PlayerNotFound
 	 */
 	public static boolean setPlayerHealth(final CommandSender sender, final CommandArgs name,
-			final Type.Health toDo) {
+			final Type.Health toDo) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		if (target == null) {
 			return false;
@@ -1166,8 +1127,8 @@ public final class Utils {
 			} else if (arg.equalsIgnoreCase("dawn")) {
 				newtime += 23000;
 			} else if (arg.equalsIgnoreCase("pause")) {
-				final int taskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-						ACHelper.getInstance().getCoreInstance(), new SetTime(w), 0, 10);
+				final int taskId = ACPluginManager.getScheduler().scheduleSyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new SetTimeTask(w), 0, 5L);
 				ACWorld.getWorld(w.getName()).setInformation(Type.TIME_FREEZED.toString(), taskId);
 			} else {
 				// if not a constant, use raw time
@@ -1189,8 +1150,7 @@ public final class Utils {
 			sI18n(sender, "timePaused", "world", w.getName());
 		}
 
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new SetTime(w, newtime));
+		ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
 	}
 
 	public static void sI18n(final CommandSender sender, final String key) {
@@ -1574,7 +1534,7 @@ public final class Utils {
 	public static void teleportWithChunkCheck(final Player player, final Location loc) {
 		final CraftServer server = ((CraftServer) player.getServer());
 		final PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
-				TeleportCause.COMMAND);
+				TeleportCause.PLUGIN);
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;

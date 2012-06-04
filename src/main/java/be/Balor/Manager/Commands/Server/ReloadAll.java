@@ -19,6 +19,8 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -46,7 +48,7 @@ public class ReloadAll extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		ACHelper.getInstance().saveElapsedTime();
 		final boolean bcast = ConfigEnum.BSRELOAD.getBoolean();
 		ACPluginManager.scheduleSyncTask(new Runnable() {

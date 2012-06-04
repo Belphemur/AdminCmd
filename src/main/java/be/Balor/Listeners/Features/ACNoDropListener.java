@@ -27,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +42,7 @@ import be.Balor.Tools.Type;
  */
 public class ACNoDropListener implements Listener {
 	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
+	private final Map<String, List<ItemStack>> itemsOfDeadDisconnected = new HashMap<String, List<ItemStack>>();
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
@@ -74,6 +76,7 @@ public class ACNoDropListener implements Listener {
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		if (!player.hasPower(Type.NO_DROP)
 				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+			itemsDrops.remove(p);
 			return;
 		}
 		final List<ItemStack> items = itemsDrops.get(p);
@@ -86,6 +89,27 @@ public class ACNoDropListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(final PlayerQuitEvent event) {
-		itemsDrops.remove(event.getPlayer());
+		final Player player = event.getPlayer();
+		final List<ItemStack> itemStacks = itemsDrops.remove(player);
+		if (itemStacks != null && player.isDead()) {
+			itemsOfDeadDisconnected.put(player.getName(), itemStacks);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onJoin(final PlayerJoinEvent event) {
+		final Player p = event.getPlayer();
+		final ACPlayer player = ACPlayer.getPlayer(p);
+		final String name = p.getName();
+		if (!player.hasPower(Type.NO_DROP)
+				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+			itemsOfDeadDisconnected.remove(name);
+			return;
+		}
+		final List<ItemStack> itemStacks = itemsOfDeadDisconnected.remove(name);
+		if (itemStacks == null) {
+			return;
+		}
+		itemsDrops.put(p, itemStacks);
 	}
 }

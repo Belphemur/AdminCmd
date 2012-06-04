@@ -19,6 +19,8 @@ package be.Balor.Manager.Commands.Weather;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 
@@ -44,7 +46,7 @@ public class FreezeWeather extends WeatherCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		Utils.weather(sender, Type.Weather.FREEZE, args);
 	}
 

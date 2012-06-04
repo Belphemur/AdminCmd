@@ -19,6 +19,8 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type.Health;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -46,12 +48,19 @@ public class Heal extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 
 			@Override
 			public void run() {
-				Utils.setPlayerHealth(sender, args, Health.HEAL);
+				try {
+					Utils.setPlayerHealth(sender, args, Health.HEAL);
+				} catch (final PlayerNotFound e) {
+					e.getSender().sendMessage(e.getMessage());
+				} catch (final ActionNotPermitedException e) {
+					e.sendMessage();
+				}
 			}
 		});
 

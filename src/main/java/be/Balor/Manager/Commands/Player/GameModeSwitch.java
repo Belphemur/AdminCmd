@@ -23,6 +23,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -47,7 +51,8 @@ public class GameModeSwitch extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Utils.getUser(sender, args, permNode);
 		if (target == null) {
 			return;
@@ -61,6 +66,10 @@ public class GameModeSwitch extends PlayerCommand {
 					target.setGameMode(GameMode.SURVIVAL);
 				}
 			});
+			if (ACPlayer.getPlayer(target).hasPower(Type.FLY)) {
+				target.setAllowFlight(true);
+				target.setFlying(true);
+			}
 			replace.put("gamemode", GameMode.SURVIVAL.toString());
 			Utils.sendMessage(sender, target, "gmSwitch", replace);
 		} else {

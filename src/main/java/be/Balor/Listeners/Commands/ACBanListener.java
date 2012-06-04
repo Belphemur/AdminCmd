@@ -32,7 +32,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
  * 
  */
 public class ACBanListener implements Listener {
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (!event.getResult().equals(Result.ALLOWED)) {
 			return;

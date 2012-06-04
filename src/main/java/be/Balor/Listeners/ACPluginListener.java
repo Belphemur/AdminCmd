@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
+import org.dynmap.DynmapAPI;
 
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -34,6 +35,7 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import belgium.Balor.Workers.InvisibleWorker;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
@@ -126,6 +128,14 @@ public class ACPluginListener implements Listener {
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.setLogBlock(((LogBlock) plugin).getConsumer());
 				ACLogger.info("Successfully linked with LogBlock");
+			}
+		}
+		if (InvisibleWorker.dynmapAPI == null) {
+			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("dynmap");
+			if (plugin != null && plugin.isEnabled()) {
+				InvisibleWorker.dynmapAPI = (DynmapAPI) plugin;
+				ACLogger.info("Successfully linked with Dynmap");
 			}
 		}
 		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {

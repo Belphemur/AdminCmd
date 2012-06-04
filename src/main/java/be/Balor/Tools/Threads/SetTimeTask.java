@@ -14,49 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Items;
+package be.Balor.Tools.Threads;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.World;
 
-import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.bukkit.AdminCmd.ACHelper;
-
-/**
- * @author Balor (aka Antoine Aflalo)
- * 
- */
-public class AddAlias extends ItemCommand {
+public class SetTimeTask implements Runnable {
+	private final World w;
+	private final Long time;
 
 	/**
-	 * 
+	 *
 	 */
-	public AddAlias() {
-		permNode = "admincmd.item.alias";
-		cmdName = "bal_addalias";
+	public SetTimeTask(final World w) {
+		this.w = w;
+		this.time = w.getTime();
+	}
+
+	/**
+	 * @param w
+	 * @param time
+	 */
+	public SetTimeTask(final World w, final Long time) {
+		this.w = w;
+		this.time = time;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	 * @see java.lang.Runnable#run()
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
-		ACHelper.getInstance().alias(sender, args);
+	public void run() {
+		w.setTime(time);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(final String... args) {
-		return args != null && args.length >= 2;
-	}
-
 }

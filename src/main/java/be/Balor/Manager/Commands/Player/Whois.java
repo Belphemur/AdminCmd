@@ -25,7 +25,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.IBan;
@@ -59,7 +61,7 @@ public class Whois extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.hasFlag('w')) {
 			ACWorld w;
 			try {
@@ -146,8 +148,11 @@ public class Whois extends PlayerCommand {
 		}
 		// Powers
 		for (final Entry<String, String> power : actarget.getPowers().entrySet()) {
-			String line = ChatColor.GOLD + Type.matchType(power.getKey()).display()
-					+ ChatColor.WHITE + " : ";
+			final Type powerType = Type.matchType(power.getKey());
+			if (powerType == Type.INVISIBLE) {
+				continue;
+			}
+			String line = ChatColor.GOLD + powerType.display() + ChatColor.WHITE + " : ";
 			final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(line);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(

@@ -24,6 +24,7 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Lister.Lister;
@@ -49,7 +50,7 @@ public class UnMuteAll extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		final Set<ACPlayer> players = new HashSet<ACPlayer>();
 		players.addAll(ACPlayer.getPlayers(Type.MUTED));
 		players.addAll(ACPlayer.getPlayers(Type.MUTED_COMMAND));

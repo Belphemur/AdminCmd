@@ -138,9 +138,10 @@ public enum ConfigEnum {
 	IMPORT_BAN_TXT("importBannedPlayersTXT", false, "If set to true, this will import any player which does not exist in the banned.yml, afterwards it will be set to false!"),
 	SUPER_BLACKLIST("supBlacklist", false, "With this mode, the users that don't have the admincmd.spec.noblacklist can't pickup/drop/use any blacklisted items."),
 	EDIT_SIGN("editSignRightClick", true, "When true, when you right click a sign, you'll be able to edit it. If you delete every lines, the sign will be deleted and droped."),
-	LOG_SAME_IP("logSameIP", true, "When set to true all players joining from the same IP will be loged in the console and a message is sent to all players with the permission: admincmd.spec.ipbroadcast"),
+	LOG_SAME_IP("logSameIP", false, "When set to true all players joining from the same IP will be loged in the console and a message is sent to all players with the permission: admincmd.spec.ipbroadcast"),
 	LISTER_ITEMS("nbItemsPerPageInList", 8, "How many items are displayed per page in banlist/mutelist etc ..."),
 	IMPORT_ESSENTIALS("importFrom.essentials", true, "If set to true AdminCmd will look for Essential datas the next time the server starts, import them if they exist and deactivate this feature.");
+
 	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;

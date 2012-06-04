@@ -22,7 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
@@ -49,7 +51,7 @@ public class MobLimit extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		ACWorld world = null;
 		int limit;
 		if (args.hasFlag('m')) {

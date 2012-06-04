@@ -22,6 +22,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 
@@ -50,7 +52,7 @@ public class PlayerList extends PlayerCommand {
 	 */
 
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 
 		final Collection<String> list = Utils.getPlayerList(sender);
 		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + list.size());

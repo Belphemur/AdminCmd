@@ -21,6 +21,8 @@ import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.CommandNotFound;
+import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 
 /**
@@ -45,7 +47,7 @@ public class Execution extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			return;

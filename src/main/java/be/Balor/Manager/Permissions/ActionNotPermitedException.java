@@ -14,35 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Listeners.Commands;
+package be.Balor.Manager.Permissions;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ACResetPowerListener implements Listener {
-	@EventHandler
-	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
-		final Player bPlayer = event.getPlayer();
-		if (PermissionManager.hasPerm(bPlayer, "admincmd.player.noreset", false)) {
-			return;
-		}
-		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
-		player.removeAllSuperPower();
-		if (InvisibleWorker.getInstance().hasInvisiblePowers(bPlayer)) {
-			InvisibleWorker.getInstance().reappear(bPlayer);
-		}
-		Utils.sI18n(bPlayer, "changedWorld");
+public class ActionNotPermitedException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -49502752416573412L;
+	private final CommandSender sender;
+
+	/**
+	 * @param message
+	 */
+	public ActionNotPermitedException(final CommandSender sender, final String perm) {
+		super(Utils.I18n("errorNotPerm", "p", perm));
+		this.sender = sender;
 	}
+
+	public void sendMessage() {
+		this.sender.sendMessage(this.getMessage());
+	}
+
 }

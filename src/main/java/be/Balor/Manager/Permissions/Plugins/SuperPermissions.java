@@ -19,10 +19,7 @@ package be.Balor.Manager.Permissions.Plugins;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import in.mDev.MiracleM4n.mChatSuite.types.InfoType;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,8 +30,6 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.miraclem4n.mchat.api.Reader;
 
@@ -154,35 +149,21 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 		if (result == null || (result != null && result.isEmpty())) {
 			final Pattern regex = Pattern
 					.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-			final Set<PermissionAttachmentInfo> perms = new LinkedHashSet<PermissionAttachmentInfo>();
-			final CountDownLatch countDown = new CountDownLatch(1);
-			ACPluginManager.scheduleSyncTask(new Runnable() {
-
-				@Override
-				public void run() {
-					perms.addAll(p.getEffectivePermissions());
-					countDown.countDown();
-
-				}
-			});
-			try {
-				countDown.await();
-			} catch (final InterruptedException e) {
-				DebugLog.INSTANCE.log(Level.WARNING,
-						"Problem to get Permission of the user " + p.getName(), e);
-			}
+			final Set<PermissionAttachmentInfo> perms = p.getEffectivePermissions();
 			int max = Integer.MIN_VALUE;
-			for (final PermissionAttachmentInfo info : perms) {
-				final Matcher regexMatcher = regex.matcher(info.getPermission().toLowerCase());
-				if (!regexMatcher.find()) {
-					continue;
-				}
-				final int current = Integer.parseInt(info.getPermission().split("\\.")[2]);
-				if (current < max) {
-					continue;
-				}
-				max = current;
+			synchronized (perms) {
+				for (final PermissionAttachmentInfo info : perms) {
+					final Matcher regexMatcher = regex.matcher(info.getPermission().toLowerCase());
+					if (!regexMatcher.find()) {
+						continue;
+					}
+					final int current = Integer.parseInt(info.getPermission().split("\\.")[2]);
+					if (current < max) {
+						continue;
+					}
+					max = current;
 
+				}
 			}
 			if (max != Integer.MIN_VALUE) {
 				return String.valueOf(max);

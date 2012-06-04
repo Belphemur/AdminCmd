@@ -47,6 +47,7 @@ import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.ClassUtils;
 import be.Balor.Tools.Utils;
@@ -78,7 +79,7 @@ public class CommandManager implements CommandExecutor {
 			this.acc = acc;
 		}
 
-		protected void processCmd() throws PlayerNotFound {
+		protected void processCmd() throws PlayerNotFound, ActionNotPermitedException {
 			acc.processArguments();
 			acc.execute();
 		}
@@ -106,6 +107,8 @@ public class CommandManager implements CommandExecutor {
 				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender(), replace);
 			} catch (final PlayerNotFound e) {
 				e.getSender().sendMessage(e.getMessage());
+			} catch (final ActionNotPermitedException e) {
+				e.sendMessage();
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
 				Utils.broadcastMessage("[AdminCmd] " + acc.debug());

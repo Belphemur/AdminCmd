@@ -29,7 +29,6 @@ import be.Balor.Listeners.Commands.ACFrozenPlayerListener;
 import be.Balor.Listeners.Commands.ACGodListener;
 import be.Balor.Listeners.Commands.ACLockedServerListener;
 import be.Balor.Listeners.Commands.ACOpenInvListener;
-import be.Balor.Listeners.Commands.ACResetPowerListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACTeleportBackListener;
 import be.Balor.Listeners.Commands.ACThorListener;
@@ -39,6 +38,7 @@ import be.Balor.Listeners.Features.ACColorSignListener;
 import be.Balor.Listeners.Features.ACCreatureSpawnListener;
 import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
+import be.Balor.Listeners.Features.ACResetPowerListener;
 import be.Balor.Listeners.Features.ACSignEditListener;
 import be.Balor.Listeners.Features.ACSuperBlacklistListener;
 import be.Balor.Manager.CommandManager;
@@ -517,18 +517,21 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.kit.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));
-		final PermParent majorPerm = new PermParent("admincmd.*");
-		permissionLinker.setMajorPerm(majorPerm);
+		final PermParent spec = new PermParent("admincmd.spec.*");
+		permissionLinker.addPermParent(spec);
+
 		player.addChild("admincmd.player.bypass");
 		permissionLinker.addPermChild("admincmd.spec.noblacklist");
 		player.addChild("admincmd.player.noreset");
 		permissionLinker.addPermChild("admincmd.spec.notprequest");
 		player.addChild("admincmd.player.noafkkick");
+		final PermParent majorPerm = new PermParent("admincmd.*");
+
 		permissionLinker.addPermChild("admincmd.admin.home");
 		permissionLinker.addPermChild("admincmd.item.infinity");
-		permissionLinker.addPermChild("admincmd.spec.noloss");
-		permissionLinker.addPermChild("admincmd.spec.signedit");
-		permissionLinker.addPermChild("admincmd.spec.ipbroadcast");
+		spec.addChild("admincmd.spec.noloss");
+		spec.addChild("admincmd.spec.signedit");
+		spec.addChild("admincmd.spec.ipbroadcast");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (final World w : this.getServer().getWorlds()) {
@@ -544,6 +547,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			permissionLinker.addPermChild("admincmd.respawn." + group);
 		}
 		permissionLinker.addPermChild("admincmd.respawn.admin");
+		permissionLinker.setMajorPerm(majorPerm);
+
 	}
 
 	@Override
