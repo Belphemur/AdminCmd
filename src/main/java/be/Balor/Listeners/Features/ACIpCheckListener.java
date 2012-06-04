@@ -1,16 +1,16 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
@@ -38,7 +38,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class ACIpCheckListener implements Listener {
 	private final ConcurrentMap<String, Player> ips = new MapMaker().makeMap();
@@ -52,7 +52,7 @@ public class ACIpCheckListener implements Listener {
 		if (sameIP != null) {
 			replace.put("player", Utils.getPlayerName(p));
 			replace.put("player2", Utils.getPlayerName(sameIP));
-			replace.put("ip", address.toString());
+			replace.put("ip", address.toString().substring(1));
 			broadcastIP(replace);
 		}
 
@@ -71,7 +71,7 @@ public class ACIpCheckListener implements Listener {
 	/**
 	 * Broadcasts a message if someone joined from the same IP to all players
 	 * with a permission and to the console.
-	 * 
+	 *
 	 * @param message
 	 *            - The message
 	 * @param players
@@ -96,7 +96,7 @@ public class ACIpCheckListener implements Listener {
 	 * If a player quits loop through the online players and see if a second
 	 * player uses the same IP and replace the quitting player with the online
 	 * player. Otherwise remove the player from the list!
-	 * 
+	 *
 	 * @param quits
 	 * @param address
 	 */
@@ -109,11 +109,11 @@ public class ACIpCheckListener implements Listener {
 						continue;
 					}
 					if (p.getAddress().getAddress().equals(address)) {
-						ips.replace(address.toString(), p);
+						ips.replace(address.toString().substring(1), p);
 						return;
 					}
 				}
-				ips.remove(address.toString());
+				ips.remove(address.toString().substring(1));
 
 			}
 		});
@@ -122,25 +122,25 @@ public class ACIpCheckListener implements Listener {
 
 	/**
 	 * Adds a player to the ip list if his ip is not already in.
-	 * 
+	 *
 	 * @param player
 	 * @param address
 	 * @return The player who also uses this IP or null if there was none
 	 *         previously
 	 */
 	private Player addIP(final Player player, final InetAddress address) {
-		final Player p = ips.putIfAbsent(address.toString(), player);
+		final Player p = ips.putIfAbsent(address.toString().substring(1), player);
 		return p;
 	}
 
 	/**
 	 * Checks if an IP is already in use
-	 * 
+	 *
 	 * @param address
 	 * @return {@code true} if an IP is found, {@code false} otherwise.
 	 */
 	public boolean ipInUse(final InetAddress address) {
-		if (ips.containsKey(address.toString())) {
+		if (ips.containsKey(address.toString().substring(1))) {
 			return true;
 		}
 		return false;

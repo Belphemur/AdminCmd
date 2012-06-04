@@ -111,7 +111,7 @@ public class ACPlayerListener implements Listener {
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
 		InvisibleWorker.getInstance().makeInvisibleToPlayer(p);
 		final InetAddress address = p.getAddress().getAddress();
-		player.setInformation("last-ip", address.toString());
+		player.setInformation("last-ip", address.toString().substring(1));
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			replace.put("name", Utils.getPlayerName(p, null, true));
