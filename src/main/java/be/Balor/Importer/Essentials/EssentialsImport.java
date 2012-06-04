@@ -50,12 +50,19 @@ public class EssentialsImport implements IImport {
 	private SubDirFileFilter filter = new SubDirFileFilter();
 
 	public EssentialsImport(String path) {
-		importPath = path;
+		importPath = path + File.separator + "Essentials";
 	}
 
 	@Override
 	public void initImport() {
 		int number = 0;
+		File file = new File(importPath);
+		if (!file.exists()) {
+			ConfigEnum.IMPORT_ESSENTIALS.setValue(false);
+			ACHelper.getInstance().saveConfig();
+			ACLogger.info("Import deactivated. Did not find folder 'Essentials' in plugins.");
+			return;
+		}
 		ACLogger.info("Starting import of Essentials data.\n Trying to import User-data.....");
 		number = importUserData();
 		ACLogger.info("Data of " + number + " user(s) imported. Trying to import spawn point(s)....");
