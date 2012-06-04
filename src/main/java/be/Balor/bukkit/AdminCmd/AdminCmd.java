@@ -15,6 +15,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.PluginClassLoader;
 
+import be.Balor.Importer.IImport;
+import be.Balor.Importer.ImportTools;
+import be.Balor.Importer.Essentials.EssentialsImport;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACEntityListener;
 import be.Balor.Listeners.ACPlayerListener;
@@ -313,6 +316,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		if (ConfigEnum.RESET_POWERS.getBoolean()) {
 			pm.registerEvents(new ACResetPowerListener(), this);
+		}
+		IImport importer = null;
+		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+			importer = new EssentialsImport(ImportTools.getPluginsFolder(getDataFolder()));
+			importer.initImport();
 		}
 
 	}

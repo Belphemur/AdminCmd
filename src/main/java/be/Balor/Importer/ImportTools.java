@@ -42,6 +42,11 @@ import be.Balor.World.ACWorld;
  */
 public class ImportTools {
 
+	public static String getPluginsFolder(final File file) {
+		final String path = file.getPath();
+		return path.substring(0, path.lastIndexOf(File.separator));
+	}
+
 	public static void copyTextFile(File sourcefile, File targeFile) throws IOException {
 		assert sourcefile != null && targeFile != null;
 		final BufferedReader in = new BufferedReader(new UnicodeReader(new FileInputStream(
