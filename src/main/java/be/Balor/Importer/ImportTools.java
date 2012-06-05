@@ -79,7 +79,7 @@ public class ImportTools {
 					homeLoc = buildLocation(home, w);
 				} catch (final Exception e) {
 					ACLogger.info("[ERROR] Could not import homes of user: " + playerName);
-					DebugLog.INSTANCE.log(Level.INFO, "[ERROR] Could not import homes of user: "
+					DebugLog.INSTANCE.log(Level.WARNING, "[ERROR] Could not import homes of user: "
 							+ playerName, e);
 					return false;
 				}
@@ -113,7 +113,8 @@ public class ImportTools {
 		ConfigurationSection iLoc = null;
 		iLoc = uerFile.getConfigurationSection("lastlocation");
 		if (iLoc == null) {
-			DebugLog.INSTANCE.info("Can find the lastLocation in the configuration file");
+			DebugLog.INSTANCE.info("Can find the lastLocation in the configuration file for "
+					+ playerName + " in file " + uerFile);
 			return false;
 		}
 		final ACWorld w = ACWorld.getWorld(iLoc.getString("world"));
@@ -121,7 +122,7 @@ public class ImportTools {
 			lastLoc = buildLocation(iLoc, w);
 		} catch (final Exception e) {
 			ACLogger.info("[ERROR] Could not import the last location of user: " + playerName);
-			DebugLog.INSTANCE.log(Level.INFO, "[ERROR] Could not import last location of user: "
+			DebugLog.INSTANCE.log(Level.WARNING, "[ERROR] Could not import last location of user: "
 					+ playerName, e);
 			return false;
 		}
