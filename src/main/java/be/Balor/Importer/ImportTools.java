@@ -38,7 +38,7 @@ import be.Balor.World.ACWorld;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class ImportTools {
 
@@ -47,7 +47,7 @@ public class ImportTools {
 		return path.substring(0, path.lastIndexOf(File.separator));
 	}
 
-	public static void copyTextFile(File sourcefile, File targeFile) throws IOException {
+	public static void copyTextFile(final File sourcefile, final File targeFile) throws IOException {
 		assert sourcefile != null && targeFile != null;
 		final BufferedReader in = new BufferedReader(new UnicodeReader(new FileInputStream(
 				sourcefile), "UTF-8"));
@@ -60,7 +60,8 @@ public class ImportTools {
 		UnicodeUtil.saveUTF8File(targeFile, result.toString(), false);
 	}
 
-	public static boolean importESHomes(ExtendedConfiguration userFile, String playerName) {
+	public static boolean importESHomes(final ExtendedConfiguration userFile,
+			final String playerName) {
 		Set<String> nodeList;
 		ConfigurationSection home = null, homes = null;
 		Location homeLoc = null;
@@ -71,14 +72,15 @@ public class ImportTools {
 		homes = userFile.getConfigurationSection("homes");
 		if (homes != null) {
 			nodeList = homes.getKeys(false);
-			for (String name : nodeList) {
+			for (final String name : nodeList) {
 				home = homes.getConfigurationSection(name);
-				ACWorld w = ACWorld.getWorld(home.getString("world"));
+				final ACWorld w = ACWorld.getWorld(home.getString("world"));
 				try {
 					homeLoc = buildLocation(home, w);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					ACLogger.info("[ERROR] Could not import homes of user: " + playerName);
-					DebugLog.INSTANCE.log(Level.INFO, "[ERROR] Could not import homes of user: " + playerName, e);
+					DebugLog.INSTANCE.log(Level.INFO, "[ERROR] Could not import homes of user: "
+							+ playerName, e);
 					return false;
 				}
 				ACPlayer.getPlayer(playerName).setHome(name, homeLoc);
@@ -90,7 +92,8 @@ public class ImportTools {
 		return true;
 	}
 
-	public static Location buildLocation(ConfigurationSection section, ACWorld world) throws Exception {
+	public static Location buildLocation(final ConfigurationSection section, final ACWorld world)
+			throws Exception {
 		Location loc = null;
 		assert section != null && world != null;
 		double x = 0D, y = 0D, z = 0D;
@@ -104,16 +107,22 @@ public class ImportTools {
 		return loc;
 	}
 
-	public static boolean importESLastLocation(ExtendedConfiguration uerFile, String playerName) {
+	public static boolean importESLastLocation(final ExtendedConfiguration uerFile,
+			final String playerName) {
 		Location lastLoc = null;
 		ConfigurationSection iLoc = null;
 		iLoc = uerFile.getConfigurationSection("lastlocation");
-		ACWorld w = ACWorld.getWorld(iLoc.getString("world"));
+		if (iLoc == null) {
+			DebugLog.INSTANCE.info("Can find the lastLocation in the configuration file");
+			return false;
+		}
+		final ACWorld w = ACWorld.getWorld(iLoc.getString("world"));
 		try {
 			lastLoc = buildLocation(iLoc, w);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ACLogger.info("[ERROR] Could not import the last location of user: " + playerName);
-			DebugLog.INSTANCE.log(Level.INFO, "[ERROR] Could not import last location of user: " + playerName, e);
+			DebugLog.INSTANCE.log(Level.INFO, "[ERROR] Could not import last location of user: "
+					+ playerName, e);
 			return false;
 		}
 		ACPlayer.getPlayer(playerName).setLastLocation(lastLoc);
