@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 public class UnicodeUtil {
 
 	public static final byte[] UTF8_BOMS = new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
+	public static final int BOM_SIZE = 4;
 
 	public static void saveUTF8File(final File file, final String data, final boolean append)
 			throws IOException {

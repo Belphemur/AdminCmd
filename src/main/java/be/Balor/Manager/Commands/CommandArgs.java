@@ -63,9 +63,15 @@ public class CommandArgs implements Iterable<String> {
 				int endIndex;
 				for (endIndex = i; endIndex < args.length; ++endIndex) {
 					final String arg2 = args[endIndex];
+					if (arg2.isEmpty()) {
+						continue;
+					}
 					if (arg2.charAt(arg2.length() - 1) == quotedChar) {
 						if (endIndex != i) {
 							build.append(' ');
+						}
+						if (endIndex == i && arg2.length() == 1) {
+							continue;
 						}
 						build.append(arg2.substring(endIndex == i ? 1 : 0, arg2.length() - 1));
 						break;

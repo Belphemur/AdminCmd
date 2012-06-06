@@ -60,16 +60,17 @@ public class GameModeSwitch extends PlayerCommand {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(target));
 		if (target.getGameMode() == GameMode.CREATIVE) {
+			final ACPlayer acTarget = ACPlayer.getPlayer(target);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
 					target.setGameMode(GameMode.SURVIVAL);
+					if (acTarget.hasPower(Type.FLY)) {
+						target.setAllowFlight(true);
+						target.setFlying(true);
+					}
 				}
 			});
-			if (ACPlayer.getPlayer(target).hasPower(Type.FLY)) {
-				target.setAllowFlight(true);
-				target.setFlying(true);
-			}
 			replace.put("gamemode", GameMode.SURVIVAL.toString());
 			Utils.sendMessage(sender, target, "gmSwitch", replace);
 		} else {

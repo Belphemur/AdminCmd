@@ -33,8 +33,6 @@ public class UnicodeReader extends Reader {
 	InputStreamReader internalIn2 = null;
 	String defaultEnc;
 
-	private static final int BOM_SIZE = 4;
-
 	/**
 	 * 
 	 * @param in
@@ -44,7 +42,7 @@ public class UnicodeReader extends Reader {
 	 *            to use system-level default.
 	 */
 	public UnicodeReader(final InputStream in, final String defaultEnc) {
-		internalIn = new PushbackInputStream(in, BOM_SIZE);
+		internalIn = new PushbackInputStream(in, UnicodeUtil.BOM_SIZE);
 		this.defaultEnc = defaultEnc;
 	}
 
@@ -73,7 +71,7 @@ public class UnicodeReader extends Reader {
 		}
 
 		String encoding;
-		final byte bom[] = new byte[BOM_SIZE];
+		final byte bom[] = new byte[UnicodeUtil.BOM_SIZE];
 		int n, unread;
 		n = internalIn.read(bom, 0, bom.length);
 

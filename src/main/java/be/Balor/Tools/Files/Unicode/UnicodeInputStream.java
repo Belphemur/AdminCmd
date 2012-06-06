@@ -38,10 +38,8 @@ public class UnicodeInputStream extends InputStream {
 	String defaultEnc;
 	String encoding;
 
-	private static final int BOM_SIZE = 4;
-
 	public UnicodeInputStream(final InputStream in, final String defaultEnc) {
-		internalIn = new PushbackInputStream(in, BOM_SIZE);
+		internalIn = new PushbackInputStream(in, UnicodeUtil.BOM_SIZE);
 		this.defaultEnc = defaultEnc;
 	}
 
@@ -71,7 +69,7 @@ public class UnicodeInputStream extends InputStream {
 			return;
 		}
 
-		final byte bom[] = new byte[BOM_SIZE];
+		final byte bom[] = new byte[UnicodeUtil.BOM_SIZE];
 		int n, unread;
 		n = internalIn.read(bom, 0, bom.length);
 
