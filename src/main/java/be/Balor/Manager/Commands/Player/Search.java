@@ -67,7 +67,7 @@ public class Search extends PlayerCommand {
 			InetAddress ipAdress;
 			for (final Player p : onPlayers) {
 				ipAdress = p.getAddress().getAddress();
-				if (ipAdress != null && ipAdress.toString().equals(ip)) {
+				if (ipAdress != null && ipAdress.toString().substring(1).equals(ip)) {
 					players.add(on + Utils.getPlayerName(p));
 					playersOld.add(p.getName());
 				}
@@ -75,7 +75,7 @@ public class Search extends PlayerCommand {
 			String ip2;
 			for (final ACPlayer p : exPlayers) {
 				ip2 = p.getInformation("last-ip").getString();
-				if (ip2 != null && ip2.toString().equals(ip) && !playersOld.contains(p.getName())) {
+				if (ip2 != null && ip2.contains(ip) && !playersOld.contains(p.getName())) {
 					players.add(off + p.getName());
 				}
 			}
