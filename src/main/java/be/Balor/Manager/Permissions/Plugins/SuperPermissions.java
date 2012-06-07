@@ -167,9 +167,9 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 			} catch (final NoSuchFieldException e) {
 				ACLogger.severe("Can't get the limit " + limit + " from player " + p.getName(), e);
 			}
-			final Collection<PermissionAttachmentInfo> perms = permissions.values();
 			int max = Integer.MIN_VALUE;
 			synchronized (permissions) {
+				final Collection<PermissionAttachmentInfo> perms = permissions.values();
 				for (final PermissionAttachmentInfo info : perms) {
 					final Matcher regexMatcher = regex.matcher(info.getPermission().toLowerCase());
 					if (!regexMatcher.find()) {
