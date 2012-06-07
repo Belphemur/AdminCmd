@@ -31,7 +31,7 @@ public class ACLogger {
 	protected static final String prefix = "[AdminCmd] ";
 
 	public static void severe(final String string, final Throwable ex) {
-		logger.log(Level.SEVERE, prefix + ChatColor.stripColor(ChatColor.stripColor(string)), ex);
+		logger.log(Level.SEVERE, prefix.concat(ChatColor.stripColor(string)), ex);
 	}
 
 	public static void severe(final String string) {
