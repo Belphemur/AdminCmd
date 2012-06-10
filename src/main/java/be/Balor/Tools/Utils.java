@@ -1544,8 +1544,8 @@ public final class Utils {
 		if (event.isCancelled()) {
 			return;
 		}
-		if (!loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ())) {
-			loc.getWorld().loadChunk(loc.getBlockX(), loc.getBlockZ());
+		if (!loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4)) {
+			loc.getWorld().loadChunk(loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
 		}
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 		final WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
