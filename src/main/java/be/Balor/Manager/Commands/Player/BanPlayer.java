@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.NotANumberException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
@@ -87,39 +88,14 @@ public class BanPlayer extends PlayerCommand {
 					message += args.getString(i) + " ";
 				}
 			}
-			String tmpTime = args.getString(args.length -1);
-			if (tmpTime != null) {
-				String[] tmpTimeParsed = Utils.tempStringParser(tmpTime);
-				if (tmpTimeParsed[0] != null && tmpTimeParsed[1] == null)
-					try {
-						tmpBan = Integer.parseInt(tmpTimeParsed[0]);
-					} catch (final Exception e) {
-					}
-				if (tmpTimeParsed[0] != null && tmpTimeParsed[1] != null) {
-					tmpBan = Integer.parseInt(tmpTimeParsed[0]);
-					String timeMulti = tmpTimeParsed[1];
-					if (timeMulti.contains("month")) {
-						tmpBan = tmpBan * 43200;
-					} else if (timeMulti.contains("week")) {
-						tmpBan = tmpBan * 10080;
-					} else if (timeMulti.contains("day")) {
-						tmpBan = tmpBan * 1440;
-					} else if (timeMulti.contains("hour")) {
-						tmpBan = tmpBan * 60;
-					} else if (timeMulti.contains("year")) {
-						tmpBan = tmpBan * 525600;
-					}
+			try {
+				int tmpIntTime = Utils.timeParser(args.getString(args.length -1));
+				if (tmpIntTime != -1) {
+					tmpBan = tmpIntTime;
 				}
-				if (tmpTimeParsed[0] == null && tmpTimeParsed[1] != null) {
-					if (!args.hasFlag('m')) {
-						message += tmpTimeParsed[1];
-					}
-				}
-				if (tmpTimeParsed[0] == null && tmpTimeParsed[1] == null) {
-					if (!args.hasFlag('m')) {
-						message += args.getString(args.length - 1);
-					}
-				}
+			} catch (NotANumberException e) {
+				Utils.sI18n(sender, "NaN", "number", args.getString(args.length -1));
+				return;
 			}
 			if (message.isEmpty()) {
 				message += " You have been banned ";
