@@ -90,15 +90,32 @@ public class BanPlayer extends PlayerCommand {
 			String tmpTime = args.getString(args.length -1);
 			if (tmpTime != null) {
 				String[] tmpTimeParsed = Utils.tempStringParser(tmpTime);
-				if (tmpTimeParsed[0] != null)
+				if (tmpTimeParsed[0] != null && tmpTimeParsed[1] == null)
 					try {
 						tmpBan = Integer.parseInt(tmpTimeParsed[0]);
 					} catch (final Exception e) {
 					}
 				if (tmpTimeParsed[0] != null && tmpTimeParsed[1] != null) {
-
+					tmpBan = Integer.parseInt(tmpTimeParsed[0]);
+					String timeMulti = tmpTimeParsed[1];
+					if (timeMulti.contains("month")) {
+						tmpBan = tmpBan * 43200;
+					} else if (timeMulti.contains("week")) {
+						tmpBan = tmpBan * 10080;
+					} else if (timeMulti.contains("day")) {
+						tmpBan = tmpBan * 1440;
+					} else if (timeMulti.contains("hour")) {
+						tmpBan = tmpBan * 60;
+					} else if (timeMulti.contains("year")) {
+						tmpBan = tmpBan * 525600;
+					}
 				}
 				if (tmpTimeParsed[0] == null && tmpTimeParsed[1] != null) {
+					if (!args.hasFlag('m')) {
+						message += tmpTimeParsed[1];
+					}
+				}
+				if (tmpTimeParsed[0] == null && tmpTimeParsed[1] == null) {
 					if (!args.hasFlag('m')) {
 						message += args.getString(args.length - 1);
 					}
@@ -138,7 +155,7 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return;
 				}
-				ban = new TempBannedIP(banPlayerString, message, tmpBan * 60 * 1000);
+				ban = new TempBannedIP(banPlayerString, message, tmpBan * 60 *1000);
 				ACHelper.getInstance().banPlayer(ban);
 			} else {
 				ban = new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000);
