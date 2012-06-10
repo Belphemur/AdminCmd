@@ -116,6 +116,8 @@ public final class Utils {
 			.compile("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b");
 	public static final Pattern REGEX_INACCURATE_IP_V4 = Pattern
 			.compile("\\b([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\b");
+	public static final Pattern NUMBERS = Pattern.compile("(\\d*[.|\\.]?\\d+)" + "|(\\d+)");
+	public static final Pattern TIMES = Pattern.compile("");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -1600,5 +1602,11 @@ public final class Utils {
 		replace.put("s", timeLongToSring(time[3]));
 		replace.put("player", playername);
 		return replace;
+	}
+
+	public static String[] tempStringParser(String toParse) {
+		String[] parsed = new String[2];
+		Matcher numberMatcher = NUMBERS.matcher(toParse);
+		return parsed;
 	}
 }

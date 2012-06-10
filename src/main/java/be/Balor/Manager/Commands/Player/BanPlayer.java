@@ -41,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class BanPlayer extends PlayerCommand {
 
@@ -55,7 +55,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -87,11 +87,21 @@ public class BanPlayer extends PlayerCommand {
 					message += args.getString(i) + " ";
 				}
 			}
-			try {
-				tmpBan = args.getInt(args.length - 1);
-			} catch (final Exception e) {
-				if (!args.hasFlag('m')) {
-					message += args.getString(args.length - 1);
+			String tmpTime = args.getString(args.length -1);
+			if (tmpTime != null) {
+				String[] tmpTimeParsed = Utils.tempStringParser(tmpTime);
+				if (tmpTimeParsed[0] != null)
+					try {
+						tmpBan = Integer.parseInt(tmpTimeParsed[0]);
+					} catch (final Exception e) {
+					}
+				if (tmpTimeParsed[0] != null && tmpTimeParsed[1] != null) {
+
+				}
+				if (tmpTimeParsed[0] == null && tmpTimeParsed[1] != null) {
+					if (!args.hasFlag('m')) {
+						message += args.getString(args.length - 1);
+					}
 				}
 			}
 			if (message.isEmpty()) {
@@ -167,7 +177,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
