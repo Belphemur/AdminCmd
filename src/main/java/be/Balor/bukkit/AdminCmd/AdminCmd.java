@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -950,12 +950,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					} catch (final MalformedURLException e3) {
 						e3.printStackTrace();
 					}
-					final Map<String, String> urls = new HashMap<String, String>();
-					urls.put("http://wiki.admincmd.com/player_commands.html",
-							"http://wiki.admincmd.com");
-					urls.put(
-							"http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1",
-							"http://wiki.admincmd.com/player_commands.html");
+					final List<String> urls = new ArrayList<String>();
+					urls.add("http://wiki.admincmd.com/player_commands.html");
+					urls.add("http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1");
 					webBrowser = new WebBrowser(urls);
 					webBrowser.startService();
 					if (!ConfigEnum.DEBUG.getBoolean()) {
