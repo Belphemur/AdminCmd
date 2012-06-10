@@ -1,0 +1,58 @@
+#version: ${git.commit.id}
+Admin Command
+=============
+Version: 6.0.1 (BUILD 01.06.2012 @ 10:41:06)
+Thread: http://forums.bukkit.org/threads/admincmd.10770/
+Ticket (Für Bugs / Feature-Anfragen): http://dev.bukkit.org/server-mods/admincmd/tickets/
+Wiki: http://dev.bukkit.org/server-mods/admincmd/
+
+Features:
+==========
+    Zeitkontrolle
+    Item Manager
+    Spieler Befehle
+    Teleport Befehle
+    Wetterkontrolle
+    Warp Befehle
+    Mobkontrolle
+    Spawn Befehle
+    Auto-AFK mit AFK-Kick
+    Unterstützt verschiedene Permissions-Plugins (PEX, Permissions 3x, PermissionsBukkit, etc.)
+    Unterstützt OddItem
+    Unterstützt mChat
+	Unterstützt LogBlock
+	Farbige Schilder
+    Konfigurierbar über eine Konfigurationsdatei
+	Doppeltnutzung von Befehlen wird deaktiviert
+	Alle Befehle lassen sich einfach deaktivieren
+    Mehrsprachig: Englisch und Deutsch (Von MrMysterious)
+
+Immunität
+=========
+Man kann nun Immunitäts-Level setzen, die Immunitäts-Level repräsentieren
+die Stärke eines Spielers.
+Ein Spieler mit dem Immunitäts-Level 0 kann keine Befehle gegen einen Spieler mit dem
+Immunitäts-Level 1 oder höher ausführen. Ein Spieler mit dem Immunitäts-Level 150
+(Maximale Anzahl) kann alles gegen einen niedrigeren Spieler ausführen. 
+
+Ordner und Dateien
+==================
+Ordner: 
+---------
+Ordner /userData/ -> Beinhaltet alle Daten über Spieler (z.B. Deren Zuhause, Gamemode 0 oder 1, etc.)
+Ordner /locale/ -> Beinhaltet die lokalen Dateien
+Ordner /scripts/ -> Beinhaltet sripts.yml um eigene Skripte zu schreiben (Bash/Batch), welche dann auf dem Server ausgeführt werden (Nur für erfahrene Admins).
+Ordner /worldData/ -> Beinhaltet alle Daten über Welten, Spawnpunkte, Warps, Zeit und Wetter.
+Ordner /HelpFiles/ -> Beinhaltet alle Hilfsdateien über AdminCmd.
+
+Dateien:
+-------
+Alias.yml -> Beinhaltet alle Befehls-Abkürzungen, die im Spiel erstellt wurden.
+blacklist.yml -> Beinhaltet die geblockten Blöcke und Items.
+config.yml -> Dies ist die Konfigurationsdatei
+items.csv -> Beinhaltet die Standard-Aliases von Essentials.
+kits.yml -> Beinhaltet die Kits.
+commands.yml -> Beinhaltet die Befehle, welche deaktiviert werden sollen, oder deren Priorität geändert werden kann.
+motd.txt -> Beinhaltet den Begrüßungstext.
+rules.txt -> Beinhaltet die Regeln.
+news.txt -> Beinhaltet die Neuigkeiten.
