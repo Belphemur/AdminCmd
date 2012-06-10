@@ -65,6 +65,7 @@ import org.bukkit.plugin.PluginManager;
 import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.NotANumberException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -97,7 +98,7 @@ import de.diddiz.LogBlock.Consumer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public final class Utils {
 	public static OddItemBase oddItem = null;
@@ -121,7 +122,7 @@ public final class Utils {
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 	/**
 	 *
@@ -141,7 +142,7 @@ public final class Utils {
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -174,7 +175,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
@@ -190,7 +191,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -206,7 +207,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(final String message) {
@@ -220,7 +221,7 @@ public final class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -257,7 +258,7 @@ public final class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -323,7 +324,7 @@ public final class Utils {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 * @throws InvalidInputException
@@ -360,7 +361,7 @@ public final class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -390,7 +391,7 @@ public final class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
@@ -455,7 +456,7 @@ public final class Utils {
 
 	/**
 	 * Get the ACPlayer, useful when working with only the AC user informations
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -504,7 +505,7 @@ public final class Utils {
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -514,7 +515,7 @@ public final class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -562,7 +563,7 @@ public final class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -603,7 +604,7 @@ public final class Utils {
 
 	/**
 	 * For compatibility
-	 *
+	 * 
 	 * @param player
 	 * @param sender
 	 * @param withPrefix
@@ -616,7 +617,7 @@ public final class Utils {
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
@@ -644,7 +645,7 @@ public final class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
@@ -673,7 +674,7 @@ public final class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -695,7 +696,7 @@ public final class Utils {
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -742,7 +743,7 @@ public final class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -763,7 +764,7 @@ public final class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -838,7 +839,7 @@ public final class Utils {
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -853,7 +854,7 @@ public final class Utils {
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(final CommandSender sender) {
@@ -861,10 +862,12 @@ public final class Utils {
 	}
 
 	/**
-	 * Checks if the command sender is a Player. Sends the sender an error message
-	 * if he is not a player.
+	 * Checks if the command sender is a Player. Sends the sender an error
+	 * message if he is not a player.
+	 * 
 	 * @param sender
-	 * @param msg - If {@code true} an error message will be sent.
+	 * @param msg
+	 *            - If {@code true} an error message will be sent.
 	 * @return
 	 */
 	public static boolean isPlayer(final CommandSender sender, final boolean msg) {
@@ -880,7 +883,7 @@ public final class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
@@ -935,7 +938,7 @@ public final class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -962,7 +965,7 @@ public final class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
@@ -1028,7 +1031,7 @@ public final class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 * @throws ActionNotPermitedException
@@ -1368,7 +1371,7 @@ public final class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -1527,7 +1530,7 @@ public final class Utils {
 
 	/**
 	 * Check if the chunk is loaded before teleport the player to the location
-	 *
+	 * 
 	 * @param player
 	 *            player to be teleported
 	 * @param loc
@@ -1562,7 +1565,7 @@ public final class Utils {
 
 	/**
 	 * Get the player list ordered by group and alphabetically for the sender
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @return a Collection containing what to display
@@ -1587,7 +1590,7 @@ public final class Utils {
 
 	/**
 	 * Send the played time of a player to a another one.
-	 *
+	 * 
 	 * @param playername
 	 *            name of the player that the time belong to
 	 * @param total
@@ -1604,10 +1607,19 @@ public final class Utils {
 		return replace;
 	}
 
-	public static String[] tempStringParser(String toParse) {
-		String[] parsed = new String[2];
-		Matcher numberMatcher = NUMBERS.matcher(toParse);
-		Matcher timeMatcher = TIMES.matcher(toParse);
+	/**
+	 * Cut in 2 part the given time if it's in the format : <br />
+	 * <blockquote> <X day | X hour | X minute | X week | X month> </blockquote>
+	 * 
+	 * @param toParse
+	 *            input to be parsed
+	 * @return a 2 sized String vector with the parsed time if successful, else
+	 *         an empty one.
+	 */
+	public static String[] tempStringParser(final String toParse) {
+		final String[] parsed = new String[2];
+		final Matcher numberMatcher = NUMBERS.matcher(toParse);
+		final Matcher timeMatcher = TIMES.matcher(toParse);
 		if (numberMatcher.find()) {
 			parsed[0] = numberMatcher.group();
 		}
@@ -1615,5 +1627,53 @@ public final class Utils {
 			parsed[1] = timeMatcher.group();
 		}
 		return parsed;
+	}
+
+	/**
+	 * Parse the given string to get the time in an integer it's in the format : <br />
+	 * <blockquote> <X day | X hour | X minute | X week | X month> </blockquote>
+	 * 
+	 * @param toParse
+	 *            time to parse
+	 * @return time parsed, -1 if nothing to be parsed
+	 * @throws NotANumberException
+	 *             if the String to be parsed doesn't have the right format
+	 */
+	public static int timeParser(final String toParse) throws NotANumberException {
+		int tmpBan;
+		final String[] tmpTimeParsed = Utils.tempStringParser(toParse);
+		if (tmpTimeParsed[0] == null) {
+			return -1;
+		}
+		if (tmpTimeParsed[1] == null) {
+			try {
+				return Integer.parseInt(tmpTimeParsed[0]);
+			} catch (final NumberFormatException e) {
+				throw new NotANumberException("Time given : " + tmpTimeParsed[0], e);
+			}
+		} else {
+			try {
+				tmpBan = Integer.parseInt(tmpTimeParsed[0]);
+			} catch (final NumberFormatException e) {
+				throw new NotANumberException("Time given : " + tmpTimeParsed[0], e);
+			}
+			final String timeMulti = tmpTimeParsed[1];
+			if (timeMulti.contains("month")) {
+				return tmpBan * 43200;
+			}
+			if (timeMulti.contains("week")) {
+				return tmpBan * 10080;
+			}
+			if (timeMulti.contains("day")) {
+				return tmpBan * 1440;
+			}
+			if (timeMulti.contains("hour")) {
+				return tmpBan * 60;
+			}
+			if (timeMulti.contains("year")) {
+				return tmpBan * 525600;
+			}
+			throw new NotANumberException("Can't parse the time : " + tmpTimeParsed[1]);
+		}
 	}
 }
