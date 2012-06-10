@@ -81,6 +81,7 @@
 				<includes>
 					<include>plugin.yml</include>
 					<include>ReadMe.txt</include>
+					<include>LiesMich.txt</include>
 					<include>**/*.properties</include>
 					<include>items.csv</include>
 					<include>AdminCmd.yml</include>
@@ -395,12 +396,12 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.2.5-R3.1-SNAPSHOT</version>
+			<version>1.2.5-R4.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.2.5-R3.1-SNAPSHOT</version>
+			<version>1.2.5-R4.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>be.balor</groupId>

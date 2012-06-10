@@ -17,6 +17,7 @@
 package be.Balor.Tools.Threads;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,13 +28,14 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class RemovePowerTask implements Runnable {
 
 	private final ACPlayer player;
 	private final Type power;
 	private final CommandSender sender;
+	private final Map<String, String> replace = new HashMap<String, String>();
 
 	/**
 	 * @param player
@@ -44,11 +46,17 @@ public class RemovePowerTask implements Runnable {
 		this.player = player;
 		this.power = power;
 		this.sender = sender;
+		replace.put("power", this.power.display());
+		if (this.player.isOnline()) {
+			replace.put("name", Utils.getPlayerName(this.player.getHandler()));
+		} else {
+			replace.put("name", this.player.getName());
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -63,12 +71,8 @@ public class RemovePowerTask implements Runnable {
 			}
 		}
 		if (!sender.equals(handler)) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("power", power.display());
-			try {
-				replace.put("name", Utils.getPlayerName(handler));
-			} catch (NullPointerException e) {
-				replace.put("name", player.getName());
+			if (Utils.isPlayer(sender, false) && !((Player) sender).isOnline()) {
+				return;
 			}
 			Utils.sI18n(sender, "timeOutPowerSender", replace);
 		}
