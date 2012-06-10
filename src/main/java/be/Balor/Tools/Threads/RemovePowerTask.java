@@ -27,7 +27,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class RemovePowerTask implements Runnable {
 
@@ -48,7 +48,7 @@ public class RemovePowerTask implements Runnable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -65,7 +65,11 @@ public class RemovePowerTask implements Runnable {
 		if (!sender.equals(handler)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("power", power.display());
-			replace.put("name", Utils.getPlayerName(handler));
+			try {
+				replace.put("name", Utils.getPlayerName(handler));
+			} catch (NullPointerException e) {
+				replace.put("name", player.getName());
+			}
 			Utils.sI18n(sender, "timeOutPowerSender", replace);
 		}
 	}
