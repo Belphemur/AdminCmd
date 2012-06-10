@@ -41,6 +41,7 @@ import be.Balor.Listeners.Features.ACColorSignListener;
 import be.Balor.Listeners.Features.ACCreatureSpawnListener;
 import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
+import be.Balor.Listeners.Features.ACPowerOffListener;
 import be.Balor.Listeners.Features.ACResetPowerListener;
 import be.Balor.Listeners.Features.ACSignEditListener;
 import be.Balor.Listeners.Features.ACSuperBlacklistListener;
@@ -322,6 +323,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
 			importer = new EssentialsImport(ImportTools.getPluginsFolder(getDataFolder()));
 			importer.initImport();
+		}
+		if (ConfigEnum.POWERS_OFF.getBoolean()){
+			pm.registerEvents(new ACPowerOffListener(), this);
 		}
 
 	}
