@@ -117,7 +117,7 @@ public final class Utils {
 	public static final Pattern REGEX_INACCURATE_IP_V4 = Pattern
 			.compile("\\b([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\b");
 	public static final Pattern NUMBERS = Pattern.compile("(\\d*[.|\\.]?\\d+)" + "|(\\d+)");
-	public static final Pattern TIMES = Pattern.compile("");
+	public static final Pattern TIMES = Pattern.compile("month(s?)|day(s?)|hour(s?)|week(s?)");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -1607,6 +1607,13 @@ public final class Utils {
 	public static String[] tempStringParser(String toParse) {
 		String[] parsed = new String[2];
 		Matcher numberMatcher = NUMBERS.matcher(toParse);
+		Matcher timeMatcher = TIMES.matcher(toParse);
+		if (numberMatcher.find()) {
+			parsed[0] = numberMatcher.group();
+		}
+		if (timeMatcher.find()) {
+			parsed[1] = timeMatcher.group();
+		}
 		return parsed;
 	}
 }
