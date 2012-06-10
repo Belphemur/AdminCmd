@@ -17,17 +17,12 @@
 package be.Balor.Tools.Files;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -337,31 +332,11 @@ public class FileManager implements DataManager {
 
 		}
 		if (!file.exists()) {
-			final InputStream res = this.getClass().getResourceAsStream("/" + filename);
-
-			Writer tx = null;
 			try {
-				final FileOutputStream fos = new FileOutputStream(file);
-				fos.write(UnicodeUtil.UTF8_BOMS);
-				tx = new BufferedWriter(new OutputStreamWriter(fos, "UTF8"));
-				for (int i = 0; (i = res.read()) > 0;) {
-					tx.write(i);
-				}
-				tx.flush();
-			} catch (final IOException ex) {
-				ex.printStackTrace();
-				return file;
-			} finally {
-				try {
-					res.close();
-				} catch (final Exception ex) {
-				}
-				try {
-					if (tx != null) {
-						tx.close();
-					}
-				} catch (final Exception ex) {
-				}
+				UnicodeUtil.saveUTF8File(file, this.getClass().getResourceAsStream("/" + filename),
+						false);
+			} catch (final IOException e) {
+				ACLogger.severe("Can't copy the inner file " + filename + " to " + file, e);
 			}
 		}
 		return file;
