@@ -33,14 +33,7 @@ public class ClassUtils {
 	public static <T> T getPrivateField(final Object object, final String field)
 			throws SecurityException, IllegalArgumentException, IllegalAccessException,
 			NoSuchFieldException {
-		final Class<?> clazz = object.getClass();
-		Field objectField;
-		try {
-			objectField = clazz.getDeclaredField(field);
-		} catch (final NoSuchFieldException e) {
-			final Class<?> superClazz = clazz.getSuperclass();
-			objectField = superClazz.getDeclaredField(field);
-		}
+		final Field objectField = getObjectField(object, field);
 		objectField.setAccessible(true);
 		final T obj = (T) objectField.get(object);
 		objectField.setAccessible(false);
@@ -50,16 +43,31 @@ public class ClassUtils {
 	public static void setPrivateField(final Object object, final String field, final Object value)
 			throws SecurityException, IllegalArgumentException, IllegalAccessException,
 			NoSuchFieldException {
-		final Class<?> clazz = object.getClass();
+		final Field objectField = getObjectField(object, field);
+		objectField.setAccessible(true);
+		objectField.set(object, value);
+		objectField.setAccessible(false);
+	}
+
+	private static Field getObjectField(final Object object, final String field)
+			throws SecurityException, NoSuchFieldException {
+		Class<?> clazz = object.getClass();
 		Field objectField;
 		try {
 			objectField = clazz.getDeclaredField(field);
 		} catch (final NoSuchFieldException e) {
-			final Class<?> superClazz = clazz.getSuperclass();
-			objectField = superClazz.getDeclaredField(field);
+			while (true) {
+				clazz = clazz.getSuperclass();
+				if (clazz.equals(Object.class)) {
+					throw e;
+				}
+				try {
+					objectField = clazz.getDeclaredField(field);
+					break;
+				} catch (final NoSuchFieldException e1) {
+				}
+			}
 		}
-		objectField.setAccessible(true);
-		objectField.set(object, value);
-		objectField.setAccessible(false);
+		return objectField;
 	}
 }

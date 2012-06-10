@@ -19,17 +19,22 @@ package be.Balor.Manager.Permissions.Plugins;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import in.mDev.MiracleM4n.mChatSuite.types.InfoType;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
+import be.Balor.Tools.ClassUtils;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.ACLogger;
 
 import com.miraclem4n.mchat.api.Reader;
 
@@ -149,9 +154,22 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 		if (result == null || (result != null && result.isEmpty())) {
 			final Pattern regex = Pattern
 					.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
-			final Set<PermissionAttachmentInfo> perms = p.getEffectivePermissions();
+			Map<String, PermissionAttachmentInfo> permissions = null;
+			try {
+				final PermissibleBase perm = ClassUtils.getPrivateField(p, "perm");
+				permissions = ClassUtils.getPrivateField(perm, "permissions");
+			} catch (final SecurityException e) {
+				ACLogger.severe("Can't get the limit " + limit + " from player " + p.getName(), e);
+			} catch (final IllegalArgumentException e) {
+				ACLogger.severe("Can't get the limit " + limit + " from player " + p.getName(), e);
+			} catch (final IllegalAccessException e) {
+				ACLogger.severe("Can't get the limit " + limit + " from player " + p.getName(), e);
+			} catch (final NoSuchFieldException e) {
+				ACLogger.severe("Can't get the limit " + limit + " from player " + p.getName(), e);
+			}
 			int max = Integer.MIN_VALUE;
-			synchronized (perms) {
+			synchronized (permissions) {
+				final Collection<PermissionAttachmentInfo> perms = permissions.values();
 				for (final PermissionAttachmentInfo info : perms) {
 					final Matcher regexMatcher = regex.matcher(info.getPermission().toLowerCase());
 					if (!regexMatcher.find()) {
