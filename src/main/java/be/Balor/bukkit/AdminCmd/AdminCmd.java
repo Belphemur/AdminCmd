@@ -180,7 +180,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -313,21 +313,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACEntityListener(), this);
 		pm.registerEvents(new ACPlayerListener(), this);
 		pm.registerEvents(new ACWeatherListener(), this);
-		if (ConfigEnum.COLSIGN.getBoolean()) {
-			pm.registerEvents(new ACColorSignListener(), this);
-		}
-		if (ConfigEnum.RESET_POWERS.getBoolean()) {
-			pm.registerEvents(new ACResetPowerListener(), this);
-		}
-		IImport importer = null;
-		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-			importer = new EssentialsImport(ImportTools.getPluginsFolder(getDataFolder()));
-			importer.initImport();
-		}
-		if (ConfigEnum.POWERS_OFF.getBoolean()){
-			pm.registerEvents(new ACPowerOffListener(), this);
-		}
-
+		checkModulableFeatures(pm);
 	}
 
 	@Override
@@ -493,12 +479,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			InventoryManager.createInstance();
 			pm.registerEvents(new ACOpenInvListener(), this);
 		}
-		if (ConfigEnum.EDIT_SIGN.getBoolean()) {
-			pm.registerEvents(new ACSignEditListener(), this);
-		}
-		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
-			pm.registerEvents(new ACIpCheckListener(), this);
-		}
+
 		if (ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group")) {
 			cmdManager.registerCommand(SetGroupSpawn.class);
 			cmdManager.registerCommand(GroupSpawn.class);
@@ -929,6 +910,30 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				+ "%egg" + ChatColor.RED + " : " + ChatColor.YELLOW + "%error");
 		LocaleHelper.addAllLocales();
 		LocaleManager.getInstance().save();
+	}
+
+	private void checkModulableFeatures(final PluginManager pm) {
+
+		if (ConfigEnum.EDIT_SIGN.getBoolean()) {
+			pm.registerEvents(new ACSignEditListener(), this);
+		}
+		if (ConfigEnum.LOG_SAME_IP.getBoolean()) {
+			pm.registerEvents(new ACIpCheckListener(), this);
+		}
+		if (ConfigEnum.COLSIGN.getBoolean()) {
+			pm.registerEvents(new ACColorSignListener(), this);
+		}
+		if (ConfigEnum.RESET_POWERS.getBoolean()) {
+			pm.registerEvents(new ACResetPowerListener(), this);
+		}
+		IImport importer = null;
+		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+			importer = new EssentialsImport(ImportTools.getPluginsFolder(getDataFolder()));
+			importer.initImport();
+		}
+		if (ConfigEnum.POWERS_OFF.getBoolean()) {
+			pm.registerEvents(new ACPowerOffListener(), this);
+		}
 	}
 
 	private void loadWebBrowser() {
