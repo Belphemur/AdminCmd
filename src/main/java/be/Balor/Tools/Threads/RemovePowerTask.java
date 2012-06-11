@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class RemovePowerTask implements Runnable {
 
@@ -48,15 +48,16 @@ public class RemovePowerTask implements Runnable {
 		this.sender = sender;
 		replace.put("power", this.power.display());
 		if (this.player.isOnline()) {
-			replace.put("name", Utils.getPlayerName(this.player.getHandler()));
+			replace.put("player", Utils.getPlayerName(this.player.getHandler()));
 		} else {
-			replace.put("name", this.player.getName());
+			replace.put("player", this.player.getName());
 		}
+		replace.put("reason", "Time expired");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
