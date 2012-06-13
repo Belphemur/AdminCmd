@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissibleBase;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
@@ -156,8 +156,14 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 					.compile("admincmd\\." + limit.toLowerCase() + "\\.[0-9]+");
 			Map<String, PermissionAttachmentInfo> permissions = null;
 			try {
-				final PermissibleBase perm = ClassUtils.getPrivateField(p, "perm");
-				permissions = ClassUtils.getPrivateField(perm, "permissions");
+				Permissible perm = ClassUtils.getPrivateField(p, "perm");
+				try {
+					permissions = ClassUtils.getPrivateField(perm, "permissions");
+				} catch (final NoSuchFieldException e) {
+					perm = ClassUtils.getPrivateField(perm, "perm");
+					permissions = ClassUtils.getPrivateField(perm, "permissions");
+				}
+
 			} catch (final SecurityException e) {
 				ACLogger.severe("Can't get the limit " + limit + " from player " + p.getName(), e);
 			} catch (final IllegalArgumentException e) {
