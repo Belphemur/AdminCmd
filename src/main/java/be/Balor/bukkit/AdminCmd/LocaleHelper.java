@@ -114,7 +114,8 @@ public enum LocaleHelper {
 	NO_GROUP_SPAWN("noGroupSpawn", ChatColor.RED + "The group " + ChatColor.AQUA +"%groupName"
 			+ ChatColor.RED + " does not have a group spawn"),
 	NO_SUCH_GROUP("noSuchGroup", ChatColor.RED + "A group with the name " + ChatColor.AQUA
-			+ "%groupName" + ChatColor.RED + " does not exist.");
+			+ "%groupName" + ChatColor.RED + " does not exist."),
+	DEATH_MSG("deathMessage", ChatColor.AQUA + "%player" + ChatColor.YELLOW + "%msg");
 
 	private final String key;
 	private final String locale;

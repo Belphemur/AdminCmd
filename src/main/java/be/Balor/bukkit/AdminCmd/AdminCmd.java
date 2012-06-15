@@ -39,6 +39,7 @@ import be.Balor.Listeners.Commands.ACTpAtSeeListener;
 import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Listeners.Features.ACColorSignListener;
 import be.Balor.Listeners.Features.ACCreatureSpawnListener;
+import be.Balor.Listeners.Features.ACDeathListener;
 import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
 import be.Balor.Listeners.Features.ACPowerOffListener;
@@ -933,6 +934,11 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		if (ConfigEnum.POWERS_OFF.getBoolean()) {
 			pm.registerEvents(new ACPowerOffListener(), this);
+		}
+		if (ConfigEnum.DEATH_MSG.getBoolean()) {
+			pm.registerEvents(new ACDeathListener(false), this);
+		} else {
+			pm.registerEvents(new ACDeathListener(true), this);
 		}
 	}
 
