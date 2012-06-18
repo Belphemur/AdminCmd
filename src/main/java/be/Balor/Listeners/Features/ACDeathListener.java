@@ -20,6 +20,7 @@ package be.Balor.Listeners.Features;
 
 import java.util.HashMap;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -55,7 +56,7 @@ public class ACDeathListener implements Listener {
 		String message = null;
 		EntityDamageEvent cause = e.getEntity().getLastDamageCause();
 		if (cause instanceof EntityDamageByEntityEvent) {
-
+			message = getMessage(cause);
 		} else {
 			switch(cause.getCause()) {
 				case CONTACT:
@@ -95,6 +96,12 @@ public class ACDeathListener implements Listener {
 				case SUICIDE:
 					message = ACHelper.getInstance().getDeathMessage("suicide");
 					break;
+				case ENTITY_EXPLOSION:
+					message = ACHelper.getInstance().getDeathMessage("creeper");
+					break;
+				case BLOCK_EXPLOSION:
+					message = ACHelper.getInstance().getDeathMessage("tnt");
+					break;
 				default:
 					message = ACHelper.getInstance().getDeathMessage("default");
 					break;
@@ -108,7 +115,8 @@ public class ACDeathListener implements Listener {
 		//Utils.broadcastMessage(LocaleHelper.DEATH_MSG.getLocale(replace));
 	}
 
-	private String getMessage(final PlayerDeathEvent e) {
+	private String getMessage(final EntityDamageEvent e) {
+		Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
 		return "";
 	}
 }
