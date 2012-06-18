@@ -34,9 +34,9 @@ import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -500,30 +500,36 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand pCmd) {
 		try {
-			final SimpleCommandMap commandMap = ClassUtils.getPrivateField(corePlugin.getServer()
+			final CommandMap commandMap = ClassUtils.getPrivateField(corePlugin.getServer()
 					.getPluginManager(), "commandMap");
 			final HashMap<String, Command> knownCommands = ClassUtils.getPrivateField(commandMap,
 					"knownCommands");
 			PluginCommand cmd;
+			final List<String> aliases = new ArrayList<String>();
 			try {
 				cmd = (PluginCommand) knownCommands.get(pCmd.getName());
-				if (cmd != null && cmd.getExecutor().equals(this)) {
+				if (pCmd == cmd) {
+					DebugLog.INSTANCE.info("Remove Command " + pCmd.getName());
 					knownCommands.remove(pCmd.getName());
+					aliases.addAll(pCmd.getAliases());
+					pCmd.unregister(commandMap);
+				} else {
+					return;
 				}
 			} catch (final ClassCastException e) {
 				DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
 			}
-
-			for (final String alias : pCmd.getAliases()) {
+			for (final String alias : aliases) {
 				try {
 					cmd = (PluginCommand) knownCommands.get(alias);
-					if (cmd != null && cmd.getExecutor().equals(this)) {
+					if (pCmd == cmd) {
 						knownCommands.remove(alias);
 					}
 				} catch (final ClassCastException e) {
 					DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
 				}
 			}
+
 		} catch (final SecurityException e) {
 			ACLogger.severe("Unregistering command problem", e);
 		} catch (final IllegalArgumentException e) {
