@@ -20,13 +20,24 @@ package be.Balor.Listeners.Features;
 
 import java.util.HashMap;
 
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Ghast;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import be.Balor.Tools.Utils;
@@ -117,6 +128,37 @@ public class ACDeathListener implements Listener {
 
 	private String getMessage(final EntityDamageEvent e) {
 		Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
-		return "";
+		if (damager instanceof Wolf) {
+			return ACHelper.getInstance().getDeathMessage("wolf");
+		} else if (damager instanceof Skeleton) {
+			return ACHelper.getInstance().getDeathMessage("skeleton");
+		} else if (damager instanceof TNTPrimed) {
+			return ACHelper.getInstance().getDeathMessage("TNTPrimed");
+		} else if( damager instanceof Zombie) {
+			return ACHelper.getInstance().getDeathMessage("zombie");
+		} else if (damager instanceof Projectile) {
+			if (damager instanceof Arrow) {
+				if (((Arrow) damager).getShooter() == null) {
+					return ACHelper.getInstance().getDeathMessage("dispenser");
+				} else if (((Arrow) damager).getShooter() instanceof Player) {
+					return ACHelper.getInstance().getDeathMessage("playerBow");
+				} else if (((Projectile) damager).getShooter() instanceof Skeleton) {
+					return ACHelper.getInstance().getDeathMessage("skeleton");
+				}
+			} else if (damager instanceof Fireball) {
+				if (((Fireball) damager).getShooter() instanceof Blaze) {
+					return ACHelper.getInstance().getDeathMessage("blaze");
+				} else if (((Fireball) damager).getShooter() instanceof Ghast) {
+					return ACHelper.getInstance().getDeathMessage("ghast");
+				}
+			} else if (damager instanceof ThrownPotion) {
+				if (((ThrownPotion) damager).getShooter() instanceof Player) {
+					return ACHelper.getInstance().getDeathMessage("potion");
+				}
+			}
+		} else if (damager instanceof LivingEntity) {
+			return ACHelper.getInstance().getDeathMessage("mob") + damager.getType().getName();
+		}
+		return ACHelper.getInstance().getDeathMessage("default");
 	}
 }
