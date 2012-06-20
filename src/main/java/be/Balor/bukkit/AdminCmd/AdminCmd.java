@@ -926,11 +926,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.RESET_POWERS.getBoolean()) {
 			pm.registerEvents(new ACResetPowerListener(), this);
 		}
-		IImport importer = null;
-		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-			importer = new EssentialsImport(ImportTools.getPluginsFolder(getDataFolder()));
-			importer.initImport();
-		}
 		if (ConfigEnum.POWERS_OFF.getBoolean()) {
 			pm.registerEvents(new ACPowerOffListener(), this);
 		}
@@ -951,6 +946,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					try {
 						((PluginClassLoader) AdminCmd.this.getClassLoader()).addURL(new URL(
 								"jar:file:" + "lib/WebBrowser.jar" + "!/"));
+						IImport importer = null;
+						if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+							importer = new EssentialsImport(ImportTools
+									.getPluginsFolder(getDataFolder()));
+							importer.initImport();
+						}
 
 					} catch (final MalformedURLException e3) {
 						e3.printStackTrace();
