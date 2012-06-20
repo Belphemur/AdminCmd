@@ -973,7 +973,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 								"jar:file:" + "lib/WebBrowser.jar" + "!/"));
 						retry++;
 						if (retry == 3) {
-							ACLogger.warning("Problem when trying to load the associated librairy WebBrowser");
+							ACLogger.warning("Problem when trying to load the associated library WebBrowser");
 							return;
 						}
 						break reload;
