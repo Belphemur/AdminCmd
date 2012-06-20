@@ -56,7 +56,7 @@ public class ExMemoryConfiguration extends ExMemorySection implements Configurat
 		}
 
 		if (defaults == null) {
-			defaults = new MemoryConfiguration();
+			defaults = new ExMemoryConfiguration();
 		}
 
 		defaults.set(path, value);

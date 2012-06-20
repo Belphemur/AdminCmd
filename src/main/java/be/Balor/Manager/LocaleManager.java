@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,6 +40,7 @@ public class LocaleManager {
 	private static LocaleManager instance = new LocaleManager();
 	private final Map<String, ExtendedConfiguration> localesFiles = new HashMap<String, ExtendedConfiguration>();
 	public static final String PRIMARY_LOCALE = "primary";
+	public static final String DEFAULT_LOCALE = "default_locale";
 	private boolean noMsg = false;
 	private final Pattern recursiveLocale = Pattern.compile("#([\\w]+)#");
 	private final Pattern replaceLocale = Pattern.compile("%([\\w]+)");
@@ -68,8 +68,8 @@ public class LocaleManager {
 	 *            of the file
 	 * @param fileName
 	 */
-	public void addLocaleFile(final String name, final File file) {
-		localesFiles.put(name, ExtendedConfiguration.loadConfiguration(file));
+	public void addLocaleFile(final String name, final ExtendedConfiguration file) {
+		localesFiles.put(name, file);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class LocaleManager {
 		if (override) {
 			localesFiles.get(PRIMARY_LOCALE).set(key, value);
 		} else {
-			localesFiles.get(PRIMARY_LOCALE).add(key, value);
+			localesFiles.get(DEFAULT_LOCALE).add(key, value);
 		}
 	}
 

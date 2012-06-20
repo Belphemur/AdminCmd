@@ -50,7 +50,7 @@ import be.Balor.Tools.Debug.DebugLog;
 @SuppressWarnings("unchecked")
 public class ExtendedConfiguration extends ExFileConfiguration {
 
-	protected static final String COMMENT_PREFIX = "# ";
+	protected static final String COMMENT_PREFIX = "#";
 	protected static final String BLANK_CONFIG = "{}\n";
 	private static DumperOptions yamlOptions = new DumperOptions();
 	private static Representer yamlRepresenter = new ExtendedRepresenter();

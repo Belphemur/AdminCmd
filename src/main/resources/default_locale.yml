@@ -1,0 +1,271 @@
+#version: ${git.commit.id}
+playerNotFound: '§cNo such player: §f%player'
+kitNotFound: '§cNo such kit: §f%kit'
+pluginNotFound: '§cNo such plugin: §f%plugin'
+worldNotFound: '§cNo such world: §f%world'
+unknownMat: '§cUnknown material : §f%material'
+onlinePlayers: '§cOnline players: '
+serverReload: §aThe server has been reloaded.
+changedWorld: §4All your powers have been deactivated because you teleported to an another world
+stillInv: §cYou are still invisible.
+errorNotPerm: §fYou don't have permission to do that §c(%p)
+dropItemOtherPlayer: §c[%sender]§f dropped §6%amount %material at your location.
+dropItemCommandSender: §cDropped §6%amount %material to §f%target
+dropItemYourself: §cDropped §6%amount %material
+giveItemOtherPlayer: §c[%sender]§f sent you §6%amount %material
+giveItemCommandSender: §cAdded §6%amount %material to §f%target's inventory
+giveItemYourself: §cAdded §6%amount %material§f to your inventory
+errorHolding: §cYou have to be holding something!
+moreTooMuch: Excedent item(s) (§9%amount§f) have been stored in your inventory.
+repairTarget: Your §c%type§f has been successfully repaired.
+repair: '%player''s §c%type§f has been successfully repaired.'
+errorRepair: 'You can''t repair a §c%type'
+repairAll: All of %player's items have been repaired.
+repairAllTarget: Your items have been repaired.
+errorMob: '§cNo such mob: §f%mob'
+spawnMob: §9Spawned §f%nb %mob
+spawnMobOther: §6%player §9spawned §f%nb %mob(s)§9 at your location.
+clear: §cYour inventory has been cleared.
+clearTarget: §c%player§f''s inventory has been cleared.
+fireballDisabled: §4Fireball mode disabled.
+fireballDisabledTarget: §4Fireball mode disabled for %player.
+fireballEnabled: §4Fireball mode enabled.
+fireballEnabledTarget: §4Fireball mode enabled for %player.
+godDisabled: §3God mode disabled.
+godDisabledTarget: §3God mode disabled for %player.
+godEnabled: §3God mode enabled.
+godEnabledTarget: §3God mode enabled for %player
+noDropDisabled: §3No Drop mode disabled.
+noDropDisabledTarget: §3No Drop mode disabled for %player.
+noDropEnabled: §3No Drop mode enabled.
+noDropEnabledTarget: §3No Drop mode enabled for %player.
+thorDisabled: §3Thor mode disabled.
+thorDisabledTarget: §3Thor mode disabled for %player.
+thorEnabled: §3Thor mode enabled.
+thorEnabledTarget: §3Thor mode enabled for %player
+vulcanDisabled: §4Vulcan mode disabled.
+vulcanDisabledTarget: §4Vulcan mode disabled for %player
+vulcanEnabled: §4Vulcan mode enabled.
+vulcanEnabledTarget: §4Vulcan mode enabled for %player
+spymsgDisabled: §3SpyMsg mode disabled.
+spymsgEnabled: §3SpyMsg mode enabled.
+invisibleEnabled: §cYou are now invisible
+invisibleEnabledTarget: §3Invisible mode enabled for %player
+invisibleDisabled: §aYou are now visible.
+invisibleDisabledTarget: §3Invisible mode disabled for %player.
+errorMultiHome: §2Home §c%home§f not set.
+multiHome: §2Teleported§f to your home §3%home.
+setMultiHome: §2Home §3%home§f set.
+rmHome: §cHome §3%home§f removed.
+homeLimit: §cYou have reached your §2home limit.
+itemLimit: §cYou have exceeded your §2item limit§c of %limit items per command.
+errorLocation: §cLocation must be formed by numbers.
+addWarp: §aWarp point %name§f created.
+rmWarp: §cWarp point %name§f removed.
+errorWarp: §4Warp point %name not found.
+tpWarp: §aTeleported to §f%name.
+strike: '%player was struck by Thor'
+tp: Successfully teleported §9%fromPlayer§f to §a%toPlayer
+addBlacklistItem: §aItem (§f%material§a) can no longer be given using i, give, or drop.
+addBlacklistBlock: §aBlock (§f%material§a) can no longer be placed.
+rmBlacklistItem: §aItem (§f%material§a) has been removed from the blacklist.
+rmBlacklistBlock: §aBlock (§f%material§a) has been removed from the blacklist.
+inBlacklistItem: §4This item (§f%material§4) is blacklisted.
+inBlacklistBlock: §4This block (§f%material§4) is blacklisted.
+errorSpawn: §2Spawn§f is not set for this world.
+spawn: §2Teleported§f to the spawn.
+setSpawn: §2Spawn§f has been set.
+sClear: 'Sky cleared in world: '
+sStorm: 'Storm set for %duration mins in world: '
+sRain: 'Rain set for %duration mins in world: '
+afk: '%player §cis AFK'
+online: '%player §ais now online'
+afkTitle: §9[AFK]§f
+ip: §eIP address of §f%player - %ip
+ban: '§e%player has been banned: §c%reason'
+unban: §e%player is now unbanned.
+killMob: '§cKilling mobs (§f%type§c) of worlds: §5%worlds'
+killedMobs: '%nbKilled§4 mobs have been killed.'
+flyDisabled: §6Fly mode disabled.
+flyDisabledTarget: §6Fly mode disabled for %player.
+flyEnabled: §6Fly mode enabled.
+flyEnabledTarget: §6Fly mode enabled for %player.
+npDisabled: §6No Pickup mode disabled.
+npDisabledTarget: §6No Pickup mode disabled for %player.
+npEnabled: §6No Pickup mode enabled.
+npEnabledTarget: §6No Pickup mode enabled for %player.
+afkKick: You have been kicked because you were AFK.
+freezeDisabled: §2You can now move again.
+freezeDisabledTarget: §2Freeze mode disabled for %player
+freezeEnabled: §4You have been frozen.
+freezeEnabledTarget: §4%player has been frozen.
+muteDisabled: §2You are now unmuted.
+muteDisabledTarget: §2%player is unmuted.
+muteEnabled: §4You have been muted.
+tmpMuteEnabled: §4You have been muted for %minutes minutes.
+muteEnabledTarget: §4%player has been muted.
+alreadyMuted: §3This player is already muted. To unmute them use the unmute command.
+notMuted: §3This player is not muted.
+commandMuteDisabled: §2You can use commands again.
+commandMuteDisabledTarget: §2%player can use commands again.
+commandMuteEnabled: §4Your commands have been disabled.
+commandTmpMuteEnabled: §4Your commands have been disabled for %minutes minutes.
+commandMuteEnabledTarget: §4%player's commands have been muted.
+alreadyCommandMuted: §3This player already can't use commands. To let them use commands again use the unmute command.
+NaN: '%number §4is not a number.'
+mobLimit: '§6Mob limit for world %world has been set to %number.'
+mobLimitPerMob: '#mobLimit# §cfor mob %mob'
+mobLimitRemoved: '§aThe mob limit has been removed for world: %world'
+mobLimitRemovedPerMob: '#mobLimitRemoved# §b for mob %mob'
+wFrozen: 'Weather is now unpaused in world:'
+wUnFrozen: 'Weather has been paused in world :'
+invTitle: '[INV]'
+roll: '§2[%player] §frolled a §6%face dice : §e%result'
+extinguish: §b%nb blocks§3 have been extinguished.
+pluginReloaded: '§f%plugin §ehas been reloaded'
+replaced: §c%nb blocks of §5%mat§3 have been replaced with air.
+undo: §a%nb blocks §2have been replaced.
+nothingToUndo: §5There is nothing to undo.
+noRepeat: §4There is no command to repeat.
+reExec: §eRepeating the last command.
+timeSet: '§6Time has been set to %type in world: §f%world'
+timeNotSet: §c%type doesn't exist.
+timePaused: '§4Time is paused in §f%world. §2To unpause, use /time unpause.'
+moreAll: §bAll of your items are now at their max stack size.
+tpRequestTo: §9%player §6wants to teleport to you. §2Type §a/tpt yes §2to accept.
+tpRequestSend: §5You send a teleport request to §f%player§5 for a teleport §b%tp_type
+tpRequestFrom: §9%player §3wants to teleport you to their location. §2Type §a/tpt yes §2to accept.
+tpRequestOff: §2Teleport request system disabled.
+tpRequestOn: §4Teleport request system enabled.
+tpSeeEnabled: §2You teleport to where you are looking when you left click.
+tpSeeDisabled: §4TP at See mode disabled.
+elapsedTime: 'Uptime: §e%d day(s) %h:%m:%s'
+kitList: '§6Available kits : §b%list'
+kitOtherPlayer: '§c[%sender]§f sent you the kit: §6%kit'
+kitCommandSender: §cAdded §6%kit to §f%target's inventory.
+kitYourself: §cAdded §6%kit§f to your inventory.
+tpRequestTimeOut: §cThis teleport request has timed out.
+noTpRequest: §aThere is no teleport request to execute.
+noteAfk: '§f%player §eis AFK at the moment:'
+idleTime: §3Idle for %mins minute(s)
+pluginVersion: '§eVersion of §f%plugin: §a%version'
+emptyList: §cEmpty list or the selected type doesn't exist.
+telportSuccess: §2You have been successfully teleported.
+noLastLocation: §cYou don't have a last location to tp back to.
+super_breakerDisabled: §6Super Breaker mode disabled.
+super_breakerDisabledTarget: §6Super Breaker mode disabled for %player
+super_breakerEnabled: §6Super Breaker mode enabled.
+super_breakerEnabledTarget: §6Super Breaker mode enabled for %player
+airForbidden: §4Air cannot be given as a block.
+playedTime: §3%player §fplayed §b#elapsedTotalTime#
+serverUnlock: §aServer is now unlocked.
+serverLock: §cServer will be lock in 5 seconds, you'll be kicked if you don't have permission to stay.
+eternalDisabled: §4Eternal mode disabled.
+eternalDisabledTarget: §4Eternal mode disabled for %player.
+eternalEnabled: §4Eternal mode enabled.
+eternalEnabledTarget: §4Eternal mode enabled for %player.
+fakeQuitDisabled: §3Fake Quit mode disabled, you are now listed online again.
+fakeQuitDisabledTarget: §3Fake Quit mode disabled for %player
+fakeQuitEnabled: §3Fake Quit mode enabled, you are now not listed online anymore.
+fakeQuitEnabledTarget: §3Fake Quit mode enabled for %player
+noLoginInformation: No login information available.
+insufficientLvl: §4You don't have a sufficient level to do that.
+gmSwitch: '§aGame mode for §6%player §aswitched to : §f%gamemode'
+kitDelayNotUp: §cYou cannot use that kit for another §f%delay
+days: '%d day(s)'
+elapsedTotalTime: '#days# %h:%m:%s'
+spawnerSetDelay: '§aDelay set to: §6%delay'
+spawnerSetType: '§aCreatureType of the Mob Spawner changed to: §6%type'
+spawnerGetData: §3This Mob Spawner spawns §6%mobs§3 with a delay of §6%delay§3.
+spawnerNaN: §cYour input is not a number!
+addSpawnWarp: §aSpawnpoint for the group §3 %name§a added.
+tpTO: to them.
+tpHERE: to you.
+tpPLAYERSTO: of %target to you.
+tpPLAYERSFROM: you to %target.
+offline: '%player §cis Offline'
+noPlayerToReply: §cYou can't reply to a message if nobody has sent you a private message.
+mustBePlayer: '[AdminCmd] You must be a player to use this command.'
+errorInsufficientArguments: You have to specify a %argument to use this command from the command line.
+setDifficutly: '§3The difficulty of §6%world§3 has been set to: §6%difficulty'
+getDifficulty: '§3The difficulty of §6%world§3 is set to: §6%difficulty'
+serverLockMessage: The server is locked.
+errorMoved: §cYou have moved since you issued the %cmdname command, teleportation aborted!
+privateTitle: §c[Private]§f
+privateMessageHeader: '#privateTitle# %sender§f: '
+joinMessage: '%name§e joined the game!'
+joinMessageFirstTime: '%name§e joined the game §6for the first time!'
+quitMessage: '%name§e left the game!'
+presSet: '§ePresentation for§f %player§e set to : §6%pres'
+expAdded: §6%amount §3has been added to your experience.
+expLevelSet: §3Your current level has been set to §6%amount.
+expProgressionSet: §3Your current level progression has been set to §6%amount.
+expDropped: §3An experience orb has been dropped at your location!
+expTotal: '§3Your total experience is: §6%exp'
+expAddedTarget: §aYou have added§6 %amount §ato %target's total experience.
+expLevelSetTarget: §a%targets level now is:§6 %amount
+expProgressionSetTarget: §aYou have set %targets current progression to §6%amount
+expDroppedTarget: §aYou have dropped an experience orb at %targets location.
+expTotalTarget: '§3%target''s total experience is: §6%exp'
+kitOnce: §cThe kit §6%kit§c can be only used once.
+MOTDset: '§eMOTD has been set to: %motd'
+NEWSset: '§eNews has been set to: %news'
+RulesSet: '§eRules have been set to://n%rules'
+timeOutPower: §6Your %power power wore off.
+timeOutPowerSender: '§4%player''s §6%power power wore off.'
+serverStop: The server is stopping.
+serverWillStop: §c[IMPORTANT] §eThe server will §4stop §ein §6%sec seconds.
+diffWorld: §b%player§c is in a different world than §5%to§4 so they cannot tp there.
+paramMissing: §cThis command needs the parameter §6-%param .
+eggDontExists: §cThis egg type (§6%egg§c) doesn't exist.
+eggEnabled: §3Egg §6(%egg)§b mode enabled.
+eggNormal: §aEgg has been return to normality.
+eggNoParamGiven: §cYou need to specify an egg-type for the /egg -E command.
+entityDontExists: §cThe entity ID §6%entity§c doesn't exist.
+eggCustomError: '§cProblem with the egg §6%egg§c: §e%error'
+itemId: §6%player§7 is holding §a%item§f:§c%data
+eggCmdParam: §cThe parameter §6-E§c is needed to choose the egg.
+eggBlockParam: §cThe parameter §6-b§c is needed to choose the block to use for replacement.
+eggEntityParam: §cThe parameter §6-e§c is needed to choose the entity ID to spawn.
+eggMobParam: §cThe parameter §6-m§c is needed to choose the mob to spawn.
+dontExists: §cThe %type §6%value §cdoesn't exist!
+cantEnchantItem: §cThis §6%item§c can't be enchanted with §a%enchant.
+enchantSuccess: §aYour §6%item§a is now enchanted with §9%enchant§a §d%lvl.
+highEggEffect: §aYou are now §6HIGH§a, prepare to see the world differently!
+potionEffect: §ka§b%player§d drank a §6%potion potion!§kz
+spymsgTitle: §a[SpyMsg]§f
+spymsgMessageHeader: '#spymsgTitle# %sender-%receiver§f: '
+dontExistsType:
+  enchant: enchantment
+  potion: potion
+  cmd: command
+  mat: material
+playerKicked: §6%player §ehas been kicked from the server:§c %reason
+quitCmdMsg: '§6%player §eleft the game: %reason'
+worldNotLoaded: §cThis world is not loaded:§6 %message
+missingArg: §cYou must provide a %arg as an argument to use the command §b%cmdName.
+dimensionTeleport: §aYou were successfully teleported to world %world!
+dimTpList: '§aWorlds which are currently available to teleport to:  //n §6%list'
+tpAll: §aYou have been successfully teleported to §6%loc§a by §6%sender.
+itemBlAlready: §cThis item §6%item §cis already blacklisted.
+blItemSaveProb: §6Can't save the blacklist file.
+blItemNotBl: §cThis item §6%item§c is not black listed.
+banList: §6%player, §bBanned for :§6 %reason on %date.
+inaccurateIp: §cThis IP §6%ip §cis incorrect!
+notBanned: §6No ban found for§c %ban.
+powersClearedSender: §aSuccessfully removed all powers from %target!
+powersClearedTarget: §bAll of your active powers have been removed by§6 %sender§b!
+powersCleared: §aYou have successfully removed all your powers!
+muteList: §6%player, §b%msg
+noMutedPlayers: §cThere aren't any muted players.
+unMutedPlayers: §b%nb §aplayers have been unmuted.
+allTxtReloaded: §aAll text files have been reloaded.
+kill: §ckilled
+feed: §5fed
+heal: §ahealed
+nState: '§6You have been '
+pNewState: '§6%player has been '
+suicide: §cYou committed suicide.
+broadcast: §e[BROADCAST]§6%message
+unknown: unknown
+ipBroadcast: '§6%player §cjoined from the same IP§6 as %player2§c. The IP is: §b%ip'
