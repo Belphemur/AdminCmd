@@ -16,11 +16,13 @@
  ************************************************************************/
 package be.Balor.Listeners.Features;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import net.minecraft.server.EntityPlayer;
+
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,8 +43,8 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACNoDropListener implements Listener {
-	private final Map<Player, List<ItemStack>> itemsDrops = new HashMap<Player, List<ItemStack>>();
-	private final Map<String, List<ItemStack>> itemsOfDeadDisconnected = new HashMap<String, List<ItemStack>>();
+	private final Map<Player, PlayerInv> itemsDrops = new HashMap<Player, PlayerInv>();
+	private final Map<String, PlayerInv> itemsOfDeadDisconnected = new HashMap<String, PlayerInv>();
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
@@ -62,12 +64,10 @@ public class ACNoDropListener implements Listener {
 				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
 			return;
 		}
-		final List<ItemStack> items = new ArrayList<ItemStack>();
 		for (final ItemStack item : event.getDrops()) {
-			items.add(item.clone());
 			item.setAmount(0);
 		}
-		itemsDrops.put(p, items);
+		itemsDrops.put(p, new PlayerInv(p));
 	}
 
 	@EventHandler
@@ -79,20 +79,20 @@ public class ACNoDropListener implements Listener {
 			itemsDrops.remove(p);
 			return;
 		}
-		final List<ItemStack> items = itemsDrops.get(p);
-		if (items == null) {
+		final PlayerInv inv = itemsDrops.get(p);
+		if (inv == null) {
 			return;
 		}
-		p.getInventory().addItem(items.toArray(new ItemStack[items.size()]));
+		inv.setInventory(p);
 		itemsDrops.remove(p);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		final List<ItemStack> itemStacks = itemsDrops.remove(player);
-		if (itemStacks != null && player.isDead()) {
-			itemsOfDeadDisconnected.put(player.getName(), itemStacks);
+		final PlayerInv inv = itemsDrops.remove(player);
+		if (inv != null && player.isDead()) {
+			itemsOfDeadDisconnected.put(player.getName(), inv);
 		}
 	}
 
@@ -106,10 +106,31 @@ public class ACNoDropListener implements Listener {
 			itemsOfDeadDisconnected.remove(name);
 			return;
 		}
-		final List<ItemStack> itemStacks = itemsOfDeadDisconnected.remove(name);
-		if (itemStacks == null) {
+		final PlayerInv inv = itemsOfDeadDisconnected.remove(name);
+		if (inv == null) {
 			return;
 		}
-		itemsDrops.put(p, itemStacks);
+		itemsDrops.put(p, inv);
+	}
+
+	private class PlayerInv {
+		final net.minecraft.server.ItemStack items[];
+		final net.minecraft.server.ItemStack armor[];
+
+		/**
+		 * 
+		 */
+		public PlayerInv(final Player p) {
+			final EntityPlayer player = ((CraftPlayer) p).getHandle();
+			items = Arrays.copyOf(player.inventory.items, player.inventory.items.length);
+			armor = Arrays.copyOf(player.inventory.armor, player.inventory.armor.length);
+		}
+
+		public void setInventory(final Player p) {
+			final EntityPlayer player = ((CraftPlayer) p).getHandle();
+			player.inventory.armor = this.armor;
+			player.inventory.items = this.items;
+		}
+
 	}
 }
