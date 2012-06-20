@@ -946,12 +946,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					try {
 						((PluginClassLoader) AdminCmd.this.getClassLoader()).addURL(new URL(
 								"jar:file:" + "lib/WebBrowser.jar" + "!/"));
-						IImport importer = null;
-						if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-							importer = new EssentialsImport(ImportTools
-									.getPluginsFolder(getDataFolder()));
-							importer.initImport();
-						}
 
 					} catch (final MalformedURLException e3) {
 						e3.printStackTrace();
@@ -959,8 +953,31 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					final List<String> urls = new ArrayList<String>();
 					urls.add("http://wiki.admincmd.com/player_commands.html");
 					urls.add("http://www.e-zeeinternet.com/count.php?page=812064&style=default&nbdigits=9&reloads=1");
-					webBrowser = new WebBrowser(urls);
-					webBrowser.startService();
+					int retry = 0;
+					reload: try {
+						if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+							final IImport importer = new EssentialsImport(ImportTools
+									.getPluginsFolder(getDataFolder()));
+							importer.initImport();
+						}
+						webBrowser = new WebBrowser(urls);
+						webBrowser.startService();
+					} catch (final NoClassDefFoundError e) {
+						final File versionFile = new File(browserFile.getParent(), browserFile
+								.getName() + ".version");
+						versionFile.delete();
+						browserFile.delete();
+						Downloader.download("http://static.admincmd.com/WebBrowser.jar",
+								browserFile);
+						((PluginClassLoader) AdminCmd.this.getClassLoader()).addURL(new URL(
+								"jar:file:" + "lib/WebBrowser.jar" + "!/"));
+						retry++;
+						if (retry == 3) {
+							ACLogger.warning("Problem when trying to load the associated librairy WebBrowser");
+							return;
+						}
+						break reload;
+					}
 					if (!ConfigEnum.DEBUG.getBoolean()) {
 						WebBrowser.stopDebugLog();
 					} else {
