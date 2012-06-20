@@ -45,19 +45,18 @@ public class Played extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final ACPlayer target = Utils.getACPlayer(sender, args, permNode);
 		if (target != null) {
 			final String playername;
-			final long total;
 			if (target.isOnline()) {
 				playername = Utils.getPlayerName(target.getHandler(), sender);
-				total = target.getCurrentPlayedTime();
 			} else {
 				playername = target.getName();
-				total = target.getInformation("totalTime").getLong(0);
 			}
-			Utils.sI18n(sender, "playedTime", Utils.playedTime(playername, total));
+			Utils.sI18n(sender, "playedTime",
+					Utils.playedTime(playername, target.getCurrentPlayedTime()));
 
 		}
 	}

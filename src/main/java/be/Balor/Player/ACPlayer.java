@@ -352,8 +352,12 @@ public abstract class ACPlayer {
 	 * @return the total played time in Long
 	 */
 	public long getCurrentPlayedTime() {
-		return (getInformation("totalTime").getLong(0) + System.currentTimeMillis() - getInformation(
-				"lastConnection").getLong(System.currentTimeMillis()));
+		if (this.isOnline()) {
+			return (getInformation("totalTime").getLong(0) + System.currentTimeMillis() - getInformation(
+					"lastConnection").getLong(System.currentTimeMillis()));
+		} else {
+			return getInformation("totalTime").getLong(0);
+		}
 	}
 
 	/**

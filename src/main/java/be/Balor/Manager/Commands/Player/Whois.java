@@ -61,7 +61,8 @@ public class Whois extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.hasFlag('w')) {
 			ACWorld w;
 			try {
