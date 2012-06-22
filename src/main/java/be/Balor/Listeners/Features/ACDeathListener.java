@@ -141,7 +141,7 @@ public class ACDeathListener implements Listener {
 				if (((Arrow) damager).getShooter() == null) {
 					return ACHelper.getInstance().getDeathMessage("dispenser");
 				} else if (((Arrow) damager).getShooter() instanceof Player) {
-					return ACHelper.getInstance().getDeathMessage("playerBow");
+					return ACHelper.getInstance().getDeathMessage("playerBow") + Utils.getPlayerName(((Player)((Arrow) damager).getShooter()));
 				} else if (((Projectile) damager).getShooter() instanceof Skeleton) {
 					return ACHelper.getInstance().getDeathMessage("skeleton");
 				}
