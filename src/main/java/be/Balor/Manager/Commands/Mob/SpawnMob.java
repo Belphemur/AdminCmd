@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public class SpawnMob extends MobCommand {
 
@@ -46,7 +46,7 @@ public class SpawnMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -131,7 +131,7 @@ public class SpawnMob extends MobCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -163,7 +163,7 @@ public class SpawnMob extends MobCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName());
 			for (int i = 0; i < nb; i++) {
-				loc.getWorld().spawnCreature(loc, ct);
+				loc.getWorld().spawnEntity(loc, ct);
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
@@ -195,8 +195,8 @@ public class SpawnMob extends MobCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName() + "-" + passenger.getName());
 			for (int i = 0; i < nb; i++) {
-				loc.getWorld().spawnCreature(loc, ct)
-						.setPassenger(loc.getWorld().spawnCreature(loc, passenger));
+				loc.getWorld().spawnEntity(loc, ct)
+						.setPassenger(loc.getWorld().spawnEntity(loc, passenger));
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
