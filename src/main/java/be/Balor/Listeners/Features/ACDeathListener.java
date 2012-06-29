@@ -66,57 +66,61 @@ public class ACDeathListener implements Listener {
 		replace.put("player", Utils.getPlayerName(e.getEntity()));
 		String message = null;
 		EntityDamageEvent cause = e.getEntity().getLastDamageCause();
-		if (cause instanceof EntityDamageByEntityEvent) {
-			message = getMessage(cause);
-		} else {
-			switch(cause.getCause()) {
-				case CONTACT:
-					message = ACHelper.getInstance().getDeathMessage("cactus");
-					break;
-				case DROWNING:
-					message = ACHelper.getInstance().getDeathMessage("drowning");
-					break;
-				case FALL:
-					message = ACHelper.getInstance().getDeathMessage("falling");
-					break;
-				case FIRE_TICK:
-				case FIRE:
-					message = ACHelper.getInstance().getDeathMessage("fire");
-					break;
-				case STARVATION:
-					message = ACHelper.getInstance().getDeathMessage("starving");
-					break;
-				case SUFFOCATION:
-					message = ACHelper.getInstance().getDeathMessage("suffocation");
-					break;
-				case VOID:
-					message = ACHelper.getInstance().getDeathMessage("void");
-					break;
-				case LAVA:
-					message = ACHelper.getInstance().getDeathMessage("lava");
-					break;
-				case POISON:
-					message = ACHelper.getInstance().getDeathMessage("poisen");
-					break;
-				case LIGHTNING:
-					message = ACHelper.getInstance().getDeathMessage("lightning");
-					break;
-				case MAGIC:
-					message = ACHelper.getInstance().getDeathMessage("magic");
-					break;
-				case SUICIDE:
-					message = ACHelper.getInstance().getDeathMessage("suicide");
-					break;
-				case ENTITY_EXPLOSION:
-					message = ACHelper.getInstance().getDeathMessage("creeper");
-					break;
-				case BLOCK_EXPLOSION:
-					message = ACHelper.getInstance().getDeathMessage("tnt");
-					break;
-				default:
-					message = ACHelper.getInstance().getDeathMessage("default");
-					break;
+		try {
+			if (cause instanceof EntityDamageByEntityEvent) {
+				message = getMessage(cause);
+			} else {
+				switch(cause.getCause()) {
+					case CONTACT:
+						message = ACHelper.getInstance().getDeathMessage("cactus");
+						break;
+					case DROWNING:
+						message = ACHelper.getInstance().getDeathMessage("drowning");
+						break;
+					case FALL:
+						message = ACHelper.getInstance().getDeathMessage("falling");
+						break;
+					case FIRE_TICK:
+					case FIRE:
+						message = ACHelper.getInstance().getDeathMessage("fire");
+						break;
+					case STARVATION:
+						message = ACHelper.getInstance().getDeathMessage("starving");
+						break;
+					case SUFFOCATION:
+						message = ACHelper.getInstance().getDeathMessage("suffocation");
+						break;
+					case VOID:
+						message = ACHelper.getInstance().getDeathMessage("void");
+						break;
+					case LAVA:
+						message = ACHelper.getInstance().getDeathMessage("lava");
+						break;
+					case POISON:
+						message = ACHelper.getInstance().getDeathMessage("poisen");
+						break;
+					case LIGHTNING:
+						message = ACHelper.getInstance().getDeathMessage("lightning");
+						break;
+					case MAGIC:
+						message = ACHelper.getInstance().getDeathMessage("magic");
+						break;
+					case SUICIDE:
+						message = ACHelper.getInstance().getDeathMessage("suicide");
+						break;
+					case ENTITY_EXPLOSION:
+						message = ACHelper.getInstance().getDeathMessage("creeper");
+						break;
+					case BLOCK_EXPLOSION:
+						message = ACHelper.getInstance().getDeathMessage("tnt");
+						break;
+					default:
+						message = ACHelper.getInstance().getDeathMessage("default");
+						break;
+				}
 			}
+		} catch (NullPointerException ex) {
+			message = null;
 		}
 		if (message == null) {
 			message = "just died.";
