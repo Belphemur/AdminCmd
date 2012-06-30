@@ -37,7 +37,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 class HelpList {
 	private TreeSet<HelpEntry> pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
@@ -124,15 +124,21 @@ class HelpList {
 	/**
 	 * Process all help to check get only the command that the player have
 	 * access
-	 * 
+	 *
 	 * @param sender
 	 */
 	private void checkPermissions(final CommandSender sender) {
 		if (lastCommandSender != null && sender.equals(lastCommandSender)) {
 			return;
 		}
-		lastHelpEntries = new PriorityQueue<HelpEntry>(pluginHelp.size() / 2,
+		try {
+			lastHelpEntries = new PriorityQueue<HelpEntry>(pluginHelp.size() / 2,
 				new EntryCommandComparator());
+		} catch(IllegalArgumentException ex) {
+			sender.sendMessage(ChatColor.RED + "[AdminCmd] Sorry the plugin you requested did not" +
+					" probably include descriptions for the commands it provides!");
+			return;
+		}
 		lastCommandSender = sender;
 		for (final HelpEntry he : pluginHelp) {
 			if (he.hasPerm(sender)) {
@@ -144,7 +150,7 @@ class HelpList {
 	/**
 	 * Get a list of the string to display for the wanted page, and the given
 	 * user
-	 * 
+	 *
 	 * @param page
 	 *            int the wanted page
 	 * @param sender
@@ -188,7 +194,7 @@ class HelpList {
 	/**
 	 * Get the command help of the wanted command by matching it in the list of
 	 * avaible commands.
-	 * 
+	 *
 	 * @param cmd
 	 *            command to search
 	 * @param sender
@@ -231,7 +237,7 @@ class HelpList {
 
 	/**
 	 * Search for the commandName
-	 * 
+	 *
 	 * @param cmd
 	 * @return
 	 */
