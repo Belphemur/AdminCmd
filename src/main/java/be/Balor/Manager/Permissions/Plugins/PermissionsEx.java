@@ -19,7 +19,9 @@ package be.Balor.Manager.Permissions.Plugins;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
@@ -40,180 +42,180 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermissionsEx extends SuperPermissions {
-	private final PermissionManager PEX;
+    private final PermissionManager PEX;
 
-	/**
+    /**
 	 *
 	 */
-	public PermissionsEx(final PermissionManager PEX) {
-		this.PEX = PEX;
-	}
+    public PermissionsEx(final PermissionManager PEX) {
+	this.PEX = PEX;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
-	 * .CommandSender, java.lang.String, boolean)
-	 */
-	@Override
-	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
-		if (!(player instanceof Player)) {
-			return true;
-		}
-		if (PEX.has((Player) player, perm)) {
-			return true;
-		} else {
-			if (errorMsg) {
-				Utils.sI18n(player, "errorNotPerm", "p", perm);
-			}
-			return false;
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.Permissions.AbstractPermission#hasPerm(org.bukkit.command
+     * .CommandSender, java.lang.String, boolean)
+     */
+    @Override
+    public boolean hasPerm(final CommandSender player, final String perm,
+	    final boolean errorMsg) {
+	if (!(player instanceof Player)) {
+	    return true;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
-	 * .String)
-	 */
-	@Override
-	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
-		PermissionUser[] users = null;
-		users = PEX.getUsers(groupName);
-		final Set<Player> players = new HashSet<Player>();
-		if (users != null) {
-			Player player = null;
-			for (final PermissionUser user : users) {
-				player = ACPlayer.getPlayer(user.getName()).getHandler();
-				if (player == null) {
-					continue;
-				}
-				players.add(player);
-			}
-			return players;
-		}
-		return null;
+	if (PEX.has((Player) player, perm)) {
+	    return true;
+	} else {
+	    if (errorMsg) {
+		Utils.sI18n(player, "errorNotPerm", "p", perm);
+	    }
+	    return false;
 	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
-	 * .bukkit.entity.Player, java.lang.String)
-	 */
-	@Override
-	public String getPermissionLimit(final Player p, final String limit) {
-		String permLimit = null;
-		try {
-			permLimit = PEX.getUser(p).getOption("admincmd." + limit);
-		} catch (final ConcurrentModificationException e) {
-			final CountDownLatch countDown = new CountDownLatch(1);
-			final String[] limitString = new String[1];
-			ACPluginManager.scheduleSyncTask(new Runnable() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.Permissions.AbstractPermission#getUsers(org.java.lang
+     * .String)
+     */
+    @Override
+    public Set<Player> getUsers(final String groupName)
+	    throws NoPermissionsPlugin {
+	PermissionUser[] users = null;
+	users = PEX.getUsers(groupName);
+	final Set<Player> players = new HashSet<Player>();
+	if (users != null) {
+	    Player player = null;
+	    for (final PermissionUser user : users) {
+		player = ACPlayer.getPlayer(user.getName()).getHandler();
+		if (player == null) {
+		    continue;
+		}
+		players.add(player);
+	    }
+	    return players;
+	}
+	return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.Permissions.AbstractPermission#getPermissionLimit(org
+     * .bukkit.entity.Player, java.lang.String)
+     */
+    @Override
+    public String getPermissionLimit(final Player p, final String limit) {
+	String permLimit = null;
+	try {
+	    permLimit = PEX.getUser(p).getOption("admincmd." + limit);
+	} catch (final ConcurrentModificationException e) {
+	    final Future<String> permTask = ACPluginManager.getScheduler()
+		    .callSyncMethod(ACPluginManager.getCorePlugin(),
+			    new Callable<String>() {
+
 				@Override
-				public void run() {
-					try {
-						limitString[0] = PEX.getUser(p).getOption("admincmd." + limit);
-					} catch (final Exception e2) {
-						DebugLog.INSTANCE.log(Level.SEVERE, "Cant' get the limit " + limit
-								+ " for the user " + p.getName(), e2);
-					}
-
-					countDown.countDown();
+				public String call() throws Exception {
+				    return PEX.getUser(p).getOption(
+					    "admincmd." + limit);
 				}
-			});
-			try {
-				countDown.await();
-			} catch (final InterruptedException e1) {
-			}
-			permLimit = limitString[0];
-		}
-
-		if (permLimit == null || (permLimit != null && permLimit.isEmpty())) {
-			permLimit = super.getPermissionLimit(p, limit);
-		}
-		return permLimit;
+			    });
+	    try {
+		permLimit = permTask.get();
+	    } catch (final InterruptedException e1) {
+		permLimit = null;
+	    } catch (final ExecutionException e1) {
+		permLimit = null;
+	    }
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(org.bukkit.
-	 * entity.Player)
-	 */
-	@Override
-	public String getPrefix(final Player player) {
-		PermissionUser user = null;
-		try {
-			user = PEX.getUser(player);
-		} catch (final Exception e) {
-			DebugLog.INSTANCE.log(Level.SEVERE,
-					"Problem when trying to get the prefix of the user " + player.getName(), e);
-			return "";
-		}
+	if (permLimit == null || (permLimit != null && permLimit.isEmpty())) {
+	    permLimit = super.getPermissionLimit(p, limit);
+	}
+	return permLimit;
+    }
 
-		if (user != null) {
-			return user.getPrefix() == null ? "" : user.getPrefix();
-		}
-
-		String prefix = "";
-		for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
-			if ((prefix = group.getPrefix()) != null && !prefix.isEmpty()) {
-				break;
-			}
-		}
-		return prefix;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.Permissions.AbstractPermission#getPrefix(org.bukkit.
+     * entity.Player)
+     */
+    @Override
+    public String getPrefix(final Player player) {
+	PermissionUser user = null;
+	try {
+	    user = PEX.getUser(player);
+	} catch (final Exception e) {
+	    DebugLog.INSTANCE.log(Level.SEVERE,
+		    "Problem when trying to get the prefix of the user "
+			    + player.getName(), e);
+	    return "";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
-	 * .Player)
-	 */
-	@Override
-	public String getSuffix(final Player player) {
-		final PermissionUser user = PEX.getUser(player);
-		if (user != null) {
-			return user.getSuffix() == null ? "" : user.getSuffix();
-		}
-
-		String suffix = "";
-		for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
-			if ((suffix = group.getSuffix()) != null && !suffix.isEmpty()) {
-				break;
-			}
-		}
-		return suffix;
+	if (user != null) {
+	    return user.getPrefix() == null ? "" : user.getPrefix();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getGroup(org.bukkit
-	 * .entity.Player)
-	 */
-	@Override
-	public Group getGroup(final Player player) {
-		int max = Integer.MIN_VALUE;
-		PermissionGroup cur = null;
-		for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
-			final int rank = group.getRank();
-			if (rank > max) {
-				max = rank;
-				cur = group;
-			}
-		}
-		if (cur == null) {
-			return new Group();
-		}
-		return new Group(cur.getName(), cur.getRank());
+	String prefix = "";
+	for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
+	    if ((prefix = group.getPrefix()) != null && !prefix.isEmpty()) {
+		break;
+	    }
 	}
+	return prefix;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.Permissions.IPermissionPlugin#getSuffix(org.bukkit.entity
+     * .Player)
+     */
+    @Override
+    public String getSuffix(final Player player) {
+	final PermissionUser user = PEX.getUser(player);
+	if (user != null) {
+	    return user.getSuffix() == null ? "" : user.getSuffix();
+	}
+
+	String suffix = "";
+	for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
+	    if ((suffix = group.getSuffix()) != null && !suffix.isEmpty()) {
+		break;
+	    }
+	}
+	return suffix;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * be.Balor.Manager.Permissions.Plugins.SuperPermissions#getGroup(org.bukkit
+     * .entity.Player)
+     */
+    @Override
+    public Group getGroup(final Player player) {
+	int max = Integer.MIN_VALUE;
+	PermissionGroup cur = null;
+	for (final PermissionGroup group : PEX.getUser(player).getGroups()) {
+	    final int rank = group.getRank();
+	    if (rank > max) {
+		max = rank;
+		cur = group;
+	    }
+	}
+	if (cur == null) {
+	    return new Group();
+	}
+	return new Group(cur.getName(), cur.getRank());
+    }
 
 }
