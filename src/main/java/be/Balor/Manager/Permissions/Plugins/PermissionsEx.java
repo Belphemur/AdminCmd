@@ -128,8 +128,12 @@ public class PermissionsEx extends SuperPermissions {
 		permLimit = permTask.get();
 	    } catch (final InterruptedException e1) {
 		permLimit = null;
+		DebugLog.INSTANCE.info("Problem while gettings ASYNC perm of "
+			+ p.getName());
 	    } catch (final ExecutionException e1) {
 		permLimit = null;
+		DebugLog.INSTANCE.info("Problem while gettings ASYNC perm of "
+			+ p.getName());
 	    }
 	}
 

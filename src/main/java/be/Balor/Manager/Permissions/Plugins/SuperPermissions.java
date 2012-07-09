@@ -33,7 +33,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -178,12 +178,15 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 				ACPluginManager.getCorePlugin(), perms);
 		try {
 		    permissions = permTask.get();
+		    DebugLog.INSTANCE.info("Perms got for " + p.getName());
 		} catch (final InterruptedException e) {
-		    ACLogger.info("Problem while gettings ASYNC perm of "
-			    + p.getName());
+		    DebugLog.INSTANCE
+			    .info("Problem while gettings ASYNC perm of "
+				    + p.getName());
 		} catch (final ExecutionException e) {
-		    ACLogger.info("Problem while gettings ASYNC perm of "
-			    + p.getName());
+		    DebugLog.INSTANCE
+			    .info("Problem while gettings ASYNC perm of "
+				    + p.getName());
 		}
 	    }
 	    return permissionCheck(permissions, regex);
