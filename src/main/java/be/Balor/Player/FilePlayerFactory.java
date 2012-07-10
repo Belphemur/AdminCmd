@@ -23,64 +23,66 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Files.YmlFilter;
+import be.Balor.Tools.Files.Filters.YmlFilter;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class FilePlayerFactory implements IPlayerFactory {
-	final String directory;
-	private final Set<String> existingPlayers = new HashSet<String>();
+    final String directory;
+    private final Set<String> existingPlayers = new HashSet<String>();
 
-	/**
+    /**
 	 * 
 	 */
-	public FilePlayerFactory(final String directory) {
-		this.directory = directory;
-		final File[] players = YmlFilter.listRecursively(new File(directory), 1);
-		final StringBuffer files = new StringBuffer();
-		for (final File player : players) {
-			final String name = player.getName();
-			existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
-			files.append(name + " ");
-		}
-		DebugLog.INSTANCE.info("User's file found : " + files.toString().trim());
+    public FilePlayerFactory(final String directory) {
+	this.directory = directory;
+	final File[] players = YmlFilter.INSTANCE.listRecursively(new File(
+		directory), 1);
+	final StringBuffer files = new StringBuffer();
+	for (final File player : players) {
+	    final String name = player.getName();
+	    existingPlayers.add(name.substring(0, name.lastIndexOf('.')));
+	    files.append(name + " ");
 	}
+	DebugLog.INSTANCE
+		.info("User's file found : " + files.toString().trim());
+    }
 
-	@Override
-	public void addExistingPlayer(final String player) {
-		existingPlayers.add(player);
-	}
+    @Override
+    public void addExistingPlayer(final String player) {
+	existingPlayers.add(player);
+    }
 
-	@Override
-	public ACPlayer createPlayer(final String playername) {
-		if (!existingPlayers.contains(playername)) {
-			return new EmptyPlayer(playername);
-		} else if (directory != null) {
-			return new FilePlayer(directory, playername);
-		} else {
-			return null;
-		}
+    @Override
+    public ACPlayer createPlayer(final String playername) {
+	if (!existingPlayers.contains(playername)) {
+	    return new EmptyPlayer(playername);
+	} else if (directory != null) {
+	    return new FilePlayer(directory, playername);
+	} else {
+	    return null;
 	}
+    }
 
-	@Override
-	public ACPlayer createPlayer(final Player player) {
-		if (!existingPlayers.contains(player.getName())) {
-			return new EmptyPlayer(player);
-		} else if (directory != null) {
-			return new FilePlayer(directory, player);
-		} else {
-			return null;
-		}
+    @Override
+    public ACPlayer createPlayer(final Player player) {
+	if (!existingPlayers.contains(player.getName())) {
+	    return new EmptyPlayer(player);
+	} else if (directory != null) {
+	    return new FilePlayer(directory, player);
+	} else {
+	    return null;
 	}
+    }
 
-	/**
-	 * @return the existingPlayers
-	 */
-	@Override
-	public Set<String> getExistingPlayers() {
-		return existingPlayers;
-	}
+    /**
+     * @return the existingPlayers
+     */
+    @Override
+    public Set<String> getExistingPlayers() {
+	return existingPlayers;
+    }
 
 }
