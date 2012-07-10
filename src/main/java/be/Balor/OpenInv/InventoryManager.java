@@ -47,7 +47,7 @@ import com.google.common.collect.MapMaker;
  */
 public class InventoryManager {
     public static InventoryManager INSTANCE;
-    private final Map<Player, ACPlayerInventory> replacedInv = new MapMaker()
+    private final Map<String, ACPlayerInventory> replacedInv = new MapMaker()
 	    .makeMap();
     private final Map<String, ACPlayerInventory> offlineInv = new MapMaker()
 	    .makeMap();
@@ -65,7 +65,14 @@ public class InventoryManager {
     }
 
     public void onQuit(final Player p) {
-	replacedInv.remove(p);
+	final String name = p.getName();
+	final ACPlayerInventory inv = replacedInv.get(name);
+	if (inv == null) {
+	    return;
+	}
+	if (inv.getViewers().isEmpty()) {
+	    replacedInv.remove(name);
+	}
     }
 
     void closeOfflineInv(final Player p) {
@@ -76,17 +83,20 @@ public class InventoryManager {
     }
 
     public void onJoin(final Player p) {
-	final ACPlayerInventory inv = offlineInv.get(p.getName());
+	final String name = p.getName();
+	ACPlayerInventory inv = offlineInv.get(name);
+	if (inv == null) {
+	    inv = replacedInv.get(name);
+	}
 	if (inv == null) {
 	    return;
 	}
-	if (inv instanceof ACOfflinePlayerInventory) {
-	    final CraftPlayer cp = (CraftPlayer) p;
-	    final PlayerInventory mcInv = ((CraftInventoryPlayer) cp
-		    .getInventory()).getInventory();
-	    mcInv.items = inv.items;
-	    mcInv.armor = inv.armor;
-	}
+	final CraftPlayer cp = (CraftPlayer) p;
+	final PlayerInventory mcInv = ((CraftInventoryPlayer) cp.getInventory())
+		.getInventory();
+	mcInv.items = inv.items;
+	mcInv.armor = inv.armor;
+
     }
 
     /**
@@ -165,13 +175,14 @@ public class InventoryManager {
 
     private ACPlayerInventory getInventory(final Player player,
 	    final boolean offline) {
-	ACPlayerInventory inventory = replacedInv.get(player);
+	ACPlayerInventory inventory = replacedInv.get(player.getName());
 	if (inventory == null) {
 	    if (offline) {
 		inventory = new ACOfflinePlayerInventory(player);
 		offlineInv.put(player.getName(), inventory);
 	    } else {
 		inventory = new ACPlayerInventory(player);
+		replacedInv.put(player.getName(), inventory);
 	    }
 	}
 	return inventory;
