@@ -139,15 +139,13 @@ class HelpList {
 		if (lastCommandSender != null && sender.equals(lastCommandSender)) {
 			return;
 		}
-		try {
-			lastHelpEntries = new PriorityQueue<HelpEntry>(
-					pluginHelp.size() / 2, new EntryCommandComparator());
-		} catch (IllegalArgumentException ex) {
-			sender.sendMessage(ChatColor.RED
-					+ "[AdminCmd] Sorry the plugin you requested did not"
-					+ " probably include descriptions for the commands it provides!");
-			return;
-		}
+		final int dividedBy2 = pluginHelp.size() / 2;
+		final int initSize = dividedBy2 >= 1
+				? dividedBy2
+				: 1;
+		lastHelpEntries = new PriorityQueue<HelpEntry>(initSize,
+				new EntryCommandComparator());
+
 		lastCommandSender = sender;
 		for (final HelpEntry he : pluginHelp) {
 			if (he.hasPerm(sender)) {
