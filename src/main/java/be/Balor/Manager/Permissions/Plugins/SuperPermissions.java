@@ -248,7 +248,6 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 		continue;
 	    }
 	    max = current;
-
 	}
 
 	if (max != Integer.MIN_VALUE) {
@@ -256,5 +255,4 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 	}
 	return null;
     }
-
 }

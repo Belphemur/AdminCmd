@@ -23,6 +23,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -111,8 +113,9 @@ public class PermissionsEx extends SuperPermissions {
     @Override
     public String getPermissionLimit(final Player p, final String limit) {
 	String permLimit = null;
+	final PermissionUser permUser = PEX.getUser(p);
 	try {
-	    permLimit = PEX.getUser(p).getOption("admincmd." + limit);
+	    permLimit = permUser.getOption("admincmd." + limit);
 	} catch (final ConcurrentModificationException e) {
 	    final Future<String> permTask = ACPluginManager.getScheduler()
 		    .callSyncMethod(ACPluginManager.getCorePlugin(),
@@ -120,7 +123,7 @@ public class PermissionsEx extends SuperPermissions {
 
 				@Override
 				public String call() throws Exception {
-				    return PEX.getUser(p).getOption(
+				    return permUser.getOption(
 					    "admincmd." + limit);
 				}
 			    });
@@ -138,9 +141,79 @@ public class PermissionsEx extends SuperPermissions {
 	}
 
 	if (permLimit == null || (permLimit != null && permLimit.isEmpty())) {
-	    permLimit = super.getPermissionLimit(p, limit);
+	    Set<String> permissions = new HashSet<String>();
+	    final String worldName = p.getWorld().getName();
+	    try {
+		for (final String str : permUser
+			.getPermissions(worldName)) {
+		    permissions.add(str);
+		}
+		for (final PermissionGroup group : permUser.getGroups()) {
+		    for (final String str : group.getPermissions(worldName)) {
+			permissions.add(str);
+		    }
+		}
+	    } catch (final ConcurrentModificationException e) {
+		final Future<Set<String>> permTask = ACPluginManager
+			.getScheduler().callSyncMethod(
+				ACPluginManager.getCorePlugin(),
+				new Callable<Set<String>>() {
+
+				    @Override
+				    public Set<String> call() throws Exception {
+					final Set<String> permissions = new HashSet<String>();
+					for (final String str : permUser
+						.getPermissions(worldName)) {
+					    permissions.add(str);
+					}
+					for (final PermissionGroup group : permUser.getGroups()) {
+					    for (final String str : group
+						    .getPermissions(worldName)) {
+						permissions.add(str);
+					    }
+					}
+					return permissions;
+				    }
+				});
+		try {
+		    permissions = permTask.get();
+		} catch (final InterruptedException e1) {
+		    DebugLog.INSTANCE
+			    .info("Problem while gettings ASYNC perm (PEX) of "
+				    + p.getName());
+		    return null;
+		} catch (final ExecutionException e1) {
+		    DebugLog.INSTANCE
+			    .info("Problem while gettings ASYNC perm (PEX) of "
+				    + p.getName());
+		    return null;
+		}
+	    }
+	    return limitSearcher(limit, permissions);
 	}
 	return permLimit;
+    }
+
+    private String limitSearcher(final String limit, final Set<String> perms) {
+	final Pattern regex = Pattern.compile("admincmd\\."
+		+ limit.toLowerCase() + "\\.[0-9]+");
+	int max = Integer.MIN_VALUE;
+	for (final String perm : perms) {
+	    final Matcher regexMatcher = regex.matcher(perm.toLowerCase());
+	    if (!regexMatcher.find()) {
+		continue;
+	    }
+	    final int current = Integer.parseInt(perm.split("\\.")[2]);
+	    if (current < max) {
+		continue;
+	    }
+	    max = current;
+	}
+
+	if (max != Integer.MIN_VALUE) {
+	    return String.valueOf(max);
+	}
+	return null;
     }
 
     /*
