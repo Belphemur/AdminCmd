@@ -28,6 +28,7 @@ public abstract class HomeCommand extends CoreCommand {
  */
 	public HomeCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.tp.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.tp.*");
 	}
 }

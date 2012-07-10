@@ -55,56 +55,59 @@ public class CommandArgs implements Iterable<String> {
 			argIndexList.add(i);
 
 			switch (arg.charAt(0)) {
-			case '\'':
-			case '"':
-				final StringBuilder build = new StringBuilder();
-				final char quotedChar = arg.charAt(0);
+				case '\'' :
+				case '"' :
+					final StringBuilder build = new StringBuilder();
+					final char quotedChar = arg.charAt(0);
 
-				int endIndex;
-				for (endIndex = i; endIndex < args.length; ++endIndex) {
-					final String arg2 = args[endIndex];
-					if (arg2.isEmpty()) {
-						continue;
-					}
-					if (arg2.charAt(arg2.length() - 1) == quotedChar) {
-						if (endIndex != i) {
-							build.append(' ');
-						}
-						if (endIndex == i && arg2.length() == 1) {
+					int endIndex;
+					for (endIndex = i; endIndex < args.length; ++endIndex) {
+						final String arg2 = args[endIndex];
+						if (arg2.isEmpty()) {
 							continue;
 						}
-						build.append(arg2.substring(endIndex == i ? 1 : 0, arg2.length() - 1));
-						break;
-					} else if (endIndex == i) {
-						build.append(arg2.substring(1));
-					} else {
-						build.append(' ').append(arg2);
+						if (arg2.charAt(arg2.length() - 1) == quotedChar) {
+							if (endIndex != i) {
+								build.append(' ');
+							}
+							if (endIndex == i && arg2.length() == 1) {
+								continue;
+							}
+							build.append(arg2.substring(endIndex == i ? 1 : 0,
+									arg2.length() - 1));
+							break;
+						} else if (endIndex == i) {
+							build.append(arg2.substring(1));
+						} else {
+							build.append(' ').append(arg2);
+						}
 					}
-				}
 
-				if (endIndex < args.length) {
-					arg = build.toString();
-					i = endIndex;
-				}
+					if (endIndex < args.length) {
+						arg = build.toString();
+						i = endIndex;
+					}
 
-				// In case there is an empty quoted string
-				if (arg.length() == 0) {
-					continue;
-				}
-				// else raise exception about hanging quotes?
+					// In case there is an empty quoted string
+					if (arg.length() == 0) {
+						continue;
+					}
+					// else raise exception about hanging quotes?
 			}
 			argList.add(arg);
 		}
 		// Then flags
 
-		final List<Integer> originalArgIndices = new ArrayList<Integer>(argIndexList.size());
+		final List<Integer> originalArgIndices = new ArrayList<Integer>(
+				argIndexList.size());
 		this.parsedArgs = new ArrayList<String>(argList.size());
 
 		for (int nextArg = 0; nextArg < argList.size();) {
 			// Fetch argument
 			final String arg = argList.get(nextArg++);
 
-			if (arg.charAt(0) == '-' && arg.length() > 1 && arg.matches("^-[a-zA-Z]+$")) {
+			if (arg.charAt(0) == '-' && arg.length() > 1
+					&& arg.matches("^-[a-zA-Z]+$")) {
 				for (int i = 1; i < arg.length(); ++i) {
 					final char flagName = arg.charAt(i);
 					if (this.valueFlags.containsKey(flagName)) {
@@ -221,17 +224,22 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(parsedArgs.toArray(new String[] {})) + " BoolFlags : "
-				+ Arrays.toString(booleanFlags.toArray(new Character[] {})) + " ValFlags : "
-				+ (valueFlags.isEmpty() ? "[]" : "[" + valueFlagsToString() + "]");
+		return Arrays.toString(parsedArgs.toArray(new String[]{}))
+				+ " BoolFlags : "
+				+ Arrays.toString(booleanFlags.toArray(new Character[]{}))
+				+ " ValFlags : "
+				+ (valueFlags.isEmpty() ? "[]" : "[" + valueFlagsToString()
+						+ "]");
 	}
 
 	private String valueFlagsToString() {
 		final StringBuffer buffer = new StringBuffer();
 		for (final Entry<Character, String> entry : valueFlags.entrySet()) {
-			buffer.append(entry.getKey()).append("->").append(entry.getValue()).append(", ");
+			buffer.append(entry.getKey()).append("->").append(entry.getValue())
+					.append(", ");
 		}
-		buffer.deleteCharAt(buffer.length() - 1).deleteCharAt(buffer.length() - 1);
+		buffer.deleteCharAt(buffer.length() - 1).deleteCharAt(
+				buffer.length() - 1);
 		return buffer.toString();
 	}
 

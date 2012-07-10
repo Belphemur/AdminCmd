@@ -37,9 +37,11 @@ public interface IPermissionPlugin {
 
 	public abstract String getSuffix(Player player);
 
-	public abstract Set<Player> getUsers(String groupName) throws NoPermissionsPlugin;
+	public abstract Set<Player> getUsers(String groupName)
+			throws NoPermissionsPlugin;
 
-	public abstract boolean hasPerm(CommandSender player, Permission perm, boolean errorMsg);
+	public abstract boolean hasPerm(CommandSender player, Permission perm,
+			boolean errorMsg);
 
 	/**
 	 * Check the permission with the possibility to disable the error msg
@@ -49,9 +51,11 @@ public interface IPermissionPlugin {
 	 * @param errorMsg
 	 * @return
 	 */
-	public abstract boolean hasPerm(CommandSender player, String perm, boolean errorMsg);
+	public abstract boolean hasPerm(CommandSender player, String perm,
+			boolean errorMsg);
 
-	public abstract boolean isInGroup(String groupName, Player player) throws NoPermissionsPlugin;
+	public abstract boolean isInGroup(String groupName, Player player)
+			throws NoPermissionsPlugin;
 
 	/**
 	 * Get the group of the player

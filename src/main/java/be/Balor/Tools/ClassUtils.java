@@ -31,8 +31,8 @@ import java.lang.reflect.Field;
 public class ClassUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> T getPrivateField(final Object object, final String field)
-			throws SecurityException, IllegalArgumentException, IllegalAccessException,
-			NoSuchFieldException {
+			throws SecurityException, IllegalArgumentException,
+			IllegalAccessException, NoSuchFieldException {
 		final Field objectField = getObjectField(object, field);
 		objectField.setAccessible(true);
 		final T obj = (T) objectField.get(object);
@@ -40,8 +40,9 @@ public class ClassUtils {
 		return obj;
 	}
 
-	public static void setPrivateField(final Object object, final String field, final Object value)
-			throws SecurityException, IllegalArgumentException, IllegalAccessException,
+	public static void setPrivateField(final Object object, final String field,
+			final Object value) throws SecurityException,
+			IllegalArgumentException, IllegalAccessException,
 			NoSuchFieldException {
 		final Field objectField = getObjectField(object, field);
 		objectField.setAccessible(true);
@@ -64,8 +65,7 @@ public class ClassUtils {
 				try {
 					objectField = clazz.getDeclaredField(field);
 					break;
-				} catch (final NoSuchFieldException e1) {
-				}
+				} catch (final NoSuchFieldException e1) {}
 			}
 		}
 		return objectField;

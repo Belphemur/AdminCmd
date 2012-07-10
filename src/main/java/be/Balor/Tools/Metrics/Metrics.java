@@ -106,7 +106,8 @@ public class Metrics {
 	/**
 	 * All of the custom graphs to submit to metrics
 	 */
-	private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
+	private final Set<Graph> graphs = Collections
+			.synchronizedSet(new HashSet<Graph>());
 
 	/**
 	 * The default graph, used for addCustomData when you don't want a specific
@@ -156,7 +157,8 @@ public class Metrics {
 
 		// Do we need to create the file?
 		if (configuration.get("guid", null) == null) {
-			configuration.options().header("http://mcstats.org").copyDefaults(true);
+			configuration.options().header("http://mcstats.org")
+					.copyDefaults(true);
 			configuration.save(configurationFile);
 		}
 
@@ -240,7 +242,8 @@ public class Metrics {
 									// Disable Task, if it is running and the
 									// server owner decided to opt-out
 									if (isOptOut() && taskId > 0) {
-										plugin.getServer().getScheduler().cancelTask(taskId);
+										plugin.getServer().getScheduler()
+												.cancelTask(taskId);
 										taskId = -1;
 									}
 								}
@@ -258,7 +261,8 @@ public class Metrics {
 								// Each post thereafter will be a ping
 								firstPost = false;
 							} catch (final IOException e) {
-								Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+								Bukkit.getLogger().log(Level.INFO,
+										"[Metrics] " + e.getMessage());
 							}
 						}
 					}, 0, PING_INTERVAL * 1200);
@@ -278,10 +282,12 @@ public class Metrics {
 				// Reload the metrics file
 				configuration.load(CONFIG_FILE);
 			} catch (final IOException ex) {
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				Bukkit.getLogger().log(Level.INFO,
+						"[Metrics] " + ex.getMessage());
 				return true;
 			} catch (final InvalidConfigurationException ex) {
-				Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+				Bukkit.getLogger().log(Level.INFO,
+						"[Metrics] " + ex.getMessage());
 				return true;
 			}
 			return configuration.getBoolean("opt-out", false);
@@ -374,8 +380,9 @@ public class Metrics {
 					// is defined at the top
 					// Legacy (R4) submitters use the format Custom%s, or
 					// CustomPLOTTERNAME
-					final String key = String.format("C%s%s%s%s", CUSTOM_DATA_SEPARATOR,
-							graph.getName(), CUSTOM_DATA_SEPARATOR, plotter.getColumnName());
+					final String key = String.format("C%s%s%s%s",
+							CUSTOM_DATA_SEPARATOR, graph.getName(),
+							CUSTOM_DATA_SEPARATOR, plotter.getColumnName());
 
 					// The value to send, which for the foreseeable future is
 					// just the string
@@ -390,7 +397,8 @@ public class Metrics {
 
 		// Create the url
 		final URL url = new URL(BASE_URL
-				+ String.format(REPORT_URL, encode(plugin.getDescription().getName())));
+				+ String.format(REPORT_URL, encode(plugin.getDescription()
+						.getName())));
 
 		// Connect to the website
 		URLConnection connection;
@@ -406,7 +414,8 @@ public class Metrics {
 		connection.setDoOutput(true);
 
 		// Write the data
-		final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+		final OutputStreamWriter writer = new OutputStreamWriter(
+				connection.getOutputStream());
 		writer.write(data.toString());
 		writer.flush();
 
@@ -470,9 +479,11 @@ public class Metrics {
 	 * @param value
 	 * @return
 	 */
-	private static void encodeDataPair(final StringBuilder buffer, final String key,
-			final String value) throws UnsupportedEncodingException {
-		buffer.append('&').append(encode(key)).append('=').append(encode(value));
+	private static void encodeDataPair(final StringBuilder buffer,
+			final String key, final String value)
+			throws UnsupportedEncodingException {
+		buffer.append('&').append(encode(key)).append('=')
+				.append(encode(value));
 	}
 
 	/**
@@ -481,7 +492,8 @@ public class Metrics {
 	 * @param text
 	 * @return
 	 */
-	private static String encode(final String text) throws UnsupportedEncodingException {
+	private static String encode(final String text)
+			throws UnsupportedEncodingException {
 		return URLEncoder.encode(text, "UTF-8");
 	}
 
@@ -618,7 +630,8 @@ public class Metrics {
 			}
 
 			final Plotter plotter = (Plotter) object;
-			return plotter.name.equals(name) && plotter.getValue() == getValue();
+			return plotter.name.equals(name)
+					&& plotter.getValue() == getValue();
 		}
 
 	}

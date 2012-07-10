@@ -49,13 +49,13 @@ public class Roll extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		int dice = 6;
 		if (args.length >= 1) {
 			try {
 				dice = args.getInt(0);
-			} catch (final NumberFormatException e) {
-			}
+			} catch (final NumberFormatException e) {}
 		}
 
 		final Random rand = new Random();

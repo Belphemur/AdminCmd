@@ -49,18 +49,21 @@ public class AddWarp extends WarpCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player p = (Player) sender;
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			if (args.hasFlag('g')) {
 				ACWorld.getWorld(p.getWorld().getName()).addWarp(
-						"spawn" + args.getString(0).toLowerCase(), p.getLocation());
+						"spawn" + args.getString(0).toLowerCase(),
+						p.getLocation());
 				replace.put("name", args.getString(0));
 				Utils.sI18n(sender, "addSpawnWarp", replace);
 				return;
 			}
-			ACWorld.getWorld(p.getWorld().getName()).addWarp(args.getString(0), p.getLocation());
+			ACWorld.getWorld(p.getWorld().getName()).addWarp(args.getString(0),
+					p.getLocation());
 			replace.put("name", args.getString(0));
 			Utils.sI18n(sender, "addWarp", replace);
 		}

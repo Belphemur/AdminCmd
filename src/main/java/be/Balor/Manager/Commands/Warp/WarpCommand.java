@@ -26,6 +26,7 @@ public abstract class WarpCommand extends CoreCommand {
 
 	public WarpCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.warp.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.warp.*");
 	}
 }

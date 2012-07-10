@@ -51,7 +51,8 @@ class ExtendedRepresenter extends Representer {
 	private class RepresentConfigurationSection extends RepresentMap {
 		@Override
 		public Node representData(final Object data) {
-			return super.representData(((ConfigurationSection) data).getValues(false));
+			return super.representData(((ConfigurationSection) data)
+					.getValues(false));
 		}
 	}
 
@@ -60,7 +61,8 @@ class ExtendedRepresenter extends Representer {
 		public Node representData(final Object data) {
 			final ConfigurationSerializable serializable = (ConfigurationSerializable) data;
 			final Map<String, Object> values = new LinkedHashMap<String, Object>();
-			values.put(ConfigurationSerialization.SERIALIZED_TYPE_KEY,
+			values.put(
+					ConfigurationSerialization.SERIALIZED_TYPE_KEY,
 					ConfigurationSerialization.getAlias(serializable.getClass()));
 			values.putAll(serializable.serialize());
 
@@ -81,7 +83,8 @@ class ExtendedRepresenter extends Representer {
 		super();
 		this.nullRepresenter = new EmptyRepresentNull();
 		this.representers.put(TpRequest.class, new RepresentTpRequest());
-		this.multiRepresenters.put(ConfigurationSection.class, new RepresentConfigurationSection());
+		this.multiRepresenters.put(ConfigurationSection.class,
+				new RepresentConfigurationSection());
 		this.multiRepresenters.put(ConfigurationSerializable.class,
 				new RepresentConfigurationSerializable());
 	}
@@ -89,10 +92,11 @@ class ExtendedRepresenter extends Representer {
 	// Code borrowed from snakeyaml
 	// (http://code.google.com/p/snakeyaml/source/browse/src/test/java/org/yaml/snakeyaml/issues/issue60/SkipBeanTest.java)
 	@Override
-	protected NodeTuple representJavaBeanProperty(final Object javaBean, final Property property,
-			final Object propertyValue, final Tag customTag) {
-		final NodeTuple tuple = super.representJavaBeanProperty(javaBean, property, propertyValue,
-				customTag);
+	protected NodeTuple representJavaBeanProperty(final Object javaBean,
+			final Property property, final Object propertyValue,
+			final Tag customTag) {
+		final NodeTuple tuple = super.representJavaBeanProperty(javaBean,
+				property, propertyValue, customTag);
 		final Node valueNode = tuple.getValueNode();
 		if (valueNode instanceof CollectionNode) {
 			// Removed null check

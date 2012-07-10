@@ -82,7 +82,8 @@ public class BlockChangeInfo implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "BlockChangeInfo [b=" + Material.getMaterial(blockTypeId) + ", r=" + radius + "]";
+		return "BlockChangeInfo [b=" + Material.getMaterial(blockTypeId)
+				+ ", r=" + radius + "]";
 	}
 
 }

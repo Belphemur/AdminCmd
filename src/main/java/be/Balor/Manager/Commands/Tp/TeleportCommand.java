@@ -28,7 +28,8 @@ public abstract class TeleportCommand extends CoreCommand {
  */
 	public TeleportCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.tp.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.tp.*");
 	}
 
 	/**
@@ -37,6 +38,7 @@ public abstract class TeleportCommand extends CoreCommand {
 	 */
 	public TeleportCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.tp.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.tp.*");
 	}
 }

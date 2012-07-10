@@ -78,11 +78,13 @@ public abstract class EggType<T> implements Serializable {
 	 *             when the player don't have the permission, with the message
 	 *             to display to the user
 	 */
-	protected boolean checkPermission(final Player player) throws DontHaveThePermissionException {
-		final Permission perm = EggPermissionManager.INSTANCE.getPermission(this);
+	protected boolean checkPermission(final Player player)
+			throws DontHaveThePermissionException {
+		final Permission perm = EggPermissionManager.INSTANCE
+				.getPermission(this);
 		if (!PermissionManager.hasPerm(player, perm, false)) {
-			throw new DontHaveThePermissionException(
-					Utils.I18n("errorNotPerm", "p", perm.getName()));
+			throw new DontHaveThePermissionException(Utils.I18n("errorNotPerm",
+					"p", perm.getName()));
 		}
 		return true;
 	}
@@ -111,21 +113,26 @@ public abstract class EggType<T> implements Serializable {
 	 * @throws DontHaveThePermissionException
 	 *             if the player don't have the permission to use that egg
 	 */
-	public static EggType<?> createEggType(final Player player, final CommandArgs args)
-			throws ProcessingArgsException, DontHaveThePermissionException, NullPointerException {
+	public static EggType<?> createEggType(final Player player,
+			final CommandArgs args) throws ProcessingArgsException,
+			DontHaveThePermissionException, NullPointerException {
 		if (!args.hasFlag('E')) {
-			throw new ParameterMissingException('E', LocaleHelper.EGG_PARAM.getLocale());
+			throw new ParameterMissingException('E',
+					LocaleHelper.EGG_PARAM.getLocale());
 		}
 		EggType<?> eggType;
 		final String className = args.getValueFlag('E');
 		try {
 			eggType = matchEggClass(className);
 		} catch (final ClassNotFoundException e) {
-			throw new ProcessingArgsException(ExceptionType.NO_CLASS, className, e);
+			throw new ProcessingArgsException(ExceptionType.NO_CLASS,
+					className, e);
 		} catch (final InstantiationException e) {
-			throw new ProcessingArgsException(ExceptionType.INSTANCE, className, e);
+			throw new ProcessingArgsException(ExceptionType.INSTANCE,
+					className, e);
 		} catch (final IllegalAccessException e) {
-			throw new ProcessingArgsException(ExceptionType.ILLEGAL_ACCESS, className, e);
+			throw new ProcessingArgsException(ExceptionType.ILLEGAL_ACCESS,
+					className, e);
 		} catch (final NullPointerException e) {
 			throw new NullPointerException();
 		}
@@ -135,8 +142,9 @@ public abstract class EggType<T> implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static EggType<?> matchEggClass(final String name) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException, NullPointerException {
+	private static EggType<?> matchEggClass(final String name)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, NullPointerException {
 		final Class<? extends EggType<?>> c = (Class<? extends EggType<?>>) eggTypeLoader
 				.loadClass(name);
 		return c.newInstance();

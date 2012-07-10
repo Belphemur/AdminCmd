@@ -50,7 +50,8 @@ public class UnBanTask implements Runnable {
 		if (!bcast) {
 			return;
 		}
-		final String unbanMsg = Utils.I18n("unban", "player", toUnBan.getPlayer());
+		final String unbanMsg = Utils.I18n("unban", "player",
+				toUnBan.getPlayer());
 		if (unbanMsg != null) {
 			Utils.broadcastMessage(unbanMsg);
 		}

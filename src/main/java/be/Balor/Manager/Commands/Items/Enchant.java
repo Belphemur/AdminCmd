@@ -63,13 +63,15 @@ public class Enchant extends ItemCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
+					+ Joiner.on(", ").skipNulls().join(enchantList)
+							.toLowerCase());
 			return;
 		}
 		final String enchantString = args.getString(0);
@@ -87,7 +89,8 @@ public class Enchant extends ItemCommand {
 			LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(enchantList).toLowerCase());
+					+ Joiner.on(", ").skipNulls().join(enchantList)
+							.toLowerCase());
 			return;
 		}
 		final Enchantment enchantment = Enchantment.getByName(found);

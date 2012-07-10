@@ -48,7 +48,8 @@ public class Quit extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender, true)) {
 			final Player quitting = (Player) sender;
 			final HashMap<String, String> replace = new HashMap<String, String>();
@@ -64,7 +65,8 @@ public class Quit extends PlayerCommand {
 			replace.put("player", Utils.getPlayerName(quitting));
 			ACPlayer.getPlayer(quitting).setPower(Type.KICKED);
 			quitting.kickPlayer("Disconnected");
-			Utils.broadcastMessage(LocaleHelper.PLAYER_QUITCMD_MSG.getLocale(replace));
+			Utils.broadcastMessage(LocaleHelper.PLAYER_QUITCMD_MSG
+					.getLocale(replace));
 		}
 	}
 

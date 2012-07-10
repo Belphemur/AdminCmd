@@ -52,7 +52,8 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class Memory extends ServerCommand {
-	private final PermChild full, animal, xp, item, mob, npc, cart, boat, vehicle;
+	private final PermChild full, animal, xp, item, mob, npc, cart, boat,
+			vehicle;
 
 	/**
      *
@@ -79,62 +80,75 @@ public class Memory extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
-		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full.getBukkitPerm())) {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
+		if (args.hasFlag('f')
+				&& !PermissionManager.hasPerm(sender, full.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal.getBukkitPerm())) {
+		if (args.hasFlag('a')
+				&& !PermissionManager.hasPerm(sender, animal.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob.getBukkitPerm())) {
+		if (args.hasFlag('m')
+				&& !PermissionManager.hasPerm(sender, mob.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item.getBukkitPerm())) {
+		if (args.hasFlag('i')
+				&& !PermissionManager.hasPerm(sender, item.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp.getBukkitPerm())) {
+		if (args.hasFlag('x')
+				&& !PermissionManager.hasPerm(sender, xp.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc.getBukkitPerm())) {
+		if (args.hasFlag('n')
+				&& !PermissionManager.hasPerm(sender, npc.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cart.getBukkitPerm())) {
+		if (args.hasFlag('c')
+				&& !PermissionManager.hasPerm(sender, cart.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('b') && !PermissionManager.hasPerm(sender, boat.getBukkitPerm())) {
+		if (args.hasFlag('b')
+				&& !PermissionManager.hasPerm(sender, boat.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm())) {
+		if (args.hasFlag('v')
+				&& !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm())) {
 			return;
 		}
-		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m')
-				|| args.hasFlag('a') || args.hasFlag('n') || args.hasFlag('v') || args.hasFlag('c')
-				|| args.hasFlag('b')) {
+		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i')
+				|| args.hasFlag('m') || args.hasFlag('a') || args.hasFlag('n')
+				|| args.hasFlag('v') || args.hasFlag('c') || args.hasFlag('b')) {
 			int count = 0;
 			final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
 					sender.getServer().getWorlds().size());
 			final List<World> worlds = sender.getServer().getWorlds();
 			final Semaphore sema = new Semaphore(0);
 
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-				@SuppressWarnings("unchecked")
-				@Override
-				public void run() {
-					for (final World w : worlds) {
-						final net.minecraft.server.World cWorld = ((CraftWorld) w).getHandle();
-						synchronized (cWorld.entityList) {
-							entityList.put(w.getName(), new ArrayList<Entity>(cWorld.entityList));
-							sema.release();
-						}
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin,
+					new Runnable() {
+						@SuppressWarnings("unchecked")
+						@Override
+						public void run() {
+							for (final World w : worlds) {
+								final net.minecraft.server.World cWorld = ((CraftWorld) w)
+										.getHandle();
+								synchronized (cWorld.entityList) {
+									entityList.put(w.getName(),
+											new ArrayList<Entity>(
+													cWorld.entityList));
+									sema.release();
+								}
 
-					}
-				}
-			});
+							}
+						}
+					});
 			for (final World w : worlds) {
 				try {
 					sema.acquire();
-				} catch (final InterruptedException e) {
-				}
+				} catch (final InterruptedException e) {}
 				for (final Entity entity : entityList.get(w.getName())) {
 					if (dontKill(args, entity)) {
 						continue;
@@ -147,19 +161,21 @@ public class Memory extends ServerCommand {
 			sender.sendMessage("Freed Entities : " + count);
 			try {
 				Thread.sleep(500);
-			} catch (final InterruptedException e) {
-			}
+			} catch (final InterruptedException e) {}
 		}
-		final long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
+		final long usedMB = (Runtime.getRuntime().totalMemory() - Runtime
+				.getRuntime().freeMemory()) / 1024L / 1024L;
 		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
 				+ Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
-		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
-		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE
-				+ Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
+		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : "
+				+ ChatColor.WHITE + usedMB + "MB");
+		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : "
+				+ ChatColor.WHITE + Runtime.getRuntime().freeMemory() / 1024L
+				/ 1024L + "MB");
 		for (final World w : sender.getServer().getWorlds()) {
-			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": "
-					+ w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
-					+ " entities");
+			sender.sendMessage(w.getEnvironment() + " \"" + w.getName()
+					+ "\": " + w.getLoadedChunks().length + " chunks, "
+					+ w.getEntities().size() + " entities");
 		}
 
 		// Code for TPS from here on
@@ -180,7 +196,8 @@ public class Memory extends ServerCommand {
 		final World world = ACPluginManager.getServer().getWorlds().get(0);
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 				ACHelper.getInstance().getCoreInstance(),
-				new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender), delay);
+				new CheckTicks(System.nanoTime(), world, world.getFullTime(),
+						sender), delay);
 	}
 
 	/*
@@ -203,8 +220,9 @@ public class Memory extends ServerCommand {
 		final PermParent parent = new PermParent(permNode + ".*");
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
-		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item)
-				.addChild(full).addChild(npc).addChild(vehicle).addChild(cart).addChild(boat);
+		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp)
+				.addChild(item).addChild(full).addChild(npc).addChild(vehicle)
+				.addChild(cart).addChild(boat);
 		bukkitPerm = child.getBukkitPerm();
 	}
 
@@ -218,8 +236,8 @@ public class Memory extends ServerCommand {
 		protected long elapsedTicks;
 		protected CommandSender sender;
 
-		public CheckTicks(final long oldNanoTime, final World world, final long start,
-				final CommandSender sender) {
+		public CheckTicks(final long oldNanoTime, final World world,
+				final long start, final CommandSender sender) {
 			this.oldNanoTime = oldNanoTime;
 			this.world = world;
 			this.start = start;
@@ -236,8 +254,9 @@ public class Memory extends ServerCommand {
 			elapsedNanoTime = System.nanoTime() - oldNanoTime;
 			elapsedTicks = world.getFullTime() - start;
 			ticksPerSecond = (elapsedTicks * 1000000000.0) / elapsedNanoTime;
-			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: "
-					+ elapsedTicks + " | Nano Time:" + elapsedNanoTime);
+			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond
+					+ " | Ticks elapsed: " + elapsedTicks + " | Nano Time:"
+					+ elapsedNanoTime);
 		}
 	}
 

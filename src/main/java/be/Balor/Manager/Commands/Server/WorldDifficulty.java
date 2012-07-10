@@ -52,7 +52,8 @@ public class WorldDifficulty extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		ACWorld world = null;
 		boolean worldGiven = false;
 		int difValue = -1;
@@ -65,7 +66,8 @@ public class WorldDifficulty extends ServerCommand {
 			if (args.length >= 1 && worldGiven) {
 				world = ACWorld.getWorld(args.getString(0));
 			} else if (Utils.isPlayer(sender, false)) {
-				world = ACWorld.getWorld(((Player) sender).getWorld().getName());
+				world = ACWorld
+						.getWorld(((Player) sender).getWorld().getName());
 			} else {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("argument", "world");

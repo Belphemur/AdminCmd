@@ -26,7 +26,9 @@ import org.bukkit.configuration.MemoryConfiguration;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExMemoryConfiguration extends ExMemorySection implements Configuration {
+public class ExMemoryConfiguration extends ExMemorySection
+		implements
+			Configuration {
 	protected Configuration defaults;
 	protected ExMemoryConfigurationOption options;
 

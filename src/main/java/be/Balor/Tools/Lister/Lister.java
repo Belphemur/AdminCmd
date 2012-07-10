@@ -35,8 +35,7 @@ public abstract class Lister {
 			Lister.List.class);
 
 	public enum List {
-		BAN,
-		MUTE;
+		BAN, MUTE;
 	}
 
 	/**
@@ -65,21 +64,22 @@ public abstract class Lister {
 	 *            if we want to create it if doesn't exists.
 	 * @return lister
 	 */
-	public static Lister getLister(final Lister.List type, final boolean instanciate) {
+	public static Lister getLister(final Lister.List type,
+			final boolean instanciate) {
 		Lister lister = lastListed.get(type);
 		if (!instanciate) {
 			return lister;
 		} else if (lister == null) {
 			switch (type) {
-			case BAN:
-				lister = new BanLister();
-				break;
-			case MUTE:
-				lister = new MuteLister();
-				break;
+				case BAN :
+					lister = new BanLister();
+					break;
+				case MUTE :
+					lister = new MuteLister();
+					break;
 
-			default:
-				break;
+				default :
+					break;
 			}
 			lastListed.put(type, lister);
 		}
@@ -96,7 +96,8 @@ public abstract class Lister {
 	 * @throws EmptyListException
 	 *             the list is empty
 	 */
-	public synchronized Collection<String> getPage(int page) throws EmptyListException {
+	public synchronized Collection<String> getPage(int page)
+			throws EmptyListException {
 		final int entryPerPage = ConfigEnum.LISTER_ITEMS.getInt();
 		final Collection<String> list = getList();
 
@@ -104,15 +105,19 @@ public abstract class Lister {
 			throw new EmptyListException();
 		}
 
-		final int maxPages = (int) Math.ceil(list.size() / (double) entryPerPage);
+		final int maxPages = (int) Math.ceil(list.size()
+				/ (double) entryPerPage);
 		page = page > maxPages ? maxPages : page;
 		final int start = (page - 1) * entryPerPage;
-		final int end = start + entryPerPage > list.size() ? list.size() : start + entryPerPage;
+		final int end = start + entryPerPage > list.size()
+				? list.size()
+				: start + entryPerPage;
 		final java.util.List<String> result = new ArrayList<String>();
 		result.add(ChatColor.AQUA
-				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " "
-						+ getType() + " (" + page + "/" + maxPages + ") " + ChatColor.AQUA, '='));
-		final String[] array = list.toArray(new String[] {});
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(
+						ChatColor.DARK_GREEN + " " + getType() + " (" + page
+								+ "/" + maxPages + ") " + ChatColor.AQUA, '='));
+		final String[] array = list.toArray(new String[]{});
 		for (int i = start; i < end; i++) {
 			result.add(array[i]);
 		}

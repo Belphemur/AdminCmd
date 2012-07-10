@@ -46,9 +46,10 @@ public class SetTime extends TimeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
-		if ((args.getString(0).equalsIgnoreCase("pause") || args.getString(0).equalsIgnoreCase(
-				"unpause"))
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
+		if ((args.getString(0).equalsIgnoreCase("pause") || args.getString(0)
+				.equalsIgnoreCase("unpause"))
 				&& !(PermissionManager.hasPerm(sender, "admincmd.time.pause"))) {
 			return;
 		}

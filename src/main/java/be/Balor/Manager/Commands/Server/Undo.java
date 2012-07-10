@@ -47,11 +47,13 @@ public class Undo extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			int count = 0;
 			try {
-				count = ACHelper.getInstance().undoLastModification(((Player) sender).getName());
+				count = ACHelper.getInstance().undoLastModification(
+						((Player) sender).getName());
 				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
 			} catch (final Exception e) {
 				Utils.sI18n(sender, "nothingToUndo");

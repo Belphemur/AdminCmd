@@ -53,7 +53,8 @@ public class Freeze extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = sender.getServer().getPlayer(args.getString(0));
 		if (player != null) {
@@ -85,7 +86,8 @@ public class Freeze extends PlayerCommand {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.FROZEN, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+								* timeOutValue);
 			}
 		}
 

@@ -46,7 +46,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class ACDeathListener implements Listener {
 
@@ -70,52 +70,66 @@ public class ACDeathListener implements Listener {
 			if (cause instanceof EntityDamageByEntityEvent) {
 				message = getMessage(cause);
 			} else {
-				switch(cause.getCause()) {
-					case CONTACT:
-						message = ACHelper.getInstance().getDeathMessage("cactus");
+				switch (cause.getCause()) {
+					case CONTACT :
+						message = ACHelper.getInstance().getDeathMessage(
+								"cactus");
 						break;
-					case DROWNING:
-						message = ACHelper.getInstance().getDeathMessage("drowning");
+					case DROWNING :
+						message = ACHelper.getInstance().getDeathMessage(
+								"drowning");
 						break;
-					case FALL:
-						message = ACHelper.getInstance().getDeathMessage("falling");
+					case FALL :
+						message = ACHelper.getInstance().getDeathMessage(
+								"falling");
 						break;
-					case FIRE_TICK:
-					case FIRE:
-						message = ACHelper.getInstance().getDeathMessage("fire");
+					case FIRE_TICK :
+					case FIRE :
+						message = ACHelper.getInstance()
+								.getDeathMessage("fire");
 						break;
-					case STARVATION:
-						message = ACHelper.getInstance().getDeathMessage("starving");
+					case STARVATION :
+						message = ACHelper.getInstance().getDeathMessage(
+								"starving");
 						break;
-					case SUFFOCATION:
-						message = ACHelper.getInstance().getDeathMessage("suffocation");
+					case SUFFOCATION :
+						message = ACHelper.getInstance().getDeathMessage(
+								"suffocation");
 						break;
-					case VOID:
-						message = ACHelper.getInstance().getDeathMessage("void");
+					case VOID :
+						message = ACHelper.getInstance()
+								.getDeathMessage("void");
 						break;
-					case LAVA:
-						message = ACHelper.getInstance().getDeathMessage("lava");
+					case LAVA :
+						message = ACHelper.getInstance()
+								.getDeathMessage("lava");
 						break;
-					case POISON:
-						message = ACHelper.getInstance().getDeathMessage("poisen");
+					case POISON :
+						message = ACHelper.getInstance().getDeathMessage(
+								"poisen");
 						break;
-					case LIGHTNING:
-						message = ACHelper.getInstance().getDeathMessage("lightning");
+					case LIGHTNING :
+						message = ACHelper.getInstance().getDeathMessage(
+								"lightning");
 						break;
-					case MAGIC:
-						message = ACHelper.getInstance().getDeathMessage("magic");
+					case MAGIC :
+						message = ACHelper.getInstance().getDeathMessage(
+								"magic");
 						break;
-					case SUICIDE:
-						message = ACHelper.getInstance().getDeathMessage("suicide");
+					case SUICIDE :
+						message = ACHelper.getInstance().getDeathMessage(
+								"suicide");
 						break;
-					case ENTITY_EXPLOSION:
-						message = ACHelper.getInstance().getDeathMessage("creeper");
+					case ENTITY_EXPLOSION :
+						message = ACHelper.getInstance().getDeathMessage(
+								"creeper");
 						break;
-					case BLOCK_EXPLOSION:
+					case BLOCK_EXPLOSION :
 						message = ACHelper.getInstance().getDeathMessage("tnt");
 						break;
-					default:
-						message = ACHelper.getInstance().getDeathMessage("default");
+					default :
+						message = ACHelper.getInstance().getDeathMessage(
+								"default");
 						break;
 				}
 			}
@@ -127,7 +141,7 @@ public class ACDeathListener implements Listener {
 		}
 		replace.put("msg", message);
 		e.setDeathMessage(LocaleHelper.DEATH_MSG.getLocale(replace));
-		//Utils.broadcastMessage(LocaleHelper.DEATH_MSG.getLocale(replace));
+		// Utils.broadcastMessage(LocaleHelper.DEATH_MSG.getLocale(replace));
 	}
 
 	private String getMessage(final EntityDamageEvent e) {
@@ -138,14 +152,16 @@ public class ACDeathListener implements Listener {
 			return ACHelper.getInstance().getDeathMessage("skeleton");
 		} else if (damager instanceof TNTPrimed) {
 			return ACHelper.getInstance().getDeathMessage("TNTPrimed");
-		} else if( damager instanceof Zombie) {
+		} else if (damager instanceof Zombie) {
 			return ACHelper.getInstance().getDeathMessage("zombie");
 		} else if (damager instanceof Projectile) {
 			if (damager instanceof Arrow) {
 				if (((Arrow) damager).getShooter() == null) {
 					return ACHelper.getInstance().getDeathMessage("dispenser");
 				} else if (((Arrow) damager).getShooter() instanceof Player) {
-					return ACHelper.getInstance().getDeathMessage("playerBow") + Utils.getPlayerName(((Player)((Arrow) damager).getShooter()));
+					return ACHelper.getInstance().getDeathMessage("playerBow")
+							+ Utils.getPlayerName(((Player) ((Arrow) damager)
+									.getShooter()));
 				} else if (((Projectile) damager).getShooter() instanceof Skeleton) {
 					return ACHelper.getInstance().getDeathMessage("skeleton");
 				}
@@ -161,7 +177,8 @@ public class ACDeathListener implements Listener {
 				}
 			}
 		} else if (damager instanceof LivingEntity) {
-			return ACHelper.getInstance().getDeathMessage("mob") + damager.getType().getName();
+			return ACHelper.getInstance().getDeathMessage("mob")
+					+ damager.getType().getName();
 		}
 		return ACHelper.getInstance().getDeathMessage("default");
 	}

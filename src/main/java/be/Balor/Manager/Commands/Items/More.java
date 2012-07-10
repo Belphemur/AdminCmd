@@ -52,7 +52,8 @@ public class More extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final ItemStack hand = ((Player) sender).getItemInHand();
 			if (hand == null || hand.getType() == Material.AIR) {
@@ -72,18 +73,20 @@ public class More extends ItemCommand {
 					return;
 				}
 				if ((hand.getAmount() + toAdd) > hand.getMaxStackSize()) {
-					final int inInventory = (hand.getAmount() + toAdd) - hand.getMaxStackSize();
-					ACPluginManager
-							.scheduleSyncTask(new HandSetAmount(hand, hand.getMaxStackSize()));
+					final int inInventory = (hand.getAmount() + toAdd)
+							- hand.getMaxStackSize();
+					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand,
+							hand.getMaxStackSize()));
 					((Player) sender).getInventory().addItem(
-							new ItemStack(hand.getType(), inInventory, hand.getDurability()));
+							new ItemStack(hand.getType(), inInventory, hand
+									.getDurability()));
 					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("amount", String.valueOf(inInventory));
 					Utils.sI18n(sender, "moreTooMuch", replace);
 
 				} else {
-					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand, hand.getAmount()
-							+ toAdd));
+					ACPluginManager.scheduleSyncTask(new HandSetAmount(hand,
+							hand.getAmount() + toAdd));
 				}
 			}
 		}

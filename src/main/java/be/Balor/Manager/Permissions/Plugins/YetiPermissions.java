@@ -57,7 +57,8 @@ public class YetiPermissions implements IPermissionPlugin {
 	}
 
 	@Override
-	public boolean hasPerm(final CommandSender player, final String perm, final boolean errorMsg) {
+	public boolean hasPerm(final CommandSender player, final String perm,
+			final boolean errorMsg) {
 		if (!(player instanceof Player)) {
 			return true;
 		}
@@ -79,7 +80,8 @@ public class YetiPermissions implements IPermissionPlugin {
 	 * .CommandSender, org.bukkit.permissions.Permission, boolean)
 	 */
 	@Override
-	public boolean hasPerm(final CommandSender player, final Permission perm, final boolean errorMsg) {
+	public boolean hasPerm(final CommandSender player, final Permission perm,
+			final boolean errorMsg) {
 		if (!(player instanceof Player)) {
 			return true;
 		}
@@ -102,7 +104,8 @@ public class YetiPermissions implements IPermissionPlugin {
 	 */
 	@Override
 	public boolean isInGroup(final String groupName, final Player player) {
-		return permission.inGroup(player.getWorld().getName(), player.getName(), groupName);
+		return permission.inGroup(player.getWorld().getName(),
+				player.getName(), groupName);
 	}
 
 	/*
@@ -113,7 +116,8 @@ public class YetiPermissions implements IPermissionPlugin {
 	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
+	public Set<Player> getUsers(final String groupName)
+			throws NoPermissionsPlugin {
 		throw new NoPermissionsPlugin(
 				"To use this functionality you need a newer Permissions plugin!");
 	}
@@ -130,13 +134,13 @@ public class YetiPermissions implements IPermissionPlugin {
 	public String getPermissionLimit(final Player p, final String type) {
 		Integer limitInteger = null;
 		try {
-			limitInteger = permission.getInfoInteger(p.getWorld().getName(), p.getName(),
-					"admincmd." + type, false);
+			limitInteger = permission.getInfoInteger(p.getWorld().getName(),
+					p.getName(), "admincmd." + type, false);
 		} catch (final NoSuchMethodError e) {
 			try {
 
-				limitInteger = permission.getPermissionInteger(p.getWorld().getName(), p.getName(),
-						"admincmd." + type);
+				limitInteger = permission.getPermissionInteger(p.getWorld()
+						.getName(), p.getName(), "admincmd." + type);
 			} catch (final Throwable e2) {
 				limitInteger = null;
 			}

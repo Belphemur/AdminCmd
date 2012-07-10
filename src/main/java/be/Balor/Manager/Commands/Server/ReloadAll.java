@@ -48,7 +48,8 @@ public class ReloadAll extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		ACHelper.getInstance().saveElapsedTime();
 		final boolean bcast = ConfigEnum.BSRELOAD.getBoolean();
 		ACPluginManager.scheduleSyncTask(new Runnable() {

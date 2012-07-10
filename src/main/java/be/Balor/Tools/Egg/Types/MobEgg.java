@@ -66,7 +66,8 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 	protected void processArguments(final Player sender, final CommandArgs args)
 			throws ProcessingArgsException {
 		if (!args.hasFlag('m')) {
-			throw new ParameterMissingException('m', LocaleHelper.EGG_PARAM_MOB.getLocale());
+			throw new ParameterMissingException('m',
+					LocaleHelper.EGG_PARAM_MOB.getLocale());
 		}
 		int nbre = 1;
 		final String valFlag = args.getValueFlag('n');

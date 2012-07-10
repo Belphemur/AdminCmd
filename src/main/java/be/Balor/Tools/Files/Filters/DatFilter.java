@@ -21,20 +21,20 @@ import java.io.File;
  * 
  */
 public class DatFilter extends FileFilter {
-    public static final FileFilter INSTANCE = new DatFilter();
+	public static final FileFilter INSTANCE = new DatFilter();
 
-    /*
-     * (Non javadoc)
-     * 
-     * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
-     */
-    @Override
-    public boolean accept(final File dir, final String name) {
-	if (name.endsWith(".dat")) {
-	    return true;
-	} else {
-	    return false;
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
+	 */
+	@Override
+	public boolean accept(final File dir, final String name) {
+		if (name.endsWith(".dat")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-    }
 
 }

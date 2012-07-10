@@ -45,7 +45,8 @@ public class OpenInventory extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		if (!Utils.isPlayer(sender)) {
 			return;
 		}
@@ -57,7 +58,8 @@ public class OpenInventory extends PlayerCommand {
 			if (world == null) {
 				world = pSender.getWorld().getName();
 			}
-			InventoryManager.INSTANCE.openOfflineInv(pSender, playerName, world);
+			InventoryManager.INSTANCE
+					.openOfflineInv(pSender, playerName, world);
 			return;
 		}
 		if (!Utils.checkImmunity(sender, target)) {

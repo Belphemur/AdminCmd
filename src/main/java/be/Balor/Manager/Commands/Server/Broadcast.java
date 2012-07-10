@@ -48,7 +48,8 @@ public class Broadcast extends ServerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final String message = Joiner.on(" ").skipNulls().join(args);
 		replace.put("message", Utils.colorParser(message));

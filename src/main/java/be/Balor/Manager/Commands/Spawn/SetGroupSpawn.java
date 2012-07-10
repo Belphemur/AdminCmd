@@ -31,63 +31,67 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class SetGroupSpawn extends SpawnCommand {
 
-		/**
+	/**
 		 *
 		 */
-		public SetGroupSpawn() {
-			permNode = "admincmd.spawn.gset";
-			cmdName = "bal_setgroupspawn";
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see
-		 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-		 * java.lang.String[])
-		 */
-		@Override
-		public void execute(final CommandSender sender, final CommandArgs args) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			if (args.length < 1) {
-				if (Utils.isPlayer(sender)) {
-					for (final String groupName : ACHelper.getInstance().getGroupList()) {
-						if (PermissionManager.hasPerm((Player) sender, "admincmd.respawn." + groupName)) {
-							ACHelper.getInstance().setGroupSpawnLocation(((Player) sender).getLocation(), groupName);
-							replace.put("groupName", groupName);
-							LocaleHelper.GROUP_SPAWN_SET.sendLocale(sender, replace);
-							return;
-						}
-					}
-				}
-			} else if (args.length >= 1) {
-				if (Utils.isPlayer(sender)) {
-					final String groupName = args.getString(0);
-					if (ACHelper.getInstance().getGroupList().contains(groupName)) {
-						ACHelper.getInstance().setGroupSpawnLocation(((Player) sender).getLocation(), groupName);
-						replace.put("groupName", groupName);
-						LocaleHelper.GROUP_SPAWN_SET.sendLocale(sender, replace);
-						return;
-					}
-					LocaleHelper.NO_SUCH_GROUP.sendLocale(sender, replace);
-					return;
-				}
-			}
-		}
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-		 */
-		@Override
-		public boolean argsCheck(final String... args) {
-			return args != null;
-		}
-
+	public SetGroupSpawn() {
+		permNode = "admincmd.spawn.gset";
+		cmdName = "bal_setgroupspawn";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
+	 * java.lang.String[])
+	 */
+	@Override
+	public void execute(final CommandSender sender, final CommandArgs args) {
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		if (args.length < 1) {
+			if (Utils.isPlayer(sender)) {
+				for (final String groupName : ACHelper.getInstance()
+						.getGroupList()) {
+					if (PermissionManager.hasPerm((Player) sender,
+							"admincmd.respawn." + groupName)) {
+						ACHelper.getInstance().setGroupSpawnLocation(
+								((Player) sender).getLocation(), groupName);
+						replace.put("groupName", groupName);
+						LocaleHelper.GROUP_SPAWN_SET
+								.sendLocale(sender, replace);
+						return;
+					}
+				}
+			}
+		} else if (args.length >= 1) {
+			if (Utils.isPlayer(sender)) {
+				final String groupName = args.getString(0);
+				if (ACHelper.getInstance().getGroupList().contains(groupName)) {
+					ACHelper.getInstance().setGroupSpawnLocation(
+							((Player) sender).getLocation(), groupName);
+					replace.put("groupName", groupName);
+					LocaleHelper.GROUP_SPAWN_SET.sendLocale(sender, replace);
+					return;
+				}
+				LocaleHelper.NO_SUCH_GROUP.sendLocale(sender, replace);
+				return;
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
+	 */
+	@Override
+	public boolean argsCheck(final String... args) {
+		return args != null;
+	}
+
+}

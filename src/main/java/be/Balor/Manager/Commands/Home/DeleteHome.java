@@ -46,9 +46,11 @@ public class DeleteHome extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
-			final be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
+			final be.Balor.Tools.Home home = Utils.getHome(sender,
+					args.getString(0));
 			if (home == null) {
 				return;
 			}

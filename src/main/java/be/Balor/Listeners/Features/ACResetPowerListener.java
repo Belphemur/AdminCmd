@@ -34,7 +34,8 @@ public class ACResetPowerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
 		final Player bPlayer = event.getPlayer();
-		if (PermissionManager.hasPerm(bPlayer, "admincmd.player.noreset", false)) {
+		if (PermissionManager
+				.hasPerm(bPlayer, "admincmd.player.noreset", false)) {
 			return;
 		}
 		final ACPlayer player = ACPlayer.getPlayer(bPlayer);

@@ -49,7 +49,8 @@ public class KillerEgg extends SimpleRadiusEgg {
 	 * 
 	 */
 	public KillerEgg() {
-		super(ConfigEnum.DEGG_KILL_RADIUS.getInt(), ConfigEnum.MAXEGG_KILL_RADIUS.getInt());
+		super(ConfigEnum.DEGG_KILL_RADIUS.getInt(),
+				ConfigEnum.MAXEGG_KILL_RADIUS.getInt());
 	}
 
 	/*
@@ -72,8 +73,8 @@ public class KillerEgg extends SimpleRadiusEgg {
 				entities.add((EntityLiving) entity);
 			}
 		}
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override
 					public void run() {
@@ -82,13 +83,15 @@ public class KillerEgg extends SimpleRadiusEgg {
 							if (entity.equals(p.getHandle())) {
 								continue;
 							}
-							final Location entityLoc = new Location(w, entity.locX, entity.locY,
-									entity.locZ, entity.yaw, entity.pitch);
+							final Location entityLoc = new Location(w,
+									entity.locX, entity.locY, entity.locZ,
+									entity.yaw, entity.pitch);
 							if (entityLoc.distanceSquared(loc) > radius) {
 								continue;
 							}
 							if (entity instanceof EntityPlayer) {
-								final Player player = (Player) entity.getBukkitEntity();
+								final Player player = (Player) entity
+										.getBukkitEntity();
 								player.setHealth(0);
 								count++;
 								continue;

@@ -135,7 +135,8 @@ public class SynchronizedStack<E> extends Stack<E> {
 	 * @see java.util.Vector#addAll(int, java.util.Collection)
 	 */
 	@Override
-	public synchronized boolean addAll(final int index, final Collection<? extends E> c) {
+	public synchronized boolean addAll(final int index,
+			final Collection<? extends E> c) {
 		lock.lock();
 		try {
 			return super.addAll(index, c);

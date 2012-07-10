@@ -42,7 +42,9 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
+		result = prime
+				* result
+				+ ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
 		hashCode = result;
 	}
 
@@ -52,7 +54,9 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
+		result = prime
+				* result
+				+ ((permissionLinker == null) ? 0 : permissionLinker.hashCode());
 		hashCode = result;
 	}
 
@@ -116,8 +120,8 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 	 */
 	@Override
 	public String toString() {
-		return "AbstractAdminCmdPlugin [permissionLinker=" + permissionLinker + ", name=" + name
-				+ ", hashCode=" + hashCode + "]";
+		return "AbstractAdminCmdPlugin [permissionLinker=" + permissionLinker
+				+ ", name=" + name + ", hashCode=" + hashCode + "]";
 	}
 
 }

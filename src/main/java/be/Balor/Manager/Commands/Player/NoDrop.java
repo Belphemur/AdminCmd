@@ -48,7 +48,8 @@ public class NoDrop extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Utils.getUserParam(sender, args, permNode);
 		if (player == null) {
@@ -82,7 +83,8 @@ public class NoDrop extends PlayerCommand {
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 					ACPluginManager.getCorePlugin(),
 					new RemovePowerTask(acp, Type.NO_DROP, sender),
-					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+							* timeOutValue);
 		}
 	}
 

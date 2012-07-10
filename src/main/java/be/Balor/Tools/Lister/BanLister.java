@@ -49,7 +49,8 @@ public class BanLister extends Lister {
 	@Override
 	public synchronized void update() {
 		ban.clear();
-		final Collection<IBan> banned = ACHelper.getInstance().getBannedPlayers();
+		final Collection<IBan> banned = ACHelper.getInstance()
+				.getBannedPlayers();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		for (final IBan p : banned) {
 			replace.clear();

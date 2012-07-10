@@ -36,8 +36,8 @@ public class UnixTerminalCommand extends TerminalCommand {
 	 * @param args
 	 * @param workingDir
 	 */
-	public UnixTerminalCommand(final String commandName, final String execution, final String args,
-			final File workingDir) {
+	public UnixTerminalCommand(final String commandName,
+			final String execution, final String args, final File workingDir) {
 		super(commandName, execution, args, workingDir);
 	}
 
@@ -47,8 +47,8 @@ public class UnixTerminalCommand extends TerminalCommand {
 	 * @param args
 	 * @param workingDir
 	 */
-	public UnixTerminalCommand(final String commandName, final String execution, final String args,
-			final String workingDir) {
+	public UnixTerminalCommand(final String commandName,
+			final String execution, final String args, final String workingDir) {
 		super(commandName, execution, args, workingDir);
 	}
 
@@ -71,7 +71,8 @@ public class UnixTerminalCommand extends TerminalCommand {
 			pb.redirectErrorStream(true);
 			pb.directory(workingDir);
 			final Process p = pb.start();
-			final BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			final BufferedReader in = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null) {
 				sender.sendMessage(line);

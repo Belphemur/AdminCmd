@@ -60,13 +60,15 @@ public class TpWorld extends TeleportCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		assert (target != null);
 		final Map<String, String> replace = new HashMap<String, String>();
 		if (args.length < 1) {
 			if (PermissionManager.hasPerm(target, permNode + ".list")) {
-				final List<World> worlds = ACPluginManager.getServer().getWorlds();
+				final List<World> worlds = ACPluginManager.getServer()
+						.getWorlds();
 				String worldList = "";
 				for (final World w : worlds) {
 					worldList += w.getName() + ", ";

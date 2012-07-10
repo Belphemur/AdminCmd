@@ -63,7 +63,8 @@ public class KillMob extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String type = "all";
 		if (args.length >= 1) {
@@ -101,8 +102,8 @@ public class KillMob extends MobCommand {
 		}
 		final String finalType = type;
 		final CommandSender finalSender = sender;
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
 						killMobs(worldList, finalType, finalSender);
@@ -129,7 +130,8 @@ public class KillMob extends MobCommand {
 		return args != null;
 	}
 
-	private void killMobs(final List<World> worlds, final String type, final CommandSender sender) {
+	private void killMobs(final List<World> worlds, final String type,
+			final CommandSender sender) {
 		int mobKilled = 0;
 		if (type.equalsIgnoreCase("all")) {
 			for (final World w : worlds) {
@@ -147,7 +149,8 @@ public class KillMob extends MobCommand {
 			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
 					if (m instanceof EntityMonster) {
-						final Entity entity = ((CraftLivingEntity) m).getHandle();
+						final Entity entity = ((CraftLivingEntity) m)
+								.getHandle();
 						entity.die();
 						mobKilled++;
 					}
@@ -157,7 +160,8 @@ public class KillMob extends MobCommand {
 			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
 					if (m instanceof EntityAnimal) {
-						final Entity entity = ((CraftLivingEntity) m).getHandle();
+						final Entity entity = ((CraftLivingEntity) m)
+								.getHandle();
 						entity.die();
 						mobKilled++;
 					}
@@ -173,7 +177,8 @@ public class KillMob extends MobCommand {
 				return;
 			}
 			for (final World w : worlds) {
-				for (final org.bukkit.entity.Entity m : w.getEntitiesByClasses(ct.getEntityClass())) {
+				for (final org.bukkit.entity.Entity m : w
+						.getEntitiesByClasses(ct.getEntityClass())) {
 					final Entity entity = ((CraftEntity) m).getHandle();
 					entity.die();
 					mobKilled++;

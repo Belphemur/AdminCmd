@@ -28,7 +28,8 @@ public abstract class ServerCommand extends CoreCommand {
  */
 	public ServerCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.server.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.server.*");
 	}
 
 	/**
@@ -37,6 +38,7 @@ public abstract class ServerCommand extends CoreCommand {
 	 */
 	public ServerCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.server.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.server.*");
 	}
 }

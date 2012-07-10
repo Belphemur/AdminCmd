@@ -52,7 +52,8 @@ public class ListHomes extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			String msg = "";
 			String player = "serverConsole";
@@ -66,7 +67,8 @@ public class ListHomes extends HomeCommand {
 				player = args.getString(0);
 			}
 			final Set<String> homes = ACPlayer.getPlayer(player).getHomeList();
-			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE + homes.size());
+			sender.sendMessage(ChatColor.GOLD + "Home(s) : " + ChatColor.WHITE
+					+ homes.size());
 			for (final String name : homes) {
 				msg += name + ", ";
 				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {

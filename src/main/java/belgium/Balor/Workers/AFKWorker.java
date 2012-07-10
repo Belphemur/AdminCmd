@@ -37,8 +37,10 @@ import com.google.common.collect.MapMaker;
 final public class AFKWorker {
 	private int afkTime = 60000;
 	private int kickTime = 180000;
-	private final ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker().weakKeys().makeMap();
-	private final ConcurrentMap<Player, Object> playersAfk = new MapMaker().weakKeys().makeMap();
+	private final ConcurrentMap<Player, Long> playerTimeStamp = new MapMaker()
+			.weakKeys().makeMap();
+	private final ConcurrentMap<Player, Object> playersAfk = new MapMaker()
+			.weakKeys().makeMap();
 	private final AfkChecker afkChecker;
 	private final KickChecker kickChecker;
 	private static AFKWorker instance = new AFKWorker();
@@ -154,7 +156,8 @@ final public class AFKWorker {
 	public void setAfk(final Player p, final String msg) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
-			String afkString = Utils.I18n("afk", "player", Utils.getPlayerName(p, null));
+			String afkString = Utils.I18n("afk", "player",
+					Utils.getPlayerName(p, null));
 			if (afkString != null) {
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
 			}
@@ -182,7 +185,8 @@ final public class AFKWorker {
 		}
 		final Object obj = playersAfk.get(buddy);
 		if (obj != null) {
-			Utils.sI18n(sender, "noteAfk", "player", Utils.getPlayerName(buddy, sender));
+			Utils.sI18n(sender, "noteAfk", "player",
+					Utils.getPlayerName(buddy, sender));
 			if (obj instanceof String) {
 				sender.sendMessage((String) obj);
 			} else if (obj instanceof Long) {
@@ -201,7 +205,8 @@ final public class AFKWorker {
 	public void setOnline(final Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
-			final String online = Utils.I18n("online", "player", Utils.getPlayerName(p, null));
+			final String online = Utils.I18n("online", "player",
+					Utils.getPlayerName(p, null));
 			if (online != null) {
 				Utils.broadcastMessage(online);
 			}
@@ -231,7 +236,8 @@ final public class AFKWorker {
 			final long now = System.currentTimeMillis();
 			for (final Player p : Utils.getOnlinePlayers()) {
 				final Long timeStamp = playerTimeStamp.get(p);
-				if (timeStamp != null && !playersAfk.containsKey(p) && (now - timeStamp) >= afkTime) {
+				if (timeStamp != null && !playersAfk.containsKey(p)
+						&& (now - timeStamp) >= afkTime) {
 					setAfk(p);
 				}
 			}
@@ -252,8 +258,10 @@ final public class AFKWorker {
 			final long now = System.currentTimeMillis();
 			for (final Player p : playersAfk.keySet()) {
 				final Long timeStamp = playerTimeStamp.get(p);
-				if (timeStamp != null && (now - timeStamp >= kickTime)
-						&& !PermissionManager.hasPerm(p, "admincmd.player.noafkkick")) {
+				if (timeStamp != null
+						&& (now - timeStamp >= kickTime)
+						&& !PermissionManager.hasPerm(p,
+								"admincmd.player.noafkkick")) {
 					ACPluginManager.scheduleSyncTask(new Runnable() {
 
 						@Override

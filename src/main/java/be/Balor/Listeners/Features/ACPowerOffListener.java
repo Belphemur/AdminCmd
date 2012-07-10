@@ -27,7 +27,7 @@ import be.Balor.Player.ACPlayer;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class ACPowerOffListener implements Listener {
 

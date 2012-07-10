@@ -55,7 +55,8 @@ public class WarpList extends WarpCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player p = (Player) sender;
 			String msg = "";
@@ -68,7 +69,8 @@ public class WarpList extends WarpCommand {
 			} else {
 				wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
 			}
-			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : " + ChatColor.WHITE + wp.size());
+			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : "
+					+ ChatColor.WHITE + wp.size());
 			for (final String name : wp) {
 				msg += name + ", ";
 				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {

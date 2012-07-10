@@ -37,7 +37,8 @@ public class ACSuperBreaker implements Listener {
 			return;
 		}
 		final ItemStack itemInHand = event.getItemInHand();
-		if (itemInHand != null && itemInHand.getTypeId() == ConfigEnum.SB_ITEM.getInt()) {
+		if (itemInHand != null
+				&& itemInHand.getTypeId() == ConfigEnum.SB_ITEM.getInt()) {
 			event.setInstaBreak(true);
 			itemInHand.setDurability((short) 0);
 		}

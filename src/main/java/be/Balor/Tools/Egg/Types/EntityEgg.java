@@ -76,7 +76,8 @@ public class EntityEgg extends EggType<EntityInEgg> {
 			throws ProcessingArgsException {
 		final String entityParam = args.getValueFlag('e');
 		if (entityParam == null) {
-			throw new ParameterMissingException('e', LocaleHelper.EGG_PARAM_ENTITY.getLocale());
+			throw new ParameterMissingException('e',
+					LocaleHelper.EGG_PARAM_ENTITY.getLocale());
 		}
 		final String valFlag = args.getValueFlag('n');
 		int nbre = 1;
@@ -98,11 +99,13 @@ public class EntityEgg extends EggType<EntityInEgg> {
 		}
 		try {
 			final Entity entity = EntityTypes.a(entityNb,
-					((CraftWorld) sender.getWorld()).getHandle()).getBukkitEntity();
-			value = new EntityInEgg(entity.getClass().getName(), nbre, entity.getClass()
-					.getSimpleName());
+					((CraftWorld) sender.getWorld()).getHandle())
+					.getBukkitEntity();
+			value = new EntityInEgg(entity.getClass().getName(), nbre, entity
+					.getClass().getSimpleName());
 		} catch (final NullPointerException e) {
-			throw new ProcessingArgsException(ExceptionType.DONT_EXISTS, String.valueOf(entityNb));
+			throw new ProcessingArgsException(ExceptionType.DONT_EXISTS,
+					String.valueOf(entityNb));
 		}
 
 	}

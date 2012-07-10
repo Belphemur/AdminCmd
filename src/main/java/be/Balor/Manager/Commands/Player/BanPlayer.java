@@ -42,7 +42,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BanPlayer extends PlayerCommand {
 
@@ -56,13 +56,14 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player toBan = Utils.getPlayer(args.getString(0));
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String message = "";
@@ -79,8 +80,8 @@ public class BanPlayer extends PlayerCommand {
 		Integer tmpBan = null;
 		if (args.length >= 2) {
 			if (args.hasFlag('m')) {
-				message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
-						"player", banPlayerString);
+				message = LocaleManager.getInstance().get("kickMessages",
+						args.getValueFlag('m'), "player", banPlayerString);
 			}
 			if (message == null || (message != null && message.isEmpty())) {
 				message = "";
@@ -89,12 +90,14 @@ public class BanPlayer extends PlayerCommand {
 				}
 			}
 			try {
-				int tmpIntTime = Utils.timeParser(args.getString(args.length -1));
+				int tmpIntTime = Utils.timeParser(args
+						.getString(args.length - 1));
 				if (tmpIntTime != -1) {
 					tmpBan = tmpIntTime;
 				}
 			} catch (NotANumberException e) {
-				Utils.sI18n(sender, "NaN", "number", args.getString(args.length -1));
+				Utils.sI18n(sender, "NaN", "number",
+						args.getString(args.length - 1));
 				return;
 			}
 			if (message.isEmpty()) {
@@ -119,7 +122,8 @@ public class BanPlayer extends PlayerCommand {
 		replace.put("player", banPlayerString);
 		replace.put("reason", message);
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
-		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4.matcher(banPlayerString);
+		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4
+				.matcher(banPlayerString);
 		if (tmpBan != null) {
 			message += " (Banned for " + tmpBan + " minutes)";
 			replace.put("reason", message);
@@ -131,14 +135,17 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return;
 				}
-				ban = new TempBannedIP(banPlayerString, message, tmpBan * 60 *1000);
+				ban = new TempBannedIP(banPlayerString, message,
+						tmpBan * 60 * 1000);
 				ACHelper.getInstance().banPlayer(ban);
 			} else {
-				ban = new TempBannedPlayer(banPlayerString, message, tmpBan * 60 * 1000);
+				ban = new TempBannedPlayer(banPlayerString, message,
+						tmpBan * 60 * 1000);
 				ACHelper.getInstance().banPlayer(ban);
 			}
-			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(getPlugin(),
-					new UnBanTask(ban, true), Utils.secInTick * 60 * tmpBan);
+			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+					getPlugin(), new UnBanTask(ban, true),
+					Utils.secInTick * 60 * tmpBan);
 		} else {
 			if (inaccurateIp.find()) {
 				if (!ipv4.find()) {
@@ -147,9 +154,11 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return;
 				}
-				ACHelper.getInstance().banPlayer(new BannedIP(banPlayerString, message));
+				ACHelper.getInstance().banPlayer(
+						new BannedIP(banPlayerString, message));
 			} else {
-				ACHelper.getInstance().banPlayer(new BannedPlayer(banPlayerString, message));
+				ACHelper.getInstance().banPlayer(
+						new BannedPlayer(banPlayerString, message));
 			}
 		}
 		ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
@@ -170,7 +179,7 @@ public class BanPlayer extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

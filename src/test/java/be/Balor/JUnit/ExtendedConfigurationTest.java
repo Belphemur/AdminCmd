@@ -46,7 +46,8 @@ public class ExtendedConfigurationTest {
 	public void setUp() throws Exception {
 		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
 		file = new File("test.yml");
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(file);
 		conf.add("test", "blah");
 		conf.createSection("yatta").set("test", "blah");
 		conf.save();
@@ -55,15 +56,18 @@ public class ExtendedConfigurationTest {
 
 	@Test
 	public void loadTest() {
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(file);
 		assertEquals("blah", conf.get("test"));
 		assertFalse(conf.add("test", "test"));
 		assertEquals("blah", conf.get("test"));
 	}
 
 	@Test
-	public void serializeBukkitTest() throws IOException, InvalidConfigurationException {
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+	public void serializeBukkitTest() throws IOException,
+			InvalidConfigurationException {
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(file);
 		final ItemStack test = new ItemStack(Material.WATER, 10);
 		conf.set("serial.item", test);
 		conf.save();
@@ -72,12 +76,15 @@ public class ExtendedConfigurationTest {
 	}
 
 	@Test
-	public void serializeAdminCmdTest() throws IOException, InvalidConfigurationException {
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+	public void serializeAdminCmdTest() throws IOException,
+			InvalidConfigurationException {
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(file);
 		conf.set("serial.banPlayer", new BannedPlayer("Test", "testing"));
 		conf.save();
 		conf.reload();
-		assertEquals("Test", ((BannedPlayer) conf.get("serial.banPlayer")).getPlayer());
+		assertEquals("Test",
+				((BannedPlayer) conf.get("serial.banPlayer")).getPlayer());
 	}
 
 	@After

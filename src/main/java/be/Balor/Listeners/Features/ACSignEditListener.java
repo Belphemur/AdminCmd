@@ -55,8 +55,8 @@ public class ACSignEditListener implements Listener {
 			return;
 		}
 		final Player player = event.getPlayer();
-		final ACSignChangeEvent signChange = new ACSignChangeEvent(saved.getUpdatedSignBlk(),
-				player, event.getLines());
+		final ACSignChangeEvent signChange = new ACSignChangeEvent(
+				saved.getUpdatedSignBlk(), player, event.getLines());
 		Bukkit.getPluginManager().callEvent(signChange);
 		if (signChange.isCancelled()) {
 			signEditor.remove(signLoc);
@@ -72,7 +72,8 @@ public class ACSignEditListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void signPlace(final BlockPlaceEvent event) {
 		final Block block = event.getBlockPlaced();
-		if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST) {
+		if (block.getType() != Material.WALL_SIGN
+				&& block.getType() != Material.SIGN_POST) {
 			return;
 		}
 		final Block blockAgainst = event.getBlockAgainst();
@@ -80,8 +81,10 @@ public class ACSignEditListener implements Listener {
 		if (!(blockAgainstState instanceof Sign)) {
 			return;
 		}
-		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.spec.signedit")) {
-			signEditor.put(block.getLocation(), new SignEditor(block, blockAgainst));
+		if (PermissionManager.hasPerm(event.getPlayer(),
+				"admincmd.spec.signedit")) {
+			signEditor.put(block.getLocation(), new SignEditor(block,
+					blockAgainst));
 		}
 
 	}

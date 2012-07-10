@@ -51,7 +51,8 @@ public class Reply extends PlayerCommand {
 	}
 
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (!Utils.isPlayer(sender, true)) {
 			return;
 		}
@@ -71,15 +72,18 @@ public class Reply extends PlayerCommand {
 				return;
 			}
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
-					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
-				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
+					&& !PermissionManager.hasPerm(sender,
+							"admincmd.invisible.cansee", false)) {
+				Utils.sI18n(sender, "playerNotFound", "player",
+						args.getString(0));
 				return;
 			}
 			String senderPm = "";
 			String msg = "";
 			String senderName = "";
 			senderName = pSender.getName();
-			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE + " - ";
+			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE
+					+ " - ";
 
 			for (final String arg : args) {
 				msg += arg + " ";
@@ -92,14 +96,17 @@ public class Reply extends PlayerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Utils.getPlayerName(buddy));
-			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
+			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace)
+					+ parsed);
 			ACHelper.getInstance().setReplyPlayer(buddy, pSender);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
 			} else {
-				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
+				sender.sendMessage(Utils.I18n("privateMessageHeader", replace)
+						+ parsed);
 			}
-			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
+			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace)
+					+ parsed;
 			for (final Player p : ACHelper.getInstance().getSpyPlayers()) {
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName())) {

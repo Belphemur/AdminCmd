@@ -28,10 +28,9 @@ import be.Balor.Tools.Files.FileManager;
  * 
  */
 public enum TextLocale {
-	NEWS("NEWS"),
-	RULES("Rules"),
-	MOTD("MOTD"),
-	MOTD_NEW("MOTDNewUser", "motdNewUser");
+	NEWS("NEWS"), RULES("Rules"), MOTD("MOTD"), MOTD_NEW(
+			"MOTDNewUser",
+			"motdNewUser");
 	private final String locale;
 	private final String file;
 	private static ExtendedConfiguration version;
@@ -61,8 +60,7 @@ public enum TextLocale {
 		version.set(file, System.currentTimeMillis());
 		try {
 			version.save();
-		} catch (final IOException e) {
-		}
+		} catch (final IOException e) {}
 	}
 
 	/**
@@ -75,8 +73,7 @@ public enum TextLocale {
 		version.set(file, System.currentTimeMillis());
 		try {
 			version.save();
-		} catch (final IOException e) {
-		}
+		} catch (final IOException e) {}
 
 	}
 

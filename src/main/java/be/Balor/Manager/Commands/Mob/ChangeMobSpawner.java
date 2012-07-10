@@ -53,7 +53,8 @@ public class ChangeMobSpawner extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final Player player = (Player) sender;

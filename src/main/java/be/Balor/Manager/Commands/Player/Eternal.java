@@ -53,7 +53,8 @@ public class Eternal extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
@@ -92,7 +93,8 @@ public class Eternal extends PlayerCommand {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.ETERNAL, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+								* timeOutValue);
 			}
 		}
 	}

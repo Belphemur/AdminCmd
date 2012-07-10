@@ -45,12 +45,14 @@ public class PermChild {
 		if (ACPluginManager.getServer() == null) {
 			return;
 		}
-		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null) {
+		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager()
+				.getPermission(permName)) != null) {
 			bukkitPerm.setDefault(permDefault);
 			return;
 		}
 		bukkitPerm = new Permission(permName, permDefault);
-		ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
+		ACPluginManager.getServer().getPluginManager()
+				.addPermission(bukkitPerm);
 	}
 
 	/**
@@ -83,7 +85,8 @@ public class PermChild {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((bukkitPerm == null) ? 0 : bukkitPerm.hashCode());
+		result = prime * result
+				+ ((bukkitPerm == null) ? 0 : bukkitPerm.hashCode());
 		return result;
 	}
 
@@ -121,8 +124,8 @@ public class PermChild {
 	 */
 	@Override
 	public String toString() {
-		return "PermChild [getPermName()=" + getPermName() + ", getPermDefault()="
-				+ getPermDefault() + "]";
+		return "PermChild [getPermName()=" + getPermName()
+				+ ", getPermDefault()=" + getPermDefault() + "]";
 	}
 
 }

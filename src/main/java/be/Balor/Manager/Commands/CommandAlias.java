@@ -31,7 +31,8 @@ public class CommandAlias {
 	 * @param alias
 	 * @param parameters
 	 */
-	public CommandAlias(final String commandName, final String alias, final String parameters) {
+	public CommandAlias(final String commandName, final String alias,
+			final String parameters) {
 		super();
 		this.commandName = commandName;
 		this.alias = alias;

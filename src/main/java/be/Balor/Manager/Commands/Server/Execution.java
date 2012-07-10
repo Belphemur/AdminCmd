@@ -47,7 +47,8 @@ public class Execution extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			return;
@@ -59,7 +60,8 @@ public class Execution extends ServerCommand {
 				sender.sendMessage("Possibles Cmds : " + getCmdList(sender));
 			} else {
 				try {
-					TerminalCommandManager.getInstance().execute(sender, args.getString(0), true);
+					TerminalCommandManager.getInstance().execute(sender,
+							args.getString(0), true);
 				} catch (final CommandNotFound e) {
 					sender.sendMessage(e.getMessage());
 
@@ -70,7 +72,8 @@ public class Execution extends ServerCommand {
 		}
 		try {
 
-			TerminalCommandManager.getInstance().execute(sender, args.getString(0), false);
+			TerminalCommandManager.getInstance().execute(sender,
+					args.getString(0), false);
 		} catch (final CommandNotFound e) {
 			sender.sendMessage(e.getMessage());
 
@@ -91,7 +94,8 @@ public class Execution extends ServerCommand {
 
 	private String getCmdList(final CommandSender sender) {
 		String cmds = "";
-		for (final String cmd : TerminalCommandManager.getInstance().getCommandList()) {
+		for (final String cmd : TerminalCommandManager.getInstance()
+				.getCommandList()) {
 			if (TerminalCommandManager.getInstance().checkCommand(cmd, sender)) {
 				cmds += cmd + ", ";
 			}

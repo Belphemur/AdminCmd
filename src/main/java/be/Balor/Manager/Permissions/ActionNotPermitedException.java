@@ -35,7 +35,8 @@ public class ActionNotPermitedException extends Exception {
 	/**
 	 * @param message
 	 */
-	public ActionNotPermitedException(final CommandSender sender, final String perm) {
+	public ActionNotPermitedException(final CommandSender sender,
+			final String perm) {
 		super(Utils.I18n("errorNotPerm", "p", perm));
 		this.sender = sender;
 	}

@@ -37,7 +37,8 @@ public class ACLockedServerListener implements Listener {
 			return;
 		}
 		if (ACHelper.getInstance().isServerLocked()
-				&& !PermissionManager.hasPerm(event.getPlayer(), "admincmd.server.lockdown", false)) {
+				&& !PermissionManager.hasPerm(event.getPlayer(),
+						"admincmd.server.lockdown", false)) {
 			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
 		}
 	}

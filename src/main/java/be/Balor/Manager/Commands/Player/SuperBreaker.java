@@ -53,7 +53,8 @@ public class SuperBreaker extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
@@ -64,13 +65,15 @@ public class SuperBreaker extends PlayerCommand {
 				acp.removePower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Disabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget", replace);
+					Utils.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget",
+							replace);
 				}
 			} else {
 				acp.setPower(Type.SUPER_BREAKER);
 				Utils.sI18n(player, Type.SUPER_BREAKER + "Enabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget", replace);
+					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget",
+							replace);
 				}
 				if (timeOut == null) {
 					return;

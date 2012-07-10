@@ -47,18 +47,22 @@ public class RemoveBlackList extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.hasFlag('i')) {
 			if (args.length >= 1) {
-				ACHelper.getInstance().removeBlackListedItem(sender, args.getString(0));
+				ACHelper.getInstance().removeBlackListedItem(sender,
+						args.getString(0));
 			} else if (Utils.isPlayer(sender)) {
 				final Player player = (Player) sender;
-				ACHelper.getInstance().removeBlackListedItem(sender, player.getItemInHand());
+				ACHelper.getInstance().removeBlackListedItem(sender,
+						player.getItemInHand());
 			}
 		}
 
 		else if (args.hasFlag('b')) {
-			ACHelper.getInstance().removeBlackListedBlock(sender, args.getString(0));
+			ACHelper.getInstance().removeBlackListedBlock(sender,
+					args.getString(0));
 		}
 	}
 

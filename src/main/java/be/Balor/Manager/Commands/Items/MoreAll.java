@@ -49,14 +49,17 @@ public class MoreAll extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player p = ((Player) sender);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
 					for (final ItemStack is : p.getInventory().getContents()) {
-						if (is != null && !ACHelper.getInstance().inBlackListItem(p, is)) {
+						if (is != null
+								&& !ACHelper.getInstance().inBlackListItem(p,
+										is)) {
 							is.setAmount(is.getMaxStackSize());
 						}
 					}

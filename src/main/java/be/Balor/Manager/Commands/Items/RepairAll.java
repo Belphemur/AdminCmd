@@ -52,7 +52,8 @@ public class RepairAll extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Utils.getUser(sender, args, permNode);
 		if (player == null) {
 			return;
@@ -61,11 +62,14 @@ public class RepairAll extends ItemCommand {
 			@Override
 			public void run() {
 				for (final ItemStack item : player.getInventory().getContents()) {
-					if (item != null && ACHelper.getInstance().repairable(item.getTypeId())) {
+					if (item != null
+							&& ACHelper.getInstance().repairable(
+									item.getTypeId())) {
 						item.setDurability((short) 0);
 					}
 				}
-				for (final ItemStack item : player.getInventory().getArmorContents()) {
+				for (final ItemStack item : player.getInventory()
+						.getArmorContents()) {
 					if (item != null) {
 						item.setDurability((short) 0);
 					}

@@ -28,7 +28,8 @@ public abstract class TimeCommand extends CoreCommand {
  */
 	public TimeCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.time.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.time.*");
 	}
 
 	/**
@@ -37,6 +38,7 @@ public abstract class TimeCommand extends CoreCommand {
 	 */
 	public TimeCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.time.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.time.*");
 	}
 }

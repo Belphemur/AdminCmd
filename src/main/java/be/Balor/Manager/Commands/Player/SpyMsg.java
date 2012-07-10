@@ -52,7 +52,8 @@ public class SpyMsg extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
 			final ACPlayer acp = ACPlayer.getPlayer(((Player) sender));
@@ -76,14 +77,19 @@ public class SpyMsg extends PlayerCommand {
 				}
 				final CommandSender newSender = sender;
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						ACPluginManager.getCorePlugin(), new Runnable() {
+						ACPluginManager.getCorePlugin(),
+						new Runnable() {
 
 							@Override
 							public void run() {
-								ACHelper.getInstance().removeSpy(acp.getHandler());
-								new RemovePowerTask(acp, Type.SPYMSG, newSender).run();
+								ACHelper.getInstance().removeSpy(
+										acp.getHandler());
+								new RemovePowerTask(acp, Type.SPYMSG, newSender)
+										.run();
 							}
-						}, Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+						},
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+								* timeOutValue);
 			}
 
 		}

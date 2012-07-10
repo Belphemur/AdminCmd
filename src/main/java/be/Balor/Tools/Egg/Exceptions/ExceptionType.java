@@ -21,10 +21,5 @@ package be.Balor.Tools.Egg.Exceptions;
  * 
  */
 public enum ExceptionType {
-	DONT_EXISTS,
-	NO_CLASS,
-	ILLEGAL_ACCESS,
-	INSTANCE,
-	MISSING_PARAM,
-	CUSTOM;
+	DONT_EXISTS, NO_CLASS, ILLEGAL_ACCESS, INSTANCE, MISSING_PARAM, CUSTOM;
 }

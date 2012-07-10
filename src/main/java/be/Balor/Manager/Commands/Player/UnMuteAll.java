@@ -50,7 +50,8 @@ public class UnMuteAll extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Set<ACPlayer> players = new HashSet<ACPlayer>();
 		players.addAll(ACPlayer.getPlayers(Type.MUTED));
 		players.addAll(ACPlayer.getPlayers(Type.MUTED_COMMAND));

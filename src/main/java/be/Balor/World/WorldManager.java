@@ -33,7 +33,8 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class WorldManager {
-	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
+	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
+			.makeMap();
 	private IWorldFactory worldFactory;
 	private static WorldManager instance = new WorldManager();
 
@@ -94,9 +95,10 @@ public class WorldManager {
 			for (final String mob : oldWorld.getMobLimitList()) {
 				newWorld.setMobLimit(mob, oldWorld.getMobLimit(mob));
 			}
-			for (final Entry<String, String> info : oldWorld.getInformations().entrySet()) {
-				newWorld.setInformation(info.getKey(), oldWorld.getInformation(info.getKey())
-						.getObj());
+			for (final Entry<String, String> info : oldWorld.getInformations()
+					.entrySet()) {
+				newWorld.setInformation(info.getKey(),
+						oldWorld.getInformation(info.getKey()).getObj());
 			}
 			newWorlds.put(newWorld.getName(), newWorld);
 		}

@@ -184,7 +184,8 @@ public class ACPluginManager {
 
 	void stopChildrenPlugins() {
 		ACLogger.info("Disabling all AdminCmd's plugins");
-		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet()) {
+		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances
+				.entrySet()) {
 			if (plugin.getValue().isEnabled()) {
 				server.getPluginManager().disablePlugin(plugin.getValue());
 			}

@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class GroupSpawn extends SpawnCommand {
 
@@ -48,11 +48,15 @@ public class GroupSpawn extends SpawnCommand {
 		cmdName = "bal_groupspawn";
 	}
 
-	/* (non-Javadoc)
-	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.CommandSender, be.Balor.Manager.Commands.CommandArgs)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
+	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args) throws PlayerNotFound {
+	public void execute(CommandSender sender, CommandArgs args)
+			throws PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final Player p = (Player) sender;
@@ -81,7 +85,8 @@ public class GroupSpawn extends SpawnCommand {
 				}
 				Warp warp = null;
 				for (String gName : ACHelper.getInstance().getGroupList()) {
-					if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName)) {
+					if (PermissionManager.hasPerm(p, "admincmd.respawn."
+							+ gName)) {
 						warp = w.getWarp("spawn:" + gName);
 						replace.put("groupName", gName);
 						break;
@@ -107,8 +112,10 @@ public class GroupSpawn extends SpawnCommand {
 					return;
 				}
 				Warp warp = null;
-				if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName, true)
-						|| PermissionManager.hasPerm(p, "admincmd.respawn.admin")) {
+				if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName,
+						true)
+						|| PermissionManager.hasPerm(p,
+								"admincmd.respawn.admin")) {
 					warp = w.getWarp("spawn:" + gName);
 					replace.put("groupName", gName);
 					if (warp == null) {
@@ -130,8 +137,10 @@ public class GroupSpawn extends SpawnCommand {
 					return;
 				}
 				Warp warp = null;
-				if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName, true)
-						|| PermissionManager.hasPerm(p, "admincmd.respawn.admin")) {
+				if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName,
+						true)
+						|| PermissionManager.hasPerm(p,
+								"admincmd.respawn.admin")) {
 					warp = w.getWarp("spawn:" + gName);
 					replace.put("groupName", gName);
 					if (warp == null) {
@@ -145,7 +154,9 @@ public class GroupSpawn extends SpawnCommand {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

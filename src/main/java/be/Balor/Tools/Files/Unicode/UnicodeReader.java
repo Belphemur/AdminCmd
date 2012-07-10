@@ -75,15 +75,16 @@ public class UnicodeReader extends Reader {
 		int n, unread;
 		n = internalIn.read(bom, 0, bom.length);
 
-		if ((bom[0] == (byte) 0x00) && (bom[1] == (byte) 0x00) && (bom[2] == (byte) 0xFE)
-				&& (bom[3] == (byte) 0xFF)) {
+		if ((bom[0] == (byte) 0x00) && (bom[1] == (byte) 0x00)
+				&& (bom[2] == (byte) 0xFE) && (bom[3] == (byte) 0xFF)) {
 			encoding = "UTF-32BE";
 			unread = n - 4;
-		} else if ((bom[0] == (byte) 0xFF) && (bom[1] == (byte) 0xFE) && (bom[2] == (byte) 0x00)
-				&& (bom[3] == (byte) 0x00)) {
+		} else if ((bom[0] == (byte) 0xFF) && (bom[1] == (byte) 0xFE)
+				&& (bom[2] == (byte) 0x00) && (bom[3] == (byte) 0x00)) {
 			encoding = "UTF-32LE";
 			unread = n - 4;
-		} else if ((bom[0] == (byte) 0xEF) && (bom[1] == (byte) 0xBB) && (bom[2] == (byte) 0xBF)) {
+		} else if ((bom[0] == (byte) 0xEF) && (bom[1] == (byte) 0xBB)
+				&& (bom[2] == (byte) 0xBF)) {
 			encoding = "UTF-8";
 			unread = n - 3;
 		} else if ((bom[0] == (byte) 0xFE) && (bom[1] == (byte) 0xFF)) {
@@ -118,7 +119,8 @@ public class UnicodeReader extends Reader {
 	}
 
 	@Override
-	public int read(final char[] cbuf, final int off, final int len) throws IOException {
+	public int read(final char[] cbuf, final int off, final int len)
+			throws IOException {
 		init();
 		return internalIn2.read(cbuf, off, len);
 	}

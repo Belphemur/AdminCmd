@@ -62,7 +62,8 @@ public class TpToWarp extends WarpCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Utils.getUser(sender, args, permNode, 1, true);
 		if (Utils.isPlayer(sender)) {
 			final Player p = (Player) sender;
@@ -71,7 +72,8 @@ public class TpToWarp extends WarpCommand {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 
 				if (args.getString(0).contains(":")) {
-					if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm())) {
+					if (!PermissionManager.hasPerm(sender,
+							tpAll.getBukkitPerm())) {
 						return;
 					}
 					final String[] split = args.getString(0).split(":");
@@ -87,7 +89,8 @@ public class TpToWarp extends WarpCommand {
 							return;
 						}
 						loc = warpPoint.loc;
-						replace.put("name", acWorld.getName() + ":" + warpPoint.name);
+						replace.put("name", acWorld.getName() + ":"
+								+ warpPoint.name);
 					} catch (final WorldNotLoaded e) {
 						Utils.sI18n(sender, "worldNotFound", "world", world);
 						return;
@@ -96,7 +99,8 @@ public class TpToWarp extends WarpCommand {
 					replace.put("name", args.getString(0));
 
 					try {
-						final Warp warpPoint = ACWorld.getWorld(p.getWorld().getName()).getWarp(
+						final Warp warpPoint = ACWorld.getWorld(
+								p.getWorld().getName()).getWarp(
 								args.getString(0));
 						if (warpPoint == null) {
 							replace.put("name", args.getString(0));
@@ -105,18 +109,17 @@ public class TpToWarp extends WarpCommand {
 						}
 						loc = warpPoint.loc;
 						replace.put("name", warpPoint.name);
-					} catch (final WorldNotLoaded e) {
-					}
+					} catch (final WorldNotLoaded e) {}
 				}
 				if (loc == null) {
 					Utils.sI18n(sender, "errorWarp", replace);
 					return;
 				} else {
-					ACPluginManager.getScheduler()
-							.scheduleSyncDelayedTask(
-									ACHelper.getInstance().getCoreInstance(),
-									new DelayedTeleport(target.getLocation(), loc, target, replace,
-											sender), ConfigEnum.TP_DELAY.getLong());
+					ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+							ACHelper.getInstance().getCoreInstance(),
+							new DelayedTeleport(target.getLocation(), loc,
+									target, replace, sender),
+							ConfigEnum.TP_DELAY.getLong());
 				}
 			}
 		}
@@ -152,8 +155,9 @@ public class TpToWarp extends WarpCommand {
 		protected HashMap<String, String> replace;
 		protected CommandSender sender;
 
-		public DelayedTeleport(final Location locBefore, final Location teleportLoc,
-				final Player target, final HashMap<String, String> replace,
+		public DelayedTeleport(final Location locBefore,
+				final Location teleportLoc, final Player target,
+				final HashMap<String, String> replace,
 				final CommandSender sender) {
 			this.target = target;
 			this.locBefore = locBefore;
@@ -164,7 +168,8 @@ public class TpToWarp extends WarpCommand {
 
 		@Override
 		public void run() {
-			if (locBefore.equals(target.getLocation()) && ConfigEnum.CHECKTP.getBoolean()) {
+			if (locBefore.equals(target.getLocation())
+					&& ConfigEnum.CHECKTP.getBoolean()) {
 				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				sendMessage(sender, target, "tpWarp", replace);
 			} else if (!ConfigEnum.CHECKTP.getBoolean()) {

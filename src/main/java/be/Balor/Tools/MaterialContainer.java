@@ -85,8 +85,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		short d = 0;
 		try {
 			d = Short.parseShort(damage);
-		} catch (final NumberFormatException e) {
-		}
+		} catch (final NumberFormatException e) {}
 		this.dmg = d;
 	}
 
@@ -191,7 +190,8 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + dmg;
-		result = prime * result + ((material == null) ? 0 : material.hashCode());
+		result = prime * result
+				+ ((material == null) ? 0 : material.hashCode());
 		return result;
 	}
 

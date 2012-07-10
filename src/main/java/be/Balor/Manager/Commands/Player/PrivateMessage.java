@@ -58,7 +58,8 @@ public class PrivateMessage extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender, false)
 				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
 				&& ConfigEnum.MUTEDPM.getBoolean()) {
@@ -68,8 +69,10 @@ public class PrivateMessage extends PlayerCommand {
 		final Player buddy = sender.getServer().getPlayer(args.getString(0));
 		if (buddy != null) {
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
-					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
-				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
+					&& !PermissionManager.hasPerm(sender,
+							"admincmd.invisible.cansee", false)) {
+				Utils.sI18n(sender, "playerNotFound", "player",
+						args.getString(0));
 				return;
 			}
 			String senderPm = "";
@@ -95,20 +98,24 @@ public class PrivateMessage extends PlayerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Utils.getPlayerName(buddy));
-			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
+			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace)
+					+ parsed);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
 			} else {
-				sender.sendMessage(Utils.I18n("privateMessageHeader", replace) + parsed);
+				sender.sendMessage(Utils.I18n("privateMessageHeader", replace)
+						+ parsed);
 			}
-			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
+			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace)
+					+ parsed;
 			for (final Player p : ACHelper.getInstance().getSpyPlayers()) {
 				if (p != null && !p.getName().equals(senderName)
 						&& !p.getName().equals(buddy.getName())) {
 					p.sendMessage(spyMsg);
 				}
 			}
-			if (ConfigEnum.LOG_PM.getBoolean() && !(sender instanceof ConsoleCommandSender)) {
+			if (ConfigEnum.LOG_PM.getBoolean()
+					&& !(sender instanceof ConsoleCommandSender)) {
 				ACLogger.info(spyMsg);
 			}
 		} else {

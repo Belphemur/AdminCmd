@@ -57,8 +57,7 @@ public class FileWorld extends ACWorld {
 		final File wFile = new File(directory, world.getName() + ".yml");
 		try {
 			Files.createParentDirs(wFile);
-		} catch (final IOException e) {
-		}
+		} catch (final IOException e) {}
 		datas = ExtendedConfiguration.loadConfiguration(wFile);
 
 		warps = datas.addSection("warps");
@@ -145,7 +144,8 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Warp getWarp(final String name) throws WorldNotLoaded, IllegalArgumentException {
+	public Warp getWarp(final String name) throws WorldNotLoaded,
+			IllegalArgumentException {
 		if (name == null || (name != null && name.isEmpty())) {
 			throw new IllegalArgumentException("Name can't be null or Empty");
 		}
@@ -233,7 +233,8 @@ public class FileWorld extends ACWorld {
 		try {
 			datas.save();
 		} catch (final IOException e) {
-			ACLogger.severe("Problem when saving the World File of " + getName(), e);
+			ACLogger.severe("Problem when saving the World File of "
+					+ getName(), e);
 		}
 	}
 
@@ -245,11 +246,14 @@ public class FileWorld extends ACWorld {
 	@Override
 	public Map<String, String> getInformations() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
-		for (final Entry<String, Object> entry : informations.getValues(false).entrySet()) {
+		for (final Entry<String, Object> entry : informations.getValues(false)
+				.entrySet()) {
 			result.put(entry.getKey(), entry.getValue().toString());
 		}
-		for (final Entry<String, Object> entry : mobLimits.getValues(false).entrySet()) {
-			result.put("Limit on " + entry.getKey(), entry.getValue().toString());
+		for (final Entry<String, Object> entry : mobLimits.getValues(false)
+				.entrySet()) {
+			result.put("Limit on " + entry.getKey(), entry.getValue()
+					.toString());
 		}
 		return result;
 	}

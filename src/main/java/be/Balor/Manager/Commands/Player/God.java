@@ -54,7 +54,8 @@ public class God extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Utils.getUser(sender, args, permNode);
 		if (player != null) {
@@ -86,7 +87,8 @@ public class God extends PlayerCommand {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.GOD, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+								* timeOutValue);
 			}
 		}
 	}

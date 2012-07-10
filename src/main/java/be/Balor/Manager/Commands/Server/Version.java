@@ -49,10 +49,12 @@ public class Version extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		Plugin plug = ACHelper.getInstance().getCoreInstance();
 		if (args.length >= 1) {
-			plug = plug.getServer().getPluginManager().getPlugin(args.getString(0));
+			plug = plug.getServer().getPluginManager()
+					.getPlugin(args.getString(0));
 		}
 		if (plug == null) {
 			Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));

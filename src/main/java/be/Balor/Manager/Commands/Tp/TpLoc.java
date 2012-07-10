@@ -50,7 +50,8 @@ public class TpLoc extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;
@@ -66,8 +67,8 @@ public class TpLoc extends TeleportCommand {
 			Utils.sI18n(sender, "errorLocation");
 			return;
 		}
-		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(target.getWorld(),
-				x, y, z)));
+		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
+				target.getWorld(), x, y, z)));
 
 	}
 

@@ -47,9 +47,11 @@ public class TpTo extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
-			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0), Type.Tp.TO);
+			Utils.tpP2P(sender, ((Player) sender).getName(), args.getString(0),
+					Type.Tp.TO);
 		}
 	}
 

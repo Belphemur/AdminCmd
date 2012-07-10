@@ -60,7 +60,8 @@ public class EggSpawner extends MobCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (!Utils.isPlayer(sender)) {
 			return;
 		}
@@ -71,13 +72,17 @@ public class EggSpawner extends MobCommand {
 			egg = EggType.createEggType(player, args);
 		} catch (final ParameterMissingException e) {
 			if (e.getParam() == 'E') {
-				final String list = Joiner.on(", ").skipNulls()
-						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
+				final String list = Joiner
+						.on(", ")
+						.skipNulls()
+						.join(EggPermissionManager.INSTANCE
+								.getEggTypeNames(player));
 				sender.sendMessage(e.getMessage());
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else {
-				Utils.sI18n(sender, "paramMissing", "param", String.valueOf(e.getParam()));
+				Utils.sI18n(sender, "paramMissing", "param",
+						String.valueOf(e.getParam()));
 				sender.sendMessage(e.getMessage());
 			}
 			return;
@@ -85,14 +90,16 @@ public class EggSpawner extends MobCommand {
 			if (e.getType().equals(ExceptionType.NO_CLASS)) {
 				Utils.sI18n(sender, "eggDontExists", "egg", e.getMessage());
 			} else if (e.getType().equals(ExceptionType.DONT_EXISTS)) {
-				Utils.sI18n(sender, "entityDontExists", "entity", e.getMessage());
+				Utils.sI18n(sender, "entityDontExists", "entity",
+						e.getMessage());
 			} else if (e.getType().equals(ExceptionType.CUSTOM)) {
 				final Map<String, String> replace = new HashMap<String, String>();
 				replace.put("egg", args.getValueFlag('E'));
 				replace.put("error", e.getMessage());
 				Utils.sI18n(sender, "eggCustomError", replace);
 			} else {
-				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(), e);
+				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(),
+						e);
 			}
 			return;
 		} catch (final DontHaveThePermissionException e) {
@@ -100,8 +107,11 @@ public class EggSpawner extends MobCommand {
 			return;
 		} catch (final NullPointerException e) {
 			if (args.hasFlag('E')) {
-				final String list = Joiner.on(", ").skipNulls()
-						.join(EggPermissionManager.INSTANCE.getEggTypeNames(player));
+				final String list = Joiner
+						.on(", ")
+						.skipNulls()
+						.join(EggPermissionManager.INSTANCE
+								.getEggTypeNames(player));
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else {

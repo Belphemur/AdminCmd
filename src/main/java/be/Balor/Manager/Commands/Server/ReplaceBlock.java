@@ -51,9 +51,10 @@ public class ReplaceBlock extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
-		final MaterialContainer mc = ACHelper.getInstance()
-				.checkMaterial(sender, args.getString(0));
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
+		final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
+				sender, args.getString(0));
 		if (mc.isNull()) {
 			return;
 		}

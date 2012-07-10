@@ -77,8 +77,8 @@ public interface DataManager {
 	 * @param directory
 	 * @return
 	 */
-	public Location getLocation(String property, String filename, String directory)
-			throws WorldNotLoaded;
+	public Location getLocation(String property, String filename,
+			String directory) throws WorldNotLoaded;
 
 	/**
 	 * Store the location informations
@@ -87,6 +87,7 @@ public interface DataManager {
 	 * @param filename
 	 * @param directory
 	 */
-	public void writeLocation(Location loc, String name, String filename, String directory);
+	public void writeLocation(Location loc, String name, String filename,
+			String directory);
 
 }

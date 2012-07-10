@@ -46,7 +46,8 @@ public class FreezeWeather extends WeatherCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		Utils.weather(sender, Type.Weather.FREEZE, args);
 	}
 

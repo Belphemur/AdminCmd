@@ -31,7 +31,8 @@ public class SimplifiedLocation extends Location {
 	 * @param y
 	 * @param z
 	 */
-	public SimplifiedLocation(final World world, final double x, final double y, final double z) {
+	public SimplifiedLocation(final World world, final double x,
+			final double y, final double z) {
 		super(world, x, y, z);
 	}
 
@@ -51,7 +52,8 @@ public class SimplifiedLocation extends Location {
 		}
 
 		final Location other = (Location) obj;
-		return other.getBlockX() == this.getBlockX() && other.getBlockY() == this.getBlockY()
+		return other.getBlockX() == this.getBlockX()
+				&& other.getBlockY() == this.getBlockY()
 				&& other.getBlockZ() == this.getBlockZ();
 	}
 

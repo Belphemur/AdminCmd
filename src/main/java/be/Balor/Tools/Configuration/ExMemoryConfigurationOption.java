@@ -24,7 +24,8 @@ import org.bukkit.configuration.ConfigurationOptions;
  */
 public class ExMemoryConfigurationOption extends ConfigurationOptions {
 
-	protected ExMemoryConfigurationOption(final ExMemoryConfiguration configuration) {
+	protected ExMemoryConfigurationOption(
+			final ExMemoryConfiguration configuration) {
 		super(configuration);
 	}
 

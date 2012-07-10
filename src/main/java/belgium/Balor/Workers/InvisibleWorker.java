@@ -36,7 +36,8 @@ import com.google.common.collect.MapMaker;
  */
 final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
-	private final ConcurrentMap<Player, Object> invisiblesPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<Player, Object> invisiblesPlayers = new MapMaker()
+			.makeMap();
 	private static final Object EMPTY = new Object();
 	public static DynmapAPI dynmapAPI;
 
@@ -99,8 +100,8 @@ final public class InvisibleWorker {
 		if (dynmapAPI != null) {
 			dynmapAPI.setPlayerVisiblity(toReappear, true);
 		}
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
 						for (final Player p : Utils.getOnlinePlayers()) {
@@ -127,7 +128,8 @@ final public class InvisibleWorker {
 		if (hideFrom == null) {
 			return;
 		}
-		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false)) {
+		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee",
+				false)) {
 			return;
 		}
 		ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -147,7 +149,8 @@ final public class InvisibleWorker {
 	 * @param unHideFrom
 	 */
 	private void uninvisible(final Player unHide, final Player unHideFrom) {
-		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false)) {
+		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee",
+				false)) {
 			return;
 		}
 		ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -220,8 +223,8 @@ final public class InvisibleWorker {
 	 *            new connected player.
 	 */
 	public void makeInvisibleToPlayer(final Player newPlayer) {
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override
 					public void run() {

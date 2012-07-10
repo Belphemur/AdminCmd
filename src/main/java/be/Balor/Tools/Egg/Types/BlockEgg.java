@@ -62,7 +62,8 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 	 * 
 	 */
 	public BlockEgg() {
-		super(ConfigEnum.DEGG_BLOCK_RADIUS.getInt(), ConfigEnum.MAXEGG_BLOCK_RADIUS.getInt());
+		super(ConfigEnum.DEGG_BLOCK_RADIUS.getInt(),
+				ConfigEnum.MAXEGG_BLOCK_RADIUS.getInt());
 	}
 
 	/**
@@ -89,16 +90,18 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		final World w = loc.getWorld();
 		if (blockTimeOut() == 0) {
 			for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++) {
-				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++) {
-					for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
+				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ()
+						+ radius; z++) {
+					for (int y = loc.getBlockY() - radius; y < loc.getBlockY()
+							+ radius; y++) {
 						final Block block = w.getBlockAt(x, y, z);
 						if (block.getTypeId() != Material.AIR.getId()
 								&& block.getTypeId() != Material.SNOW.getId()) {
 							continue;
 						}
 						IBlockRemanenceFactory.FACTORY.createBlockRemanence(
-								new SimplifiedLocation(w, x, y, z)).setBlockType(
-								value.getBlockTypeId());
+								new SimplifiedLocation(w, x, y, z))
+								.setBlockType(value.getBlockTypeId());
 					}
 				}
 			}
@@ -107,13 +110,16 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		final Integer eventId = eggNb++;
 		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++) {
 			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++) {
-				for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
+				for (int y = loc.getBlockY() - radius; y < loc.getBlockY()
+						+ radius; y++) {
 					final int blckId = w.getBlockTypeIdAt(x, y, z);
-					if (blckId != Material.AIR.getId() && blckId != Material.SNOW.getId()) {
+					if (blckId != Material.AIR.getId()
+							&& blckId != Material.SNOW.getId()) {
 						continue;
 					}
 					final BlockRemanence blk = IBlockRemanenceFactory.FACTORY
-							.createBlockRemanence(new SimplifiedLocation(w, x, y, z));
+							.createBlockRemanence(new SimplifiedLocation(w, x,
+									y, z));
 					blk.setBlockType(value.getBlockTypeId());
 					blocks.add(blk);
 
@@ -121,8 +127,8 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 			}
 		}
 		blocksPerEvent.put(eventId, blocks);
-		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override
 					public void run() {
@@ -154,13 +160,15 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 			throws ProcessingArgsException {
 		final String block = args.getValueFlag('b');
 		if (block == null) {
-			throw new ParameterMissingException('b', LocaleHelper.EGG_PARAM_BLOCK.getLocale());
+			throw new ParameterMissingException('b',
+					LocaleHelper.EGG_PARAM_BLOCK.getLocale());
 		}
 		final int radius = getRadius(sender, args);
 		if (radius == -1) {
 			return;
 		}
-		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(sender, block);
+		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(
+				sender, block);
 		if (mat.isNull()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", LocaleHelper.TYPE_MAT.getLocale());

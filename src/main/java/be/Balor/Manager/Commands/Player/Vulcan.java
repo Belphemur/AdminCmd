@@ -53,7 +53,8 @@ public class Vulcan extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		float power = ConfigEnum.DVULCAN.getFloat();
 		final String timeOut = args.getValueFlag('t');
@@ -100,7 +101,8 @@ public class Vulcan extends PlayerCommand {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.VULCAN, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+								* timeOutValue);
 			}
 		}
 	}

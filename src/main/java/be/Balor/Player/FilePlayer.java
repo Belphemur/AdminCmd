@@ -69,8 +69,7 @@ public class FilePlayer extends ACPlayer {
 		final File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
-		} catch (final IOException e) {
-		}
+		} catch (final IOException e) {}
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
 		homes = datas.addSection("home");
@@ -85,8 +84,7 @@ public class FilePlayer extends ACPlayer {
 		final File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
-		} catch (final IOException e) {
-		}
+		} catch (final IOException e) {}
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
 		homes = datas.addSection("home");
@@ -112,10 +110,14 @@ public class FilePlayer extends ACPlayer {
 				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
 			return;
 		}
-		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
-		ioStackTaskId = ACPluginManager.getScheduler().scheduleAsyncRepeatingTask(
-				ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay);
-		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
+		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY
+				.getInt() : 30;
+		ioStackTaskId = ACPluginManager.getScheduler()
+				.scheduleAsyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK,
+						20 * 60, 20 * delay);
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
+				+ ioStackTaskId);
 	}
 
 	/**
@@ -159,7 +161,8 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getHome(final String home) {
-		final ConfigurationSection homeSection = homes.getConfigurationSection(home);
+		final ConfigurationSection homeSection = homes
+				.getConfigurationSection(home);
 		if (homeSection == null) {
 			final String found = Str.matchString(homes.getKeys(false), home);
 			if (found == null) {
@@ -244,11 +247,14 @@ public class FilePlayer extends ACPlayer {
 		return loc;
 	}
 
-	private Location getLocation(final ConfigurationSection node) throws WorldNotLoaded {
-		final World w = ACPluginManager.getServer().getWorld(node.getString("world"));
+	private Location getLocation(final ConfigurationSection node)
+			throws WorldNotLoaded {
+		final World w = ACPluginManager.getServer().getWorld(
+				node.getString("world"));
 		if (w != null) {
-			return new Location(w, node.getDouble("x", 0), node.getDouble("y", 0), node.getDouble(
-					"z", 0), Float.parseFloat(node.getString("yaw")), Float.parseFloat(node
+			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
+					0), node.getDouble("z", 0), Float.parseFloat(node
+					.getString("yaw")), Float.parseFloat(node
 					.getString("pitch")));
 		} else {
 			throw new WorldNotLoaded(node.getString("world"));
@@ -335,7 +341,8 @@ public class FilePlayer extends ACPlayer {
 			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
 		} catch (final IOException e) {
-			ACLogger.severe("Problem while saving Player file of " + getName(), e);
+			ACLogger.severe("Problem while saving Player file of " + getName(),
+					e);
 		}
 	}
 
@@ -348,7 +355,8 @@ public class FilePlayer extends ACPlayer {
 	public void removeAllSuperPower() {
 		for (final String power : powers.getKeys(false)) {
 			final Type matched = Type.matchType(power);
-			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER)) {
+			if (matched != null
+					&& matched.getCategory().equals(Category.SUPER_POWER)) {
 				powers.set(power, null);
 				if (matched != Type.FLY) {
 					continue;
@@ -361,7 +369,8 @@ public class FilePlayer extends ACPlayer {
 			}
 		}
 
-		if (handler != null && InvisibleWorker.getInstance().hasInvisiblePowers(handler)) {
+		if (handler != null
+				&& InvisibleWorker.getInstance().hasInvisiblePowers(handler)) {
 			InvisibleWorker.getInstance().reappear(handler);
 		}
 		writeFile();
@@ -423,7 +432,8 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<String, String> getPowers() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
-		for (final Entry<String, Object> entry : powers.getValues(false).entrySet()) {
+		for (final Entry<String, Object> entry : powers.getValues(false)
+				.entrySet()) {
 			result.put(entry.getKey(), entry.getValue().toString());
 		}
 		return result;

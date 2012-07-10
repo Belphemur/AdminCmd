@@ -52,7 +52,8 @@ public class TpAtSee extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		if (Utils.isPlayer(sender)) {
 			final Player player = (Player) sender;
@@ -78,7 +79,8 @@ public class TpAtSee extends TeleportCommand {
 				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.TP_AT_SEE, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+								* timeOutValue);
 			}
 
 		}

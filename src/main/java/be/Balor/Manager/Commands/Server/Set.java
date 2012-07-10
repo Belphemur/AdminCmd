@@ -48,7 +48,8 @@ public class Set extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		String message = "";
 		if (args.hasFlag('m')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {

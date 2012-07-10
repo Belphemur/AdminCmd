@@ -38,7 +38,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class ACIpCheckListener implements Listener {
 	private final ConcurrentMap<String, Player> ips = new MapMaker().makeMap();
@@ -71,7 +71,7 @@ public class ACIpCheckListener implements Listener {
 	/**
 	 * Broadcasts a message if someone joined from the same IP to all players
 	 * with a permission and to the console.
-	 *
+	 * 
 	 * @param message
 	 *            - The message
 	 * @param players
@@ -96,7 +96,7 @@ public class ACIpCheckListener implements Listener {
 	 * If a player quits loop through the online players and see if a second
 	 * player uses the same IP and replace the quitting player with the online
 	 * player. Otherwise remove the player from the list!
-	 *
+	 * 
 	 * @param quits
 	 * @param address
 	 */
@@ -122,20 +122,21 @@ public class ACIpCheckListener implements Listener {
 
 	/**
 	 * Adds a player to the ip list if his ip is not already in.
-	 *
+	 * 
 	 * @param player
 	 * @param address
 	 * @return The player who also uses this IP or null if there was none
 	 *         previously
 	 */
 	private Player addIP(final Player player, final InetAddress address) {
-		final Player p = ips.putIfAbsent(address.toString().substring(1), player);
+		final Player p = ips.putIfAbsent(address.toString().substring(1),
+				player);
 		return p;
 	}
 
 	/**
 	 * Checks if an IP is already in use
-	 *
+	 * 
 	 * @param address
 	 * @return {@code true} if an IP is found, {@code false} otherwise.
 	 */

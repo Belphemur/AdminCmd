@@ -31,7 +31,8 @@ public class ACLogger {
 	protected static final String prefix = "[AdminCmd] ";
 
 	public static void severe(final String string, final Throwable ex) {
-		logger.log(Level.SEVERE, prefix.concat(ChatColor.stripColor(string)), ex);
+		logger.log(Level.SEVERE, prefix.concat(ChatColor.stripColor(string)),
+				ex);
 	}
 
 	public static void severe(final String string) {
@@ -47,32 +48,38 @@ public class ACLogger {
 	}
 
 	public static void Log(final String txt) {
-		logger.log(Level.INFO, String.format(prefix + "%s", ChatColor.stripColor(txt)));
+		logger.log(Level.INFO,
+				String.format(prefix + "%s", ChatColor.stripColor(txt)));
 	}
 
 	public static void Log(final Level loglevel, final String txt) {
 		Log(loglevel, txt, true);
 	}
 
-	public static void Log(final Level loglevel, final String txt, final boolean sendReport) {
-		logger.log(loglevel,
-				String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)));
+	public static void Log(final Level loglevel, final String txt,
+			final boolean sendReport) {
+		logger.log(
+				loglevel,
+				String.format(prefix + "%s",
+						txt == null ? "" : ChatColor.stripColor(txt)));
 	}
 
-	public static void Log(final Level loglevel, final String txt, final Throwable params) {
+	public static void Log(final Level loglevel, final String txt,
+			final Throwable params) {
 		if (txt == null) {
 			Log(loglevel, params);
 		} else {
-			logger.log(loglevel,
-					String.format(prefix + "%s", txt == null ? "" : ChatColor.stripColor(txt)),
+			logger.log(
+					loglevel,
+					String.format(prefix + "%s",
+							txt == null ? "" : ChatColor.stripColor(txt)),
 					params);
 		}
 	}
 
 	public static void Log(final Level loglevel, final Throwable err) {
-		logger.log(
-				loglevel,
-				String.format(prefix + "%s",
-						err == null ? "? unknown exception ?" : err.getMessage()), err);
+		logger.log(loglevel, String.format(prefix + "%s", err == null
+				? "? unknown exception ?"
+				: err.getMessage()), err);
 	}
 }

@@ -46,8 +46,9 @@ public class CheckingBlockTask implements Runnable {
 	 * @param limitZ
 	 * @param mat
 	 */
-	public CheckingBlockTask(final Semaphore sema, final List<SimplifiedLocation> okBlocks,
-			final Block block, final int radius, final int limitY, final int limitX,
+	public CheckingBlockTask(final Semaphore sema,
+			final List<SimplifiedLocation> okBlocks, final Block block,
+			final int radius, final int limitY, final int limitX,
 			final int limitZ, final List<Material> mat) {
 		super();
 		this.sema = sema;
@@ -72,11 +73,12 @@ public class CheckingBlockTask implements Runnable {
 			for (int y = block.getY() - radius; y <= limitY; y++) {
 				for (int x = block.getX() - radius; x <= limitX; x++) {
 					for (int z = block.getZ() - radius; z <= limitZ; z++) {
-						if (!mat.contains(Material.getMaterial(block.getWorld().getBlockTypeIdAt(x,
-								y, z)))) {
+						if (!mat.contains(Material.getMaterial(block.getWorld()
+								.getBlockTypeIdAt(x, y, z)))) {
 							continue;
 						}
-						okBlocks.add(new SimplifiedLocation(block.getWorld(), x, y, z));
+						okBlocks.add(new SimplifiedLocation(block.getWorld(),
+								x, y, z));
 					}
 				}
 			}

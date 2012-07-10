@@ -49,13 +49,15 @@ public class TpToggle extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)
 					&& args.getString(0).equalsIgnoreCase("yes")) {
-				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow")) {
+				if (!PermissionManager.hasPerm(player,
+						"admincmd.tp.toggle.allow")) {
 					return;
 				}
 				final TpRequest request = acp.getTpRequest();
@@ -66,7 +68,8 @@ public class TpToggle extends TeleportCommand {
 					Utils.sI18n(sender, "noTpRequest");
 				}
 			} else {
-				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.use")) {
+				if (!PermissionManager
+						.hasPerm(player, "admincmd.tp.toggle.use")) {
 					return;
 				}
 				if (acp.hasPower(Type.TP_REQUEST)) {
@@ -88,9 +91,10 @@ public class TpToggle extends TeleportCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		final PermParent parent = plugin.getPermissionLinker()
-				.getPermParent("admincmd.tp.toggle.*");
-		parent.addChild("admincmd.tp.toggle.allow").addChild("admincmd.tp.toggle.use");
+		final PermParent parent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.tp.toggle.*");
+		parent.addChild("admincmd.tp.toggle.allow").addChild(
+				"admincmd.tp.toggle.use");
 	}
 
 	/*

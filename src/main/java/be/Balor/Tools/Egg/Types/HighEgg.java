@@ -38,7 +38,8 @@ public class HighEgg extends SimpleRadiusEgg {
 	 * @param maxRadius
 	 */
 	public HighEgg() {
-		super(ConfigEnum.DEGG_HIGH_RADIUS.getInt(), ConfigEnum.MAXEGG_HIGH_RADIUS.getInt());
+		super(ConfigEnum.DEGG_HIGH_RADIUS.getInt(),
+				ConfigEnum.MAXEGG_HIGH_RADIUS.getInt());
 	}
 
 	/**
@@ -58,7 +59,8 @@ public class HighEgg extends SimpleRadiusEgg {
 		event.setHatching(false);
 		final Location loc = event.getEgg().getLocation();
 		final int radius = value * value;
-		final int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt() * Utils.secInTick;
+		final int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt()
+				* Utils.secInTick;
 		for (final Player player : Utils.getOnlinePlayers()) {
 			if (!player.getWorld().equals(loc.getWorld())) {
 				continue;
@@ -66,9 +68,12 @@ public class HighEgg extends SimpleRadiusEgg {
 			if (player.getLocation().distanceSquared(loc) > radius) {
 				continue;
 			}
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, timeout, 5));
-			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, timeout, 100));
-			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, timeout, 10));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+					timeout, 5));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
+					timeout, 100));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,
+					timeout, 10));
 			LocaleHelper.HIGH_EFFECT.sendLocale(player);
 		}
 

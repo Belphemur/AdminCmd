@@ -50,7 +50,8 @@ public class Help extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", 1, sender);
 			return;
@@ -59,8 +60,9 @@ public class Help extends ServerCommand {
 				|| args.getString(0).equalsIgnoreCase("plugins")) {
 			String msg = "";
 			sender.sendMessage(ChatColor.DARK_AQUA
-					+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.WHITE + " Plugins "
-							+ ChatColor.DARK_AQUA, '-'));
+					+ ACMinecraftFontWidthCalculator
+							.strPadCenterChat(ChatColor.WHITE + " Plugins "
+									+ ChatColor.DARK_AQUA, '-'));
 			for (final String plugin : HelpLister.getInstance().getPluginList()) {
 				msg += plugin + ", ";
 			}
@@ -77,7 +79,8 @@ public class Help extends ServerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", LocaleHelper.TYPE_CMD.getLocale());
 			replace.put("value", cmd);
-			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd, sender)) {
+			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd,
+					sender)) {
 				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			}
 			return;
@@ -87,7 +90,8 @@ public class Help extends ServerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", LocaleHelper.TYPE_CMD.getLocale());
 			replace.put("value", cmd2);
-			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd2, sender, true)) {
+			if (!HelpLister.getInstance().sendHelpCmd(args.getString(0), cmd2,
+					sender, true)) {
 				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			}
 			return;
@@ -98,14 +102,18 @@ public class Help extends ServerCommand {
 			HelpLister.getInstance().sendHelpPage("AdminCmd", page, sender);
 		} catch (final NumberFormatException e) {
 			if (args.length == 1) {
-				if (!HelpLister.getInstance().sendHelpPage(args.getString(0), 1, sender)) {
-					Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
+				if (!HelpLister.getInstance().sendHelpPage(args.getString(0),
+						1, sender)) {
+					Utils.sI18n(sender, "pluginNotFound", "plugin",
+							args.getString(0));
 				}
 			} else {
 				try {
 					page = args.getInt(1);
-					if (!HelpLister.getInstance().sendHelpPage(args.getString(0), page, sender)) {
-						Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
+					if (!HelpLister.getInstance().sendHelpPage(
+							args.getString(0), page, sender)) {
+						Utils.sI18n(sender, "pluginNotFound", "plugin",
+								args.getString(0));
 					}
 				} catch (final NumberFormatException e1) {
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));

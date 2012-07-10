@@ -45,12 +45,16 @@ public class PluginCommandUtil {
 			final Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) object;
 
 			if (map != null) {
-				for (final Entry<String, Map<String, Object>> entry : map.entrySet()) {
-					final Command newCmd = new FakePluginCommand(entry.getKey(), plugin);
-					final Object description = entry.getValue().get("description");
+				for (final Entry<String, Map<String, Object>> entry : map
+						.entrySet()) {
+					final Command newCmd = new FakePluginCommand(
+							entry.getKey(), plugin);
+					final Object description = entry.getValue().get(
+							"description");
 					final Object usage = entry.getValue().get("usage");
 					final Object aliases = entry.getValue().get("aliases");
-					final Object permission = entry.getValue().get("permission");
+					final Object permission = entry.getValue()
+							.get("permission");
 
 					if (description != null) {
 						newCmd.setDescription(description.toString());

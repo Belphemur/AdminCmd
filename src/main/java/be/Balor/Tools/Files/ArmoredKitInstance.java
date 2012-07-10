@@ -46,9 +46,11 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @param items
 	 */
 	public ArmoredKitInstance(final String name, final int delay,
-			final List<MaterialContainer> items, final Map<Type.ArmorPart, MaterialContainer> armor) {
+			final List<MaterialContainer> items,
+			final Map<Type.ArmorPart, MaterialContainer> armor) {
 		super(name, delay, items);
-		for (final Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet()) {
+		for (final Entry<Type.ArmorPart, MaterialContainer> e : armor
+				.entrySet()) {
 			if (!e.getKey().isValid(e.getValue().getMaterial().getId())) {
 				continue;
 			}
@@ -83,14 +85,16 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @return contain the Part of the armor that couldn't be setted.
 	 */
 	public ArmorPart[] setPlayerArmorParts(final Player p) {
-		final List<ArmorPart> armorParts = new ArrayList<Type.ArmorPart>(ArmorPart.values().length);
+		final List<ArmorPart> armorParts = new ArrayList<Type.ArmorPart>(
+				ArmorPart.values().length);
 		final ItemStack[] armors = new ItemStack[ArmorPart.values().length];
 		final PlayerInventory inventory = p.getInventory();
 		if (ConfigEnum.ARMOR_KIT_OVERRIDE.getBoolean()) {
 			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
 				if (toadd == null) {
-					toadd = inventory.getItem(inventory.getSize() + part.getPlaceInInventory());
+					toadd = inventory.getItem(inventory.getSize()
+							+ part.getPlaceInInventory());
 					armorParts.add(part);
 				}
 				armors[part.getPlaceInInventory()] = toadd;
@@ -98,11 +102,13 @@ public class ArmoredKitInstance extends KitInstance {
 		} else {
 			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
-				if (inventory.getItem(inventory.getSize() + part.getPlaceInInventory()) != null) {
+				if (inventory.getItem(inventory.getSize()
+						+ part.getPlaceInInventory()) != null) {
 					continue;
 				}
 				if (toadd == null) {
-					toadd = inventory.getItem(inventory.getSize() + part.getPlaceInInventory());
+					toadd = inventory.getItem(inventory.getSize()
+							+ part.getPlaceInInventory());
 					armorParts.add(part);
 				}
 				armors[part.getPlaceInInventory()] = toadd;

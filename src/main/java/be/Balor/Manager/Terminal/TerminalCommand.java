@@ -37,16 +37,16 @@ public abstract class TerminalCommand {
 	/**
 	 * 
 	 */
-	public TerminalCommand(final String commandName, final String execution, final String args,
-			final File workingDir) {
+	public TerminalCommand(final String commandName, final String execution,
+			final String args, final File workingDir) {
 		this.commandName = commandName;
 		this.execution = execution;
 		this.args = args;
 		this.workingDir = workingDir;
 	}
 
-	public TerminalCommand(final String commandName, final String execution, final String args,
-			final String workingDir) {
+	public TerminalCommand(final String commandName, final String execution,
+			final String args, final String workingDir) {
 		this(commandName, execution, args, new File(workingDir));
 	}
 

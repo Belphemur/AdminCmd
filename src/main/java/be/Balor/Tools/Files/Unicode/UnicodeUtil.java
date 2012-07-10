@@ -11,7 +11,8 @@ import java.io.Reader;
 
 public class UnicodeUtil {
 
-	public static final byte[] UTF8_BOMS = new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
+	public static final byte[] UTF8_BOMS = new byte[]{(byte) 0xEF, (byte) 0xBB,
+			(byte) 0xBF};
 	public static final int BOM_SIZE = 4;
 
 	/**
@@ -26,8 +27,8 @@ public class UnicodeUtil {
 	 * @throws IOException
 	 *             something goes wrong with the file
 	 */
-	public static void saveUTF8File(final File file, final String data, final boolean append)
-			throws IOException {
+	public static void saveUTF8File(final File file, final String data,
+			final boolean append) throws IOException {
 		BufferedWriter bw = null;
 		OutputStreamWriter osw = null;
 
@@ -47,8 +48,7 @@ public class UnicodeUtil {
 			try {
 				bw.close();
 				fos.close();
-			} catch (final Exception ex) {
-			}
+			} catch (final Exception ex) {}
 		}
 	}
 
@@ -64,13 +64,14 @@ public class UnicodeUtil {
 	 * @throws IOException
 	 *             something goes wrong with the file
 	 */
-	public static void saveUTF8File(final File file, final InputStream stream, final boolean append)
-			throws IOException {
+	public static void saveUTF8File(final File file, final InputStream stream,
+			final boolean append) throws IOException {
 		BufferedWriter bw = null;
 		OutputStreamWriter osw = null;
 
 		final FileOutputStream fos = new FileOutputStream(file, append);
-		final Reader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"));
+		final Reader reader = new BufferedReader(new UnicodeReader(stream,
+				"UTF-8"));
 		try {
 			// write UTF8 BOM mark if file is empty
 			if (file.length() < 1) {
@@ -88,8 +89,7 @@ public class UnicodeUtil {
 				bw.close();
 				fos.close();
 				reader.close();
-			} catch (final Exception ex) {
-			}
+			} catch (final Exception ex) {}
 		}
 	}
 

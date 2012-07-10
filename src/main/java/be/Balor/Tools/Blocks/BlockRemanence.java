@@ -21,7 +21,7 @@ import org.bukkit.block.Block;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class BlockRemanence {
 	protected Location loc;
@@ -72,7 +72,7 @@ public class BlockRemanence {
 
 	/**
 	 * Block types. From worldEdit
-	 *
+	 * 
 	 * @author sk89q
 	 */
 	private static boolean usesData(final int id) {

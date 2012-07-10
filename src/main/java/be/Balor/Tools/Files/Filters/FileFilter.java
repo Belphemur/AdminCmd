@@ -24,41 +24,41 @@ import java.util.Arrays;
  * 
  */
 public abstract class FileFilter implements FilenameFilter {
-    public File[] listRecursively(final File folder) {
-	if (folder != null && folder.isDirectory()) {
-	    return _listRecursively(folder, 5).toArray(new File[0]);
-	}
-	return new File[0];
-    }
-
-    public File[] listRecursively(final File folder, final int depth) {
-	if (folder != null && folder.isDirectory()) {
-	    return _listRecursively(folder, depth).toArray(new File[0]);
-	}
-	return new File[0];
-    }
-
-    private ArrayList<File> _listRecursively(final File folder, final int depth) {
-	final ArrayList<File> files = new ArrayList<File>();
-	if (folder != null && folder.isDirectory()) {
-	    files.addAll(Arrays.asList(folder.listFiles(this)));
-	    if (depth > 0) {// now scan folders
-		final File folders[] = folder.listFiles(new DirFilter());
-		if (folders != null) {
-		    for (final File f : folders) {
-			files.addAll(_listRecursively(f, depth - 1));
-		    }
+	public File[] listRecursively(final File folder) {
+		if (folder != null && folder.isDirectory()) {
+			return _listRecursively(folder, 5).toArray(new File[0]);
 		}
-	    }
+		return new File[0];
 	}
-	return files;
-    }
 
-    public static class DirFilter implements FilenameFilter {
-
-	@Override
-	public boolean accept(final File file, final String name) {
-	    return file.isDirectory();
+	public File[] listRecursively(final File folder, final int depth) {
+		if (folder != null && folder.isDirectory()) {
+			return _listRecursively(folder, depth).toArray(new File[0]);
+		}
+		return new File[0];
 	}
-    }
+
+	private ArrayList<File> _listRecursively(final File folder, final int depth) {
+		final ArrayList<File> files = new ArrayList<File>();
+		if (folder != null && folder.isDirectory()) {
+			files.addAll(Arrays.asList(folder.listFiles(this)));
+			if (depth > 0) {// now scan folders
+				final File folders[] = folder.listFiles(new DirFilter());
+				if (folders != null) {
+					for (final File f : folders) {
+						files.addAll(_listRecursively(f, depth - 1));
+					}
+				}
+			}
+		}
+		return files;
+	}
+
+	public static class DirFilter implements FilenameFilter {
+
+		@Override
+		public boolean accept(final File file, final String name) {
+			return file.isDirectory();
+		}
+	}
 }

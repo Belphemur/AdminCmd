@@ -50,7 +50,8 @@ public class Ip extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Utils.getUser(sender, args, permNode, 0, false);
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (target != null) {

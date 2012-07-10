@@ -31,7 +31,8 @@ public class ACSignChangeEvent extends SignChangeEvent {
 	 * @param thePlayer
 	 * @param theLines
 	 */
-	public ACSignChangeEvent(final Block theBlock, final Player thePlayer, final String[] theLines) {
+	public ACSignChangeEvent(final Block theBlock, final Player thePlayer,
+			final String[] theLines) {
 		super(theBlock, thePlayer, theLines);
 	}
 

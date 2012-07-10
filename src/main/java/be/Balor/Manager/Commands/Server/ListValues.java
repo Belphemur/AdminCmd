@@ -50,7 +50,8 @@ public class ListValues extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.DARK_AQUA + "Possibles Types :");
 			sender.sendMessage(Arrays.toString(Type.values()));
@@ -67,8 +68,9 @@ public class ListValues extends ServerCommand {
 		}
 		final List<ACPlayer> list = ACPlayer.getPlayers(arg);
 		if (list != null) {
-			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display() + ChatColor.WHITE
-					+ " (" + list.size() + ") " + ChatColor.AQUA + ":");
+			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display()
+					+ ChatColor.WHITE + " (" + list.size() + ") "
+					+ ChatColor.AQUA + ":");
 			String buffer = "";
 			for (final ACPlayer value : list) {
 				buffer += value.getName() + ", ";

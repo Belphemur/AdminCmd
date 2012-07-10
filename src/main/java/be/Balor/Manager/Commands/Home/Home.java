@@ -48,7 +48,8 @@ public class Home extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			be.Balor.Tools.Home home = null;
@@ -56,7 +57,8 @@ public class Home extends HomeCommand {
 			if (home == null) {
 				return;
 			}
-			final Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
+			final Location loc = ACPlayer.getPlayer(home.player).getHome(
+					home.home);
 			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;

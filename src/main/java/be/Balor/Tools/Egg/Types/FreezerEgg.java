@@ -39,7 +39,8 @@ public class FreezerEgg extends BlockEgg {
 	 * 
 	 */
 	public FreezerEgg() {
-		super(ConfigEnum.DEGG_FREEZE_RADIUS.getInt(), ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt());
+		super(ConfigEnum.DEGG_FREEZE_RADIUS.getInt(),
+				ConfigEnum.MAXEGG_FREEZE_RADIUS.getInt());
 	}
 
 	/*

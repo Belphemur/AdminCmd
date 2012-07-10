@@ -62,7 +62,8 @@ public final class Downloader {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + (int) (size ^ (size >>> 32));
-			result = prime * result + ((version == null) ? 0 : version.hashCode());
+			result = prime * result
+					+ ((version == null) ? 0 : version.hashCode());
 			return result;
 		}
 
@@ -113,8 +114,7 @@ public final class Downloader {
 					if (out != null) {
 						out.close();
 					}
-				} catch (final IOException e) {
-				}
+				} catch (final IOException e) {}
 			}
 		}
 
@@ -131,15 +131,18 @@ public final class Downloader {
 	 *             if something goes wrong in the process of downloading the
 	 *             file
 	 */
-	public static void download(final String urlString, final File downloaded) throws IOException {
+	public static void download(final String urlString, final File downloaded)
+			throws IOException {
 		BufferedOutputStream bout = null;
 		BufferedInputStream in = null;
 		HttpURLConnection connection = null;
 		if (!exists(urlString)) {
-			throw new FileNotFoundException("The remote file " + urlString + " can't be found.");
+			throw new FileNotFoundException("The remote file " + urlString
+					+ " can't be found.");
 		}
 
-		if (downloaded.getParentFile() != null && !downloaded.getParentFile().exists()) {
+		if (downloaded.getParentFile() != null
+				&& !downloaded.getParentFile().exists()) {
 			downloaded.getParentFile().mkdirs();
 		}
 		if (!checkVersionToDownload(urlString, downloaded)) {
@@ -200,20 +203,24 @@ public final class Downloader {
 	 * @throws IOException
 	 * 
 	 */
-	private static final boolean checkVersionToDownload(final String fileUrl, final File download)
-			throws IOException {
+	private static final boolean checkVersionToDownload(final String fileUrl,
+			final File download) throws IOException {
 		final String urlString = fileUrl + ".version";
-		final File versionFile = new File(download.getParent(), download.getName() + ".version");
+		final File versionFile = new File(download.getParent(),
+				download.getName() + ".version");
 		if (!exists(urlString)) {
 			return true;
 		}
 		HttpURLConnection connection = null;
 		try {
-			connection = (HttpURLConnection) new URL(urlString).openConnection();
+			connection = (HttpURLConnection) new URL(urlString)
+					.openConnection();
 			final Version version = readVersion(connection.getInputStream());
 			if (versionFile.exists()) {
-				final Version curVersion = readVersion(new FileInputStream(versionFile));
-				if (curVersion.equals(version) && download.exists() && version.checkSize(download)) {
+				final Version curVersion = readVersion(new FileInputStream(
+						versionFile));
+				if (curVersion.equals(version) && download.exists()
+						&& version.checkSize(download)) {
 					return false;
 				}
 			}
@@ -246,7 +253,8 @@ public final class Downloader {
 	}
 
 	private static Version readVersion(final InputStream stream) {
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(
+				stream));
 		try {
 			final String version = reader.readLine();
 			Long size;
@@ -261,8 +269,7 @@ public final class Downloader {
 		} finally {
 			try {
 				reader.close();
-			} catch (final IOException e) {
-			}
+			} catch (final IOException e) {}
 		}
 	}
 

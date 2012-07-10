@@ -53,7 +53,8 @@ public class KickPlayer extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final Player toKick = sender.getServer().getPlayer(args.getString(0));
 		if (toKick == null) {
@@ -67,8 +68,8 @@ public class KickPlayer extends PlayerCommand {
 		}
 		String message = "";
 		if (args.hasFlag('m')) {
-			message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'),
-					"player", toKick.getName());
+			message = LocaleManager.getInstance().get("kickMessages",
+					args.getValueFlag('m'), "player", toKick.getName());
 		} else if (args.length >= 2) {
 			for (int i = 1; i < args.length; i++) {
 				message += args.getString(i) + " ";

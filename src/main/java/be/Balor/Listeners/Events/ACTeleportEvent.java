@@ -31,7 +31,8 @@ public class ACTeleportEvent extends PlayerTeleportEvent {
 	 * @param from
 	 * @param to
 	 */
-	public ACTeleportEvent(final Player player, final Location from, final Location to) {
+	public ACTeleportEvent(final Player player, final Location from,
+			final Location to) {
 		super(player, from, to);
 	}
 
@@ -41,8 +42,8 @@ public class ACTeleportEvent extends PlayerTeleportEvent {
 	 * @param to
 	 * @param cause
 	 */
-	public ACTeleportEvent(final Player player, final Location from, final Location to,
-			final TeleportCause cause) {
+	public ACTeleportEvent(final Player player, final Location from,
+			final Location to, final TeleportCause cause) {
 		super(player, from, to, cause);
 	}
 

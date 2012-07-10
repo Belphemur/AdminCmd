@@ -54,7 +54,8 @@ public class Invisible extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Utils.getUser(sender, args, permNode);
 		final boolean noPickUp = ConfigEnum.NPINVISIBLE.getBoolean();
 		if (target != null) {
@@ -112,10 +113,10 @@ public class Invisible extends PlayerCommand {
 	@Override
 	public void registerBukkitPerm() {
 		super.registerBukkitPerm();
-		plugin.getPermissionLinker().addPermChild("admincmd.invisible.notatarget",
+		plugin.getPermissionLinker().addPermChild(
+				"admincmd.invisible.notatarget", PermissionDefault.OP);
+		plugin.getPermissionLinker().addPermChild("admincmd.invisible.cansee",
 				PermissionDefault.OP);
-		plugin.getPermissionLinker()
-				.addPermChild("admincmd.invisible.cansee", PermissionDefault.OP);
 	}
 
 }

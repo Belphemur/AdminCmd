@@ -56,17 +56,18 @@ public class ACPluginListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(final PluginEnableEvent event) {
 		if (!PermissionManager.isPermissionsExSet()) {
-			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("PermissionsEx");
+			final Plugin Permissions = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("PermissionsEx");
 			if (Permissions != null) {
 				if (Permissions.isEnabled()) {
-					PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+					PermissionManager.setPEX(PermissionsEx
+							.getPermissionManager());
 				}
 			}
 		}
 		if (!PermissionManager.isGroupManagerSet()) {
-			final Plugin GMplugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("GroupManager");
+			final Plugin GMplugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("GroupManager");
 			if (GMplugin != null) {
 				if (GMplugin.isEnabled()) {
 					PermissionManager.setGroupManager(GMplugin);
@@ -74,17 +75,19 @@ public class ACPluginListener implements Listener {
 			}
 		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
-			final Plugin Permissions = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("Permissions");
+			final Plugin Permissions = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("Permissions");
 			if (Permissions != null) {
 				if (Permissions.isEnabled()) {
-					PermissionManager.setYetiPermissions(((Permissions) Permissions).getHandler());
+					PermissionManager
+							.setYetiPermissions(((Permissions) Permissions)
+									.getHandler());
 				}
 			}
 		}
 		if (!PermissionManager.isbPermissionsSet()) {
-			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("bPermissions");
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("bPermissions");
 			if (plugin != null) {
 				String version = plugin.getDescription().getVersion();
 				version = version.replace(".", "");
@@ -99,10 +102,11 @@ public class ACPluginListener implements Listener {
 			}
 		}
 		if (!PermissionManager.isPermissionsBukkitSet()) {
-			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("PermissionsBukkit");
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("PermissionsBukkit");
 			if (plugin != null) {
-				PermissionManager.setPermissionsBukkit((PermissionsPlugin) plugin);
+				PermissionManager
+						.setPermissionsBukkit((PermissionsPlugin) plugin);
 			}
 		}
 		if (Utils.oddItem == null) {
@@ -114,8 +118,8 @@ public class ACPluginListener implements Listener {
 			}
 		}
 		if (!SuperPermissions.isApiSet()) {
-			final Plugin mChatPlugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("mChatSuite");
+			final Plugin mChatPlugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("mChatSuite");
 			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
 				SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
 				Utils.mChatPresent = true;
@@ -123,30 +127,30 @@ public class ACPluginListener implements Listener {
 			}
 		}
 		if (Utils.logBlock == null) {
-			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("LogBlock");
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("LogBlock");
 			if (plugin != null && plugin.isEnabled()) {
 				Utils.setLogBlock(((LogBlock) plugin).getConsumer());
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
 		if (InvisibleWorker.dynmapAPI == null) {
-			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("dynmap");
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("dynmap");
 			if (plugin != null && plugin.isEnabled()) {
 				InvisibleWorker.dynmapAPI = (DynmapAPI) plugin;
 				ACLogger.info("Successfully linked with Dynmap");
 			}
 		}
 		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
-			for (final Plugin plugin : event.getPlugin().getServer().getPluginManager()
-					.getPlugins()) {
+			for (final Plugin plugin : event.getPlugin().getServer()
+					.getPluginManager().getPlugins()) {
 				HelpLister.getInstance().addPlugin(plugin);
 			}
 		}
 		if (!Utils.signExtention) {
-			final Plugin plugin = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("SignExtensions");
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("SignExtensions");
 			if (plugin != null) {
 				Utils.signExtention = true;
 			}

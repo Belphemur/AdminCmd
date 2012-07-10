@@ -68,7 +68,8 @@ public class LocaleManager {
 	 *            of the file
 	 * @param fileName
 	 */
-	public void addLocaleFile(final String name, final ExtendedConfiguration file) {
+	public void addLocaleFile(final String name,
+			final ExtendedConfiguration file) {
 		localesFiles.put(name, file);
 	}
 
@@ -98,7 +99,8 @@ public class LocaleManager {
 		addLocale(key, value, false);
 	}
 
-	public void addLocale(final String key, final String value, final boolean override) {
+	public void addLocale(final String key, final String value,
+			final boolean override) {
 		if (override) {
 			localesFiles.get(PRIMARY_LOCALE).set(key, value);
 		} else {
@@ -119,8 +121,8 @@ public class LocaleManager {
 	 *            if true, override the existing locale
 	 * @return true if everything went fine, else false.
 	 */
-	public boolean addLocale(final String file, final String key, final String value,
-			final boolean override) {
+	public boolean addLocale(final String file, final String key,
+			final String value, final boolean override) {
 		final ExtendedConfiguration conf = localesFiles.get(file);
 		if (conf == null) {
 			return false;
@@ -144,7 +146,8 @@ public class LocaleManager {
 	 *            text of the locale
 	 * @return true if everything went fine, else false.
 	 */
-	public boolean addLocale(final String file, final String key, final String value) {
+	public boolean addLocale(final String file, final String key,
+			final String value) {
 		return addLocale(file, key, value, false);
 	}
 
@@ -184,7 +187,8 @@ public class LocaleManager {
 	 * @param values
 	 * @return
 	 */
-	public String get(final String file, final String key, final Map<String, String> values) {
+	public String get(final String file, final String key,
+			final Map<String, String> values) {
 		if (noMsg) {
 			return null;
 		}
@@ -220,7 +224,8 @@ public class LocaleManager {
 	private String getLocale(final String key) {
 		String result = localesFiles.get(PRIMARY_LOCALE).getString(key);
 		if (result == null || (result != null && result.isEmpty())) {
-			for (final Entry<String, ExtendedConfiguration> e : localesFiles.entrySet()) {
+			for (final Entry<String, ExtendedConfiguration> e : localesFiles
+					.entrySet()) {
 				if (e.getKey().equals(PRIMARY_LOCALE)) {
 					continue;
 				}
@@ -235,7 +240,8 @@ public class LocaleManager {
 
 	}
 
-	private String recursiveReplaceLocale(final String locale, final Map<String, String> values) {
+	private String recursiveReplaceLocale(final String locale,
+			final Map<String, String> values) {
 		String ResultString = null;
 		String result = locale;
 		try {
@@ -258,7 +264,8 @@ public class LocaleManager {
 					try {
 						result = regexMatcher.replaceFirst(replaceValue);
 					} catch (final StringIndexOutOfBoundsException e) {
-						result = regexMatcher.replaceFirst(replaceValue.replaceAll("\\W", ""));
+						result = regexMatcher.replaceFirst(replaceValue
+								.replaceAll("\\W", ""));
 					}
 
 				} else {
@@ -275,7 +282,8 @@ public class LocaleManager {
 		return result;
 	}
 
-	public String get(final String key, final String alias, final String replaceBy) {
+	public String get(final String key, final String alias,
+			final String replaceBy) {
 		if (noMsg) {
 			return null;
 		}

@@ -439,11 +439,11 @@ public class ObjectContainer {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public String toString() {
 		if (obj instanceof List<?>) {
-			return Arrays.toString(((List) obj).toArray(new String[] {}));
+			return Arrays.toString(((List) obj).toArray(new String[]{}));
 		}
 		return obj.toString();
 	}

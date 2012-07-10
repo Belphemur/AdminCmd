@@ -47,14 +47,14 @@ public class ACTpAtSeeListener implements Listener {
 		try {
 			final Player p = player.getHandler();
 			final Block toTp = p.getWorld().getBlockAt(
-					p.getTargetBlock(null, ConfigEnum.RTPSEE.getInt()).getLocation().add(0, 1, 0));
+					p.getTargetBlock(null, ConfigEnum.RTPSEE.getInt())
+							.getLocation().add(0, 1, 0));
 			if (toTp.getTypeId() == 0) {
 				final Location loc = toTp.getLocation().clone();
 				loc.setPitch(p.getLocation().getPitch());
 				loc.setYaw(p.getLocation().getYaw());
 				Utils.teleportWithChunkCheck(p, loc);
 			}
-		} catch (final Exception e) {
-		}
+		} catch (final Exception e) {}
 	}
 }

@@ -38,8 +38,8 @@ public class ACBlockListener implements Listener {
 	public void onBlockPlace(final BlockPlaceEvent event) {
 		final Player player = event.getPlayer();
 		final Block block = event.getBlock();
-		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(player,
-				String.valueOf(block.getTypeId()));
+		final MaterialContainer mat = ACHelper.getInstance().checkMaterial(
+				player, String.valueOf(block.getTypeId()));
 		if (!ACHelper.getInstance().inBlackListBlock(player, mat)) {
 			return;
 		}

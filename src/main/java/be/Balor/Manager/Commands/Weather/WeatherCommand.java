@@ -28,6 +28,7 @@ public abstract class WeatherCommand extends CoreCommand {
  */
 	public WeatherCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.weather.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.weather.*");
 	}
 }

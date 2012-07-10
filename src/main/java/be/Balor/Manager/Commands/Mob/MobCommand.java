@@ -28,6 +28,7 @@ public abstract class MobCommand extends CoreCommand {
  */
 	public MobCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.mob.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.mob.*");
 	}
 }

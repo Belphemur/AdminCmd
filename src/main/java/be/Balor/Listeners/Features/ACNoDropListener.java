@@ -122,8 +122,10 @@ public class ACNoDropListener implements Listener {
 		 */
 		public PlayerInv(final Player p) {
 			final EntityPlayer player = ((CraftPlayer) p).getHandle();
-			items = Arrays.copyOf(player.inventory.items, player.inventory.items.length);
-			armor = Arrays.copyOf(player.inventory.armor, player.inventory.armor.length);
+			items = Arrays.copyOf(player.inventory.items,
+					player.inventory.items.length);
+			armor = Arrays.copyOf(player.inventory.armor,
+					player.inventory.armor.length);
 		}
 
 		public void setInventory(final Player p) {

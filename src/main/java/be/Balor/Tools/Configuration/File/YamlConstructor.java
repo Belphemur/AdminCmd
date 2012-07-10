@@ -40,13 +40,17 @@ class YamlConstructor extends Constructor {
 		@Override
 		public Object construct(final Node node) {
 			if (node.isTwoStepsConstruction()) {
-				throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
+				throw new YAMLException(
+						"Unexpected referential mapping structure. Node: "
+								+ node);
 			}
 
-			final Map<Object, Object> raw = (Map<Object, Object>) super.construct(node);
+			final Map<Object, Object> raw = (Map<Object, Object>) super
+					.construct(node);
 
 			if (raw.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
-				final Map<String, Object> typed = new LinkedHashMap<String, Object>(raw.size());
+				final Map<String, Object> typed = new LinkedHashMap<String, Object>(
+						raw.size());
 				for (final Map.Entry<Object, Object> entry : raw.entrySet()) {
 					typed.put(entry.getKey().toString(), entry.getValue());
 				}
@@ -63,7 +67,8 @@ class YamlConstructor extends Constructor {
 
 		@Override
 		public void construct2ndStep(final Node node, final Object object) {
-			throw new YAMLException("Unexpected referential mapping structure. Node: " + node);
+			throw new YAMLException(
+					"Unexpected referential mapping structure. Node: " + node);
 		}
 	}
 
@@ -72,8 +77,9 @@ class YamlConstructor extends Constructor {
 		public Object construct(final Node node) {
 			final String val = (String) constructScalar((ScalarNode) node);
 			final String[] split = val.split(";");
-			return new TpRequest(ACPluginManager.getServer().getPlayer(split[0]), ACPluginManager
-					.getServer().getPlayer(split[1]));
+			return new TpRequest(ACPluginManager.getServer()
+					.getPlayer(split[0]), ACPluginManager.getServer()
+					.getPlayer(split[1]));
 		}
 	}
 
@@ -84,7 +90,8 @@ class YamlConstructor extends Constructor {
 	 */
 	public YamlConstructor(final ClassLoader classLoader) {
 		super();
-		this.yamlConstructors.put(new Tag("!tpRequest"), new ConstructTpRequest());
+		this.yamlConstructors.put(new Tag("!tpRequest"),
+				new ConstructTpRequest());
 		this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());
 		this.pluginClassLoader = classLoader;
 	}
@@ -100,7 +107,8 @@ class YamlConstructor extends Constructor {
 	 * .snakeyaml.nodes.Node)
 	 */
 	@Override
-	protected Class<?> getClassForName(final String name) throws ClassNotFoundException {
+	protected Class<?> getClassForName(final String name)
+			throws ClassNotFoundException {
 		return Class.forName(name, true, pluginClassLoader);
 	}
 }

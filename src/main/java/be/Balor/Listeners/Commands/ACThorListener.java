@@ -39,8 +39,11 @@ public class ACThorListener implements Listener {
 		if (!player.hasPower(Type.THOR)) {
 			return;
 		}
-		player.getHandler().getWorld()
-				.strikeLightning(player.getHandler().getTargetBlock(null, 600).getLocation());
+		player.getHandler()
+				.getWorld()
+				.strikeLightning(
+						player.getHandler().getTargetBlock(null, 600)
+								.getLocation());
 
 	}
 }

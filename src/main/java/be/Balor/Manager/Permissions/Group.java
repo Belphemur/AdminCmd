@@ -42,7 +42,8 @@ public class Group implements Comparable<Group> {
 	 * @param name
 	 */
 	public Group(final String name, final Player p) {
-		this(name, ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY, "defaultImmunityLvl"));
+		this(name, ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY,
+				"defaultImmunityLvl"));
 	}
 
 	/**

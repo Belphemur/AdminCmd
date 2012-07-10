@@ -50,7 +50,8 @@ public abstract class ACPlayer {
 		this.name = name;
 		final int prime = 41;
 		int result = 7;
-		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+		result = prime * result
+				+ ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
 		handler = ACPluginManager.getServer().getPlayer(this.name);
 	}
@@ -59,7 +60,8 @@ public abstract class ACPlayer {
 		this.name = p.getName();
 		final int prime = 41;
 		int result = 7;
-		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+		result = prime * result
+				+ ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
 		handler = p;
 	}
@@ -353,8 +355,9 @@ public abstract class ACPlayer {
 	 */
 	public long getCurrentPlayedTime() {
 		if (this.isOnline()) {
-			return (getInformation("totalTime").getLong(0) + System.currentTimeMillis() - getInformation(
-					"lastConnection").getLong(System.currentTimeMillis()));
+			return (getInformation("totalTime").getLong(0)
+					+ System.currentTimeMillis() - getInformation(
+						"lastConnection").getLong(System.currentTimeMillis()));
 		} else {
 			return getInformation("totalTime").getLong(0);
 		}

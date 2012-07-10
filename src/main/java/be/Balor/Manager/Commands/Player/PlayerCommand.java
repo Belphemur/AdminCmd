@@ -28,7 +28,8 @@ public abstract class PlayerCommand extends CoreCommand {
  */
 	public PlayerCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.player.*");
 	}
 
 	/**
@@ -37,6 +38,7 @@ public abstract class PlayerCommand extends CoreCommand {
 	 */
 	public PlayerCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.player.*");
 	}
 }

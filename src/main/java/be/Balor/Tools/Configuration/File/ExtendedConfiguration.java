@@ -78,16 +78,18 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 		try {
 			config.load(file);
-		} catch (final FileNotFoundException ex) {
-		} catch (final IOException ex) {
+		} catch (final FileNotFoundException ex) {} catch (final IOException ex) {
 			Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
 		} catch (final InvalidConfigurationException ex) {
 			if (ex.getCause() instanceof YAMLException) {
-				ACLogger.severe("Config file " + file + " isn't valid! " + ex.getCause());
-			} else if ((ex.getCause() == null) || (ex.getCause() instanceof ClassCastException)) {
+				ACLogger.severe("Config file " + file + " isn't valid! "
+						+ ex.getCause());
+			} else if ((ex.getCause() == null)
+					|| (ex.getCause() instanceof ClassCastException)) {
 				ACLogger.severe("Config file " + file + " isn't valid!");
 			} else {
-				ACLogger.severe("Cannot load " + file + ": " + ex.getCause().getClass(), ex);
+				ACLogger.severe("Cannot load " + file + ": "
+						+ ex.getCause().getClass(), ex);
 			}
 		}
 
@@ -95,7 +97,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	}
 
 	public static void setClassLoader(final ClassLoader loader) {
-		yaml = new Yaml(new YamlConstructor(loader), yamlRepresenter, yamlOptions);
+		yaml = new Yaml(new YamlConstructor(loader), yamlRepresenter,
+				yamlOptions);
 	}
 
 	@Override
@@ -143,7 +146,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			final Object value = entry.getValue();
 
 			if (value instanceof Map<?, ?>) {
-				convertMapsToSections((Map<Object, Object>) value, section.createSection(key));
+				convertMapsToSections((Map<Object, Object>) value,
+						section.createSection(key));
 			} else {
 				section.set(key, value);
 			}
@@ -158,7 +162,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 * .String)
 	 */
 	@Override
-	public void loadFromString(String contents) throws InvalidConfigurationException {
+	public void loadFromString(String contents)
+			throws InvalidConfigurationException {
 		lock.lock();
 		try {
 
@@ -167,27 +172,33 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			}
 
 			Map<Object, Object> input = null;
-			contents = contents.replaceAll("\uFFFD", "?").replaceAll("\t", "    ");
+			contents = contents.replaceAll("\uFFFD", "?").replaceAll("\t",
+					"    ");
 			try {
 				input = (Map<Object, Object>) yaml.load(contents);
 			} catch (final ScannerException e) {
 				if (e.getContextMark() == null) {
-					ACLogger.severe("File : " + file
-							+ "\n You have to correct the error manualy in the file.", e);
+					ACLogger.severe(
+							"File : "
+									+ file
+									+ "\n You have to correct the error manualy in the file.",
+							e);
 					corrupted = true;
 					return;
 				}
 				removeLineFromFile(e.getContextMark().getLine());
-				ACLogger.info("File : " + file + "\n" + e.toString() + "\nLINE "
-						+ (e.getContextMark().getLine() + 1) + " DELETED");
+				ACLogger.info("File : " + file + "\n" + e.toString()
+						+ "\nLINE " + (e.getContextMark().getLine() + 1)
+						+ " DELETED");
 				try {
 					load(file);
-				} catch (final FileNotFoundException e1) {
-				} catch (final IOException e1) {
-				}
+				} catch (final FileNotFoundException e1) {} catch (final IOException e1) {}
 			} catch (final ParserException e) {
-				ACLogger.severe("File : " + file
-						+ "\n You have to correct the error manualy in the file.", e);
+				ACLogger.severe(
+						"File : "
+								+ file
+								+ "\n You have to correct the error manualy in the file.",
+						e);
 				corrupted = true;
 				return;
 
@@ -198,7 +209,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			}
 
 			final int size = (input == null) ? 0 : input.size();
-			final Map<String, Object> result = new LinkedHashMap<String, Object>(size);
+			final Map<String, Object> result = new LinkedHashMap<String, Object>(
+					size);
 
 			if (size > 0) {
 				for (final Map.Entry<Object, Object> entry : input.entrySet()) {
@@ -263,7 +275,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	 * @throws IOException
 	 * @throws InvalidConfigurationException
 	 */
-	public void reload() throws FileNotFoundException, IOException, InvalidConfigurationException {
+	public void reload() throws FileNotFoundException, IOException,
+			InvalidConfigurationException {
 		load(file);
 	}
 
@@ -276,8 +289,10 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 			// Construct the new file that will later be renamed to the original
 			// filename.
 			final File tempFile = File.createTempFile(file.getName(), null);
-			br = new BufferedReader(new UnicodeReader(new FileInputStream(file)));
-			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8"));
+			br = new BufferedReader(
+					new UnicodeReader(new FileInputStream(file)));
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(
+					tempFile), "UTF-8"));
 
 			String line = null;
 
@@ -320,8 +335,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 				if (br != null) {
 					br.close();
 				}
-			} catch (final IOException e) {
-			}
+			} catch (final IOException e) {}
 		}
 	}
 

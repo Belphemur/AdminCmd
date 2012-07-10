@@ -62,24 +62,29 @@ public class TerminalCommandManager {
 	 */
 	public void setPerm(final AbstractAdminCmdPlugin plugin) {
 		this.perm = plugin.getPermissionLinker();
-		final File scripts = FileManager.getInstance()
-				.getInnerFile("scripts.yml", "scripts", false);
+		final File scripts = FileManager.getInstance().getInnerFile(
+				"scripts.yml", "scripts", false);
 		final File workingDir = scripts.getParentFile();
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(scripts);
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows")) {
 			for (final String cmdName : conf.getKeys(false)) {
-				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
+				toAdd = new WindowsTerminalCommand(cmdName,
+						conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec." + cmdName));
+				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec."
+						+ cmdName));
 				commands.put(cmdName, toAdd);
 
 			}
 		} else {
 			for (final String cmdName : conf.getKeys(false)) {
-				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
-						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec." + cmdName));
+				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName
+						+ ".exec"), conf.getString(cmdName + ".args"),
+						workingDir);
+				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec."
+						+ cmdName));
 				commands.put(cmdName, toAdd);
 			}
 		}
@@ -95,26 +100,31 @@ public class TerminalCommandManager {
 	}
 
 	public void reloadScripts() {
-		final File scripts = FileManager.getInstance()
-				.getInnerFile("scripts.yml", "scripts", false);
+		final File scripts = FileManager.getInstance().getInnerFile(
+				"scripts.yml", "scripts", false);
 		final File workingDir = scripts.getParentFile();
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(scripts);
 		commands.clear();
 		TerminalCommand toAdd;
 		if (System.getProperty("os.name").contains("Windows")) {
 			for (final String cmdName : conf.getKeys(false)) {
-				toAdd = new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
+				toAdd = new WindowsTerminalCommand(cmdName,
+						conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly("admincmd.server.exec." + cmdName,
+				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly(
+						"admincmd.server.exec." + cmdName,
 						"admincmd.server.exec.*"));
 				commands.put(cmdName, toAdd);
 
 			}
 		} else {
 			for (final String cmdName : conf.getKeys(false)) {
-				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"),
-						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly("admincmd.server.exec." + cmdName,
+				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName
+						+ ".exec"), conf.getString(cmdName + ".args"),
+						workingDir);
+				toAdd.setBukkitPerm(PermissionLinker.addOnTheFly(
+						"admincmd.server.exec." + cmdName,
 						"admincmd.server.exec.*"));
 				commands.put(cmdName, toAdd);
 			}
@@ -129,32 +139,37 @@ public class TerminalCommandManager {
 	 * @return
 	 * @throws CommandNotFound
 	 */
-	public boolean execute(final CommandSender sender, final String cmdName, final boolean reload)
-			throws CommandNotFound {
+	public boolean execute(final CommandSender sender, final String cmdName,
+			final boolean reload) throws CommandNotFound {
 		TerminalCommand cmd = commands.get(cmdName);
 		if (cmd == null || reload) {
-			final File scripts = FileManager.getInstance().getInnerFile("scripts.yml", "scripts",
-					false);
+			final File scripts = FileManager.getInstance().getInnerFile(
+					"scripts.yml", "scripts", false);
 			final File workingDir = scripts.getParentFile();
-			final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(scripts);
+			final ExtendedConfiguration conf = ExtendedConfiguration
+					.loadConfiguration(scripts);
 			if (conf.get(cmdName) == null) {
 				throw new CommandNotFound(cmdName + " is not registered");
 			}
 			if (System.getProperty("os.name").contains("Windows")) {
 				commands.put(
 						cmdName,
-						new WindowsTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
+						new WindowsTerminalCommand(cmdName, conf
+								.getString(cmdName + ".exec"), conf
 								.getString(cmdName + ".args"), workingDir));
 				cmd = commands.get(cmdName);
-				cmd.setBukkitPerm(PermissionLinker.addOnTheFly("admincmd.server.exec." + cmdName,
+				cmd.setBukkitPerm(PermissionLinker.addOnTheFly(
+						"admincmd.server.exec." + cmdName,
 						"admincmd.server.exec.*"));
 			} else {
 				commands.put(
 						cmdName,
-						new UnixTerminalCommand(cmdName, conf.getString(cmdName + ".exec"), conf
-								.getString(cmdName + ".args"), workingDir));
+						new UnixTerminalCommand(cmdName, conf.getString(cmdName
+								+ ".exec"), conf.getString(cmdName + ".args"),
+								workingDir));
 				cmd = commands.get(cmdName);
-				cmd.setBukkitPerm(PermissionLinker.addOnTheFly("admincmd.server.exec." + cmdName,
+				cmd.setBukkitPerm(PermissionLinker.addOnTheFly(
+						"admincmd.server.exec." + cmdName,
 						"admincmd.server.exec.*"));
 			}
 		}

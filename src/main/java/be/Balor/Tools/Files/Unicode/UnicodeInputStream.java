@@ -52,7 +52,8 @@ public class UnicodeInputStream extends InputStream {
 			try {
 				init();
 			} catch (final IOException ex) {
-				final IllegalStateException ise = new IllegalStateException("Init method failed.");
+				final IllegalStateException ise = new IllegalStateException(
+						"Init method failed.");
 				ise.initCause(ise);
 				throw ise;
 			}
@@ -73,15 +74,16 @@ public class UnicodeInputStream extends InputStream {
 		int n, unread;
 		n = internalIn.read(bom, 0, bom.length);
 
-		if ((bom[0] == (byte) 0x00) && (bom[1] == (byte) 0x00) && (bom[2] == (byte) 0xFE)
-				&& (bom[3] == (byte) 0xFF)) {
+		if ((bom[0] == (byte) 0x00) && (bom[1] == (byte) 0x00)
+				&& (bom[2] == (byte) 0xFE) && (bom[3] == (byte) 0xFF)) {
 			encoding = "UTF-32BE";
 			unread = n - 4;
-		} else if ((bom[0] == (byte) 0xFF) && (bom[1] == (byte) 0xFE) && (bom[2] == (byte) 0x00)
-				&& (bom[3] == (byte) 0x00)) {
+		} else if ((bom[0] == (byte) 0xFF) && (bom[1] == (byte) 0xFE)
+				&& (bom[2] == (byte) 0x00) && (bom[3] == (byte) 0x00)) {
 			encoding = "UTF-32LE";
 			unread = n - 4;
-		} else if ((bom[0] == (byte) 0xEF) && (bom[1] == (byte) 0xBB) && (bom[2] == (byte) 0xBF)) {
+		} else if ((bom[0] == (byte) 0xEF) && (bom[1] == (byte) 0xBB)
+				&& (bom[2] == (byte) 0xBF)) {
 			encoding = "UTF-8";
 			unread = n - 3;
 		} else if ((bom[0] == (byte) 0xFE) && (bom[1] == (byte) 0xFF)) {

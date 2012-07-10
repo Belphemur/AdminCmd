@@ -35,8 +35,8 @@ import com.avaje.ebean.EbeanServer;
  * 
  */
 public class TestPlugin extends JavaPlugin {
-	private final PluginDescriptionFile pdf = new PluginDescriptionFile("test", "0.1",
-			"be.Blor.JUnit.Egg");
+	private final PluginDescriptionFile pdf = new PluginDescriptionFile("test",
+			"0.1", "be.Blor.JUnit.Egg");
 
 	/*
 	 * (non-Javadoc)
@@ -46,8 +46,8 @@ public class TestPlugin extends JavaPlugin {
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label,
-			final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command,
+			final String label, final String[] args) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -200,7 +200,8 @@ public class TestPlugin extends JavaPlugin {
 	 * java.lang.String)
 	 */
 	@Override
-	public ChunkGenerator getDefaultWorldGenerator(final String worldName, final String id) {
+	public ChunkGenerator getDefaultWorldGenerator(final String worldName,
+			final String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -91,8 +91,8 @@ public abstract class CoreCommand {
 	 * @param parent
 	 *            PermParent used to register the permission of the command
 	 */
-	public CoreCommand(final String name, final String perm, final String plugin,
-			final PermParent parent) {
+	public CoreCommand(final String name, final String perm,
+			final String plugin, final PermParent parent) {
 		this.permNode = perm;
 		this.cmdName = name;
 		this.plugin = ACPluginManager.getPluginInstance(plugin);
@@ -160,14 +160,17 @@ public abstract class CoreCommand {
 				permParent.addChild(child);
 				bukkitPerm = child.getBukkitPerm();
 				if (other) {
-					permParent.addChild(new PermChild(permNode + ".other", bukkitDefault));
+					permParent.addChild(new PermChild(permNode + ".other",
+							bukkitDefault));
 				}
 
 				return;
 			}
-			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
+			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode,
+					bukkitDefault);
 			if (other) {
-				plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
+				plugin.getPermissionLinker().addPermChild(permNode + ".other",
+						bukkitDefault);
 			}
 		}
 	}
@@ -190,12 +193,14 @@ public abstract class CoreCommand {
 	 */
 	public void initializeCommand() throws CommandNotFound, CommandAlreadyExist {
 		if ((pluginCommand = plugin.getCommand(cmdName)) == null) {
-			throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated");
+			throw new CommandNotFound(cmdName
+					+ " is not loaded in bukkit. Command deactivated");
 		}
 
 		if (pluginCommand.getAliases().isEmpty()) {
-			throw new CommandAlreadyExist(cmdName
-					+ " has all his alias already registered. Command deactivated");
+			throw new CommandAlreadyExist(
+					cmdName
+							+ " has all his alias already registered. Command deactivated");
 		}
 	}
 
@@ -220,8 +225,8 @@ public abstract class CoreCommand {
 	 */
 	@Override
 	public String toString() {
-		return "CoreCommand [permNode=" + permNode + ", cmdName=" + cmdName + ", plugin=" + plugin
-				+ ", permParent=" + permParent + "]";
+		return "CoreCommand [permNode=" + permNode + ", cmdName=" + cmdName
+				+ ", plugin=" + plugin + ", permParent=" + permParent + "]";
 	}
 
 	/*
@@ -233,11 +238,14 @@ public abstract class CoreCommand {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((bukkitDefault == null) ? 0 : bukkitDefault.hashCode());
+		result = prime * result
+				+ ((bukkitDefault == null) ? 0 : bukkitDefault.hashCode());
 		result = prime * result + ((cmdName == null) ? 0 : cmdName.hashCode());
 		result = prime * result + (other ? 1231 : 1237);
-		result = prime * result + ((permNode == null) ? 0 : permNode.hashCode());
-		result = prime * result + ((permParent == null) ? 0 : permParent.hashCode());
+		result = prime * result
+				+ ((permNode == null) ? 0 : permNode.hashCode());
+		result = prime * result
+				+ ((permParent == null) ? 0 : permParent.hashCode());
 		result = prime * result + ((plugin == null) ? 0 : plugin.hashCode());
 		return result;
 	}

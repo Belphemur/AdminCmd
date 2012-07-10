@@ -68,19 +68,21 @@ public class PlayerLocation extends PlayerCommand {
 				loc = target.getLocation();
 				msg = Utils.getPlayerName(target) + " is";
 			} catch (final NullPointerException ex) {
-				Utils.sI18n(sender, "playerNotFound", "player", args.getString(0));
+				Utils.sI18n(sender, "playerNotFound", "player",
+						args.getString(0));
 				return;
 			}
 		}
-		sender.sendMessage(loc.getBlockX() + " X, " + loc.getBlockZ() + " Z, " + loc.getBlockY()
-				+ " Y");
-		final String facing[] = { "S", "SW", "W", "NW", "N", "NE", "E", "SE" };
+		sender.sendMessage(loc.getBlockX() + " X, " + loc.getBlockZ() + " Z, "
+				+ loc.getBlockY() + " Y");
+		final String facing[] = {"S", "SW", "W", "NW", "N", "NE", "E", "SE"};
 		double yaw = ((loc.getYaw() + 22.5) % 360);
 		if (yaw < 0) {
 			yaw += 360;
 		}
-		sender.sendMessage(msg + " facing " + ChatColor.RED + facing[(int) (yaw / 45)]
-				+ ChatColor.WHITE + " in World " + ChatColor.AQUA + target.getWorld().getName());
+		sender.sendMessage(msg + " facing " + ChatColor.RED
+				+ facing[(int) (yaw / 45)] + ChatColor.WHITE + " in World "
+				+ ChatColor.AQUA + target.getWorld().getName());
 
 	}
 

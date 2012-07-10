@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @authors Balor, Lathanael
- *
+ * 
  */
 public class Spawn extends SpawnCommand {
 
@@ -50,13 +50,14 @@ public class Spawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length >= 1 && Utils.isPlayer(sender, true)) {
 			final ACWorld w = ACWorld.getWorld(args.getString(0));
 			final Player target = (Player) sender;
@@ -67,18 +68,20 @@ public class Spawn extends SpawnCommand {
 			}
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 					ACHelper.getInstance().getCoreInstance(),
-					new DelayedTeleport(target, sender, w), ConfigEnum.TP_DELAY.getLong());
+					new DelayedTeleport(target, sender, w),
+					ConfigEnum.TP_DELAY.getLong());
 		} else if (Utils.isPlayer(sender, true)) {
 			final Player target = (Player) sender;
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 					ACHelper.getInstance().getCoreInstance(),
-					new DelayedTeleport(target, sender, null), ConfigEnum.TP_DELAY.getLong());
+					new DelayedTeleport(target, sender, null),
+					ConfigEnum.TP_DELAY.getLong());
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
@@ -94,7 +97,8 @@ public class Spawn extends SpawnCommand {
 		protected CommandSender sender;
 		protected ACWorld world;
 
-		public DelayedTeleport(final Player target, final CommandSender sender, final ACWorld world) {
+		public DelayedTeleport(final Player target, final CommandSender sender,
+				final ACWorld world) {
 			this.target = target;
 			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.sender = sender;

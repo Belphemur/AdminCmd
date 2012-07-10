@@ -51,7 +51,8 @@ public class Repair extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player player = Utils.getUser(sender, args, permNode);
 			if (player == null) {
@@ -60,7 +61,8 @@ public class Repair extends ItemCommand {
 			final ItemStack item = player.getItemInHand();
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
-			if (item != null && ACHelper.getInstance().repairable(item.getTypeId())) {
+			if (item != null
+					&& ACHelper.getInstance().repairable(item.getTypeId())) {
 				ACPluginManager.scheduleSyncTask(new Runnable() {
 					@Override
 					public void run() {

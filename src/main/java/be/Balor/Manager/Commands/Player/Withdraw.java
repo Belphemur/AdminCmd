@@ -51,7 +51,8 @@ public class Withdraw extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (args.length == 0) {

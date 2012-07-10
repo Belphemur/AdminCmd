@@ -51,7 +51,8 @@ public class MobLimit extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		ACWorld world = null;
 		int limit;
 		if (args.hasFlag('m')) {
@@ -79,7 +80,8 @@ public class MobLimit extends MobCommand {
 				if (args.getString(1).equals("none")) {
 					replace.put("world", world.getName());
 					replace.put("mob", name);
-					ACWorld.getWorld(world.getName()).removeMobLimit("Craft" + ct.getName());
+					ACWorld.getWorld(world.getName()).removeMobLimit(
+							"Craft" + ct.getName());
 					Utils.sI18n(sender, "mobLimitRemovedPerMob", replace);
 				} else {
 					Utils.sI18n(sender, "NaN", "number", args.getString(1));

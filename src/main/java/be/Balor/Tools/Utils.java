@@ -98,7 +98,7 @@ import de.diddiz.LogBlock.Consumer;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public final class Utils {
 	public static OddItemBase oddItem = null;
@@ -111,18 +111,21 @@ public final class Utils {
 	public final static long dayInMillis = hourInMillis * 24;
 	public final static int secInTick = 20;
 	private static final Character delimiter = '&';
-	public static final Pattern regexColorParser = Pattern.compile(delimiter + "[A-Fa-f]|"
-			+ delimiter + "1[0-5]|" + delimiter + "[0-9]|" + delimiter + "[L-Ol-o]");
+	public static final Pattern regexColorParser = Pattern.compile(delimiter
+			+ "[A-Fa-f]|" + delimiter + "1[0-5]|" + delimiter + "[0-9]|"
+			+ delimiter + "[L-Ol-o]");
 	public static final Pattern REGEX_IP_V4 = Pattern
 			.compile("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b");
 	public static final Pattern REGEX_INACCURATE_IP_V4 = Pattern
 			.compile("\\b([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\b");
-	public static final Pattern NUMBERS = Pattern.compile("(\\d*[.|\\.]?\\d+)" + "|(\\d+)");
-	public static final Pattern TIMES = Pattern.compile("month(s?)|day(s?)|hour(s?)|week(s?)");
+	public static final Pattern NUMBERS = Pattern.compile("(\\d*[.|\\.]?\\d+)"
+			+ "|(\\d+)");
+	public static final Pattern TIMES = Pattern
+			.compile("month(s?)|day(s?)|hour(s?)|week(s?)");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
-	 *
+	 * 
 	 */
 	/**
 	 *
@@ -136,34 +139,41 @@ public final class Utils {
 		LocaleManager.getInstance().addLocale(key, value);
 	}
 
-	public static void addLocale(final String key, final String value, final boolean override) {
+	public static void addLocale(final String key, final String value,
+			final boolean override) {
 		LocaleManager.getInstance().addLocale(key, value, true);
 	}
 
 	/**
 	 * Add the player in the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
 	public static void addPlayerInOnlineList(final Player player) {
-		((CraftServer) player.getServer()).getHandle().sendAll(
-				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, true, 1000));
+		((CraftServer) player.getServer()).getHandle()
+				.sendAll(
+						new Packet201PlayerInfo(((CraftPlayer) player)
+								.getHandle().listName, true, 1000));
 	}
 
-	public static void addPlayerInOnlineList(final Player toAdd, final Player fromPlayer) {
-		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
-				((CraftPlayer) toAdd).getHandle().listName, true, 1000));
+	public static void addPlayerInOnlineList(final Player toAdd,
+			final Player fromPlayer) {
+		((CraftPlayer) fromPlayer).getHandle().netServerHandler
+				.sendPacket(new Packet201PlayerInfo(((CraftPlayer) toAdd)
+						.getHandle().listName, true, 1000));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T[] Arrays_copyOfRange(final T[] original, final int start, final int end) {
+	public static <T> T[] Arrays_copyOfRange(final T[] original,
+			final int start, final int end) {
 		if (original.length >= start && 0 <= start) {
 			if (start <= end) {
 				final int length = end - start;
-				final int copyLength = Math.min(length, original.length - start);
-				final T[] copy = (T[]) Array.newInstance(original.getClass().getComponentType(),
-						length);
+				final int copyLength = Math
+						.min(length, original.length - start);
+				final T[] copy = (T[]) Array.newInstance(original.getClass()
+						.getComponentType(), length);
 
 				System.arraycopy(original, start, copy, 0, copyLength);
 				return copy;
@@ -175,7 +185,7 @@ public final class Utils {
 
 	/**
 	 * Broadcast a fakeJoin message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake join.
 	 */
@@ -184,14 +194,15 @@ public final class Utils {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ Reader.getEventMessage(EventType.JOIN));
 		} else {
-			Utils.broadcastMessage(I18n("joinMessage", "name", getPlayerName(player, null, true)));
+			Utils.broadcastMessage(I18n("joinMessage", "name",
+					getPlayerName(player, null, true)));
 		}
 
 	}
 
 	/**
 	 * Broadcast a fakeQuit message for the selected player
-	 *
+	 * 
 	 * @param player
 	 *            that fake quit.
 	 */
@@ -200,14 +211,15 @@ public final class Utils {
 			Utils.broadcastMessage(getPlayerName(player, null, true) + " "
 					+ Reader.getEventMessage(EventType.QUIT));
 		} else {
-			Utils.broadcastMessage(I18n("quitMessage", "name", getPlayerName(player, null, true)));
+			Utils.broadcastMessage(I18n("quitMessage", "name",
+					getPlayerName(player, null, true)));
 		}
 
 	}
 
 	/**
 	 * Broadcast message to every user since the bukkit one is bugged
-	 *
+	 * 
 	 * @param message
 	 */
 	public static void broadcastMessage(final String message) {
@@ -223,7 +235,7 @@ public final class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param args
@@ -233,9 +245,10 @@ public final class Utils {
 	 * @return true if the sender have the right to execute the command, else
 	 *         false with displaying an error message to the sender.
 	 */
-	public static boolean checkImmunity(final CommandSender sender, final CommandArgs args,
-			final int index) {
-		final Player target = sender.getServer().getPlayer(args.getString(index));
+	public static boolean checkImmunity(final CommandSender sender,
+			final CommandArgs args, final int index) {
+		final Player target = sender.getServer().getPlayer(
+				args.getString(index));
 		if (target != null) {
 			if (checkImmunity(sender, target)) {
 				return true;
@@ -248,8 +261,8 @@ public final class Utils {
 				return true;
 			}
 			final Player player = (Player) sender;
-			final int pLvl = ACHelper.getInstance().getLimit(player, Type.Limit.IMMUNITY,
-					"defaultImmunityLvl");
+			final int pLvl = ACHelper.getInstance().getLimit(player,
+					Type.Limit.IMMUNITY, "defaultImmunityLvl");
 			final int tLvl = ACPlayer.getPlayer(args.getString(index))
 					.getInformation("immunityLvl").getInt(0);
 			return checkLvl(player, pLvl, tLvl);
@@ -260,7 +273,7 @@ public final class Utils {
 	/**
 	 * Check the if the player have the right to execute the command on the
 	 * other player
-	 *
+	 * 
 	 * @param sender
 	 *            the one who want to do the command
 	 * @param target
@@ -268,30 +281,32 @@ public final class Utils {
 	 * @return true if the sender have the right to execute the command, else
 	 *         false.
 	 */
-	public static boolean checkImmunity(final CommandSender sender, final Player target) {
+	public static boolean checkImmunity(final CommandSender sender,
+			final Player target) {
 		if (preImmunityCheck(sender, target)) {
 			return true;
 		}
 		final Player player = (Player) sender;
-		final int pLvl = ACHelper.getInstance().getLimit(player, Type.Limit.IMMUNITY,
-				"defaultImmunityLvl");
-		final int tLvl = ACHelper.getInstance().getLimit(target, Type.Limit.IMMUNITY,
-				"defaultImmunityLvl");
+		final int pLvl = ACHelper.getInstance().getLimit(player,
+				Type.Limit.IMMUNITY, "defaultImmunityLvl");
+		final int tLvl = ACHelper.getInstance().getLimit(target,
+				Type.Limit.IMMUNITY, "defaultImmunityLvl");
 
 		return checkLvl(player, pLvl, tLvl);
 	}
 
-	public static boolean checkImmunity(final CommandSender sender, final ACPlayer target) {
+	public static boolean checkImmunity(final CommandSender sender,
+			final ACPlayer target) {
 		if (preImmunityCheck(sender, target)) {
 			return true;
 		}
 		final Player player = (Player) sender;
-		final int pLvl = ACHelper.getInstance().getLimit(player, Type.Limit.IMMUNITY,
-				"defaultImmunityLvl");
+		final int pLvl = ACHelper.getInstance().getLimit(player,
+				Type.Limit.IMMUNITY, "defaultImmunityLvl");
 		int tLvl = 0;
 		if (target.isOnline()) {
-			tLvl = ACHelper.getInstance().getLimit(target.getHandler(), Type.Limit.IMMUNITY,
-					"defaultImmunityLvl");
+			tLvl = ACHelper.getInstance().getLimit(target.getHandler(),
+					Type.Limit.IMMUNITY, "defaultImmunityLvl");
 		} else {
 			tLvl = target.getInformation("immunityLvl").getInt(0);
 		}
@@ -299,9 +314,10 @@ public final class Utils {
 
 	}
 
-	private static boolean checkLvl(final Player player, final int pLvl, final int tLvl) {
-		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl", false)
-				&& pLvl != tLvl) {
+	private static boolean checkLvl(final Player player, final int pLvl,
+			final int tLvl) {
+		if (PermissionManager.hasPerm(player, "admincmd.immunityLvl.samelvl",
+				false) && pLvl != tLvl) {
 			return false;
 		}
 		if (pLvl >= tLvl) {
@@ -311,7 +327,8 @@ public final class Utils {
 		}
 	}
 
-	private static boolean preImmunityCheck(final CommandSender sender, final Object target) {
+	private static boolean preImmunityCheck(final CommandSender sender,
+			final Object target) {
 		if (!ConfigEnum.IMMUNITY.getBoolean()) {
 			return true;
 		}
@@ -326,13 +343,14 @@ public final class Utils {
 
 	/**
 	 * Translate the id or name to a material
-	 *
+	 * 
 	 * @param mat
 	 * @return Material
 	 * @throws InvalidInputException
 	 *             if the input is invalid
 	 */
-	public static MaterialContainer checkMaterial(final String mat) throws InvalidInputException {
+	public static MaterialContainer checkMaterial(final String mat)
+			throws InvalidInputException {
 		MaterialContainer mc = new MaterialContainer();
 		try {
 			if (oddItem != null) {
@@ -341,8 +359,7 @@ public final class Utils {
 					return new MaterialContainer(is);
 				}
 			}
-		} catch (final Exception e) {
-		}
+		} catch (final Exception e) {}
 		String[] info = new String[2];
 		if (mat.contains(":")) {
 			info = mat.split(":");
@@ -363,7 +380,7 @@ public final class Utils {
 
 	/**
 	 * Parse a string and replace the color in it
-	 *
+	 * 
 	 * @author Speedy64
 	 * @param toParse
 	 * @return
@@ -375,10 +392,13 @@ public final class Utils {
 			String result = toParse;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
-				int colorint = Integer.parseInt(ResultString.substring(1, 2), 16);
+				int colorint = Integer.parseInt(ResultString.substring(1, 2),
+						16);
 				if (ResultString.length() > 1) {
-					if (colorint == 1 && ResultString.substring(2).matches("[012345]")) {
-						colorint = colorint * 10 + Integer.parseInt(ResultString.substring(2));
+					if (colorint == 1
+							&& ResultString.substring(2).matches("[012345]")) {
+						colorint = colorint * 10
+								+ Integer.parseInt(ResultString.substring(2));
 					}
 				}
 				result = regexMatcher.replaceFirst(ChatColor.getByChar(
@@ -393,13 +413,13 @@ public final class Utils {
 
 	/**
 	 * Because water and lava are fluid, using another algo to "delete"
-	 *
+	 * 
 	 * @param block
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> drainFluid(final String playername, final Block block,
-			final int radius) {
+	private static Stack<BlockRemanence> drainFluid(final String playername,
+			final Block block, final int radius) {
 		final Stack<BlockRemanence> blocks = new Stack<BlockRemanence>();
 		final Stack<SimplifiedLocation> processQueue = new Stack<SimplifiedLocation>();
 		BlockRemanence current = null;
@@ -410,17 +430,21 @@ public final class Utils {
 		for (int x = block.getX() - 2; x <= block.getX() + 2; x++) {
 			for (int z = block.getZ() - 2; z <= block.getZ() + 2; z++) {
 				for (int y = block.getY() - 2; y <= block.getY() + 2; y++) {
-					final SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+					final SimplifiedLocation newPos = new SimplifiedLocation(w,
+							x, y, z);
 					if (isFluid(newPos) && !visited.contains(newPos)) {
 						visited.add(newPos);
 						processQueue.push(newPos);
-						current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
+						current = IBlockRemanenceFactory.FACTORY
+								.createBlockRemanence(newPos);
 						blocks.push(current);
 						blocksCache.push(current);
 						if (blocksCache.size() == MAX_BLOCKS) {
-							ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-									ACHelper.getInstance().getCoreInstance(),
-									new ReplaceBlockTask(blocksCache));
+							ACPluginManager.getScheduler()
+									.scheduleSyncDelayedTask(
+											ACHelper.getInstance()
+													.getCoreInstance(),
+											new ReplaceBlockTask(blocksCache));
 						}
 					}
 
@@ -432,17 +456,22 @@ public final class Utils {
 			for (int y = loc.getBlockY() - 1; y <= loc.getBlockY() + 1; y++) {
 				for (int x = loc.getBlockX() - 1; x <= loc.getBlockX() + 1; x++) {
 					for (int z = loc.getBlockZ() - 1; z <= loc.getBlockZ() + 1; z++) {
-						final SimplifiedLocation newPos = new SimplifiedLocation(w, x, y, z);
+						final SimplifiedLocation newPos = new SimplifiedLocation(
+								w, x, y, z);
 						if (!visited.contains(newPos) && isFluid(newPos)
 								&& start.distance(newPos) < radius) {
 							processQueue.push(newPos);
-							current = IBlockRemanenceFactory.FACTORY.createBlockRemanence(newPos);
+							current = IBlockRemanenceFactory.FACTORY
+									.createBlockRemanence(newPos);
 							blocks.push(current);
 							blocksCache.push(current);
 							if (blocksCache.size() == MAX_BLOCKS) {
-								ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-										ACHelper.getInstance().getCoreInstance(),
-										new ReplaceBlockTask(blocksCache));
+								ACPluginManager.getScheduler()
+										.scheduleSyncDelayedTask(
+												ACHelper.getInstance()
+														.getCoreInstance(),
+												new ReplaceBlockTask(
+														blocksCache));
 							}
 							visited.add(newPos);
 						}
@@ -452,13 +481,14 @@ public final class Utils {
 			}
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache));
+				ACHelper.getInstance().getCoreInstance(),
+				new ReplaceBlockTask(blocksCache));
 		return blocks;
 	}
 
 	/**
 	 * Get the ACPlayer, useful when working with only the AC user informations
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -469,8 +499,9 @@ public final class Utils {
 	 * @throws ActionNotPermitedException
 	 * @throws PlayerNotFound
 	 */
-	public static ACPlayer getACPlayer(final CommandSender sender, final CommandArgs args,
-			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
+	public static ACPlayer getACPlayer(final CommandSender sender,
+			final CommandArgs args, final String permNode)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUser(sender, args, permNode, 0, false);
 		ACPlayer actarget;
 		if (target == null) {
@@ -480,7 +511,8 @@ public final class Utils {
 			}
 			actarget = ACPlayer.getPlayer(args.getString(0));
 			if (actarget instanceof EmptyPlayer) {
-				Utils.sI18n(sender, "playerNotFound", "player", actarget.getName());
+				Utils.sI18n(sender, "playerNotFound", "player",
+						actarget.getName());
 				return null;
 			}
 			if (!Utils.checkImmunity(sender, args, 0)) {
@@ -496,18 +528,20 @@ public final class Utils {
 		return actarget;
 	}
 
-	public static double getDistanceSquared(final Player player1, final Player player2) {
+	public static double getDistanceSquared(final Player player1,
+			final Player player2) {
 		if (!player1.getWorld().getName().equals(player2.getWorld().getName())) {
 			return Double.MAX_VALUE;
 		}
 		final Location loc1 = player1.getLocation();
 		final Location loc2 = player2.getLocation();
-		return Math.pow((loc1.getX() - loc2.getX()), 2) + Math.pow((loc1.getZ() - loc2.getZ()), 2);
+		return Math.pow((loc1.getX() - loc2.getX()), 2)
+				+ Math.pow((loc1.getZ() - loc2.getZ()), 2);
 	}
 
 	/**
 	 * Get the elapsed time since the start.
-	 *
+	 * 
 	 * @param start
 	 * @return
 	 */
@@ -517,7 +551,7 @@ public final class Utils {
 
 	/**
 	 * Get the home by checking the colon
-	 *
+	 * 
 	 * @param sender
 	 *            who send the command
 	 * @param toParse
@@ -538,8 +572,7 @@ public final class Utils {
 					return null;
 				}
 				result.home = split[1];
-			} catch (final ArrayIndexOutOfBoundsException e) {
-			}
+			} catch (final ArrayIndexOutOfBoundsException e) {}
 			if (isPlayer(sender, false)) {
 				final Player p = (Player) sender;
 				if (!p.getName().equals(result.player)
@@ -565,7 +598,7 @@ public final class Utils {
 
 	/**
 	 * Shortcut to online players.
-	 *
+	 * 
 	 * @return
 	 */
 	public static List<Player> getOnlinePlayers() {
@@ -585,7 +618,8 @@ public final class Utils {
 					found = player;
 					delta = curDelta;
 				} else {
-					curDelta = player.getDisplayName().length() - lowerName.length();
+					curDelta = player.getDisplayName().length()
+							- lowerName.length();
 					if (curDelta < delta) {
 						found = player;
 						delta = curDelta;
@@ -606,33 +640,36 @@ public final class Utils {
 
 	/**
 	 * For compatibility
-	 *
+	 * 
 	 * @param player
 	 * @param sender
 	 * @param withPrefix
 	 * @return
 	 */
-	public static String getPlayerName(final Player player, final CommandSender sender,
-			final boolean withPrefix) {
+	public static String getPlayerName(final Player player,
+			final CommandSender sender, final boolean withPrefix) {
 		return getPlayerName(player, sender);
 	}
 
 	/**
 	 * Get the complete player name with all prefix
-	 *
+	 * 
 	 * @param player
 	 *            player to get the name
 	 * @param sender
 	 *            sender that want the name
 	 * @return the complete player name with prefix
 	 */
-	public static String getPlayerName(final Player player, final CommandSender sender) {
+	public static String getPlayerName(final Player player,
+			final CommandSender sender) {
 		assert (player != null);
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
 			final String prefix = colorParser(getPrefix(player, sender));
-			final String suffix = colorParser(PermissionManager.getSuffix(player));
+			final String suffix = colorParser(PermissionManager
+					.getSuffix(player));
 			if (ConfigEnum.DNAME.getBoolean()) {
-				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
+				return prefix + player.getDisplayName() + suffix
+						+ ChatColor.YELLOW;
 			}
 
 			return prefix + player.getName() + suffix + ChatColor.YELLOW;
@@ -647,17 +684,19 @@ public final class Utils {
 
 	/**
 	 * Get the prefix of the player, by checking the right the sender have
-	 *
+	 * 
 	 * @param player
 	 * @return
 	 */
-	private static String getPrefix(final Player player, final CommandSender sender) {
+	private static String getPrefix(final Player player,
+			final CommandSender sender) {
 		boolean isInv = false;
 		String prefixstring = "";
 		String statusPrefix = "";
 		if (sender != null) {
 			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player)
-					&& PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
+					&& PermissionManager.hasPerm(sender,
+							"admincmd.invisible.cansee", false);
 		}
 		if (isInv) {
 			statusPrefix = Utils.I18n("invTitle");
@@ -676,7 +715,7 @@ public final class Utils {
 
 	/**
 	 * Get the real time from the server
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param gmt
 	 *            The wanted GMT offset
@@ -691,14 +730,15 @@ public final class Utils {
 		return serverTime;
 	}
 
-	public static Player getUser(final CommandSender sender, final CommandArgs args,
-			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
+	public static Player getUser(final CommandSender sender,
+			final CommandArgs args, final String permNode)
+			throws PlayerNotFound, ActionNotPermitedException {
 		return getUser(sender, args, permNode, 0, true);
 	}
 
 	/**
 	 * Get the user and check who launched the command.
-	 *
+	 * 
 	 * @param sender
 	 * @param args
 	 * @param permNode
@@ -708,8 +748,9 @@ public final class Utils {
 	 * @throws PlayerNotFound
 	 * @throws ActionNotPermitedException
 	 */
-	public static Player getUser(final CommandSender sender, final CommandArgs args,
-			final String permNode, final int index, final boolean errorMsg) throws PlayerNotFound,
+	public static Player getUser(final CommandSender sender,
+			final CommandArgs args, final String permNode, final int index,
+			final boolean errorMsg) throws PlayerNotFound,
 			ActionNotPermitedException {
 		Player target = null;
 		if (args.length >= index + 1) {
@@ -717,14 +758,17 @@ public final class Utils {
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
+				} else if (PermissionManager.hasPerm(sender, permNode
+						+ ".other", false)) {
 					if (checkImmunity(sender, target)) {
 						return target;
 					} else {
-						throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
+						throw new PlayerNotFound(Utils.I18n("insufficientLvl"),
+								sender);
 					}
 				} else {
-					throw new ActionNotPermitedException(sender, permNode + ".other");
+					throw new ActionNotPermitedException(sender, permNode
+							+ ".other");
 				}
 			}
 		} else if (isPlayer(sender, false)) {
@@ -736,7 +780,8 @@ public final class Utils {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", args.getString(index));
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+					sender);
 		}
 		return target;
 
@@ -745,7 +790,7 @@ public final class Utils {
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -758,15 +803,16 @@ public final class Utils {
 	 * @throws ActionNotPermitedException
 	 *             if the player don't have the permission
 	 */
-	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
-			final String permNode) throws PlayerNotFound, ActionNotPermitedException {
+	public static Player getUserParam(final CommandSender sender,
+			final CommandArgs args, final String permNode)
+			throws PlayerNotFound, ActionNotPermitedException {
 		return getUserParam(sender, args, permNode, true);
 	}
 
 	/**
 	 * Get the user using the -P param as indicating the userName and check who
 	 * launched the command.
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @param args
@@ -781,8 +827,9 @@ public final class Utils {
 	 * @throws ActionNotPermitedException
 	 *             if the player don't have the permission
 	 */
-	public static Player getUserParam(final CommandSender sender, final CommandArgs args,
-			final String permNode, final boolean errorMsg) throws PlayerNotFound,
+	public static Player getUserParam(final CommandSender sender,
+			final CommandArgs args, final String permNode,
+			final boolean errorMsg) throws PlayerNotFound,
 			ActionNotPermitedException {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
@@ -791,14 +838,17 @@ public final class Utils {
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
+				} else if (PermissionManager.hasPerm(sender, permNode
+						+ ".other", false)) {
 					if (checkImmunity(sender, target)) {
 						return target;
 					} else {
-						throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
+						throw new PlayerNotFound(Utils.I18n("insufficientLvl"),
+								sender);
 					}
 				} else {
-					throw new ActionNotPermitedException(sender, permNode + ".other");
+					throw new ActionNotPermitedException(sender, permNode
+							+ ".other");
 				}
 			}
 		} else if (isPlayer(sender, false)) {
@@ -810,7 +860,8 @@ public final class Utils {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", playerName);
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace), sender);
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+					sender);
 		}
 		return target;
 	}
@@ -819,11 +870,13 @@ public final class Utils {
 		return I18n(key, null);
 	}
 
-	public static String I18n(final String key, final Map<String, String> replace) {
+	public static String I18n(final String key,
+			final Map<String, String> replace) {
 		return LocaleManager.getInstance().get(key, replace);
 	}
 
-	public static String I18n(final String key, final String alias, final String toReplace) {
+	public static String I18n(final String key, final String alias,
+			final String toReplace) {
 		return LocaleManager.getInstance().get(key, alias, toReplace);
 	}
 
@@ -831,17 +884,19 @@ public final class Utils {
 		return I18n(key.getKey(), null);
 	}
 
-	public static String I18n(final LocaleHelper key, final Map<String, String> replace) {
+	public static String I18n(final LocaleHelper key,
+			final Map<String, String> replace) {
 		return LocaleManager.getInstance().get(key.getKey(), replace);
 	}
 
-	public static String I18n(final LocaleHelper key, final String alias, final String toReplace) {
+	public static String I18n(final LocaleHelper key, final String alias,
+			final String toReplace) {
 		return LocaleManager.getInstance().get(key.getKey(), alias, toReplace);
 	}
 
 	/**
 	 * Check if the block is a fluid.
-	 *
+	 * 
 	 * @param loc
 	 * @return
 	 */
@@ -850,13 +905,15 @@ public final class Utils {
 		if (b == null) {
 			return false;
 		}
-		return b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
-				|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA;
+		return b.getType() == Material.WATER
+				|| b.getType() == Material.STATIONARY_WATER
+				|| b.getType() == Material.LAVA
+				|| b.getType() == Material.STATIONARY_LAVA;
 	}
 
 	/**
 	 * Check if the command sender is a Player
-	 *
+	 * 
 	 * @return
 	 */
 	public static boolean isPlayer(final CommandSender sender) {
@@ -866,7 +923,7 @@ public final class Utils {
 	/**
 	 * Checks if the command sender is a Player. Sends the sender an error
 	 * message if he is not a player.
-	 *
+	 * 
 	 * @param sender
 	 * @param msg
 	 *            - If {@code true} an error message will be sent.
@@ -885,25 +942,30 @@ public final class Utils {
 
 	/**
 	 * Remove the player from the online list (TAB key)
-	 *
+	 * 
 	 * @param player
 	 *            player to remove
 	 */
 	public static void removePlayerFromOnlineList(final Player player) {
 		((CraftServer) player.getServer()).getHandle().sendAll(
-				new Packet201PlayerInfo(((CraftPlayer) player).getHandle().listName, false, 9999));
+				new Packet201PlayerInfo(
+						((CraftPlayer) player).getHandle().listName, false,
+						9999));
 	}
 
-	public static void removePlayerFromOnlineList(final Player toRemove, final Player fromPlayer) {
+	public static void removePlayerFromOnlineList(final Player toRemove,
+			final Player fromPlayer) {
 		if (toRemove == null || fromPlayer == null) {
 			return;
 		}
-		((CraftPlayer) fromPlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(
-				((CraftPlayer) toRemove).getHandle().listName, false, 9999));
+		((CraftPlayer) fromPlayer).getHandle().netServerHandler
+				.sendPacket(new Packet201PlayerInfo(((CraftPlayer) toRemove)
+						.getHandle().listName, false, 9999));
 	}
 
-	public static Integer replaceBlockByAir(final CommandSender sender, final CommandArgs args,
-			final List<Material> mat, final int defaultRadius) {
+	public static Integer replaceBlockByAir(final CommandSender sender,
+			final CommandArgs args, final List<Material> mat,
+			final int defaultRadius) {
 		if (Utils.isPlayer(sender)) {
 			int radius = defaultRadius;
 			if (args.length >= 1) {
@@ -940,7 +1002,7 @@ public final class Utils {
 	/**
 	 * Replace the time and date to the format given in the config with the
 	 * corresponding date and time
-	 *
+	 * 
 	 * @author Lathanael
 	 * @param
 	 * @return timeFormatted
@@ -954,11 +1016,13 @@ public final class Utils {
 		return timeFormatted;
 	}
 
-	public static String replaceDateAndTimeFormat(final ACPlayer player, final Type.Whois type) {
+	public static String replaceDateAndTimeFormat(final ACPlayer player,
+			final Type.Whois type) {
 		final String format = ConfigEnum.DT_FORMAT.getString();
 		final SimpleDateFormat formater = new SimpleDateFormat(format);
 		String lastlogin = "";
-		lastlogin = formater.format(new Date(player.getInformation(type.getVal()).getLong(1)));
+		lastlogin = formater.format(new Date(player.getInformation(
+				type.getVal()).getLong(1)));
 		if (lastlogin == formater.format(new Date(1))) {
 			return null;
 		}
@@ -967,14 +1031,15 @@ public final class Utils {
 
 	/**
 	 * Replace all the chosen material in the cuboid region.
-	 *
+	 * 
 	 * @param mat
 	 * @param block
 	 * @param radius
 	 * @return
 	 */
-	private static Stack<BlockRemanence> replaceInCuboid(final String playername,
-			final List<Material> mat, final Block block, final int radius) {
+	private static Stack<BlockRemanence> replaceInCuboid(
+			final String playername, final List<Material> mat,
+			final Block block, final int radius) {
 		final Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
 		final Stack<BlockRemanence> blocksCache = new SynchronizedStack<BlockRemanence>();
 		final int limitX = block.getX() + radius;
@@ -982,13 +1047,15 @@ public final class Utils {
 		final int limitZ = block.getZ() + radius;
 		BlockRemanence br = null;
 		final Semaphore sema = new Semaphore(0, true);
-		final List<SimplifiedLocation> okBlocks = new ArrayList<SimplifiedLocation>(50);
-		ACPluginManager.scheduleSyncTask(new CheckingBlockTask(sema, okBlocks, block, radius,
-				limitY, limitX, limitZ, mat));
+		final List<SimplifiedLocation> okBlocks = new ArrayList<SimplifiedLocation>(
+				50);
+		ACPluginManager.scheduleSyncTask(new CheckingBlockTask(sema, okBlocks,
+				block, radius, limitY, limitX, limitZ, mat));
 		try {
 			sema.acquire();
 		} catch (final InterruptedException e) {
-			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with acquiring the semaphore", e);
+			DebugLog.INSTANCE.log(Level.SEVERE,
+					"Problem with acquiring the semaphore", e);
 		}
 		for (final SimplifiedLocation loc : okBlocks) {
 			br = IBlockRemanenceFactory.FACTORY.createBlockRemanence(loc);
@@ -1001,17 +1068,19 @@ public final class Utils {
 			}
 		}
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(), new ReplaceBlockTask(blocksCache), 1);
+				ACHelper.getInstance().getCoreInstance(),
+				new ReplaceBlockTask(blocksCache), 1);
 		return blocks;
 	}
 
-	public static void sendMessage(final CommandSender sender, final CommandSender player,
-			final String key) {
+	public static void sendMessage(final CommandSender sender,
+			final CommandSender player, final String key) {
 		sendMessage(sender, player, key, null);
 	}
 
-	public static void sendMessage(final CommandSender sender, final CommandSender player,
-			final String key, final Map<String, String> replace) {
+	public static void sendMessage(final CommandSender sender,
+			final CommandSender player, final String key,
+			final Map<String, String> replace) {
 		final String msg = I18n(key, replace);
 		if (msg != null && !msg.isEmpty()) {
 			if (!sender.equals(player)) {
@@ -1033,98 +1102,111 @@ public final class Utils {
 
 	/**
 	 * Heal or refill the FoodBar of the selected player.
-	 *
+	 * 
 	 * @param name
 	 * @return
 	 * @throws ActionNotPermitedException
 	 * @throws PlayerNotFound
 	 */
-	public static boolean setPlayerHealth(final CommandSender sender, final CommandArgs name,
-			final Type.Health toDo) throws PlayerNotFound, ActionNotPermitedException {
+	public static boolean setPlayerHealth(final CommandSender sender,
+			final CommandArgs name, final Type.Health toDo)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = getUser(sender, name, "admincmd.player." + toDo);
 		if (target == null) {
 			return false;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", getPlayerName(target));
-		final PluginManager pluginManager = ACPluginManager.getServer().getPluginManager();
+		final PluginManager pluginManager = ACPluginManager.getServer()
+				.getPluginManager();
 		final String newStateLocale = LocaleHelper.NEW_STATE.getLocale();
-		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER.getLocale(replace);
+		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER
+				.getLocale(replace);
 		switch (toDo) {
-		case HEAL:
-			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(target, 20,
-					RegainReason.CUSTOM);
-			pluginManager.callEvent(heal);
-			if (!heal.isCancelled()) {
-				target.setHealth(heal.getAmount());
-				target.setFireTicks(0);
-				final String msg = newStateLocale + LocaleHelper.HEALED.getLocale();
-				target.sendMessage(msg);
-				if (!target.equals(sender)) {
-					final String newStateMsg = newStatePlayerLocale
+			case HEAL :
+				final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(
+						target, 20, RegainReason.CUSTOM);
+				pluginManager.callEvent(heal);
+				if (!heal.isCancelled()) {
+					target.setHealth(heal.getAmount());
+					target.setFireTicks(0);
+					final String msg = newStateLocale
 							+ LocaleHelper.HEALED.getLocale();
-					sender.sendMessage(newStateMsg);
-				}
-			}
-			break;
-		case FEED:
-			final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(target, 20);
-			pluginManager.callEvent(foodEvent);
-			if (!foodEvent.isCancelled()) {
-				target.setFoodLevel(foodEvent.getFoodLevel());
-				final String msg = newStateLocale + LocaleHelper.FEEDED.getLocale();
-				target.sendMessage(msg);
-				if (!target.equals(sender)) {
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.FEEDED.getLocale();
-					sender.sendMessage(newStateMsg);
-				}
-			}
-			break;
-		case KILL:
-			if (target.equals(sender)) {
-				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target,
-						EntityDamageEvent.DamageCause.SUICIDE, Short.MAX_VALUE);
-				pluginManager.callEvent(dmgEvent);
-				if (!dmgEvent.isCancelled()) {
-					target.damage(Short.MAX_VALUE);
-					LocaleHelper.SUICIDE.sendLocale(target);
-				}
-			} else {
-				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target,
-						EntityDamageEvent.DamageCause.CUSTOM, Short.MAX_VALUE);
-				pluginManager.callEvent(dmgEvent);
-				if (!dmgEvent.isCancelled()) {
-					if (isPlayer(sender, false)) {
-						target.damage(dmgEvent.getDamage(), (Player) sender);
-					} else {
-						target.damage(dmgEvent.getDamage());
-					}
-					final String msg = newStateLocale + LocaleHelper.KILLED.getLocale();
 					target.sendMessage(msg);
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.KILLED.getLocale();
-					sender.sendMessage(newStateMsg);
-
+					if (!target.equals(sender)) {
+						final String newStateMsg = newStatePlayerLocale
+								+ LocaleHelper.HEALED.getLocale();
+						sender.sendMessage(newStateMsg);
+					}
 				}
-			}
-			if (logBlock != null) {
-				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender : null, target);
-			}
-			break;
-		default:
-			return false;
+				break;
+			case FEED :
+				final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(
+						target, 20);
+				pluginManager.callEvent(foodEvent);
+				if (!foodEvent.isCancelled()) {
+					target.setFoodLevel(foodEvent.getFoodLevel());
+					final String msg = newStateLocale
+							+ LocaleHelper.FEEDED.getLocale();
+					target.sendMessage(msg);
+					if (!target.equals(sender)) {
+						final String newStateMsg = newStatePlayerLocale
+								+ LocaleHelper.FEEDED.getLocale();
+						sender.sendMessage(newStateMsg);
+					}
+				}
+				break;
+			case KILL :
+				if (target.equals(sender)) {
+					final EntityDamageEvent dmgEvent = new EntityDamageEvent(
+							target, EntityDamageEvent.DamageCause.SUICIDE,
+							Short.MAX_VALUE);
+					pluginManager.callEvent(dmgEvent);
+					if (!dmgEvent.isCancelled()) {
+						target.damage(Short.MAX_VALUE);
+						LocaleHelper.SUICIDE.sendLocale(target);
+					}
+				} else {
+					final EntityDamageEvent dmgEvent = new EntityDamageEvent(
+							target, EntityDamageEvent.DamageCause.CUSTOM,
+							Short.MAX_VALUE);
+					pluginManager.callEvent(dmgEvent);
+					if (!dmgEvent.isCancelled()) {
+						if (isPlayer(sender, false)) {
+							target.damage(dmgEvent.getDamage(), (Player) sender);
+						} else {
+							target.damage(dmgEvent.getDamage());
+						}
+						final String msg = newStateLocale
+								+ LocaleHelper.KILLED.getLocale();
+						target.sendMessage(msg);
+						final String newStateMsg = newStatePlayerLocale
+								+ LocaleHelper.KILLED.getLocale();
+						sender.sendMessage(newStateMsg);
+
+					}
+				}
+				if (logBlock != null) {
+					logBlock.queueKill(isPlayer(sender, false)
+							? (Player) sender
+							: null, target);
+				}
+				break;
+			default :
+				return false;
 		}
 		return true;
 	}
 
-	private static void setTime(final CommandSender sender, final World w, final String arg) {
+	private static void setTime(final CommandSender sender, final World w,
+			final String arg) {
 		final long curtime = w.getTime();
 		long newtime = curtime - (curtime % 24000);
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("type", arg);
 		replace.put("world", w.getName());
-		if (ACWorld.getWorld(w.getName()).getInformation(Type.TIME_FREEZED.toString()).isNull()) {
+		if (ACWorld.getWorld(w.getName())
+				.getInformation(Type.TIME_FREEZED.toString()).isNull()) {
 			if (arg.equalsIgnoreCase("day")) {
 				newtime += 0;
 			} else if (arg.equalsIgnoreCase("night")) {
@@ -1134,9 +1216,12 @@ public final class Utils {
 			} else if (arg.equalsIgnoreCase("dawn")) {
 				newtime += 23000;
 			} else if (arg.equalsIgnoreCase("pause")) {
-				final int taskId = ACPluginManager.getScheduler().scheduleSyncRepeatingTask(
-						ACHelper.getInstance().getCoreInstance(), new SetTimeTask(w), 0, 5L);
-				ACWorld.getWorld(w.getName()).setInformation(Type.TIME_FREEZED.toString(), taskId);
+				final int taskId = ACPluginManager.getScheduler()
+						.scheduleSyncRepeatingTask(
+								ACHelper.getInstance().getCoreInstance(),
+								new SetTimeTask(w), 0, 5L);
+				ACWorld.getWorld(w.getName()).setInformation(
+						Type.TIME_FREEZED.toString(), taskId);
 			} else {
 				// if not a constant, use raw time
 				try {
@@ -1151,7 +1236,8 @@ public final class Utils {
 			final int removeTask = ACWorld.getWorld(w.getName())
 					.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
 			ACPluginManager.getScheduler().cancelTask(removeTask);
-			ACWorld.getWorld(w.getName()).removeInformation(Type.TIME_FREEZED.toString());
+			ACWorld.getWorld(w.getName()).removeInformation(
+					Type.TIME_FREEZED.toString());
 			sI18n(sender, "timeSet", replace);
 		} else {
 			sI18n(sender, "timePaused", "world", w.getName());
@@ -1172,8 +1258,8 @@ public final class Utils {
 		}
 	}
 
-	public static void sI18n(final CommandSender sender, final String key, final String alias,
-			final String toReplace) {
+	public static void sI18n(final CommandSender sender, final String key,
+			final String alias, final String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
 		if (locale != null && !locale.isEmpty()) {
 			sender.sendMessage(locale);
@@ -1184,16 +1270,16 @@ public final class Utils {
 		sI18n(sender, key, null);
 	}
 
-	public static void sI18n(final CommandSender sender, final LocaleHelper key,
-			final Map<String, String> replace) {
+	public static void sI18n(final CommandSender sender,
+			final LocaleHelper key, final Map<String, String> replace) {
 		final String locale = I18n(key, replace);
 		if (locale != null && !locale.isEmpty()) {
 			sender.sendMessage(locale);
 		}
 	}
 
-	public static void sI18n(final CommandSender sender, final LocaleHelper key,
-			final String alias, final String toReplace) {
+	public static void sI18n(final CommandSender sender,
+			final LocaleHelper key, final String alias, final String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
 		if (locale != null && !locale.isEmpty()) {
 			sender.sendMessage(locale);
@@ -1212,8 +1298,10 @@ public final class Utils {
 		final Collection<String> list = Utils.getPlayerList(p);
 		String connected = Joiner.on(", ").join(list);
 		if (connected.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
-			final String tmp = connected.substring(0, ACMinecraftFontWidthCalculator.chatwidth);
-			final String tmp2 = connected.substring(ACMinecraftFontWidthCalculator.chatwidth,
+			final String tmp = connected.substring(0,
+					ACMinecraftFontWidthCalculator.chatwidth);
+			final String tmp2 = connected.substring(
+					ACMinecraftFontWidthCalculator.chatwidth,
 					connected.length());
 			connected = tmp + "//n" + tmp2;
 		}
@@ -1227,7 +1315,8 @@ public final class Utils {
 		} else {
 			replace.put("lastlogin", date);
 		}
-		final String motd = I18n(locale, replace).replace("\\n", "\n").replace("//n", "\n");
+		final String motd = I18n(locale, replace).replace("\\n", "\n").replace(
+				"//n", "\n");
 		if (motd != null) {
 			for (final String toSend : motd.split("\n")) {
 				if (toSend.isEmpty()) {
@@ -1247,7 +1336,8 @@ public final class Utils {
 	// false then means to show the default handle
 	// ! make sure the player variable IS a player!
 	// set world time to a new value
-	public static boolean timeSet(final CommandSender sender, final String time, final String world) {
+	public static boolean timeSet(final CommandSender sender,
+			final String time, final String world) {
 		if (isPlayer(sender, false) && world == null) {
 			final Player p = (Player) sender;
 			setTime(sender, p.getWorld(), time);
@@ -1269,8 +1359,8 @@ public final class Utils {
 
 	}
 
-	public static void tpP2P(final CommandSender sender, final String nFrom, final String nTo,
-			final Type.Tp type) {
+	public static void tpP2P(final CommandSender sender, final String nFrom,
+			final String nTo, final Type.Tp type) {
 		boolean found = true;
 		final Player pFrom = ACPluginManager.getServer().getPlayer(nFrom);
 		final Player pTo = ACPluginManager.getServer().getPlayer(nTo);
@@ -1313,7 +1403,8 @@ public final class Utils {
 		}
 		if ((type.equals(Type.Tp.TO) || type.equals(Type.Tp.PLAYERS))
 				&& InvisibleWorker.getInstance().hasInvisiblePowers(pTo)
-				&& !PermissionManager.hasPerm(pFrom, "admincmd.invisible.cansee", false)) {
+				&& !PermissionManager.hasPerm(pFrom,
+						"admincmd.invisible.cansee", false)) {
 			replace.put("player", nTo);
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return;
@@ -1325,8 +1416,10 @@ public final class Utils {
 			Utils.sI18n(sender, "playerNotFound", replace);
 			return;
 		}
-		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest", false)) {
-			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.notprequest",
+				false)) {
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo
+					.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
 			Utils.sI18n(sender, "tp", replace);
@@ -1347,7 +1440,8 @@ public final class Utils {
 			Utils.sI18n(pFrom, "tpRequestSend", replace2);
 
 		} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
-				&& ACPlayer.getPlayer(pFrom.getName()).hasPower(Type.TP_REQUEST)) {
+				&& ACPlayer.getPlayer(pFrom.getName())
+						.hasPower(Type.TP_REQUEST)) {
 			ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
 			Utils.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 			final HashMap<String, String> replace2 = new HashMap<String, String>();
@@ -1363,7 +1457,8 @@ public final class Utils {
 			Utils.sI18n(pTo, "tpRequestSend", replace2);
 
 		} else {
-			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo.getLocation()));
+			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo
+					.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
 			Utils.sI18n(sender, "tp", replace);
@@ -1373,7 +1468,7 @@ public final class Utils {
 
 	/**
 	 * Transform a given time to an elapsed time.
-	 *
+	 * 
 	 * @param time
 	 *            in milisec
 	 * @return Long[] containing days, hours, mins and sec.
@@ -1389,14 +1484,16 @@ public final class Utils {
 		diff = diff % minuteInMillis;
 		final long elapsedSeconds = diff / secondInMillis;
 
-		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds };
+		return new Long[]{elapsedDays, elapsedHours, elapsedMinutes,
+				elapsedSeconds};
 	}
 
-	public static boolean weather(final CommandSender sender, final Type.Weather type,
-			final CommandArgs duration) {
+	public static boolean weather(final CommandSender sender,
+			final Type.Weather type, final CommandArgs duration) {
 		if (isPlayer(sender, false)) {
 			if (duration.length >= 2) {
-				final World w = sender.getServer().getWorld(duration.getString(1));
+				final World w = sender.getServer().getWorld(
+						duration.getString(1));
 				if (w == null) {
 					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("world", duration.getString(2));
@@ -1404,9 +1501,11 @@ public final class Utils {
 					return true;
 				}
 				weatherChange(sender, w, type, duration);
-			} else if ((type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR))
+			} else if ((type.equals(Type.Weather.FREEZE) || type
+					.equals(Type.Weather.CLEAR))
 					&& duration.getString(0) != null) {
-				final World w = sender.getServer().getWorld(duration.getString(0));
+				final World w = sender.getServer().getWorld(
+						duration.getString(0));
 				if (w == null) {
 					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("world", duration.getString(0));
@@ -1415,7 +1514,8 @@ public final class Utils {
 				}
 				weatherChange(sender, w, type, duration);
 			} else {
-				weatherChange(sender, ((Player) sender).getWorld(), type, duration);
+				weatherChange(sender, ((Player) sender).getWorld(), type,
+						duration);
 			}
 		} else if (duration.length >= 2) {
 			final World w = sender.getServer().getWorld(duration.getString(1));
@@ -1426,8 +1526,8 @@ public final class Utils {
 				return true;
 			}
 			weatherChange(sender, w, type, duration);
-		} else if ((type.equals(Type.Weather.FREEZE) || type.equals(Type.Weather.CLEAR))
-				&& duration.getString(0) != null) {
+		} else if ((type.equals(Type.Weather.FREEZE) || type
+				.equals(Type.Weather.CLEAR)) && duration.getString(0) != null) {
 			final World w = sender.getServer().getWorld(duration.getString(0));
 			if (w == null) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
@@ -1445,112 +1545,129 @@ public final class Utils {
 		return true;
 	}
 
-	private static void weatherChange(final CommandSender sender, final World w,
-			final Type.Weather type, final CommandArgs duration) {
+	private static void weatherChange(final CommandSender sender,
+			final World w, final Type.Weather type, final CommandArgs duration) {
 		if (!type.equals(Type.Weather.FREEZE)
-				&& !ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
+				&& !ACWorld.getWorld(w.getName())
+						.getInformation(Type.WEATHER_FROZEN.toString())
 						.isNull()) {
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " " + w.getName());
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("wFrozen") + " "
+					+ w.getName());
 			return;
 		}
 		switch (type) {
-		case CLEAR:
-			w.setThundering(false);
-			w.setStorm(false);
-			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " " + w.getName());
-			break;
-		case STORM:
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			if (duration == null || duration.length < 1) {
-				w.setStorm(true);
-				w.setThundering(true);
-				w.setWeatherDuration(12000);
-				replace.put("duration", "10");
-				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
-			} else {
-				try {
+			case CLEAR :
+				w.setThundering(false);
+				w.setStorm(false);
+				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " "
+						+ w.getName());
+				break;
+			case STORM :
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				if (duration == null || duration.length < 1) {
 					w.setStorm(true);
 					w.setThundering(true);
-					final int time = duration.getInt(0);
-					w.setWeatherDuration(time * 1200);
-					replace.put("duration", String.valueOf(time));
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
-				} catch (final NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration.getString(0)
-							+ ") isn't a number!");
-					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replace.put("duration", "10");
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sStorm", replace) + w.getName());
+					sender.sendMessage(ChatColor.GOLD
+							+ Utils.I18n("sStorm", replace) + w.getName());
+				} else {
+					try {
+						w.setStorm(true);
+						w.setThundering(true);
+						final int time = duration.getInt(0);
+						w.setWeatherDuration(time * 1200);
+						replace.put("duration", String.valueOf(time));
+						sender.sendMessage(ChatColor.GOLD
+								+ Utils.I18n("sStorm", replace) + w.getName());
+					} catch (final NumberFormatException e) {
+						sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
+								+ duration.getString(0) + ") isn't a number!");
+						w.setStorm(true);
+						w.setWeatherDuration(12000);
+						replace.put("duration", "10");
+						sender.sendMessage(ChatColor.GOLD
+								+ Utils.I18n("sStorm", replace) + w.getName());
+					}
 				}
-			}
-			break;
-		case FREEZE:
-			if (!ACWorld.getWorld(w.getName()).getInformation(Type.WEATHER_FROZEN.toString())
-					.isNull()) {
-				ACWorld.getWorld(w.getName()).removeInformation(Type.WEATHER_FROZEN.toString());
-				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFrozen") + " "
-						+ ChatColor.WHITE + w.getName());
-			} else {
-				ACWorld.getWorld(w.getName()).setInformation(Type.WEATHER_FROZEN.toString(), true);
-				sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen") + " " + ChatColor.WHITE
-						+ w.getName());
-			}
-			break;
-		case RAIN:
-			final HashMap<String, String> replaceRain = new HashMap<String, String>();
-			if (duration == null || duration.length < 1) {
-				w.setStorm(true);
-				w.setThundering(false);
-				w.setWeatherDuration(12000);
-				replaceRain.put("duration", "10");
-				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain) + w.getName());
-			} else {
-				try {
+				break;
+			case FREEZE :
+				if (!ACWorld.getWorld(w.getName())
+						.getInformation(Type.WEATHER_FROZEN.toString())
+						.isNull()) {
+					ACWorld.getWorld(w.getName()).removeInformation(
+							Type.WEATHER_FROZEN.toString());
+					sender.sendMessage(ChatColor.GREEN
+							+ Utils.I18n("wUnFrozen") + " " + ChatColor.WHITE
+							+ w.getName());
+				} else {
+					ACWorld.getWorld(w.getName()).setInformation(
+							Type.WEATHER_FROZEN.toString(), true);
+					sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen")
+							+ " " + ChatColor.WHITE + w.getName());
+				}
+				break;
+			case RAIN :
+				final HashMap<String, String> replaceRain = new HashMap<String, String>();
+				if (duration == null || duration.length < 1) {
 					w.setStorm(true);
 					w.setThundering(false);
-					final int time = duration.getInt(0);
-					w.setWeatherDuration(time * 1200);
-					replaceRain.put("duration", String.valueOf(time));
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
-							+ w.getName());
-				} catch (final NumberFormatException e) {
-					sender.sendMessage(ChatColor.BLUE + "Sorry, that (" + duration.getString(0)
-							+ ") isn't a number!");
-					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replaceRain.put("duration", "10");
-					sender.sendMessage(ChatColor.GOLD + Utils.I18n("sRain", replaceRain)
-							+ w.getName());
+					sender.sendMessage(ChatColor.GOLD
+							+ Utils.I18n("sRain", replaceRain) + w.getName());
+				} else {
+					try {
+						w.setStorm(true);
+						w.setThundering(false);
+						final int time = duration.getInt(0);
+						w.setWeatherDuration(time * 1200);
+						replaceRain.put("duration", String.valueOf(time));
+						sender.sendMessage(ChatColor.GOLD
+								+ Utils.I18n("sRain", replaceRain)
+								+ w.getName());
+					} catch (final NumberFormatException e) {
+						sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
+								+ duration.getString(0) + ") isn't a number!");
+						w.setStorm(true);
+						w.setWeatherDuration(12000);
+						replaceRain.put("duration", "10");
+						sender.sendMessage(ChatColor.GOLD
+								+ Utils.I18n("sRain", replaceRain)
+								+ w.getName());
+					}
 				}
-			}
-			break;
-		default:
-			break;
+				break;
+			default :
+				break;
 		}
 	}
 
 	/**
 	 * Check if the chunk is loaded before teleport the player to the location
-	 *
+	 * 
 	 * @param player
 	 *            player to be teleported
 	 * @param loc
 	 *            location where the player will be tp
 	 */
-	public static void teleportWithChunkCheck(final Player player, final Location loc) {
+	public static void teleportWithChunkCheck(final Player player,
+			final Location loc) {
 		final CraftServer server = ((CraftServer) player.getServer());
-		final PlayerTeleportEvent event = new ACTeleportEvent(player, player.getLocation(), loc,
-				TeleportCause.PLUGIN);
+		final PlayerTeleportEvent event = new ACTeleportEvent(player,
+				player.getLocation(), loc, TeleportCause.PLUGIN);
 		server.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;
 		}
-		if (!loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4)) {
-			loc.getWorld().loadChunk(loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
+		if (!loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4,
+				loc.getBlockZ() >> 4)) {
+			loc.getWorld()
+					.loadChunk(loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
 		}
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
-		final WorldServer fromWorld = ((CraftWorld) player.getLocation().getWorld()).getHandle();
+		final WorldServer fromWorld = ((CraftWorld) player.getLocation()
+				.getWorld()).getHandle();
 		final WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
 		final EntityPlayer entity = ((CraftPlayer) player).getHandle();
 		// Check if the fromWorld and toWorld are the same.
@@ -1561,24 +1678,27 @@ public final class Utils {
 			if (entity.activeContainer != entity.defaultContainer) {
 				entity.closeInventory();
 			}
-			server.getHandle().moveToWorld(entity, toWorld.dimension, true, loc);
+			server.getHandle()
+					.moveToWorld(entity, toWorld.dimension, true, loc);
 		}
 	}
 
 	/**
 	 * Get the player list ordered by group and alphabetically for the sender
-	 *
+	 * 
 	 * @param sender
 	 *            sender of the command
 	 * @return a Collection containing what to display
 	 */
 	public static Collection<String> getPlayerList(final CommandSender sender) {
 		final List<Player> online = Utils.getOnlinePlayers();
-		final Map<Player, String> players = new TreeMap<Player, String>(new PlayerComparator());
+		final Map<Player, String> players = new TreeMap<Player, String>(
+				new PlayerComparator());
 		for (final Player p : online) {
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p) || ACPlayer.getPlayer(p)
-					.hasPower(Type.FAKEQUIT))
-					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p) || ACPlayer
+					.getPlayer(p).hasPower(Type.FAKEQUIT))
+					&& !PermissionManager.hasPerm(sender,
+							"admincmd.invisible.cansee", false)) {
 				continue;
 			}
 			players.put(p, Utils.getPlayerName(p, sender));
@@ -1592,13 +1712,14 @@ public final class Utils {
 
 	/**
 	 * Send the played time of a player to a another one.
-	 *
+	 * 
 	 * @param playername
 	 *            name of the player that the time belong to
 	 * @param total
 	 *            total time played
 	 */
-	public static Map<String, String> playedTime(final String playername, final long total) {
+	public static Map<String, String> playedTime(final String playername,
+			final long total) {
 		final Long[] time = Utils.transformToElapsedTime(total);
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());
@@ -1612,7 +1733,7 @@ public final class Utils {
 	/**
 	 * Cut in 2 part the given time if it's in the format : <br />
 	 * <blockquote> <X day | X hour | X minute | X week | X month> </blockquote>
-	 *
+	 * 
 	 * @param toParse
 	 *            input to be parsed
 	 * @return a 2 sized String vector with the parsed time if successful, else
@@ -1634,14 +1755,15 @@ public final class Utils {
 	/**
 	 * Parse the given string to get the time in an integer it's in the format : <br />
 	 * <blockquote> <X day | X hour | X minute | X week | X month> </blockquote>
-	 *
+	 * 
 	 * @param toParse
 	 *            time to parse
 	 * @return time parsed, -1 if nothing to be parsed
 	 * @throws NotANumberException
 	 *             if the String to be parsed doesn't have the right format
 	 */
-	public static int timeParser(final String toParse) throws NotANumberException {
+	public static int timeParser(final String toParse)
+			throws NotANumberException {
 		int tmpBan;
 		final String[] tmpTimeParsed = Utils.tempStringParser(toParse);
 		if (tmpTimeParsed[0] == null) {
@@ -1651,13 +1773,15 @@ public final class Utils {
 			try {
 				return Integer.parseInt(tmpTimeParsed[0]);
 			} catch (final NumberFormatException e) {
-				throw new NotANumberException("Time given : " + tmpTimeParsed[0], e);
+				throw new NotANumberException("Time given : "
+						+ tmpTimeParsed[0], e);
 			}
 		} else {
 			try {
 				tmpBan = Integer.parseInt(tmpTimeParsed[0]);
 			} catch (final NumberFormatException e) {
-				throw new NotANumberException("Time given : " + tmpTimeParsed[0], e);
+				throw new NotANumberException("Time given : "
+						+ tmpTimeParsed[0], e);
 			}
 			final String timeMulti = tmpTimeParsed[1];
 			if (timeMulti.contains("month")) {
@@ -1675,7 +1799,8 @@ public final class Utils {
 			if (timeMulti.contains("year")) {
 				return tmpBan * 525600;
 			}
-			throw new NotANumberException("Can't parse the time : " + tmpTimeParsed[1]);
+			throw new NotANumberException("Can't parse the time : "
+					+ tmpTimeParsed[1]);
 		}
 	}
 }

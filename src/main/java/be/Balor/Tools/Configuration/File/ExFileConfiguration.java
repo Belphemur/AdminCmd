@@ -115,8 +115,8 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when file is null.
 	 */
-	public void load(final File file) throws FileNotFoundException, IOException,
-			InvalidConfigurationException {
+	public void load(final File file) throws FileNotFoundException,
+			IOException, InvalidConfigurationException {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}
@@ -146,12 +146,14 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when stream is null.
 	 */
-	public void load(final InputStream stream) throws IOException, InvalidConfigurationException {
+	public void load(final InputStream stream) throws IOException,
+			InvalidConfigurationException {
 		if (stream == null) {
 			throw new IllegalArgumentException("Stream cannot be null");
 		}
 		final StringBuilder builder = new StringBuilder();
-		final BufferedReader input = new BufferedReader(new UnicodeReader(stream, "UTF-8"));
+		final BufferedReader input = new BufferedReader(new UnicodeReader(
+				stream, "UTF-8"));
 
 		try {
 			String line;
@@ -187,8 +189,8 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown when file is null.
 	 */
-	public void load(final String file) throws FileNotFoundException, IOException,
-			InvalidConfigurationException {
+	public void load(final String file) throws FileNotFoundException,
+			IOException, InvalidConfigurationException {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null");
 		}
@@ -213,7 +215,8 @@ public abstract class ExFileConfiguration extends ExMemoryConfiguration {
 	 * @throws IllegalArgumentException
 	 *             Thrown if contents is null.
 	 */
-	public abstract void loadFromString(String contents) throws InvalidConfigurationException;
+	public abstract void loadFromString(String contents)
+			throws InvalidConfigurationException;
 
 	@Override
 	public ExFileConfigurationOptions options() {

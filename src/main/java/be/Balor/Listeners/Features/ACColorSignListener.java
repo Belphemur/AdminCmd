@@ -35,7 +35,8 @@ public class ACColorSignListener implements Listener {
 
 		String parsed = null;
 		String line;
-		if (Utils.signExtention && (line = event.getLine(0)) != null && line.endsWith("Sign]")) {
+		if (Utils.signExtention && (line = event.getLine(0)) != null
+				&& line.endsWith("Sign]")) {
 			return;
 		}
 		for (int i = 0; i < 4; i++) {
@@ -47,7 +48,8 @@ public class ACColorSignListener implements Listener {
 				continue;
 			}
 			if (!havePerm) {
-				Utils.sI18n(event.getPlayer(), "errorNotPerm", "p", "admincmd.coloredsign.create");
+				Utils.sI18n(event.getPlayer(), "errorNotPerm", "p",
+						"admincmd.coloredsign.create");
 				return;
 			}
 			parsed = Utils.colorParser(line);

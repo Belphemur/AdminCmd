@@ -47,11 +47,13 @@ public class RepeatCmd extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		try {
 
 			if (Utils.isPlayer(sender, false)) {
-				ACPlayer.getPlayer(((Player) sender).getName()).executeLastCmd();
+				ACPlayer.getPlayer(((Player) sender).getName())
+						.executeLastCmd();
 			} else {
 				ACPlayer.getPlayer("serverConsole").executeLastCmd();
 			}

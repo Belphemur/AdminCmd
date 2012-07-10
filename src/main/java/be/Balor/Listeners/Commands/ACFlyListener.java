@@ -59,8 +59,8 @@ public class ACFlyListener implements Listener {
 				p.setVelocity(p.getLocation().getDirection().multiply(power));
 			} else if (ConfigEnum.GLIDE.getBoolean()) {
 				final Vector vel = p.getVelocity();
-				vel.add(p.getLocation().getDirection().multiply(ConfigEnum.G_MULT.getFloat())
-						.setY(0));
+				vel.add(p.getLocation().getDirection()
+						.multiply(ConfigEnum.G_MULT.getFloat()).setY(0));
 				if (vel.getY() < ConfigEnum.G_VELCHECK.getFloat()) {
 					vel.setY(ConfigEnum.G_NEWYVEL.getFloat());
 					p.setVelocity(vel);
@@ -93,8 +93,8 @@ public class ACFlyListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
-		if ((ACPlayer.getPlayer(player).hasPower(Type.FLY) || ACPlayer.getPlayer(player).hasPower(
-				Type.FLY_OLD))
+		if ((ACPlayer.getPlayer(player).hasPower(Type.FLY) || ACPlayer
+				.getPlayer(player).hasPower(Type.FLY_OLD))
 				&& event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
 			event.setCancelled(true);
 			event.setDamage(0);
@@ -104,8 +104,8 @@ public class ACFlyListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerKick(final PlayerKickEvent event) {
 		final Player p = event.getPlayer();
-		if ((event.getReason().toLowerCase().contains("flying") || event.getReason().toLowerCase()
-				.contains("floating"))
+		if ((event.getReason().toLowerCase().contains("flying") || event
+				.getReason().toLowerCase().contains("floating"))
 				&& PermissionManager.hasPerm(p, "admincmd.player.fly.allowed")) {
 			event.setCancelled(true);
 		}

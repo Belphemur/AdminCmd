@@ -37,7 +37,8 @@ public class TpRequest {
 	public TpRequest(final Player from, final Player to) {
 		this.from = from;
 		this.to = to;
-		timeOut = System.currentTimeMillis() + (ConfigEnum.TPR_TIMEOUT.getLong() * 60000);
+		timeOut = System.currentTimeMillis()
+				+ (ConfigEnum.TPR_TIMEOUT.getLong() * 60000);
 	}
 
 	public void teleport(final Player sender) {
@@ -85,6 +86,7 @@ public class TpRequest {
 	 */
 	@Override
 	public String toString() {
-		return from == null || to == null ? "false" : from.getName() + ":" + to.getName();
+		return from == null || to == null ? "false" : from.getName() + ":"
+				+ to.getName();
 	}
 }

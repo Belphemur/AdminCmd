@@ -41,16 +41,16 @@ public class ACBanListener implements Listener {
 		IBan ban = ACHelper.getInstance().getBan(player.getName());
 		if (ban == null) {
 			try {
-				ban = ACHelper.getInstance().getBan(event.getAddress().toString().substring(1));
-			} catch (final NoSuchMethodError e) {
-			}
+				ban = ACHelper.getInstance().getBan(
+						event.getAddress().toString().substring(1));
+			} catch (final NoSuchMethodError e) {}
 
 		}
 		if (ban != null) {
 			if (ban instanceof ITempBan) {
 				final ITempBan banTemp = (ITempBan) ban;
-				event.disallow(Result.KICK_BANNED,
-						banTemp.getReason() + " Time left: " + banTemp.timeLeft());
+				event.disallow(Result.KICK_BANNED, banTemp.getReason()
+						+ " Time left: " + banTemp.timeLeft());
 			} else {
 				event.disallow(Result.KICK_BANNED, ban.getReason());
 			}

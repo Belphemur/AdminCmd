@@ -44,8 +44,9 @@ class HelpEntry {
 	 * @param permissions
 	 * @param commandName
 	 */
-	HelpEntry(final String command, final String description, final String detailedDesc,
-			final List<String> permissions, final String commandName) {
+	HelpEntry(final String command, final String description,
+			final String detailedDesc, final List<String> permissions,
+			final String commandName) {
 		super();
 		this.command = command;
 		this.description = description;
@@ -71,8 +72,9 @@ class HelpEntry {
 	@Override
 	public String toString() {
 		return String
-				.format("%s/%s%s : %s%s", ChatColor.GOLD, command, ChatColor.WHITE.toString(),
-						ChatColor.WHITE, description).replace("[", ChatColor.RED + "[")
+				.format("%s/%s%s : %s%s", ChatColor.GOLD, command,
+						ChatColor.WHITE.toString(), ChatColor.WHITE,
+						description).replace("[", ChatColor.RED + "[")
 				.replace("]", "]" + ChatColor.GOLD);
 	}
 
@@ -83,52 +85,65 @@ class HelpEntry {
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
 		int descriptionSize;
 		if (detailed && !detailedDesc.equals("")) {
-			descriptionSize = ACMinecraftFontWidthCalculator.strLen(detailedDesc);
+			descriptionSize = ACMinecraftFontWidthCalculator
+					.strLen(detailedDesc);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-					detailedDesc.replace("[", ChatColor.DARK_RED + "[").replace("]",
-							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+					detailedDesc.replace("[", ChatColor.DARK_RED + "[")
+							.replace("]", "]" + ChatColor.WHITE),
+					sizeRemaining, ' ');
 		} else {
-			descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+			descriptionSize = ACMinecraftFontWidthCalculator
+					.strLen(description);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-					description.replace("[", ChatColor.DARK_RED + "[").replace("]",
-							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+					description.replace("[", ChatColor.DARK_RED + "[").replace(
+							"]", "]" + ChatColor.WHITE), sizeRemaining, ' ');
 		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strChatTrim(line);
-		} else if (sizeRemaining > descriptionSize || !ConfigEnum.H_WRAP.getBoolean()) {
+		} else if (sizeRemaining > descriptionSize
+				|| !ConfigEnum.H_WRAP.getBoolean()) {
 			return line;
 		} else if (ConfigEnum.H_RWRAP.getBoolean()) {
-			return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line, 10, ' ', ':');
+			return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line,
+					10, ' ', ':');
 		} else {
 			return ACMinecraftFontWidthCalculator.strChatWordWrap(line, 10);
 		}
 	}
 
 	public String consoleString(final boolean detailed) {
-		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
+		final int width = System.getProperty("os.name").startsWith("Windows")
+				? 80 - 17
+				: 90;
 		String line = getFormatedCmd();
 
-		final int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
+		final int sizeRemaining = width
+				- ACMinecraftFontWidthCalculator.strLen(line);
 		int descriptionSize;
 		if (detailed && !detailedDesc.equals("")) {
-			descriptionSize = ACMinecraftFontWidthCalculator.strLen(detailedDesc);
+			descriptionSize = ACMinecraftFontWidthCalculator
+					.strLen(detailedDesc);
 			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-					detailedDesc.replace("[", ChatColor.DARK_RED + "[").replace("]",
-							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+					detailedDesc.replace("[", ChatColor.DARK_RED + "[")
+							.replace("]", "]" + ChatColor.WHITE),
+					sizeRemaining, ' ');
 		} else {
-			descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+			descriptionSize = ACMinecraftFontWidthCalculator
+					.strLen(description);
 			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-					description.replace("[", ChatColor.DARK_RED + "[").replace("]",
-							"]" + ChatColor.WHITE), sizeRemaining, ' ');
+					description.replace("[", ChatColor.DARK_RED + "[").replace(
+							"]", "]" + ChatColor.WHITE), sizeRemaining, ' ');
 		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strTrim(line, width);
-		} else if (sizeRemaining > descriptionSize || !ConfigEnum.H_WRAP.getBoolean()) {
+		} else if (sizeRemaining > descriptionSize
+				|| !ConfigEnum.H_WRAP.getBoolean()) {
 			return line;
 		} else if (ConfigEnum.H_RWRAP.getBoolean()) {
-			return ACMinecraftFontWidthCalculator.strWordWrapRight(line, width, 10, ' ', ':');
+			return ACMinecraftFontWidthCalculator.strWordWrapRight(line, width,
+					10, ' ', ':');
 		} else {
 			return ACMinecraftFontWidthCalculator.strWordWrap(line, width, 10);
 		}
@@ -136,9 +151,11 @@ class HelpEntry {
 	}
 
 	private String getFormatedCmd() {
-		return String.format("%s/%s%s : ", ChatColor.GOLD,
-				command.replace("[", ChatColor.DARK_RED + "[").replace("]", "]" + ChatColor.GOLD),
-				ChatColor.WHITE);
+		return String.format(
+				"%s/%s%s : ",
+				ChatColor.GOLD,
+				command.replace("[", ChatColor.DARK_RED + "[").replace("]",
+						"]" + ChatColor.GOLD), ChatColor.WHITE);
 	}
 
 	/**

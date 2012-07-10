@@ -55,7 +55,8 @@ public class Give extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		// which material?
 		MaterialContainer mat = null;
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
@@ -79,11 +80,14 @@ public class Give extends ItemCommand {
 			} catch (final Exception e) {
 				return;
 			}
-			if (cnt > ACHelper.getInstance().getLimit(sender, Type.Limit.MAX_ITEMS)
+			if (cnt > ACHelper.getInstance().getLimit(sender,
+					Type.Limit.MAX_ITEMS)
 					&& !(sender.hasPermission("admincmd.item.infinity"))) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("limit", String.valueOf(ACHelper.getInstance().getLimit(sender,
-						Type.Limit.MAX_ITEMS)));
+				replace.put(
+						"limit",
+						String.valueOf(ACHelper.getInstance().getLimit(sender,
+								Type.Limit.MAX_ITEMS)));
 				Utils.sI18n(sender, "itemLimit", replace);
 				return;
 			}

@@ -28,7 +28,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 public class RemovePowerTask implements Runnable {
 
@@ -41,7 +41,8 @@ public class RemovePowerTask implements Runnable {
 	 * @param player
 	 * @param power
 	 */
-	public RemovePowerTask(final ACPlayer player, final Type power, final CommandSender sender) {
+	public RemovePowerTask(final ACPlayer player, final Type power,
+			final CommandSender sender) {
 		super();
 		this.player = player;
 		this.power = power;
@@ -57,7 +58,7 @@ public class RemovePowerTask implements Runnable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override

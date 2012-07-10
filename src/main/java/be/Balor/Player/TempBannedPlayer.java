@@ -36,7 +36,8 @@ public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 	 * @param reason
 	 * @param time
 	 */
-	public TempBannedPlayer(final String player, final String reason, final long time) {
+	public TempBannedPlayer(final String player, final String reason,
+			final long time) {
 		super(player, reason);
 		endBan = new Date(System.currentTimeMillis() + time);
 	}

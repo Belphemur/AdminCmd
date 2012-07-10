@@ -9,7 +9,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	private int indent = 2;
 
-	protected ExtendedConfigurationOptions(final ExtendedConfiguration configuration) {
+	protected ExtendedConfigurationOptions(
+			final ExtendedConfiguration configuration) {
 		super(configuration);
 	}
 
@@ -58,7 +59,8 @@ public class ExtendedConfigurationOptions extends ExFileConfigurationOptions {
 	 */
 	public ExtendedConfigurationOptions indent(final int value) {
 		if ((indent < 2) || (value > 9)) {
-			throw new IllegalArgumentException("Indent must be between 1 and 10 characters");
+			throw new IllegalArgumentException(
+					"Indent must be between 1 and 10 characters");
 		}
 
 		this.indent = value;

@@ -51,7 +51,8 @@ public class UnMute extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Utils.getPlayer(args.getString(0));
 
 		final HashMap<String, String> replace = new HashMap<String, String>();

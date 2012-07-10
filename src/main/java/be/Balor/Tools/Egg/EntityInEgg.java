@@ -38,7 +38,8 @@ public class EntityInEgg implements Serializable {
 	 * @param nb
 	 * @param entityName
 	 */
-	public EntityInEgg(final String entityClass, final int nb, final String entityName) {
+	public EntityInEgg(final String entityClass, final int nb,
+			final String entityName) {
 		super();
 		this.entityClass = entityClass;
 		this.nb = nb;

@@ -51,7 +51,8 @@ public class ACCreatureSpawnListener implements Listener {
 		}
 
 		final List<LivingEntity> livEntities = world.getLivingEntities();
-		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
+		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString())
+				.getInt(-1);
 		if (limit != -1) {
 			if ((livEntities.size() - world.getPlayers().size()) >= limit) {
 				event.setCancelled(true);

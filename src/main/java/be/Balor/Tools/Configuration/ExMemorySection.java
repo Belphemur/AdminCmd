@@ -28,7 +28,9 @@ import org.bukkit.configuration.MemorySection;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class ExMemorySection extends MemorySection implements ExConfigurationSection {
+public class ExMemorySection extends MemorySection
+		implements
+			ExConfigurationSection {
 	protected final Lock lock = new ReentrantLock(true);
 
 	/**
@@ -42,7 +44,8 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * @param exMemorySection
 	 * @param key
 	 */
-	protected ExMemorySection(final ConfigurationSection exMemorySection, final String key) {
+	protected ExMemorySection(final ConfigurationSection exMemorySection,
+			final String key) {
 		super(exMemorySection, key);
 	}
 
@@ -86,11 +89,12 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		if (path == null) {
 			throw new IllegalArgumentException("Path cannot be null");
 		} else if (path.length() == 0) {
-			throw new IllegalArgumentException("Cannot create section at empty path");
+			throw new IllegalArgumentException(
+					"Cannot create section at empty path");
 		}
 
-		final String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
-				.pathSeparator())));
+		final String[] split = path.split(Pattern.quote(Character
+				.toString(getRoot().options().pathSeparator())));
 		ExConfigurationSection section = this;
 
 		for (int i = 0; i < split.length - 1; i++) {
@@ -142,7 +146,8 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 	 * .lang.String, java.util.List)
 	 */
 	@Override
-	public List<Boolean> getBooleanList(final String path, final List<Boolean> def) {
+	public List<Boolean> getBooleanList(final String path,
+			final List<Boolean> def) {
 		final List<Boolean> result = super.getBooleanList(path);
 		if (result == null || (result != null && result.isEmpty())) {
 			return def;
@@ -157,7 +162,9 @@ public class ExMemorySection extends MemorySection implements ExConfigurationSec
 		}
 
 		final Object val = get(path, getDefault(path));
-		return (val instanceof ExConfigurationSection) ? (ExConfigurationSection) val : null;
+		return (val instanceof ExConfigurationSection)
+				? (ExConfigurationSection) val
+				: null;
 	}
 
 	/*

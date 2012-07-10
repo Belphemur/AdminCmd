@@ -42,8 +42,9 @@ public class ACVulcanListener implements Listener {
 		}
 		player.getHandler()
 				.getWorld()
-				.createExplosion(player.getHandler().getTargetBlock(null, 600).getLocation(),
-						power, true);
+				.createExplosion(
+						player.getHandler().getTargetBlock(null, 600)
+								.getLocation(), power, true);
 
 	}
 }

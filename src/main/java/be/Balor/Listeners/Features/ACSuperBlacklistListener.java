@@ -54,7 +54,8 @@ public class ACSuperBlacklistListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onUse(final PlayerInteractEvent event) {
 		final Action action = event.getAction();
-		if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+		if (action != Action.RIGHT_CLICK_AIR
+				&& action != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 		final Player player = event.getPlayer();
@@ -76,7 +77,8 @@ public class ACSuperBlacklistListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void specialBucket(final PlayerBucketEmptyEvent event) {
-		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(), event.getItemStack())) {
+		if (!ACHelper.getInstance().inBlackListItem(event.getPlayer(),
+				event.getItemStack())) {
 			return;
 		}
 		event.setCancelled(true);

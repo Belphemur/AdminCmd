@@ -63,7 +63,8 @@ public enum Type {
 
 	public String display() {
 		final String s = super.toString();
-		return s.substring(0, 1) + s.substring(1).toLowerCase().replaceAll("_", " ");
+		return s.substring(0, 1)
+				+ s.substring(1).toLowerCase().replaceAll("_", " ");
 	}
 
 	private final Category category;
@@ -115,24 +116,15 @@ public enum Type {
 	}
 
 	public enum Category {
-		SUPER_POWER,
-		WORLD,
-		OTHER,
-		SANCTION,
-		MISC;
+		SUPER_POWER, WORLD, OTHER, SANCTION, MISC;
 	}
 
 	public enum Weather {
-		STORM,
-		RAIN,
-		CLEAR,
-		FREEZE;
+		STORM, RAIN, CLEAR, FREEZE;
 	}
 
 	public enum Tp {
-		HERE,
-		TO,
-		PLAYERS;
+		HERE, TO, PLAYERS;
 		@Override
 		public String toString() {
 			final String s = super.toString();
@@ -141,8 +133,7 @@ public enum Type {
 	}
 
 	public enum Whois {
-		LOGOUT("lastDisconnect"),
-		LOGIN("lastConnection");
+		LOGOUT("lastDisconnect"), LOGIN("lastConnection");
 		private final String val;
 
 		private Whois(final String val) {
@@ -158,10 +149,7 @@ public enum Type {
 	}
 
 	public enum ArmorPart {
-		BOOTS(0, 301),
-		LEGS(1, 300),
-		CHEST(2, 299),
-		HEAD(3, 298);
+		BOOTS(0, 301), LEGS(1, 300), CHEST(2, 299), HEAD(3, 298);
 		private final int placeInInventory;
 		private final List<Integer> possibleId = new ArrayList<Integer>();
 		private static final int nbEquipment = 5;
@@ -200,9 +188,7 @@ public enum Type {
 	}
 
 	public enum Health {
-		KILL,
-		HEAL,
-		FEED;
+		KILL, HEAL, FEED;
 		@Override
 		public String toString() {
 			return super.toString().toLowerCase();
@@ -211,9 +197,8 @@ public enum Type {
 	}
 
 	public enum Limit {
-		IMMUNITY("immunityLvl"),
-		MAX_HOME("maxHomeByUser"),
-		MAX_ITEMS("maxItemAmount");
+		IMMUNITY("immunityLvl"), MAX_HOME("maxHomeByUser"), MAX_ITEMS(
+				"maxItemAmount");
 		/**
 		 * 
 		 */

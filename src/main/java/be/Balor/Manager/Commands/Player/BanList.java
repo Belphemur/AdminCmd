@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class BanList extends PlayerCommand {
 
@@ -42,25 +42,28 @@ public class BanList extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		int page = 1;
 		if (args.length == 1) {
 			try {
 				page = args.getInt(0);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				String msg = Utils.I18n("NaN", "number", args.getString(0));
-				sender.sendMessage(msg + ChatColor.RED + " Used default page 1!");
+				sender.sendMessage(msg + ChatColor.RED
+						+ " Used default page 1!");
 				page = 1;
 			}
 		}
 
 		try {
-			for (final String s : Lister.getLister(Lister.List.BAN).getPage(page)) {
+			for (final String s : Lister.getLister(Lister.List.BAN).getPage(
+					page)) {
 				sender.sendMessage(s);
 			}
 		} catch (final EmptyListException e) {
@@ -70,7 +73,7 @@ public class BanList extends PlayerCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

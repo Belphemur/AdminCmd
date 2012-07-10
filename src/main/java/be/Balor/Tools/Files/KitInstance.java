@@ -15,10 +15,11 @@ public class KitInstance {
 	protected final String name;
 	protected int delay = 0;
 	protected final List<MaterialContainer> items;
-	private static final PermissionLinker perm = ACPluginManager.getCorePlugin()
-			.getPermissionLinker();
+	private static final PermissionLinker perm = ACPluginManager
+			.getCorePlugin().getPermissionLinker();
 
-	public KitInstance(final String name, final int delay, final List<MaterialContainer> items) {
+	public KitInstance(final String name, final int delay,
+			final List<MaterialContainer> items) {
 		this.name = name;
 		this.delay = delay;
 		this.items = items;
@@ -35,8 +36,7 @@ public class KitInstance {
 		final ArrayList<ItemStack> result = new ArrayList<ItemStack>();
 		try {
 			// return Utils.oddItem.getItemGroup(kit, -1));
-		} catch (final Throwable e) {
-		}
+		} catch (final Throwable e) {}
 		for (final MaterialContainer mc : items) {
 			result.add(mc.getItemStack());
 		}

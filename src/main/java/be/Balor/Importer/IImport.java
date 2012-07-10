@@ -21,7 +21,7 @@ import java.io.IOException;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public interface IImport {
 
@@ -41,6 +41,7 @@ public interface IImport {
 
 	/**
 	 * Imports data from normal text-files.
+	 * 
 	 * @throws IOException
 	 */
 	public abstract void importTextFiles() throws IOException;

@@ -50,7 +50,8 @@ public class LockServer extends ServerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (ACHelper.getInstance().isServerLocked()) {
 			ACHelper.getInstance().setServerLocked(false);
 			Utils.sI18n(sender, "serverUnlock");
@@ -62,17 +63,19 @@ public class LockServer extends ServerCommand {
 			}
 			ACHelper.getInstance().setServerLocked(true);
 			final List<Player> onlinePlayers = Utils.getOnlinePlayers();
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable() {
-				@Override
-				public void run() {
-					for (final Player p : onlinePlayers) {
-						if (PermissionManager.hasPerm(p, "admincmd.server.lockdown")) {
-							continue;
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(getPlugin(),
+					new Runnable() {
+						@Override
+						public void run() {
+							for (final Player p : onlinePlayers) {
+								if (PermissionManager.hasPerm(p,
+										"admincmd.server.lockdown")) {
+									continue;
+								}
+								p.kickPlayer(Utils.I18n("serverLockMessage"));
+							}
 						}
-						p.kickPlayer(Utils.I18n("serverLockMessage"));
-					}
-				}
-			}, 100);
+					}, 100);
 		}
 
 	}

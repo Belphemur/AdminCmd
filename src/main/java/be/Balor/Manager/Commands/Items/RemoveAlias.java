@@ -45,7 +45,8 @@ public class RemoveAlias extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		ACHelper.getInstance().rmAlias(sender, args.getString(0));
 	}
 

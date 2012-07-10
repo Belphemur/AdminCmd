@@ -48,7 +48,8 @@ public class Extinguish extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(Material.FIRE);
 		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);

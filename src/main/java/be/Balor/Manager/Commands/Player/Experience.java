@@ -49,7 +49,8 @@ public class Experience extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		float amount = 0;
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
@@ -85,7 +86,8 @@ public class Experience extends PlayerCommand {
 			if (Utils.isPlayer(sender, true)) {
 				if (args.hasFlag('t')) {
 					target = (Player) sender;
-					replace.put("exp", String.valueOf(target.getTotalExperience()));
+					replace.put("exp",
+							String.valueOf(target.getTotalExperience()));
 					sender.sendMessage(Utils.I18n("expTotal", replace));
 					return;
 				}
@@ -105,7 +107,8 @@ public class Experience extends PlayerCommand {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					taskTarget.getLocation().getWorld().spawn(loc, ExperienceOrb.class)
+					taskTarget.getLocation().getWorld()
+							.spawn(loc, ExperienceOrb.class)
 							.setExperience((int) amountXp);
 				}
 			});
@@ -146,7 +149,8 @@ public class Experience extends PlayerCommand {
 			} else {
 				replace.put("target", Utils.getPlayerName(target));
 				target.sendMessage(Utils.I18n("expProgressionSet", replace));
-				sender.sendMessage(Utils.I18n("expProgressionSetTarget", replace));
+				sender.sendMessage(Utils.I18n("expProgressionSetTarget",
+						replace));
 			}
 		} else if (args.hasFlag('l')) {
 			ACPluginManager.scheduleSyncTask(new Runnable() {

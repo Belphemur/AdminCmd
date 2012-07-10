@@ -38,7 +38,8 @@ public class ACCommandContainer {
 	/**
  *
  */
-	public ACCommandContainer(final CommandSender sender, final CoreCommand cmd, final String[] args) {
+	public ACCommandContainer(final CommandSender sender,
+			final CoreCommand cmd, final String[] args) {
 		this.sender = sender;
 		this.cmd = cmd;
 		this.argsStrings = args;
@@ -68,7 +69,8 @@ public class ACCommandContainer {
 			if (sender instanceof Player) {
 				name = ((Player) sender).getName();
 			}
-			ACLogger.info(name + " [CMD: " + cmd.getCmdName() + "] (ARGS:" + args.toString() + ")");
+			ACLogger.info(name + " [CMD: " + cmd.getCmdName() + "] (ARGS:"
+					+ args.toString() + ")");
 		}
 		cmd.execute(sender, args);
 	}
@@ -80,7 +82,8 @@ public class ACCommandContainer {
 	 */
 	public String debug() {
 		return "[Plugin Version: "
-				+ ACHelper.getInstance().getCoreInstance().getDescription().getVersion()
+				+ ACHelper.getInstance().getCoreInstance().getDescription()
+						.getVersion()
 				+ "]["
 				+ Thread.currentThread().getName()
 				+ "] The command "
@@ -108,6 +111,7 @@ public class ACCommandContainer {
 	 */
 	@Override
 	public String toString() {
-		return "ACCommandContainer [sender=" + sender + ", cmd=" + cmd + ", args=" + args + "]";
+		return "ACCommandContainer [sender=" + sender + ", cmd=" + cmd
+				+ ", args=" + args + "]";
 	}
 }

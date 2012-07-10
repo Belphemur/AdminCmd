@@ -78,13 +78,14 @@ public class PermissionManager {
 		return permissionHandler.getGroup(player);
 	}
 
-	public static boolean hasPerm(final CommandSender player, final Permission perm)
-			throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player,
+			final Permission perm) throws NullPointerException {
 		return hasPerm(player, perm, true);
 	}
 
-	public static boolean hasPerm(final CommandSender player, final Permission perm,
-			final boolean errorMsg) throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player,
+			final Permission perm, final boolean errorMsg)
+			throws NullPointerException {
 		if (perm == null) {
 			throw new NullPointerException("The Permission Node can't be NULL");
 		}
@@ -126,8 +127,9 @@ public class PermissionManager {
 	 * @throws NullPointerException
 	 *             when the permission node is null
 	 */
-	public static boolean hasPerm(final CommandSender player, final String perm,
-			final boolean errorMsg) throws NullPointerException {
+	public static boolean hasPerm(final CommandSender player,
+			final String perm, final boolean errorMsg)
+			throws NullPointerException {
 		if (perm == null) {
 			throw new NullPointerException("The Permission Node can't be NULL");
 		}
@@ -207,7 +209,8 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setPermissionsBukkit(final PermissionsPlugin plugin) {
-		if (!permissionsBukkit && !bPermissions && !permissionsEx && !groupManager) {
+		if (!permissionsBukkit && !bPermissions && !permissionsEx
+				&& !groupManager) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
 			if (!yetiPermissions) {
@@ -225,7 +228,8 @@ public class PermissionManager {
 	 * @param pEX
 	 *            the pEX to set
 	 */
-	public static boolean setPEX(final ru.tehkode.permissions.PermissionManager pEX) {
+	public static boolean setPEX(
+			final ru.tehkode.permissions.PermissionManager pEX) {
 		if (!permissionsEx) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				permissionsEx = true;

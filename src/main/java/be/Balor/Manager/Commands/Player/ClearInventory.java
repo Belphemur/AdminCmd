@@ -54,14 +54,15 @@ public class ClearInventory extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;
 		}
 		if (args.length == 1) {
-			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
-					args.getString(0));
+			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
+					sender, args.getString(0));
 			if (mc.isNull()) {
 				return;
 			}
@@ -78,8 +79,8 @@ public class ClearInventory extends PlayerCommand {
 			final HashMap<Integer, ? extends ItemStack> stacks;
 			final int startAmount = args.getInt(1);
 
-			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(sender,
-					args.getString(0));
+			final MaterialContainer mc = ACHelper.getInstance().checkMaterial(
+					sender, args.getString(0));
 			if (mc.isNull()) {
 				return;
 			}

@@ -53,10 +53,12 @@ public class SetHome extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player p = ((Player) sender);
-			final be.Balor.Tools.Home home = Utils.getHome(sender, args.getString(0));
+			final be.Balor.Tools.Home home = Utils.getHome(sender,
+					args.getString(0));
 			if (home == null) {
 				return;
 			}
@@ -64,8 +66,10 @@ public class SetHome extends HomeCommand {
 			final Set<String> tmp = player.getHomeList();
 			final Location loc = p.getLocation();
 			if (!tmp.contains(home.home)
-					&& !PermissionManager.hasPerm(p, "admincmd.admin.home", false)
-					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p, Type.Limit.MAX_HOME)) {
+					&& !PermissionManager.hasPerm(p, "admincmd.admin.home",
+							false)
+					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p,
+							Type.Limit.MAX_HOME)) {
 				Utils.sI18n(sender, "homeLimit");
 				return;
 			}

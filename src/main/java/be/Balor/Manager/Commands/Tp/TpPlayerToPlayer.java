@@ -47,15 +47,19 @@ public class TpPlayerToPlayer extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Player from = sender.getServer().getPlayer(args.getString(0));
 		final Player to = sender.getServer().getPlayer(args.getString(1));
 		if (from != null && from.equals(sender)) {
-			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.TO);
+			Utils.tpP2P(sender, args.getString(0), args.getString(1),
+					Type.Tp.TO);
 		} else if (to != null && to.equals(sender)) {
-			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.HERE);
+			Utils.tpP2P(sender, args.getString(0), args.getString(1),
+					Type.Tp.HERE);
 		} else {
-			Utils.tpP2P(sender, args.getString(0), args.getString(1), Type.Tp.PLAYERS);
+			Utils.tpP2P(sender, args.getString(0), args.getString(1),
+					Type.Tp.PLAYERS);
 		}
 	}
 

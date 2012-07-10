@@ -26,10 +26,12 @@ public class PermParent extends PermChild {
 	protected final String compareName;
 
 	public PermParent(final String perm) {
-		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1), PermissionDefault.OP);
+		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
+				PermissionDefault.OP);
 	}
 
-	public PermParent(final String perm, final String compare, final PermissionDefault def) {
+	public PermParent(final String perm, final String compare,
+			final PermissionDefault def) {
 		super(perm, def);
 		this.compareName = compare;
 	}
@@ -47,7 +49,8 @@ public class PermParent extends PermChild {
 	 * @param perm
 	 * @return the PermParent (this)
 	 */
-	public PermParent addChild(final PermChild perm) throws IllegalArgumentException {
+	public PermParent addChild(final PermChild perm)
+			throws IllegalArgumentException {
 		if (perm.equals(this)) {
 			throw new IllegalArgumentException("The Child can't be the parent.");
 		}
@@ -75,7 +78,8 @@ public class PermParent extends PermChild {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((compareName == null) ? 0 : compareName.hashCode());
+		result = prime * result
+				+ ((compareName == null) ? 0 : compareName.hashCode());
 		return result;
 	}
 

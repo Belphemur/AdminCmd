@@ -47,7 +47,8 @@ public class Uptime extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final Long[] time = ACHelper.getElapsedTime();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("d", time[0].toString());

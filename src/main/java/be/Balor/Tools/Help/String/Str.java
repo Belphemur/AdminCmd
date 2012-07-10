@@ -30,7 +30,8 @@ public class Str extends OutputStream {
 		return argStr(s, sep, 0);
 	}
 
-	public static String argStr(final String[] s, final String sep, final int start) {
+	public static String argStr(final String[] s, final String sep,
+			final int start) {
 		String ret = "";
 		if (s != null) {
 			for (int i = start; i < s.length; ++i) {
@@ -43,8 +44,8 @@ public class Str extends OutputStream {
 		return ret;
 	}
 
-	public static String argStr(final String[] s, final String sep, final int start,
-			final int length) {
+	public static String argStr(final String[] s, final String sep,
+			final int start, final int length) {
 		String ret = "";
 		if (s != null) {
 			for (int i = start, j = 0; i < s.length && j < length; ++i, ++j) {
@@ -142,7 +143,8 @@ public class Str extends OutputStream {
 		return -1;
 	}
 
-	public static int indexOfIgnoreCase(final String array[], final String search) {
+	public static int indexOfIgnoreCase(final String array[],
+			final String search) {
 		for (int i = array.length - 1; i >= 0; --i) {
 			if (array[i].equalsIgnoreCase(search)) {
 				return i;
@@ -271,9 +273,10 @@ public class Str extends OutputStream {
 		text += (char) b;
 	}
 
-	public static String[] removePortionOfArray(final String[] array, final int from, final int to,
-			final String replace) {
-		final String[] newArray = new String[from + array.length - to - (replace == null ? 1 : 0)];
+	public static String[] removePortionOfArray(final String[] array,
+			final int from, final int to, final String replace) {
+		final String[] newArray = new String[from + array.length - to
+				- (replace == null ? 1 : 0)];
 		System.arraycopy(array, 0, newArray, 0, from);
 		if (replace != null) {
 			newArray[from] = replace;
@@ -283,7 +286,8 @@ public class Str extends OutputStream {
 		return newArray;
 	}
 
-	public static String[] removeCaseOfArray(final String[] array, final int index) {
+	public static String[] removeCaseOfArray(final String[] array,
+			final int index) {
 		final String[] newArray = new String[array.length - 1];
 		for (int i = 0; i < index; i++) {
 			newArray[i] = array[i];
@@ -309,7 +313,8 @@ public class Str extends OutputStream {
 	 * @param search
 	 * @return
 	 */
-	public static String matchString(final Collection<String> container, final String search) {
+	public static String matchString(final Collection<String> container,
+			final String search) {
 		String found = null;
 		if (search == null) {
 			return found;

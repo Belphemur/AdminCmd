@@ -48,19 +48,23 @@ public class Reload extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length >= 1 && !args.getString(0).equals("AdminCmd")) {
 			final Plugin plugin = sender.getServer().getPluginManager()
 					.getPlugin(args.getString(0));
 			if (plugin == null) {
-				Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
+				Utils.sI18n(sender, "pluginNotFound", "plugin",
+						args.getString(0));
 				return;
 			}
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					ACPluginManager.getServer().getPluginManager().disablePlugin(plugin);
-					ACPluginManager.getServer().getPluginManager().enablePlugin(plugin);
+					ACPluginManager.getServer().getPluginManager()
+							.disablePlugin(plugin);
+					ACPluginManager.getServer().getPluginManager()
+							.enablePlugin(plugin);
 
 				}
 			});

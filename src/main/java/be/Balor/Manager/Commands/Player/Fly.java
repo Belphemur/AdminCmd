@@ -38,8 +38,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 public class Fly extends PlayerCommand {
 
 	private enum FlyMode {
-		OLD,
-		NEW;
+		OLD, NEW;
 	}
 
 	/**
@@ -88,8 +87,9 @@ public class Fly extends PlayerCommand {
 		return args != null;
 	}
 
-	private void setFly(final CommandSender sender, final Player player, final String timeOut,
-			final Type power, final FlyMode c, final CommandArgs args) {
+	private void setFly(final CommandSender sender, final Player player,
+			final String timeOut, final Type power, final FlyMode c,
+			final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(player));
 		final ACPlayer acp = ACPlayer.getPlayer(player);
@@ -98,10 +98,10 @@ public class Fly extends PlayerCommand {
 		if (powerValueString != null) {
 			try {
 				powerFloat = Float.parseFloat(powerValueString);
-			} catch (final NumberFormatException e) {
-			}
+			} catch (final NumberFormatException e) {}
 		}
-		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat()
+		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat()
+				? ConfigEnum.MAX_FLY.getFloat()
 				: powerFloat;
 		if (acp.hasPower(power)) {
 			acp.removePower(power);
@@ -118,9 +118,15 @@ public class Fly extends PlayerCommand {
 			if (c == FlyMode.NEW) {
 				player.setAllowFlight(true);
 				player.setFlying(true);
-				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
+				acp.setPower(power,
+						powerFloat == 0
+								? ConfigEnum.DFLY.getFloat()
+								: powerFloat);
 			} else {
-				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
+				acp.setPower(power,
+						powerFloat == 0
+								? ConfigEnum.DFLY.getFloat()
+								: powerFloat);
 			}
 			player.setFallDistance(1F);
 			Utils.sI18n(player, "flyEnabled");
@@ -138,8 +144,10 @@ public class Fly extends PlayerCommand {
 				return;
 			}
 			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-					ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, power, sender),
-					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
+					ACPluginManager.getCorePlugin(),
+					new RemovePowerTask(acp, power, sender),
+					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
+							* timeOutValue);
 		}
 	}
 }

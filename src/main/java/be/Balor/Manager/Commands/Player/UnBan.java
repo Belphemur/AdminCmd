@@ -51,11 +51,13 @@ public class UnBan extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String unban = args.getString(0);
 		final IBan ban = ACHelper.getInstance().getBan(unban);
 		if (ban != null) {
-			if (ban instanceof BannedPlayer && !Utils.checkImmunity(sender, args, 0)) {
+			if (ban instanceof BannedPlayer
+					&& !Utils.checkImmunity(sender, args, 0)) {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
 			}

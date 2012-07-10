@@ -69,7 +69,8 @@ public class Whois extends PlayerCommand {
 				if (args.length >= 1) {
 					w = ACWorld.getWorld(args.getString(0));
 				} else if (Utils.isPlayer(sender)) {
-					w = ACWorld.getWorld(((Player) sender).getWorld().getName());
+					w = ACWorld
+							.getWorld(((Player) sender).getWorld().getName());
 				} else {
 					return;
 				}
@@ -79,9 +80,12 @@ public class Whois extends PlayerCommand {
 			}
 			sender.sendMessage(ChatColor.GREEN
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(
-							ChatColor.AQUA + " " + w.getName() + " " + ChatColor.GREEN, '='));
-			for (final Entry<String, String> power : w.getInformations().entrySet()) {
-				String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE + " : ";
+							ChatColor.AQUA + " " + w.getName() + " "
+									+ ChatColor.GREEN, '='));
+			for (final Entry<String, String> power : w.getInformations()
+					.entrySet()) {
+				String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE
+						+ " : ";
 				final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 						- ACMinecraftFontWidthCalculator.getStringWidth(line);
 				line += ACMinecraftFontWidthCalculator.strPadLeftChat(
@@ -95,44 +99,56 @@ public class Whois extends PlayerCommand {
 			return;
 		}
 		sender.sendMessage(ChatColor.AQUA
-				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN
-						+ " "
-						+ (actarget.isOnline() ? Utils.getPlayerName(actarget.getHandler(), sender)
-								: actarget.getName()) + " " + ChatColor.AQUA, '='));
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(
+						ChatColor.DARK_GREEN
+								+ " "
+								+ (actarget.isOnline()
+										? Utils.getPlayerName(
+												actarget.getHandler(), sender)
+										: actarget.getName()) + " "
+								+ ChatColor.AQUA, '='));
 		// Login
-		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE + " : ";
+		String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE
+				+ " : ";
 		final int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(loginDate);
 		loginDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget, Type.Whois.LOGIN),
-				logSizeRemaining, ' ');
+				ChatColor.GREEN
+						+ Utils.replaceDateAndTimeFormat(actarget,
+								Type.Whois.LOGIN), logSizeRemaining, ' ');
 		sender.sendMessage(loginDate);
 
 		// Logout
-		String logoutDate = ChatColor.GOLD + "Last Quit" + ChatColor.WHITE + " : ";
+		String logoutDate = ChatColor.GOLD + "Last Quit" + ChatColor.WHITE
+				+ " : ";
 		final int logoutSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(logoutDate);
 		logoutDate += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.replaceDateAndTimeFormat(actarget, Type.Whois.LOGOUT),
-				logoutSizeRemaining, ' ');
+				ChatColor.GREEN
+						+ Utils.replaceDateAndTimeFormat(actarget,
+								Type.Whois.LOGOUT), logoutSizeRemaining, ' ');
 		sender.sendMessage(logoutDate);
 
 		// Presentation
-		String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE + " : ";
+		String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE
+				+ " : ";
 		final int presSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(presentation);
 		presentation += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + actarget.getPresentation(), presSizeRemaining, ' ');
+				ChatColor.GREEN + actarget.getPresentation(),
+				presSizeRemaining, ' ');
 		sender.sendMessage(presentation);
 
 		// Played
 		final long total = actarget.getCurrentPlayedTime();
-		final Map<String, String> replace = Utils.playedTime(actarget.getName(), total);
-		String played = ChatColor.GOLD + "Time Played" + ChatColor.WHITE + " : ";
+		final Map<String, String> replace = Utils.playedTime(
+				actarget.getName(), total);
+		String played = ChatColor.GOLD + "Time Played" + ChatColor.WHITE
+				+ " : ";
 		int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(played);
-		played += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN + Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
+		played += ACMinecraftFontWidthCalculator.strPadLeftChat(ChatColor.GREEN
+				+ Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
 		sender.sendMessage(played);
 		// Banned
 		final IBan ban = ACHelper.getInstance().getBan(actarget.getName());
@@ -143,17 +159,20 @@ public class Whois extends PlayerCommand {
 			banned += ACMinecraftFontWidthCalculator.strPadLeftChat(
 					ChatColor.GREEN
 							+ (ban instanceof ITempBan ? Utils
-									.replaceDateAndTimeFormat(((ITempBan) ban).getEndBan())
-									: "Permanent"), banSizeRem, ' ');
+									.replaceDateAndTimeFormat(((ITempBan) ban)
+											.getEndBan()) : "Permanent"),
+					banSizeRem, ' ');
 			sender.sendMessage(banned);
 		}
 		// Powers
-		for (final Entry<String, String> power : actarget.getPowers().entrySet()) {
+		for (final Entry<String, String> power : actarget.getPowers()
+				.entrySet()) {
 			final Type powerType = Type.matchType(power.getKey());
 			if (powerType == Type.INVISIBLE) {
 				continue;
 			}
-			String line = ChatColor.GOLD + powerType.display() + ChatColor.WHITE + " : ";
+			String line = ChatColor.GOLD + powerType.display()
+					+ ChatColor.WHITE + " : ";
 			final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 					- ACMinecraftFontWidthCalculator.getStringWidth(line);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
@@ -164,17 +183,22 @@ public class Whois extends PlayerCommand {
 		String line = ChatColor.GOLD + "invisible" + ChatColor.WHITE + " : ";
 		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(line);
-		line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-				ChatColor.GREEN
-						+ String.valueOf((InvisibleWorker.getInstance().hasInvisiblePowers(
-								actarget.getHandler()) && PermissionManager.hasPerm(sender,
-								"admincmd.invisible.cansee", false))), sizeRemaining, ' ');
+		line += ACMinecraftFontWidthCalculator
+				.strPadLeftChat(
+						ChatColor.GREEN
+								+ String.valueOf((InvisibleWorker.getInstance()
+										.hasInvisiblePowers(
+												actarget.getHandler()) && PermissionManager
+										.hasPerm(sender,
+												"admincmd.invisible.cansee",
+												false))), sizeRemaining, ' ');
 		sender.sendMessage(line);
 
 		// Immunity Level
 		final int level = actarget.getInformation("immunityLvl").getInt(
 				ConfigEnum.DIMMUNITY.getInt());
-		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE + " : ";
+		String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE
+				+ " : ";
 		strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);
 		immuLvl += ACMinecraftFontWidthCalculator.strPadLeftChat(
@@ -182,7 +206,8 @@ public class Whois extends PlayerCommand {
 		sender.sendMessage(immuLvl);
 
 		// GameMode
-		String gameMode = ChatColor.GREEN + "Current GameMode: " + ChatColor.GOLD;
+		String gameMode = ChatColor.GREEN + "Current GameMode: "
+				+ ChatColor.GOLD;
 		String currentMode = "";
 		if (actarget.isOnline()) {
 			if (actarget.getHandler().getGameMode() == GameMode.CREATIVE) {

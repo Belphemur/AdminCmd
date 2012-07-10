@@ -46,9 +46,12 @@ public class ACFireballListener implements Listener {
 		}
 		final Location playerLoc = player.getLocation();
 		final Location fbLocation = playerLoc.add(
-				playerLoc.getDirection().normalize().multiply(2)
-						.toLocation(player.getWorld(), playerLoc.getYaw(), playerLoc.getPitch()))
-				.add(0, 1D, 0);
+				playerLoc
+						.getDirection()
+						.normalize()
+						.multiply(2)
+						.toLocation(player.getWorld(), playerLoc.getYaw(),
+								playerLoc.getPitch())).add(0, 1D, 0);
 		final Fireball f = player.getWorld().spawn(fbLocation, Fireball.class);
 		f.setYield(power);
 		f.setShooter(player);

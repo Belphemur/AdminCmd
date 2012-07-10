@@ -31,7 +31,8 @@ public class ProcessingArgsException extends IllegalArgumentException {
 	/**
 	 * 
 	 */
-	public ProcessingArgsException(final ExceptionType type, final String message) {
+	public ProcessingArgsException(final ExceptionType type,
+			final String message) {
 		super(message);
 		this.type = type;
 
@@ -40,8 +41,8 @@ public class ProcessingArgsException extends IllegalArgumentException {
 	/**
 	 * 
 	 */
-	public ProcessingArgsException(final ExceptionType type, final String message,
-			final Throwable ex) {
+	public ProcessingArgsException(final ExceptionType type,
+			final String message, final Throwable ex) {
 		super(message, ex);
 		this.type = type;
 	}

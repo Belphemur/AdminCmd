@@ -67,14 +67,17 @@ public class Kit extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		// which material?
 		Player target;
 		if (args.length == 0) {
-			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance().getKitList(sender));
+			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance()
+					.getKitList(sender));
 			return;
 		}
-		final KitInstance kit = ACHelper.getInstance().getKit(args.getString(0));
+		final KitInstance kit = ACHelper.getInstance()
+				.getKit(args.getString(0));
 		if (kit == null) {
 			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
 			return;
@@ -84,7 +87,8 @@ public class Kit extends ItemCommand {
 		if (target == null) {
 			return;
 		}
-		if (!PermissionManager.hasPerm(sender, "admincmd.kit." + args.getString(0))) {
+		if (!PermissionManager.hasPerm(sender,
+				"admincmd.kit." + args.getString(0))) {
 			return;
 		}
 		final ACPlayer actarget = ACPlayer.getPlayer(target);
@@ -109,8 +113,8 @@ public class Kit extends ItemCommand {
 					replace.put("h", timeLeft[1].toString());
 					replace.put("m", timeLeft[2].toString());
 					replace.put("s", timeLeft[3].toString());
-					final String timestamp = (timeLeft[0] > 0 ? (Utils.I18n("days", "d",
-							timeLeft[0].toString())) : "")
+					final String timestamp = (timeLeft[0] > 0 ? (Utils.I18n(
+							"days", "d", timeLeft[0].toString())) : "")
 							+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
 							+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
 							+ (timeLeft[3] > 0 ? (timeLeft[3] + "s") : "");
@@ -140,7 +144,8 @@ public class Kit extends ItemCommand {
 			replace.put("target", Utils.getPlayerName(target));
 			Utils.sI18n(sender, "kitCommandSender", replace);
 		}
-		final ItemStack[] items = kit.getItemStacks().toArray(new ItemStack[] {});
+		final ItemStack[] items = kit.getItemStacks()
+				.toArray(new ItemStack[]{});
 		final Player taskTarget = target;
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
@@ -162,8 +167,9 @@ public class Kit extends ItemCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		permParent.addChild(new PermChild("admincmd.item.nodelay", bukkitDefault)).addChild(
-				new PermChild("admincmd.item.kithelp", bukkitDefault));
+		permParent
+				.addChild(new PermChild("admincmd.item.nodelay", bukkitDefault))
+				.addChild(new PermChild("admincmd.item.kithelp", bukkitDefault));
 		super.registerBukkitPerm();
 	}
 

@@ -28,7 +28,8 @@ public abstract class ItemCommand extends CoreCommand {
  */
 	public ItemCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.item.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent(
+				"admincmd.item.*");
 	}
 
 }

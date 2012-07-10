@@ -52,14 +52,18 @@ public class PlayerList extends PlayerCommand {
 	 */
 
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 
 		final Collection<String> list = Utils.getPlayerList(sender);
-		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE + list.size());
+		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE
+				+ list.size());
 		final String toDisplay = Joiner.on(", ").join(list);
 		if (toDisplay.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
-			sender.sendMessage(toDisplay.substring(0, ACMinecraftFontWidthCalculator.chatwidth));
-			sender.sendMessage(toDisplay.substring(ACMinecraftFontWidthCalculator.chatwidth,
+			sender.sendMessage(toDisplay.substring(0,
+					ACMinecraftFontWidthCalculator.chatwidth));
+			sender.sendMessage(toDisplay.substring(
+					ACMinecraftFontWidthCalculator.chatwidth,
 					toDisplay.length()));
 			return;
 		}

@@ -51,7 +51,8 @@ public class StopServer extends ServerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		int timeOutValue;
 		if (timeOut != null) {
@@ -64,11 +65,12 @@ public class StopServer extends ServerCommand {
 		} else {
 			timeOutValue = ConfigEnum.TIME_STOP.getInt();
 		}
-		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec", String.valueOf(timeOutValue)));
+		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec",
+				String.valueOf(timeOutValue)));
 		ACHelper.getInstance().setServerLocked(true);
 		final List<Player> onlinePlayers = Utils.getOnlinePlayers();
-		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override
 					public void run() {

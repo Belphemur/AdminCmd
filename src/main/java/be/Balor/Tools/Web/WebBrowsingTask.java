@@ -51,13 +51,17 @@ public class WebBrowsingTask implements Runnable {
 		try {
 
 			DebugLog.INSTANCE.info("WebPage opened");
-			for (final Entry<String, String> entry : browser.openPage().entrySet()) {
-				DebugLog.INSTANCE.info(entry.getKey() + " -> " + entry.getValue());
+			for (final Entry<String, String> entry : browser.openPage()
+					.entrySet()) {
+				DebugLog.INSTANCE.info(entry.getKey() + " -> "
+						+ entry.getValue());
 			}
 		} catch (final Exception e) {
-			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with the web browser", e);
+			DebugLog.INSTANCE.log(Level.SEVERE, "Problem with the web browser",
+					e);
 		}
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				this, (long) ((random.nextDouble() + 1) * 46800L * Utils.secInTick));
+		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getCorePlugin(), this,
+				(long) ((random.nextDouble() + 1) * 46800L * Utils.secInTick));
 	}
 }

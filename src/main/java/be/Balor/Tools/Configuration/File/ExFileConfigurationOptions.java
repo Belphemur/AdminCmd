@@ -11,7 +11,8 @@ public class ExFileConfigurationOptions extends ExMemoryConfigurationOption {
 	private String header = null;
 	private boolean copyHeader = true;
 
-	protected ExFileConfigurationOptions(final ExMemoryConfiguration configuration) {
+	protected ExFileConfigurationOptions(
+			final ExMemoryConfiguration configuration) {
 		super(configuration);
 	}
 

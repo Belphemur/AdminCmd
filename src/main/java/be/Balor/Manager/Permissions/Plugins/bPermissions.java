@@ -69,11 +69,12 @@ public class bPermissions extends SuperPermissions {
 	 * .String)
 	 */
 	@Override
-	public Set<Player> getUsers(final String groupName) throws NoPermissionsPlugin {
+	public Set<Player> getUsers(final String groupName)
+			throws NoPermissionsPlugin {
 		final Set<Player> players = new HashSet<Player>();
 		for (final Player player : Utils.getOnlinePlayers()) {
-			if (ApiLayer.hasGroup(player.getWorld().getName(), CalculableType.USER,
-					player.getName(), groupName)) {
+			if (ApiLayer.hasGroup(player.getWorld().getName(),
+					CalculableType.USER, player.getName(), groupName)) {
 				players.add(player);
 			}
 		}
@@ -89,8 +90,8 @@ public class bPermissions extends SuperPermissions {
 	 */
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
-		String result = ApiLayer.getValue(p.getWorld().getName(), CalculableType.USER, p.getName(),
-				limit);
+		String result = ApiLayer.getValue(p.getWorld().getName(),
+				CalculableType.USER, p.getName(), limit);
 		if (result == null || (result != null && result.isEmpty())) {
 			result = super.getPermissionLimit(p, limit);
 		}
@@ -108,8 +109,8 @@ public class bPermissions extends SuperPermissions {
 	public String getPrefix(final Player player) {
 		String prefix = super.getPrefix(player);
 		if (prefix == null || prefix.isEmpty()) {
-			prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
-					player.getName(), "prefix");
+			prefix = ApiLayer.getValue(player.getWorld().getName(),
+					CalculableType.USER, player.getName(), "prefix");
 		}
 		return prefix;
 	}
@@ -125,8 +126,8 @@ public class bPermissions extends SuperPermissions {
 	public String getSuffix(final Player player) {
 		String suffix = super.getSuffix(player);
 		if (suffix == null || suffix.isEmpty()) {
-			suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
-					player.getName(), "suffix");
+			suffix = ApiLayer.getValue(player.getWorld().getName(),
+					CalculableType.USER, player.getName(), "suffix");
 		}
 		return suffix;
 	}
@@ -149,20 +150,21 @@ public class bPermissions extends SuperPermissions {
 		String bestGroup = groups[0];
 		for (final String group : groups) {
 			try {
-				final int currentPriority = Integer.parseInt(ApiLayer.getValue(player.getWorld()
-						.getName(), CalculableType.GROUP, group, "priority"));
+				final int currentPriority = Integer.parseInt(ApiLayer.getValue(
+						player.getWorld().getName(), CalculableType.GROUP,
+						group, "priority"));
 				if (currentPriority > maxPriority) {
 					maxPriority = currentPriority;
 					bestGroup = group;
 				}
-			} catch (final NumberFormatException e) {
-			}
+			} catch (final NumberFormatException e) {}
 		}
-		final String priority = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER,
-				player.getName(), "priority");
-		return new Group(bestGroup,
-				priority == null || (priority != null && priority.isEmpty()) ? 0
-						: Integer.parseInt(priority));
+		final String priority = ApiLayer.getValue(player.getWorld().getName(),
+				CalculableType.USER, player.getName(), "priority");
+		return new Group(bestGroup, priority == null
+				|| (priority != null && priority.isEmpty())
+				? 0
+				: Integer.parseInt(priority));
 	}
 
 }

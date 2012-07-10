@@ -34,10 +34,10 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class PlayerManager {
-	private final ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8)
-			.weakValues().makeMap();
-	private final ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(
-			8).makeMap();
+	private final ConcurrentMap<String, ACPlayer> players = new MapMaker()
+			.concurrencyLevel(8).weakValues().makeMap();
+	private final ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker()
+			.concurrencyLevel(8).makeMap();
 	private final static PlayerManager instance = new PlayerManager();
 	private IPlayerFactory playerFactory;
 
@@ -82,20 +82,23 @@ public class PlayerManager {
 			for (final String home : oldPlayer.getHomeList()) {
 				newPlayer.setHome(home, oldPlayer.getHome(home));
 			}
-			for (final Entry<String, String> entry : oldPlayer.getPowers().entrySet()) {
+			for (final Entry<String, String> entry : oldPlayer.getPowers()
+					.entrySet()) {
 				final Type power = Type.matchType(entry.getKey());
 				if (power != null) {
-					newPlayer.setPower(power, oldPlayer.getPower(power).getObj());
+					newPlayer.setPower(power, oldPlayer.getPower(power)
+							.getObj());
 				} else {
-					newPlayer.setCustomPower(entry.getKey(),
-							oldPlayer.getCustomPower(entry.getKey()).getObj());
+					newPlayer.setCustomPower(entry.getKey(), oldPlayer
+							.getCustomPower(entry.getKey()).getObj());
 				}
 			}
 			for (final String info : oldPlayer.getInformationsList()) {
 				if (info.equals("lastLoc") || info.equals("presentation")) {
 					continue;
 				}
-				newPlayer.setInformation(info, oldPlayer.getInformation(info).getObj());
+				newPlayer.setInformation(info, oldPlayer.getInformation(info)
+						.getObj());
 			}
 			for (final String kit : oldPlayer.getKitUseList()) {
 				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
@@ -140,7 +143,8 @@ public class PlayerManager {
 	 * @return
 	 */
 	public List<Player> getOnlinePlayers() {
-		final ArrayList<Player> list = new ArrayList<Player>(onlinePlayers.size());
+		final ArrayList<Player> list = new ArrayList<Player>(
+				onlinePlayers.size());
 		for (final ACPlayer p : onlinePlayers.keySet()) {
 			final Player handler = p.getHandler();
 			if (handler != null) {

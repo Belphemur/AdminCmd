@@ -48,8 +48,8 @@ public class EssentialsGroupManager extends SuperPermissions {
 	 */
 	@Override
 	public boolean isInGroup(final String groupName, final Player player) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
-				player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
+				.getWorldPermissions(player);
 		if (handler == null) {
 			return false;
 		}
@@ -67,8 +67,8 @@ public class EssentialsGroupManager extends SuperPermissions {
 	public String getPrefix(final Player base) {
 		final String prefix = super.getPrefix(base);
 		if (prefix == null || prefix.isEmpty()) {
-			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-					.getWorldPermissions(base);
+			final AnjoPermissionsHandler handler = groupManager
+					.getWorldsHolder().getWorldPermissions(base);
 			if (handler == null) {
 				return "";
 			}
@@ -88,8 +88,8 @@ public class EssentialsGroupManager extends SuperPermissions {
 	public String getSuffix(final Player base) {
 		final String suffix = super.getSuffix(base);
 		if (suffix == null || suffix.isEmpty()) {
-			final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
-					.getWorldPermissions(base);
+			final AnjoPermissionsHandler handler = groupManager
+					.getWorldsHolder().getWorldPermissions(base);
 			if (handler == null) {
 				return "";
 			}
@@ -107,8 +107,8 @@ public class EssentialsGroupManager extends SuperPermissions {
 	 */
 	@Override
 	public Group getGroup(final Player player) {
-		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder().getWorldPermissions(
-				player);
+		final AnjoPermissionsHandler handler = groupManager.getWorldsHolder()
+				.getWorldPermissions(player);
 		final String group = handler.getGroup(player.getName());
 		if (group == null) {
 			return new Group();

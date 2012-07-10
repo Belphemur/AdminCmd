@@ -51,29 +51,33 @@ public class EggTypeClassLoader extends ClassLoader {
 	 * @param packageName
 	 */
 	@SuppressWarnings("unchecked")
-	public synchronized static void addPackage(final Plugin plugin, final String packageName) {
+	public synchronized static void addPackage(final Plugin plugin,
+			final String packageName) {
 
-		for (final Class<?> clazz : getClassesInPackage(packageName, plugin.getClass()
-				.getClassLoader())) {
+		for (final Class<?> clazz : getClassesInPackage(packageName, plugin
+				.getClass().getClassLoader())) {
 			Permission perm = null;
 			if (EggType.class.isAssignableFrom(clazz)) {
 				if (clazz.isAnnotationPresent(EggPermission.class)) {
-					final EggPermission annotation = clazz.getAnnotation(EggPermission.class);
+					final EggPermission annotation = clazz
+							.getAnnotation(EggPermission.class);
 					if (!annotation.permission().isEmpty()) {
-						perm = PermissionLinker.addOnTheFly(annotation.permission(),
+						perm = PermissionLinker.addOnTheFly(
+								annotation.permission(),
 								annotation.permissionParent());
 					}
 				} else {
 					final String simpleName = clazz.getSimpleName();
-					perm = PermissionLinker.addOnTheFly(
-							"admincmd.egg."
-									+ simpleName.substring(0, simpleName.length() - 3)
-											.toLowerCase(), "admincmd.egg.*");
+					perm = PermissionLinker.addOnTheFly("admincmd.egg."
+							+ simpleName.substring(0, simpleName.length() - 3)
+									.toLowerCase(), "admincmd.egg.*");
 				}
-				classes.put(clazz.getName(), (Class<? extends EggType<?>>) clazz);
-				classesSimpleName.put(clazz.getSimpleName(), (Class<? extends EggType<?>>) clazz);
-				EggPermissionManager.INSTANCE.addPermission((Class<? extends EggType<?>>) clazz,
-						perm);
+				classes.put(clazz.getName(),
+						(Class<? extends EggType<?>>) clazz);
+				classesSimpleName.put(clazz.getSimpleName(),
+						(Class<? extends EggType<?>>) clazz);
+				EggPermissionManager.INSTANCE.addPermission(
+						(Class<? extends EggType<?>>) clazz, perm);
 			}
 		}
 	}
@@ -83,7 +87,8 @@ public class EggTypeClassLoader extends ClassLoader {
 		Class<? extends EggType<?>> found = null;
 		final String lowerSearch = search.toLowerCase();
 		int delta = Integer.MAX_VALUE;
-		for (final Entry<String, Class<? extends EggType<?>>> entry : classesSimpleName.entrySet()) {
+		for (final Entry<String, Class<? extends EggType<?>>> entry : classesSimpleName
+				.entrySet()) {
 			final String str = entry.getKey();
 			if (str.toLowerCase().startsWith(lowerSearch)) {
 				final int curDelta = str.length() - lowerSearch.length();
@@ -176,8 +181,8 @@ public class EggTypeClassLoader extends ClassLoader {
 	 *            an optional class name pattern. e.g. .*Test
 	 * @return The classes
 	 */
-	private static SortedSet<String> findClasses(final String path, final String packageName)
-			throws Exception {
+	private static SortedSet<String> findClasses(final String path,
+			final String packageName) throws Exception {
 		final TreeSet<String> classes = new TreeSet<String>();
 		if (path.startsWith("file:") && path.contains("!")) {
 			final String[] split = path.split("!");
@@ -186,10 +191,12 @@ public class EggTypeClassLoader extends ClassLoader {
 			ZipEntry entry;
 			while ((entry = zip.getNextEntry()) != null) {
 				if (entry.getName().endsWith(".class")) {
-					final String className = entry.getName().replaceAll("[$].*", "")
-							.replaceAll("[.]class", "").replace('/', '.');
+					final String className = entry.getName()
+							.replaceAll("[$].*", "").replaceAll("[.]class", "")
+							.replace('/', '.');
 					if (className.startsWith(packageName)
-							&& (regex == null || regex.matcher(className).matches())) {
+							&& (regex == null || regex.matcher(className)
+									.matches())) {
 						classes.add(className);
 					}
 				}
@@ -203,11 +210,13 @@ public class EggTypeClassLoader extends ClassLoader {
 		for (final File file : files) {
 			if (file.isDirectory()) {
 				assert !file.getName().contains(".");
-				classes.addAll(findClasses(file.getAbsolutePath(),
-						packageName + "." + file.getName()));
+				classes.addAll(findClasses(file.getAbsolutePath(), packageName
+						+ "." + file.getName()));
 			} else if (file.getName().endsWith(".class")) {
-				final String className = packageName + '.'
-						+ file.getName().substring(0, file.getName().length() - 6);
+				final String className = packageName
+						+ '.'
+						+ file.getName().substring(0,
+								file.getName().length() - 6);
 				if (regex == null || regex.matcher(className).matches()) {
 					classes.add(className);
 				}

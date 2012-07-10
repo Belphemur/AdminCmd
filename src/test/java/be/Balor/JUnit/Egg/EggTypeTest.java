@@ -44,23 +44,32 @@ public class EggTypeTest {
 	}
 
 	@Test
-	public void registeringNewEggs() throws ProcessingArgsException, DontHaveThePermissionException {
-		assertTrue(EggType.createEggType(null, new CommandArgs("-E Test -m Test")) instanceof TestEgg);
+	public void registeringNewEggs() throws ProcessingArgsException,
+			DontHaveThePermissionException {
+		assertTrue(EggType.createEggType(null, new CommandArgs(
+				"-E Test -m Test")) instanceof TestEgg);
 	}
 
 	@Test
-	public void serializationOfEggType() throws IOException, InvalidConfigurationException,
-			ProcessingArgsException, DontHaveThePermissionException {
+	public void serializationOfEggType() throws IOException,
+			InvalidConfigurationException, ProcessingArgsException,
+			DontHaveThePermissionException {
 		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
-		final EggType<?> egg = EggType.createEggType(null, new CommandArgs("-E Test -t"));
+		final EggType<?> egg = EggType.createEggType(null, new CommandArgs(
+				"-E Test -t"));
 		final File test = new File("testEgg.yml");
-		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(test);
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(test);
 		conf.set("egg", egg);
-		conf.set("egg2", EggType.createEggType(null, new CommandArgs("-E Test")));
+		conf.set("egg2",
+				EggType.createEggType(null, new CommandArgs("-E Test")));
 		conf.save();
 		conf.reload();
-		assertEquals(EggType.createEggType(null, new CommandArgs("-E Test -t")), conf.get("egg"));
-		assertEquals(EggType.createEggType(null, new CommandArgs("-E Test")), conf.get("egg2"));
+		assertEquals(
+				EggType.createEggType(null, new CommandArgs("-E Test -t")),
+				conf.get("egg"));
+		assertEquals(EggType.createEggType(null, new CommandArgs("-E Test")),
+				conf.get("egg2"));
 		test.deleteOnExit();
 
 	}

@@ -71,9 +71,10 @@ public class LogFormatter extends Formatter {
 		}
 
 		// convert it into the MessageFormat form
-		format = format.replace("%L", "{0}").replace("%m", "{1}").replace("%M", "{2}")
-				.replace("%t", "{3}").replace("%c", "{4}").replace("%T", "{5}")
-				.replace("%n", "{6}").replace("%C", "{7}").replace("%S", "{8}")
+		format = format.replace("%L", "{0}").replace("%m", "{1}")
+				.replace("%M", "{2}").replace("%t", "{3}").replace("%c", "{4}")
+				.replace("%T", "{5}").replace("%n", "{6}").replace("%C", "{7}")
+				.replace("%S", "{8}")
 				+ "\n";
 
 		messageFormat = new MessageFormat(format);
@@ -132,7 +133,8 @@ public class LogFormatter extends Formatter {
 				arguments[1] = record.getThrown().toString();
 			}
 			String stackTrace = "\n";
-			for (final StackTraceElement st : record.getThrown().getStackTrace()) {
+			for (final StackTraceElement st : record.getThrown()
+					.getStackTrace()) {
 				stackTrace += "\t" + st.toString() + "\n";
 			}
 			arguments[8] = stackTrace;

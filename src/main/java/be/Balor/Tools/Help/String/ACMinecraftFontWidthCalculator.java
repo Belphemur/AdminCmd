@@ -23,20 +23,26 @@ import java.util.LinkedList;
 public class ACMinecraftFontWidthCalculator {
 
 	public final static int chatwidth = 318; // 325
-	public static String charWidthIndexIndex = " !\"#$%&'()*+,-./" + "0123456789:;<=>?"
-			+ "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[\\]^_" + "'abcdefghijklmno" + "pqrstuvwxyz{|}~⌂"
-			+ "ÇüéâäàåçêëèïîìÄÅ" + "ÉæÆôöòûùÿÖÜø£Ø×ƒ" + "áíóúñÑªº¿®¬½¼¡«»";
-	public static int[] charWidths = { 4, 2, 5, 6, 6, 6, 6, 3, 5, 5, 5, 6, 2, 6, 2, 6, 6, 6, 6, 6,
-			6, 6, 6, 6, 6, 6, 2, 2, 5, 6, 5, 6, 7, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 6,
-			6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 4, 6, 6, 3, 6, 6, 6, 6, 6, 5, 6, 6, 2, 6, 5, 3, 6,
-			6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 5, 2, 5, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-			4, 6, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 3, 6, 6, 6, 6, 6, 6,
-			6, 7, 6, 6, 6, 2, 6,
+	public static String charWidthIndexIndex = " !\"#$%&'()*+,-./"
+			+ "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[\\]^_"
+			+ "'abcdefghijklmno" + "pqrstuvwxyz{|}~⌂"
+			+ "ÇüéâäàåçêëèïîìÄÅ"
+			+ "ÉæÆôöòûùÿÖÜø£Ø×ƒ"
+			+ "áíóúñÑªº¿®¬½¼¡«»";
+	public static int[] charWidths = {4, 2, 5, 6, 6, 6, 6, 3, 5, 5, 5, 6, 2, 6,
+			2, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 2, 2, 5, 6, 5, 6, 7, 6, 6, 6,
+			6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+			6, 4, 6, 4, 6, 6, 3, 6, 6, 6, 6, 6, 5, 6, 6, 2, 6, 5, 3, 6, 6, 6,
+			6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 5, 2, 5, 7, 6, 6, 6, 6, 6, 6, 6,
+			6, 6, 6, 6, 6, 4, 6, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+			6, 6, 4, 6, 6, 3, 6, 6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 2,
+			6,
 			6,
 			// not sure what tkelly made these rows for..
-			8, 9, 9, 6, 6, 6, 8, 8, 6, 8, 8, 8, 8, 8, 6, 6, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
-			9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 6, 9, 9, 9, 5, 9, 9, 8, 7, 7, 8, 7, 8, 8, 8, 7, 8,
-			8, 7, 9, 9, 6, 7, 7, 7, 7, 7, 9, 6, 7, 8, 7, 6, 6, 9, 7, 6, 7, 1 };
+			8, 9, 9, 6, 6, 6, 8, 8, 6, 8, 8, 8, 8, 8, 6, 6, 9, 9, 9, 9, 9, 9,
+			9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 6, 9, 9,
+			9, 5, 9, 9, 8, 7, 7, 8, 7, 8, 8, 8, 7, 8, 8, 7, 9, 9, 6, 7, 7, 7,
+			7, 7, 9, 6, 7, 8, 7, 6, 6, 9, 7, 6, 7, 1};
 
 	// chat limmitation: repetitions of characters is limmited to 119 per line
 	// so: repeating !'s will not fill a line
@@ -90,7 +96,8 @@ public class ACMinecraftFontWidthCalculator {
 		return str + unformattedStrRepeat(pad, len / getCharWidth(pad, 6));
 	}
 
-	public static String strPadRightChat(final String str, int abslen, final char pad) {
+	public static String strPadRightChat(final String str, int abslen,
+			final char pad) {
 		abslen -= getStringWidth(str);
 		return str + unformattedStrRepeat(pad, abslen / getCharWidth(pad, 6));
 	}
@@ -128,24 +135,29 @@ public class ACMinecraftFontWidthCalculator {
 		return unformattedStrRepeat(pad, len / getCharWidth(pad, 6)) + str;
 	}
 
-	public static String strPadLeftChat(final String str, int abslen, final char pad) {
+	public static String strPadLeftChat(final String str, int abslen,
+			final char pad) {
 		abslen -= getStringWidth(str);
-		return unformattedStrRepeat(pad, abslen / getCharWidth(pad, 6)).concat(str);
+		return unformattedStrRepeat(pad, abslen / getCharWidth(pad, 6)).concat(
+				str);
 	}
 
 	public static String strPadLeftChat(final String str, int abslen) {
 		abslen -= getStringWidth(str);
-		return unformattedStrRepeat(' ', abslen / getCharWidth(' ', 6)).concat(str);
+		return unformattedStrRepeat(' ', abslen / getCharWidth(' ', 6)).concat(
+				str);
 	}
 
 	public static String strPadLeftChat(final String str, final char pad) {
 		final int width = chatwidth - getStringWidth(str);
-		return unformattedStrRepeat(pad, width / getCharWidth(pad, 6)).concat(str);
+		return unformattedStrRepeat(pad, width / getCharWidth(pad, 6)).concat(
+				str);
 	}
 
 	public static String strPadLeftChat(final String str) {
 		final int width = chatwidth - getStringWidth(str);
-		return unformattedStrRepeat(' ', width / getCharWidth(' ', 6)).concat(str);
+		return unformattedStrRepeat(' ', width / getCharWidth(' ', 6)).concat(
+				str);
 	}
 
 	/**
@@ -166,15 +178,18 @@ public class ACMinecraftFontWidthCalculator {
 		final int padwid = getCharWidth(pad, 6);
 		final int prepad = (len / padwid) / 2;
 		len -= prepad * padwid;
-		return unformattedStrRepeat(pad, prepad) + str + unformattedStrRepeat(pad, len / padwid);
+		return unformattedStrRepeat(pad, prepad) + str
+				+ unformattedStrRepeat(pad, len / padwid);
 	}
 
-	public static String strPadCenterChat(final String str, int abslen, final char pad) {
+	public static String strPadCenterChat(final String str, int abslen,
+			final char pad) {
 		abslen -= getStringWidth(str);
 		final int padwid = getCharWidth(pad, 6);
 		final int prepad = (abslen / padwid) / 2;
 		abslen -= prepad * padwid;
-		return unformattedStrRepeat(pad, prepad) + str + unformattedStrRepeat(pad, abslen / padwid);
+		return unformattedStrRepeat(pad, prepad) + str
+				+ unformattedStrRepeat(pad, abslen / padwid);
 	}
 
 	public static String strPadCenterChat(final String str, final char pad) {
@@ -182,7 +197,8 @@ public class ACMinecraftFontWidthCalculator {
 		final int padwid = getCharWidth(pad, 6);
 		final int prepad = (width / padwid) / 2;
 		width -= prepad * padwid;
-		return unformattedStrRepeat(pad, prepad) + str + unformattedStrRepeat(pad, width / padwid);
+		return unformattedStrRepeat(pad, prepad) + str
+				+ unformattedStrRepeat(pad, width / padwid);
 	}
 
 	public static int strLen(final String str) {
@@ -193,21 +209,25 @@ public class ACMinecraftFontWidthCalculator {
 		return str.replaceAll("\\u00A7.", "").length();
 	}
 
-	public static String unformattedPadRight(String str, final int len, final char pad) {
+	public static String unformattedPadRight(String str, final int len,
+			final char pad) {
 		for (int i = strLen(str); i < len; ++i) {
 			str += pad;
 		}
 		return str;
 	}
 
-	public static String unformattedPadLeft(final String str, final int len, final char pad) {
+	public static String unformattedPadLeft(final String str, final int len,
+			final char pad) {
 		return unformattedStrRepeat(pad, len - strLen(str)) + str;
 	}
 
-	public static String unformattedPadCenter(final String str, int len, final char pad) {
+	public static String unformattedPadCenter(final String str, int len,
+			final char pad) {
 		len -= strLen(str);
 		final int prepad = len / 2;
-		return unformattedStrRepeat(pad, prepad) + str + unformattedStrRepeat(pad, len - prepad);
+		return unformattedStrRepeat(pad, prepad) + str
+				+ unformattedStrRepeat(pad, len - prepad);
 	}
 
 	public static String unformattedStrRepeat(final char ch, final int len) {
@@ -286,13 +306,14 @@ public class ACMinecraftFontWidthCalculator {
 		return strChatWordWrap(str, tab, ' ');
 	}
 
-	public static String strChatWordWrap(String str, final int tab, final char tabChar) {
+	public static String strChatWordWrap(String str, final int tab,
+			final char tabChar) {
 		String ret = "";
 		while (str.length() > 0) {
 			// find last char of first line
 			if (getStringWidth(str) <= chatwidth) {
-				return (ret.length() > 0 ? ret + "\n" + unformattedStrRepeat(tabChar, tab) : "")
-						.concat(str);
+				return (ret.length() > 0 ? ret + "\n"
+						+ unformattedStrRepeat(tabChar, tab) : "").concat(str);
 			}
 			final String line1 = strChatTrim(str);
 			int lastPos = line1.length() - (ret.length() > 0 ? tab + 1 : 1);
@@ -305,7 +326,8 @@ public class ACMinecraftFontWidthCalculator {
 			// ret += strPadRightChat((ret.length() > 0 ?
 			// unformattedStrRepeat(tabChar, tab) : "") + str.substring(0,
 			// lastPos));
-			ret += (ret.length() > 0 ? "\n" + unformattedStrRepeat(tabChar, tab) : "")
+			ret += (ret.length() > 0 ? "\n"
+					+ unformattedStrRepeat(tabChar, tab) : "")
 					+ str.substring(0, lastPos);
 			str = str.substring(lastPos + 1);
 		}
@@ -324,12 +346,14 @@ public class ACMinecraftFontWidthCalculator {
 	 * @param tabChar
 	 * @return
 	 */
-	public static String strChatWordWrapRight(String str, final int tab, final char tabChar) {
+	public static String strChatWordWrapRight(String str, final int tab,
+			final char tabChar) {
 		String ret = "";
 		while (str.length() > 0) {
 			// find last char of first line
 			if (getStringWidth(str) <= chatwidth) {
-				return (ret.length() > 0 ? ret + "\n" : "").concat(strPadLeftChat(str, tabChar));
+				return (ret.length() > 0 ? ret + "\n" : "")
+						.concat(strPadLeftChat(str, tabChar));
 			}
 			final String line1 = strChatTrim(str);
 			int lastPos = line1.length() - (ret.length() > 0 ? tab + 1 : 1);
@@ -357,8 +381,8 @@ public class ACMinecraftFontWidthCalculator {
 	 * @param sepChar
 	 * @return
 	 */
-	public static String strChatWordWrapRight(String str, final int tab, final char tabChar,
-			final char sepChar) {
+	public static String strChatWordWrapRight(String str, final int tab,
+			final char tabChar, final char sepChar) {
 		String ret = "";
 		String line1 = strChatTrim(str);
 		// first run the first left & right align
@@ -374,13 +398,15 @@ public class ACMinecraftFontWidthCalculator {
 				lastPos = sepPos;
 			}
 			ret += str.substring(0, sepPos);
-			ret += strPadLeftChat(str.substring(sepPos, lastPos), chatwidth - getStringWidth(ret));
+			ret += strPadLeftChat(str.substring(sepPos, lastPos), chatwidth
+					- getStringWidth(ret));
 			str = str.substring(lastPos + 1);
 		}
 		while (str.length() > 0) {
 			// find last char of first line
 			if (getStringWidth(str) <= chatwidth) {
-				return (ret.length() > 0 ? ret + "\n" : "").concat(strPadLeftChat(str, tabChar));
+				return (ret.length() > 0 ? ret + "\n" : "")
+						.concat(strPadLeftChat(str, tabChar));
 			}
 			line1 = strChatTrim(str);
 			int lastPos = line1.length() - (ret.length() > 0 ? tab + 1 : 1);
@@ -395,8 +421,8 @@ public class ACMinecraftFontWidthCalculator {
 					+ strPadLeftChat(str.substring(0, lastPos), tabChar);
 			str = str.substring(lastPos + 1);
 		}
-		System.out
-				.println(str + " changed to " + ret + "(" + getStringWidth(ret) + " pixels long)");
+		System.out.println(str + " changed to " + ret + "("
+				+ getStringWidth(ret) + " pixels long)");
 		return ret;
 	}
 
@@ -404,39 +430,47 @@ public class ACMinecraftFontWidthCalculator {
 		return strWordWrap(str, width, 0, ' ');
 	}
 
-	public static String strWordWrap(final String str, final int width, final int tab) {
+	public static String strWordWrap(final String str, final int width,
+			final int tab) {
 		return strWordWrap(str, width, tab, ' ');
 	}
 
-	public static String strWordWrap(String str, final int width, final int tab, final char tabChar) {
+	public static String strWordWrap(String str, final int width,
+			final int tab, final char tabChar) {
 		String ret = "";
 		while (str.length() > 0) {
 			// find last char of first line
 			if (strLen(str) <= width) {
-				return (ret.length() > 0 ? ret + "\n" + unformattedStrRepeat(tabChar, tab) : "")
-						.concat(str);
+				return (ret.length() > 0 ? ret + "\n"
+						+ unformattedStrRepeat(tabChar, tab) : "").concat(str);
 			}
 			final String line1 = strTrim(str, width);
 			int lastPos = line1.length()
-					- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+					- (ret.length() > 0 && line1.length() > tab + 1
+							? tab + 1
+							: 1);
 			while (lastPos > 0 && line1.charAt(lastPos) != ' ') {
 				--lastPos;
 			}
 			if (lastPos == 0) {
 				lastPos = line1.length()
-						- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+						- (ret.length() > 0 && line1.length() > tab + 1
+								? tab + 1
+								: 1);
 			}
 			// ret += strPadRightChat((ret.length() > 0 ?
 			// unformattedStrRepeat(tabChar, tab) : "") + str.substring(0,
 			// lastPos));
-			ret += (ret.length() > 0 ? "\n" + unformattedStrRepeat(tabChar, tab) : "")
+			ret += (ret.length() > 0 ? "\n"
+					+ unformattedStrRepeat(tabChar, tab) : "")
 					+ str.substring(0, lastPos);
 			str = str.substring(lastPos + 1);
 		}
 		return ret;
 	}
 
-	public static String strWordWrapRight(final String str, final int width, final int tab) {
+	public static String strWordWrapRight(final String str, final int width,
+			final int tab) {
 		return strWordWrapRight(str, width, tab, ' ');
 	}
 
@@ -449,28 +483,33 @@ public class ACMinecraftFontWidthCalculator {
 	 * @param tabChar
 	 * @return
 	 */
-	public static String strWordWrapRight(String str, final int width, final int tab,
-			final char tabChar) {
+	public static String strWordWrapRight(String str, final int width,
+			final int tab, final char tabChar) {
 		String ret = "";
 		while (str.length() > 0) {
 			// find last char of first line
 			if (getStringWidth(str) <= width) {
-				return (ret.length() > 0 ? ret + "\n" : "").concat(unformattedPadLeft(str, width,
-						tabChar));
+				return (ret.length() > 0 ? ret + "\n" : "")
+						.concat(unformattedPadLeft(str, width, tabChar));
 			}
 			final String line1 = strTrim(str, width);
 			int lastPos = line1.length()
-					- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+					- (ret.length() > 0 && line1.length() > tab + 1
+							? tab + 1
+							: 1);
 			while (lastPos > 0 && line1.charAt(lastPos) != ' ') {
 				--lastPos;
 			}
 			if (lastPos <= 0) {
 				lastPos = line1.length()
-						- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+						- (ret.length() > 0 && line1.length() > tab + 1
+								? tab + 1
+								: 1);
 			}
 			// ret += strPadLeftChat(str.substring(0, lastPos), tabChar);
 			ret += (ret.length() > 0 ? "\n" : "")
-					+ unformattedPadLeft(str.substring(0, lastPos), width, tabChar);
+					+ unformattedPadLeft(str.substring(0, lastPos), width,
+							tabChar);
 			str = str.substring(lastPos + 1);
 		}
 		return ret;
@@ -487,8 +526,8 @@ public class ACMinecraftFontWidthCalculator {
 	 * @param sepChar
 	 * @return
 	 */
-	public static String strWordWrapRight(String str, final int width, final int tab,
-			final char tabChar, final char sepChar) {
+	public static String strWordWrapRight(String str, final int width,
+			final int tab, final char tabChar, final char sepChar) {
 		String ret = "";
 		String line1 = strTrim(str, width);
 		// first run the first left & right align
@@ -500,33 +539,41 @@ public class ACMinecraftFontWidthCalculator {
 			}
 			if (lastPos == 0) {
 				lastPos = line1.length()
-						- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+						- (ret.length() > 0 && line1.length() > tab + 1
+								? tab + 1
+								: 1);
 			} else if (sepPos > lastPos) {
 				lastPos = sepPos;
 			}
 			ret += str.substring(0, sepPos);
-			ret += strPadLeftChat(str.substring(sepPos, lastPos), width - strLen(ret));
+			ret += strPadLeftChat(str.substring(sepPos, lastPos), width
+					- strLen(ret));
 			str = str.substring(lastPos + 1);
 		}
 		while (str.length() > 0) {
 			// find last char of first line
 			if (strLen(str) <= width) {
-				return (ret.length() > 0 ? ret + "\n" : "").concat(unformattedPadLeft(str, width,
-						tabChar));
+				return (ret.length() > 0 ? ret + "\n" : "")
+						.concat(unformattedPadLeft(str, width, tabChar));
 			}
 			line1 = strChatTrim(str);
 			int lastPos = line1.length()
-					- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+					- (ret.length() > 0 && line1.length() > tab + 1
+							? tab + 1
+							: 1);
 			while (lastPos > 0 && line1.charAt(lastPos) != ' ') {
 				--lastPos;
 			}
 			if (lastPos == 0) {
 				lastPos = line1.length()
-						- (ret.length() > 0 && line1.length() > tab + 1 ? tab + 1 : 1);
+						- (ret.length() > 0 && line1.length() > tab + 1
+								? tab + 1
+								: 1);
 			}
 			// ret += strPadLeftChat(str.substring(0, lastPos), tabChar);
 			ret += (ret.length() > 0 ? "\n" + lastStrColor(ret) : "")
-					+ unformattedPadLeft(str.substring(0, lastPos), width, tabChar);
+					+ unformattedPadLeft(str.substring(0, lastPos), width,
+							tabChar);
 			str = str.substring(lastPos + 1);
 		}
 		return ret;
@@ -544,8 +591,8 @@ public class ACMinecraftFontWidthCalculator {
 		final int pos = str.indexOf("<" + tag);
 		if (pos >= 0) {
 			return str.length() > pos + ("<" + tag).length()
-					&& (str.charAt(pos + ("<" + tag).length()) == '>' || str.charAt(pos
-							+ ("<" + tag).length() + 1) == '>');
+					&& (str.charAt(pos + ("<" + tag).length()) == '>' || str
+							.charAt(pos + ("<" + tag).length() + 1) == '>');
 		}
 		return false;
 	}
@@ -553,42 +600,56 @@ public class ACMinecraftFontWidthCalculator {
 	/**
 	 * UNTESTED: DON'T USE YET
 	 */
-	public static String alignTags(String input, final boolean minecraftChatFormat) {
-		for (final String fm : new String[] { "l", "r", "c" }) {
+	public static String alignTags(String input,
+			final boolean minecraftChatFormat) {
+		for (final String fm : new String[]{"l", "r", "c"}) {
 			while (containsAlignTag(input, fm)) {
 				char repl = ' ';
 				if (input.matches("^.*<" + fm + ".>.*$")) {
-					repl = input.substring(input.indexOf("<" + fm) + 2).charAt(0);
+					repl = input.substring(input.indexOf("<" + fm) + 2).charAt(
+							0);
 					input = input.replaceFirst("<" + fm + ".>", "<" + fm + ">");
 				}
 
 				if (fm.equals("l")) {
 					if (minecraftChatFormat) {
-						input = strPadRight(input.substring(0, input.indexOf("<" + fm + ">")),
+						input = strPadRight(
+								input.substring(0,
+										input.indexOf("<" + fm + ">")),
 								input.indexOf("<" + fm + ">"), repl)
 								+ input.substring(input.indexOf("<" + fm + ">") + 3);
 					} else {
-						input = Str.padRight(input.substring(0, input.indexOf("<" + fm + ">")),
+						input = Str.padRight(
+								input.substring(0,
+										input.indexOf("<" + fm + ">")),
 								input.indexOf("<" + fm + ">"), repl)
 								+ input.substring(input.indexOf("<" + fm + ">") + 3);
 					}
 				} else if (fm.equals("c")) {
 					if (minecraftChatFormat) {
-						input = strPadCenter(input.substring(0, input.indexOf("<" + fm + ">")),
+						input = strPadCenter(
+								input.substring(0,
+										input.indexOf("<" + fm + ">")),
 								input.indexOf("<" + fm + ">"), repl)
 								+ input.substring(input.indexOf("<" + fm + ">") + 3);
 					} else {
-						input = Str.padCenter(input.substring(0, input.indexOf("<" + fm + ">")),
+						input = Str.padCenter(
+								input.substring(0,
+										input.indexOf("<" + fm + ">")),
 								input.indexOf("<" + fm + ">"), repl)
 								+ input.substring(input.indexOf("<" + fm + ">") + 3);
 					}
 				} else {
 					if (minecraftChatFormat) {
-						input = strPadLeft(input.substring(0, input.indexOf("<" + fm + ">")),
+						input = strPadLeft(
+								input.substring(0,
+										input.indexOf("<" + fm + ">")),
 								input.indexOf("<" + fm + ">"), repl)
 								+ input.substring(input.indexOf("<" + fm + ">") + 3);
 					} else {
-						input = Str.padLeft(input.substring(0, input.indexOf("<" + fm + ">")),
+						input = Str.padLeft(
+								input.substring(0,
+										input.indexOf("<" + fm + ">")),
 								input.indexOf("<" + fm + ">"), repl)
 								+ input.substring(input.indexOf("<" + fm + ">") + 3);
 					}
@@ -600,16 +661,21 @@ public class ACMinecraftFontWidthCalculator {
 
 	public static LinkedList<String> alignTags(LinkedList<String> input,
 			final boolean minecraftChatFormat) {
-		for (final String fm : new String[] { "l", "r", "c" }) {
+		for (final String fm : new String[]{"l", "r", "c"}) {
 			while (containsAlignTag(input.get(1), fm)) {
 				char repl = ' ';
 				if (input.get(1).matches("^.*<" + fm + ".>.*$")) {// ||
 																	// input.get(1).matches("^.*<r.>.*$"))
 																	// {
-					repl = input.get(1).substring(input.get(1).indexOf("<" + fm) + 2).charAt(0); // ,
-																									// input.get(1).indexOf(">")
+					repl = input.get(1)
+							.substring(input.get(1).indexOf("<" + fm) + 2)
+							.charAt(0); // ,
+										// input.get(1).indexOf(">")
 					for (int i = 0; i < input.size(); ++i) {
-						input.set(i, input.get(i).replaceFirst("<" + fm + ".>", "<" + fm + ">"));
+						input.set(
+								i,
+								input.get(i).replaceFirst("<" + fm + ".>",
+										"<" + fm + ">"));
 					}
 				}
 
@@ -627,32 +693,50 @@ public class ACMinecraftFontWidthCalculator {
 						if (fm.equals("l")) {
 							if (minecraftChatFormat) {
 								newinput.add(strPadRight(
-										line.substring(0, line.indexOf("<" + fm + ">")), maxPos,
-										repl) + line.substring(line.indexOf("<" + fm + ">") + 3));
+										line.substring(0,
+												line.indexOf("<" + fm + ">")),
+										maxPos, repl)
+										+ line.substring(line.indexOf("<" + fm
+												+ ">") + 3));
 							} else {
 								newinput.add(Str.padRight(
-										line.substring(0, line.indexOf("<" + fm + ">")), maxPos,
-										repl) + line.substring(line.indexOf("<" + fm + ">") + 3));
+										line.substring(0,
+												line.indexOf("<" + fm + ">")),
+										maxPos, repl)
+										+ line.substring(line.indexOf("<" + fm
+												+ ">") + 3));
 							}
 						} else if (fm.equals("c")) {
 							if (minecraftChatFormat) {
 								newinput.add(strPadCenter(
-										line.substring(0, line.indexOf("<" + fm + ">")), maxPos,
-										repl) + line.substring(line.indexOf("<" + fm + ">") + 3));
+										line.substring(0,
+												line.indexOf("<" + fm + ">")),
+										maxPos, repl)
+										+ line.substring(line.indexOf("<" + fm
+												+ ">") + 3));
 							} else {
 								newinput.add(Str.padCenter(
-										line.substring(0, line.indexOf("<" + fm + ">")), maxPos,
-										repl) + line.substring(line.indexOf("<" + fm + ">") + 3));
+										line.substring(0,
+												line.indexOf("<" + fm + ">")),
+										maxPos, repl)
+										+ line.substring(line.indexOf("<" + fm
+												+ ">") + 3));
 							}
 						} else {
 							if (minecraftChatFormat) {
 								newinput.add(strPadLeft(
-										line.substring(0, line.indexOf("<" + fm + ">")), maxPos,
-										repl) + line.substring(line.indexOf("<" + fm + ">") + 3));
+										line.substring(0,
+												line.indexOf("<" + fm + ">")),
+										maxPos, repl)
+										+ line.substring(line.indexOf("<" + fm
+												+ ">") + 3));
 							} else {
 								newinput.add(Str.padLeft(
-										line.substring(0, line.indexOf("<" + fm + ">")), maxPos,
-										repl) + line.substring(line.indexOf("<" + fm + ">") + 3));
+										line.substring(0,
+												line.indexOf("<" + fm + ">")),
+										maxPos, repl)
+										+ line.substring(line.indexOf("<" + fm
+												+ ">") + 3));
 							}
 						}
 					} else {

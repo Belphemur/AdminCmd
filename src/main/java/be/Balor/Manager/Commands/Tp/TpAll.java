@@ -53,7 +53,8 @@ public class TpAll extends TeleportCommand {
 	 */
 	@SuppressWarnings("unused")
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player[] players = ACPluginManager.getServer().getOnlinePlayers();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String teleporter;
@@ -69,7 +70,8 @@ public class TpAll extends TeleportCommand {
 			world = ACWorld.getWorld(args.getString(0));
 		} else {
 			if (sender instanceof Player) {
-				world = ACWorld.getWorld(((Player) sender).getWorld().getName());
+				world = ACWorld
+						.getWorld(((Player) sender).getWorld().getName());
 			} else {
 				replace.put("arg", "world");
 				replace.put("cmdName", "/tpall");
@@ -194,8 +196,9 @@ public class TpAll extends TeleportCommand {
 		}
 	}
 
-	private void doTeleportAndMessage(final Player sender, final Player[] players,
-			final HashMap<String, String> replace, final Location loc) {
+	private void doTeleportAndMessage(final Player sender,
+			final Player[] players, final HashMap<String, String> replace,
+			final Location loc) {
 		if (loc == null) {
 			return;
 		}
@@ -215,7 +218,8 @@ public class TpAll extends TeleportCommand {
 		}
 	}
 
-	private void parseNumber(final CommandSender sender, final String toParse, Double parsed) {
+	private void parseNumber(final CommandSender sender, final String toParse,
+			Double parsed) {
 		try {
 			parsed = (double) Integer.parseInt(toParse);
 		} catch (final NumberFormatException e) {

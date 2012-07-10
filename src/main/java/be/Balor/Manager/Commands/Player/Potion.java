@@ -64,7 +64,8 @@ public class Potion extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args)
+			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
 		final String potion = args.getString(0);
 		final String potionFound = Str.matchString(potions, potion);
@@ -74,7 +75,8 @@ public class Potion extends PlayerCommand {
 			replace.put("type", LocaleHelper.TYPE_POTION.getLocale());
 			LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
 			sender.sendMessage(ChatColor.GREEN + "Potion list :");
-			sender.sendMessage(Joiner.on(", ").skipNulls().join(potions).toLowerCase());
+			sender.sendMessage(Joiner.on(", ").skipNulls().join(potions)
+					.toLowerCase());
 			return;
 		}
 		final String potionDurationString = args.getString(1);
@@ -97,8 +99,8 @@ public class Potion extends PlayerCommand {
 				return;
 			}
 		}
-		target.addPotionEffect(new PotionEffect(PotionEffectType.getByName(potionFound), duration,
-				amplifier));
+		target.addPotionEffect(new PotionEffect(PotionEffectType
+				.getByName(potionFound), duration, amplifier));
 		replace.put("player", Utils.getPlayerName(target, sender));
 		replace.put("potion", potionFound);
 		LocaleHelper.POTION_EFFECT.sendLocale(sender, replace);

@@ -43,8 +43,8 @@ public class FakePluginCommand extends Command {
 	 * java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public boolean execute(final CommandSender sender, final String commandLabel,
-			final String[] args) {
+	public boolean execute(final CommandSender sender,
+			final String commandLabel, final String[] args) {
 		return false;
 	}
 
