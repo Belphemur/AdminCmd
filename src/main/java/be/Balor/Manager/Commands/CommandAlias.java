@@ -87,4 +87,16 @@ public class CommandAlias {
 		}
 		return result;
 	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CommandAlias [commandName=" + commandName + ", parameters="
+				+ parameters + "]";
+	}
+
 }

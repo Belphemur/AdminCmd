@@ -356,10 +356,10 @@ public class CommandManager implements CommandExecutor {
 		if (cmdAlias != null) {
 			if (ConfigEnum.VERBOSE.getBoolean()) {
 				ACLogger.info("Command " + cmdName + " intercepted for "
-						+ cmdAlias.getCommandName());
+						+ cmdAlias);
 			}
-			final String[] cmdArgsArray = Utils.Arrays_copyOfRange(split, 1,
-					split.length);
+			final String[] cmdArgsArray = cmdAlias.processArguments(Utils
+					.Arrays_copyOfRange(split, 1, split.length));
 			final CoreCommand coreCmd = cmdAlias.getCmd();
 			if (!coreCmd.argsCheck(cmdArgsArray)) {
 				if (!HelpLister.getInstance().displayExactCommandHelp(sender,
@@ -369,12 +369,10 @@ public class CommandManager implements CommandExecutor {
 				}
 				return true;
 			}
-			return executeCommand(sender, coreCmd,
-					cmdAlias.processArguments(cmdArgsArray));
+			return executeCommand(sender, coreCmd, cmdArgsArray);
 		}
 		return false;
 	}
-
 	/**
 	 * Register command from plugin
 	 * 
@@ -502,8 +500,21 @@ public class CommandManager implements CommandExecutor {
 					.getConfigurationSection(command);
 			for (final Entry<String, Object> alias : aliasSection.getValues(
 					false).entrySet()) {
+				String params;
+				final Object value = alias.getValue();
+				if (value instanceof ConfigurationSection) {
+					final StringBuffer buffer = new StringBuffer();
+					for (final Entry<String, Object> entry : ((ConfigurationSection) alias)
+							.getValues(false).entrySet()) {
+						buffer.append(entry.getKey()).append(':')
+								.append(entry.getValue());
+					}
+					params = buffer.toString();
+				} else {
+					params = value.toString();
+				}
 				final CommandAlias commandAlias = new CommandAlias(command,
-						alias.getKey(), alias.getValue().toString());
+						alias.getKey(), params);
 				commandsAliasReplacer.put(alias.getKey(), commandAlias);
 
 				setAliasCmd.add(commandAlias);
