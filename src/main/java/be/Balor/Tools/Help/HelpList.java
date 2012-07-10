@@ -46,14 +46,13 @@ class HelpList {
 	private CommandSender lastCommandSender;
 	private Queue<HelpEntry> lastHelpEntries;
 	private CmdMatch lastCommandSearched;
-	private final int initSize;
+	private int initSize = 1;
 
 	/**
 	 *
 	 */
 	HelpList(final String plugin) {
 		this.pluginName = plugin;
-		initSize = 1;
 	}
 
 	public void addEntry(final HelpEntry he) {
@@ -61,6 +60,11 @@ class HelpList {
 			pluginHelp.remove(he);
 		}
 		pluginHelp.add(he);
+		updateInitSize();
+	}
+	private void updateInitSize() {
+		final int dividedBy2 = pluginHelp.size() / 2;
+		initSize = dividedBy2 >= 1 ? dividedBy2 : 1;
 	}
 
 	public boolean removeEntry(final String commandName) {
@@ -121,8 +125,7 @@ class HelpList {
 			}
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
-		final int dividedBy2 = pluginHelp.size() / 2;
-		initSize = dividedBy2 >= 1 ? dividedBy2 : 1;
+		updateInitSize();
 
 	}
 
