@@ -46,12 +46,14 @@ class HelpList {
 	private CommandSender lastCommandSender;
 	private Queue<HelpEntry> lastHelpEntries;
 	private CmdMatch lastCommandSearched;
+	private final int initSize;
 
 	/**
 	 *
 	 */
 	HelpList(final String plugin) {
 		this.pluginName = plugin;
+		initSize = 1;
 	}
 
 	public void addEntry(final HelpEntry he) {
@@ -119,6 +121,8 @@ class HelpList {
 			}
 			this.pluginHelp = new TreeSet<HelpEntry>(new EntryNameComparator());
 		}
+		final int dividedBy2 = pluginHelp.size() / 2;
+		initSize = dividedBy2 >= 1 ? dividedBy2 : 1;
 
 	}
 
@@ -139,10 +143,7 @@ class HelpList {
 		if (lastCommandSender != null && sender.equals(lastCommandSender)) {
 			return;
 		}
-		final int dividedBy2 = pluginHelp.size() / 2;
-		final int initSize = dividedBy2 >= 1
-				? dividedBy2
-				: 1;
+
 		lastHelpEntries = new PriorityQueue<HelpEntry>(initSize,
 				new EntryCommandComparator());
 
