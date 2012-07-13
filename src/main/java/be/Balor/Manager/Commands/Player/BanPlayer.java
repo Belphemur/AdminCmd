@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Player;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -90,12 +91,12 @@ public class BanPlayer extends PlayerCommand {
 				}
 			}
 			try {
-				int tmpIntTime = Utils.timeParser(args
+				final int tmpIntTime = Utils.timeParser(args
 						.getString(args.length - 1));
 				if (tmpIntTime != -1) {
 					tmpBan = tmpIntTime;
 				}
-			} catch (NotANumberException e) {
+			} catch (final NotANumberException e) {
 				Utils.sI18n(sender, "NaN", "number",
 						args.getString(args.length - 1));
 				return;
@@ -106,7 +107,9 @@ public class BanPlayer extends PlayerCommand {
 			if (!Utils.isPlayer(sender, false)) {
 				message += "by Server Admin";
 			} else {
-				message += "by " + Utils.getPlayerName((Player) sender);
+				message += "by "
+						+ ChatColor.stripColor(Utils
+								.getPlayerName((Player) sender));
 			}
 		} else {
 			if (message.isEmpty()) {
@@ -115,7 +118,9 @@ public class BanPlayer extends PlayerCommand {
 			if (!Utils.isPlayer(sender, false)) {
 				message += "by Server Admin";
 			} else {
-				message += "by " + Utils.getPlayerName((Player) sender);
+				message += "by "
+						+ ChatColor.stripColor(Utils
+								.getPlayerName((Player) sender));
 			}
 		}
 		message = message.trim();
