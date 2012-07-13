@@ -44,7 +44,7 @@ public class ACColorSignListener implements Listener {
 			if (line == null || (line != null && line.isEmpty())) {
 				continue;
 			}
-			if (!Utils.regexColorParser.matcher(line).find()) {
+			if (!Utils.REGEX_COLOR_PERSER.matcher(line).find()) {
 				continue;
 			}
 			if (!havePerm) {

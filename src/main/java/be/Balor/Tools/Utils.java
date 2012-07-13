@@ -110,10 +110,10 @@ public final class Utils {
 	public final static long hourInMillis = minuteInMillis * 60;
 	public final static long dayInMillis = hourInMillis * 24;
 	public final static int secInTick = 20;
-	private static final Character delimiter = '&';
-	public static final Pattern regexColorParser = Pattern.compile(delimiter
-			+ "[A-Fa-f]|" + delimiter + "1[0-5]|" + delimiter + "[0-9]|"
-			+ delimiter + "[L-Ol-o]");
+	private static final Character CHATCOLOR_DELIMITER = '&';
+	public static final Pattern REGEX_COLOR_PERSER = Pattern.compile(CHATCOLOR_DELIMITER
+			+ "[A-Fa-f]|" + CHATCOLOR_DELIMITER + "1[0-5]|" + CHATCOLOR_DELIMITER + "[0-9]|"
+			+ CHATCOLOR_DELIMITER + "[L-Ol-o]");
 	public static final Pattern REGEX_IP_V4 = Pattern
 			.compile("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b");
 	public static final Pattern REGEX_INACCURATE_IP_V4 = Pattern
@@ -223,8 +223,9 @@ public final class Utils {
 	 * @param message
 	 */
 	public static void broadcastMessage(final String message) {
-		if (message == null)
+		if (message == null) {
 			return;
+		}
 		for (final Player p : getOnlinePlayers()) {
 			p.sendMessage(message);
 			// new ColouredConsoleSender((CraftServer)
@@ -386,9 +387,16 @@ public final class Utils {
 	 * @return
 	 */
 	public static String colorParser(final String toParse) {
+		try {
+			return ChatColor.translateAlternateColorCodes(CHATCOLOR_DELIMITER, toParse);
+		} catch (final NoSuchMethodError e) {
+			return oldColorParser(toParse);
+		}
+	}
+	private static String oldColorParser(final String toParse) {
 		String ResultString = null;
 		try {
-			Matcher regexMatcher = regexColorParser.matcher(toParse);
+			Matcher regexMatcher = REGEX_COLOR_PERSER.matcher(toParse);
 			String result = toParse;
 			while (regexMatcher.find()) {
 				ResultString = regexMatcher.group();
@@ -403,7 +411,7 @@ public final class Utils {
 				}
 				result = regexMatcher.replaceFirst(ChatColor.getByChar(
 						Integer.toHexString(colorint)).toString());
-				regexMatcher = regexColorParser.matcher(result);
+				regexMatcher = REGEX_COLOR_PERSER.matcher(result);
 			}
 			return result;
 		} catch (final Exception ex) {
