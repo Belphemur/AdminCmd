@@ -111,9 +111,10 @@ public final class Utils {
 	public final static long dayInMillis = hourInMillis * 24;
 	public final static int secInTick = 20;
 	private static final Character CHATCOLOR_DELIMITER = '&';
-	public static final Pattern REGEX_COLOR_PERSER = Pattern.compile(CHATCOLOR_DELIMITER
-			+ "[A-Fa-f]|" + CHATCOLOR_DELIMITER + "1[0-5]|" + CHATCOLOR_DELIMITER + "[0-9]|"
-			+ CHATCOLOR_DELIMITER + "[L-Ol-o]");
+	public static final Pattern REGEX_COLOR_PERSER = Pattern
+			.compile(CHATCOLOR_DELIMITER + "[A-Fa-f]|" + CHATCOLOR_DELIMITER
+					+ "1[0-5]|" + CHATCOLOR_DELIMITER + "[0-9]|"
+					+ CHATCOLOR_DELIMITER + "[L-Ol-o]");
 	public static final Pattern REGEX_IP_V4 = Pattern
 			.compile("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b");
 	public static final Pattern REGEX_INACCURATE_IP_V4 = Pattern
@@ -388,7 +389,8 @@ public final class Utils {
 	 */
 	public static String colorParser(final String toParse) {
 		try {
-			return ChatColor.translateAlternateColorCodes(CHATCOLOR_DELIMITER, toParse);
+			return ChatColor.translateAlternateColorCodes(CHATCOLOR_DELIMITER,
+					toParse);
 		} catch (final NoSuchMethodError e) {
 			return oldColorParser(toParse);
 		}
@@ -1323,10 +1325,10 @@ public final class Utils {
 		} else {
 			replace.put("lastlogin", date);
 		}
-		final String motd = I18n(locale, replace).replace("\\n", "\n").replace(
-				"//n", "\n");
-		if (motd != null) {
-			for (final String toSend : motd.split("\n")) {
+		final String messageToSend = I18n(locale, replace);
+		if (messageToSend != null) {
+			messageToSend.replace("\\n", "\n").replace("//n", "\n");
+			for (final String toSend : messageToSend.split("\n")) {
 				if (toSend.isEmpty()) {
 					continue;
 				}
