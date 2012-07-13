@@ -53,6 +53,9 @@ public class GetItemId extends ItemCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Utils.getUserParam(sender, args, permNode);
+		if (target == null) {
+			return;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(target));
 		final ItemStack inHand = target.getItemInHand();
