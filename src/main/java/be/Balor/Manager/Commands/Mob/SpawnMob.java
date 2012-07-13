@@ -167,8 +167,15 @@ public class SpawnMob extends MobCommand {
 		public void run() {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName());
-			for (int i = 0; i < nb; i++) {
-				loc.getWorld().spawnEntity(loc, ct);
+			// TODO: remove old code when 4.1 will be the next RB
+			try {
+				for (int i = 0; i < nb; i++) {
+					loc.getWorld().spawnEntity(loc, ct);
+				}
+			} catch (final NoSuchMethodError e) {
+				for (int i = 0; i < nb; i++) {
+					loc.getWorld().spawnCreature(loc, ct);
+				}
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
@@ -200,11 +207,22 @@ public class SpawnMob extends MobCommand {
 		public void run() {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName() + "-" + passenger.getName());
-			for (int i = 0; i < nb; i++) {
-				loc.getWorld()
-						.spawnEntity(loc, ct)
-						.setPassenger(
-								loc.getWorld().spawnEntity(loc, passenger));
+			// TODO: remove old code when 4.1 will be the next RB
+			try {
+				for (int i = 0; i < nb; i++) {
+					loc.getWorld()
+							.spawnEntity(loc, ct)
+							.setPassenger(
+									loc.getWorld().spawnEntity(loc, passenger));
+				}
+			} catch (final NoSuchMethodError e) {
+				for (int i = 0; i < nb; i++) {
+					loc.getWorld()
+							.spawnCreature(loc, ct)
+							.setPassenger(
+									loc.getWorld()
+											.spawnCreature(loc, passenger));
+				}
 			}
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
