@@ -16,6 +16,9 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Home;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,6 +32,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @authors Balor, Lathanael
@@ -96,6 +100,14 @@ public class Home extends HomeCommand {
 			this.teleportToLoc = teleportLoc;
 			this.home = home;
 			this.sender = sender;
+			if (ConfigEnum.TP_DELAY.getLong() > 0) {
+				final Map<String, String> replace = new HashMap<String, String>();
+				replace.put(
+						"sec",
+						String.valueOf(ConfigEnum.TP_DELAY.getLong()
+								/ Utils.secInTick));
+				LocaleHelper.TELEPORT_SOON.sendLocale(target, replace);
+			}
 		}
 
 		@Override

@@ -31,31 +31,61 @@ import org.bukkit.plugin.PluginDescriptionFile;
  */
 public enum ConfigEnum {
 
-	MOTD("MessageOfTheDay", true, "if true, display MOTD on join"),
-	NEWS("DisplayNewsOnJoin", true, "If true, display the news message on Join"),
-	RULES("DisplayRulesOnJoin", true, "If true, display the rules on Join"),
+	MOTD(
+			"MessageOfTheDay",
+			true,
+			"if true, display MOTD on join"),
+	NEWS(
+			"DisplayNewsOnJoin",
+			true,
+			"If true, display the news message on Join"),
+	RULES(
+			"DisplayRulesOnJoin",
+			true,
+			"If true, display the rules on Join"),
 	FJ_RULES(
 			"DisplayRulesOnlyOnFirstJoin",
 			false,
 			"If true, display the rules ONLY ON FIRST JOIN\n"
 					+ "(override the above parameter DisplayRulesOnJoin)"),
-	DVULCAN("DefaultVulcanPower", 4.0F, "Default value for Vulcan power"),
-	DFB("DefaultFireBallPower", 1.0F, "Default value for Fireball power"),
+	DVULCAN(
+			"DefaultVulcanPower",
+			4.0F,
+			"Default value for Vulcan power"),
+	DFB(
+			"DefaultFireBallPower",
+			1.0F,
+			"Default value for Fireball power"),
 	SUPERPERM(
 			"forceOfficialBukkitPerm",
 			false,
 			"Only useful when using bridge with SuperPerm,\n"
 					+ "to avoid the use of the bridge."),
-	LOCALE("locale", "en_US", "Language of messages displayed in the plugin."),
-	NO_MSG("noMessage", false, "Disable every message of the plugin"),
-	AUTO_AFK("autoAfk", true, "Activate the autoAfk, meaning the player\n"
-			+ "will be set AFK after the given time"),
-	AFK_TIMEOUT("afkTimeInSecond", 60, "Time before setting the player AFK"),
+	LOCALE(
+			"locale",
+			"en_US",
+			"Language of messages displayed in the plugin."),
+	NO_MSG(
+			"noMessage",
+			false,
+			"Disable every message of the plugin"),
+	AUTO_AFK(
+			"autoAfk",
+			true,
+			"Activate the autoAfk, meaning the player\n"
+					+ "will be set AFK after the given time"),
+	AFK_TIMEOUT(
+			"afkTimeInSecond",
+			60,
+			"Time before setting the player AFK"),
 	AUTO_KICK(
 			"autoKickAfkPlayer",
 			false,
 			"Activate the auto kick AFK people after the given time"),
-	KICK_TIMEOUT("afkKickInMinutes", 3, "Time before kicking the AFK player"),
+	KICK_TIMEOUT(
+			"afkKickInMinutes",
+			3,
+			"Time before kicking the AFK player"),
 	STATUS(
 			"statusCheckInSec",
 			20,
@@ -88,8 +118,14 @@ public enum ConfigEnum {
 			"InvisAndNoPickup",
 			true,
 			"Setting this to true, will disable the auto-picking item when invisible"),
-	DFLY("fly.DefaultFlyPower", 1.75F, "Default value for Fly power"),
-	MAX_FLY("fly.maxFlyValue", 2F, "Maximum value for the fly commands"),
+	DFLY(
+			"fly.DefaultFlyPower",
+			1.75F,
+			"Default value for Fly power"),
+	MAX_FLY(
+			"fly.maxFlyValue",
+			2F,
+			"Maximum value for the fly commands"),
 	GLIDE(
 			"fly.glideWhenFallingInFlyMode",
 			true,
@@ -102,7 +138,10 @@ public enum ConfigEnum {
 			"fly.gliding.YvelocityCheckToGlide",
 			-0.2D,
 			"Velocity needed to open the parachute"),
-	G_MULT("fly.gliding.multiplicator", 0.1D, "Gliding multiplicator"),
+	G_MULT(
+			"fly.gliding.multiplicator",
+			0.1D,
+			"Gliding multiplicator"),
 	COLSIGN(
 			"ColoredSign",
 			true,
@@ -111,7 +150,10 @@ public enum ConfigEnum {
 			"mutedPlayerCantPm",
 			false,
 			"Disallow muted player to send private message"),
-	RTPSEE("maxRangeForTpAtSee", 312, "Max Range in block for the tp at see."),
+	RTPSEE(
+			"maxRangeForTpAtSee",
+			312,
+			"Max Range in block for the tp at see."),
 	TPREQUEST(
 			"tpRequestActivatedByDefault",
 			false,
@@ -136,10 +178,22 @@ public enum ConfigEnum {
 			"broadcastServerReload",
 			true,
 			"Broadcast a message to every player when reloading the server."),
-	H_ENTRY("help.entryPerPage", 9, "Number of help entry per page"),
-	H_SHORTE("help.shortenEntries", false, "Shorten the help text"),
-	H_WRAP("help.useWordWrap", false, "Check the word to do the new line"),
-	H_RWRAP("help.wordWrapRight", false, "Wrap by the right"),
+	H_ENTRY(
+			"help.entryPerPage",
+			9,
+			"Number of help entry per page"),
+	H_SHORTE(
+			"help.shortenEntries",
+			false,
+			"Shorten the help text"),
+	H_WRAP(
+			"help.useWordWrap",
+			false,
+			"Check the word to do the new line"),
+	H_RWRAP(
+			"help.wordWrapRight",
+			false,
+			"Wrap by the right"),
 	H_ALLPLUGIN(
 			"help.getHelpForAllPlugins",
 			true,
@@ -149,7 +203,10 @@ public enum ConfigEnum {
 			"superBreakerItem",
 			278,
 			"ID of the item used for the SuperBreaker mode"),
-	DT_FORMAT("DateAndTime.Format", "dd/MM/yy - HH:mm:ss", "Date/Time format"),
+	DT_FORMAT(
+			"DateAndTime.Format",
+			"dd/MM/yy - HH:mm:ss",
+			"Date/Time format"),
 	DT_GMT(
 			"DateAndTime.GMToffset",
 			"GMT+00:00",
@@ -158,12 +215,18 @@ public enum ConfigEnum {
 			"useImmunityLvl",
 			false,
 			"if you want to use the immunity level explained in the Read Me."),
-	DIMMUNITY("defaultImmunityLvl", 1, "Level assigned by default to an user."),
+	DIMMUNITY(
+			"defaultImmunityLvl",
+			1,
+			"Level assigned by default to an user."),
 	DNAME(
 			"useDisplayName",
 			true,
 			"Use the DisplayName of the player when using the player name"),
-	DEBUG("debug", false, "To activate the debug log (debug.log file)"),
+	DEBUG(
+			"debug",
+			false,
+			"To activate the debug log (debug.log file)"),
 	GSPAWN(
 			"globalRespawnSetting",
 			"globalSpawn",
@@ -177,7 +240,7 @@ public enum ConfigEnum {
 	TP_DELAY(
 			"teleportDelay",
 			0,
-			"Delay before teleporting (Spawn/Home) in ticks (20 Ticks = 1 Sec)"),
+			"Delay before teleporting (Spawn/Home) in ticks (20 Ticks = 1 Sec). 0 for no delay."),
 	LOG_CMD(
 			"logAllCmd",
 			false,
@@ -192,20 +255,24 @@ public enum ConfigEnum {
 			120,
 			"Delay before writing the user file on the disk (in seconds)"),
 
-	GNAMES("groupNames", Collections.list(new Enumeration<String>() {
-		private int count = 0;
-		private final String[] val = new String[]{"default", "mod", "admin"};
+	GNAMES(
+			"groupNames",
+			Collections.list(new Enumeration<String>() {
+				private int count = 0;
+				private final String[] val = new String[]{"default", "mod",
+						"admin"};
 
-		@Override
-		public boolean hasMoreElements() {
-			return count < val.length;
-		}
+				@Override
+				public boolean hasMoreElements() {
+					return count < val.length;
+				}
 
-		@Override
-		public String nextElement() {
-			return val[count++];
-		}
-	}), "Will be used in a later version"),
+				@Override
+				public String nextElement() {
+					return val[count++];
+				}
+			}),
+			"Will be used in a later version"),
 	SCALE_TIMEOUT(
 			"timeOutScale",
 			60,

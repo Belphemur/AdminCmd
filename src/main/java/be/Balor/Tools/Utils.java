@@ -1670,26 +1670,28 @@ public final class Utils {
 		if (event.isCancelled()) {
 			return;
 		}
-		if (!loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4,
-				loc.getBlockZ() >> 4)) {
-			loc.getWorld()
-					.loadChunk(loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
+		final Location toLocation = event.getTo();
+		final int x = toLocation.getBlockX() >> 4;
+		final int z = toLocation.getBlockZ() >> 4;
+		if (!toLocation.getWorld().isChunkLoaded(x, z)) {
+			toLocation.getWorld().loadChunk(x, z);
 		}
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
 		final WorldServer fromWorld = ((CraftWorld) player.getLocation()
 				.getWorld()).getHandle();
-		final WorldServer toWorld = ((CraftWorld) loc.getWorld()).getHandle();
+		final WorldServer toWorld = ((CraftWorld) toLocation.getWorld())
+				.getHandle();
 		final EntityPlayer entity = ((CraftPlayer) player).getHandle();
 		// Check if the fromWorld and toWorld are the same.
 		if (fromWorld == toWorld) {
-			entity.netServerHandler.teleport(loc);
+			entity.netServerHandler.teleport(toLocation);
 		} else {
 			// Close any foreign inventory
 			if (entity.activeContainer != entity.defaultContainer) {
 				entity.closeInventory();
 			}
-			server.getHandle()
-					.moveToWorld(entity, toWorld.dimension, true, loc);
+			server.getHandle().moveToWorld(entity, toWorld.dimension, true,
+					toLocation);
 		}
 	}
 
