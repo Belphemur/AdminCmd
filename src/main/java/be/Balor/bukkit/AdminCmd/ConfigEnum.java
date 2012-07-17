@@ -381,7 +381,27 @@ public enum ConfigEnum {
 	DEATH_MSG(
 			"deathMessage",
 			true,
-			"If set to true a death message will be broadcasted if a player dies.");
+			"If set to true a death message will be broadcasted if a player dies."),
+	DATA_WRAPPER(
+			"dataWrapper",
+			"yml",
+			"How the player data, world data are saved. Possible options : mysql,sqlite,yml. Mysql need the host,user,database,password to be set"),
+	MYSQL_HOST(
+			"mysql.host",
+			"localhost",
+			"Host to be set if mysql used."),
+	MYSQL_USER(
+			"mysql.user",
+			"root",
+			"Username to connect to mysql database"),
+	MYSQL_PASS(
+			"mysql.password",
+			"toor",
+			"Password to connect to mysql database"),
+	MYSQL_DB(
+			"mysql.database",
+			"minecraft",
+			"Database name");
 
 	public final static String PREFIX = "ac_";
 	private final String confVal;
