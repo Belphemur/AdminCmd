@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
+import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
+
 public class MySQL extends Database {
 	private String hostname = "localhost";
 	private String portnmbr = "3306";
@@ -34,36 +36,23 @@ public class MySQL extends Database {
 	}
 
 	@Override
-	protected boolean initialize() {
+	protected void initialize() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // Check that server's Java
 													// has MySQL support.
-			return true;
 		} catch (final ClassNotFoundException e) {
-			this.writeError(
-					"Class not found in initialize(): " + e.getMessage() + ".",
-					true);
-			return false;
+			throw new SQLException("Can't load JDBC Driver", e);
 		}
 	}
 
 	@Override
-	public void open() {
-		if (initialize()) {
-			String url = "";
-			try {
-				url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr
-						+ "/" + this.database;
-				this.connection = DriverManager.getConnection(url,
-						this.username, this.password);
-				// return DriverManager.getConnection(url, this.username,
-				// this.password);
-			} catch (final SQLException e) {
-				this.writeError(url, true);
-				this.writeError("SQL exception in open(): " + e.getMessage()
-						+ ".", true);
-			}
-		}
+	public void open() throws SQLException {
+		initialize();
+		String url = "";
+		url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/"
+				+ this.database;
+		this.connection = DriverManager.getConnection(url, this.username,
+				this.password);
 	}
 
 	@Override
@@ -220,5 +209,15 @@ public class MySQL extends Database {
 			}
 		}
 		return false;
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see lib.SQL.PatPeter.SQLibrary.Database#getType()
+	 */
+	@Override
+	public DatabaseType getType() {
+		return DatabaseType.MYSQL;
 	}
 }

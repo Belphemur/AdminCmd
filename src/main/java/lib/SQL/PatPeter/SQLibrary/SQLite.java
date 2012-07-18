@@ -21,6 +21,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
+import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
+
 public class SQLite extends Database {
 	public String location;
 	public String name;
@@ -45,7 +47,7 @@ public class SQLite extends Database {
 	}
 
 	@Override
-	protected boolean initialize() {
+	protected void initialize() throws SQLException {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			if (!sqlFile.exists()) {
@@ -53,23 +55,17 @@ public class SQLite extends Database {
 					sqlFile.createNewFile();
 				} catch (final IOException e) {}
 			}
-			return true;
 		} catch (final ClassNotFoundException e) {
-			this.writeError("Class not found in initialize(): " + e, true);
-			return false;
+			throw new SQLException("Can't load JDBC Driver", e);
 		}
 	}
 
 	@Override
-	public void open() {
-		if (initialize()) {
-			try {
-				this.connection = DriverManager.getConnection("jdbc:sqlite:"
-						+ sqlFile.getAbsolutePath());
-			} catch (final SQLException e) {
-				this.writeError("SQL exception in open(): " + e, true);
-			}
-		}
+	public void open() throws SQLException {
+		initialize();
+		this.connection = DriverManager.getConnection("jdbc:sqlite:"
+				+ sqlFile.getAbsolutePath());
+
 	}
 
 	@Override
@@ -145,7 +141,7 @@ public class SQLite extends Database {
 	}
 
 	@Override
-	PreparedStatement prepare(final String query) {
+	public PreparedStatement prepare(final String query) {
 		try {
 			final PreparedStatement ps = connection.prepareStatement(query);
 			return ps;
@@ -249,5 +245,14 @@ public class SQLite extends Database {
 		}
 
 		return null;
+	}
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see lib.SQL.PatPeter.SQLibrary.Database#getType()
+	 */
+	@Override
+	public DatabaseType getType() {
+		return DatabaseType.SQLITE;
 	}
 }

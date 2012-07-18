@@ -24,6 +24,7 @@ package lib.SQL.PatPeter.SQLibrary;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
@@ -202,8 +203,11 @@ public abstract class Database {
 	 * &nbsp;&nbsp;Used to check whether the class for the SQL engine is
 	 * installed. <br>
 	 * <br>
+	 * 
+	 * @throws SQLException
+	 *             if there is a problem when trying to load the JDBC driver.
 	 */
-	abstract boolean initialize();
+	abstract void initialize() throws SQLException;
 
 	/**
 	 * <b>open</b><br>
@@ -212,8 +216,10 @@ public abstract class Database {
 	 * <br>
 	 * 
 	 * @return the success of the method.
+	 * @throws SQLException
+	 *             if can't open the connection.
 	 */
-	abstract void open();
+	public abstract void open() throws SQLException;
 
 	/**
 	 * <b>close</b><br>
@@ -221,7 +227,7 @@ public abstract class Database {
 	 * &nbsp;&nbsp;Closes a connection with the database. <br>
 	 * <br>
 	 */
-	abstract void close();
+	public abstract void close();
 
 	/**
 	 * <b>getConnection</b><br>
@@ -243,7 +249,7 @@ public abstract class Database {
 	 * 
 	 * @return the status of the connection, true for up, false for down.
 	 */
-	abstract boolean checkConnection();
+	public abstract boolean checkConnection();
 
 	/**
 	 * <b>query</b><br>
@@ -254,7 +260,7 @@ public abstract class Database {
 	 *            - the SQL query to send to the database.
 	 * @return the table of results from the query.
 	 */
-	abstract ResultSet query(String query);
+	public abstract ResultSet query(String query);
 
 	/**
 	 * <b>prepare</b><br>
@@ -265,7 +271,7 @@ public abstract class Database {
 	 *            - the SQL query to prepare to send to the database.
 	 * @return the prepared statement.
 	 */
-	abstract PreparedStatement prepare(String query);
+	public abstract PreparedStatement prepare(String query);
 
 	/**
 	 * <b>getStatement</b><br>
@@ -318,7 +324,7 @@ public abstract class Database {
 	 *            - the SQL query for creating a table.
 	 * @return the success of the method.
 	 */
-	abstract boolean createTable(String query);
+	public abstract boolean createTable(String query);
 
 	/**
 	 * <b>checkTable</b><br>
@@ -330,7 +336,7 @@ public abstract class Database {
 	 *            - name of the table to check.
 	 * @return success of the method.
 	 */
-	abstract boolean checkTable(String table);
+	public abstract boolean checkTable(String table);
 
 	/**
 	 * <b>wipeTable</b><br>
@@ -342,5 +348,11 @@ public abstract class Database {
 	 *            - name of the table to wipe.
 	 * @return success of the method.
 	 */
-	abstract boolean wipeTable(String table);
+	public abstract boolean wipeTable(String table);
+	/**
+	 * Get type of the database
+	 * 
+	 * @return type of the database
+	 */
+	public abstract DatabaseType getType();
 }
