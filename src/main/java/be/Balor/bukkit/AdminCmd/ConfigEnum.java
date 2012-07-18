@@ -382,6 +382,10 @@ public enum ConfigEnum {
 			"deathMessage",
 			true,
 			"If set to true a death message will be broadcasted if a player dies."),
+	COMMANDS_ONJOIN(
+			"executeCommandsOnNewJoin",
+			false,
+			"If set to true, the commands set in the commands.yml section onNewJoin will be executed on the player that join the server for the first time."),
 	DATA_WRAPPER(
 			"dataWrapper",
 			"yml",

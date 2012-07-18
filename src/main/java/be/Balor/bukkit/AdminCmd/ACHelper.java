@@ -1214,6 +1214,7 @@ public class ACHelper {
 		fly.add("ofly", "-o");
 		final ExConfigurationSection egg = aliases.addSection("egg");
 		egg.add("grenade", "-E ExplosionEgg");
+		commands.add("onNewJoin", Arrays.asList("/kit dirt", "/motd"));
 		try {
 			commands.save();
 		} catch (final IOException e) {}

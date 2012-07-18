@@ -18,6 +18,7 @@ package be.Balor.Listeners;
 
 import java.net.InetAddress;
 import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -187,6 +188,9 @@ public class ACPlayerListener implements Listener {
 		}
 
 		if (player.getInformation("firstTime").getBoolean(true)) {
+			if (ConfigEnum.COMMANDS_ONJOIN.getBoolean()) {
+				CommandManager.getInstance().executeFirstJoinCommands(p);
+			}
 			player.setInformation("firstTime", false);
 			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 				replace.clear();

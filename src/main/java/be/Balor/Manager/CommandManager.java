@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
@@ -205,6 +206,7 @@ public class CommandManager implements CommandExecutor {
 					true));
 	private final Map<AbstractAdminCmdPlugin, Map<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, Map<String, Command>>();
 	private final Map<Class<? extends CoreCommand>, IncrementalPlotter> plotters = new HashMap<Class<? extends CoreCommand>, IncrementalPlotter>();
+	private final Set<String> commandsOnJoin = new HashSet<String>();
 
 	/**
 	 *
@@ -344,7 +346,31 @@ public class CommandManager implements CommandExecutor {
 			return false;
 		}
 	}
+	/**
+	 * Execute on the new player the commands found in the Commands.yml.<br />
+	 * First look as a simple bukkit command, then in the alias defined by the
+	 * user.
+	 * 
+	 * @param player
+	 *            player that will execute the command.
+	 */
+	public void executeFirstJoinCommands(final Player player) {
+		for (final String command : commandsOnJoin) {
+			final String[] split = command.split("\\s+");
+			if (split.length == 0) {
+				continue;
+			}
+			final String name = split[0].substring(1).toLowerCase();
+			final PluginCommand pCmd = Bukkit.getPluginCommand(name);
+			if (pCmd != null) {
+				pCmd.execute(player, name,
+						Utils.Arrays_copyOfRange(split, 1, split.length));
+			} else {
+				processCommandString(player, command);
+			}
+		}
 
+	}
 	public boolean processCommandString(final CommandSender sender,
 			final String command) {
 		final String[] split = command.split("\\s+");
@@ -488,6 +514,7 @@ public class CommandManager implements CommandExecutor {
 				new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands",
 				new LinkedList<String>());
+		commandsOnJoin.addAll(cmds.getStringList("onNewJoin"));
 		final ExConfigurationSection aliases = cmds
 				.getConfigurationSection("aliases");
 		for (final String command : aliases.getKeys(false)) {

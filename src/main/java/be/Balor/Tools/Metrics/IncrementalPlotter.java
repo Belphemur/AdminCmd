@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Metrics;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import be.Balor.Tools.Metrics.Metrics.Plotter;
 
 /**
@@ -24,7 +26,7 @@ import be.Balor.Tools.Metrics.Metrics.Plotter;
  */
 public class IncrementalPlotter extends Plotter {
 
-	private int value = 0;
+	private final AtomicInteger value = new AtomicInteger(0);
 
 	/**
 	 * @param name
@@ -40,11 +42,11 @@ public class IncrementalPlotter extends Plotter {
 	 */
 	@Override
 	public int getValue() {
-		return value;
+		return value.get();
 	}
 
 	public void increment() {
-		value++;
+		value.incrementAndGet();
 	}
 
 }
