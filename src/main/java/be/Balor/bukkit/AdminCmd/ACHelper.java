@@ -3,6 +3,7 @@ package be.Balor.bukkit.AdminCmd;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +21,9 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import lib.SQL.PatPeter.SQLibrary.Database;
+import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -1180,21 +1184,8 @@ public class ACHelper {
 				.header(ConfigEnum.getHeader());
 		pluginConfig.addDefaults(ConfigEnum.getDefaultvalues());
 
-		// TODO: Change factory
-		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
-		if (dbWrap.equalsIgnoreCase("mysql")
-				|| dbWrap.equalsIgnoreCase("sqlite")) {
-			try {
-				Class.forName("lib.SQL.PatPeter.SQLibrary.Database");
-			} catch (final ClassNotFoundException e) {}
-		}
+		dataWrapperInit();
 
-		PlayerManager.getInstance().setPlayerFactory(
-				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "userData"));
-		WorldManager.getInstance().setWorldFactory(
-				new FileWorldFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "worldData"));
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
@@ -1350,5 +1341,128 @@ public class ACHelper {
 
 	public String getDeathMessage(final String reason) {
 		return deathMessages.get(reason);
+	}
+	private void dataWrapperInit() {
+		// TODO: Change factory
+		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
+		if (dbWrap.equalsIgnoreCase("mysql")
+				|| dbWrap.equalsIgnoreCase("sqlite")) {
+			try {
+				final Database db = Database.DATABASE;
+				db.open();
+				if (!db.checkTable("ac_players")) {
+					// Mysql
+					if (db.getType() == DatabaseType.MYSQL) {
+						// Players
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  `player_id` int(10) unsigned NOT NULL,"
+								+ "  `world` varchar(64) NOT NULL,"
+								+ "  `x` double unsigned NOT NULL,"
+								+ "  `y` double unsigned NOT NULL,"
+								+ "  `z` double unsigned NOT NULL,"
+								+ "  `yaw` double unsigned NOT NULL,"
+								+ "  `pitch` double unsigned NOT NULL,"
+								+ "  PRIMARY KEY (`name`,`player_id`),"
+								+ "  KEY `player_id` (`player_id`)"
+								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
+								+ "  `key` varchar(128) NOT NULL,"
+								+ "  `player_id` int(10) unsigned NOT NULL,"
+								+ "  `info` text NOT NULL,"
+								+ "  PRIMARY KEY (`key`,`player_id`),"
+								+ "  KEY `player_id` (`player_id`)"
+								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
+								+ "  `kit` varchar(64) NOT NULL,"
+								+ "  `player_id` int(10) unsigned NOT NULL,"
+								+ "  `use` int(10) unsigned NOT NULL,"
+								+ "  PRIMARY KEY (`kit`,`player_id`),"
+								+ "  KEY `player_id` (`player_id`)"
+								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
+								+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  `world` varchar(64) NOT NULL,"
+								+ "  `x` double unsigned NOT NULL,"
+								+ "  `y` double unsigned NOT NULL,"
+								+ "  `z` double unsigned NOT NULL,"
+								+ "  `yaw` double unsigned NOT NULL,"
+								+ "  `pitch` double unsigned NOT NULL,"
+								+ "  PRIMARY KEY (`id`),"
+								+ "  UNIQUE KEY `name` (`name`)"
+								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+						db.createTable("ALTER TABLE `ac_homes`"
+								+ "  ADD CONSTRAINT `ac_homes_ibfk_1` FOREIGN KEY (`player_id`) "
+								+ "REFERENCES `ac_players` (`id`) "
+								+ "ON DELETE CASCADE ON UPDATE CASCADE;");
+						db.createTable("ALTER TABLE `ac_informations`"
+								+ "  ADD CONSTRAINT `ac_informations_ibfk_1`"
+								+ "  FOREIGN KEY (`player_id`) "
+								+ "  REFERENCES `ac_players` (`id`)"
+								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+						db.createTable("ALTER TABLE `ac_kit_uses`"
+								+ "  ADD CONSTRAINT `ac_kit_uses_ibfk_1`"
+								+ "  FOREIGN KEY (`player_id`)"
+								+ "  REFERENCES `ac_players` (`id`)"
+								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+						db.createTable("ALTER TABLE `ac_powers`"
+								+ "  ADD CONSTRAINT `ac_powers_ibfk_1`"
+								+ "  FOREIGN KEY (`player_id`)"
+								+ "  REFERENCES `ac_players` (`id`)"
+								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+						// SQLITE
+					} else if (db.getType() == DatabaseType.SQLITE) {
+						// Players
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  `player_id` int(10)  NOT NULL,"
+								+ "  `world` varchar(64) NOT NULL,"
+								+ "  `x` double  NOT NULL,"
+								+ "  `y` double  NOT NULL,"
+								+ "  `z` double  NOT NULL,"
+								+ "  `yaw` double  NOT NULL,"
+								+ "  `pitch` double  NOT NULL,"
+								+ "  PRIMARY KEY (`name`,`player_id`)" + ");");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
+								+ "  `key` varchar(128) NOT NULL,"
+								+ "  `player_id` int(10)  NOT NULL,"
+								+ "  `info` text NOT NULL,"
+								+ "  PRIMARY KEY (`key`,`player_id`)" + " ) ;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
+								+ "  `kit` varchar(64) NOT NULL,"
+								+ "  `player_id` int(10)  NOT NULL,"
+								+ "  `use` int(10)  NOT NULL,"
+								+ "  PRIMARY KEY (`kit`,`player_id`)" + " );");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
+								+ "  `id` int(10)  NOT NULL ,"
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  `world` varchar(64) NOT NULL,"
+								+ "  `x` double  NOT NULL,"
+								+ "  `y` double  NOT NULL,"
+								+ "  `z` double  NOT NULL,"
+								+ "  `yaw` double  NOT NULL,"
+								+ "  `pitch` double  NOT NULL,"
+								+ "  PRIMARY KEY (`id`),"
+								+ "  UNIQUE (`name`)"
+								+ ") ;");
+						db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
+						db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
+						db.createTable("CREATE INDEX kit_pid ON ac_kit_uses (player_id);");
+					}
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"There is a problem in your SQL configuration : ", e);
+				ACLogger.warning("The plugin is falling back to YML data managment");
+			}
+		}
+
+		PlayerManager.getInstance().setPlayerFactory(
+				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
+						+ File.separator + "userData"));
+		WorldManager.getInstance().setWorldFactory(
+				new FileWorldFactory(coreInstance.getDataFolder().getPath()
+						+ File.separator + "worldData"));
 	}
 }
