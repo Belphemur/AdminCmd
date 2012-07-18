@@ -24,8 +24,14 @@ import org.bukkit.configuration.InvalidConfigurationException;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class DatabaseFactory {
-	public static Database createDatabase(final DatabaseConfig config)
+class DatabaseFactory {
+	/**
+	 * 
+	 */
+	private DatabaseFactory() {
+
+	}
+	static Database createDatabase(final DatabaseConfig config)
 			throws InvalidConfigurationException {
 		if (!config.isValid()) {
 			throw new InvalidConfigurationException(
