@@ -65,7 +65,7 @@ public class ACDeathListener implements Listener {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Utils.getPlayerName(e.getEntity()));
 		String message = null;
-		EntityDamageEvent cause = e.getEntity().getLastDamageCause();
+		final EntityDamageEvent cause = e.getEntity().getLastDamageCause();
 		try {
 			if (cause instanceof EntityDamageByEntityEvent) {
 				message = getMessage(cause);
@@ -133,11 +133,11 @@ public class ACDeathListener implements Listener {
 						break;
 				}
 			}
-		} catch (NullPointerException ex) {
+		} catch (final NullPointerException ex) {
 			message = null;
 		}
 		if (message == null) {
-			message = "just died.";
+			return;
 		}
 		replace.put("msg", message);
 		e.setDeathMessage(LocaleHelper.DEATH_MSG.getLocale(replace));
@@ -145,7 +145,7 @@ public class ACDeathListener implements Listener {
 	}
 
 	private String getMessage(final EntityDamageEvent e) {
-		Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
+		final Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
 		if (damager instanceof Wolf) {
 			return ACHelper.getInstance().getDeathMessage("wolf");
 		} else if (damager instanceof Skeleton) {
