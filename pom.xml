@@ -419,5 +419,5 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<version>6.1-SNAPSHOT</version>
+	<version>6.5-SNAPSHOT</version>
 </project>
