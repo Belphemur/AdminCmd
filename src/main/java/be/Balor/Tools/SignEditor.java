@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -41,7 +42,7 @@ public class SignEditor {
 		this.editor = (Sign) this.editorBlk.getState();
 		int i = 0;
 		for (final String line : SignEditor.this.updated.getLines()) {
-			this.editor.setLine(i++, line);
+			this.editor.setLine(i++, line.replace(ChatColor.COLOR_CHAR, '&'));
 		}
 		this.editor.update();
 	}
