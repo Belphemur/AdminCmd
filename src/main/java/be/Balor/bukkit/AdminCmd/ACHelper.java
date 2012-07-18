@@ -1160,12 +1160,7 @@ public class ACHelper {
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
-		PlayerManager.getInstance().setPlayerFactory(
-				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "userData"));
-		WorldManager.getInstance().setWorldFactory(
-				new FileWorldFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "worldData"));
+
 		// convertBannedMuted();
 		convertSpawnWarp();
 		fManager.getInnerFile("kits.yml");
@@ -1184,6 +1179,22 @@ public class ACHelper {
 		pluginConfig.options().copyDefaults(true)
 				.header(ConfigEnum.getHeader());
 		pluginConfig.addDefaults(ConfigEnum.getDefaultvalues());
+
+		// TODO: Change factory
+		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
+		if (dbWrap.equalsIgnoreCase("mysql")
+				|| dbWrap.equalsIgnoreCase("sqlite")) {
+			try {
+				Class.forName("lib.SQL.PatPeter.SQLibrary.Database");
+			} catch (final ClassNotFoundException e) {}
+		}
+
+		PlayerManager.getInstance().setPlayerFactory(
+				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
+						+ File.separator + "userData"));
+		WorldManager.getInstance().setWorldFactory(
+				new FileWorldFactory(coreInstance.getDataFolder().getPath()
+						+ File.separator + "worldData"));
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {

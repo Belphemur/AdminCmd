@@ -21,7 +21,6 @@ package lib.SQL.PatPeter.SQLibrary;
 /*
  *  Both
  */
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,6 +31,8 @@ import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.Parameter;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 
+import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -62,9 +63,11 @@ public abstract class Database {
 		} else if (dbWrapper.equalsIgnoreCase("sqlite")) {
 			config.setType(DatabaseType.SQLITE);
 			try {
-				config.setParameter(Parameter.DB_LOCATION, new File(ACHelper
-						.getInstance().getCoreInstance().getDataFolder(),
-						"admincmd.db").getAbsolutePath());
+				config.setParameter(Parameter.DB_LOCATION, ACHelper
+						.getInstance().getCoreInstance().getDataFolder()
+						.getAbsolutePath());
+				config.setParameter(Parameter.DB_NAME, "admincmd");
+
 			} catch (final NullPointerException e) {} catch (final InvalidConfigurationException e) {}
 		}
 		config.setLog(ACHelper.getInstance().getCoreInstance().getLogger());
@@ -77,15 +80,17 @@ public abstract class Database {
 		}
 
 		try {
-			if (!config.isValid()) {
+			if (config.getType() == null) {
 				db = null;
 			} else {
 				db = DatabaseFactory.createDatabase(config);
 			}
 		} catch (final InvalidConfigurationException e) {
+			ACLogger.severe("Problem while trying to load the Database", e);
 			db = null;
 		}
 		DATABASE = db;
+		DebugLog.INSTANCE.info("Database initialization done");
 
 	}
 

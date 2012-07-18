@@ -11,6 +11,7 @@ package lib.SQL.PatPeter.SQLibrary;
  * SQLite
  */
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -40,15 +41,18 @@ public class SQLite extends Database {
 			folder.mkdir();
 		}
 
-		sqlFile = new File(folder.getAbsolutePath() + File.separator + name
-				+ ".db");
+		sqlFile = new File(folder, name + ".db");
 	}
 
 	@Override
 	protected boolean initialize() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-
+			if (!sqlFile.exists()) {
+				try {
+					sqlFile.createNewFile();
+				} catch (final IOException e) {}
+			}
 			return true;
 		} catch (final ClassNotFoundException e) {
 			this.writeError("Class not found in initialize(): " + e, true);
