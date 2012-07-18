@@ -225,7 +225,7 @@ public enum LocaleHelper {
 					+ "%groupName" + ChatColor.RED + " does not exist."),
 	DEATH_MSG(
 			"deathMessage",
-			ChatColor.AQUA + "%player" + ChatColor.YELLOW + "%msg"),
+			ChatColor.AQUA + "%player " + ChatColor.YELLOW + "%msg"),
 	TELEPORT_SOON(
 			"tpSoonMsg",
 			ChatColor.AQUA + "You'll be teleported to your location in "

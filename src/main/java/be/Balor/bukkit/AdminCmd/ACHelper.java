@@ -937,19 +937,13 @@ public class ACHelper {
 		}
 
 		if (pluginConfig.getBoolean("verboseLog", true)) {
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + itemBlacklist.size()
-							+ " blacklisted items loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + blockBlacklist.size()
-							+ " blacklisted blocks loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + alias.size() + " alias loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + kits.size() + " kits loaded.");
-			Logger.getLogger("Minecraft").info(
-					"[AdminCmd] " + bannedPlayers.size()
-							+ " banned players loaded.");
+			final Logger logger = coreInstance.getLogger();
+			logger.info(itemBlacklist.size() + " blacklisted items loaded.");
+			logger.info(blockBlacklist.size() + " blacklisted blocks loaded.");
+			logger.info(alias.size() + " alias loaded.");
+			logger.info(kits.size() + " kits loaded.");
+			logger.info(bannedPlayers.size() + " banned players loaded.");
+			logger.info(deathMessages.size() + " death messages loaded.");
 		}
 	}
 

@@ -575,10 +575,10 @@ public class FileManager implements DataManager {
 	public Map<String, String> loadDeathMessages() {
 		final Map<String, String> result = new HashMap<String, String>();
 		final ExtendedConfiguration conf = getYml("deathMessages");
-		for (String reason : conf.getKeys(false)) {
+		for (final String reason : conf.getKeys(false)) {
 			result.put(reason, conf.getString(reason));
 		}
-		return null;
+		return result;
 	}
 
 	private void importBannedPlayerTXT(final Map<String, Ban> result) {
