@@ -101,6 +101,11 @@ public class ACHelper {
 	}
 
 	static void killInstance() {
+		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
+		if (dbWrap.equalsIgnoreCase("mysql")
+				|| dbWrap.equalsIgnoreCase("sqlite")) {
+			Database.DATABASE.close();
+		}
 		instance = null;
 	}
 
@@ -1406,6 +1411,43 @@ public class ACHelper {
 								+ "  FOREIGN KEY (`player_id`)"
 								+ "  REFERENCES `ac_players` (`id`)"
 								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+
+						// Worlds
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  `world_id` int(10) unsigned NOT NULL,"
+								+ "  `x` double NOT NULL,"
+								+ "  `y` double NOT NULL,"
+								+ "  `z` double NOT NULL,"
+								+ "  `pitch` double NOT NULL,"
+								+ "  `yaw` double NOT NULL,"
+								+ "  PRIMARY KEY (`name`,`world_id`),"
+								+ "  KEY `world_id` (`world_id`)"
+								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
+								+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  PRIMARY KEY (`id`),"
+								+ "  UNIQUE KEY `name` (`name`)"
+								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
+								+ "  `key` varchar(64) NOT NULL,"
+								+ "  `world_id` int(10) unsigned NOT NULL,"
+								+ "  `info` text NOT NULL,"
+								+ "  PRIMARY KEY (`key`,`world_id`),"
+								+ "  KEY `world_id` (`world_id`)"
+								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+						db.createTable("ALTER TABLE `ac_warps`"
+								+ "  ADD CONSTRAINT `ac_warps_ibfk_1` "
+								+ "  FOREIGN KEY (`world_id`) "
+								+ "  REFERENCES `ac_worlds` (`id`) "
+								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+						db.createTable("ALTER TABLE `ac_w_infos`"
+								+ "  ADD CONSTRAINT `ac_w_infos_ibfk_1`"
+								+ "  FOREIGN KEY (`world_id`)"
+								+ "  REFERENCES `ac_worlds` (`id`) "
+								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
 						// SQLITE
 					} else if (db.getType() == DatabaseType.SQLITE) {
 						// Players
@@ -1444,6 +1486,31 @@ public class ACHelper {
 						db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
 						db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
 						db.createTable("CREATE INDEX kit_pid ON ac_kit_uses (player_id);");
+
+						// Worlds
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  `world_id` int(10)  NOT NULL,"
+								+ "  `x` double NOT NULL,"
+								+ "  `y` double NOT NULL,"
+								+ "  `z` double NOT NULL,"
+								+ "  `pitch` double NOT NULL,"
+								+ "  `yaw` double NOT NULL,"
+								+ "  PRIMARY KEY (`name`,`world_id`)" + ") ;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
+								+ "  `id` int(10) NOT NULL,"
+								+ "  `name` varchar(64) NOT NULL,"
+								+ "  PRIMARY KEY (`id`),"
+								+ "  UNIQUE (`name`)"
+								+ ") ;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
+								+ "  `key` varchar(64) NOT NULL,"
+								+ "  `world_id` int(10) NOT NULL,"
+								+ "  `info` text NOT NULL,"
+								+ "  PRIMARY KEY (`key`,`world_id`)" + ");");
+
+						db.createTable("CREATE INDEX warp_wid ON ac_warps (world_id);");
+						db.createTable("CREATE INDEX info_wid ON ac_w_infos (world_id);");
 					}
 				}
 			} catch (final SQLException e) {
