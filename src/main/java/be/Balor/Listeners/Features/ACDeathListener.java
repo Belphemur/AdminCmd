@@ -46,7 +46,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class ACDeathListener implements Listener {
 
@@ -106,7 +106,7 @@ public class ACDeathListener implements Listener {
 						break;
 					case POISON :
 						message = ACHelper.getInstance().getDeathMessage(
-								"poisen");
+								"poison");
 						break;
 					case LIGHTNING :
 						message = ACHelper.getInstance().getDeathMessage(
