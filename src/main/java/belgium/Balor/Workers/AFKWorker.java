@@ -1,21 +1,22 @@
 /************************************************************************
- * This file is part of AdminCmd.									
- *																		
+ * This file is part of AdminCmd.
+ *
  * AdminCmd is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by	
- * the Free Software Foundation, either version 3 of the License, or		
- * (at your option) any later version.									
- *																		
- * AdminCmd is distributed in the hope that it will be useful,	
- * but WITHOUT ANY WARRANTY; without even the implied warranty of		
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			
- * GNU General Public License for more details.							
- *																		
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AdminCmd is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
 package belgium.Balor.Workers;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.ChatColor;
@@ -26,13 +27,15 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 final public class AFKWorker {
 	private int afkTime = 60000;
@@ -46,7 +49,7 @@ final public class AFKWorker {
 	private static AFKWorker instance = new AFKWorker();
 
 	/**
-	 * 
+	 *
 	 */
 	private AFKWorker() {
 		afkChecker = new AfkChecker();
@@ -111,7 +114,7 @@ final public class AFKWorker {
 
 	/**
 	 * Get the number of afk players
-	 * 
+	 *
 	 * @return
 	 */
 	public int nbAfk() {
@@ -120,7 +123,7 @@ final public class AFKWorker {
 
 	/**
 	 * update a player timeStamp (last time the player moved)
-	 * 
+	 *
 	 * @param player
 	 * @param timestamp
 	 */
@@ -130,7 +133,7 @@ final public class AFKWorker {
 
 	/**
 	 * Remove the player from the check
-	 * 
+	 *
 	 * @param player
 	 */
 	public void removePlayer(final Player player) {
@@ -140,7 +143,7 @@ final public class AFKWorker {
 
 	/**
 	 * Set the player AFK
-	 * 
+	 *
 	 * @param p
 	 */
 	public void setAfk(final Player p) {
@@ -149,7 +152,7 @@ final public class AFKWorker {
 
 	/**
 	 * Set the player AFK with the given msg
-	 * 
+	 *
 	 * @param p
 	 * @param msg
 	 */
@@ -174,7 +177,7 @@ final public class AFKWorker {
 
 	/**
 	 * Send the corresponding afk message to the user
-	 * 
+	 *
 	 * @param sender
 	 * @param buddy
 	 */
@@ -199,7 +202,7 @@ final public class AFKWorker {
 
 	/**
 	 * Set the player Online
-	 * 
+	 *
 	 * @param p
 	 */
 	public void setOnline(final Player p) {
@@ -216,7 +219,7 @@ final public class AFKWorker {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param p
 	 * @return if the player is afk
 	 */
@@ -228,7 +231,7 @@ final public class AFKWorker {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -250,7 +253,7 @@ final public class AFKWorker {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -266,7 +269,12 @@ final public class AFKWorker {
 
 						@Override
 						public void run() {
+							final HashMap<String, String> replace = new HashMap<String, String>();
+							replace.put("player", Utils.getPlayerName(p));
 							p.kickPlayer(Utils.I18n("afkKick"));
+							final String msg = LocaleHelper.AFK_KICK_BCAST.getLocale(replace);
+							Utils.broadcastMessage(msg);
+							ACLogger.info(msg);
 							playersAfk.remove(p);
 							playerTimeStamp.remove(p);
 

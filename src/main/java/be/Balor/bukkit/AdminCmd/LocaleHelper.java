@@ -26,7 +26,7 @@ import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum LocaleHelper {
 	ITEMID(
@@ -229,7 +229,9 @@ public enum LocaleHelper {
 	TELEPORT_SOON(
 			"tpSoonMsg",
 			ChatColor.AQUA + "You'll be teleported to your location in "
-					+ ChatColor.GREEN + "%sec seconds");
+					+ ChatColor.GREEN + "%sec seconds"),
+	AFK_KICK_BCAST("afkKickBroadcast", ChatColor.AQUA + "%player" + ChatColor.GOLD + " has been" +
+			" kicked out of the game due to being AFK too long.");
 
 	private final String key;
 	private final String locale;
@@ -254,7 +256,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the message
 	 * @param replace
@@ -267,7 +269,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Send the locale the the CommandSender
-	 * 
+	 *
 	 * @param sender
 	 *            CommandSender that will get the messages
 	 */
@@ -277,7 +279,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale with replacement variables
-	 * 
+	 *
 	 * @param replace
 	 *            Replacement variables
 	 * @return the locale with the variables replaced in.
@@ -288,7 +290,7 @@ public enum LocaleHelper {
 
 	/**
 	 * Get the locale without replacement variables
-	 * 
+	 *
 	 * @return the locale
 	 */
 	public String getLocale() {
