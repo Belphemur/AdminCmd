@@ -22,9 +22,11 @@ package lib.SQL.PatPeter.SQLibrary;
  *  Both
  */
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Logger;
 
 import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
@@ -227,7 +229,15 @@ public abstract class Database {
 	 * &nbsp;&nbsp;Closes a connection with the database. <br>
 	 * <br>
 	 */
-	public abstract void close();
+	public void close() {
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (final SQLException ex) {
+				this.writeError("SQL exception in close(): " + ex, true);
+			}
+		}
+	}
 
 	/**
 	 * <b>getConnection</b><br>
@@ -239,7 +249,9 @@ public abstract class Database {
 	 *         "http://download.oracle.com/javase/6/docs/api/java/sql/Connection.html"
 	 *         >Connection</a> variable.
 	 */
-	abstract Connection getConnection();
+	public Connection getConnection() {
+		return this.connection;
+	}
 
 	/**
 	 * <b>checkConnection</b><br>
@@ -249,7 +261,12 @@ public abstract class Database {
 	 * 
 	 * @return the status of the connection, true for up, false for down.
 	 */
-	public abstract boolean checkConnection();
+	public boolean checkConnection() {
+		if (connection != null) {
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * <b>query</b><br>
@@ -271,8 +288,21 @@ public abstract class Database {
 	 *            - the SQL query to prepare to send to the database.
 	 * @return the prepared statement.
 	 */
-	public abstract PreparedStatement prepare(String query);
-
+	public PreparedStatement prepare(final String query) {
+		try {
+			final PreparedStatement ps;
+			synchronized (connection) {
+				ps = connection.prepareStatement(query);
+			}
+			return ps;
+		} catch (final SQLException e) {
+			if (!e.toString().contains("not return ResultSet")) {
+				this.writeError(
+						"SQL exception in prepare(): " + e.getMessage(), false);
+			}
+		}
+		return null;
+	}
 	/**
 	 * <b>getStatement</b><br>
 	 * &nbsp;&nbsp;Determines the name of the statement and converts it into an
@@ -324,7 +354,25 @@ public abstract class Database {
 	 *            - the SQL query for creating a table.
 	 * @return the success of the method.
 	 */
-	public abstract boolean createTable(String query);
+	public boolean createTable(final String query) {
+		Statement statement = null;
+		try {
+			if (query.equals("") || query == null) {
+				this.writeError(
+						"Parameter 'query' empty or null in createTable().",
+						true);
+				return false;
+			}
+			synchronized (connection) {
+				statement = connection.createStatement();
+				statement.execute(query);
+			}
+			return true;
+		} catch (final SQLException ex) {
+			this.writeError(ex.getMessage(), true);
+			return false;
+		}
+	}
 
 	/**
 	 * <b>checkTable</b><br>
@@ -336,8 +384,25 @@ public abstract class Database {
 	 *            - name of the table to check.
 	 * @return success of the method.
 	 */
-	public abstract boolean checkTable(String table);
+	public boolean checkTable(final String table) {
+		DatabaseMetaData dbm = null;
+		try {
+			synchronized (connection) {
+				dbm = this.connection.getMetaData();
+			}
 
+			final ResultSet tables = dbm.getTables(null, null, table, null);
+			if (tables.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (final SQLException e) {
+			this.writeError("Failed to check if table \"" + table
+					+ "\" exists: " + e.getMessage(), true);
+			return false;
+		}
+	}
 	/**
 	 * <b>wipeTable</b><br>
 	 * <br>

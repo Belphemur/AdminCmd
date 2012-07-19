@@ -7,9 +7,7 @@
  */
 package lib.SQL.PatPeter.SQLibrary;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -56,61 +54,37 @@ public class MySQL extends Database {
 	}
 
 	@Override
-	public void close() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (final Exception e) {
-			this.writeError("Exception in close(): " + e.getMessage(), true);
-		}
-	}
-
-	@Override
-	public Connection getConnection() {
-		return this.connection;
-	}
-
-	// http://forums.bukkit.org/threads/lib-tut-mysql-sqlite-bukkit-drivers.33849/page-4#post-701550
-	@Override
-	public boolean checkConnection() {
-		if (connection != null) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public ResultSet query(final String query) {
 		Statement statement = null;
 		ResultSet result = null;
 		try {
-			statement = this.connection.createStatement();
-			result = statement.executeQuery("SELECT CURTIME()");
+			synchronized (connection) {
+				statement = this.connection.createStatement();
 
-			switch (this.getStatement(query)) {
-				case SELECT :
-					result = statement.executeQuery(query);
-					break;
+				switch (this.getStatement(query)) {
+					case SELECT :
+						result = statement.executeQuery(query);
+						break;
 
-				case INSERT :
-				case UPDATE :
-				case DELETE :
-				case CREATE :
-				case ALTER :
-				case DROP :
-				case TRUNCATE :
-				case RENAME :
-				case DO :
-				case REPLACE :
-				case LOAD :
-				case HANDLER :
-				case CALL :
-					this.lastUpdate = statement.executeUpdate(query);
-					break;
+					case INSERT :
+					case UPDATE :
+					case DELETE :
+					case CREATE :
+					case ALTER :
+					case DROP :
+					case TRUNCATE :
+					case RENAME :
+					case DO :
+					case REPLACE :
+					case LOAD :
+					case HANDLER :
+					case CALL :
+						this.lastUpdate = statement.executeUpdate(query);
+						break;
 
-				default :
-					result = statement.executeQuery(query);
+					default :
+						result = statement.executeQuery(query);
+				}
 			}
 			return result;
 		} catch (final SQLException e) {
@@ -118,74 +92,6 @@ public class MySQL extends Database {
 					false);
 		}
 		return result;
-	}
-
-	@Override
-	public PreparedStatement prepare(final String query) {
-		PreparedStatement ps = null;
-		try {
-			ps = connection.prepareStatement(query);
-			return ps;
-		} catch (final SQLException e) {
-			if (!e.toString().contains("not return ResultSet")) {
-				this.writeError(
-						"SQL exception in prepare(): " + e.getMessage(), false);
-			}
-		}
-		return ps;
-	}
-
-	@Override
-	public boolean createTable(final String query) {
-		Statement statement = null;
-		try {
-			if (query.equals("") || query == null) {
-				this.writeError(
-						"Parameter 'query' empty or null in createTable(): "
-								+ query, true);
-				return false;
-			}
-
-			statement = connection.createStatement();
-			statement.execute(query);
-			return true;
-		} catch (final SQLException e) {
-			this.writeError(e.getMessage(), true);
-			return false;
-		} catch (final Exception e) {
-			this.writeError(e.getMessage(), true);
-			return false;
-		}
-	}
-
-	@Override
-	public boolean checkTable(final String table) {
-		try {
-			final Statement statement = connection.createStatement();
-
-			final ResultSet result = statement.executeQuery("SELECT * FROM "
-					+ table);
-
-			if (result == null) {
-				return false;
-			}
-			if (result != null) {
-				return true;
-			}
-		} catch (final SQLException e) {
-			if (e.getMessage().contains("exist")) {
-				return false;
-			} else {
-				this.writeError(
-						"SQL exception in checkTable(): " + e.getMessage(),
-						false);
-			}
-		}
-
-		if (query("SELECT * FROM " + table) == null) {
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -198,10 +104,11 @@ public class MySQL extends Database {
 						+ "\" in wipeTable() does not exist.", true);
 				return false;
 			}
-			statement = this.connection.createStatement();
 			query = "DELETE FROM " + table + ";";
-			statement.executeUpdate(query);
-
+			synchronized (connection) {
+				statement = connection.createStatement();
+				statement.executeQuery(query);
+			}
 			return true;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
