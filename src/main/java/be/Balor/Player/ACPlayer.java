@@ -332,7 +332,7 @@ public abstract class ACPlayer {
 	/**
 	 * Force the save
 	 */
-	abstract void forceSave();
+	public abstract void forceSave();
 
 	/**
 	 * Update the played time of the player

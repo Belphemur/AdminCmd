@@ -38,7 +38,7 @@ import be.Balor.Tools.TpRequest;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-class ExtendedRepresenter extends Representer {
+public class ExtendedRepresenter extends Representer {
 
 	protected class EmptyRepresentNull implements Represent {
 		@Override

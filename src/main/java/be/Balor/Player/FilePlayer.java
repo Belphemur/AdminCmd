@@ -336,7 +336,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#forceSave()
 	 */
 	@Override
-	void forceSave() {
+	public void forceSave() {
 		try {
 			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
