@@ -1392,6 +1392,15 @@ public class ACHelper {
 								+ "  PRIMARY KEY (`id`),"
 								+ "  UNIQUE KEY `name` (`name`)"
 								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
+								+ "  `key` varchar(128) NOT NULL,"
+								+ "  `player_id` int(10) unsigned NOT NULL,"
+								+ "  `info` text NOT NULL,"
+								+ "  `category` varchar(64) NOT NULL,"
+								+ "  PRIMARY KEY (`key`,`player_id`),"
+								+ "  KEY `player_id` (`player_id`),"
+								+ "  KEY `category` (`category`)"
+								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 						db.createTable("ALTER TABLE `ac_homes`"
 								+ "  ADD CONSTRAINT `ac_homes_ibfk_1` FOREIGN KEY (`player_id`) "
 								+ "REFERENCES `ac_players` (`id`) "
@@ -1471,6 +1480,12 @@ public class ACHelper {
 								+ "  `player_id` int(10)  NOT NULL,"
 								+ "  `use` int(10)  NOT NULL,"
 								+ "  PRIMARY KEY (`kit`,`player_id`)" + " );");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
+								+ "  `key` varchar(128) NOT NULL,"
+								+ "  `player_id` int(10) NOT NULL,"
+								+ "  `info` text NOT NULL,"
+								+ "  `category` varchar(64) NOT NULL,"
+								+ "  PRIMARY KEY (`key`,`player_id`)" + ");");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
 								+ "  `id` int(10)  NOT NULL ,"
 								+ "  `name` varchar(64) NOT NULL,"
@@ -1486,6 +1501,8 @@ public class ACHelper {
 						db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
 						db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
 						db.createTable("CREATE INDEX kit_pid ON ac_kit_uses (player_id);");
+						db.createTable("CREATE INDEX power_pid ON ac_powers (player_id);");
+						db.createTable("CREATE INDEX power_cat ON ac_powers (category);");
 
 						// Worlds
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
