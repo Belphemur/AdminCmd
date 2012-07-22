@@ -36,7 +36,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class GroupSpawn extends SpawnCommand {
 
@@ -50,7 +50,7 @@ public class GroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
@@ -86,9 +86,9 @@ public class GroupSpawn extends SpawnCommand {
 				Warp warp = null;
 				for (String gName : ACHelper.getInstance().getGroupList()) {
 					if (PermissionManager.hasPerm(p, "admincmd.respawn."
-							+ gName)) {
-						warp = w.getWarp("spawn:" + gName);
-						replace.put("groupName", gName);
+							+ gName.toLowerCase())) {
+						warp = w.getWarp("spawn:" + gName.toLowerCase());
+						replace.put("groupName", gName.toLowerCase());
 						break;
 					}
 				}
@@ -101,7 +101,7 @@ public class GroupSpawn extends SpawnCommand {
 					return;
 				}
 			} else if (args.length == 1) {
-				final String gName = args.getString(0);
+				final String gName = args.getString(0).toLowerCase();
 				if (!ACHelper.getInstance().getGroupList().contains(gName)) {
 					replace.put("groupName", gName);
 					LocaleHelper.NO_SUCH_GROUP.sendLocale(p, replace);
@@ -126,7 +126,7 @@ public class GroupSpawn extends SpawnCommand {
 					LocaleHelper.GROUP_SPAWN.sendLocale(p, replace);
 				}
 			} else if (args.length >= 2) {
-				final String gName = args.getString(0);
+				final String gName = args.getString(0).toLowerCase();
 				final ACWorld w = ACWorld.getWorld(args.getString(1));
 				if (!ACHelper.getInstance().getGroupList().contains(gName)) {
 					replace.put("groupName", gName);
@@ -156,7 +156,7 @@ public class GroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override

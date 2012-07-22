@@ -78,7 +78,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Handle commands
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public class ACHelper {
@@ -89,7 +89,7 @@ public class ACHelper {
 
 	/**
 	 * Return the elapsed time.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Long[] getElapsedTime() {
@@ -181,7 +181,7 @@ public class ACHelper {
 
 	/**
 	 * Ban a new player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void banPlayer(final IBan ban) {
@@ -198,7 +198,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the Command BlackList
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -230,7 +230,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the BlackList
-	 * 
+	 *
 	 * @param name
 	 *            string representing the item to blacklist
 	 * @return
@@ -244,7 +244,7 @@ public class ACHelper {
 
 	/**
 	 * Add an item to the BlackList
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param item
@@ -289,7 +289,7 @@ public class ACHelper {
 
 	/**
 	 * Add modified block in the undoQueue
-	 * 
+	 *
 	 * @param blocks
 	 */
 	public void addInUndoQueue(final String player,
@@ -378,7 +378,7 @@ public class ACHelper {
 	/**
 	 * Used to check if the Ban is a Temporary ban, to relaunch the task to
 	 * unBan the player or unban him if his time out.
-	 * 
+	 *
 	 * @param player
 	 * @return true if the ban is valid, false if invalid (expired)
 	 */
@@ -402,7 +402,7 @@ public class ACHelper {
 
 	/**
 	 * Translate the id or name to a material
-	 * 
+	 *
 	 * @param mat
 	 * @return Material
 	 */
@@ -481,7 +481,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted blocks
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Integer> getBlackListedBlocks() {
@@ -491,7 +491,7 @@ public class ACHelper {
 
 	/**
 	 * Get the blacklisted items
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -549,7 +549,7 @@ public class ACHelper {
 
 	/**
 	 * Gets the List< String> of groups defined in the config.
-	 * 
+	 *
 	 * @return
 	 */
 	public List<String> getGroupList() {
@@ -558,17 +558,22 @@ public class ACHelper {
 
 	/**
 	 * Get the Permission group names
-	 * 
+	 *
 	 * @return
 	 */
 	private List<String> getGroupNames() {
-		return fManager.getYml("config").getStringList("groupNames",
+		final List<String> gFileList = fManager.getYml("config").getStringList("groupNames",
 				new ArrayList<String>());
+		final List<String> gNewList = new ArrayList<String>();
+		for (String item : gFileList) {
+			gNewList.add(item.toLowerCase());
+		}
+		return  gNewList;
 	}
 
 	/**
 	 * Get KitInstance for given kit
-	 * 
+	 *
 	 * @param kit
 	 * @return
 	 */
@@ -578,7 +583,7 @@ public class ACHelper {
 
 	/**
 	 * Get the list of kit.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getKitList(final CommandSender sender) {
@@ -636,7 +641,7 @@ public class ACHelper {
 
 	/**
 	 * Get the number of kit in the system.
-	 * 
+	 *
 	 * @return
 	 */
 	public int getNbKit() {
@@ -645,7 +650,7 @@ public class ACHelper {
 
 	/**
 	 * Get the player to whom the reply message is sent to.
-	 * 
+	 *
 	 * @param key
 	 *            The player who wants to reply to a message.
 	 * @return
@@ -661,7 +666,7 @@ public class ACHelper {
 	/**
 	 * Teleports a player to the GroupSpawn location belonging to his group
 	 * defined in his permission node.
-	 * 
+	 *
 	 * @param player
 	 *            - The player who should be teleported
 	 * @author Lathanael
@@ -674,7 +679,7 @@ public class ACHelper {
 
 	/**
 	 * Gets the spawn location of a group.
-	 * 
+	 *
 	 * @param player
 	 *            - The player whose group is to be checked
 	 * @return The {@code Location} of the Spawn or the worlds spawn if none is
@@ -707,7 +712,7 @@ public class ACHelper {
 
 	/**
 	 * Sets the spawn location of a group in the given world.
-	 * 
+	 *
 	 * @param world
 	 *            - The world in which the location is to be set
 	 * @param loc
@@ -860,7 +865,7 @@ public class ACHelper {
 
 	/**
 	 * Return the ban of the player
-	 * 
+	 *
 	 * @param player
 	 *            player's name
 	 * @return the ban if the player have one, else return null
@@ -1012,7 +1017,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed block
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -1046,7 +1051,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param name
@@ -1061,7 +1066,7 @@ public class ACHelper {
 
 	/**
 	 * remove a black listed item
-	 * 
+	 *
 	 * @param sender
 	 *            sender of the command
 	 * @param item
@@ -1114,7 +1119,7 @@ public class ACHelper {
 
 	/**
 	 * Remove the Key-Value pair from the Map
-	 * 
+	 *
 	 * @param key
 	 */
 	public void removeReplyPlayer(final Player key) {
@@ -1228,7 +1233,7 @@ public class ACHelper {
 
 	/**
 	 * Put a player into the Map, so that the message reciever can use /reply
-	 * 
+	 *
 	 * @param key
 	 *            The Player to whom the message is send.
 	 * @param value
@@ -1286,7 +1291,7 @@ public class ACHelper {
 
 	/**
 	 * Unban the player
-	 * 
+	 *
 	 * @param ban
 	 */
 	public void unBanPlayer(final IBan ban) {

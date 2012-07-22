@@ -31,7 +31,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class SetGroupSpawn extends SpawnCommand {
 
@@ -45,7 +45,7 @@ public class SetGroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -58,10 +58,10 @@ public class SetGroupSpawn extends SpawnCommand {
 				for (final String groupName : ACHelper.getInstance()
 						.getGroupList()) {
 					if (PermissionManager.hasPerm((Player) sender,
-							"admincmd.respawn." + groupName)) {
+							"admincmd.respawn." + groupName.toLowerCase())) {
 						ACHelper.getInstance().setGroupSpawnLocation(
-								((Player) sender).getLocation(), groupName);
-						replace.put("groupName", groupName);
+								((Player) sender).getLocation(), groupName.toLowerCase());
+						replace.put("groupName", groupName.toLowerCase());
 						LocaleHelper.GROUP_SPAWN_SET
 								.sendLocale(sender, replace);
 						return;
@@ -70,7 +70,7 @@ public class SetGroupSpawn extends SpawnCommand {
 			}
 		} else if (args.length >= 1) {
 			if (Utils.isPlayer(sender)) {
-				final String groupName = args.getString(0);
+				final String groupName = args.getString(0).toLowerCase();
 				if (ACHelper.getInstance().getGroupList().contains(groupName)) {
 					ACHelper.getInstance().setGroupSpawnLocation(
 							((Player) sender).getLocation(), groupName);
@@ -86,7 +86,7 @@ public class SetGroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override
