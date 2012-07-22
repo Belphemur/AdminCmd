@@ -34,7 +34,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-class YamlConstructor extends Constructor {
+public class YamlConstructor extends Constructor {
 	private class ConstructCustomObject extends ConstructYamlMap {
 		@SuppressWarnings("unchecked")
 		@Override

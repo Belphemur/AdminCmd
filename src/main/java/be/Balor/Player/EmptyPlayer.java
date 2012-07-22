@@ -211,7 +211,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#forceSave()
 	 */
 	@Override
-	void forceSave() {
+	public void forceSave() {
 
 	}
 
