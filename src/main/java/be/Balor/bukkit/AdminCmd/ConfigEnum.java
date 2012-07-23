@@ -27,7 +27,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ *
  */
 public enum ConfigEnum {
 
@@ -382,6 +382,10 @@ public enum ConfigEnum {
 			"deathMessage",
 			true,
 			"If set to true a death message will be broadcasted if a player dies."),
+	DEATH_MSG_OFF(
+			"turnCustomDeathMessageOff",
+			false,
+			"If set to true only MC default death messages will be displayed."),
 	COMMANDS_ONJOIN(
 			"executeCommandsOnNewJoin",
 			false,

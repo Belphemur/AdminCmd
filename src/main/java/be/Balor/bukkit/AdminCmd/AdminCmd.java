@@ -179,7 +179,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- * 
+ *
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -1054,10 +1054,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.POWERS_OFF.getBoolean()) {
 			pm.registerEvents(new ACPowerOffListener(), this);
 		}
-		if (ConfigEnum.DEATH_MSG.getBoolean()) {
-			pm.registerEvents(new ACDeathListener(false), this);
-		} else {
-			pm.registerEvents(new ACDeathListener(true), this);
+		if (!ConfigEnum.DEATH_MSG_OFF.getBoolean()) {
+			if (ConfigEnum.DEATH_MSG.getBoolean()) {
+				pm.registerEvents(new ACDeathListener(false), this);
+			} else {
+				pm.registerEvents(new ACDeathListener(true), this);
+			}
 		}
 	}
 
