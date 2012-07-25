@@ -39,28 +39,39 @@ public class SQLPlayer extends ACPlayer {
 	private final Map<String, Location> homes = new HashMap<String, Location>();
 	private final Map<String, Object> infos = new HashMap<String, Object>();
 	private final Map<String, Object> powers = new HashMap<String, Object>();
+	private final Map<String, Long> kitUses = new HashMap<String, Long>();
 	private Location lastLoc;
 	private final int id;
-	private final static PreparedStatement insertHome, deleteHome;
+	private final static PreparedStatement insertHome, deleteHome, insertInfo,
+			deleteInfo, updateLastLoc;
 	static {
 		insertHome = Database.DATABASE
 				.prepare("INSERT OR REPLACE INTO\"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
 						+ " VALUES (?,?,?,?,?,?,?,?)");
 		deleteHome = Database.DATABASE
 				.prepare("DELETE FROM ac_homes WHERE player_id=? AND name=?");
+		insertInfo = Database.DATABASE
+				.prepare("INSERT OR REPLACE INTO `ac_informations` (`key` ,`player_id` ,`info`) VALUES (?, ?, ?)");
+		deleteInfo = Database.DATABASE
+				.prepare("DELETE FROM ac_informations WHERE player_id=? AND key=?");
+		updateLastLoc = Database.DATABASE
+				.prepare("UPDATE `ac_players` SET `world` = ?, `x` = ?, `y` = ?, `z` = ?, `yaw` = ?, `pitch` = ? WHERE `ac_players`.`id` = ?;");
+
 	}
 
 	/**
 	 * @param name
 	 * @param id
 	 */
-	public SQLPlayer(final String name, final int id) {
+	public SQLPlayer(final String name, final int id, final Location lastLoc) {
 		super(name);
 		this.id = id;
+		this.lastLoc = lastLoc;
 	}
-	public SQLPlayer(final Player player, final int id) {
+	public SQLPlayer(final Player player, final int id, final Location lastLoc) {
 		super(player);
 		this.id = id;
+		this.lastLoc = lastLoc;
 	}
 
 	/*
@@ -144,7 +155,21 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setInformation(final String info, final Object value) {
-		// TODO Auto-generated method stub
+		infos.put(info, value);
+		synchronized (insertInfo) {
+			try {
+				insertInfo.clearParameters();
+				insertInfo.setString(1, info);
+				insertInfo.setInt(2, id);
+				insertInfo.setString(3, value.toString());
+				synchronized (insertInfo.getConnection()) {
+					insertInfo.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with insert info in the DB", e);
+			}
+
+		}
 
 	}
 
@@ -155,7 +180,20 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeInformation(final String info) {
-		// TODO Auto-generated method stub
+		infos.remove(info);
+		synchronized (deleteInfo) {
+			try {
+				deleteInfo.clearParameters();
+				deleteInfo.setInt(1, id);
+				deleteInfo.setString(2, info);
+				synchronized (deleteInfo.getConnection()) {
+					deleteInfo.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with deleting the info from the DB", e);
+			}
+
+		}
 
 	}
 
@@ -166,8 +204,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public ObjectContainer getInformation(final String info) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ObjectContainer(infos.get(info));
 	}
 
 	/*
@@ -177,8 +214,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public Set<String> getInformationsList() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableSet(infos.keySet());
 	}
 
 	/*
@@ -188,7 +224,25 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setLastLocation(final Location loc) {
-		// TODO Auto-generated method stub
+		lastLoc = loc;
+		synchronized (updateLastLoc) {
+			try {
+				updateLastLoc.clearParameters();
+				updateLastLoc.setString(1, loc.getWorld().getName());
+				updateLastLoc.setDouble(2, loc.getX());
+				updateLastLoc.setDouble(3, loc.getY());
+				updateLastLoc.setDouble(4, loc.getZ());
+				updateLastLoc.setDouble(5, loc.getYaw());
+				updateLastLoc.setDouble(6, loc.getPitch());
+				updateLastLoc.setInt(7, id);
+				synchronized (updateLastLoc.getConnection()) {
+					updateLastLoc.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with updating lastLoc in the DB", e);
+			}
+
+		}
 
 	}
 
@@ -199,8 +253,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getLastLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return lastLoc;
 	}
 
 	/*
