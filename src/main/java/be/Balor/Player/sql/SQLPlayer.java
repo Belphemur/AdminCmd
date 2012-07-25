@@ -55,7 +55,7 @@ public class SQLPlayer extends ACPlayer {
 			deleteInfo, updateLastLoc, insertPower, deletePower,
 			deleteSuperPowers, insertKitUse;
 	private final static PreparedStatement getHomes, getInfos, getPowers,
-			getKitUses;
+			getKitUses, getLastLoc;
 	static {
 		insertHome = Database.DATABASE
 				.prepare("INSERT OR REPLACE INTO\"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
@@ -85,25 +85,48 @@ public class SQLPlayer extends ACPlayer {
 				.prepare("SELECT `key`,`info` FROM `ac_informations` WHERE `player_id` = ?");
 		getKitUses = Database.DATABASE
 				.prepare("SELECT `kit`,`use` FROM `ac_kit_uses` WHERE `player_id` = ?");
+		getLastLoc = Database.DATABASE
+				.prepare("SELECT world,x,y,z,yaw,pitch FROM ac_players WHERE player_id=?");
 	}
 
 	/**
 	 * @param name
 	 * @param id
 	 */
-	public SQLPlayer(final String name, final int id, final Location lastLoc) {
+	public SQLPlayer(final String name, final int id) {
 		super(name);
 		this.id = id;
-		this.lastLoc = lastLoc;
 		init();
 	}
-	public SQLPlayer(final Player player, final int id, final Location lastLoc) {
+	public SQLPlayer(final Player player, final int id) {
 		super(player);
 		this.id = id;
-		this.lastLoc = lastLoc;
 		init();
 	}
 	private void init() {
+		synchronized (getLastLoc) {
+			try {
+				getLastLoc.clearParameters();
+				getLastLoc.setInt(1, id);
+				ResultSet rs;
+				synchronized (getLastLoc.getConnection()) {
+					rs = getLastLoc.executeQuery();
+				}
+				if (rs.next()) {
+					final String worldName = rs.getString("world");
+					if (!worldName.isEmpty()) {
+						lastLoc = new Location(Bukkit.getWorld(worldName),
+								rs.getDouble("x"), rs.getDouble("y"),
+								rs.getDouble("z"), Float.parseFloat(rs
+										.getString("yaw")), Float.parseFloat(rs
+										.getString("pitch")));
+					}
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"Problem with getting last location from the DB", e);
+			}
+		}
 		synchronized (getHomes) {
 			try {
 				getHomes.clearParameters();

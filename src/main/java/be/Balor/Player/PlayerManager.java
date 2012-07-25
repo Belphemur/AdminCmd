@@ -40,7 +40,7 @@ public class PlayerManager {
 			.concurrencyLevel(8).weakValues().makeMap();
 	private final ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker()
 			.concurrencyLevel(8).makeMap();
-	private final static PlayerManager instance = new PlayerManager();
+	private final static PlayerManager INSTANCE = new PlayerManager();
 	private IPlayerFactory playerFactory;
 
 	/**
@@ -56,7 +56,7 @@ public class PlayerManager {
 	 * @return the instance
 	 */
 	public static PlayerManager getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	/**

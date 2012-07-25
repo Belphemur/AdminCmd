@@ -66,7 +66,7 @@ public class FilePlayer extends ACPlayer {
 	/**
  * 
  */
-	public FilePlayer(final String directory, final String name) {
+	FilePlayer(final String directory, final String name) {
 		super(name);
 		final File pFile = new File(directory, name + ".yml");
 		try {
@@ -81,7 +81,7 @@ public class FilePlayer extends ACPlayer {
 
 	}
 
-	public FilePlayer(final String directory, final Player player) {
+	FilePlayer(final String directory, final Player player) {
 		super(player);
 		final File pFile = new File(directory, name + ".yml");
 		try {

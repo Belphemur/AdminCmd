@@ -37,7 +37,7 @@ public class EmptyPlayer extends ACPlayer {
 	/**
 	 * @param name
 	 */
-	protected EmptyPlayer(final String name) {
+	public EmptyPlayer(final String name) {
 		super(name);
 		DebugLog.INSTANCE.severe("Empty Player instancied with name : " + name);
 	}
@@ -45,7 +45,7 @@ public class EmptyPlayer extends ACPlayer {
 	/**
 	 * @param name
 	 */
-	protected EmptyPlayer(final Player name) {
+	public EmptyPlayer(final Player name) {
 		super(name);
 		DebugLog.INSTANCE.severe("Empty Player instancied with name : "
 				+ name.getName());
