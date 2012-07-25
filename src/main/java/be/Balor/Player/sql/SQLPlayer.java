@@ -15,6 +15,7 @@
 package be.Balor.Player.sql;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -23,15 +24,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import lib.SQL.PatPeter.SQLibrary.Database;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 
 /**
@@ -49,7 +53,9 @@ public class SQLPlayer extends ACPlayer {
 	private final int id;
 	private final static PreparedStatement insertHome, deleteHome, insertInfo,
 			deleteInfo, updateLastLoc, insertPower, deletePower,
-			deleteSuperPowers;
+			deleteSuperPowers, insertKitUse;
+	private final static PreparedStatement getHomes, getInfos, getPowers,
+			getKitUses;
 	static {
 		insertHome = Database.DATABASE
 				.prepare("INSERT OR REPLACE INTO\"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
@@ -69,7 +75,16 @@ public class SQLPlayer extends ACPlayer {
 		deleteSuperPowers = Database.DATABASE
 				.prepare("DELETE FROM ac_powers WHERE player_id=? AND category='"
 						+ Type.Category.SUPER_POWER.name() + "'");
-
+		insertKitUse = Database.DATABASE
+				.prepare("INSERT OR REPLACE INTO `test`.`ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
+		getHomes = Database.DATABASE
+				.prepare("SELECT `name`,`world`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_homes` WHERE `player_id` = ?");
+		getPowers = Database.DATABASE
+				.prepare("SELECT `key`,`info` FROM `ac_powers` WHERE `player_id` = ?");
+		getInfos = Database.DATABASE
+				.prepare("SELECT `key`,`info` FROM `ac_informations` WHERE `player_id` = ?");
+		getKitUses = Database.DATABASE
+				.prepare("SELECT `kit`,`use` FROM `ac_kit_uses` WHERE `player_id` = ?");
 	}
 
 	/**
@@ -80,13 +95,97 @@ public class SQLPlayer extends ACPlayer {
 		super(name);
 		this.id = id;
 		this.lastLoc = lastLoc;
+		init();
 	}
 	public SQLPlayer(final Player player, final int id, final Location lastLoc) {
 		super(player);
 		this.id = id;
 		this.lastLoc = lastLoc;
+		init();
 	}
+	private void init() {
+		synchronized (getHomes) {
+			try {
+				getHomes.clearParameters();
+				getHomes.setInt(1, id);
+				ResultSet rs;
+				synchronized (getHomes.getConnection()) {
+					rs = getHomes.executeQuery();
+				}
+				while (rs.next()) {
+					homes.put(
+							rs.getString("name"),
+							new Location(
+									Bukkit.getWorld(rs.getString("world")), rs
+											.getDouble("x"), rs.getDouble("y"),
+									rs.getDouble("z"), Float.parseFloat(rs
+											.getString("yaw")), Float
+											.parseFloat(rs.getString("pitch"))));
+				}
+				rs.close();
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with getting homes from the DB", e);
+			}
 
+		}
+		synchronized (getPowers) {
+			try {
+				getPowers.clearParameters();
+				getPowers.setInt(1, id);
+				ResultSet rs;
+				synchronized (getPowers.getConnection()) {
+					rs = getPowers.executeQuery();
+				}
+				while (rs.next()) {
+					final String powerName = rs.getString("key");
+					final Type power = Type.matchType(powerName);
+					if (power == null) {
+						customPowers.put(powerName, rs.getString("info"));
+					} else {
+						powers.put(power, rs.getString("info"));
+					}
+				}
+				rs.close();
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with getting powers from the DB", e);
+			}
+
+		}
+		synchronized (getInfos) {
+			try {
+				getInfos.clearParameters();
+				getInfos.setInt(1, id);
+				ResultSet rs;
+				synchronized (getInfos.getConnection()) {
+					rs = getInfos.executeQuery();
+				}
+				while (rs.next()) {
+					infos.put(rs.getString("key"), rs.getString("info"));
+				}
+				rs.close();
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"Problem with getting informations from the DB", e);
+			}
+
+		}
+		synchronized (getKitUses) {
+			try {
+				getKitUses.clearParameters();
+				getKitUses.setInt(1, id);
+				ResultSet rs;
+				synchronized (getKitUses.getConnection()) {
+					rs = getKitUses.executeQuery();
+				}
+				while (rs.next()) {
+					kitUses.put(rs.getString("kit"), rs.getLong("use"));
+				}
+				rs.close();
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with getting kit uses from the DB", e);
+			}
+		}
+	}
 	/*
 	 * (Non javadoc)
 	 * 
@@ -320,10 +419,8 @@ public class SQLPlayer extends ACPlayer {
 				insertPower.clearParameters();
 				insertPower.setString(1, power);
 				insertPower.setInt(2, id);
-
 				insertPower.setString(3, value.toString());
-
-				insertPower.setString(4, Type.CUSTOM.name());
+				insertPower.setString(4, Type.Category.OTHER.name());
 				synchronized (insertPower.getConnection()) {
 					insertPower.executeUpdate();
 				}
@@ -465,8 +562,21 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setLastKitUse(final String kit, final long timestamp) {
-		// TODO Auto-generated method stub
+		kitUses.put(kit, timestamp);
+		synchronized (insertKitUse) {
+			try {
+				insertKitUse.clearParameters();
 
+				insertKitUse.setString(1, kit);
+				insertKitUse.setInt(2, id);
+				insertKitUse.setLong(3, timestamp);
+				synchronized (insertKitUse.getConnection()) {
+					insertKitUse.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with inserting kit_use in the DB", e);
+			}
+		}
 	}
 
 	/*
@@ -476,8 +586,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public long getLastKitUse(final String kit) {
-		// TODO Auto-generated method stub
-		return 0;
+		return kitUses.get(kit);
 	}
 
 	/*
@@ -487,8 +596,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public Set<String> getKitUseList() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableSet(kitUses.keySet());
 	}
 
 	/*
@@ -498,8 +606,10 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void forceSave() {
-		// TODO Auto-generated method stub
-
+		DebugLog.INSTANCE
+				.log(Level.WARNING,
+						"Force Save shouldn't be called for SQLPlayer",
+						new Throwable());
 	}
 
 	/*
@@ -526,7 +636,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setPresentation(final String presentation) {
-		// TODO Auto-generated method stub
+		setInformation("presentation", presentation);
 
 	}
 
@@ -537,8 +647,12 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public String getPresentation() {
-		// TODO Auto-generated method stub
-		return null;
+		final ObjectContainer pres = getInformation("presentation");
+		if (pres.isNull()) {
+			return "";
+		}
+		return pres.getString();
+
 	}
 	/*
 	 * (Non javadoc)
