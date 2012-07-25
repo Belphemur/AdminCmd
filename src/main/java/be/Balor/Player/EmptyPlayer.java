@@ -264,7 +264,7 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getPlayerPowers()
 	 */
 	@Override
-	public Map<String, String> getPowers() {
+	public Map<String, String> getPowersString() {
 		return new HashMap<String, String>();
 	}
 
@@ -336,6 +336,28 @@ public class EmptyPlayer extends ACPlayer {
 	@Override
 	public void setLastKitUse(final String kit, final long timestamp) {
 
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPowers()
+	 */
+	@Override
+	public Map<Type, Object> getPowers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getCustomPowers()
+	 */
+	@Override
+	public Map<String, Object> getCustomPowers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

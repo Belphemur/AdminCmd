@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import lib.SQL.PatPeter.SQLibrary.Database;
 
@@ -506,9 +508,15 @@ public class SQLPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getPowers()
 	 */
 	@Override
-	public Map<String, String> getPowers() {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, String> getPowersString() {
+		final Map<String, String> result = new TreeMap<String, String>();
+		for (final Entry<Type, Object> entry : powers.entrySet()) {
+			result.put(entry.getKey().name(), entry.getValue().toString());
+		}
+		for (final Entry<String, Object> entry : customPowers.entrySet()) {
+			result.put(entry.getKey(), entry.getValue().toString());
+		}
+		return result;
 	}
 
 	/*
@@ -531,6 +539,24 @@ public class SQLPlayer extends ACPlayer {
 	public String getPresentation() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPowers()
+	 */
+	@Override
+	public Map<Type, Object> getPowers() {
+		return Collections.unmodifiableMap(powers);
+	}
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getCustomPowers()
+	 */
+	@Override
+	public Map<String, Object> getCustomPowers() {
+		return Collections.unmodifiableMap(customPowers);
 	}
 
 }

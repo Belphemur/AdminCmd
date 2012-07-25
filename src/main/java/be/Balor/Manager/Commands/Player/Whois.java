@@ -165,7 +165,7 @@ public class Whois extends PlayerCommand {
 			sender.sendMessage(banned);
 		}
 		// Powers
-		for (final Entry<String, String> power : actarget.getPowers()
+		for (final Entry<String, String> power : actarget.getPowersString()
 				.entrySet()) {
 			final Type powerType = Type.matchType(power.getKey());
 			if (powerType == Type.INVISIBLE) {

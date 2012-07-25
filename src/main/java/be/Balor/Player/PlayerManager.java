@@ -84,16 +84,14 @@ public class PlayerManager {
 			for (final String home : oldPlayer.getHomeList()) {
 				newPlayer.setHome(home, oldPlayer.getHome(home));
 			}
-			for (final Entry<String, String> entry : oldPlayer.getPowers()
+			for (final Entry<Type, Object> entry : oldPlayer.getPowers()
 					.entrySet()) {
-				final Type power = Type.matchType(entry.getKey());
-				if (power != null) {
-					newPlayer.setPower(power, oldPlayer.getPower(power)
-							.getObj());
-				} else {
-					newPlayer.setCustomPower(entry.getKey(), oldPlayer
-							.getCustomPower(entry.getKey()).getObj());
-				}
+				newPlayer.setPower(entry.getKey(), entry.getValue());
+			}
+
+			for (final Entry<String, Object> entry : oldPlayer
+					.getCustomPowers().entrySet()) {
+				newPlayer.setCustomPower(entry.getKey(), entry.getValue());
 			}
 			for (final String info : oldPlayer.getInformationsList()) {
 				if (info.equals("lastLoc") || info.equals("presentation")) {

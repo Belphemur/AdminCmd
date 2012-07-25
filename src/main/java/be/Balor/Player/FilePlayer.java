@@ -18,6 +18,8 @@ package be.Balor.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -430,7 +432,7 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#getPlayerPowers()
 	 */
 	@Override
-	public Map<String, String> getPowers() {
+	public Map<String, String> getPowersString() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
 		for (final Entry<String, Object> entry : powers.getValues(false)
 				.entrySet()) {
@@ -505,4 +507,41 @@ public class FilePlayer extends ACPlayer {
 		writeFile();
 	}
 
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getPowers()
+	 */
+	@Override
+	public Map<Type, Object> getPowers() {
+		final Map<Type, Object> result = new EnumMap<Type, Object>(Type.class);
+		for (final Entry<String, Object> entry : powers.getValues(false)
+				.entrySet()) {
+			final Type power = Type.matchType(entry.getKey());
+			if (power == null || (power != null && power == Type.CUSTOM)) {
+				continue;
+			}
+			result.put(power, entry.getValue());
+		}
+		return result;
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.Player.ACPlayer#getCustomPowers()
+	 */
+	@Override
+	public Map<String, Object> getCustomPowers() {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		for (final Entry<String, Object> entry : powers.getValues(false)
+				.entrySet()) {
+			final Type power = Type.matchType(entry.getKey());
+			if (power != null && power != Type.CUSTOM) {
+				continue;
+			}
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result;
+	}
 }

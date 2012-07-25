@@ -347,7 +347,7 @@ public abstract class ACPlayer {
 	 * 
 	 * @return
 	 */
-	public abstract Map<String, String> getPowers();
+	public abstract Map<String, String> getPowersString();
 
 	/**
 	 * 
@@ -377,6 +377,18 @@ public abstract class ACPlayer {
 	 * @return text to present the player
 	 */
 	public abstract String getPresentation();
+	/**
+	 * Get all the powers of the player
+	 * 
+	 * @return powers of the player
+	 */
+	public abstract Map<Type, Object> getPowers();
+	/**
+	 * Get all the custom powers of the player
+	 * 
+	 * @return powers of the player
+	 */
+	public abstract Map<String, Object> getCustomPowers();
 
 	/**
 	 * @param isOnline
