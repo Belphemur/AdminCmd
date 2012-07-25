@@ -609,7 +609,11 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public long getLastKitUse(final String kit) {
-		return kitUses.get(kit);
+		final Long use = kitUses.get(kit);
+		if (use == null) {
+			return 0L;
+		}
+		return use.longValue();
 	}
 
 	/*
