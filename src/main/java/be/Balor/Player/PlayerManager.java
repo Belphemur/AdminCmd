@@ -17,8 +17,10 @@
 package be.Balor.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.entity.Player;
@@ -133,8 +135,8 @@ public class PlayerManager {
 	 * 
 	 * @return
 	 */
-	public List<ACPlayer> getOnlineACPlayers() {
-		return new ArrayList<ACPlayer>(onlinePlayers.keySet());
+	public Set<ACPlayer> getOnlineACPlayers() {
+		return Collections.unmodifiableSet(onlinePlayers.keySet());
 	}
 
 	/**
@@ -147,7 +149,7 @@ public class PlayerManager {
 				onlinePlayers.size());
 		for (final ACPlayer p : onlinePlayers.keySet()) {
 			final Player handler = p.getHandler();
-			if (handler != null) {
+			if (handler != null && handler.isOnline()) {
 				list.add(handler);
 			}
 		}
