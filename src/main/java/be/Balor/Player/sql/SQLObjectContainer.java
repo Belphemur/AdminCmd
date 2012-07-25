@@ -44,7 +44,9 @@ public class SQLObjectContainer extends ObjectContainer {
 	@Override
 	public EggType<?> getEggType() {
 		if (getObj() instanceof String) {
-			return (EggType<?>) yaml.load((String) getObj());
+			synchronized (yaml) {
+				return (EggType<?>) yaml.load((String) getObj());
+			}
 		}
 		return null;
 	}

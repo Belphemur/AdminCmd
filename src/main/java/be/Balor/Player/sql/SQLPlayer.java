@@ -17,6 +17,7 @@ package be.Balor.Player.sql;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -38,12 +39,15 @@ import be.Balor.Tools.Files.ObjectContainer;
 public class SQLPlayer extends ACPlayer {
 	private final Map<String, Location> homes = new HashMap<String, Location>();
 	private final Map<String, Object> infos = new HashMap<String, Object>();
-	private final Map<String, Object> powers = new HashMap<String, Object>();
+	private final Map<Type, Object> powers = new EnumMap<Type, Object>(
+			Type.class);
+	private final Map<String, Object> customPowers = new HashMap<String, Object>();
 	private final Map<String, Long> kitUses = new HashMap<String, Long>();
 	private Location lastLoc;
 	private final int id;
 	private final static PreparedStatement insertHome, deleteHome, insertInfo,
-			deleteInfo, updateLastLoc;
+			deleteInfo, updateLastLoc, insertPower, deletePower,
+			deleteSuperPowers;
 	static {
 		insertHome = Database.DATABASE
 				.prepare("INSERT OR REPLACE INTO\"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
@@ -56,6 +60,13 @@ public class SQLPlayer extends ACPlayer {
 				.prepare("DELETE FROM ac_informations WHERE player_id=? AND key=?");
 		updateLastLoc = Database.DATABASE
 				.prepare("UPDATE `ac_players` SET `world` = ?, `x` = ?, `y` = ?, `z` = ?, `yaw` = ?, `pitch` = ? WHERE `ac_players`.`id` = ?;");
+		insertPower = Database.DATABASE
+				.prepare("INSERT OR REPLACE INTO `ac_powers` (`key`, `player_id`, `info`, `category`) VALUES (?, ?, ?, ?);");
+		deletePower = Database.DATABASE
+				.prepare("DELETE FROM ac_powers WHERE player_id=? AND key=?");
+		deleteSuperPowers = Database.DATABASE
+				.prepare("DELETE FROM ac_powers WHERE player_id=? AND category='"
+						+ Type.Category.SUPER_POWER.name() + "'");
 
 	}
 
@@ -110,19 +121,21 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeHome(final String home) {
-		homes.remove(home);
-		synchronized (deleteHome) {
-			try {
-				deleteHome.clearParameters();
-				deleteHome.setInt(1, id);
-				deleteHome.setString(2, home);
-				synchronized (deleteHome.getConnection()) {
-					deleteHome.executeUpdate();
+		if (homes.remove(home) != null) {
+			synchronized (deleteHome) {
+				try {
+					deleteHome.clearParameters();
+					deleteHome.setInt(1, id);
+					deleteHome.setString(2, home);
+					synchronized (deleteHome.getConnection()) {
+						deleteHome.executeUpdate();
+					}
+				} catch (final SQLException e) {
+					ACLogger.severe(
+							"Problem with deleting the home from the DB", e);
 				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with deleting the home from the DB", e);
-			}
 
+			}
 		}
 
 	}
@@ -180,19 +193,21 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeInformation(final String info) {
-		infos.remove(info);
-		synchronized (deleteInfo) {
-			try {
-				deleteInfo.clearParameters();
-				deleteInfo.setInt(1, id);
-				deleteInfo.setString(2, info);
-				synchronized (deleteInfo.getConnection()) {
-					deleteInfo.executeUpdate();
+		if (infos.remove(info) != null) {
+			synchronized (deleteInfo) {
+				try {
+					deleteInfo.clearParameters();
+					deleteInfo.setInt(1, id);
+					deleteInfo.setString(2, info);
+					synchronized (deleteInfo.getConnection()) {
+						deleteInfo.executeUpdate();
+					}
+				} catch (final SQLException e) {
+					ACLogger.severe(
+							"Problem with deleting the info from the DB", e);
 				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with deleting the info from the DB", e);
-			}
 
+			}
 		}
 
 	}
@@ -264,7 +279,28 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setPower(final Type power, final Object value) {
-		// TODO Auto-generated method stub
+		powers.put(power, value);
+		synchronized (insertPower) {
+			try {
+				insertPower.clearParameters();
+				insertPower.setString(1, power.name());
+				insertPower.setInt(2, id);
+				if (power == Type.EGG) {
+					synchronized (SQLObjectContainer.yaml) {
+						insertPower.setString(3,
+								SQLObjectContainer.yaml.dump(value));
+					}
+				} else {
+					insertPower.setString(3, value.toString());
+				}
+				insertPower.setString(4, power.getCategory().name());
+				synchronized (insertPower.getConnection()) {
+					insertPower.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with inserting power in the DB", e);
+			}
+		}
 
 	}
 
@@ -276,7 +312,23 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setCustomPower(final String power, final Object value) {
-		// TODO Auto-generated method stub
+		customPowers.put(power, value);
+		synchronized (insertPower) {
+			try {
+				insertPower.clearParameters();
+				insertPower.setString(1, power);
+				insertPower.setInt(2, id);
+
+				insertPower.setString(3, value.toString());
+
+				insertPower.setString(4, Type.CUSTOM.name());
+				synchronized (insertPower.getConnection()) {
+					insertPower.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with inserting power in the DB", e);
+			}
+		}
 
 	}
 
@@ -287,8 +339,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public ObjectContainer getCustomPower(final String power) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ObjectContainer(customPowers.get(power));
 	}
 
 	/*
@@ -298,8 +349,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public boolean hasCustomPower(final String power) {
-		// TODO Auto-generated method stub
-		return false;
+		return customPowers.containsKey(power);
 	}
 
 	/*
@@ -309,7 +359,22 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeCustomPower(final String power) {
-		// TODO Auto-generated method stub
+		if (customPowers.remove(power) != null) {
+			synchronized (deletePower) {
+				try {
+					deletePower.clearParameters();
+					deletePower.setInt(1, id);
+					deletePower.setString(2, power);
+					synchronized (deletePower.getConnection()) {
+						deletePower.executeUpdate();
+					}
+				} catch (final SQLException e) {
+					ACLogger.severe(
+							"Problem with deleting customPower in the DB", e);
+				}
+
+			}
+		}
 
 	}
 
@@ -320,8 +385,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public ObjectContainer getPower(final Type power) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SQLObjectContainer(powers.get(power));
 	}
 
 	/*
@@ -331,8 +395,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public boolean hasPower(final Type power) {
-		// TODO Auto-generated method stub
-		return false;
+		return powers.containsKey(power);
 	}
 
 	/*
@@ -342,7 +405,22 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void removePower(final Type power) {
-		// TODO Auto-generated method stub
+		if (powers.remove(power) != null) {
+			synchronized (deletePower) {
+				try {
+					deletePower.clearParameters();
+					deletePower.setInt(1, id);
+					deletePower.setString(2, power.name());
+					synchronized (deletePower.getConnection()) {
+						deletePower.executeUpdate();
+					}
+				} catch (final SQLException e) {
+					ACLogger.severe("Problem with deleting power from the DB",
+							e);
+				}
+
+			}
+		}
 
 	}
 
@@ -353,10 +431,31 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void removeAllSuperPower() {
-		// TODO Auto-generated method stub
+		boolean found = false;
+		for (final Type power : powers.keySet()) {
+			if (power.getCategory() != Type.Category.SUPER_POWER) {
+				continue;
+			}
+			powers.remove(power);
+			found = true;
+		}
+		if (found) {
+			synchronized (deleteSuperPowers) {
+				try {
+					deleteSuperPowers.clearParameters();
+					deleteSuperPowers.setInt(1, id);
+					synchronized (deleteSuperPowers.getConnection()) {
+						deleteSuperPowers.executeUpdate();
+					}
+				} catch (final SQLException e) {
+					ACLogger.severe(
+							"Problem with deleting super powers from the DB", e);
+				}
+
+			}
+		}
 
 	}
-
 	/*
 	 * (Non javadoc)
 	 * 
