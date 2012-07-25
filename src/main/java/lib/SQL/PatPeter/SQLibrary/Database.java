@@ -27,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
@@ -45,7 +46,8 @@ public abstract class Database {
 	protected final String PREFIX;
 	protected final String DATABASE_PREFIX;
 	protected boolean connected;
-	protected Connection connection;
+	protected Connection conn1, conn2;
+	private final Random rand = new Random();
 	static {
 		final DatabaseConfig config = new DatabaseConfig();
 		Database db;
@@ -156,7 +158,7 @@ public abstract class Database {
 		this.PREFIX = prefix;
 		this.DATABASE_PREFIX = dp;
 		this.connected = false;
-		this.connection = null;
+		this.conn1 = null;
 	}
 
 	/**
@@ -230,9 +232,16 @@ public abstract class Database {
 	 * <br>
 	 */
 	public void close() {
-		if (connection != null) {
+		if (conn1 != null) {
 			try {
-				connection.close();
+				conn1.close();
+			} catch (final SQLException ex) {
+				this.writeError("SQL exception in close(): " + ex, true);
+			}
+		}
+		if (conn2 != null) {
+			try {
+				conn2.close();
 			} catch (final SQLException ex) {
 				this.writeError("SQL exception in close(): " + ex, true);
 			}
@@ -250,7 +259,11 @@ public abstract class Database {
 	 *         >Connection</a> variable.
 	 */
 	public Connection getConnection() {
-		return this.connection;
+		if (rand.nextBoolean()) {
+			return conn1;
+		} else {
+			return conn2;
+		}
 	}
 
 	/**
@@ -262,7 +275,7 @@ public abstract class Database {
 	 * @return the status of the connection, true for up, false for down.
 	 */
 	public boolean checkConnection() {
-		if (connection != null) {
+		if (conn1 != null) {
 			return true;
 		}
 		return false;
@@ -291,8 +304,9 @@ public abstract class Database {
 	public PreparedStatement prepare(final String query) {
 		try {
 			final PreparedStatement ps;
-			synchronized (connection) {
-				ps = connection.prepareStatement(query);
+			final Connection conn = this.getConnection();
+			synchronized (conn) {
+				ps = conn.prepareStatement(query);
 			}
 			return ps;
 		} catch (final SQLException e) {
@@ -363,8 +377,8 @@ public abstract class Database {
 						true);
 				return false;
 			}
-			synchronized (connection) {
-				statement = connection.createStatement();
+			synchronized (conn1) {
+				statement = conn1.createStatement();
 				statement.execute(query);
 			}
 			return true;
@@ -387,8 +401,8 @@ public abstract class Database {
 	public boolean checkTable(final String table) {
 		DatabaseMetaData dbm = null;
 		try {
-			synchronized (connection) {
-				dbm = this.connection.getMetaData();
+			synchronized (conn1) {
+				dbm = this.conn1.getMetaData();
 			}
 
 			final ResultSet tables = dbm.getTables(null, null, table, null);

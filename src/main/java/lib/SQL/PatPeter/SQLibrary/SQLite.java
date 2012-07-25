@@ -60,8 +60,9 @@ public class SQLite extends Database {
 	@Override
 	public void open() throws SQLException {
 		initialize();
-		this.connection = DriverManager.getConnection("jdbc:sqlite:"
-				+ sqlFile.getAbsolutePath());
+		final String url = "jdbc:sqlite:" + sqlFile.getAbsolutePath();
+		this.conn1 = DriverManager.getConnection(url);
+		this.conn2 = DriverManager.getConnection(url);
 
 	}
 
@@ -71,8 +72,8 @@ public class SQLite extends Database {
 		ResultSet result = null;
 
 		try {
-			synchronized (connection) {
-				statement = connection.createStatement();
+			synchronized (conn1) {
+				statement = conn1.createStatement();
 
 				switch (this.getStatement(query)) {
 					case SELECT :
@@ -125,8 +126,8 @@ public class SQLite extends Database {
 				return false;
 			}
 			query = "DELETE FROM " + table + ";";
-			synchronized (connection) {
-				statement = connection.createStatement();
+			synchronized (conn1) {
+				statement = conn1.createStatement();
 				statement.executeQuery(query);
 			}
 			return true;
@@ -156,8 +157,8 @@ public class SQLite extends Database {
 		ResultSet result = null;
 
 		try {
-			synchronized (connection) {
-				statement = connection.createStatement();
+			synchronized (conn1) {
+				statement = conn1.createStatement();
 				result = statement.executeQuery(query);
 			}
 			return result;

@@ -46,10 +46,11 @@ public class MySQL extends Database {
 	@Override
 	public void open() throws SQLException {
 		initialize();
-		String url = "";
-		url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/"
-				+ this.database;
-		this.connection = DriverManager.getConnection(url, this.username,
+		final String url = "jdbc:mysql://" + this.hostname + ":"
+				+ this.portnmbr + "/" + this.database;
+		this.conn1 = DriverManager.getConnection(url, this.username,
+				this.password);
+		this.conn2 = DriverManager.getConnection(url, this.username,
 				this.password);
 	}
 
@@ -58,8 +59,8 @@ public class MySQL extends Database {
 		Statement statement = null;
 		ResultSet result = null;
 		try {
-			synchronized (connection) {
-				statement = this.connection.createStatement();
+			synchronized (conn1) {
+				statement = this.conn1.createStatement();
 
 				switch (this.getStatement(query)) {
 					case SELECT :
@@ -105,8 +106,8 @@ public class MySQL extends Database {
 				return false;
 			}
 			query = "DELETE FROM " + table + ";";
-			synchronized (connection) {
-				statement = connection.createStatement();
+			synchronized (conn1) {
+				statement = conn1.createStatement();
 				statement.executeQuery(query);
 			}
 			return true;
