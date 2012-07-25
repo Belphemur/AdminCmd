@@ -76,7 +76,7 @@ public class SQLPlayer extends ACPlayer {
 				.prepare("DELETE FROM ac_powers WHERE player_id=? AND category='"
 						+ Type.Category.SUPER_POWER.name() + "'");
 		insertKitUse = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO `test`.`ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
+				.prepare("INSERT OR REPLACE INTO `ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
 		getHomes = Database.DATABASE
 				.prepare("SELECT `name`,`world`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_homes` WHERE `player_id` = ?");
 		getPowers = Database.DATABASE
