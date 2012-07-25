@@ -86,7 +86,7 @@ public class SQLPlayer extends ACPlayer {
 		getKitUses = Database.DATABASE
 				.prepare("SELECT `kit`,`use` FROM `ac_kit_uses` WHERE `player_id` = ?");
 		getLastLoc = Database.DATABASE
-				.prepare("SELECT world,x,y,z,yaw,pitch FROM ac_players WHERE player_id=?");
+				.prepare("SELECT world,x,y,z,yaw,pitch FROM ac_players WHERE id=?");
 	}
 
 	/**
