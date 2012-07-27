@@ -3,10 +3,7 @@ package be.Balor.bukkit.AdminCmd;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,7 +52,6 @@ import be.Balor.Player.IBan;
 import be.Balor.Player.IPlayerFactory;
 import be.Balor.Player.ITempBan;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Player.sql.SQLPlayerFactory;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -65,10 +61,12 @@ import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Egg.Types.ExplosionEgg;
 import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
+import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Lister.Lister;
@@ -1543,34 +1541,26 @@ public class ACHelper {
 					}
 				}
 				// TODO DELETE TEST CODE !!!
-				final Connection conn = db.getConnection();
-				final Statement stmt = conn.createStatement();
-				final String name = "Belphemur_" + Math.random();
-				stmt.executeUpdate("INSERT INTO 'ac_players' ('name','world','x','y','z','yaw','pitch') VALUES ('"
-						+ name + "','','','','','','')");
-				final ResultSet rs = stmt.getGeneratedKeys();
-				rs.next();
-				final int id = rs.getInt(1);
-				ACLogger.info("Name : " + name + "/Id :" + id);
-				final SQLPlayer testplayer = new SQLPlayer(name, id);
-				testplayer.setPower(Type.FLY);
-				final SQLPlayer testplayer2 = new SQLPlayer(name, id - 1);
-				testplayer2.removeAllSuperPower();
 				final IPlayerFactory factory = new SQLPlayerFactory();
 				factory.addExistingPlayer("Belphemur");
-				final ACPlayer testplayer3 = factory.createPlayer("Belphemur");
-				System.out.println("FLY : " + testplayer3.hasPower(Type.FLY));
+				final ACPlayer testPlayer = factory.createPlayer("Belphemur");
+				System.out.println("FLY : " + testPlayer.hasPower(Type.FLY));
 				System.out.println("VULCAN : "
-						+ testplayer3.hasPower(Type.VULCAN));
-				testplayer3.setLastKitUse("blah", System.currentTimeMillis());
-				System.out.println(testplayer3.getLastKitUse("yatta"));
-				System.out
-						.println("Home test : " + testplayer3.getHome("test"));
-				testplayer3.setHome("test",
+						+ testPlayer.hasPower(Type.VULCAN));
+				testPlayer.setLastKitUse("blah", System.currentTimeMillis());
+				System.out.println("Home test : " + testPlayer.getHome("test"));
+				testPlayer.setHome("test",
 						new Location(Bukkit.getWorld("world"), 10, 10, 10, 10,
 								10));
-				testplayer3.setLastLocation(new Location(Bukkit
+				testPlayer.setLastLocation(new Location(Bukkit
 						.getWorld("world"), 20, 80, 5.007, 8.08701F, 9.0975F));
+				final ObjectContainer obj = testPlayer.getPower(Type.EGG);
+				if (!obj.isNull()) {
+					System.out.println(obj.getEggType());
+				}
+				final ExplosionEgg egg = new ExplosionEgg();
+				egg.setValue(8F);
+				testPlayer.setPower(Type.EGG, egg);
 			} catch (final SQLException e) {
 				ACLogger.severe(
 						"There is a problem in your SQL configuration : ", e);
