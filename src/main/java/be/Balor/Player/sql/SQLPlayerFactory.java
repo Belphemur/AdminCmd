@@ -120,7 +120,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 				}
 				final ResultSet rs = insertPlayer.getGeneratedKeys();
 				if (rs.next()) {
-					players.put(player, rs.getInt("id"));
+					players.put(player, rs.getInt(1));
 				}
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem when adding player to the DB", e);

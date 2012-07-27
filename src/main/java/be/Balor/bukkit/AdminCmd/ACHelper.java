@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -1547,13 +1548,19 @@ public class ACHelper {
 				System.out.println("FLY : " + testPlayer.hasPower(Type.FLY));
 				System.out.println("VULCAN : "
 						+ testPlayer.hasPower(Type.VULCAN));
+				testPlayer.setPower(Type.FLY);
 				testPlayer.setLastKitUse("blah", System.currentTimeMillis());
 				System.out.println("Home test : " + testPlayer.getHome("test"));
 				testPlayer.setHome("test",
 						new Location(Bukkit.getWorld("world"), 10, 10, 10, 10,
 								10));
+				System.out.println("Current lastLoc : "
+						+ testPlayer.getLastLocation());
+				final Random rand = new Random();
 				testPlayer.setLastLocation(new Location(Bukkit
-						.getWorld("world"), 20, 80, 5.007, 8.08701F, 9.0975F));
+						.getWorld("world"), rand.nextDouble(), rand
+						.nextDouble(), 5.007, rand.nextFloat(), rand
+						.nextFloat()));
 				final ObjectContainer obj = testPlayer.getPower(Type.EGG);
 				if (!obj.isNull()) {
 					System.out.println(obj.getEggType());
