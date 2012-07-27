@@ -117,9 +117,8 @@ public class SQLPlayer extends ACPlayer {
 					if (!worldName.isEmpty()) {
 						lastLoc = new Location(Bukkit.getWorld(worldName),
 								rs.getDouble("x"), rs.getDouble("y"),
-								rs.getDouble("z"), Float.parseFloat(rs
-										.getString("yaw")), Float.parseFloat(rs
-										.getString("pitch")));
+								rs.getDouble("z"), rs.getFloat("yaw"),
+								rs.getFloat("pitch"));
 					}
 				}
 			} catch (final SQLException e) {
@@ -141,9 +140,8 @@ public class SQLPlayer extends ACPlayer {
 							new Location(
 									Bukkit.getWorld(rs.getString("world")), rs
 											.getDouble("x"), rs.getDouble("y"),
-									rs.getDouble("z"), Float.parseFloat(rs
-											.getString("yaw")), Float
-											.parseFloat(rs.getString("pitch"))));
+									rs.getDouble("z"), rs.getFloat("yaw"), rs
+											.getFloat("pitch")));
 				}
 				rs.close();
 			} catch (final SQLException e) {
@@ -227,8 +225,8 @@ public class SQLPlayer extends ACPlayer {
 				insertHome.setDouble(4, loc.getX());
 				insertHome.setDouble(5, loc.getY());
 				insertHome.setDouble(6, loc.getZ());
-				insertHome.setDouble(7, loc.getYaw());
-				insertHome.setDouble(8, loc.getPitch());
+				insertHome.setFloat(7, loc.getYaw());
+				insertHome.setFloat(8, loc.getPitch());
 				synchronized (insertHome.getConnection()) {
 					insertHome.executeUpdate();
 				}
@@ -371,8 +369,8 @@ public class SQLPlayer extends ACPlayer {
 				updateLastLoc.setDouble(2, loc.getX());
 				updateLastLoc.setDouble(3, loc.getY());
 				updateLastLoc.setDouble(4, loc.getZ());
-				updateLastLoc.setDouble(5, loc.getYaw());
-				updateLastLoc.setDouble(6, loc.getPitch());
+				updateLastLoc.setFloat(5, loc.getYaw());
+				updateLastLoc.setFloat(6, loc.getPitch());
 				updateLastLoc.setInt(7, id);
 				synchronized (updateLastLoc.getConnection()) {
 					updateLastLoc.executeUpdate();
