@@ -50,7 +50,7 @@ public class SQLPlayer extends ACPlayer {
 	private final Map<String, Object> customPowers = new HashMap<String, Object>();
 	private final Map<String, Long> kitUses = new HashMap<String, Long>();
 	private Location lastLoc;
-	private final int id;
+	private final long id;
 	private final static PreparedStatement insertHome, deleteHome, insertInfo,
 			deleteInfo, updateLastLoc, insertPower, deletePower,
 			deleteSuperPowers, insertKitUse;
@@ -93,12 +93,12 @@ public class SQLPlayer extends ACPlayer {
 	 * @param name
 	 * @param id
 	 */
-	public SQLPlayer(final String name, final int id) {
+	public SQLPlayer(final String name, final long id) {
 		super(name);
 		this.id = id;
 		init();
 	}
-	public SQLPlayer(final Player player, final int id) {
+	public SQLPlayer(final Player player, final long id) {
 		super(player);
 		this.id = id;
 		init();
@@ -107,7 +107,7 @@ public class SQLPlayer extends ACPlayer {
 		synchronized (getLastLoc) {
 			try {
 				getLastLoc.clearParameters();
-				getLastLoc.setInt(1, id);
+				getLastLoc.setLong(1, id);
 				ResultSet rs;
 				synchronized (getLastLoc.getConnection()) {
 					rs = getLastLoc.executeQuery();
@@ -129,7 +129,7 @@ public class SQLPlayer extends ACPlayer {
 		synchronized (getHomes) {
 			try {
 				getHomes.clearParameters();
-				getHomes.setInt(1, id);
+				getHomes.setLong(1, id);
 				ResultSet rs;
 				synchronized (getHomes.getConnection()) {
 					rs = getHomes.executeQuery();
@@ -152,7 +152,7 @@ public class SQLPlayer extends ACPlayer {
 		synchronized (getPowers) {
 			try {
 				getPowers.clearParameters();
-				getPowers.setInt(1, id);
+				getPowers.setLong(1, id);
 				ResultSet rs;
 				synchronized (getPowers.getConnection()) {
 					rs = getPowers.executeQuery();
@@ -175,7 +175,7 @@ public class SQLPlayer extends ACPlayer {
 		synchronized (getInfos) {
 			try {
 				getInfos.clearParameters();
-				getInfos.setInt(1, id);
+				getInfos.setLong(1, id);
 				ResultSet rs;
 				synchronized (getInfos.getConnection()) {
 					rs = getInfos.executeQuery();
@@ -193,7 +193,7 @@ public class SQLPlayer extends ACPlayer {
 		synchronized (getKitUses) {
 			try {
 				getKitUses.clearParameters();
-				getKitUses.setInt(1, id);
+				getKitUses.setLong(1, id);
 				ResultSet rs;
 				synchronized (getKitUses.getConnection()) {
 					rs = getKitUses.executeQuery();
@@ -220,7 +220,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				insertHome.clearParameters();
 				insertHome.setString(1, home);
-				insertHome.setInt(2, id);
+				insertHome.setLong(2, id);
 				insertHome.setString(3, loc.getWorld().getName());
 				insertHome.setDouble(4, loc.getX());
 				insertHome.setDouble(5, loc.getY());
@@ -247,7 +247,7 @@ public class SQLPlayer extends ACPlayer {
 			synchronized (deleteHome) {
 				try {
 					deleteHome.clearParameters();
-					deleteHome.setInt(1, id);
+					deleteHome.setLong(1, id);
 					deleteHome.setString(2, home);
 					synchronized (deleteHome.getConnection()) {
 						deleteHome.executeUpdate();
@@ -295,7 +295,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				insertInfo.clearParameters();
 				insertInfo.setString(1, info);
-				insertInfo.setInt(2, id);
+				insertInfo.setLong(2, id);
 				insertInfo.setString(3, value.toString());
 				synchronized (insertInfo.getConnection()) {
 					insertInfo.executeUpdate();
@@ -319,7 +319,7 @@ public class SQLPlayer extends ACPlayer {
 			synchronized (deleteInfo) {
 				try {
 					deleteInfo.clearParameters();
-					deleteInfo.setInt(1, id);
+					deleteInfo.setLong(1, id);
 					deleteInfo.setString(2, info);
 					synchronized (deleteInfo.getConnection()) {
 						deleteInfo.executeUpdate();
@@ -371,7 +371,7 @@ public class SQLPlayer extends ACPlayer {
 				updateLastLoc.setDouble(4, loc.getZ());
 				updateLastLoc.setFloat(5, loc.getYaw());
 				updateLastLoc.setFloat(6, loc.getPitch());
-				updateLastLoc.setInt(7, id);
+				updateLastLoc.setLong(7, id);
 				synchronized (updateLastLoc.getConnection()) {
 					updateLastLoc.executeUpdate();
 				}
@@ -406,7 +406,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				insertPower.clearParameters();
 				insertPower.setString(1, power.name());
-				insertPower.setInt(2, id);
+				insertPower.setLong(2, id);
 				if (power == Type.EGG) {
 					synchronized (SQLObjectContainer.yaml) {
 						insertPower.setString(3,
@@ -439,7 +439,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				insertPower.clearParameters();
 				insertPower.setString(1, power);
-				insertPower.setInt(2, id);
+				insertPower.setLong(2, id);
 				insertPower.setString(3, value.toString());
 				insertPower.setString(4, Type.Category.OTHER.name());
 				synchronized (insertPower.getConnection()) {
@@ -483,7 +483,7 @@ public class SQLPlayer extends ACPlayer {
 			synchronized (deletePower) {
 				try {
 					deletePower.clearParameters();
-					deletePower.setInt(1, id);
+					deletePower.setLong(1, id);
 					deletePower.setString(2, power);
 					synchronized (deletePower.getConnection()) {
 						deletePower.executeUpdate();
@@ -529,7 +529,7 @@ public class SQLPlayer extends ACPlayer {
 			synchronized (deletePower) {
 				try {
 					deletePower.clearParameters();
-					deletePower.setInt(1, id);
+					deletePower.setLong(1, id);
 					deletePower.setString(2, power.name());
 					synchronized (deletePower.getConnection()) {
 						deletePower.executeUpdate();
@@ -563,7 +563,7 @@ public class SQLPlayer extends ACPlayer {
 			synchronized (deleteSuperPowers) {
 				try {
 					deleteSuperPowers.clearParameters();
-					deleteSuperPowers.setInt(1, id);
+					deleteSuperPowers.setLong(1, id);
 					synchronized (deleteSuperPowers.getConnection()) {
 						deleteSuperPowers.executeUpdate();
 					}
@@ -589,7 +589,7 @@ public class SQLPlayer extends ACPlayer {
 				insertKitUse.clearParameters();
 
 				insertKitUse.setString(1, kit);
-				insertKitUse.setInt(2, id);
+				insertKitUse.setLong(2, id);
 				insertKitUse.setLong(3, timestamp);
 				synchronized (insertKitUse.getConnection()) {
 					insertKitUse.executeUpdate();

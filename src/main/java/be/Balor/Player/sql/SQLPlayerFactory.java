@@ -40,7 +40,7 @@ import com.google.common.base.Joiner;
  */
 public class SQLPlayerFactory implements IPlayerFactory {
 	private final PreparedStatement insertPlayer;
-	private final Map<String, Integer> players = new HashMap<String, Integer>();
+	private final Map<String, Long> players = new HashMap<String, Long>();
 	/**
  * 
  */
@@ -51,7 +51,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 				.query("SELECT name,id FROM ac_players");
 		try {
 			while (rs.next()) {
-				players.put(rs.getString("name"), rs.getInt("id"));
+				players.put(rs.getString("name"), rs.getLong("id"));
 			}
 			rs.close();
 		} catch (final SQLException e) {
@@ -68,7 +68,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 */
 	@Override
 	public ACPlayer createPlayer(final String playername) {
-		final Integer id = players.get(playername);
+		final Long id = players.get(playername);
 		if (id == null) {
 			return new EmptyPlayer(playername);
 		} else {
@@ -85,7 +85,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 */
 	@Override
 	public ACPlayer createPlayer(final Player player) {
-		final Integer id = players.get(player.getName());
+		final Long id = players.get(player.getName());
 		if (id == null) {
 			return new EmptyPlayer(player);
 		} else {
@@ -120,7 +120,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 				}
 				final ResultSet rs = insertPlayer.getGeneratedKeys();
 				if (rs.next()) {
-					players.put(player, rs.getInt(1));
+					players.put(player, rs.getLong(1));
 				}
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem when adding player to the DB", e);
