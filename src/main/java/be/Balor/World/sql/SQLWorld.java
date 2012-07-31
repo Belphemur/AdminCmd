@@ -252,4 +252,15 @@ public class SQLWorld extends ACWorld {
 
 	}
 
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getGroupSpawns()
+	 */
+	@Override
+	protected Map<String, Location> getGroupSpawns() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

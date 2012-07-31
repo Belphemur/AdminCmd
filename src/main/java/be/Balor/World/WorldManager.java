@@ -23,6 +23,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.Location;
+
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Help.String.Str;
 
@@ -36,7 +38,7 @@ public class WorldManager {
 	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
 			.makeMap();
 	private IWorldFactory worldFactory;
-	private static WorldManager instance = new WorldManager();
+	private static final WorldManager INSTANCE = new WorldManager();
 
 	/**
 	 * 
@@ -48,7 +50,7 @@ public class WorldManager {
 	 * @return the instance
 	 */
 	public static WorldManager getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	/**
@@ -99,6 +101,11 @@ public class WorldManager {
 					.entrySet()) {
 				newWorld.setInformation(info.getKey(),
 						oldWorld.getInformation(info.getKey()).getObj());
+			}
+			for (final Entry<String, Location> groupSpawn : oldWorld
+					.getGroupSpawns().entrySet()) {
+				newWorld.setGroupSpawn(groupSpawn.getKey(),
+						groupSpawn.getValue());
 			}
 			newWorlds.put(newWorld.getName(), newWorld);
 		}

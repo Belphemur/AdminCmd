@@ -18,6 +18,7 @@ package be.Balor.World;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -336,6 +337,25 @@ public class FileWorld extends ACWorld {
 	public void setGroupSpawn(final String group, final Location spawn) {
 		spawns.set(group, new SimpleLocation(spawn));
 
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getGroupSpawns()
+	 */
+	@Override
+	protected Map<String, Location> getGroupSpawns() {
+		final Map<String, Location> result = new HashMap<String, Location>();
+		for (final Entry<String, Object> entry : spawns.getValues(false)
+				.entrySet()) {
+			final Object obj = entry.getValue();
+			if (!(obj instanceof SimpleLocation)) {
+				continue;
+			}
+			result.put(entry.getKey(), ((SimpleLocation) obj).getLocation());
+		}
+		return result;
 	}
 
 }

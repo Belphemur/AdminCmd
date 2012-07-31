@@ -236,6 +236,12 @@ public abstract class ACWorld {
 	 *            location of the new spawn.
 	 */
 	public abstract void setGroupSpawn(String group, Location spawn);
+	/**
+	 * Get all group spawn
+	 * 
+	 * @return
+	 */
+	protected abstract Map<String, Location> getGroupSpawns();
 	/*
 	 * (non-Javadoc)
 	 * 
