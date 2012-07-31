@@ -21,6 +21,7 @@ package be.Balor.Manager.Commands.Spawn;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,15 +29,16 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Warp;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
+import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class GroupSpawn extends SpawnCommand {
 
@@ -50,12 +52,12 @@ public class GroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(CommandSender sender, CommandArgs args)
+	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
@@ -63,7 +65,7 @@ public class GroupSpawn extends SpawnCommand {
 			if (args.hasFlag('l')) {
 				p.sendMessage(ChatColor.GREEN + "Possible Group Names are:");
 				String msg = "";
-				for (String gName : ACHelper.getInstance().getGroupList()) {
+				for (final String gName : ACHelper.getInstance().getGroupList()) {
 					msg += gName + ", ";
 					if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
 						sender.sendMessage(ChatColor.AQUA + msg);
@@ -83,17 +85,18 @@ public class GroupSpawn extends SpawnCommand {
 				if (w == null) {
 					return;
 				}
-				Warp warp = null;
-				for (String gName : ACHelper.getInstance().getGroupList()) {
+				Location loc = null;
+				for (final String gName : ACHelper.getInstance().getGroupList()) {
+					final String lcGname = gName.toLowerCase();
 					if (PermissionManager.hasPerm(p, "admincmd.respawn."
-							+ gName.toLowerCase())) {
-						warp = w.getWarp("spawn:" + gName.toLowerCase());
-						replace.put("groupName", gName.toLowerCase());
+							+ lcGname)) {
+						loc = w.getGroupSpawn(lcGname);
+						replace.put("groupName", lcGname);
 						break;
 					}
 				}
-				if (warp != null) {
-					Utils.teleportWithChunkCheck(p, warp.loc);
+				if (loc != null) {
+					ACPluginManager.scheduleSyncTask(new TeleportTask(p, loc));
 					LocaleHelper.GROUP_SPAWN.sendLocale(p, replace);
 					return;
 				} else {
@@ -111,18 +114,18 @@ public class GroupSpawn extends SpawnCommand {
 				if (w == null) {
 					return;
 				}
-				Warp warp = null;
+				Location loc = null;
 				if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName,
 						true)
 						|| PermissionManager.hasPerm(p,
 								"admincmd.respawn.admin")) {
-					warp = w.getWarp("spawn:" + gName);
+					loc = w.getGroupSpawn(gName);
 					replace.put("groupName", gName);
-					if (warp == null) {
+					if (loc == null) {
 						LocaleHelper.NO_GROUP_SPAWN.sendLocale(p, replace);
 						return;
 					}
-					Utils.teleportWithChunkCheck(p, warp.loc);
+					ACPluginManager.scheduleSyncTask(new TeleportTask(p, loc));
 					LocaleHelper.GROUP_SPAWN.sendLocale(p, replace);
 				}
 			} else if (args.length >= 2) {
@@ -136,31 +139,30 @@ public class GroupSpawn extends SpawnCommand {
 				if (w == null) {
 					return;
 				}
-				Warp warp = null;
+				Location loc = null;
 				if (PermissionManager.hasPerm(p, "admincmd.respawn." + gName,
 						true)
 						|| PermissionManager.hasPerm(p,
 								"admincmd.respawn.admin")) {
-					warp = w.getWarp("spawn:" + gName);
+					loc = w.getGroupSpawn(gName);
 					replace.put("groupName", gName);
-					if (warp == null) {
+					if (loc == null) {
 						LocaleHelper.NO_GROUP_SPAWN.sendLocale(p, replace);
 						return;
 					}
-					Utils.teleportWithChunkCheck(p, warp.loc);
+					ACPluginManager.scheduleSyncTask(new TeleportTask(p, loc));
 					LocaleHelper.GROUP_SPAWN.sendLocale(p, replace);
 				}
 			}
 		}
 	}
-
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])
 	 */
 	@Override
-	public boolean argsCheck(String... args) {
+	public boolean argsCheck(final String... args) {
 		return args != null;
 	}
 

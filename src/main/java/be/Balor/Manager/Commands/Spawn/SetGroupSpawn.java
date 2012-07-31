@@ -26,12 +26,13 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- *
+ * 
  */
 public class SetGroupSpawn extends SpawnCommand {
 
@@ -45,7 +46,7 @@ public class SetGroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
 	 * java.lang.String[])
@@ -53,15 +54,17 @@ public class SetGroupSpawn extends SpawnCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
+
 		if (args.length < 1) {
 			if (Utils.isPlayer(sender)) {
-				for (final String groupName : ACHelper.getInstance()
-						.getGroupList()) {
-					if (PermissionManager.hasPerm((Player) sender,
-							"admincmd.respawn." + groupName.toLowerCase())) {
-						ACHelper.getInstance().setGroupSpawnLocation(
-								((Player) sender).getLocation(), groupName.toLowerCase());
-						replace.put("groupName", groupName.toLowerCase());
+				final Player player = (Player) sender;
+				for (String groupName : ACHelper.getInstance().getGroupList()) {
+					groupName = groupName.toLowerCase();
+					if (PermissionManager.hasPerm(player, "admincmd.respawn."
+							+ groupName)) {
+						ACWorld.getWorld(player.getWorld().getName())
+								.setGroupSpawn(groupName, player.getLocation());
+						replace.put("groupName", groupName);
 						LocaleHelper.GROUP_SPAWN_SET
 								.sendLocale(sender, replace);
 						return;
@@ -70,10 +73,11 @@ public class SetGroupSpawn extends SpawnCommand {
 			}
 		} else if (args.length >= 1) {
 			if (Utils.isPlayer(sender)) {
+				final Player player = (Player) sender;
 				final String groupName = args.getString(0).toLowerCase();
 				if (ACHelper.getInstance().getGroupList().contains(groupName)) {
-					ACHelper.getInstance().setGroupSpawnLocation(
-							((Player) sender).getLocation(), groupName);
+					ACWorld.getWorld(player.getWorld().getName())
+							.setGroupSpawn(groupName, player.getLocation());
 					replace.put("groupName", groupName);
 					LocaleHelper.GROUP_SPAWN_SET.sendLocale(sender, replace);
 					return;
@@ -86,7 +90,7 @@ public class SetGroupSpawn extends SpawnCommand {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
 	 */
 	@Override

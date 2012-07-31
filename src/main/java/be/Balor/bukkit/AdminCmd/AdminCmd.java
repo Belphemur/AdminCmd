@@ -179,7 +179,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * AdminCmd for Bukkit (fork of PlgEssentials)
- *
+ * 
  * @authors Plague, Balor, Lathanael
  */
 public final class AdminCmd extends AbstractAdminCmdPlugin {
@@ -539,7 +539,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 					PermissionDefault.FALSE);
 		}
 		for (final String group : worker.getGroupList()) {
-			permissionLinker.addPermChild("admincmd.respawn." + group);
+			permissionLinker.addPermChild("admincmd.respawn." + group,
+					PermissionDefault.FALSE);
 		}
 		permissionLinker.addPermChild("admincmd.respawn.admin");
 		permissionLinker.setMajorPerm(majorPerm);

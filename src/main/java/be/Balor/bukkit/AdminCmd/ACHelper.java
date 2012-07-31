@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -559,7 +560,7 @@ public class ACHelper {
 	 * @return
 	 */
 	public List<String> getGroupList() {
-		return groups;
+		return Collections.unmodifiableList(groups);
 	}
 
 	/**
@@ -695,8 +696,9 @@ public class ACHelper {
 	public Location getGroupSpawnLocation(final Player player) {
 		Location loc = null;
 		final String worldName = player.getWorld().getName();
+		final ACWorld acWorld = ACWorld.getWorld(worldName);
 		if (groups.isEmpty()) {
-			loc = ACWorld.getWorld(worldName).getSpawn();
+			loc = acWorld.getSpawn();
 			if (loc == null) {
 				loc = player.getWorld().getSpawnLocation();
 			}
@@ -705,8 +707,7 @@ public class ACHelper {
 		for (final String groupName : groups) {
 			if (PermissionManager.hasPerm(player, "admincmd.respawn."
 					+ groupName)) {
-				loc = ACWorld.getWorld(worldName).getWarp(
-						"spawn:" + groupName.toLowerCase()).loc;
+				loc = acWorld.getGroupSpawn(groupName);
 				break;
 			}
 		}
@@ -714,22 +715,6 @@ public class ACHelper {
 			loc = player.getWorld().getSpawnLocation();
 		}
 		return loc;
-	}
-
-	/**
-	 * Sets the spawn location of a group in the given world.
-	 * 
-	 * @param world
-	 *            - The world in which the location is to be set
-	 * @param loc
-	 *            - The location which is used for the group spawn
-	 * @param groupName
-	 *            - The name of the group to which this spawn belongs
-	 * @author Lathanael
-	 */
-	public void setGroupSpawnLocation(final Location loc, final String groupName) {
-		final World w = loc.getWorld();
-		ACWorld.getWorld(w.getName()).addWarp("spawn:" + groupName, loc);
 	}
 
 	public boolean inBlackListBlock(final CommandSender sender,
