@@ -48,6 +48,7 @@ public class FileWorld extends ACWorld {
 	private final ConfigurationSection warps;
 	private final ExConfigurationSection informations;
 	private final ExConfigurationSection mobLimits;
+	private final ExConfigurationSection spawns;
 
 	/**
 	 * @param name
@@ -63,6 +64,7 @@ public class FileWorld extends ACWorld {
 		warps = datas.addSection("warps");
 		informations = datas.addSection("informations");
 		mobLimits = informations.addSection("mobLimits");
+		spawns = datas.addSection("spawns");
 		forceSave();
 	}
 
@@ -302,6 +304,38 @@ public class FileWorld extends ACWorld {
 	@Override
 	public Set<String> getMobLimitList() {
 		return mobLimits.getKeys(false);
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getGroupSpawn(java.lang.String)
+	 */
+	@Override
+	public Location getGroupSpawn(final String group) {
+		if (group == null) {
+			return getSpawn();
+		}
+		final Object spawn = spawns.get(group);
+		if (spawn == null) {
+			return getSpawn();
+		} else if (spawn instanceof SimpleLocation) {
+			return ((SimpleLocation) spawn).getLocation();
+		} else {
+			return getSpawn();
+		}
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#setGroupSpawn(java.lang.String,
+	 * org.bukkit.Location)
+	 */
+	@Override
+	public void setGroupSpawn(final String group, final Location spawn) {
+		spawns.set(group, new SimpleLocation(spawn));
+
 	}
 
 }

@@ -1457,6 +1457,17 @@ public class ACHelper {
 								+ "  PRIMARY KEY (`key`,`world_id`),"
 								+ "  KEY `world_id` (`world_id`)"
 								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
+								+ " `name` varchar(64) NOT NULL,"
+								+ "  `world_id` int(10) unsigned NOT NULL,"
+								+ "  `x` double NOT NULL,"
+								+ "  `y` double NOT NULL,"
+								+ "  `z` double NOT NULL,"
+								+ "  `pitch` double NOT NULL,"
+								+ "  `yaw` double NOT NULL,"
+								+ "  PRIMARY KEY (`name`,`world_id`),"
+								+ "  KEY `world_id` (`world_id`)"
+								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 						db.createTable("ALTER TABLE `ac_warps`"
 								+ "  ADD CONSTRAINT `ac_warps_ibfk_1` "
@@ -1465,6 +1476,11 @@ public class ACHelper {
 								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
 						db.createTable("ALTER TABLE `ac_w_infos`"
 								+ "  ADD CONSTRAINT `ac_w_infos_ibfk_1`"
+								+ "  FOREIGN KEY (`world_id`)"
+								+ "  REFERENCES `ac_worlds` (`id`) "
+								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+						db.createTable("ALTER TABLE `ac_spawns`"
+								+ "  ADD CONSTRAINT `ac_spawns_ibfk_1`"
 								+ "  FOREIGN KEY (`world_id`)"
 								+ "  REFERENCES `ac_worlds` (`id`) "
 								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
@@ -1509,6 +1525,7 @@ public class ACHelper {
 								+ "  PRIMARY KEY (`id`),"
 								+ "  UNIQUE (`name`)"
 								+ ") ;");
+
 						db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
 						db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
 						db.createTable("CREATE INDEX kit_pid ON ac_kit_uses (player_id);");
@@ -1536,9 +1553,19 @@ public class ACHelper {
 								+ "  `world_id` int(10) NOT NULL,"
 								+ "  `info` text NOT NULL,"
 								+ "  PRIMARY KEY (`key`,`world_id`)" + ");");
+						db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
+								+ " `name` varchar(64) NOT NULL,"
+								+ "  `world_id` int(10) NOT NULL,"
+								+ "  `x` double NOT NULL,"
+								+ "  `y` double NOT NULL,"
+								+ "  `z` double NOT NULL,"
+								+ "  `pitch` double NOT NULL,"
+								+ "  `yaw` double NOT NULL,"
+								+ "  PRIMARY KEY (`name`,`world_id`)" + ") ");
 
 						db.createTable("CREATE INDEX warp_wid ON ac_warps (world_id);");
 						db.createTable("CREATE INDEX info_wid ON ac_w_infos (world_id);");
+						db.createTable("CREATE INDEX spawn_wid ON ac_spawns (world_id);");
 					}
 				}
 				// TODO DELETE TEST CODE !!!

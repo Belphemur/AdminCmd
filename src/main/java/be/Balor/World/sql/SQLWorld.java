@@ -31,13 +31,12 @@ import be.Balor.World.ACWorld;
  * 
  */
 public class SQLWorld extends ACWorld {
-
+	static {}
 	/**
 	 * @param world
 	 */
 	public SQLWorld(final World world) {
 		super(world);
-		// TODO Auto-generated constructor stub
 	}
 
 	/*
@@ -228,6 +227,29 @@ public class SQLWorld extends ACWorld {
 	public Set<String> getMobLimitList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getGroupSpawn(java.lang.String)
+	 */
+	@Override
+	public Location getGroupSpawn(final String group) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (Non javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#setGroupSpawn(java.lang.String,
+	 * org.bukkit.Location)
+	 */
+	@Override
+	public void setGroupSpawn(final String group, final Location spawn) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -217,7 +217,25 @@ public abstract class ACWorld {
 	 * @return
 	 */
 	public abstract Set<String> getMobLimitList();
-
+	/**
+	 * Get the location of the spawn for the wanted group
+	 * 
+	 * @param group
+	 *            name of the group. If null, return the location of the default
+	 *            spawn.
+	 * @return location of the spawn point. If no location has been set for the
+	 *         group, return the default spawn.
+	 */
+	public abstract Location getGroupSpawn(String group);
+	/**
+	 * Set the location of the spawn for the given group
+	 * 
+	 * @param group
+	 *            name of the group.
+	 * @param spawn
+	 *            location of the new spawn.
+	 */
+	public abstract void setGroupSpawn(String group, Location spawn);
 	/*
 	 * (non-Javadoc)
 	 * 
