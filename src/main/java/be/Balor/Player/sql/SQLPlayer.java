@@ -93,12 +93,12 @@ public class SQLPlayer extends ACPlayer {
 	 * @param name
 	 * @param id
 	 */
-	public SQLPlayer(final String name, final long id) {
+	SQLPlayer(final String name, final long id) {
 		super(name);
 		this.id = id;
 		init();
 	}
-	public SQLPlayer(final Player player, final long id) {
+	SQLPlayer(final Player player, final long id) {
 		super(player);
 		this.id = id;
 		init();
@@ -630,7 +630,7 @@ public class SQLPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#forceSave()
 	 */
 	@Override
-	public void forceSave() {
+	protected void forceSave() {
 		DebugLog.INSTANCE
 				.log(Level.WARNING,
 						"Force Save shouldn't be called for SQLPlayer",

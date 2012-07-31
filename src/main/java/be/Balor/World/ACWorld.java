@@ -39,7 +39,7 @@ public abstract class ACWorld {
 	/**
 	 *
 	 */
-	public ACWorld(final World world) {
+	protected ACWorld(final World world) {
 		final int prime = 37;
 		int result = 5;
 		handler = world;
@@ -181,7 +181,7 @@ public abstract class ACWorld {
 	/**
 	 * Force the save
 	 */
-	abstract void forceSave();
+	protected abstract void forceSave();
 
 	/**
 	 * To set a limit for a specific mob

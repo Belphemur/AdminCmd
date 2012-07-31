@@ -52,7 +52,7 @@ public class FileWorld extends ACWorld {
 	/**
 	 * @param name
 	 */
-	public FileWorld(final World world, final String directory) {
+	FileWorld(final World world, final String directory) {
 		super(world);
 		final File wFile = new File(directory, world.getName() + ".yml");
 		try {
@@ -229,7 +229,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#forceSave()
 	 */
 	@Override
-	void forceSave() {
+	protected void forceSave() {
 		try {
 			datas.save();
 		} catch (final IOException e) {
