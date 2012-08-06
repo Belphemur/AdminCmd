@@ -15,6 +15,7 @@
 package be.Balor.World.sql;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ public class SQLWorld extends ACWorld {
 			.synchronizedMap(new HashMap<String, Warp>());
 	private final static PreparedStatement DEF_SPAWN, G_SPAWN, INSERT_INFO,
 			DELETE_INFO, INSERT_WARP, DELETE_WARP;
+	private final static PreparedStatement GET_INFOS, GET_SPAWNS, GET_WARPS;
 	private final long id;
 	static {
 		DEF_SPAWN = Database.DATABASE
@@ -68,14 +70,101 @@ public class SQLWorld extends ACWorld {
 				.prepare("INSERT OR REPLACE INTO 'ac_warps' ('name','world_id','x','y','z','pitch','yaw') VALUES (?,?,?,?,?,?,?)");
 		DELETE_WARP = Database.DATABASE
 				.prepare("DELETE FROM 'ac_warps' WHERE name=? AND world_id=?");
+		GET_INFOS = Database.DATABASE
+				.prepare("SELECT key, info FROM ac_w_infos WHERE world_id=?");
+		GET_SPAWNS = Database.DATABASE
+				.prepare("SELECT 'name','x','y','z','pitch','yaw' FROM ac_spawns WHERE world_id=?");
+		GET_WARPS = Database.DATABASE
+				.prepare("SELECT 'name','x','y','z','pitch','yaw' FROM ac_warps WHERE world_id=?");
 	}
 
 	/**
 	 * @param world
 	 */
-	public SQLWorld(final World world, final long id) {
+	SQLWorld(final World world, final long id) {
 		super(world);
 		this.id = id;
+		synchronized (GET_INFOS) {
+			try {
+				GET_INFOS.clearParameters();
+				GET_INFOS.setLong(1, id);
+				ResultSet rs;
+				synchronized (GET_INFOS.getConnection()) {
+					rs = GET_INFOS.executeQuery();
+				}
+				while (rs.next()) {
+					final String key = rs.getString("key");
+					if (key.startsWith("mobLimit:")) {
+						mobLimits.put(key.substring(9), rs.getInt("info"));
+					} else {
+						informations.put(key, rs.getString("info"));
+					}
+				}
+				rs.close();
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"Problem while getting the informations of the world"
+								+ this.getName(), e);
+			}
+		}
+		synchronized (GET_SPAWNS) {
+			try {
+				GET_SPAWNS.clearParameters();
+				GET_SPAWNS.setLong(1, id);
+				ResultSet rs;
+				synchronized (GET_SPAWNS.getConnection()) {
+					rs = GET_SPAWNS.executeQuery();
+				}
+				while (rs.next()) {
+					final String name = rs.getString("name");
+					if (name.equals("none")) {
+						defaultSpawn = getLoc(rs);
+					} else {
+						final Location loc = getLoc(rs);
+						if (loc != null) {
+							gSpawns.put(name, loc);
+						}
+					}
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem while getting the spawns of the world"
+						+ this.getName(), e);
+			}
+
+		}
+		synchronized (GET_WARPS) {
+			try {
+				GET_WARPS.clearParameters();
+				GET_WARPS.setLong(1, id);
+				ResultSet rs;
+				synchronized (GET_WARPS.getConnection()) {
+					rs = GET_WARPS.executeQuery();
+				}
+				while (rs.next()) {
+					final String name = rs.getString("name");
+					final Location loc = getLoc(rs);
+					if (loc != null) {
+						warps.put(name, new Warp(name, loc));
+					}
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem while getting the warps of the world"
+						+ this.getName(), e);
+			}
+
+		}
+	}
+	private Location getLoc(final ResultSet rs) {
+		try {
+			return new Location(this.getHandler(), rs.getDouble("x"),
+					rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"),
+					rs.getFloat("pitch"));
+		} catch (final SQLException e) {
+			ACLogger.severe(
+					"Problem while getting the location from SQL of world "
+							+ this.getName(), e);
+			return null;
+		}
 	}
 
 	/*
