@@ -109,8 +109,7 @@ public class ACHelper {
 
 	static void killInstance() {
 		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
-		if (dbWrap.equalsIgnoreCase("mysql")
-				|| dbWrap.equalsIgnoreCase("sqlite")) {
+		if (dbWrap.equalsIgnoreCase("mysql") || dbWrap.equalsIgnoreCase("sqlite")) {
 			Database.DATABASE.close();
 		}
 		instance = null;
@@ -125,16 +124,12 @@ public class ACHelper {
 	private List<Integer> blockBlacklist;
 	private List<String> groups;
 	private AdminCmd coreInstance;
-	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<String, MaterialContainer> alias = new MapMaker().makeMap();
 	private Map<String, KitInstance> kits = new HashMap<String, KitInstance>();
 	private Map<String, String> deathMessages = new HashMap<String, String>();
-	private final ConcurrentMap<String, IBan> bannedPlayers = new MapMaker()
-			.makeMap();
-	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker()
-			.makeMap();
-	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<String, IBan> bannedPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<Player, Object> fakeQuitPlayers = new MapMaker().makeMap();
+	private final ConcurrentMap<Player, Object> spyPlayers = new MapMaker().makeMap();
 	private static ACHelper instance = new ACHelper();
 	private final ConcurrentMap<String, Stack<Stack<BlockRemanence>>> undoQueue = new MapMaker()
 			.makeMap();
@@ -143,19 +138,16 @@ public class ACHelper {
 
 	static {
 		materialsColors = new HashMap<Material, String[]>();
-		materialsColors.put(Material.WOOL, new String[]{"White", "Orange",
-				"Magenta", "LightBlue", "Yellow", "LimeGreen", "Pink", "Gray",
-				"LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red",
-				"Black"});
-		materialsColors.put(Material.INK_SACK, new String[]{"Black", "Red",
-				"Green", "Brown", "Blue", "Purple", "Cyan", "LightGray",
-				"Gray", "Pink", "LimeGreen", "Yellow", "LightBlue", "Magenta",
-				"Orange", "White"});
-		materialsColors.put(Material.LOG, new String[]{"Oak", "Pine", "Birch"});
-		materialsColors.put(Material.STEP, new String[]{"Stone", "Sandstone",
-				"Wooden", "Cobblestone"});
-		materialsColors.put(Material.DOUBLE_STEP,
-				materialsColors.get(Material.STEP));
+		materialsColors.put(Material.WOOL, new String[] { "White", "Orange", "Magenta",
+				"LightBlue", "Yellow", "LimeGreen", "Pink", "Gray", "LightGray", "Cyan", "Purple",
+				"Blue", "Brown", "Green", "Red", "Black" });
+		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red", "Green", "Brown",
+				"Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "LimeGreen", "Yellow",
+				"LightBlue", "Magenta", "Orange", "White" });
+		materialsColors.put(Material.LOG, new String[] { "Oak", "Pine", "Birch" });
+		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden",
+				"Cobblestone" });
+		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
 		listOfPossibleRepair = new LinkedList<Integer>();
 		for (int i = 256; i <= 259; i++) {
 			listOfPossibleRepair.add(i);
@@ -183,8 +175,7 @@ public class ACHelper {
 
 	private boolean serverLocked = false;
 
-	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker().makeMap();
 
 	/**
 	 * Ban a new player
@@ -209,8 +200,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean addBlackListedBlock(final CommandSender sender,
-			final String name) {
+	public boolean addBlackListedBlock(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
@@ -222,7 +212,8 @@ public class ACHelper {
 			config.set("BlackListedBlocks", list);
 			try {
 				config.save();
-			} catch (final IOException e) {}
+			} catch (final IOException e) {
+			}
 			if (blockBlacklist == null) {
 				blockBlacklist = new ArrayList<Integer>();
 			}
@@ -242,8 +233,7 @@ public class ACHelper {
 	 *            string representing the item to blacklist
 	 * @return
 	 */
-	public boolean addBlackListedItem(final CommandSender sender,
-			final String name) {
+	public boolean addBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		return addBlackListedItem(sender, m);
 
@@ -258,15 +248,13 @@ public class ACHelper {
 	 *            itemstack to blacklist
 	 * @return
 	 */
-	public boolean addBlackListedItem(final CommandSender sender,
-			final ItemStack item) {
+	public boolean addBlackListedItem(final CommandSender sender, final ItemStack item) {
 		final MaterialContainer m = new MaterialContainer(item);
 		return addBlackListedItem(sender, m);
 
 	}
 
-	private boolean addBlackListedItem(final CommandSender sender,
-			final MaterialContainer mat) {
+	private boolean addBlackListedItem(final CommandSender sender, final MaterialContainer mat) {
 		if (mat.isNull()) {
 			return false;
 		}
@@ -299,8 +287,7 @@ public class ACHelper {
 	 * 
 	 * @param blocks
 	 */
-	public void addInUndoQueue(final String player,
-			final Stack<BlockRemanence> blocks) {
+	public void addInUndoQueue(final String player, final Stack<BlockRemanence> blocks) {
 		if (undoQueue.containsKey(player)) {
 			undoQueue.get(player).push(blocks);
 		} else {
@@ -315,15 +302,12 @@ public class ACHelper {
 		String locale = fManager.getTextFile("motd.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motd.txt. Using default values for the MotD!");
-			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome "
-					+ ChatColor.WHITE + "%player" + ChatColor.GOLD
-					+ ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD
-					+ "%connected //n" + ChatColor.DARK_GREEN
-					+ "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN
-					+ "Your last login was: " + ChatColor.AQUA + "%lastlogin",
-					true);
+			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+					+ ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
+					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
+					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN + "Your last login was: "
+					+ ChatColor.AQUA + "%lastlogin", true);
 		} else {
 			ACLogger.info("motd.txt loaded");
 			Utils.addLocale("MOTD", Utils.colorParser(locale), true);
@@ -331,12 +315,10 @@ public class ACHelper {
 		locale = fManager.getTextFile("motdNewUser.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotDNewUser!");
-			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome "
-					+ ChatColor.WHITE + "%player" + ChatColor.GOLD
-					+ ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD
-					+ "%connected //n" + ChatColor.DARK_GREEN
-					+ "You've played so far : " + ChatColor.AQUA
+			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome " + ChatColor.WHITE
+					+ "%player" + ChatColor.GOLD + ", there is currently " + ChatColor.DARK_RED
+					+ "%nb players connected : //n" + ChatColor.GOLD + "%connected //n"
+					+ ChatColor.DARK_GREEN + "You've played so far : " + ChatColor.AQUA
 					+ "#elapsedTotalTime#", true);
 		} else {
 			ACLogger.info("motdNewUser.txt loaded");
@@ -354,8 +336,7 @@ public class ACHelper {
 		locale = fManager.getTextFile("rules.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
-			Utils.addLocale("Rules", "1. Do not grief! //n"
-					+ "2. Do not use strong language! //n"
+			Utils.addLocale("Rules", "1. Do not grief! //n" + "2. Do not use strong language! //n"
 					+ "3. Be friendly to other players!", true);
 		} else {
 			ACLogger.info("rules.txt loaded");
@@ -376,9 +357,8 @@ public class ACHelper {
 		final String alias = args.getString(0);
 		this.alias.put(alias, m);
 		this.fManager.addAlias(alias, m);
-		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD
-				+ alias + ChatColor.BLUE + " for the item " + ChatColor.GOLD
-				+ m.display());
+		sender.sendMessage(ChatColor.BLUE + "You can now use " + ChatColor.GOLD + alias
+				+ ChatColor.BLUE + " for the item " + ChatColor.GOLD + m.display());
 		return true;
 	}
 
@@ -397,8 +377,8 @@ public class ACHelper {
 				unBanPlayer(player);
 				return false;
 			} else {
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
-						coreInstance, new UnBanTask(tempBan, true),
+				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(coreInstance,
+						new UnBanTask(tempBan, true),
 						timeLeft / Utils.secondInMillis * Utils.secInTick);
 				return true;
 			}
@@ -413,8 +393,7 @@ public class ACHelper {
 	 * @param mat
 	 * @return Material
 	 */
-	public MaterialContainer checkMaterial(final CommandSender sender,
-			final String mat) {
+	public MaterialContainer checkMaterial(final CommandSender sender, final String mat) {
 		MaterialContainer m = null;
 		try {
 			m = Utils.checkMaterial(mat);
@@ -434,20 +413,17 @@ public class ACHelper {
 	}
 
 	private void convertSpawnWarp() {
-		final File spawnFile = fManager.getFile("spawn", "spawnLocations.yml",
-				false);
+		final File spawnFile = fManager.getFile("spawn", "spawnLocations.yml", false);
 		if (spawnFile.exists()) {
-			final ExtendedConfiguration spawn = ExtendedConfiguration
-					.loadConfiguration(spawnFile);
-			final ConfigurationSection spawnPoints = spawn
-					.getConfigurationSection("spawn");
+			final ExtendedConfiguration spawn = ExtendedConfiguration.loadConfiguration(spawnFile);
+			final ConfigurationSection spawnPoints = spawn.getConfigurationSection("spawn");
 			if (spawnPoints != null) {
 				for (final String key : spawnPoints.getKeys(false)) {
 					try {
 						ACWorld.getWorld(key).setSpawn(
-								fManager.getLocation("spawn." + key,
-										"spawnLocations", "spawn"));
-					} catch (final WorldNotLoaded e) {}
+								fManager.getLocation("spawn." + key, "spawnLocations", "spawn"));
+					} catch (final WorldNotLoaded e) {
+					}
 				}
 			}
 
@@ -456,14 +432,12 @@ public class ACHelper {
 		}
 		final File warpFile = fManager.getFile("warp", "warpPoints.yml", false);
 		if (warpFile.exists()) {
-			for (final String key : fManager.getKeys("warp", "warpPoints",
-					"warp")) {
+			for (final String key : fManager.getKeys("warp", "warpPoints", "warp")) {
 				try {
-					final Location loc = fManager.getLocation("warp." + key,
-							"warpPoints", "warp");
-					ACWorld.getWorld(loc.getWorld().getName())
-							.addWarp(key, loc);
-				} catch (final WorldNotLoaded e) {}
+					final Location loc = fManager.getLocation("warp." + key, "warpPoints", "warp");
+					ACWorld.getWorld(loc.getWorld().getName()).addWarp(key, loc);
+				} catch (final WorldNotLoaded e) {
+				}
 			}
 			warpFile.delete();
 			warpFile.getParentFile().delete();
@@ -503,8 +477,8 @@ public class ACHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	private Set<MaterialContainer> getBlackListedItems() {
-		return (Set<MaterialContainer>) fManager.getYml("blacklist").get(
-				"BlackListedMaterial", new TreeSet<MaterialContainer>());
+		return (Set<MaterialContainer>) fManager.getYml("blacklist").get("BlackListedMaterial",
+				new TreeSet<MaterialContainer>());
 	}
 
 	/*
@@ -569,8 +543,8 @@ public class ACHelper {
 	 * @return
 	 */
 	private List<String> getGroupNames() {
-		final List<String> gFileList = fManager.getYml("config").getStringList(
-				"groupNames", new ArrayList<String>());
+		final List<String> gFileList = fManager.getYml("config").getStringList("groupNames",
+				new ArrayList<String>());
 		final List<String> gNewList = new ArrayList<String>();
 		for (final String item : gFileList) {
 			gNewList.add(item.toLowerCase());
@@ -598,9 +572,11 @@ public class ACHelper {
 		final HashSet<String> list = new HashSet<String>();
 		try {
 			list.addAll(kits.keySet());
-			if (Utils.oddItem != null) {}
+			if (Utils.oddItem != null) {
+			}
 
-		} catch (final Throwable e) {}
+		} catch (final Throwable e) {
+		}
 
 		for (final String kit : list) {
 			if (PermissionManager.hasPerm(sender, "admincmd.kit." + kit, false)) {
@@ -628,13 +604,10 @@ public class ACHelper {
 
 	// teleports chosen player to another player
 
-	public int getLimit(final Player player, final Type.Limit type,
-			final String defaultLvl) {
+	public int getLimit(final Player player, final Type.Limit type, final String defaultLvl) {
 		Integer limit = null;
-		final String toParse = PermissionManager.getPermissionLimit(player,
-				type.toString());
-		limit = toParse != null && !toParse.isEmpty() ? Integer
-				.parseInt(toParse) : null;
+		final String toParse = PermissionManager.getPermissionLimit(player, type.toString());
+		limit = toParse != null && !toParse.isEmpty() ? Integer.parseInt(toParse) : null;
 		if (limit == null || limit == -1) {
 			limit = pluginConfig.getInt(defaultLvl, 0);
 		}
@@ -705,8 +678,7 @@ public class ACHelper {
 			return loc;
 		}
 		for (final String groupName : groups) {
-			if (PermissionManager.hasPerm(player, "admincmd.respawn."
-					+ groupName)) {
+			if (PermissionManager.hasPerm(player, "admincmd.respawn." + groupName)) {
 				loc = acWorld.getGroupSpawn(groupName);
 				break;
 			}
@@ -717,10 +689,9 @@ public class ACHelper {
 		return loc;
 	}
 
-	public boolean inBlackListBlock(final CommandSender sender,
-			final ItemStack mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist",
-				false) && blockBlacklist.contains(mat.getTypeId())) {
+	public boolean inBlackListBlock(final CommandSender sender, final ItemStack mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false)
+				&& blockBlacklist.contains(mat.getTypeId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
 			Utils.sI18n(sender, "inBlacklistBlock", replace);
@@ -729,10 +700,9 @@ public class ACHelper {
 		return false;
 	}
 
-	public boolean inBlackListBlock(final CommandSender sender,
-			final MaterialContainer mat) {
-		if (!PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist",
-				false) && blockBlacklist.contains(mat.getMaterial().getId())) {
+	public boolean inBlackListBlock(final CommandSender sender, final MaterialContainer mat) {
+		if (!PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false)
+				&& blockBlacklist.contains(mat.getMaterial().getId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
 			Utils.sI18n(sender, "inBlacklistBlock", replace);
@@ -741,15 +711,12 @@ public class ACHelper {
 		return false;
 	}
 
-	public boolean inBlackListItem(final CommandSender sender,
-			final ItemStack mat) {
+	public boolean inBlackListItem(final CommandSender sender, final ItemStack mat) {
 		return inBlackListItem(sender, new MaterialContainer(mat));
 	}
 
-	public boolean inBlackListItem(final CommandSender sender,
-			final MaterialContainer mat) {
-		if (PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist",
-				false)) {
+	public boolean inBlackListItem(final CommandSender sender, final MaterialContainer mat) {
+		if (PermissionManager.hasPerm(sender, "admincmd.spec.noblacklist", false)) {
 			return false;
 		}
 		if (!itemBlacklist.contains(mat)) {
@@ -768,10 +735,8 @@ public class ACHelper {
 	private void init() {
 		AFKWorker.createInstance();
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(
-					pluginConfig.getInt("afkTimeInSecond", 60));
-			AFKWorker.getInstance().setKickTime(
-					pluginConfig.getInt("afkKickInMinutes", 3));
+			AFKWorker.getInstance().setAfkTime(pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setKickTime(pluginConfig.getInt("afkKickInMinutes", 3));
 
 			this.coreInstance
 					.getServer()
@@ -783,49 +748,41 @@ public class ACHelper {
 				this.coreInstance
 						.getServer()
 						.getScheduler()
-						.scheduleAsyncRepeatingTask(
-								this.coreInstance,
-								AFKWorker.getInstance().getKickChecker(),
-								0,
+						.scheduleAsyncRepeatingTask(this.coreInstance,
+								AFKWorker.getInstance().getKickChecker(), 0,
 								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 			}
 		}
-		final ExtendedConfiguration localeFile = ExtendedConfiguration
-				.loadConfiguration(new File(coreInstance.getDataFolder(),
-						"locales" + File.separator
-								+ pluginConfig.getString("locale", "en_US")
-								+ ".yml"));
+		final ExtendedConfiguration localeFile = ExtendedConfiguration.loadConfiguration(new File(
+				coreInstance.getDataFolder(), "locales" + File.separator
+						+ pluginConfig.getString("locale", "en_US") + ".yml"));
 		final ExtendedConfiguration defaultLocale = ExtendedConfiguration
-				.loadConfiguration(fManager.getInnerFile("default_locale.yml",
-						"locales", true));
+				.loadConfiguration(fManager.getInnerFile("default_locale.yml", "locales", true));
 		final Properties props = new Properties();
 		try {
 			props.load(this.getClass().getResourceAsStream("/git.properties"));
-		} catch (final IOException e1) {}
-		defaultLocale.options()
-				.header("version: " + props.getProperty("git.commit.id"))
+		} catch (final IOException e1) {
+		}
+		defaultLocale.options().header("version: " + props.getProperty("git.commit.id"))
 				.copyHeader(true);
 		localeFile.setDefaults(defaultLocale);
 		localeFile.options().copyHeader(false);
-		LocaleManager.getInstance().addLocaleFile(LocaleManager.DEFAULT_LOCALE,
-				defaultLocale);
-		LocaleManager.getInstance().addLocaleFile(LocaleManager.PRIMARY_LOCALE,
-				localeFile);
+		LocaleManager.getInstance().addLocaleFile(LocaleManager.DEFAULT_LOCALE, defaultLocale);
+		LocaleManager.getInstance().addLocaleFile(LocaleManager.PRIMARY_LOCALE, localeFile);
 		LocaleManager.getInstance().addLocaleFile(
 				"kickMessages",
-				ExtendedConfiguration.loadConfiguration(fManager.getInnerFile(
-						"kickMessages.yml", "locales", false)));
-		LocaleManager.getInstance().setNoMsg(
-				pluginConfig.getBoolean("noMessage", false));
+				ExtendedConfiguration.loadConfiguration(fManager.getInnerFile("kickMessages.yml",
+						"locales", false)));
+		LocaleManager.getInstance().setNoMsg(pluginConfig.getBoolean("noMessage", false));
 		HelpLoader.load(coreInstance.getDataFolder());
 		CommandManager.createInstance().setCorePlugin(coreInstance);
 		if (pluginConfig.get("pluginStarted") != null) {
-			pluginStarted = Long.parseLong(pluginConfig
-					.getString("pluginStarted"));
+			pluginStarted = Long.parseLong(pluginConfig.getString("pluginStarted"));
 			pluginConfig.remove("pluginStarted");
 			try {
 				pluginConfig.save();
-			} catch (final IOException e) {}
+			} catch (final IOException e) {
+			}
 		} else {
 			pluginStarted = System.currentTimeMillis();
 		}
@@ -842,13 +799,10 @@ public class ACHelper {
 		}
 		for (final World w : coreInstance.getServer().getWorlds()) {
 			final ACWorld world = ACWorld.getWorld(w.getName());
-			int task = world.getInformation(Type.TIME_FREEZED.toString())
-					.getInt(-1);
+			int task = world.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
 			if (task != -1) {
-				task = ACPluginManager.getScheduler()
-						.scheduleSyncRepeatingTask(
-								ACHelper.getInstance().getCoreInstance(),
-								new SetTimeTask(w), 0, 5L);
+				task = ACPluginManager.getScheduler().scheduleSyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(), new SetTimeTask(w), 0, 5L);
 				world.setInformation(Type.TIME_FREEZED.toString(), task);
 			}
 		}
@@ -894,15 +848,13 @@ public class ACHelper {
 			if (materialsColors.containsKey(m)) {
 				value = getColor(color, m);
 			} else {
-				sender.sendMessage(ChatColor.RED
-						+ "You must hold a colorable material!");
+				sender.sendMessage(ChatColor.RED + "You must hold a colorable material!");
 				return true;
 			}
 			// error?
 			if (value < 0) {
-				sender.sendMessage(ChatColor.RED + "Color " + ChatColor.WHITE
-						+ color + ChatColor.RED
-						+ " is not usable for what you're holding!");
+				sender.sendMessage(ChatColor.RED + "Color " + ChatColor.WHITE + color
+						+ ChatColor.RED + " is not usable for what you're holding!");
 				return true;
 			}
 
@@ -980,8 +932,7 @@ public class ACHelper {
 		bannedPlayers.clear();
 
 		loadInfos();
-		for (final Player p : InvisibleWorker.getInstance()
-				.getAllInvisiblePlayers()) {
+		for (final Player p : InvisibleWorker.getInstance().getAllInvisiblePlayers()) {
 			InvisibleWorker.getInstance().reappear(p);
 		}
 		InvisibleWorker.killInstance();
@@ -994,8 +945,7 @@ public class ACHelper {
 		coreInstance.registerCmds();
 		CommandManager.getInstance().checkAlias(coreInstance);
 		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
-			for (final Plugin plugin : coreInstance.getServer()
-					.getPluginManager().getPlugins()) {
+			for (final Plugin plugin : coreInstance.getServer().getPluginManager().getPlugins()) {
 				HelpLister.getInstance().addPlugin(plugin);
 			}
 		}
@@ -1012,8 +962,7 @@ public class ACHelper {
 	 * @param name
 	 * @return
 	 */
-	public boolean removeBlackListedBlock(final CommandSender sender,
-			final String name) {
+	public boolean removeBlackListedBlock(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		if (!m.isNull()) {
 			final ExtendedConfiguration config = fManager.getYml("blacklist");
@@ -1024,7 +973,8 @@ public class ACHelper {
 				config.set("BlackListedBlocks", list);
 				try {
 					config.save();
-				} catch (final IOException e) {}
+				} catch (final IOException e) {
+				}
 			}
 			if (itemBlacklist != null && !itemBlacklist.isEmpty()
 					&& itemBlacklist.contains(m.getMaterial().getId())) {
@@ -1049,8 +999,7 @@ public class ACHelper {
 	 *            string used to determine the material to blacklist
 	 * @return
 	 */
-	public boolean removeBlackListedItem(final CommandSender sender,
-			final String name) {
+	public boolean removeBlackListedItem(final CommandSender sender, final String name) {
 		final MaterialContainer m = checkMaterial(sender, name);
 		return removeBlackListedItem(sender, m);
 	}
@@ -1064,14 +1013,12 @@ public class ACHelper {
 	 *            itemstack to remove from the blackList
 	 * @return
 	 */
-	public boolean removeBlackListedItem(final CommandSender sender,
-			final ItemStack item) {
+	public boolean removeBlackListedItem(final CommandSender sender, final ItemStack item) {
 		final MaterialContainer m = new MaterialContainer(item);
 		return removeBlackListedItem(sender, m);
 	}
 
-	private boolean removeBlackListedItem(final CommandSender sender,
-			final MaterialContainer mat) {
+	private boolean removeBlackListedItem(final CommandSender sender, final MaterialContainer mat) {
 		if (mat.isNull()) {
 			return false;
 		}
@@ -1145,7 +1092,8 @@ public class ACHelper {
 		pluginConfig.set("pluginStarted", pluginStarted);
 		try {
 			pluginConfig.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	/**
@@ -1166,17 +1114,14 @@ public class ACHelper {
 		fManager.getInnerFile("deathMessages.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("LiesMich.txt", null, true);
-		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
-				+ "AdminCmd", true);
-		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(
-				coreInstance.getDataFolder(), "config.yml"));
-		TextLocale.setVersion(ExtendedConfiguration.loadConfiguration(new File(
-				new File(coreInstance.getDataFolder(), "locales"),
-				"textFile.yml")));
+		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator + "AdminCmd", true);
+		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(coreInstance
+				.getDataFolder(), "config.yml"));
+		TextLocale.setVersion(ExtendedConfiguration.loadConfiguration(new File(new File(
+				coreInstance.getDataFolder(), "locales"), "textFile.yml")));
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
-		pluginConfig.options().copyDefaults(true)
-				.header(ConfigEnum.getHeader());
+		pluginConfig.options().copyDefaults(true).header(ConfigEnum.getHeader());
 		pluginConfig.addDefaults(ConfigEnum.getDefaultvalues());
 
 		dataWrapperInit();
@@ -1188,8 +1133,7 @@ public class ACHelper {
 			pluginConfig.remove("disabledCommands");
 		}
 		if (pluginConfig.get("prioritizedCommands") != null) {
-			priority = pluginConfig.getStringList("prioritizedCommands",
-					priority);
+			priority = pluginConfig.getStringList("prioritizedCommands", priority);
 			pluginConfig.remove("prioritizedCommands");
 		}
 		if (pluginConfig.get("respawnAtSpawnPoint") != null) {
@@ -1199,14 +1143,11 @@ public class ACHelper {
 		if (!pluginConfig.getBoolean("debug")) {
 			DebugLog.stopLogging();
 		}
-		final ExtendedConfiguration commands = ExtendedConfiguration
-				.loadConfiguration(new File(coreInstance.getDataFolder(),
-						"commands.yml"));
+		final ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(
+				coreInstance.getDataFolder(), "commands.yml"));
 		commands.add("disabledCommands", disabled);
 		commands.add("prioritizedCommands",
-				priority.isEmpty()
-						? Arrays.asList("reload", "/", "stop")
-						: priority);
+				priority.isEmpty() ? Arrays.asList("reload", "/", "stop") : priority);
 		final ExConfigurationSection aliases = commands.addSection("aliases");
 		final ExConfigurationSection god = aliases.addSection("god");
 		god.add("gg", "");
@@ -1218,7 +1159,8 @@ public class ACHelper {
 		commands.add("onNewJoin", Arrays.asList("/kit dirt", "/motd"));
 		try {
 			commands.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 		init();
 	}
 
@@ -1252,8 +1194,7 @@ public class ACHelper {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
-					w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(),
-							loc.getBlockZ());
+					w.setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 				}
 			});
 
@@ -1297,8 +1238,7 @@ public class ACHelper {
 		}
 	}
 
-	public int undoLastModification(final String player)
-			throws EmptyStackException {
+	public int undoLastModification(final String player) throws EmptyStackException {
 		if (!undoQueue.containsKey(player)) {
 			throw new EmptyStackException();
 		}
@@ -1313,8 +1253,8 @@ public class ACHelper {
 			while (!undo.isEmpty()) {
 				undoCache.push(undo.pop());
 				if (undoCache.size() == Utils.MAX_BLOCKS) {
-					ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-							coreInstance, new UndoBlockTask(undoCache), 1);
+					ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
+							new UndoBlockTask(undoCache), 1);
 				}
 				i++;
 			}
@@ -1323,8 +1263,8 @@ public class ACHelper {
 			ACLogger.severe(e.getMessage(), e);
 			return i;
 		} finally {
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					coreInstance, new UndoBlockTask(undoCache), 1);
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(coreInstance,
+					new UndoBlockTask(undoCache), 1);
 		}
 		return i;
 	}
@@ -1332,17 +1272,18 @@ public class ACHelper {
 	public void saveConfig() {
 		try {
 			pluginConfig.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	public String getDeathMessage(final String reason) {
 		return deathMessages.get(reason);
 	}
+
 	private void dataWrapperInit() {
 		// TODO: Change factory
 		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
-		if (dbWrap.equalsIgnoreCase("mysql")
-				|| dbWrap.equalsIgnoreCase("sqlite")) {
+		if (dbWrap.equalsIgnoreCase("mysql") || dbWrap.equalsIgnoreCase("sqlite")) {
 			try {
 				final Database db = Database.DATABASE;
 				db.open();
@@ -1365,8 +1306,7 @@ public class ACHelper {
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
 								+ "  `key` varchar(128) NOT NULL,"
 								+ "  `player_id` int(10) unsigned NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`player_id`),"
+								+ "  `info` text NOT NULL," + "  PRIMARY KEY (`key`,`player_id`),"
 								+ "  KEY `player_id` (`player_id`)"
 								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
@@ -1384,15 +1324,13 @@ public class ACHelper {
 								+ "  `y` double unsigned NOT NULL,"
 								+ "  `z` double unsigned NOT NULL,"
 								+ "  `yaw` double unsigned NOT NULL,"
-								+ "  `pitch` double unsigned NOT NULL,"
-								+ "  PRIMARY KEY (`id`),"
+								+ "  `pitch` double unsigned NOT NULL," + "  PRIMARY KEY (`id`),"
 								+ "  UNIQUE KEY `name` (`name`)"
 								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
 								+ "  `key` varchar(128) NOT NULL,"
 								+ "  `player_id` int(10) unsigned NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  `category` varchar(64) NOT NULL,"
+								+ "  `info` text NOT NULL," + "  `category` varchar(64) NOT NULL,"
 								+ "  PRIMARY KEY (`key`,`player_id`),"
 								+ "  KEY `player_id` (`player_id`),"
 								+ "  KEY `category` (`category`)"
@@ -1421,36 +1359,28 @@ public class ACHelper {
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
 								+ "  `name` varchar(64) NOT NULL,"
 								+ "  `world_id` int(10) unsigned NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`world_id`),"
+								+ "  `x` double NOT NULL," + "  `y` double NOT NULL,"
+								+ "  `z` double NOT NULL," + "  `pitch` double NOT NULL,"
+								+ "  `yaw` double NOT NULL," + "  PRIMARY KEY (`name`,`world_id`),"
 								+ "  KEY `world_id` (`world_id`)"
 								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
 								+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  PRIMARY KEY (`id`),"
+								+ "  `name` varchar(64) NOT NULL," + "  PRIMARY KEY (`id`),"
 								+ "  UNIQUE KEY `name` (`name`)"
 								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
 								+ "  `key` varchar(64) NOT NULL,"
 								+ "  `world_id` int(10) unsigned NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`world_id`),"
+								+ "  `info` text NOT NULL," + "  PRIMARY KEY (`key`,`world_id`),"
 								+ "  KEY `world_id` (`world_id`)"
 								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
 								+ " `name` varchar(64) NOT NULL,"
 								+ "  `world_id` int(10) unsigned NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`world_id`),"
+								+ "  `x` double NOT NULL," + "  `y` double NOT NULL,"
+								+ "  `z` double NOT NULL," + "  `pitch` double NOT NULL,"
+								+ "  `yaw` double NOT NULL," + "  PRIMARY KEY (`name`,`world_id`),"
 								+ "  KEY `world_id` (`world_id`)"
 								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
@@ -1461,13 +1391,11 @@ public class ACHelper {
 								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
 						db.createTable("ALTER TABLE `ac_w_infos`"
 								+ "  ADD CONSTRAINT `ac_w_infos_ibfk_1`"
-								+ "  FOREIGN KEY (`world_id`)"
-								+ "  REFERENCES `ac_worlds` (`id`) "
+								+ "  FOREIGN KEY (`world_id`)" + "  REFERENCES `ac_worlds` (`id`) "
 								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
 						db.createTable("ALTER TABLE `ac_spawns`"
 								+ "  ADD CONSTRAINT `ac_spawns_ibfk_1`"
-								+ "  FOREIGN KEY (`world_id`)"
-								+ "  REFERENCES `ac_worlds` (`id`) "
+								+ "  FOREIGN KEY (`world_id`)" + "  REFERENCES `ac_worlds` (`id`) "
 								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
 						// SQLITE
 					} else if (db.getType() == DatabaseType.SQLITE) {
@@ -1475,41 +1403,29 @@ public class ACHelper {
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
 								+ "  `name` varchar(64) NOT NULL,"
 								+ "  `player_id` int(10)  NOT NULL,"
-								+ "  `world` varchar(64) NOT NULL,"
-								+ "  `x` double  NOT NULL,"
-								+ "  `y` double  NOT NULL,"
-								+ "  `z` double  NOT NULL,"
-								+ "  `yaw` double  NOT NULL,"
-								+ "  `pitch` double  NOT NULL,"
+								+ "  `world` varchar(64) NOT NULL," + "  `x` double  NOT NULL,"
+								+ "  `y` double  NOT NULL," + "  `z` double  NOT NULL,"
+								+ "  `yaw` double  NOT NULL," + "  `pitch` double  NOT NULL,"
 								+ "  PRIMARY KEY (`name`,`player_id`)" + ");");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
 								+ "  `key` varchar(128) NOT NULL,"
-								+ "  `player_id` int(10)  NOT NULL,"
-								+ "  `info` text NOT NULL,"
+								+ "  `player_id` int(10)  NOT NULL," + "  `info` text NOT NULL,"
 								+ "  PRIMARY KEY (`key`,`player_id`)" + " ) ;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
 								+ "  `kit` varchar(64) NOT NULL,"
-								+ "  `player_id` int(10)  NOT NULL,"
-								+ "  `use` INTEGER  NOT NULL,"
+								+ "  `player_id` int(10)  NOT NULL," + "  `use` INTEGER  NOT NULL,"
 								+ "  PRIMARY KEY (`kit`,`player_id`)" + " );");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
 								+ "  `key` varchar(128) NOT NULL,"
-								+ "  `player_id` int(10) NOT NULL,"
-								+ "  `info` text NOT NULL,"
+								+ "  `player_id` int(10) NOT NULL," + "  `info` text NOT NULL,"
 								+ "  `category` varchar(64) NOT NULL,"
 								+ "  PRIMARY KEY (`key`,`player_id`)" + ");");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
-								+ "  `id` int(10)  NOT NULL ,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `world` varchar(64) NOT NULL,"
-								+ "  `x` double  NOT NULL,"
-								+ "  `y` double  NOT NULL,"
-								+ "  `z` double  NOT NULL,"
-								+ "  `yaw` double  NOT NULL,"
-								+ "  `pitch` double  NOT NULL,"
-								+ "  PRIMARY KEY (`id`),"
-								+ "  UNIQUE (`name`)"
-								+ ") ;");
+								+ "  `id` int(10)  NOT NULL ," + "  `name` varchar(64) NOT NULL,"
+								+ "  `world` varchar(64) NOT NULL," + "  `x` double  NOT NULL,"
+								+ "  `y` double  NOT NULL," + "  `z` double  NOT NULL,"
+								+ "  `yaw` double  NOT NULL," + "  `pitch` double  NOT NULL,"
+								+ "  PRIMARY KEY (`id`)," + "  UNIQUE (`name`)" + ") ;");
 
 						db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
 						db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
@@ -1520,32 +1436,22 @@ public class ACHelper {
 						// Worlds
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
 								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `world_id` int(10)  NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
+								+ "  `world_id` int(10)  NOT NULL," + "  `x` double NOT NULL,"
+								+ "  `y` double NOT NULL," + "  `z` double NOT NULL,"
+								+ "  `pitch` double NOT NULL," + "  `yaw` double NOT NULL,"
 								+ "  PRIMARY KEY (`name`,`world_id`)" + ") ;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
-								+ "  `id` int(10) NOT NULL,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  PRIMARY KEY (`id`),"
-								+ "  UNIQUE (`name`)"
-								+ ") ;");
+								+ "  `id` int(10) NOT NULL," + "  `name` varchar(64) NOT NULL,"
+								+ "  PRIMARY KEY (`id`)," + "  UNIQUE (`name`)" + ") ;");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
 								+ "  `key` varchar(64) NOT NULL,"
-								+ "  `world_id` int(10) NOT NULL,"
-								+ "  `info` text NOT NULL,"
+								+ "  `world_id` int(10) NOT NULL," + "  `info` text NOT NULL,"
 								+ "  PRIMARY KEY (`key`,`world_id`)" + ");");
 						db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
 								+ " `name` varchar(64) NOT NULL,"
-								+ "  `world_id` int(10) NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
+								+ "  `world_id` int(10) NOT NULL," + "  `x` double NOT NULL,"
+								+ "  `y` double NOT NULL," + "  `z` double NOT NULL,"
+								+ "  `pitch` double NOT NULL," + "  `yaw` double NOT NULL,"
 								+ "  PRIMARY KEY (`name`,`world_id`)" + ") ");
 
 						db.createTable("CREATE INDEX warp_wid ON ac_warps (world_id);");
@@ -1558,21 +1464,17 @@ public class ACHelper {
 				factory.addExistingPlayer("Belphemur");
 				final ACPlayer testPlayer = factory.createPlayer("Belphemur");
 				System.out.println("FLY : " + testPlayer.hasPower(Type.FLY));
-				System.out.println("VULCAN : "
-						+ testPlayer.hasPower(Type.VULCAN));
+				System.out.println("VULCAN : " + testPlayer.hasPower(Type.VULCAN));
 				testPlayer.setPower(Type.FLY);
 				testPlayer.setLastKitUse("blah", System.currentTimeMillis());
 				System.out.println("Home test : " + testPlayer.getHome("test"));
-				testPlayer.setHome("test",
-						new Location(Bukkit.getWorld("world"), 10, 10, 10, 10,
-								10));
-				System.out.println("Current lastLoc : "
-						+ testPlayer.getLastLocation());
+				testPlayer.setHome("test", new Location(Bukkit.getWorld("world"), 10, 10, 10, 10,
+						10));
+				System.out.println("Current lastLoc : " + testPlayer.getLastLocation());
 				final Random rand = new Random();
-				testPlayer.setLastLocation(new Location(Bukkit
-						.getWorld("world"), rand.nextDouble(), rand
-						.nextDouble(), 5.007, rand.nextFloat(), rand
-						.nextFloat()));
+				testPlayer.setLastLocation(new Location(Bukkit.getWorld("world"),
+						rand.nextDouble(), rand.nextDouble(), 5.007, rand.nextFloat(), rand
+								.nextFloat()));
 				final ObjectContainer obj = testPlayer.getPower(Type.EGG);
 				if (!obj.isNull()) {
 					System.out.println(obj.getEggType());
@@ -1581,17 +1483,16 @@ public class ACHelper {
 				egg.setValue(8F);
 				testPlayer.setPower(Type.EGG, egg);
 			} catch (final SQLException e) {
-				ACLogger.severe(
-						"There is a problem in your SQL configuration : ", e);
+				ACLogger.severe("There is a problem in your SQL configuration : ", e);
 				ACLogger.warning("The plugin is falling back to YML data managment");
 			}
 		}
 
 		PlayerManager.getInstance().setPlayerFactory(
-				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "userData"));
+				new FilePlayerFactory(coreInstance.getDataFolder().getPath() + File.separator
+						+ "userData"));
 		WorldManager.getInstance().setWorldFactory(
-				new FileWorldFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "worldData"));
+				new FileWorldFactory(coreInstance.getDataFolder().getPath() + File.separator
+						+ "worldData"));
 	}
 }
