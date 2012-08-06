@@ -64,6 +64,10 @@ public class TpToWarp extends WarpCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
+		if (args.length == 0) {
+			Utils.sI18n(sender, "errorWarp", new HashMap<String, String>());
+			return;
+		}
 		final Player target = Utils.getUser(sender, args, permNode, 1, true);
 		if (Utils.isPlayer(sender)) {
 			final Player p = (Player) sender;
@@ -109,7 +113,8 @@ public class TpToWarp extends WarpCommand {
 						}
 						loc = warpPoint.loc;
 						replace.put("name", warpPoint.name);
-					} catch (final WorldNotLoaded e) {}
+					} catch (final WorldNotLoaded e) {
+					}
 				}
 				if (loc == null) {
 					Utils.sI18n(sender, "errorWarp", replace);
