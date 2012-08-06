@@ -26,6 +26,8 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.Location;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.Str;
 
 import com.google.common.collect.MapMaker;
@@ -92,8 +94,13 @@ public class WorldManager {
 		for (final Entry<String, ACWorld> entry : worlds.entrySet()) {
 			final ACWorld newWorld = factory.createWorld(entry.getKey());
 			final ACWorld oldWorld = entry.getValue();
+			ACLogger.info("Converting " + oldWorld.getName());
+			DebugLog.INSTANCE.info("Converting " + oldWorld.getName());
+			DebugLog.INSTANCE.info("Convert Difficulty");
 			newWorld.setDifficulty(oldWorld.getDifficulty());
+			DebugLog.INSTANCE.info("Convert Default Spawn");
 			newWorld.setSpawn(oldWorld.getSpawn());
+			DebugLog.INSTANCE.info("Convert Informations");
 			for (final Entry<String, Object> info : oldWorld.getInformations()
 					.entrySet()) {
 				final String key = info.getKey();
@@ -104,6 +111,7 @@ public class WorldManager {
 					newWorld.setInformation(key, info.getValue());
 				}
 			}
+			DebugLog.INSTANCE.info("Convert groupSpawn");
 			for (final Entry<String, Location> groupSpawn : oldWorld
 					.getGroupSpawns().entrySet()) {
 				newWorld.setGroupSpawn(groupSpawn.getKey(),
@@ -113,6 +121,7 @@ public class WorldManager {
 		}
 		worlds.clear();
 		worlds.putAll(newWorlds);
+		DebugLog.INSTANCE.info("Setting new Factory");
 		this.worldFactory = factory;
 	}
 

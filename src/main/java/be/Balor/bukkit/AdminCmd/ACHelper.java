@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -27,7 +26,6 @@ import java.util.logging.Logger;
 import lib.SQL.PatPeter.SQLibrary.Database;
 import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,7 +49,6 @@ import be.Balor.Player.BannedIP;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.IBan;
-import be.Balor.Player.IPlayerFactory;
 import be.Balor.Player.ITempBan;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Player.sql.SQLPlayerFactory;
@@ -63,12 +60,10 @@ import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Egg.Types.ExplosionEgg;
 import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Files.DataManager;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Files.KitInstance;
-import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Lister.Lister;
@@ -78,6 +73,7 @@ import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
+import be.Balor.World.sql.SQLWorldFactory;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -1561,33 +1557,6 @@ public class ACHelper {
 						db.createTable("CREATE INDEX spawn_wid ON ac_spawns (world_id);");
 					}
 				}
-				// TODO DELETE TEST CODE !!!
-				final IPlayerFactory factory = new SQLPlayerFactory();
-				factory.addExistingPlayer("Belphemur");
-				final ACPlayer testPlayer = factory.createPlayer("Belphemur");
-				System.out.println("FLY : " + testPlayer.hasPower(Type.FLY));
-				System.out.println("VULCAN : "
-						+ testPlayer.hasPower(Type.VULCAN));
-				testPlayer.setPower(Type.FLY);
-				testPlayer.setLastKitUse("blah", System.currentTimeMillis());
-				System.out.println("Home test : " + testPlayer.getHome("test"));
-				testPlayer.setHome("test",
-						new Location(Bukkit.getWorld("world"), 10, 10, 10, 10,
-								10));
-				System.out.println("Current lastLoc : "
-						+ testPlayer.getLastLocation());
-				final Random rand = new Random();
-				testPlayer.setLastLocation(new Location(Bukkit
-						.getWorld("world"), rand.nextDouble(), rand
-						.nextDouble(), 5.007, rand.nextFloat(), rand
-						.nextFloat()));
-				final ObjectContainer obj = testPlayer.getPower(Type.EGG);
-				if (!obj.isNull()) {
-					System.out.println(obj.getEggType());
-				}
-				final ExplosionEgg egg = new ExplosionEgg();
-				egg.setValue(8F);
-				testPlayer.setPower(Type.EGG, egg);
 			} catch (final SQLException e) {
 				ACLogger.severe(
 						"There is a problem in your SQL configuration : ", e);
@@ -1601,5 +1570,8 @@ public class ACHelper {
 		WorldManager.getInstance().setWorldFactory(
 				new FileWorldFactory(coreInstance.getDataFolder().getPath()
 						+ File.separator + "worldData"));
+		// TODO DELETE TEST CODE !!!
+		WorldManager.getInstance().convertFactory(new SQLWorldFactory());
+		PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
 	}
 }

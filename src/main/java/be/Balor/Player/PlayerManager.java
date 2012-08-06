@@ -75,24 +75,30 @@ public class PlayerManager {
 	public void convertFactory(final IPlayerFactory factory) {
 		ACLogger.info("Converting player to the new type.");
 		for (final String name : this.playerFactory.getExistingPlayers()) {
+			ACLogger.info("Convert player : " + name);
+			DebugLog.INSTANCE.info("Convert player : " + name);
 			factory.addExistingPlayer(name);
 			final ACPlayer oldPlayer = playerFactory.createPlayer(name);
 			final ACPlayer newPlayer = factory.createPlayer(name);
+			DebugLog.INSTANCE.info("Convert lastLoc");
 			newPlayer.setLastLocation(oldPlayer.getLastLocation());
+			DebugLog.INSTANCE.info("Convert presentation");
 			newPlayer.setPresentation(oldPlayer.getPresentation());
-
+			DebugLog.INSTANCE.info("Convert homes");
 			for (final String home : oldPlayer.getHomeList()) {
 				newPlayer.setHome(home, oldPlayer.getHome(home));
 			}
+			DebugLog.INSTANCE.info("Convert Powers");
 			for (final Entry<Type, Object> entry : oldPlayer.getPowers()
 					.entrySet()) {
 				newPlayer.setPower(entry.getKey(), entry.getValue());
 			}
-
+			DebugLog.INSTANCE.info("Convert Custom Powers");
 			for (final Entry<String, Object> entry : oldPlayer
 					.getCustomPowers().entrySet()) {
 				newPlayer.setCustomPower(entry.getKey(), entry.getValue());
 			}
+			DebugLog.INSTANCE.info("Convert Infos");
 			for (final String info : oldPlayer.getInformationsList()) {
 				if (info.equals("lastLoc") || info.equals("presentation")) {
 					continue;
@@ -100,13 +106,14 @@ public class PlayerManager {
 				newPlayer.setInformation(info, oldPlayer.getInformation(info)
 						.getObj());
 			}
+			DebugLog.INSTANCE.info("Convert Kit");
 			for (final String kit : oldPlayer.getKitUseList()) {
 				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
 			}
 			newPlayer.forceSave();
 		}
 		this.playerFactory = factory;
-		ACLogger.info("Convertion finished.");
+		ACLogger.info("Conversion finished.");
 	}
 
 	/**
