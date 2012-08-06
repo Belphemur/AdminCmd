@@ -294,6 +294,9 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public void setInformation(final String info, final Object value) {
+		if (value == null) {
+			return;
+		}
 		infos.put(info, value);
 		synchronized (INSERT_INFO) {
 			try {
