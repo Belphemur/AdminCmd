@@ -50,4 +50,70 @@ public class SQLObjectContainer extends ObjectContainer {
 		}
 		return null;
 	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Files.ObjectContainer#castBoolean(java.lang.Object)
+	 */
+	@Override
+	protected Boolean castBoolean(final Object o) {
+		try {
+			return Boolean.parseBoolean(o.toString());
+		} catch (final Exception e) {
+			return super.castBoolean(o);
+		}
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Files.ObjectContainer#castDouble(java.lang.Object)
+	 */
+	@Override
+	protected Double castDouble(final Object o) {
+		try {
+			return Double.parseDouble(o.toString());
+		} catch (final Exception e) {
+			return super.castDouble(o);
+		}
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Files.ObjectContainer#castFloat(java.lang.Object)
+	 */
+	@Override
+	protected Float castFloat(final Object o) {
+		try {
+			return Float.parseFloat(o.toString());
+		} catch (final Exception e) {
+			return super.castFloat(o);
+		}
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Files.ObjectContainer#castInt(java.lang.Object)
+	 */
+	@Override
+	protected Integer castInt(final Object o) {
+		try {
+			return Integer.parseInt(o.toString());
+		} catch (final Exception e) {
+			return super.castInt(o);
+		}
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Tools.Files.ObjectContainer#castLong(java.lang.Object)
+	 */
+	@Override
+	protected Long castLong(final Object o) {
+		try {
+			return Long.parseLong(o.toString());
+		} catch (final Exception e) {
+			return super.castLong(o);
+		}
+	}
+
 }

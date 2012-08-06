@@ -328,7 +328,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Integer castInt(final Object o) {
+	protected Integer castInt(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Byte) {
@@ -352,7 +352,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Double castDouble(final Object o) {
+	protected Double castDouble(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Float) {
@@ -376,7 +376,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Boolean castBoolean(final Object o) {
+	protected Boolean castBoolean(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Boolean) {
@@ -392,7 +392,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Long castLong(final Object o) {
+	protected Long castLong(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Long) {
@@ -416,7 +416,7 @@ public class ObjectContainer {
 	 * @param o
 	 * @return
 	 */
-	private static Float castFloat(final Object o) {
+	protected Float castFloat(final Object o) {
 		if (o == null) {
 			return null;
 		} else if (o instanceof Float) {

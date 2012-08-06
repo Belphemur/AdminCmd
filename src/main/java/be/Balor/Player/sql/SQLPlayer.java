@@ -348,7 +348,7 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public ObjectContainer getInformation(final String info) {
-		return new ObjectContainer(infos.get(info));
+		return new SQLObjectContainer(infos.get(info));
 	}
 
 	/*

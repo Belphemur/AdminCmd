@@ -32,6 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Player.sql.SQLObjectContainer;
 import be.Balor.Tools.Warp;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -387,7 +388,7 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public ObjectContainer getInformation(final String info) {
-		return new ObjectContainer(informations.get(info));
+		return new SQLObjectContainer(informations.get(info));
 	}
 
 	/*
