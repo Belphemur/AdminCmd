@@ -23,7 +23,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Debug.ACLogger;
@@ -90,12 +92,14 @@ public class WorldManager {
 	 * @param factory
 	 */
 	public void convertFactory(final IWorldFactory factory) {
+		ACLogger.info("Begin Worlds Conversion");
 		final Map<String, ACWorld> newWorlds = new HashMap<String, ACWorld>();
-		for (final Entry<String, ACWorld> entry : worlds.entrySet()) {
-			final ACWorld newWorld = factory.createWorld(entry.getKey());
-			final ACWorld oldWorld = entry.getValue();
-			ACLogger.info("Converting " + oldWorld.getName());
-			DebugLog.INSTANCE.info("Converting " + oldWorld.getName());
+		for (final World world : Bukkit.getWorlds()) {
+			final String worldName = world.getName();
+			final ACWorld newWorld = factory.createWorld(worldName);
+			final ACWorld oldWorld = demandACWorld(worldName);
+			ACLogger.info("Converting World : " + worldName);
+			DebugLog.INSTANCE.info("Converting " + worldName);
 			DebugLog.INSTANCE.info("Convert Difficulty");
 			newWorld.setDifficulty(oldWorld.getDifficulty());
 			DebugLog.INSTANCE.info("Convert Default Spawn");
@@ -121,6 +125,7 @@ public class WorldManager {
 		}
 		worlds.clear();
 		worlds.putAll(newWorlds);
+		ACLogger.info(worlds.size() + " World(s) have been converted.");
 		DebugLog.INSTANCE.info("Setting new Factory");
 		this.worldFactory = factory;
 	}
