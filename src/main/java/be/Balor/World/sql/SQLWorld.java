@@ -74,9 +74,9 @@ public class SQLWorld extends ACWorld {
 		GET_INFOS = Database.DATABASE
 				.prepare("SELECT key, info FROM ac_w_infos WHERE world_id=?");
 		GET_SPAWNS = Database.DATABASE
-				.prepare("SELECT 'name','x','y','z','pitch','yaw' FROM ac_spawns WHERE world_id=?");
+				.prepare("SELECT name,x,y,z,pitch,yaw FROM ac_spawns WHERE world_id=?");
 		GET_WARPS = Database.DATABASE
-				.prepare("SELECT 'name','x','y','z','pitch','yaw' FROM ac_warps WHERE world_id=?");
+				.prepare("SELECT name,x,y,z,pitch,yaw FROM ac_warps WHERE world_id=?");
 	}
 
 	/**
