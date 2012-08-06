@@ -59,7 +59,8 @@ public class FileWorld extends ACWorld {
 		final File wFile = new File(directory, world.getName() + ".yml");
 		try {
 			Files.createParentDirs(wFile);
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 		datas = ExtendedConfiguration.loadConfiguration(wFile);
 
 		warps = datas.addSection("warps");
@@ -247,7 +248,7 @@ public class FileWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getInformations()
 	 */
 	@Override
-	public Map<String, String> getInformations() {
+	public Map<String, String> getInformationsList() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
 		for (final Entry<String, Object> entry : informations.getValues(false)
 				.entrySet()) {
@@ -354,6 +355,26 @@ public class FileWorld extends ACWorld {
 				continue;
 			}
 			result.put(entry.getKey(), ((SimpleLocation) obj).getLocation());
+		}
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getInformations()
+	 */
+	@Override
+	protected Map<String, Object> getInformations() {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		for (final Entry<String, Object> entry : informations.getValues(false)
+				.entrySet()) {
+			result.put(entry.getKey(), entry.getValue());
+		}
+		for (final Entry<String, Object> entry : mobLimits.getValues(false)
+				.entrySet()) {
+			result.put("mobLimit:" + entry.getKey(), entry.getValue()
+					.toString());
 		}
 		return result;
 	}

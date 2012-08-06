@@ -176,7 +176,7 @@ public abstract class ACWorld {
 	 * 
 	 * @return
 	 */
-	public abstract Map<String, String> getInformations();
+	public abstract Map<String, String> getInformationsList();
 
 	/**
 	 * Force the save
@@ -242,6 +242,12 @@ public abstract class ACWorld {
 	 * @return
 	 */
 	protected abstract Map<String, Location> getGroupSpawns();
+	/**
+	 * Get all Informations
+	 * 
+	 * @return
+	 */
+	protected abstract Map<String, Object> getInformations();
 	/*
 	 * (non-Javadoc)
 	 * 

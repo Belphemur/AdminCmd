@@ -82,7 +82,7 @@ public class Whois extends PlayerCommand {
 					+ ACMinecraftFontWidthCalculator.strPadCenterChat(
 							ChatColor.AQUA + " " + w.getName() + " "
 									+ ChatColor.GREEN, '='));
-			for (final Entry<String, String> power : w.getInformations()
+			for (final Entry<String, String> power : w.getInformationsList()
 					.entrySet()) {
 				String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE
 						+ " : ";

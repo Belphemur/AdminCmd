@@ -94,13 +94,15 @@ public class WorldManager {
 			final ACWorld oldWorld = entry.getValue();
 			newWorld.setDifficulty(oldWorld.getDifficulty());
 			newWorld.setSpawn(oldWorld.getSpawn());
-			for (final String mob : oldWorld.getMobLimitList()) {
-				newWorld.setMobLimit(mob, oldWorld.getMobLimit(mob));
-			}
-			for (final Entry<String, String> info : oldWorld.getInformations()
+			for (final Entry<String, Object> info : oldWorld.getInformations()
 					.entrySet()) {
-				newWorld.setInformation(info.getKey(),
-						oldWorld.getInformation(info.getKey()).getObj());
+				final String key = info.getKey();
+				if (key.startsWith("mobLimit:")) {
+					newWorld.setMobLimit(key.substring(9),
+							(Integer) info.getValue());
+				} else {
+					newWorld.setInformation(key, info.getValue());
+				}
 			}
 			for (final Entry<String, Location> groupSpawn : oldWorld
 					.getGroupSpawns().entrySet()) {
