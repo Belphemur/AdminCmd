@@ -43,12 +43,16 @@ import be.Balor.Tools.Files.ObjectContainer;
  * 
  */
 public class SQLPlayer extends ACPlayer {
-	private final Map<String, Location> homes = new HashMap<String, Location>();
-	private final Map<String, Object> infos = new HashMap<String, Object>();
-	private final Map<Type, Object> powers = new EnumMap<Type, Object>(
-			Type.class);
-	private final Map<String, Object> customPowers = new HashMap<String, Object>();
-	private final Map<String, Long> kitUses = new HashMap<String, Long>();
+	private final Map<String, Location> homes = Collections
+			.synchronizedMap(new HashMap<String, Location>());
+	private final Map<String, Object> infos = Collections
+			.synchronizedMap(new HashMap<String, Object>());
+	private final Map<Type, Object> powers = Collections
+			.synchronizedMap(new EnumMap<Type, Object>(Type.class));
+	private final Map<String, Object> customPowers = Collections
+			.synchronizedMap(new HashMap<String, Object>());
+	private final Map<String, Long> kitUses = Collections
+			.synchronizedMap(new HashMap<String, Long>());
 	private Location lastLoc;
 	private final long id;
 	private final static PreparedStatement INSERT_HOME, DELETE_HOME,

@@ -16,11 +16,13 @@ package be.Balor.World.sql;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import lib.SQL.PatPeter.SQLibrary.Database;
 
@@ -31,7 +33,9 @@ import org.bukkit.World;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Warp;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
+import be.Balor.Tools.Help.String.Str;
 import be.Balor.World.ACWorld;
 
 /**
@@ -40,12 +44,16 @@ import be.Balor.World.ACWorld;
  */
 public class SQLWorld extends ACWorld {
 	private Location defaultSpawn;
-	private final Map<String, Object> informations = new HashMap<String, Object>();
-	private final Map<String, Integer> mobLimits = new HashMap<String, Integer>();
-	private final Map<String, Location> gSpawns = new HashMap<String, Location>();
-	private final Map<String, Location> warps = new HashMap<String, Location>();
+	private final Map<String, Object> informations = Collections
+			.synchronizedMap(new HashMap<String, Object>());
+	private final Map<String, Integer> mobLimits = Collections
+			.synchronizedMap(new HashMap<String, Integer>());
+	private final Map<String, Location> gSpawns = Collections
+			.synchronizedMap(new HashMap<String, Location>());
+	private final Map<String, Warp> warps = Collections
+			.synchronizedMap(new HashMap<String, Warp>());
 	private final static PreparedStatement DEF_SPAWN, G_SPAWN, INSERT_INFO,
-			DELETE_INFO;
+			DELETE_INFO, INSERT_WARP, DELETE_WARP;
 	private final long id;
 	static {
 		DEF_SPAWN = Database.DATABASE
@@ -56,6 +64,10 @@ public class SQLWorld extends ACWorld {
 				.prepare("INSERT OR REPLACE INTO 'ac_w_infos' ('key','world_id','info') VALUES (?,?,?)");
 		DELETE_INFO = Database.DATABASE
 				.prepare("DELETE FROM 'ac_w_infos' WHERE key=? AND world_id=?");
+		INSERT_WARP = Database.DATABASE
+				.prepare("INSERT OR REPLACE INTO 'ac_warps' ('name','world_id','x','y','z','pitch','yaw') VALUES (?,?,?,?,?,?,?)");
+		DELETE_WARP = Database.DATABASE
+				.prepare("DELETE FROM 'ac_warps' WHERE name=? AND world_id=?");
 	}
 
 	/**
@@ -156,8 +168,24 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public void addWarp(final String name, final Location loc) {
-		// TODO Auto-generated method stub
-
+		warps.put(name, new Warp(name, loc));
+		synchronized (INSERT_WARP) {
+			try {
+				INSERT_WARP.clearParameters();
+				INSERT_WARP.setString(1, name);
+				INSERT_WARP.setLong(2, id);
+				INSERT_WARP.setDouble(3, loc.getX());
+				INSERT_WARP.setDouble(4, loc.getY());
+				INSERT_WARP.setDouble(5, loc.getZ());
+				INSERT_WARP.setFloat(6, loc.getPitch());
+				INSERT_WARP.setFloat(7, loc.getYaw());
+				synchronized (INSERT_WARP.getConnection()) {
+					INSERT_WARP.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem while setting the Warp", e);
+			}
+		}
 	}
 
 	/*
@@ -168,8 +196,18 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public Warp getWarp(final String name) throws WorldNotLoaded,
 			IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		if (name == null || (name != null && name.isEmpty())) {
+			throw new IllegalArgumentException("Name can't be null or Empty");
+		}
+		Warp warp = warps.get(name);
+		if (warp == null) {
+			final String warpName = Str.matchString(getWarpList(), name);
+			if (warpName == null) {
+				return null;
+			}
+			warp = warps.get(warpName);
+		}
+		return warp;
 	}
 
 	/*
@@ -179,8 +217,7 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public Set<String> getWarpList() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableSet(warps.keySet());
 	}
 
 	/*
@@ -190,8 +227,19 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public void removeWarp(final String name) {
-		// TODO Auto-generated method stub
-
+		warps.remove(name);
+		synchronized (DELETE_WARP) {
+			try {
+				DELETE_WARP.clearParameters();
+				DELETE_WARP.setString(1, name);
+				DELETE_WARP.setLong(2, id);
+				synchronized (DELETE_WARP.getConnection()) {
+					DELETE_WARP.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem while deleting the warp", e);
+			}
+		}
 	}
 
 	/*
@@ -261,12 +309,16 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public Map<String, String> getInformationsList() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
-		for (final Entry<String, Object> entry : informations.entrySet()) {
-			result.put(entry.getKey(), entry.getValue().toString());
+		synchronized (informations) {
+			for (final Entry<String, Object> entry : informations.entrySet()) {
+				result.put(entry.getKey(), entry.getValue().toString());
+			}
 		}
-		for (final Entry<String, Integer> entry : mobLimits.entrySet()) {
-			result.put("Limit on " + entry.getKey(), entry.getValue()
-					.toString());
+		synchronized (mobLimits) {
+			for (final Entry<String, Integer> entry : mobLimits.entrySet()) {
+				result.put("Limit on " + entry.getKey(), entry.getValue()
+						.toString());
+			}
 		}
 		return result;
 	}
@@ -278,7 +330,8 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	protected void forceSave() {
-		// TODO Auto-generated method stub
+		DebugLog.INSTANCE.log(Level.WARNING,
+				"Force Save shouldn't be called for SQLWorld", new Throwable());
 
 	}
 
@@ -289,7 +342,21 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public void setMobLimit(final String mob, final int limit) {
-		// TODO Auto-generated method stub
+		mobLimits.put(mob, limit);
+		synchronized (INSERT_INFO) {
+			try {
+				INSERT_INFO.clearParameters();
+				INSERT_INFO.setString(1, "mobLimit:" + mob);
+				INSERT_INFO.setLong(2, id);
+				INSERT_INFO.setInt(3, limit);
+				synchronized (INSERT_INFO.getConnection()) {
+					INSERT_INFO.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem while setting the mobLimit", e);
+			}
+
+		}
 
 	}
 
@@ -300,7 +367,21 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public boolean removeMobLimit(final String mob) {
-		// TODO Auto-generated method stub
+		if (mobLimits.remove(mob) != null) {
+			synchronized (DELETE_INFO) {
+				try {
+					DELETE_INFO.clearParameters();
+					DELETE_INFO.setString(1, "mobLimit:" + mob);
+					DELETE_INFO.setLong(2, id);
+					synchronized (DELETE_INFO.getConnection()) {
+						DELETE_INFO.executeUpdate();
+					}
+				} catch (final SQLException e) {
+					ACLogger.severe("Problem while deleting information ", e);
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 
@@ -311,8 +392,11 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public int getMobLimit(final String mob) {
-		// TODO Auto-generated method stub
-		return 0;
+		final Integer limit = mobLimits.get(mob);
+		if (limit == null) {
+			return 0;
+		}
+		return limit.intValue();
 	}
 
 	/*
@@ -322,8 +406,7 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public Set<String> getMobLimitList() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableSet(mobLimits.keySet());
 	}
 
 	/*
@@ -333,8 +416,14 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public Location getGroupSpawn(final String group) {
-		// TODO Auto-generated method stub
-		return null;
+		if (group == null) {
+			return getSpawn();
+		}
+		final Location spawn = gSpawns.get(group);
+		if (spawn == null) {
+			return getSpawn();
+		}
+		return spawn;
 	}
 
 	/*
@@ -345,7 +434,24 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public void setGroupSpawn(final String group, final Location spawn) {
-		// TODO Auto-generated method stub
+		gSpawns.put(group, spawn);
+		synchronized (G_SPAWN) {
+			try {
+				G_SPAWN.clearParameters();
+				G_SPAWN.setString(1, group);
+				G_SPAWN.setLong(2, id);
+				G_SPAWN.setDouble(3, spawn.getX());
+				G_SPAWN.setDouble(4, spawn.getY());
+				G_SPAWN.setDouble(5, spawn.getZ());
+				G_SPAWN.setFloat(6, spawn.getPitch());
+				G_SPAWN.setFloat(7, spawn.getYaw());
+				synchronized (G_SPAWN.getConnection()) {
+					G_SPAWN.executeUpdate();
+				}
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem while setting the Group spawn", e);
+			}
+		}
 
 	}
 
@@ -356,8 +462,7 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	protected Map<String, Location> getGroupSpawns() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableMap(gSpawns);
 	}
 
 	/*
