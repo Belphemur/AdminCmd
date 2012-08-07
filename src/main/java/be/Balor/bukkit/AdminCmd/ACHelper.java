@@ -1353,10 +1353,22 @@ public class ACHelper {
 
 	private void dataWrapperInit() {
 		if (isSqlWrapper()) {
-			createTable();
-			PlayerManager.getInstance()
-					.setPlayerFactory(new SQLPlayerFactory());
-			WorldManager.getInstance().setWorldFactory(new SQLWorldFactory());
+			try {
+				createTable();
+				PlayerManager.getInstance().setPlayerFactory(
+						new SQLPlayerFactory());
+				WorldManager.getInstance().setWorldFactory(
+						new SQLWorldFactory());
+			} catch (final SQLException e) {
+				PlayerManager.getInstance().setPlayerFactory(
+						new FilePlayerFactory(coreInstance.getDataFolder()
+								.getPath() + File.separator + "userData"));
+				WorldManager.getInstance().setWorldFactory(
+						new FileWorldFactory(coreInstance.getDataFolder()
+								.getPath() + File.separator + "worldData"));
+				return;
+			}
+
 		} else {
 			PlayerManager.getInstance().setPlayerFactory(
 					new FilePlayerFactory(coreInstance.getDataFolder()
@@ -1368,7 +1380,7 @@ public class ACHelper {
 		convertFactory();
 	}
 
-	private void createTable() {
+	private void createTable() throws SQLException {
 		try {
 			final Database db = Database.DATABASE;
 			db.open();
@@ -1579,6 +1591,7 @@ public class ACHelper {
 			ACLogger.severe("There is a problem in your SQL configuration : ",
 					e);
 			ACLogger.warning("The plugin is falling back to YML data managment");
+			throw e;
 		}
 	}
 
@@ -1596,7 +1609,14 @@ public class ACHelper {
 				ConfigEnum.save();
 			} catch (final IOException e) {
 			}
-			createTable();
+			try {
+				createTable();
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"Can't Convert to the Database. There is a problem in your configuration",
+						e);
+				return;
+			}
 			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
 			PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
 			FilePlayer.stopSavingTask();
@@ -1628,7 +1648,14 @@ public class ACHelper {
 			} catch (final IOException e) {
 			}
 			Database.initDb();
-			createTable();
+			try {
+				createTable();
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"Can't Convert to the Database. There is a problem in your configuration",
+						e);
+				return;
+			}
 			SQLPlayer.initPrepStmt();
 			SQLWorld.initPrepStmt();
 			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
