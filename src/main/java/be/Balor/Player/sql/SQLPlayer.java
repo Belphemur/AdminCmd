@@ -17,6 +17,7 @@ package be.Balor.Player.sql;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -386,12 +387,21 @@ public class SQLPlayer extends ACPlayer {
 		synchronized (UPDATE_LASTLOC) {
 			try {
 				UPDATE_LASTLOC.clearParameters();
-				UPDATE_LASTLOC.setString(1, loc.getWorld().getName());
-				UPDATE_LASTLOC.setDouble(2, loc.getX());
-				UPDATE_LASTLOC.setDouble(3, loc.getY());
-				UPDATE_LASTLOC.setDouble(4, loc.getZ());
-				UPDATE_LASTLOC.setFloat(5, loc.getYaw());
-				UPDATE_LASTLOC.setFloat(6, loc.getPitch());
+				if (loc != null) {
+					UPDATE_LASTLOC.setString(1, loc.getWorld().getName());
+					UPDATE_LASTLOC.setDouble(2, loc.getX());
+					UPDATE_LASTLOC.setDouble(3, loc.getY());
+					UPDATE_LASTLOC.setDouble(4, loc.getZ());
+					UPDATE_LASTLOC.setFloat(5, loc.getYaw());
+					UPDATE_LASTLOC.setFloat(6, loc.getPitch());
+				} else {
+					UPDATE_LASTLOC.setNull(1, Types.VARCHAR);
+					UPDATE_LASTLOC.setNull(2, Types.DOUBLE);
+					UPDATE_LASTLOC.setNull(3, Types.DOUBLE);
+					UPDATE_LASTLOC.setNull(4, Types.DOUBLE);
+					UPDATE_LASTLOC.setNull(5, Types.FLOAT);
+					UPDATE_LASTLOC.setNull(6, Types.FLOAT);
+				}
 				UPDATE_LASTLOC.setLong(7, id);
 				synchronized (UPDATE_LASTLOC.getConnection()) {
 					UPDATE_LASTLOC.executeUpdate();
@@ -399,7 +409,6 @@ public class SQLPlayer extends ACPlayer {
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with updating lastLoc in the DB", e);
 			}
-
 		}
 
 	}
