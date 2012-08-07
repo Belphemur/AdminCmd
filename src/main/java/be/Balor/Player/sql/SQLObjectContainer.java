@@ -50,7 +50,7 @@ public class SQLObjectContainer extends ObjectContainer {
 				return (EggType<?>) yaml.load((String) getObj());
 			}
 		}
-		return null;
+		return super.getEggType();
 	}
 
 	/*
