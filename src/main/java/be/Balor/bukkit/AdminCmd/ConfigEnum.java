@@ -149,15 +149,16 @@ public enum ConfigEnum {
 	DEATH_MSG("deathMessage", true, "If set to true a death message will be broadcasted if a player dies."),
 	DEATH_MSG_OFF("turnCustomDeathMessageOff", false, "If set to true only MC default death messages will be displayed."),
 	COMMANDS_ONJOIN("executeCommandsOnNewJoin", false, "If set to true, the commands set in the commands.yml section onNewJoin will be executed on the player that join the server for the first time."),
-	DATA_WRAPPER("dataWrapper", "yml", "How the player data, world data are saved. Possible options : mysql,sqlite,yml. Mysql need the host,user,database,password to be set"),
-	CONVERT_INTO("convertInto", "sqlite", "By setting this parameter, you tell AdminCmd that it have to convert the data to the new format. Possible format : mysql,sqlite,yml."
+	DATA_WRAPPER("dataWrapper", "yml", "DON'T TOUCH !\n"
+			+ "IF YOU WANT TO CHANGE IT USE THE CONVERTINTO.\n"
+			+ "How the player data, world data are saved. Possible options : mysql,sqlite,yml."),
+	CONVERT_INTO("convertInto", "sqlite", "By setting this parameter, you tell AdminCmd that it have to convert the data to the new format. Possible format : mysql,sqlite,yml.\n Mysql need the host,user,database,password to be set"
 			+ "IF the DataWrapper is the same as the convertInto NO CONVERSION WILL BE DONE."),
 	MYSQL_HOST("mysql.host", "localhost", "Host to be set if mysql used."),
 	MYSQL_USER("mysql.user", "root", "Username to connect to mysql database"),
 	MYSQL_PASS("mysql.password", "toor", "Password to connect to mysql database"),
 	MYSQL_DB("mysql.database", "minecraft", "Database name");
 
-	public final static String PREFIX = "ac_";
 	private final String confVal;
 	private final Object defaultVal;
 	private final String description;

@@ -961,12 +961,21 @@ public class ACHelper {
 		return output;
 	}
 
+	private boolean isSqlWrapper() {
+		final String dWrapper = ConfigEnum.DATA_WRAPPER.getString();
+		return dWrapper.equalsIgnoreCase("mysql")
+				|| dWrapper.equalsIgnoreCase("sqlite");
+	}
+
 	/**
 	 * Reload the "plugin"
 	 */
 	public synchronized void reload() {
 		coreInstance.getServer().getScheduler().cancelTasks(coreInstance);
-		FilePlayer.forceSaveList();
+		// TODO: check datawrapper
+		if (!isSqlWrapper()) {
+			FilePlayer.forceSaveList();
+		}
 		alias.clear();
 		itemBlacklist.clear();
 		blockBlacklist.clear();
@@ -1339,231 +1348,284 @@ public class ACHelper {
 	}
 
 	private void dataWrapperInit() {
-		// TODO: Change factory
-		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
-		if (dbWrap.equalsIgnoreCase("mysql")
-				|| dbWrap.equalsIgnoreCase("sqlite")) {
-			try {
-				final Database db = Database.DATABASE;
-				db.open();
-				if (!db.checkTable("ac_players")) {
-					// Mysql
-					if (db.getType() == DatabaseType.MYSQL) {
-						// Players
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `player_id` int(10) unsigned NOT NULL,"
-								+ "  `world` varchar(64) NOT NULL,"
-								+ "  `x` double unsigned NOT NULL,"
-								+ "  `y` double unsigned NOT NULL,"
-								+ "  `z` double unsigned NOT NULL,"
-								+ "  `yaw` double unsigned NOT NULL,"
-								+ "  `pitch` double unsigned NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`player_id`),"
-								+ "  KEY `player_id` (`player_id`)"
-								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
-								+ "  `key` varchar(128) NOT NULL,"
-								+ "  `player_id` int(10) unsigned NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`player_id`),"
-								+ "  KEY `player_id` (`player_id`)"
-								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
-								+ "  `kit` varchar(64) NOT NULL,"
-								+ "  `player_id` int(10) unsigned NOT NULL,"
-								+ "  `use` int(10) unsigned NOT NULL,"
-								+ "  PRIMARY KEY (`kit`,`player_id`),"
-								+ "  KEY `player_id` (`player_id`)"
-								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
-								+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `world` varchar(64) NOT NULL,"
-								+ "  `x` double unsigned NOT NULL,"
-								+ "  `y` double unsigned NOT NULL,"
-								+ "  `z` double unsigned NOT NULL,"
-								+ "  `yaw` double unsigned NOT NULL,"
-								+ "  `pitch` double unsigned NOT NULL,"
-								+ "  PRIMARY KEY (`id`),"
-								+ "  UNIQUE KEY `name` (`name`)"
-								+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
-								+ "  `key` varchar(128) NOT NULL,"
-								+ "  `player_id` int(10) unsigned NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  `category` varchar(64) NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`player_id`),"
-								+ "  KEY `player_id` (`player_id`),"
-								+ "  KEY `category` (`category`)"
-								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-						db.createTable("ALTER TABLE `ac_homes`"
-								+ "  ADD CONSTRAINT `ac_homes_ibfk_1` FOREIGN KEY (`player_id`) "
-								+ "REFERENCES `ac_players` (`id`) "
-								+ "ON DELETE CASCADE ON UPDATE CASCADE;");
-						db.createTable("ALTER TABLE `ac_informations`"
-								+ "  ADD CONSTRAINT `ac_informations_ibfk_1`"
-								+ "  FOREIGN KEY (`player_id`) "
-								+ "  REFERENCES `ac_players` (`id`)"
-								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
-						db.createTable("ALTER TABLE `ac_kit_uses`"
-								+ "  ADD CONSTRAINT `ac_kit_uses_ibfk_1`"
-								+ "  FOREIGN KEY (`player_id`)"
-								+ "  REFERENCES `ac_players` (`id`)"
-								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
-						db.createTable("ALTER TABLE `ac_powers`"
-								+ "  ADD CONSTRAINT `ac_powers_ibfk_1`"
-								+ "  FOREIGN KEY (`player_id`)"
-								+ "  REFERENCES `ac_players` (`id`)"
-								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+		if (isSqlWrapper()) {
+			createTable();
+			PlayerManager.getInstance()
+					.setPlayerFactory(new SQLPlayerFactory());
+			WorldManager.getInstance().setWorldFactory(new SQLWorldFactory());
+		} else {
+			PlayerManager.getInstance().setPlayerFactory(
+					new FilePlayerFactory(coreInstance.getDataFolder()
+							.getPath() + File.separator + "userData"));
+			WorldManager.getInstance().setWorldFactory(
+					new FileWorldFactory(coreInstance.getDataFolder().getPath()
+							+ File.separator + "worldData"));
+		}
+		convertFactory();
+	}
 
-						// Worlds
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `world_id` int(10) unsigned NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`world_id`),"
-								+ "  KEY `world_id` (`world_id`)"
-								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
-								+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  PRIMARY KEY (`id`),"
-								+ "  UNIQUE KEY `name` (`name`)"
-								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
-								+ "  `key` varchar(64) NOT NULL,"
-								+ "  `world_id` int(10) unsigned NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`world_id`),"
-								+ "  KEY `world_id` (`world_id`)"
-								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
-								+ " `name` varchar(64) NOT NULL,"
-								+ "  `world_id` int(10) unsigned NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`world_id`),"
-								+ "  KEY `world_id` (`world_id`)"
-								+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	private void createTable() {
+		try {
+			final Database db = Database.DATABASE;
+			db.open();
+			if (!db.checkTable("ac_players")) {
+				// Mysql
+				if (db.getType() == DatabaseType.MYSQL) {
+					// Players
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `player_id` int(10) unsigned NOT NULL,"
+							+ "  `world` varchar(64) NOT NULL,"
+							+ "  `x` double unsigned NOT NULL,"
+							+ "  `y` double unsigned NOT NULL,"
+							+ "  `z` double unsigned NOT NULL,"
+							+ "  `yaw` double unsigned NOT NULL,"
+							+ "  `pitch` double unsigned NOT NULL,"
+							+ "  PRIMARY KEY (`name`,`player_id`),"
+							+ "  KEY `player_id` (`player_id`)"
+							+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
+							+ "  `key` varchar(128) NOT NULL,"
+							+ "  `player_id` int(10) unsigned NOT NULL,"
+							+ "  `info` text NOT NULL,"
+							+ "  PRIMARY KEY (`key`,`player_id`),"
+							+ "  KEY `player_id` (`player_id`)"
+							+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
+							+ "  `kit` varchar(64) NOT NULL,"
+							+ "  `player_id` int(10) unsigned NOT NULL,"
+							+ "  `use` int(10) unsigned NOT NULL,"
+							+ "  PRIMARY KEY (`kit`,`player_id`),"
+							+ "  KEY `player_id` (`player_id`)"
+							+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
+							+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `world` varchar(64) NOT NULL,"
+							+ "  `x` double unsigned NOT NULL,"
+							+ "  `y` double unsigned NOT NULL,"
+							+ "  `z` double unsigned NOT NULL,"
+							+ "  `yaw` double unsigned NOT NULL,"
+							+ "  `pitch` double unsigned NOT NULL,"
+							+ "  PRIMARY KEY (`id`),"
+							+ "  UNIQUE KEY `name` (`name`)"
+							+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
+							+ "  `key` varchar(128) NOT NULL,"
+							+ "  `player_id` int(10) unsigned NOT NULL,"
+							+ "  `info` text NOT NULL,"
+							+ "  `category` varchar(64) NOT NULL,"
+							+ "  PRIMARY KEY (`key`,`player_id`),"
+							+ "  KEY `player_id` (`player_id`),"
+							+ "  KEY `category` (`category`)"
+							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+					db.createTable("ALTER TABLE `ac_homes`"
+							+ "  ADD CONSTRAINT `ac_homes_ibfk_1` FOREIGN KEY (`player_id`) "
+							+ "REFERENCES `ac_players` (`id`) "
+							+ "ON DELETE CASCADE ON UPDATE CASCADE;");
+					db.createTable("ALTER TABLE `ac_informations`"
+							+ "  ADD CONSTRAINT `ac_informations_ibfk_1`"
+							+ "  FOREIGN KEY (`player_id`) "
+							+ "  REFERENCES `ac_players` (`id`)"
+							+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+					db.createTable("ALTER TABLE `ac_kit_uses`"
+							+ "  ADD CONSTRAINT `ac_kit_uses_ibfk_1`"
+							+ "  FOREIGN KEY (`player_id`)"
+							+ "  REFERENCES `ac_players` (`id`)"
+							+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+					db.createTable("ALTER TABLE `ac_powers`"
+							+ "  ADD CONSTRAINT `ac_powers_ibfk_1`"
+							+ "  FOREIGN KEY (`player_id`)"
+							+ "  REFERENCES `ac_players` (`id`)"
+							+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
 
-						db.createTable("ALTER TABLE `ac_warps`"
-								+ "  ADD CONSTRAINT `ac_warps_ibfk_1` "
-								+ "  FOREIGN KEY (`world_id`) "
-								+ "  REFERENCES `ac_worlds` (`id`) "
-								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
-						db.createTable("ALTER TABLE `ac_w_infos`"
-								+ "  ADD CONSTRAINT `ac_w_infos_ibfk_1`"
-								+ "  FOREIGN KEY (`world_id`)"
-								+ "  REFERENCES `ac_worlds` (`id`) "
-								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
-						db.createTable("ALTER TABLE `ac_spawns`"
-								+ "  ADD CONSTRAINT `ac_spawns_ibfk_1`"
-								+ "  FOREIGN KEY (`world_id`)"
-								+ "  REFERENCES `ac_worlds` (`id`) "
-								+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
-						// SQLITE
-					} else if (db.getType() == DatabaseType.SQLITE) {
-						// Players
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `player_id` INTEGER  NOT NULL,"
-								+ "  `world` varchar(64) NOT NULL,"
-								+ "  `x` double  NOT NULL,"
-								+ "  `y` double  NOT NULL,"
-								+ "  `z` double  NOT NULL,"
-								+ "  `yaw` double  NOT NULL,"
-								+ "  `pitch` double  NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`player_id`)" + ");");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
-								+ "  `key` varchar(128) NOT NULL,"
-								+ "  `player_id` INTEGER NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`player_id`)" + " ) ;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
-								+ "  `kit` varchar(64) NOT NULL,"
-								+ "  `player_id` INTEGER  NOT NULL,"
-								+ "  `use` INTEGER  NOT NULL,"
-								+ "  PRIMARY KEY (`kit`,`player_id`)" + " );");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
-								+ "  `key` varchar(128) NOT NULL,"
-								+ "  `player_id` INTEGER NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  `category` varchar(64) NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`player_id`)" + ");");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
-								+ "  `id` INTEGER PRIMARY KEY AUTOINCREMENT ,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `world` varchar(64) NOT NULL,"
-								+ "  `x` double  NOT NULL,"
-								+ "  `y` double  NOT NULL,"
-								+ "  `z` double  NOT NULL,"
-								+ "  `yaw` double  NOT NULL,"
-								+ "  `pitch` double  NOT NULL,"
-								+ "  UNIQUE (`name`)" + ") ;");
+					// Worlds
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `world_id` int(10) unsigned NOT NULL,"
+							+ "  `x` double NOT NULL,"
+							+ "  `y` double NOT NULL,"
+							+ "  `z` double NOT NULL,"
+							+ "  `pitch` double NOT NULL,"
+							+ "  `yaw` double NOT NULL,"
+							+ "  PRIMARY KEY (`name`,`world_id`),"
+							+ "  KEY `world_id` (`world_id`)"
+							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
+							+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  PRIMARY KEY (`id`),"
+							+ "  UNIQUE KEY `name` (`name`)"
+							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
+							+ "  `key` varchar(64) NOT NULL,"
+							+ "  `world_id` int(10) unsigned NOT NULL,"
+							+ "  `info` text NOT NULL,"
+							+ "  PRIMARY KEY (`key`,`world_id`),"
+							+ "  KEY `world_id` (`world_id`)"
+							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
+							+ " `name` varchar(64) NOT NULL,"
+							+ "  `world_id` int(10) unsigned NOT NULL,"
+							+ "  `x` double NOT NULL,"
+							+ "  `y` double NOT NULL,"
+							+ "  `z` double NOT NULL,"
+							+ "  `pitch` double NOT NULL,"
+							+ "  `yaw` double NOT NULL,"
+							+ "  PRIMARY KEY (`name`,`world_id`),"
+							+ "  KEY `world_id` (`world_id`)"
+							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-						db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
-						db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
-						db.createTable("CREATE INDEX kit_pid ON ac_kit_uses (player_id);");
-						db.createTable("CREATE INDEX power_pid ON ac_powers (player_id);");
-						db.createTable("CREATE INDEX power_cat ON ac_powers (category);");
+					db.createTable("ALTER TABLE `ac_warps`"
+							+ "  ADD CONSTRAINT `ac_warps_ibfk_1` "
+							+ "  FOREIGN KEY (`world_id`) "
+							+ "  REFERENCES `ac_worlds` (`id`) "
+							+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+					db.createTable("ALTER TABLE `ac_w_infos`"
+							+ "  ADD CONSTRAINT `ac_w_infos_ibfk_1`"
+							+ "  FOREIGN KEY (`world_id`)"
+							+ "  REFERENCES `ac_worlds` (`id`) "
+							+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+					db.createTable("ALTER TABLE `ac_spawns`"
+							+ "  ADD CONSTRAINT `ac_spawns_ibfk_1`"
+							+ "  FOREIGN KEY (`world_id`)"
+							+ "  REFERENCES `ac_worlds` (`id`) "
+							+ "  ON DELETE CASCADE ON UPDATE CASCADE;");
+					// SQLITE
+				} else if (db.getType() == DatabaseType.SQLITE) {
+					// Players
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `player_id` INTEGER  NOT NULL,"
+							+ "  `world` varchar(64) NOT NULL,"
+							+ "  `x` double  NOT NULL,"
+							+ "  `y` double  NOT NULL,"
+							+ "  `z` double  NOT NULL,"
+							+ "  `yaw` double  NOT NULL,"
+							+ "  `pitch` double  NOT NULL,"
+							+ "  PRIMARY KEY (`name`,`player_id`)" + ");");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
+							+ "  `key` varchar(128) NOT NULL,"
+							+ "  `player_id` INTEGER NOT NULL,"
+							+ "  `info` text NOT NULL,"
+							+ "  PRIMARY KEY (`key`,`player_id`)" + " ) ;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_kit_uses` ("
+							+ "  `kit` varchar(64) NOT NULL,"
+							+ "  `player_id` INTEGER  NOT NULL,"
+							+ "  `use` INTEGER  NOT NULL,"
+							+ "  PRIMARY KEY (`kit`,`player_id`)" + " );");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_powers` ("
+							+ "  `key` varchar(128) NOT NULL,"
+							+ "  `player_id` INTEGER NOT NULL,"
+							+ "  `info` text NOT NULL,"
+							+ "  `category` varchar(64) NOT NULL,"
+							+ "  PRIMARY KEY (`key`,`player_id`)" + ");");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
+							+ "  `id` INTEGER PRIMARY KEY AUTOINCREMENT ,"
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `world` varchar(64) NOT NULL,"
+							+ "  `x` double  NOT NULL,"
+							+ "  `y` double  NOT NULL,"
+							+ "  `z` double  NOT NULL,"
+							+ "  `yaw` double  NOT NULL,"
+							+ "  `pitch` double  NOT NULL,"
+							+ "  UNIQUE (`name`)" + ") ;");
 
-						// Worlds
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  `world_id` INTEGER  NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`world_id`)" + ") ;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
-								+ "  `id` INTEGER PRIMARY KEY AUTOINCREMENT,"
-								+ "  `name` varchar(64) NOT NULL,"
-								+ "  UNIQUE (`name`)" + ") ;");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
-								+ "  `key` varchar(64) NOT NULL,"
-								+ "  `world_id` INTEGER NOT NULL,"
-								+ "  `info` text NOT NULL,"
-								+ "  PRIMARY KEY (`key`,`world_id`)" + ");");
-						db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
-								+ " `name` varchar(64) NOT NULL,"
-								+ "  `world_id` INTEGER NOT NULL,"
-								+ "  `x` double NOT NULL,"
-								+ "  `y` double NOT NULL,"
-								+ "  `z` double NOT NULL,"
-								+ "  `pitch` double NOT NULL,"
-								+ "  `yaw` double NOT NULL,"
-								+ "  PRIMARY KEY (`name`,`world_id`)" + ") ");
+					db.createTable("CREATE INDEX home_pid ON ac_homes (player_id);");
+					db.createTable("CREATE INDEX info_pid ON ac_informations (player_id);");
+					db.createTable("CREATE INDEX kit_pid ON ac_kit_uses (player_id);");
+					db.createTable("CREATE INDEX power_pid ON ac_powers (player_id);");
+					db.createTable("CREATE INDEX power_cat ON ac_powers (category);");
 
-						db.createTable("CREATE INDEX warp_wid ON ac_warps (world_id);");
-						db.createTable("CREATE INDEX info_wid ON ac_w_infos (world_id);");
-						db.createTable("CREATE INDEX spawn_wid ON ac_spawns (world_id);");
-					}
+					// Worlds
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `world_id` INTEGER  NOT NULL,"
+							+ "  `x` double NOT NULL,"
+							+ "  `y` double NOT NULL,"
+							+ "  `z` double NOT NULL,"
+							+ "  `pitch` double NOT NULL,"
+							+ "  `yaw` double NOT NULL,"
+							+ "  PRIMARY KEY (`name`,`world_id`)" + ") ;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
+							+ "  `id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+							+ "  `name` varchar(64) NOT NULL,"
+							+ "  UNIQUE (`name`)" + ") ;");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_w_infos` ("
+							+ "  `key` varchar(64) NOT NULL,"
+							+ "  `world_id` INTEGER NOT NULL,"
+							+ "  `info` text NOT NULL,"
+							+ "  PRIMARY KEY (`key`,`world_id`)" + ");");
+					db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
+							+ " `name` varchar(64) NOT NULL,"
+							+ "  `world_id` INTEGER NOT NULL,"
+							+ "  `x` double NOT NULL,"
+							+ "  `y` double NOT NULL,"
+							+ "  `z` double NOT NULL,"
+							+ "  `pitch` double NOT NULL,"
+							+ "  `yaw` double NOT NULL,"
+							+ "  PRIMARY KEY (`name`,`world_id`)" + ") ");
+
+					db.createTable("CREATE INDEX warp_wid ON ac_warps (world_id);");
+					db.createTable("CREATE INDEX info_wid ON ac_w_infos (world_id);");
+					db.createTable("CREATE INDEX spawn_wid ON ac_spawns (world_id);");
 				}
-			} catch (final SQLException e) {
-				ACLogger.severe(
-						"There is a problem in your SQL configuration : ", e);
-				ACLogger.warning("The plugin is falling back to YML data managment");
 			}
+		} catch (final SQLException e) {
+			ACLogger.severe("There is a problem in your SQL configuration : ",
+					e);
+			ACLogger.warning("The plugin is falling back to YML data managment");
+		}
+	}
+
+	private void convertFactory() {
+		final String currentWrapper = ConfigEnum.DATA_WRAPPER.getString();
+		final String convertTo = ConfigEnum.CONVERT_INTO.getString();
+		if (convertTo.equalsIgnoreCase(currentWrapper)) {
+			return;
+		}
+		if (currentWrapper.equalsIgnoreCase("yml")
+				&& (convertTo.equalsIgnoreCase("sqlite") || convertTo
+						.equalsIgnoreCase("mysql"))) {
+			ConfigEnum.DATA_WRAPPER.setValue(convertTo);
+			try {
+				ConfigEnum.save();
+			} catch (final IOException e) {
+			}
+			createTable();
+			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
+			PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
+		} else if (isSqlWrapper() && (convertTo.equalsIgnoreCase("yml"))) {
+			ConfigEnum.DATA_WRAPPER.setValue(convertTo);
+			try {
+				ConfigEnum.save();
+			} catch (final IOException e) {
+			}
+			WorldManager.getInstance().convertFactory(
+					new FileWorldFactory(coreInstance.getDataFolder().getPath()
+							+ File.separator + "worldData"));
+			PlayerManager.getInstance().convertFactory(
+					new FilePlayerFactory(coreInstance.getDataFolder()
+							.getPath() + File.separator + "userData"));
+		} else if (isSqlWrapper()
+				&& (convertTo.equalsIgnoreCase("sqlite") || convertTo
+						.equalsIgnoreCase("mysql"))) {
+			WorldManager.getInstance().convertFactory(
+					new FileWorldFactory(coreInstance.getDataFolder().getPath()
+							+ File.separator + "worldData"));
+			PlayerManager.getInstance().convertFactory(
+					new FilePlayerFactory(coreInstance.getDataFolder()
+							.getPath() + File.separator + "userData"));
+			ConfigEnum.DATA_WRAPPER.setValue(convertTo);
+			try {
+				ConfigEnum.save();
+			} catch (final IOException e) {
+			}
+			Database.initDb();
+			createTable();
+			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
+			PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
 		}
 
-		PlayerManager.getInstance().setPlayerFactory(
-				new FilePlayerFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "userData"));
-		WorldManager.getInstance().setWorldFactory(
-				new FileWorldFactory(coreInstance.getDataFolder().getPath()
-						+ File.separator + "worldData"));
-		// TODO DELETE TEST CODE !!!
-		WorldManager.getInstance().convertFactory(new SQLWorldFactory());
-		PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
 	}
 }

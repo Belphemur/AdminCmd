@@ -40,13 +40,20 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 public abstract class Database {
-	public final static Database DATABASE;
+	public static Database DATABASE;
 	protected Logger log;
 	protected final String PREFIX;
 	protected final String DATABASE_PREFIX;
 	protected boolean connected;
 	protected Connection connection;
 	static {
+		initDb();
+	}
+
+	public static void initDb() {
+		if (DATABASE != null) {
+			DATABASE.close();
+		}
 		final DatabaseConfig config = new DatabaseConfig();
 		Database db;
 		final String dbWrapper = ConfigEnum.DATA_WRAPPER.getString();
@@ -62,7 +69,9 @@ public abstract class Database {
 				config.setParameter(Parameter.PORT_NUMBER, "3306");
 				config.setParameter(Parameter.DATABASE,
 						ConfigEnum.MYSQL_DB.getString());
-			} catch (final NullPointerException e) {} catch (final InvalidConfigurationException e) {}
+			} catch (final NullPointerException e) {
+			} catch (final InvalidConfigurationException e) {
+			}
 		} else if (dbWrapper.equalsIgnoreCase("sqlite")) {
 			config.setType(DatabaseType.SQLITE);
 			try {
@@ -71,7 +80,9 @@ public abstract class Database {
 						.getAbsolutePath());
 				config.setParameter(Parameter.DB_NAME, "admincmd");
 
-			} catch (final NullPointerException e) {} catch (final InvalidConfigurationException e) {}
+			} catch (final NullPointerException e) {
+			} catch (final InvalidConfigurationException e) {
+			}
 		}
 		config.setLog(ACHelper.getInstance().getCoreInstance().getLogger());
 		try {
@@ -94,7 +105,6 @@ public abstract class Database {
 		}
 		DATABASE = db;
 		DebugLog.INSTANCE.info("Database initialization done");
-
 	}
 
 	// http://dev.mysql.com/doc/refman/5.6/en/sql-syntax.html
@@ -303,6 +313,7 @@ public abstract class Database {
 		}
 		return null;
 	}
+
 	/**
 	 * <b>getStatement</b><br>
 	 * &nbsp;&nbsp;Determines the name of the statement and converts it into an
@@ -403,6 +414,7 @@ public abstract class Database {
 			return false;
 		}
 	}
+
 	/**
 	 * <b>wipeTable</b><br>
 	 * <br>
@@ -414,6 +426,7 @@ public abstract class Database {
 	 * @return success of the method.
 	 */
 	public abstract boolean wipeTable(String table);
+
 	/**
 	 * Get type of the database
 	 * 
