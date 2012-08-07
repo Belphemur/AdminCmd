@@ -47,7 +47,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
  */
 	public SQLPlayerFactory() {
 		insertPlayer = Database.DATABASE
-				.prepare("INSERT INTO `ac_players` (`name`, `world`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES (?, '', '', '', '', '', '');");
+				.prepare("INSERT INTO `ac_players` (`name`) VALUES (?);");
 		final ResultSet rs = Database.DATABASE
 				.query("SELECT `name`,`id` FROM `ac_players`");
 		try {

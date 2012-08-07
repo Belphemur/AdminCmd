@@ -840,7 +840,9 @@ public class ACHelper {
 		}
 		// TODO : Don't forget to check if the admin use a MySQL database or the
 		// file system
-		FilePlayer.scheduleAsyncSave();
+		if (!isSqlWrapper()) {
+			FilePlayer.scheduleAsyncSave();
+		}
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
 				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
@@ -1377,12 +1379,12 @@ public class ACHelper {
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
 							+ "  `name` varchar(64) NOT NULL,"
 							+ "  `player_id` int(10) unsigned NOT NULL,"
-							+ "  `world` varchar(64) NOT NULL,"
-							+ "  `x` double unsigned NOT NULL,"
-							+ "  `y` double unsigned NOT NULL,"
-							+ "  `z` double unsigned NOT NULL,"
-							+ "  `yaw` double unsigned NOT NULL,"
-							+ "  `pitch` double unsigned NOT NULL,"
+							+ "  `world` varchar(64) NULL,"
+							+ "  `x` double unsigned NULL,"
+							+ "  `y` double unsigned NULL,"
+							+ "  `z` double unsigned NULL,"
+							+ "  `yaw` double unsigned NULL,"
+							+ "  `pitch` double unsigned NULL,"
 							+ "  PRIMARY KEY (`name`,`player_id`),"
 							+ "  KEY `player_id` (`player_id`)"
 							+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
@@ -1499,12 +1501,10 @@ public class ACHelper {
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
 							+ "  `name` varchar(64) NOT NULL,"
 							+ "  `player_id` INTEGER  NOT NULL,"
-							+ "  `world` varchar(64) NOT NULL,"
-							+ "  `x` double  NOT NULL,"
-							+ "  `y` double  NOT NULL,"
-							+ "  `z` double  NOT NULL,"
-							+ "  `yaw` double  NOT NULL,"
-							+ "  `pitch` double  NOT NULL,"
+							+ "  `world` varchar(64) NULL,"
+							+ "  `x` double  NULL," + "  `y` double  NULL,"
+							+ "  `z` double  NULL," + "  `yaw` double  NULL,"
+							+ "  `pitch` double  NULL,"
 							+ "  PRIMARY KEY (`name`,`player_id`)" + ");");
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_informations` ("
 							+ "  `key` varchar(128) NOT NULL,"
@@ -1597,6 +1597,7 @@ public class ACHelper {
 			createTable();
 			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
 			PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
+			FilePlayer.stopSavingTask();
 		} else if (isSqlWrapper() && (convertTo.equalsIgnoreCase("yml"))) {
 			ConfigEnum.DATA_WRAPPER.setValue(convertTo);
 			try {
@@ -1609,6 +1610,7 @@ public class ACHelper {
 			PlayerManager.getInstance().convertFactory(
 					new FilePlayerFactory(coreInstance.getDataFolder()
 							.getPath() + File.separator + "userData"));
+			FilePlayer.scheduleAsyncSave();
 		} else if (isSqlWrapper()
 				&& (convertTo.equalsIgnoreCase("sqlite") || convertTo
 						.equalsIgnoreCase("mysql"))) {
