@@ -66,7 +66,7 @@ public class SQLPlayer extends ACPlayer {
 
 	public static void initPrepStmt() {
 		INSERT_HOME = Database.DATABASE
-				.prepare("REPLACE INTO \"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
+				.prepare("REPLACE INTO `ac_homes` (`name`, `player_id`, `world`, `x`, `y`, `z`, `yaw`, `pitch`)"
 						+ " VALUES (?,?,?,?,?,?,?,?)");
 		DELETE_HOME = Database.DATABASE
 				.prepare("DELETE FROM ac_homes WHERE player_id=? AND name=?");
