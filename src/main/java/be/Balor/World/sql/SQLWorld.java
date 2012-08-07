@@ -54,11 +54,15 @@ public class SQLWorld extends ACWorld {
 			.synchronizedMap(new HashMap<String, Location>());
 	private final Map<String, Warp> warps = Collections
 			.synchronizedMap(new HashMap<String, Warp>());
-	private final static PreparedStatement DEF_SPAWN, G_SPAWN, INSERT_INFO,
+	private static PreparedStatement DEF_SPAWN, G_SPAWN, INSERT_INFO,
 			DELETE_INFO, INSERT_WARP, DELETE_WARP;
-	private final static PreparedStatement GET_INFOS, GET_SPAWNS, GET_WARPS;
+	private static PreparedStatement GET_INFOS, GET_SPAWNS, GET_WARPS;
 	private final long id;
 	static {
+		initPrepStmt();
+	}
+
+	public static void initPrepStmt() {
 		DEF_SPAWN = Database.DATABASE
 				.prepare("INSERT OR REPLACE INTO 'ac_spawns' ('name','world_id','x','y','z','pitch','yaw') VALUES ('none',?,?,?,?,?,?)");
 		G_SPAWN = Database.DATABASE
@@ -155,6 +159,7 @@ public class SQLWorld extends ACWorld {
 
 		}
 	}
+
 	private Location getLoc(final ResultSet rs) {
 		try {
 			return new Location(this.getHandler(), rs.getDouble("x"),

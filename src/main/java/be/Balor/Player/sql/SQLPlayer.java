@@ -55,12 +55,16 @@ public class SQLPlayer extends ACPlayer {
 			.synchronizedMap(new HashMap<String, Long>());
 	private Location lastLoc;
 	private final long id;
-	private final static PreparedStatement INSERT_HOME, DELETE_HOME,
-			INSERT_INFO, DELETE_INFO, UPDATE_LASTLOC, INSERT_POWER,
-			DELETE_POWER, DELETE_SUPERPOWERS, INSERT_KIT_USE;
-	private final static PreparedStatement GET_HOMES, GET_INFOS, GET_POWERS,
+	private static PreparedStatement INSERT_HOME, DELETE_HOME, INSERT_INFO,
+			DELETE_INFO, UPDATE_LASTLOC, INSERT_POWER, DELETE_POWER,
+			DELETE_SUPERPOWERS, INSERT_KIT_USE;
+	private static PreparedStatement GET_HOMES, GET_INFOS, GET_POWERS,
 			GET_KIT_USES, GET_LASTLOC;
 	static {
+		initPrepStmt();
+	}
+
+	public static void initPrepStmt() {
 		INSERT_HOME = Database.DATABASE
 				.prepare("INSERT OR REPLACE INTO\"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
 						+ " VALUES (?,?,?,?,?,?,?,?)");
@@ -102,11 +106,13 @@ public class SQLPlayer extends ACPlayer {
 		this.id = id;
 		init();
 	}
+
 	SQLPlayer(final Player player, final long id) {
 		super(player);
 		this.id = id;
 		init();
 	}
+
 	private void init() {
 		synchronized (GET_LASTLOC) {
 			try {
@@ -211,6 +217,7 @@ public class SQLPlayer extends ACPlayer {
 			}
 		}
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 
@@ -583,6 +590,7 @@ public class SQLPlayer extends ACPlayer {
 		}
 
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 
@@ -686,6 +694,7 @@ public class SQLPlayer extends ACPlayer {
 		return pres.getString();
 
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 
@@ -695,6 +704,7 @@ public class SQLPlayer extends ACPlayer {
 	public Map<Type, Object> getPowers() {
 		return Collections.unmodifiableMap(powers);
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 

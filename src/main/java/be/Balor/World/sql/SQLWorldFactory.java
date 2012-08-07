@@ -35,13 +35,18 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class SQLWorldFactory implements IWorldFactory {
-	private final static PreparedStatement INSERT_WORLD, GET_WORLD;
-	static {
-		INSERT_WORLD = Database.DATABASE
+	private final PreparedStatement insertWorld, getWorld;
+
+	/**
+ * 
+ */
+	public SQLWorldFactory() {
+		insertWorld = Database.DATABASE
 				.prepare("INSERT INTO 'ac_worlds' ('name') VALUES (?)");
-		GET_WORLD = Database.DATABASE
+		getWorld = Database.DATABASE
 				.prepare("SELECT id FROM ac_worlds WHERE name=?");
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -56,22 +61,22 @@ public class SQLWorldFactory implements IWorldFactory {
 		}
 		ResultSet rs = null;
 		try {
-			GET_WORLD.clearParameters();
-			GET_WORLD.setString(1, worldName);
+			getWorld.clearParameters();
+			getWorld.setString(1, worldName);
 
-			synchronized (GET_WORLD.getConnection()) {
-				rs = GET_WORLD.executeQuery();
+			synchronized (getWorld.getConnection()) {
+				rs = getWorld.executeQuery();
 			}
 			if (rs.next()) {
 				return new SQLWorld(w, rs.getLong(1));
 			} else {
 				rs.close();
-				INSERT_WORLD.clearParameters();
-				INSERT_WORLD.setString(1, worldName);
-				synchronized (INSERT_WORLD.getConnection()) {
-					INSERT_WORLD.executeUpdate();
+				insertWorld.clearParameters();
+				insertWorld.setString(1, worldName);
+				synchronized (insertWorld.getConnection()) {
+					insertWorld.executeUpdate();
 				}
-				rs = INSERT_WORLD.getGeneratedKeys();
+				rs = insertWorld.getGeneratedKeys();
 				if (rs.next()) {
 					return new SQLWorld(w, rs.getLong(1));
 				} else {

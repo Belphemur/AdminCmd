@@ -51,6 +51,7 @@ import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.IBan;
 import be.Balor.Player.ITempBan;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Player.sql.SQLPlayerFactory;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -73,6 +74,7 @@ import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
+import be.Balor.World.sql.SQLWorld;
 import be.Balor.World.sql.SQLWorldFactory;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
@@ -1623,6 +1625,8 @@ public class ACHelper {
 			}
 			Database.initDb();
 			createTable();
+			SQLPlayer.initPrepStmt();
+			SQLWorld.initPrepStmt();
 			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
 			PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
 		}
