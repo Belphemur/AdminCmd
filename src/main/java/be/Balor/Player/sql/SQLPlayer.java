@@ -66,25 +66,25 @@ public class SQLPlayer extends ACPlayer {
 
 	public static void initPrepStmt() {
 		INSERT_HOME = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO \"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
+				.prepare("REPLACE INTO \"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
 						+ " VALUES (?,?,?,?,?,?,?,?)");
 		DELETE_HOME = Database.DATABASE
 				.prepare("DELETE FROM ac_homes WHERE player_id=? AND name=?");
 		INSERT_INFO = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO `ac_informations` (`key` ,`player_id` ,`info`) VALUES (?, ?, ?)");
+				.prepare("REPLACE INTO `ac_informations` (`key` ,`player_id` ,`info`) VALUES (?, ?, ?)");
 		DELETE_INFO = Database.DATABASE
 				.prepare("DELETE FROM ac_informations WHERE player_id=? AND key=?");
 		UPDATE_LASTLOC = Database.DATABASE
 				.prepare("UPDATE `ac_players` SET `world` = ?, `x` = ?, `y` = ?, `z` = ?, `yaw` = ?, `pitch` = ? WHERE `ac_players`.`id` = ?;");
 		INSERT_POWER = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO `ac_powers` (`key`, `player_id`, `info`, `category`) VALUES (?, ?, ?, ?);");
+				.prepare("REPLACE INTO `ac_powers` (`key`, `player_id`, `info`, `category`) VALUES (?, ?, ?, ?);");
 		DELETE_POWER = Database.DATABASE
 				.prepare("DELETE FROM ac_powers WHERE player_id=? AND key=?");
 		DELETE_SUPERPOWERS = Database.DATABASE
 				.prepare("DELETE FROM ac_powers WHERE player_id=? AND category='"
 						+ Type.Category.SUPER_POWER.name() + "'");
 		INSERT_KIT_USE = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO `ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
+				.prepare("REPLACE INTO `ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
 		GET_HOMES = Database.DATABASE
 				.prepare("SELECT `name`,`world`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_homes` WHERE `player_id` = ?");
 		GET_POWERS = Database.DATABASE

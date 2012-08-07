@@ -53,8 +53,8 @@ public class SQLWorld extends ACWorld {
 			.synchronizedMap(new HashMap<String, Location>());
 	private final Map<String, Warp> warps = Collections
 			.synchronizedMap(new HashMap<String, Warp>());
-	private static PreparedStatement DEF_SPAWN, G_SPAWN, INSERT_INFO,
-			DELETE_INFO, INSERT_WARP, DELETE_WARP;
+	private static PreparedStatement SPAWN, INSERT_INFO, DELETE_INFO,
+			INSERT_WARP, DELETE_WARP;
 	private static PreparedStatement GET_INFOS, GET_SPAWNS, GET_WARPS;
 	private final long id;
 	static {
@@ -62,18 +62,16 @@ public class SQLWorld extends ACWorld {
 	}
 
 	public static void initPrepStmt() {
-		DEF_SPAWN = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO 'ac_spawns' ('name','world_id','x','y','z','pitch','yaw') VALUES ('none',?,?,?,?,?,?)");
-		G_SPAWN = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO 'ac_spawns' ('name','world_id','x','y','z','pitch','yaw') VALUES (?,?,?,?,?,?,?)");
+		SPAWN = Database.DATABASE
+				.prepare("REPLACE INTO `ac_spawns` (`name`,`world_id`,`x`,`y`,`z`,`pitch`,`yaw`) VALUES (?,?,?,?,?,?,?)");
 		INSERT_INFO = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO 'ac_w_infos' ('key','world_id','info') VALUES (?,?,?)");
+				.prepare("REPLACE INTO `ac_w_infos` (`key`,`world_id`,`info`) VALUES (?,?,?)");
 		DELETE_INFO = Database.DATABASE
-				.prepare("DELETE FROM 'ac_w_infos' WHERE key=? AND world_id=?");
+				.prepare("DELETE FROM `ac_w_infos` WHERE key=? AND world_id=?");
 		INSERT_WARP = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO 'ac_warps' ('name','world_id','x','y','z','pitch','yaw') VALUES (?,?,?,?,?,?,?)");
+				.prepare("REPLACE INTO `ac_warps` (`name`,`world_id`,`x`,`y`,`z`,`pitch`,`yaw`) VALUES (?,?,?,?,?,?,?)");
 		DELETE_WARP = Database.DATABASE
-				.prepare("DELETE FROM 'ac_warps' WHERE name=? AND world_id=?");
+				.prepare("DELETE FROM `ac_warps` WHERE name=? AND world_id=?");
 		GET_INFOS = Database.DATABASE
 				.prepare("SELECT `key`,`info` FROM `ac_w_infos` WHERE world_id=?");
 		GET_SPAWNS = Database.DATABASE
@@ -183,17 +181,18 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public void setSpawn(final Location loc) {
 		defaultSpawn = loc;
-		synchronized (DEF_SPAWN) {
+		synchronized (SPAWN) {
 			try {
-				DEF_SPAWN.clearParameters();
-				DEF_SPAWN.setLong(1, id);
-				DEF_SPAWN.setDouble(2, loc.getX());
-				DEF_SPAWN.setDouble(3, loc.getY());
-				DEF_SPAWN.setDouble(4, loc.getZ());
-				DEF_SPAWN.setFloat(5, loc.getPitch());
-				DEF_SPAWN.setFloat(6, loc.getYaw());
-				synchronized (DEF_SPAWN.getConnection()) {
-					DEF_SPAWN.executeUpdate();
+				SPAWN.clearParameters();
+				SPAWN.setString(1, "none");
+				SPAWN.setLong(2, id);
+				SPAWN.setDouble(3, loc.getX());
+				SPAWN.setDouble(4, loc.getY());
+				SPAWN.setDouble(5, loc.getZ());
+				SPAWN.setFloat(6, loc.getPitch());
+				SPAWN.setFloat(7, loc.getYaw());
+				synchronized (SPAWN.getConnection()) {
+					SPAWN.executeUpdate();
 				}
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem while setting the global spawn", e);
@@ -208,7 +207,7 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public Location getSpawn() {
-		if (DEF_SPAWN == null) {
+		if (defaultSpawn == null) {
 			return handler.getSpawnLocation();
 		}
 		return defaultSpawn;
@@ -489,18 +488,18 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public void setGroupSpawn(final String group, final Location spawn) {
 		gSpawns.put(group, spawn);
-		synchronized (G_SPAWN) {
+		synchronized (SPAWN) {
 			try {
-				G_SPAWN.clearParameters();
-				G_SPAWN.setString(1, group);
-				G_SPAWN.setLong(2, id);
-				G_SPAWN.setDouble(3, spawn.getX());
-				G_SPAWN.setDouble(4, spawn.getY());
-				G_SPAWN.setDouble(5, spawn.getZ());
-				G_SPAWN.setFloat(6, spawn.getPitch());
-				G_SPAWN.setFloat(7, spawn.getYaw());
-				synchronized (G_SPAWN.getConnection()) {
-					G_SPAWN.executeUpdate();
+				SPAWN.clearParameters();
+				SPAWN.setString(1, group);
+				SPAWN.setLong(2, id);
+				SPAWN.setDouble(3, spawn.getX());
+				SPAWN.setDouble(4, spawn.getY());
+				SPAWN.setDouble(5, spawn.getZ());
+				SPAWN.setFloat(6, spawn.getPitch());
+				SPAWN.setFloat(7, spawn.getYaw());
+				synchronized (SPAWN.getConnection()) {
+					SPAWN.executeUpdate();
 				}
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem while setting the Group spawn", e);

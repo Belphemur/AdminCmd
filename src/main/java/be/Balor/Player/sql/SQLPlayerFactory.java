@@ -41,14 +41,15 @@ import com.google.common.base.Joiner;
 public class SQLPlayerFactory implements IPlayerFactory {
 	private final PreparedStatement insertPlayer;
 	private final Map<String, Long> players = new HashMap<String, Long>();
+
 	/**
  * 
  */
 	public SQLPlayerFactory() {
 		insertPlayer = Database.DATABASE
-				.prepare("INSERT INTO 'ac_players' ('name','world','x','y','z','yaw','pitch') VALUES (?,'','','','','','')");
+				.prepare("INSERT INTO `ac_players` (`name`, `world`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES (?, '', '', '', '', '', '');");
 		final ResultSet rs = Database.DATABASE
-				.query("SELECT name,id FROM ac_players");
+				.query("SELECT `name`,`id` FROM `ac_players`");
 		try {
 			while (rs.next()) {
 				players.put(rs.getString("name"), rs.getLong("id"));
@@ -61,6 +62,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 				+ Joiner.on(", ").join(players.keySet()));
 
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 
