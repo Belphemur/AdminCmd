@@ -42,7 +42,7 @@ public class SQLWorldFactory implements IWorldFactory {
  */
 	public SQLWorldFactory() {
 		insertWorld = Database.DATABASE
-				.prepare("INSERT INTO 'ac_worlds' ('name') VALUES (?)");
+				.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
 		getWorld = Database.DATABASE
 				.prepare("SELECT id FROM ac_worlds WHERE name=?");
 	}

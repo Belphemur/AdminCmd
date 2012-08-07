@@ -8,6 +8,7 @@
 package lib.SQL.PatPeter.SQLibrary;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -62,28 +63,28 @@ public class MySQL extends Database {
 				statement = this.connection.createStatement();
 
 				switch (this.getStatement(query)) {
-					case SELECT :
-						result = statement.executeQuery(query);
-						break;
+				case SELECT:
+					result = statement.executeQuery(query);
+					break;
 
-					case INSERT :
-					case UPDATE :
-					case DELETE :
-					case CREATE :
-					case ALTER :
-					case DROP :
-					case TRUNCATE :
-					case RENAME :
-					case DO :
-					case REPLACE :
-					case LOAD :
-					case HANDLER :
-					case CALL :
-						this.lastUpdate = statement.executeUpdate(query);
-						break;
+				case INSERT:
+				case UPDATE:
+				case DELETE:
+				case CREATE:
+				case ALTER:
+				case DROP:
+				case TRUNCATE:
+				case RENAME:
+				case DO:
+				case REPLACE:
+				case LOAD:
+				case HANDLER:
+				case CALL:
+					this.lastUpdate = statement.executeUpdate(query);
+					break;
 
-					default :
-						result = statement.executeQuery(query);
+				default:
+					result = statement.executeQuery(query);
 				}
 			}
 			return result;
@@ -126,5 +127,32 @@ public class MySQL extends Database {
 	@Override
 	public DatabaseType getType() {
 		return DatabaseType.MYSQL;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lib.SQL.PatPeter.SQLibrary.Database#prepare(java.lang.String)
+	 */
+	@Override
+	public PreparedStatement prepare(final String query) {
+		try {
+			final PreparedStatement ps;
+			synchronized (connection) {
+				if (getStatement(query) == Statements.INSERT) {
+					ps = connection.prepareStatement(query,
+							PreparedStatement.RETURN_GENERATED_KEYS);
+				} else {
+					ps = connection.prepareStatement(query);
+				}
+			}
+			return ps;
+		} catch (final SQLException e) {
+			if (!e.toString().contains("not return ResultSet")) {
+				this.writeError(
+						"SQL exception in prepare(): " + e.getMessage(), false);
+			}
+		}
+		return null;
 	}
 }

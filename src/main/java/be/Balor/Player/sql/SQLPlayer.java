@@ -66,7 +66,7 @@ public class SQLPlayer extends ACPlayer {
 
 	public static void initPrepStmt() {
 		INSERT_HOME = Database.DATABASE
-				.prepare("INSERT OR REPLACE INTO\"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
+				.prepare("INSERT OR REPLACE INTO \"ac_homes\" (\"name\",\"player_id\",\"world\",\"x\",\"y\",\"z\",\"yaw\",\"pitch\")"
 						+ " VALUES (?,?,?,?,?,?,?,?)");
 		DELETE_HOME = Database.DATABASE
 				.prepare("DELETE FROM ac_homes WHERE player_id=? AND name=?");
@@ -94,7 +94,7 @@ public class SQLPlayer extends ACPlayer {
 		GET_KIT_USES = Database.DATABASE
 				.prepare("SELECT `kit`,`use` FROM `ac_kit_uses` WHERE `player_id` = ?");
 		GET_LASTLOC = Database.DATABASE
-				.prepare("SELECT world,x,y,z,yaw,pitch FROM ac_players WHERE id=?");
+				.prepare("SELECT `world`,`x`,`y`,`z`,`yaw`,`pitch` FROM ac_players WHERE id=?");
 	}
 
 	/**
