@@ -139,17 +139,18 @@ public class ACHelper {
 
 	static {
 		materialsColors = new HashMap<Material, String[]>();
-		materialsColors.put(Material.WOOL, new String[]{"White", "Orange",
+		materialsColors.put(Material.WOOL, new String[] { "White", "Orange",
 				"Magenta", "LightBlue", "Yellow", "LimeGreen", "Pink", "Gray",
 				"LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red",
-				"Black"});
-		materialsColors.put(Material.INK_SACK, new String[]{"Black", "Red",
+				"Black" });
+		materialsColors.put(Material.INK_SACK, new String[] { "Black", "Red",
 				"Green", "Brown", "Blue", "Purple", "Cyan", "LightGray",
 				"Gray", "Pink", "LimeGreen", "Yellow", "LightBlue", "Magenta",
-				"Orange", "White"});
-		materialsColors.put(Material.LOG, new String[]{"Oak", "Pine", "Birch"});
-		materialsColors.put(Material.STEP, new String[]{"Stone", "Sandstone",
-				"Wooden", "Cobblestone"});
+				"Orange", "White" });
+		materialsColors.put(Material.LOG,
+				new String[] { "Oak", "Pine", "Birch" });
+		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone",
+				"Wooden", "Cobblestone" });
 		materialsColors.put(Material.DOUBLE_STEP,
 				materialsColors.get(Material.STEP));
 		listOfPossibleRepair = new LinkedList<Integer>();
@@ -1200,7 +1201,6 @@ public class ACHelper {
 		if (pluginConfig.get("respawnAtSpawnPoint") != null) {
 			pluginConfig.remove("respawnAtSpawnPoint");
 		}
-		saveConfig();
 		if (!pluginConfig.getBoolean("debug")) {
 			DebugLog.stopLogging();
 		}
@@ -1209,8 +1209,7 @@ public class ACHelper {
 						"commands.yml"));
 		commands.add("disabledCommands", disabled);
 		commands.add("prioritizedCommands",
-				priority.isEmpty()
-						? Arrays.asList("reload", "/", "stop")
+				priority.isEmpty() ? Arrays.asList("reload", "/", "stop")
 						: priority);
 		final ExConfigurationSection aliases = commands.addSection("aliases");
 		final ExConfigurationSection god = aliases.addSection("god");
@@ -1333,13 +1332,6 @@ public class ACHelper {
 					coreInstance, new UndoBlockTask(undoCache), 1);
 		}
 		return i;
-	}
-
-	public void saveConfig() {
-		try {
-			pluginConfig.save();
-		} catch (final IOException e) {
-		}
 	}
 
 	public String getDeathMessage(final String reason) {

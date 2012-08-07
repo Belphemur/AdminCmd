@@ -37,7 +37,6 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.World.ACWorld;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
@@ -59,7 +58,10 @@ public class EssentialsImport implements IImport {
 		final File file = new File(importPath);
 		if (!file.exists()) {
 			ConfigEnum.IMPORT_ESSENTIALS.setValue(false);
-			ACHelper.getInstance().saveConfig();
+			try {
+				ConfigEnum.save();
+			} catch (final IOException e) {
+			}
 			ACLogger.info("Import deactivated. Did not find folder 'Essentials' in plugins.");
 			return;
 		}
@@ -68,21 +70,26 @@ public class EssentialsImport implements IImport {
 		ACLogger.info("Data of " + number
 				+ " user(s) imported. Trying to import spawn point(s)....");
 		number = importSpawnPoints();
-		ACLogger.info(number + " spawn point(s) imported. Trying to import warp point(s)....");
+		ACLogger.info(number
+				+ " spawn point(s) imported. Trying to import warp point(s)....");
 		number = importWarpPoints();
-		ACLogger.info(number + "Warp point(s) imported. Trying to import text-files....");
+		ACLogger.info(number
+				+ "Warp point(s) imported. Trying to import text-files....");
 		try {
 			importTextFiles();
 		} catch (final IOException e) {
 			ACLogger.info("[ERROR] Failed to import rules.txt and motd.txt. For more information refer to the debug.log!");
-			DebugLog.INSTANCE
-					.log(Level.INFO, "[ERROR] Failed to import rules.txt and motd.txt.", e);
+			DebugLog.INSTANCE.log(Level.INFO,
+					"[ERROR] Failed to import rules.txt and motd.txt.", e);
 			return;
 		}
 		ACLogger.info("Text files imported.\n Import finished successfully, deactivating"
 				+ "import-option in the configuration file...");
 		ConfigEnum.IMPORT_ESSENTIALS.setValue(false);
-		ACHelper.getInstance().saveConfig();
+		try {
+			ConfigEnum.save();
+		} catch (final IOException e) {
+		}
 		ACLogger.info("Import deactivated, have fun with your old data in AdminCmd.");
 	}
 
@@ -94,9 +101,9 @@ public class EssentialsImport implements IImport {
 	@Override
 	public int importUserData() {
 		int counter = 0;
-		final List<File> files = filter.getFiles(
-				new File(importPath + File.separator + "userdata"), filter.new PatternFilter(
-						Type.FILE, ".yml"), false);
+		final List<File> files = filter.getFiles(new File(importPath
+				+ File.separator + "userdata"), filter.new PatternFilter(
+				Type.FILE, ".yml"), false);
 		ExtendedConfiguration esUserFile = null;
 		String playerName;
 		boolean homes = false, lastLoc = false, connect = false, newPlayer = false, ip = false, mute = false, god = false;
@@ -104,22 +111,27 @@ public class EssentialsImport implements IImport {
 			playerName = FilenameUtils.getBaseName(f.getAbsolutePath());
 			ACPlayer p = ACPlayer.getPlayer(playerName);
 			if (p == null) {
-				playerName = playerName.substring(0, 1).toUpperCase() + playerName.substring(1);
+				playerName = playerName.substring(0, 1).toUpperCase()
+						+ playerName.substring(1);
 			}
 			p = ACPlayer.getPlayer(playerName);
 			esUserFile = ExtendedConfiguration.loadConfiguration(f);
 			homes = ImportTools.importESHomes(esUserFile, playerName);
 			lastLoc = ImportTools.importESLastLocation(esUserFile, playerName);
 			if (p != null && esUserFile != null) {
-				p.setInformation("lastConnection", esUserFile.getLong("timestamps.login"));
-				p.setInformation("lastDisconnect", esUserFile.getLong("timestamps.logout"));
+				p.setInformation("lastConnection",
+						esUserFile.getLong("timestamps.login"));
+				p.setInformation("lastDisconnect",
+						esUserFile.getLong("timestamps.logout"));
 				connect = true;
-				p.setInformation("firstTime", esUserFile.getBoolean("newplayer"));
+				p.setInformation("firstTime",
+						esUserFile.getBoolean("newplayer"));
 				newPlayer = true;
 				p.setInformation("last-ip", esUserFile.getString("ipAddress"));
 				ip = true;
 				if (esUserFile.getBoolean("muted")) {
-					p.setPower(be.Balor.Tools.Type.MUTED, "Permanently muted by Server Admin");
+					p.setPower(be.Balor.Tools.Type.MUTED,
+							"Permanently muted by Server Admin");
 					mute = true;
 				}
 				if (esUserFile.getBoolean("godmode")) {
@@ -141,8 +153,8 @@ public class EssentialsImport implements IImport {
 	 */
 	@Override
 	public int importWarpPoints() {
-		List<File> files = filter.getFiles(new File(importPath + File.separator + "warps"),
-				filter.new PatternFilter(Type.FILE, ".yml"), false);
+		List<File> files = filter.getFiles(new File(importPath + File.separator
+				+ "warps"), filter.new PatternFilter(Type.FILE, ".yml"), false);
 		ExtendedConfiguration esWarp = null;
 		Location acWarp = null;
 		ACWorld world = null;
@@ -171,8 +183,8 @@ public class EssentialsImport implements IImport {
 			world.addWarp(name, acWarp);
 			counter++;
 		}
-		files = filter.getFiles(new File(importPath), filter.new PatternFilter(Type.FILE, ".yml"),
-				false);
+		files = filter.getFiles(new File(importPath), filter.new PatternFilter(
+				Type.FILE, ".yml"), false);
 		ExtendedConfiguration esJails = null;
 		for (final File f : files) {
 			if (!f.getName().contains("jails")) {
@@ -197,7 +209,8 @@ public class EssentialsImport implements IImport {
 			ConfigurationSection jail = null;
 			for (final String jName : keys) {
 				if (jName == null) {
-					ACLogger.info("[ERROR] Could not import jail " + String.valueOf(jName));
+					ACLogger.info("[ERROR] Could not import jail "
+							+ String.valueOf(jName));
 					continue;
 				}
 				jail = jails.getConfigurationSection(jName);
@@ -225,8 +238,8 @@ public class EssentialsImport implements IImport {
 	 */
 	@Override
 	public int importSpawnPoints() {
-		final List<File> files = filter.getFiles(new File(importPath), filter.new PatternFilter(
-				Type.FILE, ".yml"), false);
+		final List<File> files = filter.getFiles(new File(importPath),
+				filter.new PatternFilter(Type.FILE, ".yml"), false);
 		ExtendedConfiguration esSpawns = null;
 		ConfigurationSection esSpawn = null;
 		Location acSpawn = null;
@@ -250,7 +263,8 @@ public class EssentialsImport implements IImport {
 			ConfigurationSection spawn = null;
 			for (final String sName : keys) {
 				if (sName == null) {
-					ACLogger.info("[ERROR] Could not import jail " + String.valueOf(sName));
+					ACLogger.info("[ERROR] Could not import jail "
+							+ String.valueOf(sName));
 					continue;
 				}
 				spawn = esSpawn.getConfigurationSection(sName);
@@ -278,15 +292,19 @@ public class EssentialsImport implements IImport {
 	 */
 	@Override
 	public void importTextFiles() throws IOException {
-		final List<File> files = filter.getFiles(new File(importPath), filter.new PatternFilter(
-				Type.FILE, ".txt"), false);
+		final List<File> files = filter.getFiles(new File(importPath),
+				filter.new PatternFilter(Type.FILE, ".txt"), false);
 		for (final File f : files) {
 			if (f.getName().contains("rules")) {
-				ImportTools.copyTextFile(f,
-						FileManager.getInstance().getFile(importPath, "rules.txt"));
+				ImportTools.copyTextFile(
+						f,
+						FileManager.getInstance().getFile(importPath,
+								"rules.txt"));
 			} else if (f.getName().contains("motd")) {
-				ImportTools.copyTextFile(f,
-						FileManager.getInstance().getFile(importPath, "motd.txt"));
+				ImportTools.copyTextFile(
+						f,
+						FileManager.getInstance().getFile(importPath,
+								"motd.txt"));
 			} else {
 				continue;
 			}
