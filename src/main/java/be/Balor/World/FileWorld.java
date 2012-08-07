@@ -24,7 +24,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,7 +35,6 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.io.Files;
 
@@ -96,38 +94,6 @@ public class FileWorld extends ACWorld {
 		} else {
 			return handler.getSpawnLocation();
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#getDifficulty()
-	 */
-	@Override
-	public Difficulty getDifficulty() throws WorldNotLoaded {
-		Difficulty dif;
-		dif = (Difficulty) informations.get("difficulty");
-		if (dif == null) {
-			return handler.getDifficulty();
-		}
-		return dif;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#setDifficulty(org.bukkit.Difficulty)
-	 */
-	@Override
-	public void setDifficulty(final Difficulty dif) {
-		ACPluginManager.scheduleSyncTask(new Runnable() {
-			@Override
-			public void run() {
-				handler.setDifficulty(dif);
-			}
-		});
-
-		informations.set("difficulty", dif);
 	}
 
 	/*

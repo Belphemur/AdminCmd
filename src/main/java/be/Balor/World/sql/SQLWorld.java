@@ -27,7 +27,6 @@ import java.util.logging.Level;
 
 import lib.SQL.PatPeter.SQLibrary.Database;
 
-import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -213,49 +212,6 @@ public class SQLWorld extends ACWorld {
 			return handler.getSpawnLocation();
 		}
 		return defaultSpawn;
-	}
-
-	/*
-	 * (Non javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#getDifficulty()
-	 */
-	@Override
-	public Difficulty getDifficulty() throws WorldNotLoaded {
-		final Object obj = informations.get("difficulty");
-		if (obj == null) {
-			return handler.getDifficulty();
-		}
-		if (obj instanceof Difficulty) {
-			return (Difficulty) obj;
-		}
-		return handler.getDifficulty();
-	}
-
-	/*
-	 * (Non javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#setDifficulty(org.bukkit.Difficulty)
-	 */
-	@Override
-	public void setDifficulty(final Difficulty dif) {
-		informations.put("difficulty", dif);
-		handler.setDifficulty(dif);
-		synchronized (INSERT_INFO) {
-			try {
-				INSERT_INFO.clearParameters();
-				INSERT_INFO.setString(1, "difficulty");
-				INSERT_INFO.setLong(2, id);
-				INSERT_INFO.setInt(3, dif.getValue());
-				synchronized (INSERT_INFO.getConnection()) {
-					INSERT_INFO.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem while setting the difficulty", e);
-			}
-
-		}
-
 	}
 
 	/*

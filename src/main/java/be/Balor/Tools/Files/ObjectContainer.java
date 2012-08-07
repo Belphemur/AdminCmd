@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Difficulty;
+
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Egg.EggType;
 
@@ -42,6 +44,23 @@ public class ObjectContainer {
 	 */
 	public boolean isNull() {
 		return obj == null;
+	}
+
+	public Difficulty getDifficulty() {
+		if (obj == null) {
+			return null;
+		}
+		if (obj instanceof Difficulty) {
+			return (Difficulty) obj;
+		}
+		if (obj instanceof String) {
+			return Difficulty.valueOf((String) obj);
+		}
+		if (obj instanceof Integer) {
+			return Difficulty.getByValue((Integer) obj);
+		}
+		return null;
+
 	}
 
 	/**
@@ -439,11 +458,11 @@ public class ObjectContainer {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public String toString() {
 		if (obj instanceof List<?>) {
-			return Arrays.toString(((List) obj).toArray(new String[]{}));
+			return Arrays.toString(((List) obj).toArray(new String[] {}));
 		}
 		return obj.toString();
 	}

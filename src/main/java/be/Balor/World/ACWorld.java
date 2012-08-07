@@ -26,6 +26,7 @@ import org.bukkit.World;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Warp;
 import be.Balor.Tools.Files.ObjectContainer;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -96,7 +97,14 @@ public abstract class ACWorld {
 	 * 
 	 * @return The difficulty
 	 */
-	public abstract Difficulty getDifficulty() throws WorldNotLoaded;
+	public Difficulty getDifficulty() {
+		final Difficulty dif = getInformation("difficulty").getDifficulty();
+		if (dif == null) {
+			return handler.getDifficulty();
+		} else {
+			return dif;
+		}
+	}
 
 	/**
 	 * Set the difficulty of the world.
@@ -104,7 +112,15 @@ public abstract class ACWorld {
 	 * @param dif
 	 *            The difficulty to set.
 	 */
-	public abstract void setDifficulty(Difficulty dif);
+	public void setDifficulty(final Difficulty dif) {
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				handler.setDifficulty(dif);
+			}
+		});
+		setInformation("difficulty", dif);
+	}
 
 	/**
 	 * Add a warp point
@@ -217,6 +233,7 @@ public abstract class ACWorld {
 	 * @return
 	 */
 	public abstract Set<String> getMobLimitList();
+
 	/**
 	 * Get the location of the spawn for the wanted group
 	 * 
@@ -227,6 +244,7 @@ public abstract class ACWorld {
 	 *         group, return the default spawn.
 	 */
 	public abstract Location getGroupSpawn(String group);
+
 	/**
 	 * Set the location of the spawn for the given group
 	 * 
@@ -236,18 +254,21 @@ public abstract class ACWorld {
 	 *            location of the new spawn.
 	 */
 	public abstract void setGroupSpawn(String group, Location spawn);
+
 	/**
 	 * Get all group spawn
 	 * 
 	 * @return
 	 */
 	protected abstract Map<String, Location> getGroupSpawns();
+
 	/**
 	 * Get all Informations
 	 * 
 	 * @return
 	 */
 	protected abstract Map<String, Object> getInformations();
+
 	/*
 	 * (non-Javadoc)
 	 * 
