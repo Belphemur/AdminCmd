@@ -170,10 +170,14 @@ public class SQLPlayer extends ACPlayer {
 				while (rs.next()) {
 					final String powerName = rs.getString("key");
 					final Type power = Type.matchType(powerName);
-					if (power == null) {
-						customPowers.put(powerName, rs.getString("info"));
-					} else {
-						powers.put(power, rs.getString("info"));
+					synchronized (SQLObjectContainer.yaml) {
+						if (power == null) {
+							customPowers.put(powerName, SQLObjectContainer.yaml
+									.load(rs.getString("info")));
+						} else {
+							powers.put(power, SQLObjectContainer.yaml.load(rs
+									.getString("info")));
+						}
 					}
 				}
 				rs.close();
@@ -191,7 +195,10 @@ public class SQLPlayer extends ACPlayer {
 					rs = GET_INFOS.executeQuery();
 				}
 				while (rs.next()) {
-					infos.put(rs.getString("key"), rs.getString("info"));
+					synchronized (SQLObjectContainer.yaml) {
+						infos.put(rs.getString("key"), SQLObjectContainer.yaml
+								.load(rs.getString("info")));
+					}
 				}
 				rs.close();
 			} catch (final SQLException e) {

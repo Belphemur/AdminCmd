@@ -102,7 +102,10 @@ public class SQLWorld extends ACWorld {
 					if (key.startsWith("mobLimit:")) {
 						mobLimits.put(key.substring(9), rs.getInt("info"));
 					} else {
-						informations.put(key, rs.getString("info"));
+						synchronized (SQLObjectContainer.yaml) {
+							informations.put(key, SQLObjectContainer.yaml
+									.load(rs.getString("info")));
+						}
 					}
 				}
 				rs.close();

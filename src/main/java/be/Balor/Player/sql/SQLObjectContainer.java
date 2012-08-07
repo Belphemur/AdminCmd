@@ -30,12 +30,14 @@ public class SQLObjectContainer extends ObjectContainer {
 	public final static Yaml yaml = new Yaml(new YamlConstructor(
 			ObjectContainer.class.getClassLoader()), new ExtendedRepresenter(),
 			new DumperOptions());
+
 	/**
 	 * @param obj
 	 */
 	public SQLObjectContainer(final Object obj) {
 		super(obj);
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 
@@ -50,6 +52,7 @@ public class SQLObjectContainer extends ObjectContainer {
 		}
 		return null;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -57,12 +60,15 @@ public class SQLObjectContainer extends ObjectContainer {
 	 */
 	@Override
 	protected Boolean castBoolean(final Object o) {
-		try {
-			return Boolean.parseBoolean(o.toString());
-		} catch (final Exception e) {
+		if (o instanceof String) {
+			synchronized (yaml) {
+				return super.castBoolean(yaml.load((String) o));
+			}
+		} else {
 			return super.castBoolean(o);
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -70,12 +76,15 @@ public class SQLObjectContainer extends ObjectContainer {
 	 */
 	@Override
 	protected Double castDouble(final Object o) {
-		try {
-			return Double.parseDouble(o.toString());
-		} catch (final Exception e) {
+		if (o instanceof String) {
+			synchronized (yaml) {
+				return super.castDouble(yaml.load((String) o));
+			}
+		} else {
 			return super.castDouble(o);
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -83,12 +92,15 @@ public class SQLObjectContainer extends ObjectContainer {
 	 */
 	@Override
 	protected Float castFloat(final Object o) {
-		try {
-			return Float.parseFloat(o.toString());
-		} catch (final Exception e) {
+		if (o instanceof String) {
+			synchronized (yaml) {
+				return super.castFloat(yaml.load((String) o));
+			}
+		} else {
 			return super.castFloat(o);
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -96,12 +108,15 @@ public class SQLObjectContainer extends ObjectContainer {
 	 */
 	@Override
 	protected Integer castInt(final Object o) {
-		try {
-			return Integer.parseInt(o.toString());
-		} catch (final Exception e) {
+		if (o instanceof String) {
+			synchronized (yaml) {
+				return super.castInt(yaml.load((String) o));
+			}
+		} else {
 			return super.castInt(o);
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -109,9 +124,11 @@ public class SQLObjectContainer extends ObjectContainer {
 	 */
 	@Override
 	protected Long castLong(final Object o) {
-		try {
-			return Long.parseLong(o.toString());
-		} catch (final Exception e) {
+		if (o instanceof String) {
+			synchronized (yaml) {
+				return super.castLong(yaml.load((String) o));
+			}
+		} else {
 			return super.castLong(o);
 		}
 	}

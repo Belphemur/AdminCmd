@@ -369,6 +369,9 @@ public class FileWorld extends ACWorld {
 		final Map<String, Object> result = new HashMap<String, Object>();
 		for (final Entry<String, Object> entry : informations.getValues(false)
 				.entrySet()) {
+			if (entry.getKey().contains("mobLimits")) {
+				continue;
+			}
 			result.put(entry.getKey(), entry.getValue());
 		}
 		for (final Entry<String, Object> entry : mobLimits.getValues(false)
