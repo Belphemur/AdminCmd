@@ -38,6 +38,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import be.Balor.Importer.IImport;
+import be.Balor.Importer.ImportTools;
+import be.Balor.Importer.Essentials.EssentialsImport;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
@@ -1194,12 +1197,14 @@ public class ACHelper {
 				"textFile.yml")));
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
-		pluginConfig.options().copyDefaults(true)
-				.header(ConfigEnum.getHeader());
-		pluginConfig.addDefaults(ConfigEnum.getDefaultvalues());
 
 		dataWrapperInit();
 
+		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+			final IImport importer = new EssentialsImport(
+					ImportTools.getPluginsFolder(coreInstance.getDataFolder()));
+			importer.initImport();
+		}
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {

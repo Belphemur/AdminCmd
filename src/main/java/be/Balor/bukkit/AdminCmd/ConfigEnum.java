@@ -213,7 +213,7 @@ public enum ConfigEnum {
 	/**
 	 * @return the defaultvalues
 	 */
-	public static Map<String, Object> getDefaultvalues() {
+	private static Map<String, Object> getDefaultvalues() {
 		final Map<String, Object> values = new LinkedHashMap<String, Object>();
 		for (final ConfigEnum ce : values()) {
 			values.put(ce.confVal, ce.defaultVal);
@@ -221,7 +221,7 @@ public enum ConfigEnum {
 		return values;
 	}
 
-	public static String getHeader() {
+	private static String getHeader() {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append("Configuration file of ").append(pluginName).append('\n');
 		buffer.append("Plugin Version: ").append(pluginVersion).append('\n')
@@ -240,6 +240,8 @@ public enum ConfigEnum {
 	 */
 	public static void setConfig(final ExtendedConfiguration config) {
 		ConfigEnum.config = config;
+		ConfigEnum.config.options().copyDefaults(true).header(getHeader());
+		ConfigEnum.config.addDefaults(getDefaultvalues());
 	}
 
 	public static void setPluginInfos(final PluginDescriptionFile pdf) {

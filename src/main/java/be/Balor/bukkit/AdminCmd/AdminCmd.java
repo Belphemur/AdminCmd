@@ -10,9 +10,6 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
-import be.Balor.Importer.IImport;
-import be.Balor.Importer.ImportTools;
-import be.Balor.Importer.Essentials.EssentialsImport;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACChatListener;
 import be.Balor.Listeners.ACEntityListener;
@@ -1060,12 +1057,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACChatListener(), this);
 		} else {
 			pm.registerEvents(new ACOldChatListener(), this);
-		}
-
-		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-			final IImport importer = new EssentialsImport(
-					ImportTools.getPluginsFolder(getDataFolder()));
-			importer.initImport();
 		}
 
 	}
