@@ -242,6 +242,10 @@ public enum ConfigEnum {
 		ConfigEnum.config = config;
 		ConfigEnum.config.options().copyDefaults(true).header(getHeader());
 		ConfigEnum.config.addDefaults(getDefaultvalues());
+		try {
+			ConfigEnum.save();
+		} catch (final IOException e) {
+		}
 	}
 
 	public static void setPluginInfos(final PluginDescriptionFile pdf) {
