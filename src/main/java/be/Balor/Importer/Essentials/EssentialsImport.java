@@ -278,7 +278,11 @@ public class EssentialsImport implements IImport {
 					ACLogger.info("[ERROR] Could not import spawn: " + sName);
 					continue;
 				}
-				world.setGroupSpawn(sName, acSpawn);
+				if (sName.equalsIgnoreCase("default")) {
+					world.setSpawn(acSpawn);
+				} else {
+					world.setGroupSpawn(sName, acSpawn);
+				}
 				counter++;
 			}
 		}
