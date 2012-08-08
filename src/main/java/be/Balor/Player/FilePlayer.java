@@ -251,16 +251,18 @@ public class FilePlayer extends ACPlayer {
 	}
 
 	private Location getLocation(final ConfigurationSection node) {
-		final World w = ACPluginManager.getServer().getWorld(
-				node.getString("world"));
+		final String world = node.getString("world");
+		if (world == null) {
+			return null;
+		}
+		final World w = ACPluginManager.getServer().getWorld(world);
 		if (w != null) {
 			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
 					0), node.getDouble("z", 0), Float.parseFloat(node
 					.getString("yaw")), Float.parseFloat(node
 					.getString("pitch")));
 		} else {
-			ACLogger.warning("The world " + node.getString("world")
-					+ " is not loaded !");
+			ACLogger.warning("The world " + world + " is not loaded !");
 			return null;
 		}
 	}
