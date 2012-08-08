@@ -447,7 +447,7 @@ public class SQLWorld extends ACWorld {
 	public int getMobLimit(final String mob) {
 		final Integer limit = mobLimits.get(mob);
 		if (limit == null) {
-			return 0;
+			return -1;
 		}
 		return limit.intValue();
 	}
