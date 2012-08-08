@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
-import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -108,7 +107,7 @@ public class EssentialsImport implements IImport {
 		String playerName;
 		boolean homes = false, lastLoc = false, connect = false, newPlayer = false, ip = false, mute = false, god = false;
 		for (final File f : files) {
-			playerName = FilenameUtils.getBaseName(f.getAbsolutePath());
+			playerName = f.getName().substring(0, f.getName().length() - 4);
 			ACPlayer p = ACPlayer.getPlayer(playerName);
 			if (p == null) {
 				playerName = playerName.substring(0, 1).toUpperCase()
@@ -165,7 +164,7 @@ public class EssentialsImport implements IImport {
 			esWarp = ExtendedConfiguration.loadConfiguration(f);
 			if (esWarp == null) {
 				ACLogger.info("[ERROR] Could not import WarpPoint: "
-						+ FilenameUtils.getBaseName(f.getAbsolutePath()));
+						+ f.getName().substring(0, f.getName().length() - 4));
 				continue;
 			}
 			world = ACWorld.getWorld(esWarp.getString("world"));
@@ -177,7 +176,7 @@ public class EssentialsImport implements IImport {
 				acWarp = ImportTools.buildLocation(esWarp, world);
 			} catch (final Exception e) {
 				ACLogger.info("[ERROR] Could not import WarpPoint: "
-						+ FilenameUtils.getBaseName(f.getAbsolutePath()));
+						+ f.getName().substring(0, f.getName().length() - 4));
 				continue;
 			}
 			world.addWarp(name, acWarp);
