@@ -31,6 +31,7 @@ import lib.SQL.PatPeter.SQLibrary.Database;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import be.Balor.Player.ACPlayer;
@@ -126,10 +127,15 @@ public class SQLPlayer extends ACPlayer {
 				if (rs.next()) {
 					final String worldName = rs.getString("world");
 					if (worldName != null && !worldName.isEmpty()) {
-						lastLoc = new Location(Bukkit.getWorld(worldName),
-								rs.getDouble("x"), rs.getDouble("y"),
-								rs.getDouble("z"), rs.getFloat("yaw"),
-								rs.getFloat("pitch"));
+						final World world = Bukkit.getWorld(worldName);
+						if (world != null) {
+							lastLoc = new Location(world, rs.getDouble("x"),
+									rs.getDouble("y"), rs.getDouble("z"),
+									rs.getFloat("yaw"), rs.getFloat("pitch"));
+						} else {
+							ACLogger.warning("The World " + worldName
+									+ " is not loaded");
+						}
 					}
 				}
 			} catch (final SQLException e) {
@@ -146,13 +152,18 @@ public class SQLPlayer extends ACPlayer {
 					rs = GET_HOMES.executeQuery();
 				}
 				while (rs.next()) {
-					homes.put(
-							rs.getString("name"),
-							new Location(
-									Bukkit.getWorld(rs.getString("world")), rs
-											.getDouble("x"), rs.getDouble("y"),
-									rs.getDouble("z"), rs.getFloat("yaw"), rs
-											.getFloat("pitch")));
+					final String worldName = rs.getString("world");
+					final World world = Bukkit.getWorld(worldName);
+					if (world != null) {
+						homes.put(
+								rs.getString("name"),
+								new Location(world, rs.getDouble("x"), rs
+										.getDouble("y"), rs.getDouble("z"), rs
+										.getFloat("yaw"), rs.getFloat("pitch")));
+					} else {
+						ACLogger.warning("The World " + worldName
+								+ " is not loaded");
+					}
 				}
 				rs.close();
 			} catch (final SQLException e) {

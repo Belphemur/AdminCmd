@@ -31,7 +31,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
@@ -71,7 +70,8 @@ public class FilePlayer extends ACPlayer {
 		final File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
 		homes = datas.addSection("home");
@@ -86,7 +86,8 @@ public class FilePlayer extends ACPlayer {
 		final File pFile = new File(directory, name + ".yml");
 		try {
 			Files.createParentDirs(pFile);
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 		datas = ExtendedConfiguration.loadConfiguration(pFile);
 		informations = datas.addSection("infos");
 		homes = datas.addSection("home");
@@ -249,8 +250,7 @@ public class FilePlayer extends ACPlayer {
 		return loc;
 	}
 
-	private Location getLocation(final ConfigurationSection node)
-			throws WorldNotLoaded {
+	private Location getLocation(final ConfigurationSection node) {
 		final World w = ACPluginManager.getServer().getWorld(
 				node.getString("world"));
 		if (w != null) {
@@ -259,7 +259,9 @@ public class FilePlayer extends ACPlayer {
 					.getString("yaw")), Float.parseFloat(node
 					.getString("pitch")));
 		} else {
-			throw new WorldNotLoaded(node.getString("world"));
+			ACLogger.warning("The world " + node.getString("world")
+					+ " is not loaded !");
+			return null;
 		}
 	}
 

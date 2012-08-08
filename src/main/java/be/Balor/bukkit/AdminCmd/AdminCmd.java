@@ -1,9 +1,6 @@
 package be.Balor.bukkit.AdminCmd;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -12,11 +9,7 @@ import org.bukkit.World;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.PluginClassLoader;
 
-import be.Balor.Importer.IImport;
-import be.Balor.Importer.ImportTools;
-import be.Balor.Importer.Essentials.EssentialsImport;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACChatListener;
 import be.Balor.Listeners.ACEntityListener;
@@ -167,7 +160,6 @@ import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Downloader;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -233,7 +225,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACPluginListener(), this);
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
-		loadDependencies();
 
 		ACPluginManager.setMetrics(metrics);
 
@@ -1067,60 +1058,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		} else {
 			pm.registerEvents(new ACOldChatListener(), this);
 		}
-	}
-
-	private void loadDependencies() {
-		final File browserFile = new File("lib", "WebBrowser.jar");
-		final Thread webBrowserThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Downloader.download(
-							"http://static.admincmd.com/WebBrowser.jar",
-							browserFile);
-					try {
-						((PluginClassLoader) AdminCmd.this.getClassLoader())
-								.addURL(new URL("jar:file:"
-										+ "lib/WebBrowser.jar" + "!/"));
-
-					} catch (final MalformedURLException e3) {
-						e3.printStackTrace();
-					}
-					int retry = 0;
-					reload: try {
-						if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-							final IImport importer = new EssentialsImport(
-									ImportTools
-											.getPluginsFolder(getDataFolder()));
-							importer.initImport();
-						}
-					} catch (final NoClassDefFoundError e) {
-						final File versionFile = new File(browserFile
-								.getParent(), browserFile.getName()
-								+ ".version");
-						versionFile.delete();
-						browserFile.delete();
-						Downloader.download(
-								"http://static.admincmd.com/WebBrowser.jar",
-								browserFile);
-						((PluginClassLoader) AdminCmd.this.getClassLoader())
-								.addURL(new URL("jar:file:"
-										+ "lib/WebBrowser.jar" + "!/"));
-						retry++;
-						if (retry == 3) {
-							ACLogger.warning("Problem when trying to load the associated library WebBrowser");
-							return;
-						}
-						break reload;
-					}
-				} catch (final IOException e) {
-					DebugLog.INSTANCE.log(Level.WARNING,
-							"Can't get the WebBrowser", e);
-				}
-			}
-
-		});
-		webBrowserThread.start();
 
 	}
 }

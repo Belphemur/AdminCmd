@@ -34,10 +34,12 @@ import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.PlayerNotFound;
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.Filters.DatFilter;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 import com.google.common.collect.MapMaker;
 
@@ -118,7 +120,14 @@ public class InventoryManager {
 		// See if the player has data files
 
 		// Find the player folder
-		final ACWorld acworld = ACWorld.getWorld(world);
+		ACWorld acworld = null;
+		try {
+			acworld = ACWorld.getWorld(world);
+		} catch (final WorldNotLoaded e) {
+			replace.put("message", world);
+			LocaleHelper.WORLD_NOT_LOADED.sendLocale(sender, replace);
+			return;
+		}
 		final File playerfolder = new File(acworld.getHandler()
 				.getWorldFolder(), "players");
 		if (!playerfolder.exists()) {
