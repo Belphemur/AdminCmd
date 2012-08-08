@@ -1061,18 +1061,12 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		} else {
 			pm.registerEvents(new ACOldChatListener(), this);
 		}
-		final Thread importThread = new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-					final IImport importer = new EssentialsImport(
-							ImportTools.getPluginsFolder(getDataFolder()));
-					importer.initImport();
-				}
+		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+			final IImport importer = new EssentialsImport(
+					ImportTools.getPluginsFolder(getDataFolder()));
+			importer.initImport();
+		}
 
-			}
-		});
-		importThread.start();
 	}
 }
