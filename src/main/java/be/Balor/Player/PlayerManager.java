@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
@@ -86,7 +87,16 @@ public class PlayerManager {
 			newPlayer.setPresentation(oldPlayer.getPresentation());
 			DebugLog.INSTANCE.info("Convert homes");
 			for (final String home : oldPlayer.getHomeList()) {
-				newPlayer.setHome(home, oldPlayer.getHome(home));
+				final Location homeLoc = oldPlayer.getHome(home);
+				if (homeLoc == null) {
+					ACLogger.warning("The home "
+							+ home
+							+ " of player "
+							+ name
+							+ " has not been converted because the world is not loaded.");
+				} else {
+					newPlayer.setHome(home, homeLoc);
+				}
 			}
 			DebugLog.INSTANCE.info("Convert Powers");
 			for (final Entry<Type, Object> entry : oldPlayer.getPowers()

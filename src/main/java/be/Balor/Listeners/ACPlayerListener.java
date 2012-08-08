@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
@@ -266,9 +267,11 @@ public class ACPlayerListener implements Listener {
 		final Player player = event.getPlayer();
 		final String spawn = ConfigEnum.GSPAWN.getString();
 		Location loc = null;
-		final String worldName = player.getWorld().getName();
+		final String worldName = player.getWorld().getName();try {
 		if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
-			loc = ACWorld.getWorld(worldName).getSpawn();
+			
+				loc = ACWorld.getWorld(worldName).getSpawn();
+			
 			event.setRespawnLocation(loc);
 		} else if (spawn.equalsIgnoreCase("home")) {
 			loc = ACPlayer.getPlayer(player).getHome(worldName);
@@ -289,7 +292,9 @@ public class ACPlayerListener implements Listener {
 		} else if (spawn.equalsIgnoreCase("group")) {
 			loc = ACHelper.getInstance().getGroupSpawnLocation(player);
 			event.setRespawnLocation(loc);
-		}
+		}} catch (WorldNotLoaded e) {
+
+			}
 	}
 
 	@EventHandler(ignoreCancelled = true)

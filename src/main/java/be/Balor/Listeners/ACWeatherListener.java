@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
 import be.Balor.World.ACWorld;
 
@@ -30,9 +31,12 @@ import be.Balor.World.ACWorld;
 public class ACWeatherListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onWeatherChange(final WeatherChangeEvent event) {
-		if (!ACWorld.getWorld(event.getWorld().getName())
-				.getInformation(Type.WEATHER_FROZEN.toString()).isNull()) {
-			event.setCancelled(true);
+		try {
+			if (!ACWorld.getWorld(event.getWorld().getName())
+					.getInformation(Type.WEATHER_FROZEN.toString()).isNull()) {
+				event.setCancelled(true);
+			}
+		} catch (final WorldNotLoaded e) {
 		}
 	}
 
