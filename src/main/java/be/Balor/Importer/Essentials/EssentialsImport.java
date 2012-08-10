@@ -40,7 +40,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class EssentialsImport implements IImport {
 
@@ -94,7 +94,7 @@ public class EssentialsImport implements IImport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Importer.IImport#importUserData()
 	 */
 	@Override
@@ -147,7 +147,7 @@ public class EssentialsImport implements IImport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Importer.IImport#importWarpPoints()
 	 */
 	@Override
@@ -232,7 +232,7 @@ public class EssentialsImport implements IImport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Importer.IImport#importSpawnPoints()
 	 */
 	@Override
@@ -262,7 +262,7 @@ public class EssentialsImport implements IImport {
 			ConfigurationSection spawn = null;
 			for (final String sName : keys) {
 				if (sName == null) {
-					ACLogger.info("[ERROR] Could not import jail "
+					ACLogger.info("[ERROR] Could not import spawn "
 							+ String.valueOf(sName));
 					continue;
 				}
@@ -274,10 +274,14 @@ public class EssentialsImport implements IImport {
 				try {
 					acSpawn = ImportTools.buildLocation(spawn, world);
 				} catch (final Exception e) {
-					ACLogger.info("[ERROR] Could not import jail: " + sName);
+					ACLogger.info("[ERROR] Could not import spawn: " + sName);
 					continue;
 				}
-				world.addWarp("jail:" + sName, acSpawn);
+				if (sName.equalsIgnoreCase("default")) {
+					world.setSpawn(acSpawn);
+				} else {
+					world.setGroupSpawn(sName, acSpawn);
+				}
 				counter++;
 			}
 		}
@@ -286,7 +290,7 @@ public class EssentialsImport implements IImport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Importer.IImport#importTextFiles()
 	 */
 	@Override
@@ -312,7 +316,7 @@ public class EssentialsImport implements IImport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see be.Balor.Importer.IImport#importOtherFiles()
 	 */
 	@Override
