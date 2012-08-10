@@ -62,8 +62,8 @@ public class SetGroupSpawn extends SpawnCommand {
 					groupName = groupName.toLowerCase();
 					if (PermissionManager.hasPerm(player, "admincmd.respawn."
 							+ groupName)) {
-						ACWorld.getWorld(player.getWorld().getName())
-								.setGroupSpawn(groupName, player.getLocation());
+						ACWorld.getWorld(player.getWorld()).setGroupSpawn(
+								groupName, player.getLocation());
 						replace.put("groupName", groupName);
 						LocaleHelper.GROUP_SPAWN_SET
 								.sendLocale(sender, replace);

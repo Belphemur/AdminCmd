@@ -40,8 +40,19 @@ public class FileWorldFactory implements IWorldFactory {
 		final World w = ACPluginManager.getServer().getWorld(worldName);
 		if (w == null) {
 			throw new WorldNotLoaded(worldName);
-		} else if (directory != null) {
-			return new FileWorld(w, directory);
+		}
+		return createWorld(w);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.IWorldFactory#createWorld(org.bukkit.World)
+	 */
+	@Override
+	public ACWorld createWorld(final World world) {
+		if (directory != null) {
+			return new FileWorld(world, directory);
 		} else {
 			return null;
 		}

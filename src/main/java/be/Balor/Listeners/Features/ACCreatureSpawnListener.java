@@ -45,7 +45,7 @@ public class ACCreatureSpawnListener implements Listener {
 		final World world = e.getWorld();
 		final ACWorld acWorld;
 		try {
-			acWorld = ACWorld.getWorld(world.getName());
+			acWorld = ACWorld.getWorld(world);
 		} catch (final WorldNotLoaded e2) {
 			return;
 		}

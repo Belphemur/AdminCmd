@@ -59,7 +59,18 @@ public class SQLWorldFactory implements IWorldFactory {
 		if (w == null) {
 			throw new WorldNotLoaded(worldName);
 		}
+		return createWorld(w);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.IWorldFactory#createWorld(org.bukkit.World)
+	 */
+	@Override
+	public synchronized ACWorld createWorld(final World world) {
 		ResultSet rs = null;
+		final String worldName = world.getName();
 		try {
 			getWorld.clearParameters();
 			getWorld.setString(1, worldName);
@@ -68,7 +79,7 @@ public class SQLWorldFactory implements IWorldFactory {
 				rs = getWorld.executeQuery();
 			}
 			if (rs.next()) {
-				return new SQLWorld(w, rs.getLong(1));
+				return new SQLWorld(world, rs.getLong(1));
 			} else {
 				rs.close();
 				insertWorld.clearParameters();
@@ -78,7 +89,7 @@ public class SQLWorldFactory implements IWorldFactory {
 				}
 				rs = insertWorld.getGeneratedKeys();
 				if (rs.next()) {
-					return new SQLWorld(w, rs.getLong(1));
+					return new SQLWorld(world, rs.getLong(1));
 				} else {
 					return null;
 				}

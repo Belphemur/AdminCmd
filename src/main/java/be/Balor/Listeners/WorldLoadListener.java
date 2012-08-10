@@ -14,18 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.World;
+package be.Balor.Listeners;
 
-import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldLoadEvent;
 
-import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.World.ACWorld;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public interface IWorldFactory {
-	ACWorld createWorld(String worldName) throws WorldNotLoaded;
+public class WorldLoadListener implements Listener {
 
-	ACWorld createWorld(World world);
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onWorldLoad(final WorldLoadEvent event) {
+		final ACWorld world = ACWorld.getWorld(event.getWorld());
+		world.setInformation("loaded", System.currentTimeMillis());
+	}
 }

@@ -81,7 +81,7 @@ public class GroupSpawn extends SpawnCommand {
 				return;
 			}
 			if (args.length < 1) {
-				final ACWorld w = ACWorld.getWorld(p.getWorld().getName());
+				final ACWorld w = ACWorld.getWorld(p.getWorld());
 				if (w == null) {
 					return;
 				}
@@ -156,6 +156,7 @@ public class GroupSpawn extends SpawnCommand {
 			}
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

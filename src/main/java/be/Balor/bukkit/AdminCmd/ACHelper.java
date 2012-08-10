@@ -702,8 +702,7 @@ public class ACHelper {
 	 */
 	public Location getGroupSpawnLocation(final Player player) {
 		Location loc = null;
-		final String worldName = player.getWorld().getName();
-		final ACWorld acWorld = ACWorld.getWorld(worldName);
+		final ACWorld acWorld = ACWorld.getWorld(player.getWorld());
 		if (groups.isEmpty()) {
 			loc = acWorld.getSpawn();
 			if (loc == null) {
@@ -852,7 +851,7 @@ public class ACHelper {
 			}
 		}
 		for (final World w : coreInstance.getServer().getWorlds()) {
-			final ACWorld world = ACWorld.getWorld(w.getName());
+			final ACWorld world = ACWorld.getWorld(w);
 			int task = world.getInformation(Type.TIME_FREEZED.toString())
 					.getInt(-1);
 			if (task != -1) {

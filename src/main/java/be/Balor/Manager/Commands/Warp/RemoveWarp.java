@@ -53,8 +53,7 @@ public class RemoveWarp extends WarpCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player p = (Player) sender;
-			ACWorld.getWorld(p.getWorld().getName()).removeWarp(
-					args.getString(0));
+			ACWorld.getWorld(p.getWorld()).removeWarp(args.getString(0));
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", args.getString(0));
 			Utils.sI18n(sender, "rmWarp", replace);

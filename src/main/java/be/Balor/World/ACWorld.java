@@ -78,6 +78,17 @@ public abstract class ACWorld {
 	}
 
 	/**
+	 * Get the wanted world
+	 * 
+	 * @param world
+	 *            loaded bukkit world
+	 * @return the ACWorld
+	 */
+	public static ACWorld getWorld(final World world) {
+		return WorldManager.getInstance().demandACWorld(world);
+	}
+
+	/**
 	 * Set the spawn location
 	 * 
 	 * @param loc

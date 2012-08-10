@@ -55,7 +55,7 @@ public class AddWarp extends WarpCommand {
 			final Player p = (Player) sender;
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			if (args.hasFlag('g')) {
-				ACWorld.getWorld(p.getWorld().getName()).addWarp(
+				ACWorld.getWorld(p.getWorld()).addWarp(
 						"spawn" + args.getString(0).toLowerCase(),
 						p.getLocation());
 				replace.put("name", args.getString(0));

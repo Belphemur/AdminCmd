@@ -67,7 +67,7 @@ public class WarpList extends WarpCommand {
 				}
 				wp = WorldManager.getInstance().getAllWarpList();
 			} else {
-				wp = ACWorld.getWorld(p.getWorld().getName()).getWarpList();
+				wp = ACWorld.getWorld(p.getWorld()).getWarpList();
 			}
 			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : "
 					+ ChatColor.WHITE + wp.size());
