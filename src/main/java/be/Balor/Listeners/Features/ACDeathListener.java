@@ -26,6 +26,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Skeleton;
@@ -77,7 +78,7 @@ public class ACDeathListener implements Listener {
 			} else {
 				switch (cause.getCause()) {
 				case CONTACT:
-					message = ACHelper.getInstance().getDeathMessage("cactus");
+					message = ACHelper.getInstance().getDeathMessage("contact");
 					break;
 				case DROWNING:
 					message = ACHelper.getInstance()
@@ -143,11 +144,16 @@ public class ACDeathListener implements Listener {
 		final Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
 		if (damager instanceof Wolf) {
 			return ACHelper.getInstance().getDeathMessage("wolf");
+		} else if (damager instanceof Player) {
+			return ACHelper.getInstance().getDeathMessage("player");
 		} else if (damager instanceof Skeleton) {
 			return ACHelper.getInstance().getDeathMessage("skeleton");
 		} else if (damager instanceof TNTPrimed) {
 			return ACHelper.getInstance().getDeathMessage("TNTPrimed");
 		} else if (damager instanceof Zombie) {
+			if (damager instanceof PigZombie) {
+				return ACHelper.getInstance().getDeathMessage("zombiepig");
+			}
 			return ACHelper.getInstance().getDeathMessage("zombie");
 		} else if (damager instanceof Projectile) {
 			if (damager instanceof Arrow) {
@@ -172,8 +178,8 @@ public class ACDeathListener implements Listener {
 				}
 			}
 		} else if (damager instanceof LivingEntity) {
-			return ACHelper.getInstance().getDeathMessage("mob")
-					+ damager.getType().getName();
+			return (ACHelper.getInstance().getDeathMessage("mob")
+					+ damager.getType().getName());
 		}
 		return ACHelper.getInstance().getDeathMessage("default");
 	}
