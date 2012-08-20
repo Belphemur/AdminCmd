@@ -121,8 +121,10 @@ public final class Utils {
 			.compile("\\b([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\b");
 	public static final Pattern NUMBERS = Pattern.compile("(\\d*[.|\\.]?\\d+)"
 			+ "|(\\d+)");
-	public static final Pattern TIMES = Pattern
-			.compile("month(s?)|day(s?)|hour(s?)|week(s?)");
+	public static final Pattern TIMES1 = Pattern
+			.compile("month(s?)|day(s?)|hour(s?)|week(s?)|year(s?)");
+	public static final Pattern TIMES2 = Pattern
+			.compile("m|h|d|w|y");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -1748,18 +1750,22 @@ public final class Utils {
 	 * 
 	 * @param toParse
 	 *            input to be parsed
-	 * @return a 2 sized String vector with the parsed time if successful, else
+	 * @return a 2 sized String array with the parsed time if successful, else
 	 *         an empty one.
 	 */
 	public static String[] tempStringParser(final String toParse) {
 		final String[] parsed = new String[2];
 		final Matcher numberMatcher = NUMBERS.matcher(toParse);
-		final Matcher timeMatcher = TIMES.matcher(toParse);
+		final Matcher time1Matcher = TIMES1.matcher(toParse);
+		final Matcher time2Matcher = TIMES1.matcher(toParse);
 		if (numberMatcher.find()) {
 			parsed[0] = numberMatcher.group();
 		}
-		if (timeMatcher.find()) {
-			parsed[1] = timeMatcher.group();
+		if (time1Matcher.find()) {
+			parsed[1] = time1Matcher.group();
+		}
+		if (time2Matcher.find()) {
+			parsed[1] = time1Matcher.group();
 		}
 		return parsed;
 	}
@@ -1796,19 +1802,19 @@ public final class Utils {
 						+ tmpTimeParsed[0], e);
 			}
 			final String timeMulti = tmpTimeParsed[1];
-			if (timeMulti.contains("month")) {
+			if (timeMulti.contains("month") || timeMulti.contains("m")) {
 				return tmpBan * 43200;
 			}
-			if (timeMulti.contains("week")) {
+			if (timeMulti.contains("week") || timeMulti.contains("w")) {
 				return tmpBan * 10080;
 			}
-			if (timeMulti.contains("day")) {
+			if (timeMulti.contains("day") || timeMulti.contains("d")) {
 				return tmpBan * 1440;
 			}
-			if (timeMulti.contains("hour")) {
+			if (timeMulti.contains("hour") || timeMulti.contains("h")) {
 				return tmpBan * 60;
 			}
-			if (timeMulti.contains("year")) {
+			if (timeMulti.contains("year") || timeMulti.contains("y")) {
 				return tmpBan * 525600;
 			}
 			throw new NotANumberException("Can't parse the time : "
