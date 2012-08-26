@@ -362,8 +362,8 @@
 		</dependency>
 		<dependency>
 			<groupId>in.mDev</groupId>
-			<artifactId>mChatSuite</artifactId>
-			<version>1.2.5-R3_21</version>
+			<artifactId>MChat</artifactId>
+			<version>1.3.1-R1.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

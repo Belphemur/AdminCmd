@@ -17,7 +17,6 @@
 package be.Balor.Manager.Permissions.Plugins;
 
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
-import in.mDev.MiracleM4n.mChatSuite.types.InfoType;
 
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -38,6 +37,7 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.miraclem4n.mchat.api.Reader;
+import com.miraclem4n.mchat.types.InfoType;
 
 /**
  * @author Lathanael (aka Philippe Leipold)

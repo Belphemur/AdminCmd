@@ -12,11 +12,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
+ * along with AdminCmd. If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
 package be.Balor.Tools;
 
-import in.mDev.MiracleM4n.mChatSuite.types.EventType;
 import info.somethingodd.OddItem.OddItem;
 import info.somethingodd.OddItem.OddItemBase;
 
@@ -93,6 +92,7 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 import com.google.common.base.Joiner;
 import com.miraclem4n.mchat.api.Reader;
+import com.miraclem4n.mchat.types.EventType;
 
 import de.diddiz.LogBlock.Consumer;
 
