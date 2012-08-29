@@ -1757,14 +1757,13 @@ public final class Utils {
 		final String[] parsed = new String[2];
 		final Matcher numberMatcher = NUMBERS.matcher(toParse);
 		final Matcher time1Matcher = TIMES1.matcher(toParse);
-		final Matcher time2Matcher = TIMES1.matcher(toParse);
+		final Matcher time2Matcher = TIMES2.matcher(toParse);
 		if (numberMatcher.find()) {
 			parsed[0] = numberMatcher.group();
 		}
 		if (time1Matcher.find()) {
 			parsed[1] = time1Matcher.group();
-		}
-		if (time2Matcher.find()) {
+		} else if (time2Matcher.find()) {
 			parsed[1] = time1Matcher.group();
 		}
 		return parsed;
