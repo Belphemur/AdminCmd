@@ -45,6 +45,7 @@ import com.google.common.io.Files;
 public class FileWorld extends ACWorld {
 	private final ExtendedConfiguration datas;
 	private final ConfigurationSection warps;
+	private final ConfigurationSection permWarps;
 	private final ExConfigurationSection informations;
 	private final ExConfigurationSection mobLimits;
 	private final ExConfigurationSection spawns;
@@ -62,6 +63,7 @@ public class FileWorld extends ACWorld {
 		datas = ExtendedConfiguration.loadConfiguration(wFile);
 
 		warps = datas.addSection("warps");
+		permWarps = datas.addSection("permWarps");
 		informations = datas.addSection("informations");
 		mobLimits = informations.addSection("mobLimits");
 		spawns = datas.addSection("spawns");
@@ -153,6 +155,43 @@ public class FileWorld extends ACWorld {
 		writeFile();
 	}
 
+	@Override
+	public void addWarp(String name, Location loc, String perm) {
+		permWarps.set(name, new PermLocation(loc, perm));
+		writeFile();		
+	}
+
+	@Override
+	public Warp getPermWarp(String name) throws WorldNotLoaded,
+			IllegalArgumentException {
+		if (name == null || (name != null && name.isEmpty())) {
+			throw new IllegalArgumentException("Name can't be null or Empty");
+		}
+		Object warp = permWarps.get(name);
+		String warpName = name;
+		if (warp == null) {
+			warpName = Str.matchString(permWarps.getKeys(false), name);
+			if (warpName == null) {
+				return null;
+			}
+			warp = permWarps.get(warpName);
+		}
+		final PermLocation pWarp = (PermLocation) warp;
+		return new Warp(warpName, pWarp.getLocation(), pWarp.getPerm());
+	}
+	
+
+	@Override
+	public void removePermWarp(String name) {
+		permWarps.set(name, null);
+		writeFile();
+	}
+
+	@Override
+	public Set<String> getPermWarpList() {
+		return permWarps.getKeys(false);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -347,5 +386,4 @@ public class FileWorld extends ACWorld {
 		}
 		return result;
 	}
-
 }

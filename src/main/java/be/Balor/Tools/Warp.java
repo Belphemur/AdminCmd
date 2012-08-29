@@ -25,6 +25,7 @@ import org.bukkit.Location;
 public class Warp {
 	public final String name;
 	public final Location loc;
+	public final String permission;
 
 	/**
 	 * @param name
@@ -33,6 +34,18 @@ public class Warp {
 	public Warp(final String name, final Location loc) {
 		this.name = name;
 		this.loc = loc;
+		this.permission = "";
+	}
+	
+	/**
+	 * @param name
+	 * @param loc
+	 * @param permission
+	 */
+	public Warp(final String name, final Location loc, final String permission) {
+		this.name = name;
+		this.loc = loc;
+		this.permission = permission;
 	}
 
 }

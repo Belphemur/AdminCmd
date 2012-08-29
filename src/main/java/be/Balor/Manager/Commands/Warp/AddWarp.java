@@ -61,6 +61,11 @@ public class AddWarp extends WarpCommand {
 				replace.put("name", args.getString(0));
 				Utils.sI18n(sender, "addSpawnWarp", replace);
 				return;
+			} else if (args.getValueFlag('p') != null) {
+				final String perm = args.getValueFlag('p');
+				ACWorld.getWorld(p.getWorld().getName()).addWarp(args.getString(0),
+						p.getLocation());
+				return;
 			}
 			ACWorld.getWorld(p.getWorld().getName()).addWarp(args.getString(0),
 					p.getLocation());
