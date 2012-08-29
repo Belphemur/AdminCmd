@@ -103,24 +103,24 @@ public class BanPlayer extends PlayerCommand {
 			}
 			if (message.isEmpty()) {
 				message += " You have been banned ";
-			}
-			if (!Utils.isPlayer(sender, false)) {
-				message += "by Server Admin";
-			} else {
-				message += "by "
+				if (!Utils.isPlayer(sender, false)) {
+					message += "by Server Admin";
+				} else {
+					message += "by "
 						+ ChatColor.stripColor(Utils
 								.getPlayerName((Player) sender));
+				}
 			}
 		} else {
 			if (message.isEmpty()) {
 				message = "You have been banned ";
-			}
-			if (!Utils.isPlayer(sender, false)) {
-				message += "by Server Admin";
-			} else {
-				message += "by "
+				if (!Utils.isPlayer(sender, false)) {
+					message += "by Server Admin";
+				} else {
+					message += "by "
 						+ ChatColor.stripColor(Utils
 								.getPlayerName((Player) sender));
+				}
 			}
 		}
 		message = message.trim();
