@@ -562,6 +562,10 @@ public class FileManager implements DataManager {
 		if (ConfigEnum.IMPORT_BAN_TXT.getBoolean()) {
 			importBannedPlayerTXT(result);
 			ConfigEnum.IMPORT_BAN_TXT.setValue(false);
+			try {
+				ConfigEnum.save();
+			} catch (IOException e) {
+			}
 		}
 		return result;
 	}
