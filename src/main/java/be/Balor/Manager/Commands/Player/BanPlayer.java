@@ -84,12 +84,6 @@ public class BanPlayer extends PlayerCommand {
 				message = LocaleManager.getInstance().get("kickMessages",
 						args.getValueFlag('m'), "player", banPlayerString);
 			}
-			if (message == null || (message != null && message.isEmpty())) {
-				message = "";
-				for (int i = 1; i < args.length - 1; i++) {
-					message += args.getString(i) + " ";
-				}
-			}
 			try {
 				final int tmpIntTime = Utils.timeParser(args
 						.getString(args.length - 1));
@@ -100,6 +94,18 @@ public class BanPlayer extends PlayerCommand {
 				Utils.sI18n(sender, "NaN", "number",
 						args.getString(args.length - 1));
 				return;
+			}
+			if (message == null || (message != null && message.isEmpty())) {
+				message = "";
+				if (tmpBan == null) {
+					for (int i = 1; i < args.length; i++) {
+						message += args.getString(i) + " ";
+					}
+				} else { 
+					for (int i = 1; i < args.length - 1; i++) {
+						message += args.getString(i) + " ";
+					}
+				}
 			}
 			if (message.isEmpty()) {
 				message += " You have been banned ";
