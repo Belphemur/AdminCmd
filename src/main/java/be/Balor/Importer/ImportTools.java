@@ -43,7 +43,7 @@ import be.Balor.World.ACWorld;
 public class ImportTools {
 
 	public static String getPluginsFolder(final File file) {
-		final String path = file.getPath();
+		final String path = file.getAbsolutePath();
 		return path.substring(0, path.lastIndexOf(File.separator));
 	}
 
