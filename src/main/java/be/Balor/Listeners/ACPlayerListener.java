@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -267,32 +268,43 @@ public class ACPlayerListener implements Listener {
 		final Player player = event.getPlayer();
 		final String spawn = ConfigEnum.GSPAWN.getString();
 		Location loc = null;
-		final String worldName = player.getWorld().getName();try {
-		if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
-			
-				loc = ACWorld.getWorld(worldName).getSpawn();
-			
-			event.setRespawnLocation(loc);
-		} else if (spawn.equalsIgnoreCase("home")) {
-			loc = ACPlayer.getPlayer(player).getHome(worldName);
-			if (loc == null) {
-				loc = ACWorld.getWorld(worldName).getSpawn();
+		String worldName = player.getWorld().getName();
+		final Environment worldEnv = player.getWorld().getEnvironment();
+		if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {
+			if (worldEnv.equals(Environment.NETHER) || worldEnv.equals(Environment.THE_END)) {
+				worldName = ACWorld.getWorld(ConfigEnum.RESPAWN_WORLD.getString()).getName();
+				if (worldName.isEmpty() || worldName == null) {
+					worldName = player.getWorld().getName();
+				}
 			}
-			event.setRespawnLocation(loc);
-		} else if (spawn.equalsIgnoreCase("bed")) {
-			try {
-				loc = player.getBedSpawnLocation();
+		}	
+		try {
+			if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
+				
+					loc = ACWorld.getWorld(worldName).getSpawn();
+				
+				event.setRespawnLocation(loc);
+			} else if (spawn.equalsIgnoreCase("home")) {
+				loc = ACPlayer.getPlayer(player).getHome(worldName);
 				if (loc == null) {
 					loc = ACWorld.getWorld(worldName).getSpawn();
 				}
-			} catch (final NullPointerException e) {
-				loc = ACWorld.getWorld(worldName).getSpawn();
+				event.setRespawnLocation(loc);
+			} else if (spawn.equalsIgnoreCase("bed")) {
+				try {
+					loc = player.getBedSpawnLocation();
+					if (loc == null) {
+						loc = ACWorld.getWorld(worldName).getSpawn();
+					}
+				} catch (final NullPointerException e) {
+					loc = ACWorld.getWorld(worldName).getSpawn();
+				}
+				event.setRespawnLocation(loc);
+			} else if (spawn.equalsIgnoreCase("group")) {
+				loc = ACHelper.getInstance().getGroupSpawnLocation(player);
+				event.setRespawnLocation(loc);
 			}
-			event.setRespawnLocation(loc);
-		} else if (spawn.equalsIgnoreCase("group")) {
-			loc = ACHelper.getInstance().getGroupSpawnLocation(player);
-			event.setRespawnLocation(loc);
-		}} catch (WorldNotLoaded e) {
+		} catch (WorldNotLoaded e) {
 
 			}
 	}

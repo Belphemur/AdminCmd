@@ -157,7 +157,9 @@ public enum ConfigEnum {
 	MYSQL_HOST("mysql.host", "localhost", "Host to be set if mysql used."),
 	MYSQL_USER("mysql.user", "root", "Username to connect to mysql database"),
 	MYSQL_PASS("mysql.password", "toor", "Password to connect to mysql database"),
-	MYSQL_DB("mysql.database", "minecraft", "Database name");
+	MYSQL_DB("mysql.database", "minecraft", "Database name"),
+	RESPAWN_WORLD("respawn.world","world","The worlds' name where a player respawns after death."),
+	RESPAWN_BEHAVIOR("respawn.inNormalWorld","true","If set to false a player will respawn in the same world he died in.");
 
 	private final String confVal;
 	private final Object defaultVal;
