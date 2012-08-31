@@ -153,7 +153,7 @@ public abstract class ACWorld {
 	 * @param perm
 	 * ...........permission needed to use this warp
 	 */
-	public abstract void addWarp(String name, Location loc, String perm);
+	public abstract void addPermWarp(String name, Location loc, String perm);
 
 	/**
 	 * Get the location of the Warp

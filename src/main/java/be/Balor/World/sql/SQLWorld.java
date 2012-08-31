@@ -303,7 +303,7 @@ public class SQLWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#addWarp(java.lang.String, org.bukkit.Location, java.lang.String)
 	 */
 	@Override
-	public void addWarp(String name, Location loc, String perm) {
+	public void addPermWarp(String name, Location loc, String perm) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -338,8 +338,7 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public Set<String> getPermWarpList() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.unmodifiableSet(permWarps.keySet());
 	}
 	
 	/*

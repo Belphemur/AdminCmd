@@ -156,7 +156,7 @@ public class FileWorld extends ACWorld {
 	}
 
 	@Override
-	public void addWarp(String name, Location loc, String perm) {
+	public void addPermWarp(String name, Location loc, String perm) {
 		permWarps.set(name, new PermLocation(loc, perm));
 		writeFile();		
 	}
