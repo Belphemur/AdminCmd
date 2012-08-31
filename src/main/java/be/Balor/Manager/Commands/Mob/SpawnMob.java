@@ -105,7 +105,13 @@ public class SpawnMob extends MobCommand {
 			EntityType ct = null;
 			if (name.contains(":")) {
 				final String[] creatures = name.split(":");
+				// TODO: Remove this if-case as soon as bukkit fixes the spelling error
+				if (creatures[0].equalsIgnoreCase("Ocelot"))
+					creatures[0] = "Ozelot";
 				ct = EntityType.fromName(creatures[0]);
+				// TODO: Remove this if-case as soon as bukkit fixes the spelling error
+				if (creatures[1].equalsIgnoreCase("Ocelot"))
+					creatures[1] = "Ozelot";
 				final EntityType ct2 = EntityType.fromName(creatures[1]);
 				if (ct == null) {
 					replace.put("mob", creatures[0]);
