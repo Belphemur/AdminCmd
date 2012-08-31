@@ -88,6 +88,10 @@ public class BlockEgg extends RadiusEgg<BlockChangeInfo> {
 		final Location loc = event.getEgg().getLocation();
 		final SynchronizedStack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
 		final World w = loc.getWorld();
+		if (!Material.getMaterial(value.getBlockTypeId()).isBlock()) {
+			LocaleHelper.NOT_A_BLOCK.sendLocale(event.getPlayer());
+			return;
+		}
 		if (blockTimeOut() == 0) {
 			for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++) {
 				for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ()

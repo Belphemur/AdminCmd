@@ -231,7 +231,8 @@ public enum LocaleHelper {
 			ChatColor.AQUA + "You'll be teleported to your location in "
 					+ ChatColor.GREEN + "%sec seconds"),
 	AFK_KICK_BCAST("afkKickBroadcast", ChatColor.AQUA + "%player" + ChatColor.GOLD + " has been" +
-			" kicked out of the game due to being AFK too long.");
+			" kicked out of the game due to being AFK too long."),
+	NOT_A_BLOCK("notABlock", ChatColor.RED + "You did not enter a valid block id!");
 
 	private final String key;
 	private final String locale;
