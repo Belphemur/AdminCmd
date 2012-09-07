@@ -97,7 +97,7 @@ public class TpToWarp extends WarpCommand {
 								&& !warpPoint.permission.isEmpty()
 								&& !warpPoint.permission.equalsIgnoreCase("")
 								&& !PermissionManager.hasPerm(sender, 
-										warpPoint.permission, false)) {
+										permNode + "." + warpPoint.permission, false)) {
 							replace.put("point", warp);
 							LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
 							return;
@@ -125,7 +125,7 @@ public class TpToWarp extends WarpCommand {
 								&& !warpPoint.permission.isEmpty()
 								&& !warpPoint.permission.equalsIgnoreCase("")
 								&& !PermissionManager.hasPerm(sender, 
-										warpPoint.permission, false)) {
+										permNode + "." + warpPoint.permission, false)) {
 							replace.put("point", args.getString(0));
 							LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
 							return;
