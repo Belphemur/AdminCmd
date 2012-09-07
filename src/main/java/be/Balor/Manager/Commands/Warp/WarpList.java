@@ -47,6 +47,7 @@ public class WarpList extends WarpCommand {
 		cmdName = "bal_warplist";
 	}
 
+	// TODO: Remove PermWarps a player is not allowed to warp to from the list
 	/*
 	 * (non-Javadoc)
 	 * 

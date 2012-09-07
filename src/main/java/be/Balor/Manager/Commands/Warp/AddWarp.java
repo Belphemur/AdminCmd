@@ -65,6 +65,8 @@ public class AddWarp extends WarpCommand {
 				final String perm = args.getValueFlag('p');
 				ACWorld.getWorld(p.getWorld().getName()).addPermWarp(args.getString(0),
 						p.getLocation(), perm);
+				replace.put("name", args.getString(0));
+				Utils.sI18n(sender, "addWarp", replace);
 				return;
 			}
 			ACWorld.getWorld(p.getWorld().getName()).addWarp(args.getString(0),

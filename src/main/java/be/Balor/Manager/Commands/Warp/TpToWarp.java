@@ -36,6 +36,7 @@ import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @authors Balor, Lathanael
@@ -92,6 +93,15 @@ public class TpToWarp extends WarpCommand {
 							Utils.sI18n(sender, "errorWarp", replace);
 							return;
 						}
+						if (warpPoint.permission != null
+								&& !warpPoint.permission.isEmpty()
+								&& !warpPoint.permission.equalsIgnoreCase("")
+								&& !PermissionManager.hasPerm(sender, 
+										warpPoint.permission, false)) {
+							replace.put("point", warp);
+							LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
+							return;
+						}
 						loc = warpPoint.loc;
 						replace.put("name", acWorld.getName() + ":"
 								+ warpPoint.name);
@@ -109,6 +119,15 @@ public class TpToWarp extends WarpCommand {
 						if (warpPoint == null) {
 							replace.put("name", args.getString(0));
 							Utils.sI18n(sender, "errorWarp", replace);
+							return;
+						}
+						if (warpPoint.permission != null
+								&& !warpPoint.permission.isEmpty()
+								&& !warpPoint.permission.equalsIgnoreCase("")
+								&& !PermissionManager.hasPerm(sender, 
+										warpPoint.permission, false)) {
+							replace.put("point", args.getString(0));
+							LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
 							return;
 						}
 						loc = warpPoint.loc;

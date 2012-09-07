@@ -170,32 +170,11 @@ public abstract class ACWorld {
 			IllegalArgumentException;
 
 	/**
-	 * Get the location of the permWarp
-	 *  
-	 * @param name
-	 *            name of the Warp
-	 * @return location of the Warp
-	 * @throws WorldNotLoaded
-	 *             if the location's world is not loaded
-	 * @throws IllegalArgumentException
-	 *             if the name is null or empty
-	 */
-	public abstract Warp getPermWarp(String name) throws WorldNotLoaded,
-		IllegalArgumentException;
-
-	/**
 	 * List of the warps' name
 	 * 
 	 * @return a List containing the name of each warp of the World
 	 */
 	public abstract Set<String> getWarpList();
-
-	/**
-	 * List of the permWarps' name
-	 * 
-	 * @return a List containing the name of each permWarp of the World
-	 */
-	public abstract Set<String> getPermWarpList();
 	
 	/**
 	 * Remove the warp
@@ -204,14 +183,6 @@ public abstract class ACWorld {
 	 *            name of the warp to remove
 	 */
 	public abstract void removeWarp(String name);
-
-	/**
-	 * Remove the permWarp
-	 * 
-	 * @param name
-	 *            name of the warp to remove
-	 */
-	public abstract void removePermWarp(String name);
 
 	/**
 	 * Set player information

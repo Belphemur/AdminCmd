@@ -53,8 +53,6 @@ public class SQLWorld extends ACWorld {
 			.synchronizedMap(new HashMap<String, Location>());
 	private final Map<String, Warp> warps = Collections
 			.synchronizedMap(new HashMap<String, Warp>());
-	private final Map<String, Warp> permWarps = Collections
-			.synchronizedMap(new HashMap<String, Warp>());
 	private static PreparedStatement SPAWN, INSERT_INFO, DELETE_INFO,
 			INSERT_WARP, DELETE_WARP;
 	private static PreparedStatement GET_INFOS, GET_SPAWNS, GET_WARPS;
@@ -308,39 +306,6 @@ public class SQLWorld extends ACWorld {
 		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#getPermWarp(java.lang.String)
-	 */
-	@Override
-	public Warp getPermWarp(String name) throws WorldNotLoaded,
-			IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#removePermWarp(java.lang.String)
-	 */
-	@Override
-	public void removePermWarp(String name) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.World.ACWorld#getPermWarpList()
-	 */
-	@Override
-	public Set<String> getPermWarpList() {
-		return Collections.unmodifiableSet(permWarps.keySet());
-	}
-	
 	/*
 	 * (Non javadoc)
 	 * 

@@ -230,9 +230,11 @@ public enum LocaleHelper {
 			"tpSoonMsg",
 			ChatColor.AQUA + "You'll be teleported to your location in "
 					+ ChatColor.GREEN + "%sec seconds"),
-	AFK_KICK_BCAST("afkKickBroadcast", ChatColor.AQUA + "%player" + ChatColor.GOLD + " has been" +
-			" kicked out of the game due to being AFK too long."),
-	NOT_A_BLOCK("notABlock", ChatColor.RED + "You did not enter a valid block id!");
+	AFK_KICK_BCAST("afkKickBroadcast", ChatColor.AQUA + "%player" + ChatColor.GOLD 
+			+ " has been kicked out of the game due to being AFK too long."),
+	NOT_A_BLOCK("notABlock", ChatColor.RED + "You did not enter a valid block id!"),
+	WARP_NO_PERM("noWarpPerm", ChatColor.RED + "You do not have the permission to "
+			+ "teleport to the following warp point: " + ChatColor.GOLD + "%point");
 
 	private final String key;
 	private final String locale;
