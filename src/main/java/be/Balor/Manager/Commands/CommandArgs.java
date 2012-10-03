@@ -109,7 +109,7 @@ public class CommandArgs implements Iterable<String> {
 			if (arg.charAt(0) == '-' && arg.length() > 1
 					&& arg.matches("^-[a-zA-Z]+$")) {
 				for (int i = 1; i < arg.length(); ++i) {
-					final char flagName = arg.charAt(i);
+					final char flagName = Character.toLowerCase(arg.charAt(i));
 					if (this.valueFlags.containsKey(flagName)) {
 						continue;
 					}
@@ -195,7 +195,8 @@ public class CommandArgs implements Iterable<String> {
 	 * @return true if found.
 	 */
 	public boolean hasFlag(final char ch) {
-		return booleanFlags.contains(ch) || valueFlags.containsKey(ch);
+		return booleanFlags.contains(Character.toLowerCase(ch))
+				|| valueFlags.containsKey(Character.toLowerCase(ch));
 	}
 
 	/**
@@ -207,7 +208,7 @@ public class CommandArgs implements Iterable<String> {
 	 * @return null if not found else the value of the flag
 	 */
 	public String getValueFlag(final char flag) {
-		final String result = valueFlags.get(flag);
+		final String result = valueFlags.get(Character.toLowerCase(flag));
 		if (result == null) {
 			return null;
 		}
