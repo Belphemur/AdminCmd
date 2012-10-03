@@ -124,6 +124,9 @@ public class ACDeathListener implements Listener {
 				case BLOCK_EXPLOSION:
 					message = ACHelper.getInstance().getDeathMessage("tnt");
 					break;
+				case CUSTOM:
+					message = ACHelper.getInstance().getDeathMessage("custom");
+					break;
 				default:
 					message = ACHelper.getInstance().getDeathMessage("default");
 					break;
