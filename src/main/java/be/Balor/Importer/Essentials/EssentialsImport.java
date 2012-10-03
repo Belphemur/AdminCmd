@@ -36,6 +36,7 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
@@ -300,13 +301,13 @@ public class EssentialsImport implements IImport {
 		for (final File f : files) {
 			if (f.getName().contains("rules")) {
 				ImportTools.copyTextFile(
-						f,
-						FileManager.getInstance().getFile(importPath,
+						f, FileManager.getInstance().getFile(ACHelper.getInstance()
+								.getCoreInstance().getDataFolder().getAbsolutePath(),
 								"rules.txt"));
 			} else if (f.getName().contains("motd")) {
 				ImportTools.copyTextFile(
-						f,
-						FileManager.getInstance().getFile(importPath,
+						f, FileManager.getInstance().getFile(ACHelper.getInstance()
+								.getCoreInstance().getDataFolder().getAbsolutePath(),
 								"motd.txt"));
 			} else {
 				continue;
