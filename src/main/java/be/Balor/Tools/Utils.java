@@ -1195,7 +1195,6 @@ public final class Utils {
 						final String newStateMsg = newStatePlayerLocale
 								+ LocaleHelper.KILLED.getLocale();
 						sender.sendMessage(newStateMsg);
-
 					}
 				}
 				if (logBlock != null) {

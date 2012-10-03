@@ -191,7 +191,7 @@ public enum LocaleHelper {
 			ChatColor.GOLD + "You have been "),
 	NEW_STATE_PLAYER(
 			"pNewState",
-			ChatColor.GOLD + "%player have been "),
+			ChatColor.GOLD + "%player has been "),
 	SUICIDE(
 			"suicide",
 			ChatColor.RED + "You commited suicide."),
