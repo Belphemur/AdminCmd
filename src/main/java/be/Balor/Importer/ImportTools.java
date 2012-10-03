@@ -35,6 +35,7 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.Unicode.UnicodeReader;
 import be.Balor.Tools.Files.Unicode.UnicodeUtil;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -90,15 +91,16 @@ public class ImportTools {
 				ACPlayer.getPlayer(playerName).setHome(name, homeLoc);
 			}
 		} else {
-			ACLogger.info("[ERROR] Could not import homes of user: "
-					+ playerName);
+			if (ConfigEnum.VERBOSE.getBoolean()) {
+				ACLogger.info("User " + playerName + " did not have any homes.");
+			}
 			return false;
 		}
-		return true;
+		return false;
 	}
 
 	public static Location buildLocation(final ConfigurationSection section,
-			final ACWorld world) throws Exception {
+			final ACWorld world) {
 		Location loc = null;
 		assert section != null && world != null;
 		double x = 0D, y = 0D, z = 0D;
