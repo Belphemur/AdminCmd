@@ -39,6 +39,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
+import be.Balor.Tools.Help.String.Str;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -299,7 +300,15 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getHome(final String home) {
-		return homes.get(home);
+		Location loc = homes.get(home);
+		if (loc == null) {
+			final String homeName = Str.matchString(getHomeList(), name);
+			if (homeName == null) {
+				return null;
+			}
+			loc = homes.get(homeName);
+		}
+		return loc; 
 	}
 
 	/*
