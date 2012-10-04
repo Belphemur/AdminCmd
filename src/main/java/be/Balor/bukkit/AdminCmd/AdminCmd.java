@@ -302,6 +302,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACPlayerListener(), this);
 		pm.registerEvents(new ACWeatherListener(), this);
 		checkModulableFeatures(pm);
+		System.gc();
 	}
 
 	@Override
