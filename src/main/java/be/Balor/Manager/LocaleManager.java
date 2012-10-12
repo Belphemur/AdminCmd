@@ -262,7 +262,7 @@ public class LocaleManager {
 				final String replaceValue = values.get(ResultString);
 				if (replaceValue != null) {
 					try {
-						result = regexMatcher.replaceFirst(replaceValue);
+						result = regexMatcher.replaceFirst(Matcher.quoteReplacement(replaceValue));
 					} catch (final StringIndexOutOfBoundsException e) {
 						result = regexMatcher.replaceFirst(replaceValue
 								.replaceAll("\\W", ""));
