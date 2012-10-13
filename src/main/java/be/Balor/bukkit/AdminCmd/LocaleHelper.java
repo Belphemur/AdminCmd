@@ -36,7 +36,7 @@ public enum LocaleHelper {
 					+ ChatColor.RED + "%data"),
 	EGG_PARAM(
 			"eggCmdParam",
-			ChatColor.RED + "The parameter " + ChatColor.GOLD + "-E"
+			ChatColor.RED + "The parameter " + ChatColor.GOLD + "-t"
 					+ ChatColor.RED + " is needed to choose the egg."),
 	EGG_PARAM_BLOCK(
 			"eggBlockParam",
