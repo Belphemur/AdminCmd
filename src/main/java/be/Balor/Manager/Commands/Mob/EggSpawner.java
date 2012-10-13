@@ -71,7 +71,7 @@ public class EggSpawner extends MobCommand {
 		try {
 			egg = EggType.createEggType(player, args);
 		} catch (final ParameterMissingException e) {
-			if (e.getParam() == 'E') {
+			if (e.getParam() == 't') {
 				final String list = Joiner
 						.on(", ")
 						.skipNulls()
@@ -94,7 +94,7 @@ public class EggSpawner extends MobCommand {
 						e.getMessage());
 			} else if (e.getType().equals(ExceptionType.CUSTOM)) {
 				final Map<String, String> replace = new HashMap<String, String>();
-				replace.put("egg", args.getValueFlag('E'));
+				replace.put("egg", args.getValueFlag('t'));
 				replace.put("error", e.getMessage());
 				Utils.sI18n(sender, "eggCustomError", replace);
 			} else {
@@ -106,7 +106,7 @@ public class EggSpawner extends MobCommand {
 			sender.sendMessage(e.getMessage());
 			return;
 		} catch (final NullPointerException e) {
-			if (args.hasFlag('E')) {
+			if (args.hasFlag('t')) {
 				final String list = Joiner
 						.on(", ")
 						.skipNulls()
