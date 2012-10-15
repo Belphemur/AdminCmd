@@ -608,6 +608,14 @@ public class SQLPlayer extends ACPlayer {
 			}
 			powers.remove(power);
 			found = true;
+			if (power != Type.FLY) {
+				continue;
+			}
+			if (handler == null) {
+				continue;
+			}
+			handler.setFlying(false);
+			handler.setAllowFlight(false);
 		}
 		if (found) {
 			synchronized (DELETE_SUPERPOWERS) {
