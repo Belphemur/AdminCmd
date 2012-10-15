@@ -65,7 +65,7 @@ public class KickAllPlayers extends PlayerCommand {
 		}
 		message = message.trim();
 		for (final Player toKick : Utils.getOnlinePlayers()) {
-			if (!toKick.getName().equals(playerName)) {
+			if (!toKick.getName().equals(((Player) sender).getName())) {
 				toKick.kickPlayer(message);
 			}
 		}
