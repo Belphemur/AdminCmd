@@ -71,7 +71,7 @@ public class EggSpawner extends MobCommand {
 		try {
 			egg = EggType.createEggType(player, args);
 		} catch (final ParameterMissingException e) {
-			if (e.getParam() == 't') {
+			if (e.getParam() == 'e') {
 				final String list = Joiner
 						.on(", ")
 						.skipNulls()
@@ -106,7 +106,7 @@ public class EggSpawner extends MobCommand {
 			sender.sendMessage(e.getMessage());
 			return;
 		} catch (final NullPointerException e) {
-			if (args.hasFlag('t')) {
+			if (args.hasFlag('e')) {
 				final String list = Joiner
 						.on(", ")
 						.skipNulls()

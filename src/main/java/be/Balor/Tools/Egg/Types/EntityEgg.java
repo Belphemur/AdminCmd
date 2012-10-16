@@ -74,9 +74,9 @@ public class EntityEgg extends EggType<EntityInEgg> {
 	@Override
 	protected void processArguments(final Player sender, final CommandArgs args)
 			throws ProcessingArgsException {
-		final String entityParam = args.getValueFlag('e');
+		final String entityParam = args.getValueFlag('t');
 		if (entityParam == null) {
-			throw new ParameterMissingException('e',
+			throw new ParameterMissingException('t',
 					LocaleHelper.EGG_PARAM_ENTITY.getLocale());
 		}
 		final String valFlag = args.getValueFlag('n');
