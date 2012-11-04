@@ -55,27 +55,16 @@ public class Experience extends PlayerCommand {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		boolean self = false;
-		if (0 < args.length && args.length < 2) {
-			if (Utils.isPlayer(sender, true)) {
-				target = (Player) sender;
-				self = true;
-				if (!args.hasFlag('t')) {
-					try {
-						amount = args.getFloat(0);
-					} catch (final NumberFormatException e) {
-						replace.put("number", args.getString(0));
-						Utils.I18n("NaN", replace);
-						return;
-					}
-				}
-			} else {
-				return;
-			}
-		} else if (args.length >= 2) {
-			target = Utils.getPlayer(args.getString(0));
+		if (args.hasFlag('p')) {
+				target = Utils.getPlayer(args.getValueFlag('p'));
+		} else {
+			target = (Player) sender;
+			self = true;
+		}
+		if (0 < args.length) {
 			if (!args.hasFlag('t')) {
 				try {
-					amount = args.getFloat(1);
+					amount = args.getFloat(0);
 				} catch (final NumberFormatException e) {
 					replace.put("number", args.getString(0));
 					Utils.I18n("NaN", replace);
@@ -135,7 +124,7 @@ public class Experience extends PlayerCommand {
 				sender.sendMessage(Utils.I18n("expAddedTarget", replace));
 				target.sendMessage(Utils.I18n("expAdded", replace));
 			}
-		} else if (args.hasFlag('p')) {
+		} else if (args.hasFlag('b')) {
 			final float exp = (amount > 1 ? 1 : amount);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
