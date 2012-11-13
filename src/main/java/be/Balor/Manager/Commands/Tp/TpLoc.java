@@ -67,9 +67,20 @@ public class TpLoc extends TeleportCommand {
 			Utils.sI18n(sender, "errorLocation");
 			return;
 		}
-		ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
+		if (args.length <= 3){
+			ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
 				target.getWorld(), x, y, z)));
-
+		} else {
+			final float rot;
+			try {
+				rot = args.getFloat(3);
+			} catch (final Exception e) {
+				Utils.sI18n(sender, "errorLocation");
+				return;
+			}
+			ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(
+					target.getWorld(), x, y, z, rot, 0F)));
+		}
 	}
 
 	/*
