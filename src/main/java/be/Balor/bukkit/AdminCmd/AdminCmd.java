@@ -750,9 +750,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("muteDisabledTarget", ChatColor.DARK_GREEN
 				+ "%player is unmuted.");
 		Utils.addLocale("muteEnabled", ChatColor.DARK_RED
-				+ "You can't chat anymore.");
+				+ "You can't chat anymore. Reason: %reason");
 		Utils.addLocale("tmpMuteEnabled", ChatColor.DARK_RED
-				+ "You can't chat anymore for %minutes minutes.");
+				+ "You can't chat anymore for %minutes minutes. Reason: %reason");
 		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED
 				+ "%player is muted.");
 		Utils.addLocale(
@@ -766,9 +766,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		Utils.addLocale("commandMuteDisabledTarget", ChatColor.DARK_GREEN
 				+ "%player can use commands again.");
 		Utils.addLocale("commandMuteEnabled", ChatColor.DARK_RED
-				+ "You can't use commands anymore.");
+				+ "You can't use commands anymore. Reason: %reason");
 		Utils.addLocale("commandTmpMuteEnabled", ChatColor.DARK_RED
-				+ "You can't use commands anymore for %minutes minutes.");
+				+ "You can't use commands anymore for %minutes minutes. Reason: %reason");
 		Utils.addLocale("commandMuteEnabledTarget", ChatColor.DARK_RED
 				+ "%player is now unable to use commands.");
 		Utils.addLocale(

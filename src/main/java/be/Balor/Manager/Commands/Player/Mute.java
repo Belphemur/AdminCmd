@@ -33,6 +33,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -77,6 +78,13 @@ public class Mute extends PlayerCommand {
 				Utils.sI18n(sender, "insufficientLvl");
 				return;
 			}
+			String reason;
+			if (args.hasFlag('r')) {
+				reason = args.getValueFlag('r');
+			} else {
+				reason = "None";
+			}
+			replace.put("reason", reason);
 			if (args.hasFlag('c')) {
 				if (!acp.hasPower(Type.MUTED_COMMAND)) {
 					String msg = "Server Admin";
@@ -123,19 +131,27 @@ public class Mute extends PlayerCommand {
 							acp.setPower(Type.MUTED_COMMAND,
 									"Permanently muted(including commands) by "
 											+ msg);
-							Utils.sI18n(player, "commandMuteEnabled");
+							replace.put("time", "permanently");
+							Utils.sI18n(player, "commandMuteEnabled", "reason" , reason);
 						} else {
 							acp.setPower(Type.MUTED_COMMAND,
 									"Muted(including commands) by " + msg
 											+ " for " + tmpMute + " minutes");
+							replace.put("minutes", tmpMute.toString());
+							replace.put("time", "for" + tmpMute.toString() + " minutes");
 							Utils.sI18n(player, "commandTmpMuteEnabled",
-									"minutes", tmpMute.toString());
+									replace);
 						}
 					} else {
 						acp.setPower(Type.MUTED_COMMAND,
 								"Permanently muted(including commands) by "
 										+ msg);
-						Utils.sI18n(player, "commandMuteEnabled");
+						replace.put("time", "permanently");
+						Utils.sI18n(player, "commandMuteEnabled", replace);
+					}
+					if (args.hasFlag('b')) {
+						replace.put("muter", msg);
+						Utils.broadcastMessage(LocaleHelper.MUTE_BROADCAST.getLocale(replace));
 					}
 				} else {
 					Utils.sI18n(sender, "alreadyCommandMuted");
@@ -180,16 +196,23 @@ public class Mute extends PlayerCommand {
 					} catch (final Exception e) {}
 					if (tmpMute == null) {
 						acp.setPower(Type.MUTED, "Permanently muted by " + msg);
-						Utils.sI18n(player, "muteEnabled");
+						replace.put("time", "permanently");
+						Utils.sI18n(player, "muteEnabled", replace);
 					} else {
 						acp.setPower(Type.MUTED, "Muted by " + msg + " for "
 								+ tmpMute + " minutes");
-						Utils.sI18n(player, "tmpMuteEnabled", "minutes",
-								tmpMute.toString());
+						replace.put("minutes", tmpMute.toString());
+						replace.put("time", "for" + tmpMute.toString() + " minutes");
+						Utils.sI18n(player, "tmpMuteEnabled", replace);
 					}
 				} else {
 					acp.setPower(Type.MUTED, "Permanently muted by " + msg);
-					Utils.sI18n(player, "muteEnabled");
+					replace.put("time", "permanently");
+					Utils.sI18n(player, "muteEnabled", replace);
+				}
+				if (args.hasFlag('b')) {
+					replace.put("muter", msg);
+					Utils.broadcastMessage(LocaleHelper.MUTE_BROADCAST.getLocale(replace));
 				}
 			} else {
 				Utils.sI18n(sender, "alreadyMuted");
