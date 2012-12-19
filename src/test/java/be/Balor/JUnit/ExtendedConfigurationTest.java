@@ -22,9 +22,7 @@ import static org.junit.Assert.assertFalse;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.inventory.ItemStack;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,17 +61,17 @@ public class ExtendedConfigurationTest {
 		assertEquals("blah", conf.get("test"));
 	}
 
-	@Test
-	public void serializeBukkitTest() throws IOException,
-			InvalidConfigurationException {
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
-		final ItemStack test = new ItemStack(Material.WATER, 10);
-		conf.set("serial.item", test);
-		conf.save();
-		conf.reload();
-		assertEquals(new ItemStack(Material.WATER, 10), conf.get("serial.item"));
-	}
+	// @Test
+	// public void serializeBukkitTest() throws IOException,
+	// InvalidConfigurationException {
+	// final ExtendedConfiguration conf = ExtendedConfiguration
+	// .loadConfiguration(file);
+	// final ItemStack test = new ItemStack(Material.WATER, 10);
+	// conf.set("serial.item", test);
+	// conf.save();
+	// conf.reload();
+	// assertEquals(new ItemStack(Material.WATER, 10), conf.get("serial.item"));
+	// }
 
 	@Test
 	public void serializeAdminCmdTest() throws IOException,
