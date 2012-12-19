@@ -351,7 +351,7 @@
 		<dependency>
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
-			<version>1.19.1</version>
+			<version>1.19.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -361,15 +361,15 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>in.mDev</groupId>
+			<groupId>com.miraclem4n</groupId>
 			<artifactId>MChat</artifactId>
-			<version>1.3.1-R1.0</version>
+			<version>1.3.2-R1.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>de.diddiz</groupId>
 			<artifactId>LogBlock</artifactId>
-			<version>1.26</version>
+			<version>1.60</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -407,8 +407,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.dynmap</groupId>
-			<artifactId>DynmapAPI</artifactId>
-			<version>0.39</version>
+			<artifactId>dynmap-api</artifactId>
+			<version>1.1</version>
 		</dependency>
 	</dependencies>
 	<properties>
