@@ -76,7 +76,7 @@ public class ACPlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public boolean a(final EntityHuman entityhuman) {
+	public boolean a_(final EntityHuman entityhuman) {
 		return true;
 	}
 
