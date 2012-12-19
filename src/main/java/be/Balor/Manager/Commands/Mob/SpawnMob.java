@@ -105,13 +105,17 @@ public class SpawnMob extends MobCommand {
 			EntityType ct = null;
 			if (name.contains(":")) {
 				final String[] creatures = name.split(":");
-				// TODO: Remove this if-case as soon as bukkit fixes the spelling error
-				if (creatures[0].equalsIgnoreCase("Ocelot"))
+				// TODO: Remove this if-case as soon as bukkit fixes the
+				// spelling error
+				if (creatures[0].equalsIgnoreCase("Ocelot")) {
 					creatures[0] = "Ozelot";
+				}
 				ct = EntityType.fromName(creatures[0]);
-				// TODO: Remove this if-case as soon as bukkit fixes the spelling error
-				if (creatures[1].equalsIgnoreCase("Ocelot"))
+				// TODO: Remove this if-case as soon as bukkit fixes the
+				// spelling error
+				if (creatures[1].equalsIgnoreCase("Ocelot")) {
 					creatures[1] = "Ozelot";
+				}
 				final EntityType ct2 = EntityType.fromName(creatures[1]);
 				if (ct == null) {
 					replace.put("mob", creatures[0]);
@@ -173,16 +177,10 @@ public class SpawnMob extends MobCommand {
 		public void run() {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName());
-			// TODO: remove old code when 4.1 will be the next RB
-			try {
-				for (int i = 0; i < nb; i++) {
-					loc.getWorld().spawnEntity(loc, ct);
-				}
-			} catch (final NoSuchMethodError e) {
-				for (int i = 0; i < nb; i++) {
-					loc.getWorld().spawnCreature(loc, ct);
-				}
+			for (int i = 0; i < nb; i++) {
+				loc.getWorld().spawnEntity(loc, ct);
 			}
+
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
 				Utils.sI18n(player, "spawnMob", replace);
@@ -213,23 +211,13 @@ public class SpawnMob extends MobCommand {
 		public void run() {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", ct.getName() + "-" + passenger.getName());
-			// TODO: remove old code when 4.1 will be the next RB
-			try {
-				for (int i = 0; i < nb; i++) {
-					loc.getWorld()
-							.spawnEntity(loc, ct)
-							.setPassenger(
-									loc.getWorld().spawnEntity(loc, passenger));
-				}
-			} catch (final NoSuchMethodError e) {
-				for (int i = 0; i < nb; i++) {
-					loc.getWorld()
-							.spawnCreature(loc, ct)
-							.setPassenger(
-									loc.getWorld()
-											.spawnCreature(loc, passenger));
-				}
+			for (int i = 0; i < nb; i++) {
+				loc.getWorld()
+						.spawnEntity(loc, ct)
+						.setPassenger(
+								loc.getWorld().spawnEntity(loc, passenger));
 			}
+
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
 				Utils.sI18n(player, "spawnMob", replace);
