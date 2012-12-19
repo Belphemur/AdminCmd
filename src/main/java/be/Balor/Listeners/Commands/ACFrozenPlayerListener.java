@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners.Commands;
 
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,7 +38,9 @@ public class ACFrozenPlayerListener implements Listener {
 		if (!ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
 			return;
 		}
-		event.setCancelled(true);
+		CraftPlayer player = (CraftPlayer) event.getPlayer();
+		player.getHandle().netServerHandler.teleport(event.getFrom());
+		// event.setCancelled(true);
 
 	}
 
