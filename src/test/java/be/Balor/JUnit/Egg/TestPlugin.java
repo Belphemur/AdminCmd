@@ -16,16 +16,13 @@
  ************************************************************************/
 package be.Balor.JUnit.Egg;
 
-import java.io.File;
 import java.io.InputStream;
-import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avaje.ebean.EbeanServer;
@@ -35,8 +32,6 @@ import com.avaje.ebean.EbeanServer;
  * 
  */
 public class TestPlugin extends JavaPlugin {
-	private final PluginDescriptionFile pdf = new PluginDescriptionFile("test",
-			"0.1", "be.Blor.JUnit.Egg");
 
 	/*
 	 * (non-Javadoc)
@@ -50,27 +45,6 @@ public class TestPlugin extends JavaPlugin {
 			final String label, final String[] args) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.plugin.Plugin#getDataFolder()
-	 */
-	@Override
-	public File getDataFolder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.plugin.Plugin#getDescription()
-	 */
-	@Override
-	public PluginDescriptionFile getDescription() {
-		return pdf;
 	}
 
 	/*
@@ -202,17 +176,6 @@ public class TestPlugin extends JavaPlugin {
 	@Override
 	public ChunkGenerator getDefaultWorldGenerator(final String worldName,
 			final String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.bukkit.plugin.Plugin#getLogger()
-	 */
-	@Override
-	public Logger getLogger() {
 		// TODO Auto-generated method stub
 		return null;
 	}
