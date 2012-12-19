@@ -782,14 +782,14 @@ public class ACHelper {
 			this.coreInstance
 					.getServer()
 					.getScheduler()
-					.scheduleAsyncRepeatingTask(this.coreInstance,
+					.runTaskTimerAsynchronously(this.coreInstance,
 							AFKWorker.getInstance().getAfkChecker(), 0,
 							pluginConfig.getInt("statutCheckInSec", 20) * 20);
 			if (pluginConfig.getBoolean("autoKickAfkPlayer", false)) {
 				this.coreInstance
 						.getServer()
 						.getScheduler()
-						.scheduleAsyncRepeatingTask(
+						.runTaskTimerAsynchronously(
 								this.coreInstance,
 								AFKWorker.getInstance().getKickChecker(),
 								0,

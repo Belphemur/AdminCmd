@@ -115,10 +115,11 @@ public class FilePlayer extends ACPlayer {
 		}
 		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY
 				.getInt() : 30;
-		ioStackTaskId = ACPluginManager.getScheduler()
-				.scheduleAsyncRepeatingTask(
+		ioStackTaskId = ACPluginManager
+				.getScheduler()
+				.runTaskTimerAsynchronously(
 						ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK,
-						20 * 60, 20 * delay);
+						20 * 60, 20 * delay).getTaskId();
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
 				+ ioStackTaskId);
 	}
