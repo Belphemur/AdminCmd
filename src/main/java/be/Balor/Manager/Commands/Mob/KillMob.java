@@ -102,7 +102,7 @@ public class KillMob extends MobCommand {
 		}
 		final String finalType = type;
 		final CommandSender finalSender = sender;
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {

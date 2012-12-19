@@ -100,7 +100,7 @@ final public class InvisibleWorker {
 		if (dynmapAPI != null) {
 			dynmapAPI.setPlayerVisiblity(toReappear, true);
 		}
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
@@ -189,7 +189,7 @@ final public class InvisibleWorker {
 			if (dynmapAPI != null) {
 				dynmapAPI.setPlayerVisiblity(toVanish, false);
 			}
-			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+			ACPluginManager.getScheduler().runTaskAsynchronously(
 					ACPluginManager.getCorePlugin(), new Runnable() {
 
 						@Override
@@ -223,7 +223,7 @@ final public class InvisibleWorker {
 	 *            new connected player.
 	 */
 	public void makeInvisibleToPlayer(final Player newPlayer) {
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override

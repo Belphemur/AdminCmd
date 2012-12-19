@@ -101,7 +101,7 @@ public class ACIpCheckListener implements Listener {
 	 * @param address
 	 */
 	private void updateIP(final Player quits, final InetAddress address) {
-		ACPluginManager.scheduleAsyncDelayedTask(new Runnable() {
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 			@Override
 			public void run() {
 				for (final Player p : Utils.getOnlinePlayers()) {

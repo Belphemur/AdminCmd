@@ -104,7 +104,7 @@ public class Mute extends PlayerCommand {
 							acp.setPower(Type.MUTED_COMMAND,
 									"Muted(including commands) by " + msg);
 							ACPluginManager.getScheduler()
-									.scheduleAsyncDelayedTask(getPlugin(),
+									.runTaskLaterAsynchronously(getPlugin(),
 											new Runnable() {
 
 												@Override
@@ -173,7 +173,7 @@ public class Mute extends PlayerCommand {
 						final String unmute = player.getName();
 						final CommandSender senderFinal = sender;
 						ACPluginManager.getScheduler()
-								.scheduleAsyncDelayedTask(getPlugin(),
+								.runTaskLaterAsynchronously(getPlugin(),
 										new Runnable() {
 
 											@Override

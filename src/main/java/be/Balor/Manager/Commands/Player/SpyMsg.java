@@ -76,7 +76,7 @@ public class SpyMsg extends PlayerCommand {
 					return;
 				}
 				final CommandSender newSender = sender;
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 						ACPluginManager.getCorePlugin(),
 						new Runnable() {
 

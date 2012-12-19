@@ -84,7 +84,7 @@ public class God extends PlayerCommand {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.GOD, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()

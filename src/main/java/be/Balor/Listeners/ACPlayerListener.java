@@ -61,7 +61,8 @@ import belgium.Balor.Workers.InvisibleWorker;
 public class ACPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
+	public void onPlayerCommandPreprocess(
+			final PlayerCommandPreprocessEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		final String message = event.getMessage();
@@ -74,7 +75,8 @@ public class ACPlayerListener implements Listener {
 				}
 			}
 		}
-		if (CommandManager.getInstance().processCommandString(event.getPlayer(), message)) {
+		if (CommandManager.getInstance().processCommandString(
+				event.getPlayer(), message)) {
 			event.setCancelled(true);
 			event.setMessage("/AdminCmd : " + message);
 		}
@@ -109,21 +111,25 @@ public class ACPlayerListener implements Listener {
 			InvisibleWorker.getInstance().vanish(p, true);
 
 		}
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().runTaskAsynchronously(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
-						DebugLog.INSTANCE.info("ASync Task for optimization for " + p.getName());
+						DebugLog.INSTANCE
+								.info("ASync Task for optimization for "
+										+ p.getName());
 						DebugLog.INSTANCE.info("AFK start");
 						if (ConfigEnum.AUTO_AFK.getBoolean()) {
 							AFKWorker.getInstance().updateTimeStamp(p);
 						}
 						DebugLog.INSTANCE.info("AFK stop");
 						DebugLog.INSTANCE.info("ImmunityLvl start");
-						final int imLvl = ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY,
-								"defaultImmunityLvl");
-						player.setInformation("immunityLvl",
-								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+						final int imLvl = ACHelper.getInstance().getLimit(p,
+								Type.Limit.IMMUNITY, "defaultImmunityLvl");
+						player.setInformation(
+								"immunityLvl",
+								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY
+										.getInt() : imLvl);
 						DebugLog.INSTANCE.info("ImmunityLvl stop");
 						DebugLog.INSTANCE.info("SPY start");
 						if (player.hasPower(Type.SPYMSG)) {
@@ -131,8 +137,10 @@ public class ACPlayerListener implements Listener {
 						}
 						DebugLog.INSTANCE.info("SPY stop");
 						DebugLog.INSTANCE.info("LastConn start");
-						final long lastConn = player.getInformation("lastConnection").getLong(0);
-						player.setInformation("lastConnection", System.currentTimeMillis());
+						final long lastConn = player.getInformation(
+								"lastConnection").getLong(0);
+						player.setInformation("lastConnection",
+								System.currentTimeMillis());
 						DebugLog.INSTANCE.info("LastConn stop");
 						DebugLog.INSTANCE.info("TextLocale start");
 						final long modifTime = TextLocale.NEWS.getModifTime();
@@ -142,13 +150,16 @@ public class ACPlayerListener implements Listener {
 						}
 						DebugLog.INSTANCE.info("TextLocale stop");
 						DebugLog.INSTANCE.info("Rules start");
-						if (ConfigEnum.RULES.getBoolean() && !ConfigEnum.FJ_RULES.getBoolean()) {
+						if (ConfigEnum.RULES.getBoolean()
+								&& !ConfigEnum.FJ_RULES.getBoolean()) {
 							Utils.sParsedLocale(p, "Rules");
 						}
 						DebugLog.INSTANCE.info("Rules stop");
 						DebugLog.INSTANCE.info("TPREQUEST start");
-						if (ConfigEnum.TPREQUEST.getBoolean() && !player.hasPower(Type.TP_REQUEST)
-								&& PermissionManager.hasPerm(p, "admincmd.tp.toggle.allow", false)) {
+						if (ConfigEnum.TPREQUEST.getBoolean()
+								&& !player.hasPower(Type.TP_REQUEST)
+								&& PermissionManager.hasPerm(p,
+										"admincmd.tp.toggle.allow", false)) {
 							player.setPower(Type.TP_REQUEST);
 						}
 						DebugLog.INSTANCE.info("TPREQUEST stop");
@@ -169,7 +180,8 @@ public class ACPlayerListener implements Listener {
 			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 				replace.clear();
 				replace.put("name", Utils.getPlayerName(p, null, true));
-				event.setJoinMessage(Utils.I18n("joinMessageFirstTime", replace));
+				event.setJoinMessage(Utils
+						.I18n("joinMessageFirstTime", replace));
 			}
 			if (ConfigEnum.FCSPAWN.getBoolean()) {
 				ACHelper.getInstance().spawn(p);
@@ -195,7 +207,8 @@ public class ACPlayerListener implements Listener {
 		if (event.getResult().equals(Result.ALLOWED)) {
 			return;
 		}
-		if (PermissionManager.hasPerm(event.getPlayer(), "admincmd.player.bypass", false)
+		if (PermissionManager.hasPerm(event.getPlayer(),
+				"admincmd.player.bypass", false)
 				&& event.getResult() == Result.KICK_FULL) {
 			event.allow();
 		}
@@ -236,15 +249,17 @@ public class ACPlayerListener implements Listener {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(ACPluginManager.getCorePlugin(),
-				new Runnable() {
+		ACPluginManager.getScheduler().runTaskAsynchronously(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override
 					public void run() {
-						final int imLvl = ACHelper.getInstance().getLimit(p, Type.Limit.IMMUNITY,
-								"defaultImmunityLvl");
-						player.setInformation("immunityLvl",
-								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt() : imLvl);
+						final int imLvl = ACHelper.getInstance().getLimit(p,
+								Type.Limit.IMMUNITY, "defaultImmunityLvl");
+						player.setInformation(
+								"immunityLvl",
+								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY
+										.getInt() : imLvl);
 
 					}
 				});
@@ -271,18 +286,20 @@ public class ACPlayerListener implements Listener {
 		String worldName = player.getWorld().getName();
 		final Environment worldEnv = player.getWorld().getEnvironment();
 		if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {
-			if (worldEnv.equals(Environment.NETHER) || worldEnv.equals(Environment.THE_END)) {
-				worldName = ACWorld.getWorld(ConfigEnum.RESPAWN_WORLD.getString()).getName();
+			if (worldEnv.equals(Environment.NETHER)
+					|| worldEnv.equals(Environment.THE_END)) {
+				worldName = ACWorld.getWorld(
+						ConfigEnum.RESPAWN_WORLD.getString()).getName();
 				if (worldName.isEmpty() || worldName == null) {
 					worldName = player.getWorld().getName();
 				}
 			}
-		}	
+		}
 		try {
 			if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
-				
-					loc = ACWorld.getWorld(worldName).getSpawn();
-				
+
+				loc = ACWorld.getWorld(worldName).getSpawn();
+
 				event.setRespawnLocation(loc);
 			} else if (spawn.equalsIgnoreCase("home")) {
 				loc = ACPlayer.getPlayer(player).getHome(worldName);
@@ -306,7 +323,7 @@ public class ACPlayerListener implements Listener {
 			}
 		} catch (WorldNotLoaded e) {
 
-			}
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true)

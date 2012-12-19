@@ -154,7 +154,7 @@ public class BanPlayer extends PlayerCommand {
 						tmpBan * 60 * 1000);
 				ACHelper.getInstance().banPlayer(ban);
 			}
-			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 					getPlugin(), new UnBanTask(ban, true),
 					Utils.secInTick * 60 * tmpBan);
 		} else {

@@ -76,7 +76,7 @@ public class TpAtSee extends TeleportCommand {
 					Utils.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 						ACPluginManager.getCorePlugin(),
 						new RemovePowerTask(acp, Type.TP_AT_SEE, sender),
 						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()

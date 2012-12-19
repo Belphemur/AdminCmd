@@ -73,7 +73,7 @@ public class KillerEgg extends SimpleRadiusEgg {
 				entities.add((EntityLiving) entity);
 			}
 		}
-		ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override

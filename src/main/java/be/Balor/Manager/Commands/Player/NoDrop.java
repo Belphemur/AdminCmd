@@ -80,7 +80,7 @@ public class NoDrop extends PlayerCommand {
 				Utils.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
-			ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 					ACPluginManager.getCorePlugin(),
 					new RemovePowerTask(acp, Type.NO_DROP, sender),
 					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()

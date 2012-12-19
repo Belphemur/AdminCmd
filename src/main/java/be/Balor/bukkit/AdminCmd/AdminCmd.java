@@ -283,7 +283,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				return AFKWorker.getInstance().nbAfk();
 			}
 		});
-		getServer().getScheduler().scheduleAsyncDelayedTask(this,
+		getServer().getScheduler().runTaskLaterAsynchronously(this,
 				new Runnable() {
 
 					@Override

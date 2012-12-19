@@ -400,7 +400,7 @@ public class ACHelper {
 				unBanPlayer(player);
 				return false;
 			} else {
-				ACPluginManager.getScheduler().scheduleAsyncDelayedTask(
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 						coreInstance, new UnBanTask(tempBan, true),
 						timeLeft / Utils.secondInMillis * Utils.secInTick);
 				return true;
