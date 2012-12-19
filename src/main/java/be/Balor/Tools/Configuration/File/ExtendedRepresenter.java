@@ -59,8 +59,8 @@ public class ExtendedRepresenter extends Representer {
 	private class RepresentConfigurationSerializable extends RepresentMap {
 		@Override
 		public Node representData(final Object data) {
-			final ConfigurationSerializable serializable = (ConfigurationSerializable) data;
-			final Map<String, Object> values = new LinkedHashMap<String, Object>();
+			ConfigurationSerializable serializable = (ConfigurationSerializable) data;
+			Map<String, Object> values = new LinkedHashMap<String, Object>();
 			values.put(
 					ConfigurationSerialization.SERIALIZED_TYPE_KEY,
 					ConfigurationSerialization.getAlias(serializable.getClass()));
