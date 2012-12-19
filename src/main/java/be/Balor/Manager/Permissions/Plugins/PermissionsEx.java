@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
@@ -74,6 +75,12 @@ public class PermissionsEx extends SuperPermissions {
 			}
 			return false;
 		}
+	}
+
+	@Override
+	public boolean hasPerm(final CommandSender player, final Permission perm,
+			final boolean errorMsg) {
+		return this.hasPerm(player, perm.getName(), errorMsg);
 	}
 
 	/*
