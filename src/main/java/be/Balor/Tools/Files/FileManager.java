@@ -265,7 +265,8 @@ public class FileManager implements DataManager {
 		conf.set("ids", idList);
 		try {
 			conf.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	/**
@@ -286,7 +287,8 @@ public class FileManager implements DataManager {
 		conf.set("ids", idList);
 		try {
 			conf.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	/**
@@ -318,7 +320,8 @@ public class FileManager implements DataManager {
 			try {
 				reader = new BufferedReader(new UnicodeReader(
 						new FileInputStream(file), "UTF-8"));
-			} catch (final FileNotFoundException e) {}
+			} catch (final FileNotFoundException e) {
+			}
 			try {
 				final String version = reader.readLine();
 				final String versioncheck = version.substring(10);
@@ -335,7 +338,8 @@ public class FileManager implements DataManager {
 
 			try {
 				reader.close();
-			} catch (final IOException e) {}
+			} catch (final IOException e) {
+			}
 
 		}
 		if (!file.exists()) {
@@ -358,9 +362,10 @@ public class FileManager implements DataManager {
 		final List<String> idList = conf.getStringList("ids",
 				new ArrayList<String>());
 		int i = 0;
+		CSVReader csv = null;
 		try {
-			final CSVReader csv = new CSVReader(new FileReader(getInnerFile(
-					"items.csv", null, true)));
+			csv = new CSVReader(new FileReader(getInnerFile("items.csv", null,
+					true)));
 			String[] alias;
 			while ((alias = csv.readNext()) != null) {
 				try {
@@ -369,7 +374,8 @@ public class FileManager implements DataManager {
 				} catch (final ArrayIndexOutOfBoundsException e) {
 					try {
 						result.put(alias[0], new MaterialContainer(alias[1]));
-					} catch (final ArrayIndexOutOfBoundsException e2) {}
+					} catch (final ArrayIndexOutOfBoundsException e2) {
+					}
 
 				}
 
@@ -379,6 +385,14 @@ public class FileManager implements DataManager {
 			e.printStackTrace();
 		} catch (final IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (csv != null) {
+				try {
+					csv.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		for (final String alias : aliasList) {
 			result.put(alias, new MaterialContainer(idList.get(i)));
@@ -406,7 +420,8 @@ public class FileManager implements DataManager {
 		conf.set(name + ".pitch", loc.getPitch());
 		try {
 			conf.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	/**
@@ -457,7 +472,8 @@ public class FileManager implements DataManager {
 		conf.set(property, null);
 		try {
 			conf.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	/**
@@ -734,7 +750,8 @@ public class FileManager implements DataManager {
 
 		try {
 			banFile.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 	}
 
 	/*
@@ -757,7 +774,8 @@ public class FileManager implements DataManager {
 		}
 		try {
 			banFile.save();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+		}
 
 	}
 }
