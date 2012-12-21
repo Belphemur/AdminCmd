@@ -20,9 +20,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.server.EntityPlayer;
-
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,6 +30,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
@@ -114,24 +112,24 @@ public class ACNoDropListener implements Listener {
 	}
 
 	private class PlayerInv {
-		final net.minecraft.server.ItemStack items[];
-		final net.minecraft.server.ItemStack armor[];
+		final ItemStack items[];
+		final ItemStack armor[];
 
 		/**
 		 * 
 		 */
 		public PlayerInv(final Player p) {
-			final EntityPlayer player = ((CraftPlayer) p).getHandle();
-			items = Arrays.copyOf(player.inventory.items,
-					player.inventory.items.length);
-			armor = Arrays.copyOf(player.inventory.armor,
-					player.inventory.armor.length);
+			final PlayerInventory inventory = p.getInventory();
+			items = Arrays.copyOf(inventory.getContents(),
+					inventory.getContents().length);
+			armor = Arrays.copyOf(inventory.getArmorContents(),
+					inventory.getArmorContents().length);
 		}
 
 		public void setInventory(final Player p) {
-			final EntityPlayer player = ((CraftPlayer) p).getHandle();
-			player.inventory.armor = this.armor;
-			player.inventory.items = this.items;
+			final PlayerInventory inventory = p.getInventory();
+			inventory.setArmorContents(armor);
+			inventory.setContents(items);
 		}
 
 	}
