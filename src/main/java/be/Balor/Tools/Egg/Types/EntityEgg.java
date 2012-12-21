@@ -16,12 +16,9 @@
  ************************************************************************/
 package be.Balor.Tools.Egg.Types;
 
-import net.minecraft.server.EntityTypes;
-
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
@@ -98,9 +95,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 			}
 		}
 		try {
-			final Entity entity = EntityTypes.a(entityNb,
-					((CraftWorld) sender.getWorld()).getHandle())
-					.getBukkitEntity();
+			final EntityType entity = EntityType.fromId(entityNb);
 			value = new EntityInEgg(entity.getClass().getName(), nbre, entity
 					.getClass().getSimpleName());
 		} catch (final NullPointerException e) {
