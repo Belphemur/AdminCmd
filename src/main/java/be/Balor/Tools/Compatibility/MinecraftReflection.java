@@ -7,7 +7,9 @@ import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.google.common.base.Joiner;
@@ -59,16 +61,16 @@ public class MinecraftReflection {
 			return MINECRAFT_FULL_PACKAGE;
 		}
 
-		Server craftServer = Bukkit.getServer();
+		final Server craftServer = Bukkit.getServer();
 
 		// This server should have a "getHandle" method that we can use
 		if (craftServer != null) {
 			try {
-				Class<?> craftClass = craftServer.getClass();
-				Method getHandle = craftClass.getMethod("getHandle");
+				final Class<?> craftClass = craftServer.getClass();
+				final Method getHandle = craftClass.getMethod("getHandle");
 
-				Class<?> returnType = getHandle.getReturnType();
-				String returnName = returnType.getCanonicalName();
+				final Class<?> returnType = getHandle.getReturnType();
+				final String returnName = returnType.getCanonicalName();
 
 				// The return type will tell us the full package, regardless of
 				// formating
@@ -76,10 +78,10 @@ public class MinecraftReflection {
 				MINECRAFT_FULL_PACKAGE = getPackage(returnName);
 				return MINECRAFT_FULL_PACKAGE;
 
-			} catch (SecurityException e) {
+			} catch (final SecurityException e) {
 				throw new RuntimeException(
 						"Security violation. Cannot get handle method.", e);
-			} catch (NoSuchMethodException e) {
+			} catch (final NoSuchMethodException e) {
 				throw new IllegalStateException(
 						"Cannot find getHandle() method on server. Is this a modified CraftBukkit version?",
 						e);
@@ -162,7 +164,7 @@ public class MinecraftReflection {
 					"Cannot determine the type of a null object.");
 		}
 
-		String javaName = obj.getClass().getName();
+		final String javaName = obj.getClass().getName();
 		return javaName.startsWith(MINECRAFT_PREFIX_PACKAGE)
 				&& javaName.endsWith(className);
 	}
@@ -185,9 +187,73 @@ public class MinecraftReflection {
 		try {
 			return nmsObject.getClass().getMethod("getBukkitEntity")
 					.invoke(nmsObject);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Cannot get Bukkit entity from "
 					+ nmsObject, e);
+		}
+	}
+
+	/**
+	 * Get the Handeling Object from a Bukkit Object
+	 * 
+	 * @param bukkitObject
+	 *            - bukkit object
+	 * @return an Handler on success.
+	 * @throws RuntimeException
+	 *             If we were unable to retrieve the entity.
+	 */
+	public static Object getHandle(final Object bukkitObject) {
+		if (bukkitObject == null) {
+			return null;
+		}
+
+		// We will have to do this dynamically, unfortunately
+		try {
+			return bukkitObject.getClass().getMethod("getHandle")
+					.invoke(bukkitObject);
+		} catch (final Exception e) {
+			throw new RuntimeException("Cannot get EntityPlayer from "
+					+ bukkitObject, e);
+		}
+	}
+
+	/**
+	 * Get the networkManager of the wanted player
+	 * 
+	 * @param player
+	 *            - CraftPlayer
+	 * @return the networkManager
+	 * @throws RuntimeException
+	 *             If we were unable to retrieve the entity.
+	 */
+	public static Object getNetworkManager(final Object player) {
+		try {
+			return ClassUtils.getPrivateField(player, getNetworkManagerName());
+		} catch (final Exception e) {
+			throw new RuntimeException("Cannot get NetworkManager from "
+					+ player, e);
+		}
+	}
+
+	/**
+	 * Teleport the wanted player to the given location
+	 * 
+	 * @param player
+	 *            - Bukkit player
+	 * @param toLocation
+	 *            - Location
+	 * @throws RuntimeException
+	 *             If we were unable to retrieve the entity.
+	 */
+	public static void teleportPlayer(final Player player,
+			final Location toLocation) {
+		final Object networkManager = getNetworkManager(getHandle(player));
+		try {
+			networkManager.getClass().getMethod("teleport", Location.class)
+					.invoke(networkManager, toLocation);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't teleport the player " + player
+					+ " to " + toLocation, e);
 		}
 	}
 
@@ -360,6 +426,10 @@ public class MinecraftReflection {
 		return getMinecraftClass("NetServerHandler", "PlayerConnection");
 	}
 
+	public static Class<?> getItemInWorldManagerClass() {
+		return getMinecraftClass("ItemInWorldManager", "playerInteractManager");
+	}
+
 	/**
 	 * Retrieve the NetworkManager class.
 	 * 
@@ -501,7 +571,7 @@ public class MinecraftReflection {
 			try {
 				craftBukkitConstructor = getCraftItemStackClass()
 						.getConstructor(ItemStack.class);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// See if this method works
 				if (!craftItemStackFailed) {
 					return getBukkitItemByMethod(bukkitItemStack);
@@ -517,7 +587,7 @@ public class MinecraftReflection {
 		try {
 			return (ItemStack) craftBukkitConstructor
 					.newInstance(bukkitItemStack);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Cannot construct CraftItemStack.", e);
 		}
 	}
@@ -529,7 +599,7 @@ public class MinecraftReflection {
 			try {
 				craftBukkitMethod = getCraftItemStackClass().getMethod(
 						"asCraftCopy", ItemStack.class);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				craftItemStackFailed = true;
 				throw new RuntimeException(
 						"Cannot find CraftItemStack.asCraftCopy(org.bukkit.inventory.ItemStack).",
@@ -540,7 +610,7 @@ public class MinecraftReflection {
 		// Next, construct it
 		try {
 			return (ItemStack) craftBukkitMethod.invoke(null, bukkitItemStack);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Cannot construct CraftItemStack.", e);
 		}
 	}
@@ -564,7 +634,7 @@ public class MinecraftReflection {
 			try {
 				craftNMSConstructor = getCraftItemStackClass().getConstructor(
 						minecraftItemStack.getClass());
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// Give it a try
 				if (!craftItemStackFailed) {
 					return getBukkitItemByMethod(minecraftItemStack);
@@ -580,7 +650,7 @@ public class MinecraftReflection {
 		try {
 			return (ItemStack) craftNMSConstructor
 					.newInstance(minecraftItemStack);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Cannot construct CraftItemStack.", e);
 		}
 	}
@@ -592,7 +662,7 @@ public class MinecraftReflection {
 			try {
 				craftNMSMethod = getCraftItemStackClass().getMethod(
 						"asCraftMirror", minecraftItemStack.getClass());
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				craftItemStackFailed = true;
 				throw new RuntimeException(
 						"Cannot find CraftItemStack.asCraftMirror(net.mineraft.server.ItemStack).",
@@ -603,7 +673,7 @@ public class MinecraftReflection {
 		// Next, construct it
 		try {
 			return (ItemStack) craftNMSMethod.invoke(null, minecraftItemStack);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException("Cannot construct CraftItemStack.", e);
 		}
 	}
@@ -657,15 +727,15 @@ public class MinecraftReflection {
 		try {
 			// Try the main class first
 			return getMinecraftClass(className);
-		} catch (RuntimeException e1) {
+		} catch (final RuntimeException e1) {
 			Class success = null;
 
 			// Try every alias too
-			for (String alias : aliases) {
+			for (final String alias : aliases) {
 				try {
 					success = getMinecraftClass(alias);
 					break;
-				} catch (RuntimeException e2) {
+				} catch (final RuntimeException e2) {
 					// Swallov
 				}
 			}
