@@ -19,15 +19,12 @@ package be.Balor.Tools.Egg.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.DamageSource;
-import net.minecraft.server.EntityLiving;
-import net.minecraft.server.EntityPlayer;
-
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
 import be.Balor.Tools.Egg.SimpleRadiusEgg;
@@ -64,14 +61,13 @@ public class KillerEgg extends SimpleRadiusEgg {
 		event.setHatching(false);
 		final Location loc = event.getEgg().getLocation();
 		event.getEgg().remove();
-		final List<EntityLiving> entities = new ArrayList<EntityLiving>();
-		final CraftPlayer p = (CraftPlayer) event.getPlayer();
+		final List<LivingEntity> entities = new ArrayList<LivingEntity>();
+		final Player p = event.getPlayer();
 		final World w = p.getWorld();
 		final int radius = value * value;
-		for (final Object entity : ((CraftWorld) w).getHandle().entityList) {
-			if (entity instanceof EntityLiving) {
-				entities.add((EntityLiving) entity);
-			}
+
+		for (final LivingEntity entity : w.getLivingEntities()) {
+			entities.add(entity);
 		}
 		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
@@ -79,26 +75,21 @@ public class KillerEgg extends SimpleRadiusEgg {
 					@Override
 					public void run() {
 						int count = 0;
-						for (final EntityLiving entity : entities) {
-							if (entity.equals(p.getHandle())) {
+						for (final LivingEntity entity : entities) {
+							if (entity.equals(p)) {
 								continue;
 							}
-							final Location entityLoc = new Location(w,
-									entity.locX, entity.locY, entity.locZ,
-									entity.yaw, entity.pitch);
+							final Location entityLoc = entity.getLocation();
 							if (entityLoc.distanceSquared(loc) > radius) {
 								continue;
 							}
-							if (entity instanceof EntityPlayer) {
-								final Player player = (Player) entity
-										.getBukkitEntity();
-								player.setHealth(0);
-								count++;
-								continue;
-							}
-							entity.die(DamageSource.playerAttack(p.getHandle()));
-							entity.die();
+
+							entity.setHealth(0);
+							entity.setLastDamageCause(new EntityDamageEvent(p,
+									DamageCause.ENTITY_ATTACK, entity
+											.getMaxHealth()));
 							count++;
+
 						}
 						p.sendMessage(String.valueOf(count) + " killed.");
 					}
