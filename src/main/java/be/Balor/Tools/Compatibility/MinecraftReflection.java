@@ -432,7 +432,7 @@ public class MinecraftReflection {
 	}
 
 	public static Class<?> getItemInWorldManagerClass() {
-		return getMinecraftClass("ItemInWorldManager", "playerInteractManager");
+		return getMinecraftClass("ItemInWorldManager", "PlayerInteractManager");
 	}
 
 	/**
