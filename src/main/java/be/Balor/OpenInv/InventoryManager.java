@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.ItemInWorldManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerInteractManager;
 import net.minecraft.server.PlayerInventory;
 
 import org.bukkit.Bukkit;
@@ -147,8 +147,8 @@ public class InventoryManager {
 		final MinecraftServer server = ((CraftServer) Bukkit.getServer())
 				.getServer();
 		final EntityPlayer entity = new EntityPlayer(server,
-				server.getWorldServer(0), playername, new ItemInWorldManager(
-						server.getWorldServer(0)));
+				server.getWorldServer(0), playername,
+				new PlayerInteractManager(server.getWorldServer(0)));
 		target = (entity == null) ? null : (Player) entity.getBukkitEntity();
 		if (target != null) {
 			target.loadData();

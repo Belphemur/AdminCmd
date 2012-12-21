@@ -38,10 +38,9 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.Packet201PlayerInfo;
-import net.minecraft.server.WorldServer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,7 +48,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -75,6 +73,8 @@ import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
+import be.Balor.Tools.Compatibility.ClassUtils;
+import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -123,8 +123,7 @@ public final class Utils {
 			+ "|(\\d+)");
 	public static final Pattern TIMES1 = Pattern
 			.compile("month(s?)|day(s?)|hour(s?)|week(s?)|year(s?)");
-	public static final Pattern TIMES2 = Pattern
-			.compile("m|h|d|w|y");
+	public static final Pattern TIMES2 = Pattern.compile("m|h|d|w|y");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -162,9 +161,21 @@ public final class Utils {
 
 	public static void addPlayerInOnlineList(final Player toAdd,
 			final Player fromPlayer) {
-		((CraftPlayer) fromPlayer).getHandle().netServerHandler
-				.sendPacket(new Packet201PlayerInfo(((CraftPlayer) toAdd)
-						.getHandle().listName, true, 1000));
+		final Object netServerHandler = MinecraftReflection
+				.getNetServerHandler(fromPlayer);
+		try {
+			netServerHandler
+					.getClass()
+					.getMethod("sendPacket",
+							MinecraftReflection.getPacketClass())
+					.invoke(netServerHandler,
+							new Packet201PlayerInfo(((CraftPlayer) toAdd)
+									.getHandle().listName, true, 1000));
+		} catch (final Exception e) {
+			throw new RuntimeException("Cannot send packet from " + fromPlayer,
+					e);
+
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -363,7 +374,8 @@ public final class Utils {
 					return new MaterialContainer(is);
 				}
 			}
-		} catch (final Exception e) {}
+		} catch (final Exception e) {
+		}
 		String[] info = new String[2];
 		if (mat.contains(":")) {
 			info = mat.split(":");
@@ -397,6 +409,7 @@ public final class Utils {
 			return oldColorParser(toParse);
 		}
 	}
+
 	private static String oldColorParser(final String toParse) {
 		String ResultString = null;
 		try {
@@ -584,7 +597,8 @@ public final class Utils {
 					return null;
 				}
 				result.home = split[1];
-			} catch (final ArrayIndexOutOfBoundsException e) {}
+			} catch (final ArrayIndexOutOfBoundsException e) {
+			}
 			if (isPlayer(sender, false)) {
 				final Player p = (Player) sender;
 				if (!p.getName().equals(result.player)
@@ -608,7 +622,6 @@ public final class Utils {
 		return result;
 	}
 
-	
 	/**
 	 * Shortcut to online players.
 	 * 
@@ -971,9 +984,21 @@ public final class Utils {
 		if (toRemove == null || fromPlayer == null) {
 			return;
 		}
-		((CraftPlayer) fromPlayer).getHandle().netServerHandler
-				.sendPacket(new Packet201PlayerInfo(((CraftPlayer) toRemove)
-						.getHandle().listName, false, 9999));
+		final Object netServerHandler = MinecraftReflection
+				.getNetServerHandler(fromPlayer);
+		try {
+			netServerHandler
+					.getClass()
+					.getMethod("sendPacket",
+							MinecraftReflection.getPacketClass())
+					.invoke(netServerHandler,
+							new Packet201PlayerInfo(((CraftPlayer) toRemove)
+									.getHandle().listName, false, 9999));
+		} catch (final Exception e) {
+			throw new RuntimeException("Cannot send packet from " + fromPlayer,
+					e);
+
+		}
 	}
 
 	public static Integer replaceBlockByAir(final CommandSender sender,
@@ -1136,76 +1161,75 @@ public final class Utils {
 		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER
 				.getLocale(replace);
 		switch (toDo) {
-			case HEAL :
-				final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(
-						target, 20, RegainReason.CUSTOM);
-				pluginManager.callEvent(heal);
-				if (!heal.isCancelled()) {
-					target.setHealth(heal.getAmount());
-					target.setFireTicks(0);
-					final String msg = newStateLocale
+		case HEAL:
+			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(
+					target, 20, RegainReason.CUSTOM);
+			pluginManager.callEvent(heal);
+			if (!heal.isCancelled()) {
+				target.setHealth(heal.getAmount());
+				target.setFireTicks(0);
+				final String msg = newStateLocale
+						+ LocaleHelper.HEALED.getLocale();
+				target.sendMessage(msg);
+				if (!target.equals(sender)) {
+					final String newStateMsg = newStatePlayerLocale
 							+ LocaleHelper.HEALED.getLocale();
-					target.sendMessage(msg);
-					if (!target.equals(sender)) {
-						final String newStateMsg = newStatePlayerLocale
-								+ LocaleHelper.HEALED.getLocale();
-						sender.sendMessage(newStateMsg);
-					}
+					sender.sendMessage(newStateMsg);
 				}
-				break;
-			case FEED :
-				final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(
-						target, 20);
-				pluginManager.callEvent(foodEvent);
-				if (!foodEvent.isCancelled()) {
-					target.setFoodLevel(foodEvent.getFoodLevel());
-					final String msg = newStateLocale
+			}
+			break;
+		case FEED:
+			final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(
+					target, 20);
+			pluginManager.callEvent(foodEvent);
+			if (!foodEvent.isCancelled()) {
+				target.setFoodLevel(foodEvent.getFoodLevel());
+				final String msg = newStateLocale
+						+ LocaleHelper.FEEDED.getLocale();
+				target.sendMessage(msg);
+				if (!target.equals(sender)) {
+					final String newStateMsg = newStatePlayerLocale
 							+ LocaleHelper.FEEDED.getLocale();
+					sender.sendMessage(newStateMsg);
+				}
+			}
+			break;
+		case KILL:
+			if (target.equals(sender)) {
+				final EntityDamageEvent dmgEvent = new EntityDamageEvent(
+						target, EntityDamageEvent.DamageCause.SUICIDE,
+						Short.MAX_VALUE);
+				pluginManager.callEvent(dmgEvent);
+				if (!dmgEvent.isCancelled()) {
+					target.damage(Short.MAX_VALUE);
+					LocaleHelper.SUICIDE.sendLocale(target);
+				}
+			} else {
+				final EntityDamageEvent dmgEvent = new EntityDamageEvent(
+						target, EntityDamageEvent.DamageCause.CUSTOM,
+						Short.MAX_VALUE);
+				pluginManager.callEvent(dmgEvent);
+				if (!dmgEvent.isCancelled()) {
+					if (isPlayer(sender, false)) {
+						target.damage(dmgEvent.getDamage(), (Player) sender);
+					} else {
+						target.damage(dmgEvent.getDamage());
+					}
+					final String msg = newStateLocale
+							+ LocaleHelper.KILLED.getLocale();
 					target.sendMessage(msg);
-					if (!target.equals(sender)) {
-						final String newStateMsg = newStatePlayerLocale
-								+ LocaleHelper.FEEDED.getLocale();
-						sender.sendMessage(newStateMsg);
-					}
+					final String newStateMsg = newStatePlayerLocale
+							+ LocaleHelper.KILLED.getLocale();
+					sender.sendMessage(newStateMsg);
 				}
-				break;
-			case KILL :
-				if (target.equals(sender)) {
-					final EntityDamageEvent dmgEvent = new EntityDamageEvent(
-							target, EntityDamageEvent.DamageCause.SUICIDE,
-							Short.MAX_VALUE);
-					pluginManager.callEvent(dmgEvent);
-					if (!dmgEvent.isCancelled()) {
-						target.damage(Short.MAX_VALUE);
-						LocaleHelper.SUICIDE.sendLocale(target);
-					}
-				} else {
-					final EntityDamageEvent dmgEvent = new EntityDamageEvent(
-							target, EntityDamageEvent.DamageCause.CUSTOM,
-							Short.MAX_VALUE);
-					pluginManager.callEvent(dmgEvent);
-					if (!dmgEvent.isCancelled()) {
-						if (isPlayer(sender, false)) {
-							target.damage(dmgEvent.getDamage(), (Player) sender);
-						} else {
-							target.damage(dmgEvent.getDamage());
-						}
-						final String msg = newStateLocale
-								+ LocaleHelper.KILLED.getLocale();
-						target.sendMessage(msg);
-						final String newStateMsg = newStatePlayerLocale
-								+ LocaleHelper.KILLED.getLocale();
-						sender.sendMessage(newStateMsg);
-					}
-				}
-				if (logBlock != null) {
-					logBlock.queueKill(isPlayer(sender, false)
-							? (Player) sender
-							: null, target);
-				}
-				break;
-			default :
-				return false;
+			}
+			if (logBlock != null) {
+				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender
+						: null, target);
+			}
+			break;
+		default:
+			return false;
 		}
 		return true;
 	}
@@ -1496,8 +1520,8 @@ public final class Utils {
 		diff = diff % minuteInMillis;
 		final long elapsedSeconds = diff / secondInMillis;
 
-		return new Long[]{elapsedDays, elapsedHours, elapsedMinutes,
-				elapsedSeconds};
+		return new Long[] { elapsedDays, elapsedHours, elapsedMinutes,
+				elapsedSeconds };
 	}
 
 	public static boolean weather(final CommandSender sender,
@@ -1568,90 +1592,86 @@ public final class Utils {
 			return;
 		}
 		switch (type) {
-			case CLEAR :
-				w.setThundering(false);
-				w.setStorm(false);
-				sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " "
-						+ w.getName());
-				break;
-			case STORM :
-				final HashMap<String, String> replace = new HashMap<String, String>();
-				if (duration == null || duration.length < 1) {
+		case CLEAR:
+			w.setThundering(false);
+			w.setStorm(false);
+			sender.sendMessage(ChatColor.GOLD + Utils.I18n("sClear") + " "
+					+ w.getName());
+			break;
+		case STORM:
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			if (duration == null || duration.length < 1) {
+				w.setStorm(true);
+				w.setThundering(true);
+				w.setWeatherDuration(12000);
+				replace.put("duration", "10");
+				sender.sendMessage(ChatColor.GOLD
+						+ Utils.I18n("sStorm", replace) + w.getName());
+			} else {
+				try {
 					w.setStorm(true);
 					w.setThundering(true);
+					final int time = duration.getInt(0);
+					w.setWeatherDuration(time * 1200);
+					replace.put("duration", String.valueOf(time));
+					sender.sendMessage(ChatColor.GOLD
+							+ Utils.I18n("sStorm", replace) + w.getName());
+				} catch (final NumberFormatException e) {
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
+							+ duration.getString(0) + ") isn't a number!");
+					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replace.put("duration", "10");
 					sender.sendMessage(ChatColor.GOLD
 							+ Utils.I18n("sStorm", replace) + w.getName());
-				} else {
-					try {
-						w.setStorm(true);
-						w.setThundering(true);
-						final int time = duration.getInt(0);
-						w.setWeatherDuration(time * 1200);
-						replace.put("duration", String.valueOf(time));
-						sender.sendMessage(ChatColor.GOLD
-								+ Utils.I18n("sStorm", replace) + w.getName());
-					} catch (final NumberFormatException e) {
-						sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
-								+ duration.getString(0) + ") isn't a number!");
-						w.setStorm(true);
-						w.setWeatherDuration(12000);
-						replace.put("duration", "10");
-						sender.sendMessage(ChatColor.GOLD
-								+ Utils.I18n("sStorm", replace) + w.getName());
-					}
 				}
-				break;
-			case FREEZE :
-				if (!ACWorld.getWorld(w.getName())
-						.getInformation(Type.WEATHER_FROZEN.toString())
-						.isNull()) {
-					ACWorld.getWorld(w.getName()).removeInformation(
-							Type.WEATHER_FROZEN.toString());
-					sender.sendMessage(ChatColor.GREEN
-							+ Utils.I18n("wUnFrozen") + " " + ChatColor.WHITE
-							+ w.getName());
-				} else {
-					ACWorld.getWorld(w.getName()).setInformation(
-							Type.WEATHER_FROZEN.toString(), true);
-					sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen")
-							+ " " + ChatColor.WHITE + w.getName());
-				}
-				break;
-			case RAIN :
-				final HashMap<String, String> replaceRain = new HashMap<String, String>();
-				if (duration == null || duration.length < 1) {
+			}
+			break;
+		case FREEZE:
+			if (!ACWorld.getWorld(w.getName())
+					.getInformation(Type.WEATHER_FROZEN.toString()).isNull()) {
+				ACWorld.getWorld(w.getName()).removeInformation(
+						Type.WEATHER_FROZEN.toString());
+				sender.sendMessage(ChatColor.GREEN + Utils.I18n("wUnFrozen")
+						+ " " + ChatColor.WHITE + w.getName());
+			} else {
+				ACWorld.getWorld(w.getName()).setInformation(
+						Type.WEATHER_FROZEN.toString(), true);
+				sender.sendMessage(ChatColor.RED + Utils.I18n("wFrozen") + " "
+						+ ChatColor.WHITE + w.getName());
+			}
+			break;
+		case RAIN:
+			final HashMap<String, String> replaceRain = new HashMap<String, String>();
+			if (duration == null || duration.length < 1) {
+				w.setStorm(true);
+				w.setThundering(false);
+				w.setWeatherDuration(12000);
+				replaceRain.put("duration", "10");
+				sender.sendMessage(ChatColor.GOLD
+						+ Utils.I18n("sRain", replaceRain) + w.getName());
+			} else {
+				try {
 					w.setStorm(true);
 					w.setThundering(false);
+					final int time = duration.getInt(0);
+					w.setWeatherDuration(time * 1200);
+					replaceRain.put("duration", String.valueOf(time));
+					sender.sendMessage(ChatColor.GOLD
+							+ Utils.I18n("sRain", replaceRain) + w.getName());
+				} catch (final NumberFormatException e) {
+					sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
+							+ duration.getString(0) + ") isn't a number!");
+					w.setStorm(true);
 					w.setWeatherDuration(12000);
 					replaceRain.put("duration", "10");
 					sender.sendMessage(ChatColor.GOLD
 							+ Utils.I18n("sRain", replaceRain) + w.getName());
-				} else {
-					try {
-						w.setStorm(true);
-						w.setThundering(false);
-						final int time = duration.getInt(0);
-						w.setWeatherDuration(time * 1200);
-						replaceRain.put("duration", String.valueOf(time));
-						sender.sendMessage(ChatColor.GOLD
-								+ Utils.I18n("sRain", replaceRain)
-								+ w.getName());
-					} catch (final NumberFormatException e) {
-						sender.sendMessage(ChatColor.BLUE + "Sorry, that ("
-								+ duration.getString(0) + ") isn't a number!");
-						w.setStorm(true);
-						w.setWeatherDuration(12000);
-						replaceRain.put("duration", "10");
-						sender.sendMessage(ChatColor.GOLD
-								+ Utils.I18n("sRain", replaceRain)
-								+ w.getName());
-					}
 				}
-				break;
-			default :
-				break;
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -1665,10 +1685,10 @@ public final class Utils {
 	 */
 	public static void teleportWithChunkCheck(final Player player,
 			final Location loc) {
-		final CraftServer server = ((CraftServer) player.getServer());
+
 		final PlayerTeleportEvent event = new ACTeleportEvent(player,
 				player.getLocation(), loc, TeleportCause.PLUGIN);
-		server.getPluginManager().callEvent(event);
+		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;
 		}
@@ -1679,22 +1699,42 @@ public final class Utils {
 			toLocation.getWorld().loadChunk(x, z);
 		}
 		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
-		final WorldServer fromWorld = ((CraftWorld) player.getLocation()
-				.getWorld()).getHandle();
-		final WorldServer toWorld = ((CraftWorld) toLocation.getWorld())
-				.getHandle();
-		final EntityPlayer entity = ((CraftPlayer) player).getHandle();
-		// Check if the fromWorld and toWorld are the same.
-		if (fromWorld == toWorld) {
-			entity.netServerHandler.teleport(toLocation);
-		} else {
-			// Close any foreign inventory
-			if (entity.activeContainer != entity.defaultContainer) {
-				entity.closeInventory();
+		teleport(player, toLocation);
+
+	}
+
+	private static void teleport(final Player player, final Location toLocation) {
+		final Object server = MinecraftReflection.getHandle(player.getServer());
+		final Object entityPlayer = MinecraftReflection.getHandle(player);
+		final Object toWorld = MinecraftReflection.getHandle(toLocation
+				.getWorld());
+		try {
+			final int dimension = ClassUtils.getPrivateField(toWorld,
+					"dimension");
+			final Object activeContainer = ClassUtils.getPrivateField(
+					entityPlayer, "activeContainer");
+			final Object defaultContainer = ClassUtils.getPrivateField(
+					entityPlayer, "defaultContainer");
+
+			// Check if the fromWorld and toWorld are the same.
+			if (player.getWorld().equals(toLocation.getWorld())) {
+				MinecraftReflection.teleportPlayer(player, toLocation);
+			} else {
+				// Close any foreign inventory
+				if (activeContainer != defaultContainer) {
+					entityPlayer.getClass().getMethod("closeInventory")
+							.invoke(entityPlayer);
+				}
+				server.getClass()
+						.getMethod("moveToWorld", entityPlayer.getClass(),
+								int.class, boolean.class, toLocation.getClass())
+						.invoke(server, entityPlayer, dimension, true,
+								toLocation);
 			}
-			server.getHandle().moveToWorld(entity, toWorld.dimension, true,
-					toLocation);
+		} catch (final Exception e) {
+			throw new RuntimeException("Problem while teleporting a player", e);
 		}
+
 	}
 
 	/**
