@@ -21,21 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import net.minecraft.server.Entity;
-import net.minecraft.server.EntityAnimal;
-import net.minecraft.server.EntityBoat;
-import net.minecraft.server.EntityExperienceOrb;
-import net.minecraft.server.EntityHuman;
-import net.minecraft.server.EntityItem;
-import net.minecraft.server.EntityMinecart;
-import net.minecraft.server.EntityMonster;
-import net.minecraft.server.EntityPainting;
-import net.minecraft.server.EntityVillager;
-
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftWorld;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -44,6 +32,8 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Compatibility.ClassUtils;
+import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -122,23 +112,30 @@ public class Memory extends ServerCommand {
 				|| args.hasFlag('m') || args.hasFlag('a') || args.hasFlag('n')
 				|| args.hasFlag('v') || args.hasFlag('c') || args.hasFlag('b')) {
 			int count = 0;
-			final HashMap<String, List<Entity>> entityList = new HashMap<String, List<Entity>>(
+			final HashMap<String, List<Object>> entityList = new HashMap<String, List<Object>>(
 					sender.getServer().getWorlds().size());
 			final List<World> worlds = sender.getServer().getWorlds();
 			final Semaphore sema = new Semaphore(0);
 
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin,
 					new Runnable() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public void run() {
 							for (final World w : worlds) {
-								final net.minecraft.server.World cWorld = ((CraftWorld) w)
-										.getHandle();
-								synchronized (cWorld.entityList) {
+								final Object cWorld = MinecraftReflection
+										.getHandle(w);
+								List<Object> wEntityList = null;
+								try {
+									wEntityList = ClassUtils.getPrivateField(
+											cWorld, "entityList");
+								} catch (final Exception e) {
+									throw new RuntimeException(
+											"Cannot get entityList from "
+													+ cWorld, e);
+								}
+								synchronized (wEntityList) {
 									entityList.put(w.getName(),
-											new ArrayList<Entity>(
-													cWorld.entityList));
+											new ArrayList<Object>(wEntityList));
 									sema.release();
 								}
 
@@ -148,12 +145,17 @@ public class Memory extends ServerCommand {
 			for (final World w : worlds) {
 				try {
 					sema.acquire();
-				} catch (final InterruptedException e) {}
-				for (final Entity entity : entityList.get(w.getName())) {
+				} catch (final InterruptedException e) {
+				}
+				for (final Object entity : entityList.get(w.getName())) {
 					if (dontKill(args, entity)) {
 						continue;
 					}
-					entity.die();
+					try {
+						entity.getClass().getMethod("die").invoke(entity);
+					} catch (final Exception e) {
+						throw new RuntimeException("Can't kill " + entity, e);
+					}
 					count++;
 				}
 			}
@@ -161,7 +163,8 @@ public class Memory extends ServerCommand {
 			sender.sendMessage("Freed Entities : " + count);
 			try {
 				Thread.sleep(500);
-			} catch (final InterruptedException e) {}
+			} catch (final InterruptedException e) {
+			}
 		}
 		final long usedMB = (Runtime.getRuntime().totalMemory() - Runtime
 				.getRuntime().freeMemory()) / 1024L / 1024L;
@@ -260,34 +263,43 @@ public class Memory extends ServerCommand {
 		}
 	}
 
-	private boolean dontKill(final CommandArgs args, final Entity toKill) {
+	private boolean dontKill(final CommandArgs args, final Object toKill) {
 		boolean dontKill = true;
 		if (args.hasFlag('f')) {
-			dontKill = (toKill instanceof EntityHuman || toKill instanceof EntityPainting);
+			dontKill = (MinecraftReflection
+					.instanceOfNMS(toKill, "EntityHuman") || MinecraftReflection
+					.instanceOfNMS(toKill, "EntityPainting"));
 		}
 		if (args.hasFlag('x')) {
-			dontKill = !(toKill instanceof EntityExperienceOrb);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+					"EntityExperienceOrb");
 		}
 		if (args.hasFlag('i')) {
-			dontKill = !(toKill instanceof EntityItem);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill, "EntityItem");
 		}
 		if (args.hasFlag('m')) {
-			dontKill = !(toKill instanceof EntityMonster);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+					"EntityMonster");
 		}
 		if (args.hasFlag('a')) {
-			dontKill = !(toKill instanceof EntityAnimal);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+					"EntityAnimal");
 		}
 		if (args.hasFlag('n')) {
-			dontKill = !(toKill instanceof EntityVillager);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+					"EntityVillager");
 		}
 		if (args.hasFlag('c')) {
-			dontKill = !(toKill instanceof EntityMinecart);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+					"EntityMinecart");
 		}
 		if (args.hasFlag('b')) {
-			dontKill = !(toKill instanceof EntityBoat);
+			dontKill = !MinecraftReflection.instanceOfNMS(toKill, "EntityBoat");
 		}
 		if (args.hasFlag('v')) {
-			dontKill = !(toKill instanceof EntityMinecart || toKill instanceof EntityBoat);
+			dontKill = !(MinecraftReflection.instanceOfNMS(toKill,
+					"EntityMinecart") || MinecraftReflection.instanceOfNMS(
+					toKill, "EntityBoat"));
 		}
 		return dontKill;
 	}
