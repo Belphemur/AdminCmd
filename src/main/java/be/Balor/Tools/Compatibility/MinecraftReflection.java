@@ -218,7 +218,7 @@ public class MinecraftReflection {
 	}
 
 	/**
-	 * Get the networkManager of the wanted player
+	 * Get the NetServerHandler of the wanted player
 	 * 
 	 * @param player
 	 *            - CraftPlayer
@@ -226,11 +226,16 @@ public class MinecraftReflection {
 	 * @throws RuntimeException
 	 *             If we were unable to retrieve the entity.
 	 */
-	public static Object getNetworkManager(final Object player) {
+	public static Object getNetServerHandler(final Object player) {
 		try {
-			return ClassUtils.getPrivateField(player, getNetworkManagerName());
+			final String fieldName = getNetServerHandlerName();
+			return ClassUtils.getPrivateField(
+					player,
+					Character.toLowerCase(fieldName.charAt(0))
+							+ (fieldName.length() > 1 ? fieldName.substring(1)
+									: ""));
 		} catch (final Exception e) {
-			throw new RuntimeException("Cannot get NetworkManager from "
+			throw new RuntimeException("Cannot get NetServerHandler from "
 					+ player, e);
 		}
 	}
@@ -247,7 +252,7 @@ public class MinecraftReflection {
 	 */
 	public static void teleportPlayer(final Player player,
 			final Location toLocation) {
-		final Object networkManager = getNetworkManager(getHandle(player));
+		final Object networkManager = getNetServerHandler(getHandle(player));
 		try {
 			networkManager.getClass().getMethod("teleport", Location.class)
 					.invoke(networkManager, toLocation);
@@ -769,5 +774,14 @@ public class MinecraftReflection {
 	 */
 	public static String getNetLoginHandlerName() {
 		return getNetLoginHandlerClass().getSimpleName();
+	}
+
+	/**
+	 * Dynamically retrieve the name of the current NetServerHandler.
+	 * 
+	 * @return Name of the NetServerHandler class.
+	 */
+	public static String getNetServerHandlerName() {
+		return getNetServerHandlerClass().getSimpleName();
 	}
 }
