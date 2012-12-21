@@ -38,8 +38,6 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.minecraft.server.Packet201PlayerInfo;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -47,8 +45,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -75,6 +71,7 @@ import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Compatibility.ClassUtils;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.PacketBuilder;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -153,28 +150,15 @@ public final class Utils {
 	 *            player to remove
 	 */
 	public static void addPlayerInOnlineList(final Player player) {
-		((CraftServer) player.getServer()).getHandle()
-				.sendAll(
-						new Packet201PlayerInfo(((CraftPlayer) player)
-								.getHandle().listName, true, 1000));
-	}
-
-	public static void addPlayerInOnlineList(final Player toAdd,
-			final Player fromPlayer) {
-		final Object netServerHandler = MinecraftReflection
-				.getNetServerHandler(fromPlayer);
+		final Object server = MinecraftReflection.getHandle(player.getServer());
 		try {
-			netServerHandler
-					.getClass()
-					.getMethod("sendPacket",
-							MinecraftReflection.getPacketClass())
-					.invoke(netServerHandler,
-							new Packet201PlayerInfo(((CraftPlayer) toAdd)
-									.getHandle().listName, true, 1000));
+			server.getClass()
+					.getMethod("sendAll", MinecraftReflection.getPacketClass())
+					.invoke(server,
+							PacketBuilder.buildPacket201PlayerInfo(player,
+									true, 1000));
 		} catch (final Exception e) {
-			throw new RuntimeException("Cannot send packet from " + fromPlayer,
-					e);
-
+			throw new RuntimeException("Can't send the Packet201", e);
 		}
 	}
 
@@ -973,31 +957,15 @@ public final class Utils {
 	 *            player to remove
 	 */
 	public static void removePlayerFromOnlineList(final Player player) {
-		((CraftServer) player.getServer()).getHandle().sendAll(
-				new Packet201PlayerInfo(
-						((CraftPlayer) player).getHandle().listName, false,
-						9999));
-	}
-
-	public static void removePlayerFromOnlineList(final Player toRemove,
-			final Player fromPlayer) {
-		if (toRemove == null || fromPlayer == null) {
-			return;
-		}
-		final Object netServerHandler = MinecraftReflection
-				.getNetServerHandler(fromPlayer);
+		final Object server = MinecraftReflection.getHandle(player.getServer());
 		try {
-			netServerHandler
-					.getClass()
-					.getMethod("sendPacket",
-							MinecraftReflection.getPacketClass())
-					.invoke(netServerHandler,
-							new Packet201PlayerInfo(((CraftPlayer) toRemove)
-									.getHandle().listName, false, 9999));
+			server.getClass()
+					.getMethod("sendAll", MinecraftReflection.getPacketClass())
+					.invoke(server,
+							PacketBuilder.buildPacket201PlayerInfo(player,
+									false, 9999));
 		} catch (final Exception e) {
-			throw new RuntimeException("Cannot send packet from " + fromPlayer,
-					e);
-
+			throw new RuntimeException("Can't send the Packet201", e);
 		}
 	}
 
