@@ -359,6 +359,20 @@ public class MinecraftReflection {
 	}
 
 	/**
+	 * Determine if the given object is a NMS object of the given class
+	 * 
+	 * @param obj
+	 *            - the given object.
+	 * @param clazz
+	 *            - name of the class to test
+	 * @return TRUE if it is, FALSE otherwise.
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean instanceOfNMS(final Object obj, final String clazz) {
+		return getMinecraftClass(clazz).isAssignableFrom(obj.getClass());
+	}
+
+	/**
 	 * Determine if the given object is a data watcher object.
 	 * 
 	 * @param obj
