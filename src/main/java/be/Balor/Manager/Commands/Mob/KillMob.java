@@ -20,18 +20,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.server.Entity;
-import net.minecraft.server.EntityAnimal;
-import net.minecraft.server.EntityMonster;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.entity.CraftEntity;
-import org.bukkit.craftbukkit.entity.CraftLivingEntity;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -139,8 +135,7 @@ public class KillMob extends MobCommand {
 					if (m instanceof HumanEntity) {
 						continue;
 					}
-					final Entity entity = ((CraftLivingEntity) m).getHandle();
-					entity.die();
+					killLivingEntity(m);
 					mobKilled++;
 
 				}
@@ -148,10 +143,8 @@ public class KillMob extends MobCommand {
 		} else if (type.equalsIgnoreCase("monsters")) {
 			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
-					if (m instanceof EntityMonster) {
-						final Entity entity = ((CraftLivingEntity) m)
-								.getHandle();
-						entity.die();
+					if (m instanceof Monster) {
+						killLivingEntity(m);
 						mobKilled++;
 					}
 				}
@@ -159,10 +152,8 @@ public class KillMob extends MobCommand {
 		} else if (type.equalsIgnoreCase("animals")) {
 			for (final World w : worlds) {
 				for (final LivingEntity m : w.getLivingEntities()) {
-					if (m instanceof EntityAnimal) {
-						final Entity entity = ((CraftLivingEntity) m)
-								.getHandle();
-						entity.die();
+					if (m instanceof Animals) {
+						killLivingEntity(m);
 						mobKilled++;
 					}
 				}
@@ -177,14 +168,19 @@ public class KillMob extends MobCommand {
 				return;
 			}
 			for (final World w : worlds) {
-				for (final org.bukkit.entity.Entity m : w
-						.getEntitiesByClasses(ct.getEntityClass())) {
-					final Entity entity = ((CraftEntity) m).getHandle();
-					entity.die();
+				for (final LivingEntity m : w.getLivingEntities()) {
+					if (!ct.getEntityClass().isAssignableFrom(m.getClass())) {
+						continue;
+					}
+					killLivingEntity(m);
 					mobKilled++;
 				}
 			}
 		}
 		Utils.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
+	}
+
+	private void killLivingEntity(final LivingEntity m) {
+		m.damage(m.getMaxHealth());
 	}
 }
