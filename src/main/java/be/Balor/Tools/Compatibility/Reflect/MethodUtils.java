@@ -83,7 +83,7 @@ public class MethodUtils {
 		return result;
 	}
 
-	private static Method getClassMethod(final Class<?> clazz,
+	private synchronized static Method getClassMethod(final Class<?> clazz,
 			final String name, final Class<?>... parameterTypes)
 			throws NoSuchMethodException {
 		final MethodKey key = new MethodKey(clazz, name, parameterTypes);
