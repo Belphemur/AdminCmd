@@ -45,7 +45,7 @@ public class NMSBuilder {
 			final String listName = FieldUtils.getField(playerHandle,
 					"listName");
 			final Class<?> packetClass = MinecraftReflection
-					.getMinecraftClass("Packet201PlayerInfo");
+					.getPacket201PlayerInfoClass();
 			final Constructor<?> packetConstructor = packetClass
 					.getConstructor(String.class, boolean.class, int.class);
 			return packetConstructor.newInstance(listName, online, ping);
@@ -65,9 +65,9 @@ public class NMSBuilder {
 		final Object playerHandle = MinecraftReflection.getHandle(player);
 		try {
 			final Class<?> playerInventoryClass = MinecraftReflection
-					.getMinecraftClass("PlayerInventory");
+					.getPlayerInventoryClass();
 			final Constructor<?> invConstructor = playerInventoryClass
-					.getConstructor(MinecraftReflection.getEntityPlayerClass());
+					.getConstructor(MinecraftReflection.getEntityHumanClass());
 			return invConstructor.newInstance(playerHandle);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);

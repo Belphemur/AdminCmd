@@ -729,7 +729,7 @@ public class MinecraftReflection {
 	 *             If we are unable to find the given class.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Class getCraftBukkitClass(final String className) {
+	private static Class getCraftBukkitClass(final String className) {
 		if (craftbukkitPackage == null) {
 			craftbukkitPackage = new CachedPackage(getCraftBukkitPackage());
 		}
@@ -746,7 +746,7 @@ public class MinecraftReflection {
 	 *             If we are unable to find the given class.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Class getMinecraftClass(final String className) {
+	private static Class getMinecraftClass(final String className) {
 		if (minecraftPackage == null) {
 			minecraftPackage = new CachedPackage(getMinecraftPackage());
 		}
@@ -763,7 +763,7 @@ public class MinecraftReflection {
 	 *             If we are unable to find any of the given classes.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Class getMinecraftClass(final String className,
+	private static Class getMinecraftClass(final String className,
 			final String... aliases) {
 		try {
 			// Try the main class first
@@ -792,6 +792,42 @@ public class MinecraftReflection {
 								.join(aliases)));
 			}
 		}
+	}
+
+	/**
+	 * Retrieve the NMS PlayerInventory class.
+	 * 
+	 * @return The PlayerInventory class.
+	 */
+	public static Class<?> getPlayerInventoryClass() {
+		return getMinecraftClass("PlayerInventory");
+	}
+
+	/**
+	 * Retrieve the NMS IInventory class.
+	 * 
+	 * @return The IInventory class.
+	 */
+	public static Class<?> getIInventoryClass() {
+		return getMinecraftClass("IInventory");
+	}
+
+	/**
+	 * Retrieve the NMS Packet201PlayerInfo class.
+	 * 
+	 * @return The Packet201PlayerInfo class.
+	 */
+	public static Class<?> getPacket201PlayerInfoClass() {
+		return getMinecraftClass("Packet201PlayerInfo");
+	}
+
+	/**
+	 * Retrieve the NMS EntityHuman class.
+	 * 
+	 * @return The EntityHuman class.
+	 */
+	public static Class<?> getEntityHumanClass() {
+		return getMinecraftClass("EntityHuman");
 	}
 
 	/**
