@@ -41,7 +41,7 @@ public class MethodUtils {
 			final Class<?>... parameterTypes) {
 		Method method;
 		try {
-			method = clazz.getDeclaredMethod(name, parameterTypes);
+			method = getClassMethod(clazz, name, parameterTypes);
 			return method;
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't get method " + name + " from "
@@ -77,5 +77,29 @@ public class MethodUtils {
 			method.setAccessible(false);
 		}
 		return result;
+	}
+
+	private static Method getClassMethod(final Class<?> clazz,
+			final String name, final Class<?>... parameterTypes)
+			throws NoSuchMethodException {
+		Method classMethod;
+		Class<?> copyClass = clazz;
+		try {
+			classMethod = copyClass.getDeclaredMethod(name, parameterTypes);
+		} catch (final NoSuchMethodException e) {
+			while (true) {
+				copyClass = copyClass.getSuperclass();
+				if (copyClass.equals(Object.class)) {
+					throw e;
+				}
+				try {
+					classMethod = copyClass.getDeclaredMethod(name,
+							parameterTypes);
+					break;
+				} catch (final NoSuchMethodException e1) {
+				}
+			}
+		}
+		return classMethod;
 	}
 }
