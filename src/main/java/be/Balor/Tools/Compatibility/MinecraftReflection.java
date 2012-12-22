@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -180,14 +181,15 @@ public class MinecraftReflection {
 	 * @throws RuntimeException
 	 *             If we were unable to retrieve the Bukkit entity.
 	 */
-	public static Object getBukkitEntity(final Object nmsObject) {
+	@SuppressWarnings("unchecked")
+	public static <T extends Entity> T getBukkitEntity(final Object nmsObject) {
 		if (nmsObject == null) {
 			return null;
 		}
 
 		// We will have to do this dynamically, unfortunately
 		try {
-			return nmsObject.getClass().getMethod("getBukkitEntity")
+			return (T) nmsObject.getClass().getMethod("getBukkitEntity")
 					.invoke(nmsObject);
 		} catch (final Exception e) {
 			throw new RuntimeException("Cannot get Bukkit entity from "
@@ -484,6 +486,15 @@ public class MinecraftReflection {
 	}
 
 	/**
+	 * Retrieve the NMS WorldServer class.
+	 * 
+	 * @return The WorldServer class.
+	 */
+	public static Class<?> getWorldServerClass() {
+		return getMinecraftClass("WorldServer");
+	}
+
+	/**
 	 * Retrieve the WorldType class.
 	 * 
 	 * @return The WorldType class.
@@ -500,6 +511,15 @@ public class MinecraftReflection {
 	 */
 	public static Class<?> getMinecraftServerClass() {
 		return getMinecraftClass("MinecraftServer");
+	}
+
+	/**
+	 * Retrieve the NMS World class.
+	 * 
+	 * @return NMS World class.
+	 */
+	public static Class<?> getNMSWorldClass() {
+		return getMinecraftClass("World");
 	}
 
 	/**
@@ -849,6 +869,20 @@ public class MinecraftReflection {
 	public static Object getInventory(final Player p) {
 		return FieldUtils.getField(MinecraftReflection.getHandle(p),
 				"inventory");
+	}
+
+	/**
+	 * Get the NMS Server
+	 * 
+	 * @return instance of MinecraftServer
+	 */
+	public static Object getMinecraftServer() {
+		final Server server = Bukkit.getServer();
+		try {
+			return server.getClass().getMethod("getServer").invoke(server);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't get server  from " + server, e);
+		}
 	}
 
 	/**

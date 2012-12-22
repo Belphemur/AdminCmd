@@ -23,6 +23,7 @@ import net.minecraft.server.Packet201PlayerInfo;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 
 public class NMSBuilder {
 
@@ -71,5 +72,56 @@ public class NMSBuilder {
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);
 		}
+	}
+
+	/**
+	 * Build a FAKE entity player
+	 * 
+	 * @param name
+	 *            - name of the player
+	 * @return instance NMS of EntityPlayer
+	 */
+	public static Object buildEntityPlayer(final String name) {
+		final Object minecraftServer = MinecraftReflection.getMinecraftServer();
+		try {
+			final MethodHandler getWorldServer = new MethodHandler(
+					minecraftServer.getClass(), "getWorldServer", int.class);
+			final Object worldServer = getWorldServer
+					.invoke(minecraftServer, 0);
+			final Object itemInWorldManager = buildItemInWorldManager(worldServer);
+			final Class<?> entityPlayer = MinecraftReflection
+					.getEntityPlayerClass();
+			final Constructor<?> ePConstructor = entityPlayer.getConstructor(
+					MinecraftReflection.getMinecraftServerClass(),
+					MinecraftReflection.getNMSWorldClass(), String.class,
+					MinecraftReflection.getItemInWorldManagerClass());
+			return ePConstructor.newInstance(minecraftServer, worldServer,
+					name, itemInWorldManager);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't build PlayerInventory", e);
+		}
+	}
+
+	/**
+	 * Build a ItemInWorldManager
+	 * 
+	 * @param worldServer
+	 * @return
+	 */
+	public static Object buildItemInWorldManager(final Object worldServer) {
+		if (!MinecraftReflection.getWorldServerClass().isAssignableFrom(
+				worldServer.getClass())) {
+			throw new RuntimeException("The constructor need a "
+					+ MinecraftReflection.getWorldServerClass().getSimpleName());
+		}
+		final Class<?> clazz = MinecraftReflection.getItemInWorldManagerClass();
+		try {
+			final Constructor<?> constructor = clazz
+					.getConstructor(MinecraftReflection.getWorldServerClass());
+			return constructor.newInstance(worldServer);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't build ItemInWorldManager", e);
+		}
+
 	}
 }
