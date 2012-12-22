@@ -18,8 +18,6 @@ package be.Balor.Tools.Compatibility;
 
 import java.lang.reflect.Constructor;
 
-import net.minecraft.server.Packet201PlayerInfo;
-
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
@@ -36,7 +34,7 @@ public class NMSBuilder {
 	 *            - online or offline
 	 * @param ping
 	 *            - ping
-	 * @return {@link Packet201PlayerInfo}
+	 * @return instance of Packet201PlayerInfo
 	 */
 	public static Object buildPacket201PlayerInfo(final Player player,
 			final boolean online, final int ping) {
@@ -59,7 +57,7 @@ public class NMSBuilder {
 	 * 
 	 * @param player
 	 *            - bukkit player
-	 * @return {@link PlayerInventory}
+	 * @return instance of PlayerInventory
 	 */
 	public static Object buildPlayerInventory(final Player player) {
 		final Object playerHandle = MinecraftReflection.getHandle(player);
@@ -106,7 +104,7 @@ public class NMSBuilder {
 	 * Build a ItemInWorldManager
 	 * 
 	 * @param worldServer
-	 * @return
+	 * @return return instance of ItemInWorldManager
 	 */
 	public static Object buildItemInWorldManager(final Object worldServer) {
 		if (!MinecraftReflection.getWorldServerClass().isAssignableFrom(
