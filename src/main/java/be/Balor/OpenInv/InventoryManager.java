@@ -23,13 +23,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerInteractManager;
-
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -151,12 +144,12 @@ public class InventoryManager {
 		}
 
 		// Create an entity to load the player data
-		final MinecraftServer server = ((CraftServer) Bukkit.getServer())
-				.getServer();
-		final EntityPlayer entity = new EntityPlayer(server,
-				server.getWorldServer(0), playername,
-				new PlayerInteractManager(server.getWorldServer(0)));
-		target = (entity == null) ? null : (Player) entity.getBukkitEntity();
+		final Object entity = NMSBuilder.buildEntityPlayer(playername);
+		if (entity == null) {
+			target = null;
+		} else {
+			target = MinecraftReflection.getBukkitEntity(entity);
+		}
 		if (target != null) {
 			target.loadData();
 		} else {
@@ -185,7 +178,7 @@ public class InventoryManager {
 	private void openInv(final Player sender, final Player target,
 			final boolean offline) {
 		final Object inventory = getInventory(target, offline);
-		final EntityPlayer eh = ((CraftPlayer) sender).getHandle();
+		final Object eh = MinecraftReflection.getHandle(sender);
 		final MethodHandler openContainer = new MethodHandler(
 				MinecraftReflection.getEntityPlayerClass(), "openContainer",
 				MinecraftReflection.getIInventoryClass());
