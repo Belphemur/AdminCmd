@@ -212,8 +212,8 @@ public class MinecraftReflection {
 			return bukkitObject.getClass().getMethod("getHandle")
 					.invoke(bukkitObject);
 		} catch (final Exception e) {
-			throw new RuntimeException("Cannot get EntityPlayer from "
-					+ bukkitObject, e);
+			throw new RuntimeException(
+					"Cannot get Handle from " + bukkitObject, e);
 		}
 	}
 
