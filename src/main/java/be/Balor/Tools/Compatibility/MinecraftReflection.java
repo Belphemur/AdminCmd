@@ -12,6 +12,8 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+
 import com.google.common.base.Joiner;
 
 /**

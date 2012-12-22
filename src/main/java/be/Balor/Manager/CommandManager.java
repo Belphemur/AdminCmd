@@ -51,7 +51,7 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;

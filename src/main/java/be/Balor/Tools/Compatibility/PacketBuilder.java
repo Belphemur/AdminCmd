@@ -20,6 +20,8 @@ import java.lang.reflect.Constructor;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+
 public class PacketBuilder {
 
 	/**

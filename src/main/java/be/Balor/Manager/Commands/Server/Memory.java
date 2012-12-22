@@ -32,9 +32,9 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.FieldUtils;
-import be.Balor.Tools.Compatibility.MethodHandler;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
