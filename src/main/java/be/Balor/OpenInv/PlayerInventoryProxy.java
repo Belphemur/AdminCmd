@@ -113,11 +113,15 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	 * net.minecraft.server.PlayerInventory#onClose(org.bukkit.craftbukkit.entity
 	 * .CraftHumanEntity)
 	 */
-	protected void onClose(final Object who) throws IllegalAccessException,
+	private void onClose(final Object who) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		final MethodHandler superOnClose = new MethodHandler(obj.getClass(),
 				"onClose", MinecraftReflection.getCraftHumanEntityClass());
 		superOnClose.invoke(obj, who);
+		checkCloseEvent();
+	}
+
+	protected void checkCloseEvent() {
 		final Object transactions = FieldUtils.getField(obj, "transaction");
 		final MethodHandler isEmpty = new MethodHandler(
 				transactions.getClass(), "isEmpty");
