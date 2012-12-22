@@ -17,6 +17,7 @@
 package be.Balor.OpenInv;
 
 import java.io.File;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,17 +26,19 @@ import java.util.Map;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerInteractManager;
-import net.minecraft.server.PlayerInventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.NMSBuilder;
+import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.Filters.DatFilter;
 import be.Balor.World.ACWorld;
@@ -49,10 +52,8 @@ import com.google.common.collect.MapMaker;
  */
 public class InventoryManager {
 	public static InventoryManager INSTANCE;
-	private final Map<String, ACPlayerInventory> replacedInv = new MapMaker()
-			.makeMap();
-	private final Map<String, ACPlayerInventory> offlineInv = new MapMaker()
-			.makeMap();
+	private final Map<String, Object> replacedInv = new MapMaker().makeMap();
+	private final Map<String, Object> offlineInv = new MapMaker().makeMap();
 
 	/**
  * 
@@ -68,11 +69,17 @@ public class InventoryManager {
 
 	public void onQuit(final Player p) {
 		final String name = p.getName();
-		final ACPlayerInventory inv = replacedInv.get(name);
+		final Object inv = replacedInv.get(name);
 		if (inv == null) {
 			return;
 		}
-		if (inv.getViewers().isEmpty()) {
+		final MethodHandler getViewers = new MethodHandler(inv.getClass(),
+				"getViewers");
+		final Object viewers = getViewers.invoke(inv);
+		final MethodHandler isEmpty = new MethodHandler(viewers.getClass(),
+				"isEmpty");
+		final boolean empty = isEmpty.invoke(viewers);
+		if (empty) {
 			replacedInv.remove(name);
 		}
 	}
@@ -86,18 +93,18 @@ public class InventoryManager {
 
 	public void onJoin(final Player p) {
 		final String name = p.getName();
-		ACPlayerInventory inv = offlineInv.get(name);
+		Object inv = offlineInv.get(name);
 		if (inv == null) {
 			inv = replacedInv.get(name);
 		}
 		if (inv == null) {
 			return;
 		}
-		final CraftPlayer cp = (CraftPlayer) p;
-		final PlayerInventory mcInv = ((CraftInventoryPlayer) cp.getInventory())
-				.getInventory();
-		mcInv.items = inv.items;
-		mcInv.armor = inv.armor;
+		final PlayerInventoryProxy proxy = (PlayerInventoryProxy) Proxy
+				.getInvocationHandler(inv);
+		final Object inventory = MinecraftReflection.getInventory(p);
+		FieldUtils.setField(inventory, "armor", proxy.getArmor());
+		FieldUtils.setField(inventory, "items", proxy.getItems());
 
 	}
 
@@ -177,20 +184,24 @@ public class InventoryManager {
 
 	private void openInv(final Player sender, final Player target,
 			final boolean offline) {
-		final ACPlayerInventory inventory = getInventory(target, offline);
+		final Object inventory = getInventory(target, offline);
 		final EntityPlayer eh = ((CraftPlayer) sender).getHandle();
-		eh.openContainer(inventory);
+		final MethodHandler openContainer = new MethodHandler(
+				MinecraftReflection.getEntityPlayerClass(), "openContainer",
+				MinecraftReflection.getIInventoryClass());
+		openContainer.invoke(eh, inventory);
 	}
 
-	private ACPlayerInventory getInventory(final Player player,
-			final boolean offline) {
-		ACPlayerInventory inventory = replacedInv.get(player.getName());
+	private Object getInventory(final Player player, final boolean offline) {
+		Object inventory = replacedInv.get(player.getName());
 		if (inventory == null) {
+			final Object playerInv = NMSBuilder.buildPlayerInventory(player);
 			if (offline) {
-				inventory = new ACOfflinePlayerInventory(player);
+				inventory = OfflinePlayerInventoryProxy.newInstance(player,
+						playerInv);
 				offlineInv.put(player.getName(), inventory);
 			} else {
-				inventory = new ACPlayerInventory(player);
+				inventory = PlayerInventoryProxy.newInstance(player, playerInv);
 				replacedInv.put(player.getName(), inventory);
 			}
 		}
