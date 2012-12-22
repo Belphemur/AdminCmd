@@ -204,7 +204,7 @@ public class MinecraftReflection {
 	 * @throws RuntimeException
 	 *             If we were unable to retrieve the entity.
 	 */
-	public static Object getHandle(final Object bukkitObject) {
+	public static Object getHandle(final @Nonnull Object bukkitObject) {
 		if (bukkitObject == null) {
 			return null;
 		}
@@ -214,8 +214,12 @@ public class MinecraftReflection {
 			return bukkitObject.getClass().getMethod("getHandle")
 					.invoke(bukkitObject);
 		} catch (final Exception e) {
-			throw new RuntimeException(
-					"Cannot get Handle from " + bukkitObject, e);
+			try {
+				return FieldUtils.getField(bukkitObject, "handle");
+			} catch (final Exception e1) {
+				throw new RuntimeException("Cannot get Handle from "
+						+ bukkitObject, e1);
+			}
 		}
 	}
 
@@ -712,7 +716,7 @@ public class MinecraftReflection {
 			stack = getBukkitItemStack(stack);
 		}
 
-		return FieldUtils.getField(stack, "handle");
+		return getHandle(stack);
 	}
 
 	/**

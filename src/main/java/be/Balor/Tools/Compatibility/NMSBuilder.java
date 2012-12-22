@@ -18,11 +18,14 @@ package be.Balor.Tools.Compatibility;
 
 import java.lang.reflect.Constructor;
 
+import net.minecraft.server.Packet201PlayerInfo;
+
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 
-public class PacketBuilder {
+public class NMSBuilder {
 
 	/**
 	 * Create a Packet201PlayerInfo
@@ -33,13 +36,13 @@ public class PacketBuilder {
 	 *            - online or offline
 	 * @param ping
 	 *            - ping
-	 * @return
+	 * @return {@link Packet201PlayerInfo}
 	 */
 	public static Object buildPacket201PlayerInfo(final Player player,
 			final boolean online, final int ping) {
-		final Object playerHandler = MinecraftReflection.getHandle(player);
+		final Object playerHandle = MinecraftReflection.getHandle(player);
 		try {
-			final String listName = FieldUtils.getField(playerHandler,
+			final String listName = FieldUtils.getField(playerHandle,
 					"listName");
 			final Class<?> packetClass = MinecraftReflection
 					.getMinecraftClass("Packet201PlayerInfo");
@@ -48,6 +51,26 @@ public class PacketBuilder {
 			return packetConstructor.newInstance(listName, online, ping);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't create the wanted packet", e);
+		}
+	}
+
+	/**
+	 * Build a PlayerInventory for the given Bukkit Player.
+	 * 
+	 * @param player
+	 *            - bukkit player
+	 * @return {@link PlayerInventory}
+	 */
+	public static Object buildPlayerInventory(final Player player) {
+		final Object playerHandle = MinecraftReflection.getHandle(player);
+		try {
+			final Class<?> playerInventoryClass = MinecraftReflection
+					.getMinecraftClass("PlayerInventory");
+			final Constructor<?> invConstructor = playerInventoryClass
+					.getConstructor(MinecraftReflection.getEntityPlayerClass());
+			return invConstructor.newInstance(playerHandle);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't build PlayerInventory", e);
 		}
 	}
 }

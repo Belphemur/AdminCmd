@@ -70,7 +70,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
-import be.Balor.Tools.Compatibility.PacketBuilder;
+import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.Tools.Debug.DebugLog;
@@ -155,7 +155,7 @@ public final class Utils {
 		final MethodHandler sendAll = new MethodHandler(server.getClass(),
 				"sendAll", MinecraftReflection.getPacketClass());
 		sendAll.invoke(server,
-				PacketBuilder.buildPacket201PlayerInfo(player, true, 1000));
+				NMSBuilder.buildPacket201PlayerInfo(player, true, 1000));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -957,7 +957,7 @@ public final class Utils {
 		final MethodHandler sendAll = new MethodHandler(server.getClass(),
 				"sendAll", MinecraftReflection.getPacketClass());
 		sendAll.invoke(server,
-				PacketBuilder.buildPacket201PlayerInfo(player, false, 9999));
+				NMSBuilder.buildPacket201PlayerInfo(player, false, 9999));
 	}
 
 	public static Integer replaceBlockByAir(final CommandSender sender,
