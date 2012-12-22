@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -181,19 +180,6 @@
 							<shadedGroupFilter>
 								net.sf.opencsv
 							</shadedGroupFilter>
-							<relocations>
-								<relocation>
-									<pattern>org.bukkit.craftbukkit</pattern>
-									<shadedPattern>org.bukkit.craftbukkit.v${minecraft.version}</shadedPattern>
-									<excludes>
-										<exclude>org.bukkit.craftbukkit.Main*</exclude>
-									</excludes>
-								</relocation>
-								<relocation>
-									<pattern>net.minecraft.server</pattern>
-									<shadedPattern>net.minecraft.server.v${minecraft.version}</shadedPattern>
-								</relocation>
-							</relocations>
 						</configuration>
 					</execution>
 				</executions>
@@ -411,12 +397,12 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.4.5-R1.1-SNAPSHOT</version>
+			<version>${bukkit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.4.5-R1.1-SNAPSHOT</version>
+			<version>${bukkit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dynmap</groupId>
@@ -426,7 +412,7 @@
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<minecraft.version>1_4_5</minecraft.version>
+		<bukkit.version>1.4.6-R0.1-SNAPSHOT</bukkit.version>
 	</properties>
-	<version>6.6.0-SNAPSHOT</version>
+	<version>7.0.0-SNAPSHOT</version>
 </project>
