@@ -831,6 +831,15 @@ public class MinecraftReflection {
 	}
 
 	/**
+	 * Retrieve the CraftBukkit CraftHumanEntity class.
+	 * 
+	 * @return The CraftHumanEntity class.
+	 */
+	public static Class<?> getCraftHumanEntityClass() {
+		return getCraftBukkitClass("CraftHumanEntity");
+	}
+
+	/**
 	 * Dynamically retrieve the NetworkManager name.
 	 * 
 	 * @return Name of the NetworkManager class.
