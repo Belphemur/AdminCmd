@@ -229,7 +229,7 @@ public class MinecraftReflection {
 	public static Object getNetServerHandler(final Object player) {
 		try {
 			final String fieldName = getNetServerHandlerName();
-			return ClassUtils.getPrivateField(
+			return FieldUtils.getField(
 					player,
 					Character.toLowerCase(fieldName.charAt(0))
 							+ (fieldName.length() > 1 ? fieldName.substring(1)

@@ -20,6 +20,7 @@ import info.somethingodd.OddItem.OddItem;
 import info.somethingodd.OddItem.OddItemBase;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +70,8 @@ import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
-import be.Balor.Tools.Compatibility.ClassUtils;
+import be.Balor.Tools.Compatibility.FieldUtils;
+import be.Balor.Tools.Compatibility.MethodUtils;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.Tools.Compatibility.PacketBuilder;
 import be.Balor.Tools.Debug.DebugLog;
@@ -151,15 +153,10 @@ public final class Utils {
 	 */
 	public static void addPlayerInOnlineList(final Player player) {
 		final Object server = MinecraftReflection.getHandle(player.getServer());
-		try {
-			server.getClass()
-					.getMethod("sendAll", MinecraftReflection.getPacketClass())
-					.invoke(server,
-							PacketBuilder.buildPacket201PlayerInfo(player,
-									true, 1000));
-		} catch (final Exception e) {
-			throw new RuntimeException("Can't send the Packet201", e);
-		}
+		final Method sendAll = MethodUtils.getMethod(server.getClass(),
+				"sendAll", MinecraftReflection.getPacketClass());
+		MethodUtils.invokeMethod(server, sendAll,
+				PacketBuilder.buildPacket201PlayerInfo(player, true, 1000));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -958,15 +955,10 @@ public final class Utils {
 	 */
 	public static void removePlayerFromOnlineList(final Player player) {
 		final Object server = MinecraftReflection.getHandle(player.getServer());
-		try {
-			server.getClass()
-					.getMethod("sendAll", MinecraftReflection.getPacketClass())
-					.invoke(server,
-							PacketBuilder.buildPacket201PlayerInfo(player,
-									false, 9999));
-		} catch (final Exception e) {
-			throw new RuntimeException("Can't send the Packet201", e);
-		}
+		final Method sendAll = MethodUtils.getMethod(server.getClass(),
+				"sendAll", MinecraftReflection.getPacketClass());
+		MethodUtils.invokeMethod(server, sendAll,
+				PacketBuilder.buildPacket201PlayerInfo(player, false, 9999));
 	}
 
 	public static Integer replaceBlockByAir(final CommandSender sender,
@@ -1677,11 +1669,11 @@ public final class Utils {
 		final Object toWorld = MinecraftReflection.getHandle(toLocation
 				.getWorld());
 		try {
-			final int dimension = ClassUtils.getPrivateField(toWorld,
+			final int dimension = FieldUtils.getField(toWorld,
 					"dimension");
-			final Object activeContainer = ClassUtils.getPrivateField(
+			final Object activeContainer = FieldUtils.getField(
 					entityPlayer, "activeContainer");
-			final Object defaultContainer = ClassUtils.getPrivateField(
+			final Object defaultContainer = FieldUtils.getField(
 					entityPlayer, "defaultContainer");
 
 			// Check if the fromWorld and toWorld are the same.

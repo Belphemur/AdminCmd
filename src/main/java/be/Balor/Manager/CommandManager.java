@@ -51,7 +51,7 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.ClassUtils;
+import be.Balor.Tools.Compatibility.FieldUtils;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -322,11 +322,10 @@ public class CommandManager implements CommandExecutor {
 			}
 			return true;
 		} catch (final Throwable t) {
-			ACLogger.severe(container != null
-					? container.debug()
+			ACLogger.severe(container != null ? container.debug()
 					: "The container is null", t);
-			Utils.broadcastMessage("[AdminCmd] " + container != null
-					? container.debug()
+			Utils.broadcastMessage("[AdminCmd] " + container != null ? container
+					.debug()
 					: cmd.getCmdName()
 							+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/");
 			return false;
@@ -346,6 +345,7 @@ public class CommandManager implements CommandExecutor {
 			return false;
 		}
 	}
+
 	/**
 	 * Execute on the new player the commands found in the Commands.yml.<br />
 	 * First look as a simple bukkit command, then in the alias defined by the
@@ -371,6 +371,7 @@ public class CommandManager implements CommandExecutor {
 		}
 
 	}
+
 	public boolean processCommandString(final CommandSender sender,
 			final String command) {
 		final String[] split = command.split("\\s+");
@@ -399,6 +400,7 @@ public class CommandManager implements CommandExecutor {
 		}
 		return false;
 	}
+
 	/**
 	 * Register command from plugin
 	 * 
@@ -570,49 +572,36 @@ public class CommandManager implements CommandExecutor {
 	 * @param pCmd
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand pCmd) {
+		final CommandMap commandMap = FieldUtils.getField(corePlugin
+				.getServer().getPluginManager(), "commandMap");
+		final HashMap<String, Command> knownCommands = FieldUtils.getField(
+				commandMap, "knownCommands");
+		PluginCommand cmd;
+		final List<String> aliases = new ArrayList<String>();
 		try {
-			final CommandMap commandMap = ClassUtils.getPrivateField(corePlugin
-					.getServer().getPluginManager(), "commandMap");
-			final HashMap<String, Command> knownCommands = ClassUtils
-					.getPrivateField(commandMap, "knownCommands");
-			PluginCommand cmd;
-			final List<String> aliases = new ArrayList<String>();
+			cmd = (PluginCommand) knownCommands.get(pCmd.getName());
+			if (pCmd == cmd) {
+				DebugLog.INSTANCE.info("Remove Command " + pCmd.getName());
+				knownCommands.remove(pCmd.getName());
+				aliases.addAll(pCmd.getAliases());
+				pCmd.unregister(commandMap);
+			} else {
+				return;
+			}
+		} catch (final ClassCastException e) {
+			DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
+		}
+		for (final String alias : aliases) {
 			try {
-				cmd = (PluginCommand) knownCommands.get(pCmd.getName());
+				cmd = (PluginCommand) knownCommands.get(alias);
 				if (pCmd == cmd) {
-					DebugLog.INSTANCE.info("Remove Command " + pCmd.getName());
-					knownCommands.remove(pCmd.getName());
-					aliases.addAll(pCmd.getAliases());
-					pCmd.unregister(commandMap);
-				} else {
-					return;
+					knownCommands.remove(alias);
 				}
 			} catch (final ClassCastException e) {
 				DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
 			}
-			for (final String alias : aliases) {
-				try {
-					cmd = (PluginCommand) knownCommands.get(alias);
-					if (pCmd == cmd) {
-						knownCommands.remove(alias);
-					}
-				} catch (final ClassCastException e) {
-					DebugLog.INSTANCE
-							.log(Level.INFO, "Not a Plugin Command", e);
-				}
-			}
-
-		} catch (final SecurityException e) {
-			ACLogger.severe("Unregistering command problem", e);
-		} catch (final IllegalArgumentException e) {
-			ACLogger.severe("Unregistering command problem", e);
-		} catch (final NoSuchFieldException e) {
-			ACLogger.severe("Unregistering command problem", e);
-		} catch (final IllegalAccessException e) {
-			ACLogger.severe("Unregistering command problem", e);
-		} catch (final Exception e) {
-			ACLogger.severe("Unregistering command problem", e);
 		}
+
 	}
 
 	/**

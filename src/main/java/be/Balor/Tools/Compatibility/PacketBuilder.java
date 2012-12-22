@@ -37,7 +37,7 @@ public class PacketBuilder {
 			final boolean online, final int ping) {
 		final Object playerHandler = MinecraftReflection.getHandle(player);
 		try {
-			final String listName = ClassUtils.getPrivateField(playerHandler,
+			final String listName = FieldUtils.getField(playerHandler,
 					"listName");
 			final Class<?> packetClass = MinecraftReflection
 					.getMinecraftClass("Packet201PlayerInfo");

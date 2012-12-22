@@ -28,26 +28,54 @@ import java.lang.reflect.Field;
  * @author WinSock
  * @version 1.0
  */
-public class ClassUtils {
+public class FieldUtils {
+
+	/**
+	 * Get the field from the wanted object
+	 * 
+	 * @param object
+	 *            - given object
+	 * @param field
+	 *            - given field
+	 * @return the attribute casted as wanted.
+	 * @throws RuntimeException
+	 *             if we can't get the field
+	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T getPrivateField(final Object object, final String field)
-			throws SecurityException, IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException {
-		final Field objectField = getObjectField(object, field);
-		objectField.setAccessible(true);
-		final T obj = (T) objectField.get(object);
-		objectField.setAccessible(false);
-		return obj;
+	public static <T> T getField(final Object object, final String field) {
+		try {
+			final Field objectField = getObjectField(object, field);
+			objectField.setAccessible(true);
+			final T obj = (T) objectField.get(object);
+			objectField.setAccessible(false);
+			return obj;
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't get field " + field + " from "
+					+ object, e);
+		}
 	}
 
-	public static void setPrivateField(final Object object, final String field,
-			final Object value) throws SecurityException,
-			IllegalArgumentException, IllegalAccessException,
-			NoSuchFieldException {
-		final Field objectField = getObjectField(object, field);
-		objectField.setAccessible(true);
-		objectField.set(object, value);
-		objectField.setAccessible(false);
+	/**
+	 * Set the field from the wanted object
+	 * 
+	 * @param object
+	 *            - given object
+	 * @param field
+	 *            - given field
+	 * @throws RuntimeException
+	 *             if we can't set the field
+	 */
+	public static void setField(final Object object, final String field,
+			final Object value) {
+		try {
+			final Field objectField = getObjectField(object, field);
+			objectField.setAccessible(true);
+			objectField.set(object, value);
+			objectField.setAccessible(false);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't set field " + field + " from "
+					+ object, e);
+		}
 	}
 
 	private static Field getObjectField(final Object object, final String field)
@@ -65,7 +93,8 @@ public class ClassUtils {
 				try {
 					objectField = clazz.getDeclaredField(field);
 					break;
-				} catch (final NoSuchFieldException e1) {}
+				} catch (final NoSuchFieldException e1) {
+				}
 			}
 		}
 		return objectField;
