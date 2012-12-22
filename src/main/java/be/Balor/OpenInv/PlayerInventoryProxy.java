@@ -33,8 +33,8 @@ import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
  */
 public class PlayerInventoryProxy implements InvocationHandler {
 
-	private final Object obj;
-	private final Player proprietary;
+	protected final Object obj;
+	protected final Player proprietary;
 	private final Object[] extra = new Object[5];
 	private final int size;
 
@@ -54,7 +54,8 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	public static Object newInstance(final Player prop, final Object obj) {
-		if (!MinecraftReflection.instanceOfNMS(obj, "PlayerInventory")) {
+		if (!MinecraftReflection.getPlayerInventoryClass().isAssignableFrom(
+				obj.getClass())) {
 			throw new RuntimeException(
 					"The object must be of the type of PlayerInventory");
 		}
