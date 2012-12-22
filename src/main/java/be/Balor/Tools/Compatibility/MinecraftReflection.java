@@ -700,6 +700,22 @@ public class MinecraftReflection {
 	}
 
 	/**
+	 * Retrieve the net.minecraft.server ItemStack from a Bukkit ItemStack.
+	 * 
+	 * @param stack
+	 *            - the Bukkit ItemStack to convert.
+	 * @return The NMS ItemStack.
+	 */
+	public static Object getMinecraftItemStack(ItemStack stack) {
+		// Make sure this is a CraftItemStack
+		if (!isCraftItemStack(stack)) {
+			stack = getBukkitItemStack(stack);
+		}
+
+		return FieldUtils.getField(stack, "handle");
+	}
+
+	/**
 	 * Retrieve the class object of a specific CraftBukkit class.
 	 * 
 	 * @param className
