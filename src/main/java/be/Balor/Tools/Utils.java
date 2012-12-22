@@ -20,7 +20,6 @@ import info.somethingodd.OddItem.OddItem;
 import info.somethingodd.OddItem.OddItemBase;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,7 +70,7 @@ import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Compatibility.FieldUtils;
-import be.Balor.Tools.Compatibility.MethodUtils;
+import be.Balor.Tools.Compatibility.MethodHandler;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.Tools.Compatibility.PacketBuilder;
 import be.Balor.Tools.Debug.DebugLog;
@@ -153,9 +152,9 @@ public final class Utils {
 	 */
 	public static void addPlayerInOnlineList(final Player player) {
 		final Object server = MinecraftReflection.getHandle(player.getServer());
-		final Method sendAll = MethodUtils.getMethod(server.getClass(),
+		final MethodHandler sendAll = new MethodHandler(server.getClass(),
 				"sendAll", MinecraftReflection.getPacketClass());
-		MethodUtils.invokeMethod(server, sendAll,
+		sendAll.invoke(server,
 				PacketBuilder.buildPacket201PlayerInfo(player, true, 1000));
 	}
 
@@ -955,9 +954,9 @@ public final class Utils {
 	 */
 	public static void removePlayerFromOnlineList(final Player player) {
 		final Object server = MinecraftReflection.getHandle(player.getServer());
-		final Method sendAll = MethodUtils.getMethod(server.getClass(),
+		final MethodHandler sendAll = new MethodHandler(server.getClass(),
 				"sendAll", MinecraftReflection.getPacketClass());
-		MethodUtils.invokeMethod(server, sendAll,
+		sendAll.invoke(server,
 				PacketBuilder.buildPacket201PlayerInfo(player, false, 9999));
 	}
 
@@ -1668,31 +1667,27 @@ public final class Utils {
 		final Object entityPlayer = MinecraftReflection.getHandle(player);
 		final Object toWorld = MinecraftReflection.getHandle(toLocation
 				.getWorld());
-		try {
-			final int dimension = FieldUtils.getField(toWorld,
-					"dimension");
-			final Object activeContainer = FieldUtils.getField(
-					entityPlayer, "activeContainer");
-			final Object defaultContainer = FieldUtils.getField(
-					entityPlayer, "defaultContainer");
+		final int dimension = FieldUtils.getField(toWorld, "dimension");
+		final Object activeContainer = FieldUtils.getField(entityPlayer,
+				"activeContainer");
+		final Object defaultContainer = FieldUtils.getField(entityPlayer,
+				"defaultContainer");
 
-			// Check if the fromWorld and toWorld are the same.
-			if (player.getWorld().equals(toLocation.getWorld())) {
-				MinecraftReflection.teleportPlayer(player, toLocation);
-			} else {
-				// Close any foreign inventory
-				if (activeContainer != defaultContainer) {
-					entityPlayer.getClass().getMethod("closeInventory")
-							.invoke(entityPlayer);
-				}
-				server.getClass()
-						.getMethod("moveToWorld", entityPlayer.getClass(),
-								int.class, boolean.class, toLocation.getClass())
-						.invoke(server, entityPlayer, dimension, true,
-								toLocation);
+		// Check if the fromWorld and toWorld are the same.
+		if (player.getWorld().equals(toLocation.getWorld())) {
+			MinecraftReflection.teleportPlayer(player, toLocation);
+		} else {
+			// Close any foreign inventory
+			if (activeContainer != defaultContainer) {
+				final MethodHandler closeInventory = new MethodHandler(
+						entityPlayer.getClass(), "closeInventory");
+				closeInventory.invoke(entityPlayer);
 			}
-		} catch (final Exception e) {
-			throw new RuntimeException("Problem while teleporting a player", e);
+			final MethodHandler moveToWorld = new MethodHandler(
+					server.getClass(), "moveToWorld", entityPlayer.getClass(),
+					int.class, boolean.class, toLocation.getClass());
+			moveToWorld.invoke(server, entityPlayer, dimension, true,
+					toLocation);
 		}
 
 	}

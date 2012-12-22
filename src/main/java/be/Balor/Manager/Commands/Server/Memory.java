@@ -32,7 +32,8 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.ClassUtils;
+import be.Balor.Tools.Compatibility.FieldUtils;
+import be.Balor.Tools.Compatibility.MethodHandler;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -126,8 +127,8 @@ public class Memory extends ServerCommand {
 										.getHandle(w);
 								List<Object> wEntityList = null;
 								try {
-									wEntityList = ClassUtils.getPrivateField(
-											cWorld, "entityList");
+									wEntityList = FieldUtils.getField(cWorld,
+											"entityList");
 								} catch (final Exception e) {
 									throw new RuntimeException(
 											"Cannot get entityList from "
@@ -142,6 +143,8 @@ public class Memory extends ServerCommand {
 							}
 						}
 					});
+			final MethodHandler die = new MethodHandler(
+					MinecraftReflection.getEntityClass(), "die");
 			for (final World w : worlds) {
 				try {
 					sema.acquire();
@@ -151,11 +154,7 @@ public class Memory extends ServerCommand {
 					if (dontKill(args, entity)) {
 						continue;
 					}
-					try {
-						entity.getClass().getMethod("die").invoke(entity);
-					} catch (final Exception e) {
-						throw new RuntimeException("Can't kill " + entity, e);
-					}
+					die.invoke(entity);
 					count++;
 				}
 			}
