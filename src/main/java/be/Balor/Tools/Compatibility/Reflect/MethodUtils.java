@@ -17,12 +17,16 @@
 package be.Balor.Tools.Compatibility.Reflect;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Antoine
  * 
  */
 public class MethodUtils {
+
+	private static final Map<MethodKey, Method> cachedMethod = new HashMap<MethodKey, Method>();
 
 	/**
 	 * Get the method of the given class, even if it's a private method.
@@ -82,7 +86,11 @@ public class MethodUtils {
 	private static Method getClassMethod(final Class<?> clazz,
 			final String name, final Class<?>... parameterTypes)
 			throws NoSuchMethodException {
-		Method classMethod;
+		final MethodKey key = new MethodKey(clazz, name, parameterTypes);
+		Method classMethod = cachedMethod.get(key);
+		if (classMethod != null) {
+			return classMethod;
+		}
 		Class<?> copyClass = clazz;
 		try {
 			classMethod = copyClass.getDeclaredMethod(name, parameterTypes);
@@ -100,6 +108,7 @@ public class MethodUtils {
 				}
 			}
 		}
+		cachedMethod.put(key, classMethod);
 		return classMethod;
 	}
 }
