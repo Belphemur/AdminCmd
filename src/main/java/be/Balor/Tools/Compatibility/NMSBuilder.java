@@ -21,7 +21,6 @@ import java.lang.reflect.Constructor;
 import net.minecraft.server.Packet201PlayerInfo;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 
@@ -55,7 +54,7 @@ public class NMSBuilder {
 	}
 
 	/**
-	 * Build a PlayerInventory for the given Bukkit Player.
+	 * Build a NMS PlayerInventory for the given Bukkit Player.
 	 * 
 	 * @param player
 	 *            - bukkit player

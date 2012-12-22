@@ -840,6 +840,18 @@ public class MinecraftReflection {
 	}
 
 	/**
+	 * Get the NMS inventory of the given player
+	 * 
+	 * @param p
+	 *            - player
+	 * @return {@link PlayerInventory}
+	 */
+	public static Object getInventory(final Player p) {
+		return FieldUtils.getField(MinecraftReflection.getHandle(p),
+				"inventory");
+	}
+
+	/**
 	 * Dynamically retrieve the NetworkManager name.
 	 * 
 	 * @return Name of the NetworkManager class.
