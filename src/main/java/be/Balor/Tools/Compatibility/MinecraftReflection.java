@@ -836,7 +836,7 @@ public class MinecraftReflection {
 	 * @return The CraftHumanEntity class.
 	 */
 	public static Class<?> getCraftHumanEntityClass() {
-		return getCraftBukkitClass("CraftHumanEntity");
+		return getCraftBukkitClass("entity.CraftHumanEntity");
 	}
 
 	/**
