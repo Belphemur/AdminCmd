@@ -20,6 +20,7 @@ import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.regex.Matcher;
@@ -187,6 +188,9 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 					DebugLog.INSTANCE
 							.info("Problem while gettings ASYNC perm of "
 									+ p.getName());
+				} catch (final CancellationException e) {
+					DebugLog.INSTANCE.info("Getting ASYNC Perm cancelled"
+							+ p.getName());
 				}
 			}
 			return permissionCheck(permissions, regex);

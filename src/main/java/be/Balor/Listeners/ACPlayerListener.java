@@ -249,20 +249,13 @@ public class ACPlayerListener implements Listener {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		player.setInformation("lastDisconnect", System.currentTimeMillis());
-		ACPluginManager.getScheduler().runTaskAsynchronously(
-				ACPluginManager.getCorePlugin(), new Runnable() {
 
-					@Override
-					public void run() {
-						final int imLvl = ACHelper.getInstance().getLimit(p,
-								Type.Limit.IMMUNITY, "defaultImmunityLvl");
-						player.setInformation(
-								"immunityLvl",
-								imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY
-										.getInt() : imLvl);
+		final int imLvl = ACHelper.getInstance().getLimit(p,
+				Type.Limit.IMMUNITY, "defaultImmunityLvl");
+		player.setInformation("immunityLvl",
+				imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
+						: imLvl);
 
-					}
-				});
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", Utils.getPlayerName(p, null, true));
@@ -321,7 +314,7 @@ public class ACPlayerListener implements Listener {
 				loc = ACHelper.getInstance().getGroupSpawnLocation(player);
 				event.setRespawnLocation(loc);
 			}
-		} catch (WorldNotLoaded e) {
+		} catch (final WorldNotLoaded e) {
 
 		}
 	}
