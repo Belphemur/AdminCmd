@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -28,6 +28,10 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,35 +58,39 @@ public class ListValues extends ServerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.DARK_AQUA + "Possibles Types :");
-			sender.sendMessage(Arrays.toString(Type.values()));
+			sender.sendMessage(Joiner
+					.on(ChatColor.WHITE + ", " + ChatColor.RED).join(
+							Type.values()));
 			return;
 		}
-		String arg = "";
-		for (final String str : args) {
-			arg += str + " ";
-		}
-		arg = arg.trim();
-		if (Type.matchType(arg) == null) {
-			Utils.sI18n(sender, "emptyList");
-			return;
-		}
-		final List<ACPlayer> list = ACPlayer.getPlayers(arg);
-		if (list != null) {
-			sender.sendMessage(ChatColor.AQUA + Type.matchType(arg).display()
-					+ ChatColor.WHITE + " (" + list.size() + ") "
-					+ ChatColor.AQUA + ":");
-			String buffer = "";
-			for (final ACPlayer value : list) {
-				buffer += value.getName() + ", ";
+		for (final String arg : args) {
+			final Type type = Type.matchType(arg);
+			if (type == null) {
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put("value", arg);
+				replace.put("type", "Power");
+				LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
+				continue;
 			}
-			if (!buffer.equals("")) {
-				if (buffer.endsWith(", ")) {
-					buffer = buffer.substring(0, buffer.lastIndexOf(","));
+			final List<ACPlayer> list = ACPlayer.getPlayers(type);
+			if (list != null) {
+				sender.sendMessage(ChatColor.AQUA + type.display()
+						+ ChatColor.WHITE + " (" + list.size() + ") "
+						+ ChatColor.AQUA + ":");
+				final String buffer = ChatColor.GOLD
+						+ Joiner.on(ChatColor.WHITE + ", " + ChatColor.GOLD)
+								.join(list);
+				if (buffer.length() > ACMinecraftFontWidthCalculator.chatwidth) {
+					sender.sendMessage(buffer.substring(0,
+							ACMinecraftFontWidthCalculator.chatwidth));
+					sender.sendMessage(buffer
+							.substring(ACMinecraftFontWidthCalculator.chatwidth));
+				} else {
+					sender.sendMessage(buffer);
 				}
-				sender.sendMessage(buffer);
+			} else {
+				Utils.sI18n(sender, "emptyList");
 			}
-		} else {
-			Utils.sI18n(sender, "emptyList");
 		}
 
 	}

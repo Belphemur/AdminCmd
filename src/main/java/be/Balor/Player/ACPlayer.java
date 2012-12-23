@@ -377,12 +377,14 @@ public abstract class ACPlayer {
 	 * @return text to present the player
 	 */
 	public abstract String getPresentation();
+
 	/**
 	 * Get all the powers of the player
 	 * 
 	 * @return powers of the player
 	 */
 	public abstract Map<Type, Object> getPowers();
+
 	/**
 	 * Get all the custom powers of the player
 	 * 
@@ -492,4 +494,13 @@ public abstract class ACPlayer {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
