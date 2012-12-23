@@ -112,6 +112,9 @@ public class CommandManager implements CommandExecutor {
 				e.getSender().sendMessage(e.getMessage());
 			} catch (final ActionNotPermitedException e) {
 				e.sendMessage();
+			} catch (final NumberFormatException e) {
+				Utils.sI18n(acc.getSender(), "NaN", "number",
+						e.getLocalizedMessage());
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
 				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
