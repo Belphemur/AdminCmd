@@ -56,8 +56,11 @@ public class Experience extends PlayerCommand {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		boolean self = false;
 		if (args.hasFlag('p')) {
-				target = Utils.getPlayer(args.getValueFlag('p'));
+			target = Utils.getPlayer(args.getValueFlag('p'));
 		} else {
+			if (!Utils.isPlayer(sender)) {
+				return;
+			}
 			target = (Player) sender;
 			self = true;
 		}
