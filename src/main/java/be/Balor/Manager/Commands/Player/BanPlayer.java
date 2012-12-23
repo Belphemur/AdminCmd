@@ -31,6 +31,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
+import be.Balor.Player.IBan;
 import be.Balor.Player.ITempBan;
 import be.Balor.Player.TempBannedIP;
 import be.Balor.Player.TempBannedPlayer;
@@ -67,7 +68,7 @@ public class BanPlayer extends PlayerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final Player toBan = Utils.getPlayer(args.getString(0));
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		String message = "";
+		String message = null;
 		String banPlayerString;
 		if (toBan != null) {
 			banPlayerString = toBan.getName();
@@ -84,98 +85,30 @@ public class BanPlayer extends PlayerCommand {
 				message = LocaleManager.getInstance().get("kickMessages",
 						args.getValueFlag('m'), "player", banPlayerString);
 			}
-			try {
-				final int tmpIntTime = Utils.timeParser(args
-						.getString(args.length - 1));
-				if (tmpIntTime != -1) {
-					tmpBan = tmpIntTime;
-				}
-			} catch (final NotANumberException e) {
-				Utils.sI18n(sender, "NaN", "number",
-						args.getString(args.length - 1));
+			tmpBan = checkTempBan(args, banPlayerString, sender);
+			if (tmpBan == -1) {
 				return;
 			}
-			if (message == null || (message != null && message.isEmpty())) {
-				message = "";
-				if (tmpBan == null) {
-					for (int i = 1; i < args.length; i++) {
-						message += args.getString(i) + " ";
-					}
-				} else { 
-					for (int i = 1; i < args.length - 1; i++) {
-						message += args.getString(i) + " ";
-					}
-				}
-			}
-			if (message.isEmpty()) {
-				message += " You have been banned ";
-				if (!Utils.isPlayer(sender, false)) {
-					message += "by Server Admin";
-				} else {
-					message += "by "
-						+ ChatColor.stripColor(Utils
-								.getPlayerName((Player) sender));
-				}
-			}
-		} else {
-			if (message.isEmpty()) {
-				message = "You have been banned ";
-				if (!Utils.isPlayer(sender, false)) {
-					message += "by Server Admin";
-				} else {
-					message += "by "
-						+ ChatColor.stripColor(Utils
-								.getPlayerName((Player) sender));
-				}
-			}
 		}
-		message = message.trim();
+		message = parseMessage(args, message, tmpBan == null, sender);
 		replace.put("player", banPlayerString);
 		replace.put("reason", message);
-		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
-		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4
-				.matcher(banPlayerString);
-		if (tmpBan != null) {
-			message += " (Banned for " + tmpBan + " minutes)";
-			replace.put("reason", message);
-			ITempBan ban;
-			if (inaccurateIp.find()) {
-				if (!ipv4.find()) {
-					replace.clear();
-					replace.put("ip", banPlayerString);
-					LocaleHelper.INACC_IP.sendLocale(sender, replace);
-					return;
-				}
-				ban = new TempBannedIP(banPlayerString, message,
-						tmpBan * 60 * 1000);
-				ACHelper.getInstance().banPlayer(ban);
-			} else {
-				ban = new TempBannedPlayer(banPlayerString, message,
-						tmpBan * 60 * 1000);
-				ACHelper.getInstance().banPlayer(ban);
-			}
-			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-					getPlugin(), new UnBanTask(ban, true),
-					Utils.secInTick * 60 * tmpBan);
-		} else {
-			if (inaccurateIp.find()) {
-				if (!ipv4.find()) {
-					replace.clear();
-					replace.put("ip", banPlayerString);
-					LocaleHelper.INACC_IP.sendLocale(sender, replace);
-					return;
-				}
-				ACHelper.getInstance().banPlayer(
-						new BannedIP(banPlayerString, message));
-			} else {
-				ACHelper.getInstance().banPlayer(
-						new BannedPlayer(banPlayerString, message));
-			}
+		final IBan ban = getBanType(banPlayerString, tmpBan, message, sender,
+				replace);
+
+		if (ban == null) {
+			return;
 		}
-		ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
+		ACHelper.getInstance().banPlayer(ban);
+		if (ban instanceof ITempBan) {
+			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
+					getPlugin(), new UnBanTask((ITempBan) ban, true),
+					Utils.secInTick * 60 * tmpBan);
+		}
 		if (toBan != null) {
 			final String finalmsg = message;
 			final Player finalToKick = toBan;
+			ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 
 				@Override
@@ -186,6 +119,110 @@ public class BanPlayer extends PlayerCommand {
 		}
 		Utils.broadcastMessage(Utils.I18n("ban", replace));
 
+	}
+
+	/**
+	 * @param banPlayerString
+	 * @param tmpBan
+	 * @param message
+	 * @param sender
+	 * @param replace
+	 * @return
+	 */
+	private IBan getBanType(final String banPlayerString, final Integer tmpBan,
+			String message, final CommandSender sender,
+			final HashMap<String, String> replace) {
+		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
+		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4
+				.matcher(banPlayerString);
+		if (tmpBan != null) {
+			message += " (Banned for " + tmpBan + " minutes)";
+			replace.put("reason", message);
+			if (inaccurateIp.find()) {
+				if (!ipv4.find()) {
+					replace.clear();
+					replace.put("ip", banPlayerString);
+					LocaleHelper.INACC_IP.sendLocale(sender, replace);
+					return null;
+				}
+				return new TempBannedIP(banPlayerString, message,
+						tmpBan * 60 * 1000);
+			} else {
+				return new TempBannedPlayer(banPlayerString, message,
+						tmpBan * 60 * 1000);
+			}
+
+		} else {
+			if (inaccurateIp.find()) {
+				if (!ipv4.find()) {
+					replace.clear();
+					replace.put("ip", banPlayerString);
+					LocaleHelper.INACC_IP.sendLocale(sender, replace);
+					return null;
+				}
+				return new BannedIP(banPlayerString, message);
+			} else {
+				return new BannedPlayer(banPlayerString, message);
+			}
+		}
+	}
+
+	/**
+	 * @param args
+	 * @param message
+	 * @param b
+	 * @return
+	 */
+	private String parseMessage(final CommandArgs args, String message,
+			final boolean tempBan, final CommandSender sender) {
+		if (message == null || (message != null && message.isEmpty())) {
+			message = "";
+			if (tempBan) {
+				for (int i = 1; i < args.length; i++) {
+					message += args.getString(i) + " ";
+				}
+			} else {
+				for (int i = 1; i < args.length - 1; i++) {
+					message += args.getString(i) + " ";
+				}
+			}
+		}
+
+		if (message.isEmpty()) {
+			message = "You have been banned";
+		}
+		if (!Utils.isPlayer(sender, false)) {
+			message += " by Server Admin";
+		} else {
+			message += " by "
+					+ ChatColor
+							.stripColor(Utils.getPlayerName((Player) sender));
+		}
+
+		return message.trim();
+	}
+
+	/**
+	 * @param args
+	 * @param banPlayerString
+	 * @param sender
+	 * @return
+	 */
+	private Integer checkTempBan(final CommandArgs args,
+			final String banPlayerString, final CommandSender sender) {
+		try {
+			final int tmpIntTime = Utils.timeParser(args
+					.getString(args.length - 1));
+			if (tmpIntTime != -1) {
+				return tmpIntTime;
+			}
+		} catch (final NotANumberException e) {
+			Utils.sI18n(sender, "NaN", "number",
+					args.getString(args.length - 1));
+			return -1;
+		} catch (final Exception ex) {
+		}
+		return null;
 	}
 
 	/*
