@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -35,6 +36,8 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -168,11 +171,8 @@ public class KillMob extends MobCommand {
 				return;
 			}
 			for (final World w : worlds) {
-				for (final LivingEntity m : w.getLivingEntities()) {
-					if (!ct.getEntityClass().isAssignableFrom(m.getClass())) {
-						continue;
-					}
-					killLivingEntity(m);
+				for (final Entity m : w.getEntitiesByClass(ct.getEntityClass())) {
+					killEntity(m);
 					mobKilled++;
 				}
 			}
@@ -182,5 +182,11 @@ public class KillMob extends MobCommand {
 
 	private void killLivingEntity(final LivingEntity m) {
 		m.damage(m.getMaxHealth());
+	}
+
+	private void killEntity(final Entity e) {
+		final Object entity = MinecraftReflection.getHandle(e);
+		final MethodHandler die = new MethodHandler(entity.getClass(), "die");
+		die.invoke(entity);
 	}
 }
