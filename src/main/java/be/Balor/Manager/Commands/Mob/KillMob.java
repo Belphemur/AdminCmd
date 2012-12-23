@@ -27,7 +27,6 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
@@ -66,6 +65,11 @@ public class KillMob extends MobCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		String type = "all";
+		Integer range = null;
+		if (args.hasFlag('r')) {
+			range = Integer.parseInt(args.getValueFlag('r'));
+			range *= range;
+		}
 		if (args.length >= 1) {
 			type = args.getString(0);
 		}
@@ -101,11 +105,12 @@ public class KillMob extends MobCommand {
 		}
 		final String finalType = type;
 		final CommandSender finalSender = sender;
+		final Integer finalRange = range;
 		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
-						killMobs(worldList, finalType, finalSender);
+						killMobs(worldList, finalType, finalSender, finalRange);
 					}
 				});
 
@@ -130,38 +135,15 @@ public class KillMob extends MobCommand {
 	}
 
 	private void killMobs(final List<World> worlds, final String type,
-			final CommandSender sender) {
+			final CommandSender sender, final Integer range) {
 		int mobKilled = 0;
-		if (type.equalsIgnoreCase("all")) {
-			for (final World w : worlds) {
-				for (final LivingEntity m : w.getLivingEntities()) {
-					if (m instanceof HumanEntity) {
-						continue;
-					}
-					killLivingEntity(m);
-					mobKilled++;
+		Class<? extends Entity> clazz = null;
+		if (type.equalsIgnoreCase("monsters")) {
+			clazz = Monster.class;
 
-				}
-			}
-		} else if (type.equalsIgnoreCase("monsters")) {
-			for (final World w : worlds) {
-				for (final LivingEntity m : w.getLivingEntities()) {
-					if (m instanceof Monster) {
-						killLivingEntity(m);
-						mobKilled++;
-					}
-				}
-			}
 		} else if (type.equalsIgnoreCase("animals")) {
-			for (final World w : worlds) {
-				for (final LivingEntity m : w.getLivingEntities()) {
-					if (m instanceof Animals) {
-						killLivingEntity(m);
-						mobKilled++;
-					}
-				}
-			}
-		} else {
+			clazz = Animals.class;
+		} else if (!type.equalsIgnoreCase("all")) {
 			EntityType ct = null;
 			ct = EntityType.fromName(type);
 			if (ct == null) {
@@ -170,23 +152,62 @@ public class KillMob extends MobCommand {
 				Utils.sI18n(sender, "errorMob", replace);
 				return;
 			}
+			clazz = ct.getEntityClass();
+		}
+		if (clazz == null) {
 			for (final World w : worlds) {
-				for (final Entity m : w.getEntitiesByClass(ct.getEntityClass())) {
-					killEntity(m);
-					mobKilled++;
+				for (final Entity m : w.getEntities()) {
+					if (m instanceof HumanEntity) {
+						continue;
+					}
+					if (killEntity(m, sender, range)) {
+						mobKilled++;
+					}
+
+				}
+			}
+		} else {
+			for (final World w : worlds) {
+				for (final Entity m : w.getEntitiesByClass(clazz)) {
+					if (killEntity(m, sender, range)) {
+						mobKilled++;
+					}
 				}
 			}
 		}
 		Utils.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
 	}
 
-	private void killLivingEntity(final LivingEntity m) {
-		m.damage(m.getMaxHealth());
-	}
-
-	private void killEntity(final Entity e) {
+	private boolean killEntity(final Entity e, final CommandSender sender,
+			final Integer range) {
+		if (!checkKillCondition(e, sender, range)) {
+			return false;
+		}
 		final Object entity = MinecraftReflection.getHandle(e);
 		final MethodHandler die = new MethodHandler(entity.getClass(), "die");
 		die.invoke(entity);
+		return true;
+	}
+
+	/**
+	 * Check if the entity can be killed with the giving conditions
+	 * 
+	 * @param toCheck
+	 *            entity to be checked
+	 * @param sender
+	 *            sender of the command
+	 * @param range
+	 *            distance between the entity and the player accepted for a
+	 *            kill.
+	 * @return
+	 */
+	private boolean checkKillCondition(final Entity toCheck,
+			final CommandSender sender, final Integer range) {
+		boolean result = true;
+		if (range != null && Utils.isPlayer(sender, false)) {
+			result = toCheck.getLocation().distanceSquared(
+					((Player) sender).getLocation()) <= range;
+		}
+		return result;
 	}
 }
