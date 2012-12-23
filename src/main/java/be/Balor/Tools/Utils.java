@@ -1741,7 +1741,7 @@ public final class Utils {
 
 	/**
 	 * Cut in 2 part the given time if it's in the format : <br />
-	 * <blockquote> <X day | X hour | X minute | X week | X month> </blockquote>
+	 * <blockquote> <Xday | Xhour | Xminute | Xweek | Xmonth> </blockquote>
 	 * 
 	 * @param toParse
 	 *            input to be parsed
@@ -1759,14 +1759,14 @@ public final class Utils {
 		if (time1Matcher.find()) {
 			parsed[1] = time1Matcher.group();
 		} else if (time2Matcher.find()) {
-			parsed[1] = time1Matcher.group();
+			parsed[1] = time2Matcher.group();
 		}
 		return parsed;
 	}
 
 	/**
 	 * Parse the given string to get the time in an integer it's in the format : <br />
-	 * <blockquote> <X day | X hour | X minute | X week | X month> </blockquote>
+	 * <blockquote> <Xday | Xhour | Xminute | Xweek | Xmonth> </blockquote>
 	 * 
 	 * @param toParse
 	 *            time to parse
