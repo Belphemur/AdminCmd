@@ -86,7 +86,7 @@ public class BanPlayer extends PlayerCommand {
 						args.getValueFlag('m'), "player", banPlayerString);
 			}
 			tmpBan = checkTempBan(args, banPlayerString, sender);
-			if (tmpBan == -1) {
+			if (tmpBan != null && tmpBan == -1) {
 				return;
 			}
 		}
@@ -187,7 +187,7 @@ public class BanPlayer extends PlayerCommand {
 				}
 			}
 		}
-
+		message = message.trim();
 		if (message.isEmpty()) {
 			message = "You have been banned";
 		}
