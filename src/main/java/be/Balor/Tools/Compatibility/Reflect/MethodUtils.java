@@ -17,6 +17,7 @@
 package be.Balor.Tools.Compatibility.Reflect;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,77 @@ import java.util.Map;
  * 
  */
 public class MethodUtils {
+	private static class MethodKey {
+		private final Class<?> clazz;
+		private final String name;
+		private final Class<?>[] parameterTypes;
+
+		/**
+		 * @param clazz
+		 * @param name
+		 * @param parameterTypes
+		 */
+		public MethodKey(final Class<?> clazz, final String name,
+				final Class<?>... parameterTypes) {
+			super();
+			this.clazz = clazz;
+			this.name = name;
+			this.parameterTypes = parameterTypes;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			result = prime * result + Arrays.hashCode(parameterTypes);
+			return result;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final MethodKey other = (MethodKey) obj;
+			if (clazz == null) {
+				if (other.clazz != null) {
+					return false;
+				}
+			} else if (!clazz.equals(other.clazz)) {
+				return false;
+			}
+			if (name == null) {
+				if (other.name != null) {
+					return false;
+				}
+			} else if (!name.equals(other.name)) {
+				return false;
+			}
+			if (!Arrays.equals(parameterTypes, other.parameterTypes)) {
+				return false;
+			}
+			return true;
+		}
+
+	}
 
 	private static final Map<MethodKey, Method> cachedMethod = new HashMap<MethodKey, Method>();
 
