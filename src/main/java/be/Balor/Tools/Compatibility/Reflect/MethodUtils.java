@@ -30,6 +30,7 @@ public class MethodUtils {
 		private final Class<?> clazz;
 		private final String name;
 		private final Class<?>[] parameterTypes;
+		private final int hashcode;
 
 		/**
 		 * @param clazz
@@ -42,6 +43,16 @@ public class MethodUtils {
 			this.clazz = clazz;
 			this.name = name;
 			this.parameterTypes = parameterTypes;
+			this.hashcode = calcHashCode();
+		}
+
+		public int calcHashCode() {
+			final int prime = 23;
+			int result = 1;
+			result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			result = prime * result + Arrays.hashCode(parameterTypes);
+			return result;
 		}
 
 		/*
@@ -51,12 +62,7 @@ public class MethodUtils {
 		 */
 		@Override
 		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
-			result = prime * result + ((name == null) ? 0 : name.hashCode());
-			result = prime * result + Arrays.hashCode(parameterTypes);
-			return result;
+			return this.hashcode;
 		}
 
 		/*
