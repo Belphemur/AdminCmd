@@ -46,7 +46,7 @@ public class MethodUtils {
 			this.hashcode = calcHashCode();
 		}
 
-		public int calcHashCode() {
+		private int calcHashCode() {
 			final int prime = 23;
 			int result = 1;
 			result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
