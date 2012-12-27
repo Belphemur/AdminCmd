@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Mob;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,8 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -64,17 +67,22 @@ public class KillMob extends MobCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		String type = "all";
+		final List<String> types = new ArrayList<String>();
 		Integer range = null;
 		if (args.hasFlag('r')) {
 			range = Integer.parseInt(args.getValueFlag('r'));
 			range *= range;
 		}
-		if (args.length >= 1) {
-			type = args.getString(0);
-		}
-		replace.put("type", type);
 		final String worldString = args.getValueFlag('w');
+		if (args.length >= 1) {
+			for (final String type : args) {
+				types.add(type);
+			}
+		} else {
+			types.add("all");
+		}
+		replace.put("type", Joiner.on(", ").join(types));
+
 		final List<World> worldList = new ArrayList<World>();
 
 		if (Utils.isPlayer(sender, false)) {
@@ -103,14 +111,13 @@ public class KillMob extends MobCommand {
 				}
 			}
 		}
-		final String finalType = type;
 		final CommandSender finalSender = sender;
 		final Integer finalRange = range;
 		ACPluginManager.getScheduler().runTaskAsynchronously(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
-						killMobs(worldList, finalType, finalSender, finalRange);
+						killMobs(worldList, types, finalSender, finalRange);
 					}
 				});
 
@@ -134,27 +141,32 @@ public class KillMob extends MobCommand {
 		return args != null;
 	}
 
-	private void killMobs(final List<World> worlds, final String type,
+	@SuppressWarnings("unchecked")
+	private void killMobs(final List<World> worlds, final List<String> types,
 			final CommandSender sender, final Integer range) {
 		int mobKilled = 0;
-		Class<? extends Entity> clazz = null;
-		if (type.equalsIgnoreCase("monsters")) {
-			clazz = Monster.class;
+		final List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
+		if (!types.contains("all")) {
+			for (final String type : types) {
+				if (type.equalsIgnoreCase("monsters")) {
+					classes.add(Monster.class);
 
-		} else if (type.equalsIgnoreCase("animals")) {
-			clazz = Animals.class;
-		} else if (!type.equalsIgnoreCase("all")) {
-			EntityType ct = null;
-			ct = EntityType.fromName(type);
-			if (ct == null) {
-				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("mob", type);
-				Utils.sI18n(sender, "errorMob", replace);
-				return;
+				} else if (type.equalsIgnoreCase("animals")) {
+					classes.add(Animals.class);
+				} else {
+					EntityType ct = null;
+					ct = EntityType.fromName(type);
+					if (ct == null) {
+						final HashMap<String, String> replace = new HashMap<String, String>();
+						replace.put("mob", type);
+						Utils.sI18n(sender, "errorMob", replace);
+						continue;
+					}
+					classes.add(ct.getEntityClass());
+				}
 			}
-			clazz = ct.getEntityClass();
 		}
-		if (clazz == null) {
+		if (classes.isEmpty()) {
 			for (final World w : worlds) {
 				for (final Entity m : w.getEntities()) {
 					if (m instanceof HumanEntity) {
@@ -167,8 +179,11 @@ public class KillMob extends MobCommand {
 				}
 			}
 		} else {
+			final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(
+					Entity.class.getClass(), classes.size());
 			for (final World w : worlds) {
-				for (final Entity m : w.getEntitiesByClass(clazz)) {
+				for (final Entity m : w.getEntitiesByClasses(classes
+						.toArray(array))) {
 					if (killEntity(m, sender, range)) {
 						mobKilled++;
 					}
