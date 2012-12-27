@@ -29,6 +29,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Monster;
+import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -169,7 +170,7 @@ public class KillMob extends MobCommand {
 		if (classes.isEmpty()) {
 			for (final World w : worlds) {
 				for (final Entity m : w.getEntities()) {
-					if (m instanceof HumanEntity) {
+					if ((m instanceof HumanEntity) || m instanceof Painting) {
 						continue;
 					}
 					if (killEntity(m, sender, range)) {
