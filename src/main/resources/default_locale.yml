@@ -105,7 +105,7 @@ muteEnabled: §4You have been muted.
 tmpMuteEnabled: §4You have been muted for %minutes minutes.
 muteEnabledTarget: §4%player has been muted.
 alreadyMuted: §3This player is already muted. To unmute them use the unmute command.
-notMuted: §3This player is not muted.
+notMuted: '§f%player §cis not muted.'
 commandMuteDisabled: §2You can use commands again.
 commandMuteDisabledTarget: §2%player can use commands again.
 commandMuteEnabled: §4Your commands have been disabled.

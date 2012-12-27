@@ -761,8 +761,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				"alreadyMuted",
 				ChatColor.DARK_AQUA
 						+ "This player is already muted. To unmute him use the unmute command.");
-		Utils.addLocale("notMuted", ChatColor.DARK_AQUA
-				+ "This player is not muted.");
 		Utils.addLocale("commandMuteDisabled", ChatColor.DARK_GREEN
 				+ "You can use commands again.");
 		Utils.addLocale("commandMuteDisabledTarget", ChatColor.DARK_GREEN

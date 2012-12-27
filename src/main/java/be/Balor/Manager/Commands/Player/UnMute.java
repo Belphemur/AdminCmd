@@ -28,6 +28,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Lister.Lister;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -95,7 +96,7 @@ public class UnMute extends PlayerCommand {
 				Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
 			}
 		} else {
-			Utils.sI18n(sender, "playerNotFound", replace);
+			LocaleHelper.PLAYER_NOT_MUTED.sendLocale(sender, replace);
 		}
 
 	}
