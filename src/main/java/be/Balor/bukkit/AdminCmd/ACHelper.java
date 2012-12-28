@@ -177,6 +177,7 @@ public class ACHelper {
 		listOfPossibleRepair.add(359);
 		listOfPossibleRepair.add(Material.BOW.getId());
 		listOfPossibleRepair.add(Material.FISHING_ROD.getId());
+		listOfPossibleRepair.add(Material.CARROT_STICK.getId());
 	}
 
 	private ExtendedConfiguration pluginConfig;
