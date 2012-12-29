@@ -41,8 +41,8 @@ import be.Balor.Tools.Type;
  * 
  */
 public class ACNoDropListener implements Listener {
-	private final Map<Player, PlayerInv> itemsDrops = new HashMap<Player, PlayerInv>();
-	private final Map<String, PlayerInv> itemsOfDeadDisconnected = new HashMap<String, PlayerInv>();
+	private final Map<Player, PlayerInformation> itemsDrops = new HashMap<Player, PlayerInformation>();
+	private final Map<String, PlayerInformation> itemsOfDeadDisconnected = new HashMap<String, PlayerInformation>();
 
 	@EventHandler(ignoreCancelled = true)
 	public void onDrop(final PlayerDropItemEvent event) {
@@ -58,37 +58,36 @@ public class ACNoDropListener implements Listener {
 		}
 		final Player p = (Player) event.getEntity();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.NO_DROP)
-				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+		if (checkNoLoss(p, player)) {
 			return;
 		}
 		for (final ItemStack item : event.getDrops()) {
 			item.setAmount(0);
 		}
-		itemsDrops.put(p, new PlayerInv(p));
+		event.setDroppedExp(0);
+		itemsDrops.put(p, new PlayerInformation(p));
 	}
 
 	@EventHandler
 	public void onRespawn(final PlayerRespawnEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		if (!player.hasPower(Type.NO_DROP)
-				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+		if (checkNoLoss(p, player)) {
 			itemsDrops.remove(p);
 			return;
 		}
-		final PlayerInv inv = itemsDrops.get(p);
+		final PlayerInformation inv = itemsDrops.get(p);
 		if (inv == null) {
 			return;
 		}
-		inv.setInventory(p);
+		inv.setPlayerInfo(p);
 		itemsDrops.remove(p);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		final PlayerInv inv = itemsDrops.remove(player);
+		final PlayerInformation inv = itemsDrops.remove(player);
 		if (inv != null && player.isDead()) {
 			itemsOfDeadDisconnected.put(player.getName(), inv);
 		}
@@ -99,37 +98,55 @@ public class ACNoDropListener implements Listener {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
 		final String name = p.getName();
-		if (!player.hasPower(Type.NO_DROP)
-				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false)) {
+		if (checkNoLoss(p, player)) {
 			itemsOfDeadDisconnected.remove(name);
 			return;
 		}
-		final PlayerInv inv = itemsOfDeadDisconnected.remove(name);
+		final PlayerInformation inv = itemsOfDeadDisconnected.remove(name);
 		if (inv == null) {
 			return;
 		}
 		itemsDrops.put(p, inv);
 	}
 
-	private class PlayerInv {
+	/**
+	 * Return if the player don't have the power to get back his informations
+	 * (inventory, xp)
+	 * 
+	 * @param p
+	 * @param player
+	 * @return
+	 */
+	private boolean checkNoLoss(final Player p, final ACPlayer player) {
+		return !player.hasPower(Type.NO_DROP)
+				&& !PermissionManager.hasPerm(p, "admincmd.spec.noloss", false);
+	}
+
+	private class PlayerInformation {
 		final ItemStack items[];
 		final ItemStack armor[];
+		final float xp;
+		final int level;
 
 		/**
 		 * 
 		 */
-		public PlayerInv(final Player p) {
+		public PlayerInformation(final Player p) {
 			final PlayerInventory inventory = p.getInventory();
 			items = Arrays.copyOf(inventory.getContents(),
 					inventory.getContents().length);
 			armor = Arrays.copyOf(inventory.getArmorContents(),
 					inventory.getArmorContents().length);
+			xp = p.getExp();
+			level = p.getLevel();
 		}
 
-		public void setInventory(final Player p) {
+		public void setPlayerInfo(final Player p) {
 			final PlayerInventory inventory = p.getInventory();
 			inventory.setArmorContents(armor);
 			inventory.setContents(items);
+			p.setExp(xp);
+			p.setLevel(level);
 		}
 
 	}
