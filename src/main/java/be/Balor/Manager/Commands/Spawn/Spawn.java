@@ -21,6 +21,8 @@ import static be.Balor.Tools.Utils.sendMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -48,6 +50,9 @@ public class Spawn extends SpawnCommand {
 	public Spawn() {
 		permNode = "admincmd.spawn.tp";
 		cmdName = "bal_spawn";
+		for (final World world : Bukkit.getWorlds()) {
+			this.permParent.addChild("admincmd.spawn.tp." + world.getName());
+		}
 	}
 
 	/*
