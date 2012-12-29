@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
@@ -58,24 +57,18 @@ public class WorldDifficulty extends ServerCommand {
 		boolean worldGiven = false;
 		int difValue = -1;
 		try {
-			try {
-				difValue = args.getInt(0);
-			} catch (final NumberFormatException e) {
-				worldGiven = true;
-			}
-			if (args.length >= 1 && worldGiven) {
-				world = ACWorld.getWorld(args.getString(0));
-			} else if (Utils.isPlayer(sender, false)) {
-				world = ACWorld
-						.getWorld(((Player) sender).getWorld().getName());
-			} else {
-				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("argument", "world");
-				Utils.sI18n(sender, "errorInsufficientArguments", replace);
-				return;
-			}
-		} catch (final WorldNotLoaded e) {
-			Utils.sI18n(sender, "worldNotFound");
+			difValue = args.getInt(0);
+		} catch (final NumberFormatException e) {
+			worldGiven = true;
+		}
+		if (args.length >= 1 && worldGiven) {
+			world = ACWorld.getWorld(args.getString(0));
+		} else if (Utils.isPlayer(sender, false)) {
+			world = ACWorld.getWorld(((Player) sender).getWorld());
+		} else {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("argument", "world");
+			Utils.sI18n(sender, "errorInsufficientArguments", replace);
 			return;
 		}
 
@@ -99,9 +92,8 @@ public class WorldDifficulty extends ServerCommand {
 			replace.put("world", world.getName());
 			replace.put("difficulty", toSet.toString());
 			world.setDifficulty(toSet);
-			Utils.sI18n(sender, "setDifficulty", replace);
+			Utils.sI18n(sender, "getDifficulty", replace);
 		}
-		return;
 	}
 
 	/*
