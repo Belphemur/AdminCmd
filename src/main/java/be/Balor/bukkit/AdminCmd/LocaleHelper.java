@@ -153,7 +153,8 @@ public enum LocaleHelper {
 	MUTE_BROADCAST("MuteBroadcast", ChatColor.RED + "%player has been muted"
 			+ " by %muter %time, reason: %reason"),
 	PLAYER_NOT_MUTED("notMuted", ChatColor.GOLD + "%player " + ChatColor.RED
-			+ "is not muted.");
+			+ "is not muted."),
+	TIME_LEFT("tempBanTimeLeft", "Time left: %d d %h h %m m %s s");
 
 	private final String key;
 	private final String locale;

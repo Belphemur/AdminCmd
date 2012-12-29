@@ -42,4 +42,10 @@ public interface ITempBan extends IBan {
 	 */
 	public abstract long timeLeft();
 
+	/**
+	 * get the time left in the format days hour minute second
+	 * 
+	 * @return
+	 */
+	public abstract String getReadableTimeLeft();
 }

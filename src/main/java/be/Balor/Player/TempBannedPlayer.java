@@ -17,6 +17,10 @@
 package be.Balor.Player;
 
 import java.sql.Date;
+import java.util.HashMap;
+
+import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -110,6 +114,22 @@ public class TempBannedPlayer extends BannedPlayer implements ITempBan {
 			return false;
 		}
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Player.ITempBan#getReadableTimeLeft()
+	 */
+	@Override
+	public String getReadableTimeLeft() {
+		final Long[] timeleft = Utils.transformToElapsedTime(this.timeLeft());
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("d", String.valueOf(timeleft[0]));
+		replace.put("h", String.valueOf(timeleft[1]));
+		replace.put("m", String.valueOf(timeleft[2]));
+		replace.put("s", String.valueOf(timeleft[3]));
+		return LocaleHelper.TIME_LEFT.getLocale(replace);
 	}
 
 }
