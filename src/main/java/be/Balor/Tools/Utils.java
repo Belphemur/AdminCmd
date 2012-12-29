@@ -120,8 +120,8 @@ public final class Utils {
 	public static final Pattern NUMBERS = Pattern.compile("(\\d*[.|\\.]?\\d+)"
 			+ "|(\\d+)");
 	public static final Pattern TIMES1 = Pattern
-			.compile("month(s?)|day(s?)|second(s?) |hour(s?)|week(s?)|year(s?)");
-	public static final Pattern TIMES2 = Pattern.compile("m|h|d|w|y|s");
+			.compile("month(s?)|day(s?)|hour(s?)|week(s?)|year(s?)");
+	public static final Pattern TIMES2 = Pattern.compile("m|h|d|w|y");
 
 	/**
 	 * @author Balor (aka Antoine Aflalo)
@@ -1741,8 +1741,7 @@ public final class Utils {
 
 	/**
 	 * Cut in 2 part the given time if it's in the format : <br />
-	 * <blockquote> <Xday | Xhour | Xminute | Xsecondes| Xweek | Xmonth>
-	 * </blockquote>
+	 * <blockquote> <Xday | Xhour | Xminute | Xweek | Xmonth> </blockquote>
 	 * 
 	 * @param toParse
 	 *            input to be parsed
@@ -1811,9 +1810,6 @@ public final class Utils {
 			}
 			if (timeMulti.contains("year") || timeMulti.contains("y")) {
 				return tmpBan * 525600;
-			}
-			if (timeMulti.contains("second") || timeMulti.contains("s")) {
-				return tmpBan / 60;
 			}
 			throw new NotANumberException("Can't parse the time : "
 					+ tmpTimeParsed[1]);
