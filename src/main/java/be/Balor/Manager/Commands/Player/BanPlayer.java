@@ -104,6 +104,7 @@ public class BanPlayer extends PlayerCommand {
 			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
 					getPlugin(), new UnBanTask((ITempBan) ban, true),
 					Utils.secInTick * 60 * tmpBan);
+			message += " " + ((ITempBan) ban).getReadableTimeLeft();
 		}
 		if (toBan != null) {
 			final String finalmsg = message;
@@ -130,13 +131,12 @@ public class BanPlayer extends PlayerCommand {
 	 * @return
 	 */
 	private IBan getBanType(final String banPlayerString, final Integer tmpBan,
-			String message, final CommandSender sender,
+			final String message, final CommandSender sender,
 			final HashMap<String, String> replace) {
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
 		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4
 				.matcher(banPlayerString);
 		if (tmpBan != null) {
-			message += " (Banned for " + tmpBan + " minutes)";
 			replace.put("reason", message);
 			if (inaccurateIp.find()) {
 				if (!ipv4.find()) {
