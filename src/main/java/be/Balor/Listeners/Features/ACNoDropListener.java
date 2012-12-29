@@ -35,6 +35,7 @@ import org.bukkit.inventory.PlayerInventory;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -139,14 +140,23 @@ public class ACNoDropListener implements Listener {
 					inventory.getArmorContents().length);
 			xp = p.getExp();
 			level = p.getLevel();
+			System.out.println("XP :" + xp);
+			System.out.println("level : " + level);
 		}
 
 		public void setPlayerInfo(final Player p) {
 			final PlayerInventory inventory = p.getInventory();
 			inventory.setArmorContents(armor);
 			inventory.setContents(items);
-			p.setExp(xp);
-			p.setLevel(level);
+			ACPluginManager.scheduleSyncTask(new Runnable() {
+				@Override
+				public void run() {
+					p.setExp(xp);
+					p.setLevel(level);
+
+				}
+			});
+
 		}
 
 	}
