@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 import be.Balor.Player.IBan;
 import be.Balor.Player.ITempBan;
 import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -48,14 +49,18 @@ public class ACBanListener implements Listener {
 
 		}
 		if (ban != null) {
-
+			String reason;
 			if (ban instanceof ITempBan) {
 				final ITempBan banTemp = (ITempBan) ban;
-				event.disallow(Result.KICK_BANNED, banTemp.getReason() + " "
-						+ banTemp.getReadableTimeLeft());
+				reason = banTemp.getReason() + " "
+						+ banTemp.getReadableTimeLeft();
 			} else {
-				event.disallow(Result.KICK_BANNED, ban.getReason());
+				reason = ban.getReason();
 			}
+			if (ConfigEnum.ADD_BANNER_IN_BAN.getBoolean()) {
+				reason += " by " + ban.getBanner();
+			}
+			event.disallow(Result.KICK_BANNED, reason);
 		}
 	}
 }

@@ -55,8 +55,8 @@ public class BanLister extends Lister {
 		for (final IBan p : banned) {
 			replace.clear();
 			replace.put("player", p.getPlayer());
-			replace.put("player", p.getPlayer());
 			replace.put("reason", p.getReason());
+			replace.put("banner", p.getBanner());
 			replace.put("date", Utils.replaceDateAndTimeFormat(p.getDate()));
 			ban.put(p.getPlayer(), LocaleHelper.BANLIST.getLocale(replace));
 

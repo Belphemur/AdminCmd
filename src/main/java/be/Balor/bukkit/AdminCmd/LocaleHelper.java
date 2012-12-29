@@ -91,8 +91,9 @@ public enum LocaleHelper {
 	BL_ITEM_NOT_BLISTED("blItemNotBl", ChatColor.RED + "This item "
 			+ ChatColor.GOLD + "%item" + ChatColor.RED
 			+ " is not black listed."),
-	BANLIST("banList", ChatColor.GOLD + "%player, " + ChatColor.AQUA
+	OLD_BANLIST("banList", ChatColor.GOLD + "%player, " + ChatColor.AQUA
 			+ "Banned for :" + ChatColor.GOLD + " %reason on %date"),
+	BANLIST("banListUpdated", "#banList# by " + ChatColor.RED + "%banner"),
 	INACC_IP("inaccurateIp", ChatColor.RED + "This IP " + ChatColor.GOLD
 			+ "%ip " + ChatColor.RED + "is incorrect !"),
 	NO_BAN_FOUND("notBanned", ChatColor.GOLD + "No ban found for"
@@ -154,7 +155,10 @@ public enum LocaleHelper {
 			+ " by %muter %time, reason: %reason"),
 	PLAYER_NOT_MUTED("notMuted", ChatColor.GOLD + "%player " + ChatColor.RED
 			+ "is not muted."),
-	TIME_LEFT("tempBanTimeLeft", "Time left: %d d %h h %m m %s s");
+	TIME_LEFT("tempBanTimeLeft", "Time left: %d d %h h %m m %s s"),
+	DEFAULT_BAN_MESSAGE(
+			"defaultBanMessage",
+			"You have been banned from the server !");
 
 	private final String key;
 	private final String locale;

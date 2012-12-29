@@ -29,6 +29,7 @@ import be.Balor.Manager.Exceptions.NotANumberException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
+import be.Balor.Player.Ban;
 import be.Balor.Player.BannedIP;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Player.IBan;
@@ -40,6 +41,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -106,6 +108,9 @@ public class BanPlayer extends PlayerCommand {
 					Utils.secInTick * 60 * tmpBan);
 			message += " " + ((ITempBan) ban).getReadableTimeLeft();
 		}
+		if (ConfigEnum.ADD_BANNER_IN_BAN.getBoolean()) {
+			message += " by " + ban.getBanner();
+		}
 		if (toBan != null) {
 			final String finalmsg = message;
 			final Player finalToKick = toBan;
@@ -136,6 +141,7 @@ public class BanPlayer extends PlayerCommand {
 		final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
 		final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4
 				.matcher(banPlayerString);
+		Ban toDo;
 		if (tmpBan != null) {
 			replace.put("reason", message);
 			if (inaccurateIp.find()) {
@@ -145,10 +151,10 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return null;
 				}
-				return new TempBannedIP(banPlayerString, message,
+				toDo = new TempBannedIP(banPlayerString, message,
 						tmpBan * 60 * 1000);
 			} else {
-				return new TempBannedPlayer(banPlayerString, message,
+				toDo = new TempBannedPlayer(banPlayerString, message,
 						tmpBan * 60 * 1000);
 			}
 
@@ -160,11 +166,18 @@ public class BanPlayer extends PlayerCommand {
 					LocaleHelper.INACC_IP.sendLocale(sender, replace);
 					return null;
 				}
-				return new BannedIP(banPlayerString, message);
+				toDo = new BannedIP(banPlayerString, message);
 			} else {
-				return new BannedPlayer(banPlayerString, message);
+				toDo = new BannedPlayer(banPlayerString, message);
 			}
 		}
+		if (!Utils.isPlayer(sender, false)) {
+			toDo.setBanner("Server Admin");
+		} else {
+			toDo.setBanner(ChatColor.stripColor(Utils
+					.getPlayerName((Player) sender)));
+		}
+		return toDo;
 	}
 
 	/**
@@ -189,17 +202,9 @@ public class BanPlayer extends PlayerCommand {
 		}
 		message = message.trim();
 		if (message.isEmpty()) {
-			message = "You have been banned";
+			message = LocaleHelper.DEFAULT_BAN_MESSAGE.getLocale();
 		}
-		if (!Utils.isPlayer(sender, false)) {
-			message += " by Server Admin";
-		} else {
-			message += " by "
-					+ ChatColor
-							.stripColor(Utils.getPlayerName((Player) sender));
-		}
-
-		return message.trim();
+		return message;
 	}
 
 	/**

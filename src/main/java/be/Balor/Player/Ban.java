@@ -26,6 +26,7 @@ public abstract class Ban implements IBan {
 	private String reason;
 	private Date date;
 	private String player;
+	private String banner;
 
 	/**
 	 * 
@@ -153,6 +154,22 @@ public abstract class Ban implements IBan {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the banner
+	 */
+	@Override
+	public String getBanner() {
+		return banner;
+	}
+
+	/**
+	 * @param banner
+	 *            the banner to set
+	 */
+	public void setBanner(final String banner) {
+		this.banner = banner;
 	}
 
 }

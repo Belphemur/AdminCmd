@@ -39,4 +39,12 @@ public interface IBan {
 	 */
 	public abstract String getPlayer();
 
+	/**
+	 * get the name of the player that issued the ban.
+	 * 
+	 * @param banner
+	 *            name of the player
+	 */
+	public abstract String getBanner();
+
 }
