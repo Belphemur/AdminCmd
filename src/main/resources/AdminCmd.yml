@@ -577,7 +577,7 @@ acmobspawn:
 
 acmobkill:
     command: mobkill [Type]
-    description: "Kill the wanted mob. Type: all || animals ||\n monsters || mobname"
+    description: "Kill the wanted mob. Type: all || animals ||\n monsters || mobname. The parameter -w is to specify the world and -r the range of the command (both optional)"
     plugin: AdminCmd
     permissions: admincmd.mob.kill
     cmdname: bal_killmob
