@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -600,16 +599,7 @@ public class ACHelper {
 	 */
 	public String getKitList(final CommandSender sender) {
 		String kitList = "";
-		final HashSet<String> list = new HashSet<String>();
-		try {
-			list.addAll(kits.keySet());
-			if (Utils.oddItem != null) {
-			}
-
-		} catch (final Throwable e) {
-		}
-
-		for (final String kit : list) {
+		for (final String kit : kits.keySet()) {
 			if (PermissionManager.hasPerm(sender, "admincmd.kit." + kit, false)) {
 				kitList += kit + ", ";
 			}
@@ -620,6 +610,15 @@ public class ACHelper {
 			}
 		}
 		return kitList.trim();
+	}
+
+	/**
+	 * Get the name of all the kits
+	 * 
+	 * @return Collection containing the name of the kits available.
+	 */
+	public Collection<String> getKitList() {
+		return Collections.unmodifiableCollection(kits.keySet());
 	}
 
 	public int getLimit(final CommandSender sender, final Type.Limit type) {
