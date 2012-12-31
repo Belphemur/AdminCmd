@@ -140,8 +140,6 @@ public class ACNoDropListener implements Listener {
 					inventory.getArmorContents().length);
 			xp = p.getExp();
 			level = p.getLevel();
-			System.out.println("XP :" + xp);
-			System.out.println("level : " + level);
 		}
 
 		public void setPlayerInfo(final Player p) {
