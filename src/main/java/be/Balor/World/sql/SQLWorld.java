@@ -67,17 +67,17 @@ public class SQLWorld extends ACWorld {
 		INSERT_INFO = Database.DATABASE
 				.prepare("REPLACE INTO `ac_w_infos` (`key`,`world_id`,`info`) VALUES (?,?,?)");
 		DELETE_INFO = Database.DATABASE
-				.prepare("DELETE FROM `ac_w_infos` WHERE key=? AND world_id=?");
+				.prepare("DELETE FROM `ac_w_infos` WHERE `key`=? AND `world_id`=?");
 		INSERT_WARP = Database.DATABASE
 				.prepare("REPLACE INTO `ac_warps` (`name`,`world_id`,`x`,`y`,`z`,`pitch`,`yaw`) VALUES (?,?,?,?,?,?,?)");
 		DELETE_WARP = Database.DATABASE
-				.prepare("DELETE FROM `ac_warps` WHERE name=? AND world_id=?");
+				.prepare("DELETE FROM `ac_warps` WHERE `name`=? AND `world_id`=?");
 		GET_INFOS = Database.DATABASE
-				.prepare("SELECT `key`,`info` FROM `ac_w_infos` WHERE world_id=?");
+				.prepare("SELECT `key`,`info` FROM `ac_w_infos` WHERE `world_id`=?");
 		GET_SPAWNS = Database.DATABASE
-				.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_spawns` WHERE world_id=?");
+				.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_spawns` WHERE `world_id`=?");
 		GET_WARPS = Database.DATABASE
-				.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_warps` WHERE world_id=?");
+				.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_warps` WHERE `world_id`=?");
 	}
 
 	/**
@@ -298,12 +298,14 @@ public class SQLWorld extends ACWorld {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.World.ACWorld#addWarp(java.lang.String, org.bukkit.Location, java.lang.String)
+	 * @see be.Balor.World.ACWorld#addWarp(java.lang.String,
+	 * org.bukkit.Location, java.lang.String)
 	 */
 	@Override
-	public void addPermWarp(String name, Location loc, String perm) {
+	public void addPermWarp(final String name, final Location loc,
+			final String perm) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/*
