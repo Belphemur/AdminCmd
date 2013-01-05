@@ -61,8 +61,11 @@ public class Home extends HomeCommand {
 			if (home == null) {
 				return;
 			}
-			final Location loc = ACPlayer.getPlayer(home.player).getHome(
-					home.home);
+			Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
+			if (loc == null) {
+				loc = ACPlayer.getPlayer(home.player).getHome(
+						home.home.toLowerCase());
+			}
 			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
