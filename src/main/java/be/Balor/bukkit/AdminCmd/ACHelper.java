@@ -1393,7 +1393,7 @@ public class ACHelper {
 				if (db.getType() == DatabaseType.MYSQL) {
 					// Players
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_homes` ("
-							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `name` varchar(64) BINARY NOT NULL,"
 							+ "  `player_id` int(10) unsigned NOT NULL,"
 							+ "  `world` varchar(64) NOT NULL,"
 							+ "  `x` double NOT NULL,"
@@ -1420,7 +1420,7 @@ public class ACHelper {
 							+ ")ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_players` ("
 							+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
-							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `name` varchar(64) BINARY NOT NULL,"
 							+ "  `world` varchar(64) DEFAULT NULL,"
 							+ "  `x` double DEFAULT NULL,"
 							+ "  `y` double DEFAULT NULL,"
@@ -1461,7 +1461,7 @@ public class ACHelper {
 
 					// Worlds
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_warps` ("
-							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `name` varchar(64) BINARY NOT NULL,"
 							+ "  `world_id` int(10) unsigned NOT NULL,"
 							+ "  `x` double NOT NULL,"
 							+ "  `y` double NOT NULL,"
@@ -1473,7 +1473,7 @@ public class ACHelper {
 							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_worlds` ("
 							+ "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
-							+ "  `name` varchar(64) NOT NULL,"
+							+ "  `name` varchar(64) BINARY NOT NULL,"
 							+ "  PRIMARY KEY (`id`),"
 							+ "  UNIQUE KEY `name` (`name`)"
 							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
@@ -1485,7 +1485,7 @@ public class ACHelper {
 							+ "  KEY `world_id` (`world_id`)"
 							+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 					db.createTable("CREATE TABLE IF NOT EXISTS `ac_spawns` ("
-							+ " `name` varchar(64) NOT NULL,"
+							+ " `name` varchar(64) BINARY NOT NULL,"
 							+ "  `world_id` int(10) unsigned NOT NULL,"
 							+ "  `x` double NOT NULL,"
 							+ "  `y` double NOT NULL,"
