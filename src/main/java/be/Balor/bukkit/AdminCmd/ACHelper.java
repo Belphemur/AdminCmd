@@ -3,6 +3,8 @@ package be.Balor.bukkit.AdminCmd;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1388,7 +1390,8 @@ public class ACHelper {
 		try {
 			final Database db = Database.DATABASE;
 			db.open();
-			if (!db.checkTable("ac_players")) {
+			updatePlayerTable(db);
+			if (!db.checkTable("ac_players") && !db.checkTable("ac_worlds")) {
 				// Mysql
 				if (db.getType() == DatabaseType.MYSQL) {
 					// Players
@@ -1596,6 +1599,31 @@ public class ACHelper {
 					e);
 			ACLogger.warning("The plugin is falling back to YML data managment");
 			throw e;
+		}
+	}
+
+	/**
+	 * @param db
+	 * @throws SQLException
+	 */
+	private void updatePlayerTable(final Database db) throws SQLException {
+		if (db.getType() == DatabaseType.MYSQL && db.checkTable("ac_players")) {
+			final PreparedStatement stmt = db.prepare("SELECT COLLATION_NAME "
+					+ "FROM INFORMATION_SCHEMA.COLUMNS "
+					+ "WHERE COLUMN_NAME =  ? " + "AND TABLE_NAME = ?");
+			stmt.setString(1, "name");
+			stmt.setString(2, "ac_players");
+			final ResultSet result = stmt.executeQuery();
+			if (result.next() && !"utf8_bin".equals(result.getString(1))) {
+				db.query("ALTER TABLE  `ac_players` "
+						+ "CHANGE  `name`  `name` VARCHAR( 64 ) "
+						+ "BINARY CHARACTER " + "SET utf8 COLLATE "
+						+ "utf8_bin NOT NULL");
+				ACLogger.info("Updated the collation of the ac_player database.");
+
+			}
+			result.close();
+			stmt.close();
 		}
 	}
 
