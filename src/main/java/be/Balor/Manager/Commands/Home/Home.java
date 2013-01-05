@@ -67,6 +67,11 @@ public class Home extends HomeCommand {
 						home.home.toLowerCase());
 			}
 			if (loc == null) {
+				loc = ACPlayer.getPlayer(home.player).getHome(
+						home.home.substring(0, 1).toUpperCase()
+								+ home.home.substring(1));
+			}
+			if (loc == null) {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
 			} else {
