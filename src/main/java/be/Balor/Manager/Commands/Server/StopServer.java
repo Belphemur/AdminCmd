@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -68,13 +66,13 @@ public class StopServer extends ServerCommand {
 		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec",
 				String.valueOf(timeOutValue)));
 		ACHelper.getInstance().setServerLocked(true);
-		final List<Player> onlinePlayers = Utils.getOnlinePlayers();
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 				ACPluginManager.getCorePlugin(), new Runnable() {
 
 					@Override
 					public void run() {
-						for (final Player p : onlinePlayers) {
+						for (final Player p : Bukkit.getServer()
+								.getOnlinePlayers()) {
 							p.kickPlayer(Utils.I18n("serverStop"));
 						}
 						Bukkit.getServer().shutdown();

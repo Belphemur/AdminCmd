@@ -23,6 +23,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.KickTask;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -66,7 +67,7 @@ public class KickAllPlayers extends PlayerCommand {
 		message = message.trim();
 		for (final Player toKick : Utils.getOnlinePlayers()) {
 			if (!toKick.getName().equals(((Player) sender).getName())) {
-				toKick.kickPlayer(message);
+				new KickTask(toKick, message).scheduleSync();
 			}
 		}
 	}

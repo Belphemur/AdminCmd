@@ -16,41 +16,15 @@
  ************************************************************************/
 package be.Balor.Tools.Threads;
 
-import java.util.Stack;
-
-import be.Balor.Tools.SynchronizedStack;
-import be.Balor.Tools.Blocks.BlockRemanence;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Antoine
  * 
  */
-public class ReplaceBlockTask implements Runnable {
-	protected Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
-
-	public ReplaceBlockTask() {
-
+public abstract class BukkitSyncTask implements Runnable {
+	public int scheduleSync() {
+		return ACPluginManager.scheduleSyncTask(this);
 	}
 
-	/**
-	 * @param blocks
-	 */
-	public ReplaceBlockTask(final Stack<BlockRemanence> blocks) {
-		super();
-		while (!blocks.empty()) {
-			this.blocks.add(blocks.pop());
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run() {
-		while (!blocks.empty()) {
-			blocks.pop().setBlockType(0);
-		}
-	}
 }

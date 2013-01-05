@@ -27,6 +27,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Threads.KickTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -72,7 +73,8 @@ public class LockServer extends ServerCommand {
 										"admincmd.server.lockdown")) {
 									continue;
 								}
-								p.kickPlayer(Utils.I18n("serverLockMessage"));
+								new KickTask(p, Utils.I18n("serverLockMessage"))
+										.scheduleSync();
 							}
 						}
 					}, 100);

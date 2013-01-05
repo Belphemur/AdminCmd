@@ -28,7 +28,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.Tools.Threads.KickTask;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -85,19 +85,9 @@ public class KickPlayer extends PlayerCommand {
 		}
 
 		ACPlayer.getPlayer(toKick).setPower(Type.KICKED);
-		final String finalmsg = message.trim();
-		final Player finalToKick = toKick;
 		replace.put("player", Utils.getPlayerName(toKick));
-		ACPluginManager.scheduleSyncTask(new Runnable() {
-
-			@Override
-			public void run() {
-				finalToKick.kickPlayer(finalmsg);
-
-			}
-		});
-
-		replace.put("reason", finalmsg);
+		new KickTask(toKick, message.trim()).scheduleSync();
+		replace.put("reason", message.trim());
 		Utils.broadcastMessage(LocaleHelper.PLAYER_KICKED.getLocale(replace));
 	}
 

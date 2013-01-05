@@ -16,31 +16,30 @@
  ************************************************************************/
 package be.Balor.Tools.Threads;
 
-import java.util.Stack;
-
-import be.Balor.Tools.SynchronizedStack;
-import be.Balor.Tools.Blocks.BlockRemanence;
+import org.bukkit.entity.Player;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Antoine
  * 
  */
-public class ReplaceBlockTask implements Runnable {
-	protected Stack<BlockRemanence> blocks = new SynchronizedStack<BlockRemanence>();
+public class KickTask extends BukkitSyncTask {
 
-	public ReplaceBlockTask() {
+	private final Player toKick;
+	private final String message;
 
+	/**
+	 * @param toKick
+	 * @param message
+	 */
+	public KickTask(final Player toKick, final String message) {
+		super();
+		this.toKick = toKick;
+		this.message = message;
 	}
 
 	/**
-	 * @param blocks
+	 * To kick a player
 	 */
-	public ReplaceBlockTask(final Stack<BlockRemanence> blocks) {
-		super();
-		while (!blocks.empty()) {
-			this.blocks.add(blocks.pop());
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -49,8 +48,7 @@ public class ReplaceBlockTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		while (!blocks.empty()) {
-			blocks.pop().setBlockType(0);
-		}
+		toKick.kickPlayer(message);
 	}
+
 }

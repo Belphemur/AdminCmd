@@ -38,6 +38,7 @@ import be.Balor.Player.TempBannedIP;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.KickTask;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -112,16 +113,8 @@ public class BanPlayer extends PlayerCommand {
 			message += " by " + ban.getBanner();
 		}
 		if (toBan != null) {
-			final String finalmsg = message;
-			final Player finalToKick = toBan;
 			ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
-			ACPluginManager.scheduleSyncTask(new Runnable() {
-
-				@Override
-				public void run() {
-					finalToKick.kickPlayer(finalmsg);
-				}
-			});
+			new KickTask(toBan, message).scheduleSync();
 		}
 		Utils.broadcastMessage(Utils.I18n("ban", replace));
 
