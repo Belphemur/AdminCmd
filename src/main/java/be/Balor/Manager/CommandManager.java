@@ -179,7 +179,7 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	private final HashMap<Command, CoreCommand> registeredCommands = new HashMap<Command, CoreCommand>();
-	private final int MAX_THREADS = 8;
+	private final int MAX_THREADS = 10;
 	private static CommandManager instance = new CommandManager();
 	private Graph graph;
 
@@ -206,7 +206,7 @@ public class CommandManager implements CommandExecutor {
 	private final Map<String, Set<CommandAlias>> commandsAlias = new HashMap<String, Set<CommandAlias>>();
 	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2,
 			MAX_THREADS, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(
-					true));
+					true), new ThreadPoolExecutor.CallerRunsPolicy());
 	private final Map<AbstractAdminCmdPlugin, Map<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, Map<String, Command>>();
 	private final Map<Class<? extends CoreCommand>, IncrementalPlotter> plotters = new HashMap<Class<? extends CoreCommand>, IncrementalPlotter>();
 	private final Set<String> commandsOnJoin = new HashSet<String>();
