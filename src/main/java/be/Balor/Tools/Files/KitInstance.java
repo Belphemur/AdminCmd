@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import be.Balor.Manager.Permissions.PermissionLinker;
+import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -15,15 +15,19 @@ public class KitInstance {
 	protected final String name;
 	protected int delay = 0;
 	protected final List<MaterialContainer> items;
-	private static final PermissionLinker perm = ACPluginManager
-			.getCorePlugin().getPermissionLinker();
+	private static final PermParent perm;
+	static {
+		perm = new PermParent("admincmd.kit.*");
+		ACPluginManager.getCorePlugin().getPermissionLinker()
+				.addPermParent(perm);
+	}
 
 	public KitInstance(final String name, final int delay,
 			final List<MaterialContainer> items) {
 		this.name = name;
 		this.delay = delay;
 		this.items = items;
-		perm.addPermChild("admincmd.kit." + this.name);
+		perm.addChild("admincmd.kit." + this.name);
 	}
 
 	/**
@@ -36,7 +40,8 @@ public class KitInstance {
 		final ArrayList<ItemStack> result = new ArrayList<ItemStack>();
 		try {
 			// return Utils.oddItem.getItemGroup(kit, -1));
-		} catch (final Throwable e) {}
+		} catch (final Throwable e) {
+		}
 		for (final MaterialContainer mc : items) {
 			result.add(mc.getItemStack());
 		}

@@ -26,7 +26,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
-import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
@@ -47,11 +46,6 @@ public class Kit extends ItemCommand {
 	public Kit() {
 		cmdName = "bal_kit";
 		other = true;
-		final PermParent kits = plugin.getPermissionLinker().getPermParent(
-				"admincmd.kit.*");
-		for (final String kit : ACHelper.getInstance().getKitList()) {
-			kits.addChild("admincmd.kit." + kit);
-		}
 	}
 
 	/*
