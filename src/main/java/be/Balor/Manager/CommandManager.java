@@ -426,14 +426,7 @@ public class CommandManager implements CommandExecutor {
 	public boolean registerCommand(final Class<? extends CoreCommand> clazz) {
 		CoreCommand command = null;
 		try {
-			DebugLog.INSTANCE.info("Begin registering Command "
-					+ clazz.getName());
-			command = clazz.newInstance();
-			command.initializeCommand();
-			checkCommand(command);
-			command.registerBukkitPerm();
-			command.getPluginCommand().setExecutor(instance);
-			registeredCommands.put(command.getPluginCommand(), command);
+			command = registerCommand0(clazz);
 			final IncrementalPlotter plotter = new ClassPlotter(clazz);
 			graph.addPlotter(plotter);
 			plotters.put(clazz, plotter);
@@ -444,58 +437,10 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 			return false;
 		} catch (final CommandDisabled e) {
-			unRegisterBukkitCommand(command.getPluginCommand());
-			HelpLister.getInstance().removeHelpEntry(
-					command.getPlugin().getPluginName(), command.getCmdName());
-			if (ConfigEnum.VERBOSE.getBoolean()) {
-				ACLogger.info(e.getMessage());
-			}
+			disableCommand(command, e);
 			return false;
 		} catch (final CommandAlreadyExist e) {
-			boolean disableCommand = true;
-			final Map<String, Command> commands = pluginCommands.get(command
-					.getPlugin());
-			if (commands != null) {
-				for (final String alias : commands.get(command.getCmdName())
-						.getAliases()) {
-					if (prioritizedCommands.contains(alias)) {
-						final CommandAlias cmd = new CommandAlias(
-								command.getCmdName(), alias, "");
-						cmd.setCmd(command);
-						commandsAliasReplacer.put(alias, cmd);
-						disableCommand = false;
-					}
-					final Set<CommandAlias> commandAliases = commandsAlias
-							.get(alias);
-					if (commandAliases != null) {
-						for (final CommandAlias commandAlias : commandAliases) {
-							commandAlias.setCmd(command);
-						}
-						disableCommand = false;
-					}
-				}
-			}
-			if (disableCommand) {
-				unRegisterBukkitCommand(command.getPluginCommand());
-				HelpLister.getInstance().removeHelpEntry(
-						command.getPlugin().getPluginName(),
-						command.getCmdName());
-				if (ConfigEnum.VERBOSE.getBoolean()) {
-					ACLogger.info(e.getMessage());
-				}
-				DebugLog.INSTANCE.info("Command Disabled");
-				return false;
-			} else {
-				command.registerBukkitPerm();
-				command.getPluginCommand().setExecutor(this);
-				registeredCommands.put(command.getPluginCommand(), command);
-				DebugLog.INSTANCE
-						.info("Command Prioritized but already exists");
-				final IncrementalPlotter plotter = new ClassPlotter(clazz);
-				graph.addPlotter(plotter);
-				plotters.put(clazz, plotter);
-				return true;
-			}
+			return handleExistingCommand(clazz, command, e);
 		} catch (final CommandException e) {
 			if (ConfigEnum.VERBOSE.getBoolean()) {
 				Logger.getLogger("Minecraft").info(
@@ -505,6 +450,105 @@ public class CommandManager implements CommandExecutor {
 		}
 		DebugLog.INSTANCE.info("End registering Command " + clazz.getName());
 		return true;
+	}
+
+	/**
+	 * @param clazz
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	private CoreCommand registerCommand0(
+			final Class<? extends CoreCommand> clazz)
+			throws InstantiationException, IllegalAccessException {
+		CoreCommand command;
+		DebugLog.INSTANCE.info("Begin registering Command "
+				+ clazz.getName());
+		command = clazz.newInstance();
+		command.initializeCommand();
+		checkCommand(command);
+		command.registerBukkitPerm();
+		command.getPluginCommand().setExecutor(instance);
+		registeredCommands.put(command.getPluginCommand(), command);
+		return command;
+	}
+
+	/**
+	 * @param clazz
+	 * @param command
+	 * @param e
+	 * @return
+	 */
+	private boolean handleExistingCommand(
+			final Class<? extends CoreCommand> clazz, CoreCommand command,
+			final CommandAlreadyExist e) {
+		if (checkCmdStatus(command)) {
+			unRegisterBukkitCommand(command.getPluginCommand());
+			HelpLister.getInstance().removeHelpEntry(
+					command.getPlugin().getPluginName(),
+					command.getCmdName());
+			if (ConfigEnum.VERBOSE.getBoolean()) {
+				ACLogger.info(e.getMessage());
+			}
+			DebugLog.INSTANCE.info("Command Disabled");
+			return false;
+		} else {
+			command.registerBukkitPerm();
+			command.getPluginCommand().setExecutor(this);
+			registeredCommands.put(command.getPluginCommand(), command);
+			DebugLog.INSTANCE
+					.info("Command Prioritized but already exists");
+			final IncrementalPlotter plotter = new ClassPlotter(clazz);
+			graph.addPlotter(plotter);
+			plotters.put(clazz, plotter);
+			return true;
+		}
+	}
+
+	/**
+	 * Check if the command need to be disabled or is prioritized
+	 * 
+	 * @param command
+	 * @return true if can be disabled.
+	 */
+	private boolean checkCmdStatus(final CoreCommand command) {
+		final Map<String, Command> commands = pluginCommands.get(command
+				.getPlugin());
+		if (commands != null) {
+			for (final String alias : commands.get(command.getCmdName())
+					.getAliases()) {
+				if (prioritizedCommands.contains(alias)) {
+					final CommandAlias cmd = new CommandAlias(
+							command.getCmdName(), alias, "");
+					cmd.setCmd(command);
+					commandsAliasReplacer.put(alias, cmd);
+					return false;
+				}
+				final Set<CommandAlias> commandAliases = commandsAlias
+						.get(alias);
+				if (commandAliases != null) {
+					for (final CommandAlias commandAlias : commandAliases) {
+						commandAlias.setCmd(command);
+					}
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @param command
+	 * @param exception
+	 */
+	private void disableCommand(final CoreCommand command,
+			final CommandDisabled exception) {
+		unRegisterBukkitCommand(command.getPluginCommand());
+		HelpLister.getInstance().removeHelpEntry(
+				command.getPlugin().getPluginName(), command.getCmdName());
+		if (ConfigEnum.VERBOSE.getBoolean()) {
+			ACLogger.info(exception.getMessage());
+		}
 	}
 
 	/**
