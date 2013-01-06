@@ -19,23 +19,31 @@ package be.Balor.Manager.Exceptions;
 import be.Balor.Manager.Commands.CoreCommand;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Antoine
  * 
  */
-public class CommandDisabled extends CommandException {
+public class CommandException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6098533302948315536L;
+	private final CoreCommand command;
 
 	/**
 	 * @param message
 	 * @param command
 	 */
-	public CommandDisabled(final String message, final CoreCommand command) {
-		super(message, command);
-		// TODO Auto-generated constructor stub
+	public CommandException(final String message, final CoreCommand command) {
+		super(message);
+		this.command = command;
 	}
 
 	/**
-	 * 
+	 * @return the command
 	 */
-	private static final long serialVersionUID = -5445340831602078879L;
+	public CoreCommand getCommand() {
+		return command;
+	}
 
 }

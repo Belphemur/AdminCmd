@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Exceptions;
 
-import org.bukkit.command.CommandException;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -25,32 +25,17 @@ import org.bukkit.command.CommandException;
 public class CommandNotFound extends CommandException {
 
 	/**
+	 * @param message
+	 * @param command
+	 */
+	public CommandNotFound(final String message, final CoreCommand command) {
+		super(message, command);
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
 	 *
 	 */
 	private static final long serialVersionUID = -4046041057205651331L;
-
-	/**
-	 *
-	 */
-	public CommandNotFound() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param message
-	 */
-	public CommandNotFound(final String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public CommandNotFound(final String message, final Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
 
 }

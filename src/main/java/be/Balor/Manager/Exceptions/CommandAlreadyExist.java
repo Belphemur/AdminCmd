@@ -16,7 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Exceptions;
 
-import org.bukkit.command.CommandException;
+import be.Balor.Manager.Commands.CoreCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -25,32 +25,17 @@ import org.bukkit.command.CommandException;
 public class CommandAlreadyExist extends CommandException {
 
 	/**
+	 * @param message
+	 * @param command
+	 */
+	public CommandAlreadyExist(final String message, final CoreCommand command) {
+		super(message, command);
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7607294109508581802L;
-
-	/**
-	 * 
-	 */
-	public CommandAlreadyExist() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param message
-	 */
-	public CommandAlreadyExist(final String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public CommandAlreadyExist(final String message, final Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
 
 }

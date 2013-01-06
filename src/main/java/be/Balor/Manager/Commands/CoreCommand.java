@@ -194,13 +194,14 @@ public abstract class CoreCommand {
 	public void initializeCommand() throws CommandNotFound, CommandAlreadyExist {
 		if ((pluginCommand = plugin.getCommand(cmdName)) == null) {
 			throw new CommandNotFound(cmdName
-					+ " is not loaded in bukkit. Command deactivated");
+					+ " is not loaded in bukkit. Command deactivated", this);
 		}
 
 		if (pluginCommand.getAliases().isEmpty()) {
 			throw new CommandAlreadyExist(
 					cmdName
-							+ " has all his alias already registered. Command deactivated");
+							+ " has all his alias already registered. Command deactivated",
+					this);
 		}
 	}
 

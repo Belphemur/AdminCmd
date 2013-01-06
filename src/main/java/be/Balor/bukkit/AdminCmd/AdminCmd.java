@@ -213,11 +213,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onEnable() {
 		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
-		try {
-			metrics = new Metrics(this);
-		} catch (final IOException e) {
-			DebugLog.INSTANCE.log(Level.SEVERE, "Stats problem", e);
-		}
+
+		setMetrics();
+
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());
 		final PluginManager pm = getServer().getPluginManager();
@@ -226,6 +224,27 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		worker = ACHelper.getInstance();
 		worker.setCoreInstance(this);
 
+		worker.loadInfos();
+		super.onEnable();
+		TerminalCommandManager.getInstance().setPerm(this);
+		permissionLinker.registerAllPermParent();
+		pm.registerEvents(new ACBlockListener(), this);
+		pm.registerEvents(new ACEntityListener(), this);
+		pm.registerEvents(new ACPlayerListener(), this);
+		pm.registerEvents(new ACWeatherListener(), this);
+		checkModulableFeatures(pm);
+		System.gc();
+	}
+
+	/**
+	 * 
+	 */
+	private void setMetrics() {
+		try {
+			metrics = new Metrics(this);
+		} catch (final IOException e) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Stats problem", e);
+		}
 		ACPluginManager.setMetrics(metrics);
 
 		metrics.addCustomData(new Metrics.Plotter() {
@@ -292,17 +311,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 						DebugLog.INSTANCE.info("Stats started");
 					}
 				}, 30 * Utils.secInTick);
-
-		worker.loadInfos();
-		super.onEnable();
-		TerminalCommandManager.getInstance().setPerm(this);
-		permissionLinker.registerAllPermParent();
-		pm.registerEvents(new ACBlockListener(), this);
-		pm.registerEvents(new ACEntityListener(), this);
-		pm.registerEvents(new ACPlayerListener(), this);
-		pm.registerEvents(new ACWeatherListener(), this);
-		checkModulableFeatures(pm);
-		System.gc();
 	}
 
 	@Override

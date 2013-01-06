@@ -266,7 +266,8 @@ public class CommandManager implements CommandExecutor {
 					throw new CommandDisabled(
 							"Command "
 									+ command.getCmdName()
-									+ " selected to be disabled in the configuration file.");
+									+ " selected to be disabled in the configuration file.",
+							command);
 				}
 				if (prioritizedCommands.contains(alias)) {
 					final CommandAlias cmd = new CommandAlias(
@@ -424,9 +425,8 @@ public class CommandManager implements CommandExecutor {
 	 * @param clazz
 	 */
 	public boolean registerCommand(final Class<? extends CoreCommand> clazz) {
-		CoreCommand command = null;
 		try {
-			command = registerCommand0(clazz);
+			registerCommand0(clazz);
 			final IncrementalPlotter plotter = new ClassPlotter(clazz);
 			graph.addPlotter(plotter);
 			plotters.put(clazz, plotter);
@@ -437,10 +437,10 @@ public class CommandManager implements CommandExecutor {
 			e.printStackTrace();
 			return false;
 		} catch (final CommandDisabled e) {
-			disableCommand(command, e);
+			disableCommand(e);
 			return false;
 		} catch (final CommandAlreadyExist e) {
-			return handleExistingCommand(clazz, command, e);
+			return handleExistingCommand(e);
 		} catch (final CommandException e) {
 			if (ConfigEnum.VERBOSE.getBoolean()) {
 				Logger.getLogger("Minecraft").info(
@@ -458,19 +458,16 @@ public class CommandManager implements CommandExecutor {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private CoreCommand registerCommand0(
-			final Class<? extends CoreCommand> clazz)
+	private void registerCommand0(final Class<? extends CoreCommand> clazz)
 			throws InstantiationException, IllegalAccessException {
 		CoreCommand command;
-		DebugLog.INSTANCE.info("Begin registering Command "
-				+ clazz.getName());
+		DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
 		command = clazz.newInstance();
 		command.initializeCommand();
 		checkCommand(command);
 		command.registerBukkitPerm();
 		command.getPluginCommand().setExecutor(instance);
 		registeredCommands.put(command.getPluginCommand(), command);
-		return command;
 	}
 
 	/**
@@ -479,14 +476,12 @@ public class CommandManager implements CommandExecutor {
 	 * @param e
 	 * @return
 	 */
-	private boolean handleExistingCommand(
-			final Class<? extends CoreCommand> clazz, CoreCommand command,
-			final CommandAlreadyExist e) {
+	private boolean handleExistingCommand(final CommandAlreadyExist e) {
+		final CoreCommand command = e.getCommand();
 		if (checkCmdStatus(command)) {
 			unRegisterBukkitCommand(command.getPluginCommand());
 			HelpLister.getInstance().removeHelpEntry(
-					command.getPlugin().getPluginName(),
-					command.getCmdName());
+					command.getPlugin().getPluginName(), command.getCmdName());
 			if (ConfigEnum.VERBOSE.getBoolean()) {
 				ACLogger.info(e.getMessage());
 			}
@@ -496,11 +491,11 @@ public class CommandManager implements CommandExecutor {
 			command.registerBukkitPerm();
 			command.getPluginCommand().setExecutor(this);
 			registeredCommands.put(command.getPluginCommand(), command);
-			DebugLog.INSTANCE
-					.info("Command Prioritized but already exists");
-			final IncrementalPlotter plotter = new ClassPlotter(clazz);
+			DebugLog.INSTANCE.info("Command Prioritized but already exists");
+			final IncrementalPlotter plotter = new ClassPlotter(
+					command.getClass());
 			graph.addPlotter(plotter);
-			plotters.put(clazz, plotter);
+			plotters.put(command.getClass(), plotter);
 			return true;
 		}
 	}
@@ -541,8 +536,8 @@ public class CommandManager implements CommandExecutor {
 	 * @param command
 	 * @param exception
 	 */
-	private void disableCommand(final CoreCommand command,
-			final CommandDisabled exception) {
+	private void disableCommand(final CommandDisabled exception) {
+		final CoreCommand command = exception.getCommand();
 		unRegisterBukkitCommand(command.getPluginCommand());
 		HelpLister.getInstance().removeHelpEntry(
 				command.getPlugin().getPluginName(), command.getCmdName());

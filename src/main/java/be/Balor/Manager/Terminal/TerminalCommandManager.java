@@ -149,7 +149,7 @@ public class TerminalCommandManager {
 			final ExtendedConfiguration conf = ExtendedConfiguration
 					.loadConfiguration(scripts);
 			if (conf.get(cmdName) == null) {
-				throw new CommandNotFound(cmdName + " is not registered");
+				throw new CommandNotFound(cmdName + " is not registered", null);
 			}
 			if (System.getProperty("os.name").contains("Windows")) {
 				commands.put(
