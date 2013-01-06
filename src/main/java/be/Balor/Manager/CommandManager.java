@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
@@ -46,6 +45,7 @@ import be.Balor.Manager.Commands.CommandAlias;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandDisabled;
+import be.Balor.Manager.Exceptions.CommandException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
@@ -460,9 +460,8 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private void registerCommand0(final Class<? extends CoreCommand> clazz)
 			throws InstantiationException, IllegalAccessException {
-		CoreCommand command;
 		DebugLog.INSTANCE.info("Begin registering Command " + clazz.getName());
-		command = clazz.newInstance();
+		final CoreCommand command = clazz.newInstance();
 		command.initializeCommand();
 		checkCommand(command);
 		command.registerBukkitPerm();
@@ -479,12 +478,7 @@ public class CommandManager implements CommandExecutor {
 	private boolean handleExistingCommand(final CommandAlreadyExist e) {
 		final CoreCommand command = e.getCommand();
 		if (checkCmdStatus(command)) {
-			unRegisterBukkitCommand(command.getPluginCommand());
-			HelpLister.getInstance().removeHelpEntry(
-					command.getPlugin().getPluginName(), command.getCmdName());
-			if (ConfigEnum.VERBOSE.getBoolean()) {
-				ACLogger.info(e.getMessage());
-			}
+			disableCommand(e);
 			DebugLog.INSTANCE.info("Command Disabled");
 			return false;
 		} else {
@@ -536,7 +530,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param command
 	 * @param exception
 	 */
-	private void disableCommand(final CommandDisabled exception) {
+	private void disableCommand(final CommandException exception) {
 		final CoreCommand command = exception.getCommand();
 		unRegisterBukkitCommand(command.getPluginCommand());
 		HelpLister.getInstance().removeHelpEntry(
