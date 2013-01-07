@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
@@ -58,6 +59,13 @@ public class ACFrozenPlayerListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onInteract(final PlayerInteractEvent event) {
+		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onTeleport(final PlayerTeleportEvent event) {
 		if (ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
 			event.setCancelled(true);
 		}

@@ -35,7 +35,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -316,15 +315,6 @@ public class ACPlayerListener implements Listener {
 			}
 		} catch (final WorldNotLoaded e) {
 
-		}
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerTeleport(final PlayerTeleportEvent event) {
-		final ACPlayer player = ACPlayer.getPlayer(event.getPlayer());
-		if (player.hasPower(Type.FROZEN)) {
-			event.setCancelled(true);
-			return;
 		}
 	}
 
