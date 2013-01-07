@@ -53,7 +53,7 @@ public abstract class ACWorld {
 	/**
 	 * @return the handler
 	 */
-	public World getHandler() {
+	public World getHandle() {
 		return handler;
 	}
 

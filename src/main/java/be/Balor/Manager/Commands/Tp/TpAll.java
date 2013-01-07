@@ -147,7 +147,7 @@ public class TpAll extends TeleportCommand {
 			if (locX == null || locY == null || locZ == null) {
 				return;
 			}
-			to = new Location(world.getHandler(), locX, locY, locZ);
+			to = new Location(world.getHandle(), locX, locY, locZ);
 			replace.put("sender", teleporter);
 			replace.put("loc", "Location: x=" + x + ", y=" + y + ", z=" + z);
 			doTeleportAndMessage(players, replace, to);

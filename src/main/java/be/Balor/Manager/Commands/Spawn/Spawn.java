@@ -68,7 +68,7 @@ public class Spawn extends SpawnCommand {
 		if (args.length >= 1 && Utils.isPlayer(sender, true)) {
 			final ACWorld w = ACWorld.getWorld(args.getString(0));
 			final Player target = (Player) sender;
-			if (!target.getWorld().equals(w.getHandler())
+			if (!target.getWorld().equals(w.getHandle())
 					&& !PermissionManager.hasPerm(sender, "admincmd.spawn.tp."
 							+ w.getName().toLowerCase())) {
 				return;

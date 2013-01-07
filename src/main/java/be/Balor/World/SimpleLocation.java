@@ -16,19 +16,15 @@
  ************************************************************************/
 package be.Balor.World;
 
-import javax.persistence.MappedSuperclass;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-@MappedSuperclass
 public class SimpleLocation {
 	private String world;
 	private double x;
@@ -51,7 +47,7 @@ public class SimpleLocation {
 	}
 
 	public Location getLocation() throws WorldNotLoaded {
-		final World w = ACPluginManager.getServer().getWorld(world);
+		final World w = ACWorld.getWorld(world).getHandle();
 		if (w == null) {
 			throw new WorldNotLoaded(world);
 		} else {

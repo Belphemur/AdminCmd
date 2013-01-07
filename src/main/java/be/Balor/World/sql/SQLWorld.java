@@ -162,7 +162,7 @@ public class SQLWorld extends ACWorld {
 
 	private Location getLoc(final ResultSet rs) {
 		try {
-			return new Location(this.getHandler(), rs.getDouble("x"),
+			return new Location(this.getHandle(), rs.getDouble("x"),
 					rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"),
 					rs.getFloat("pitch"));
 		} catch (final SQLException e) {

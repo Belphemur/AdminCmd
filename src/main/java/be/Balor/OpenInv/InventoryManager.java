@@ -128,7 +128,7 @@ public class InventoryManager {
 			LocaleHelper.WORLD_NOT_LOADED.sendLocale(sender, replace);
 			return;
 		}
-		final File playerfolder = new File(acworld.getHandler()
+		final File playerfolder = new File(acworld.getHandle()
 				.getWorldFolder(), "players");
 		if (!playerfolder.exists()) {
 			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),

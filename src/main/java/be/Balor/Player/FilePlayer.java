@@ -40,6 +40,7 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.IOSaveTask;
+import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -256,7 +257,7 @@ public class FilePlayer extends ACPlayer {
 		if (world == null) {
 			return null;
 		}
-		final World w = ACPluginManager.getServer().getWorld(world);
+		final World w = ACWorld.getWorld(world).getHandle();
 		if (w != null) {
 			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
 					0), node.getDouble("z", 0), Float.parseFloat(node

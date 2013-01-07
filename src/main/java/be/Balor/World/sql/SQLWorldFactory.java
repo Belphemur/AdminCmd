@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.World.sql;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +24,7 @@ import java.sql.SQLException;
 import lib.SQL.PatPeter.SQLibrary.Database;
 
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Debug.ACLogger;
@@ -57,9 +59,32 @@ public class SQLWorldFactory implements IWorldFactory {
 			throws WorldNotLoaded {
 		final World w = ACPluginManager.getServer().getWorld(worldName);
 		if (w == null) {
+			File worldFile = new File(ACPluginManager.getServer()
+					.getWorldContainer(), worldName);
+			if (!isExistingWorld(worldFile)) {
+				worldFile = new File(ACPluginManager.getServer()
+						.getWorldContainer(), worldName.toLowerCase());
+			}
+			if (!isExistingWorld(worldFile)) {
+				worldFile = new File(ACPluginManager.getServer()
+						.getWorldContainer(), worldName.substring(0, 1)
+						.toUpperCase() + worldName.substring(1).toLowerCase());
+			}
+			if (isExistingWorld(worldFile)) {
+				return createWorld(ACPluginManager.getServer().createWorld(
+						new WorldCreator(worldFile.getName())));
+			}
 			throw new WorldNotLoaded(worldName);
 		}
 		return createWorld(w);
+	}
+
+	/**
+	 * @param worldFile
+	 * @return
+	 */
+	private boolean isExistingWorld(final File worldFile) {
+		return worldFile.exists() && worldFile.isDirectory();
 	}
 
 	/*

@@ -110,7 +110,7 @@ public class ImportTools {
 		z = section.getDouble("z");
 		yaw = Float.parseFloat(section.getString("yaw"));
 		pitch = Float.parseFloat(section.getString("pitch"));
-		loc = new Location(world.getHandler(), x, y, z, yaw, pitch);
+		loc = new Location(world.getHandle(), x, y, z, yaw, pitch);
 		return loc;
 	}
 
