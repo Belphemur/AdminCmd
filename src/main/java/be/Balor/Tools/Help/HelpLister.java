@@ -28,6 +28,7 @@ import org.bukkit.plugin.Plugin;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -136,7 +137,8 @@ public class HelpLister {
 		final List<String> toDisplay = help.getPage(page, sender);
 		for (final String send : toDisplay) {
 			for (final String l : send.split("\n")) {
-				sender.sendMessage(l);
+				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL
+						.getString()) + l);
 			}
 		}
 		return true;
@@ -239,14 +241,16 @@ public class HelpLister {
 			final HelpEntry entry = list.get(0);
 			final String chat = entry.chatString(detailed);
 			for (final String l : chat.split("\n")) {
-				sender.sendMessage(l);
+				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL
+						.getString()) + l);
 			}
 			return;
 		}
 		for (final HelpEntry entry : list) {
 			final String chat = entry.chatString(detailed);
 			for (final String l : chat.split("\n")) {
-				sender.sendMessage(l);
+				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL
+						.getString()) + l);
 			}
 		}
 	}

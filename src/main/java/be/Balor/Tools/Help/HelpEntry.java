@@ -71,11 +71,39 @@ class HelpEntry {
 
 	@Override
 	public String toString() {
-		return String
-				.format("%s/%s%s : %s%s", ChatColor.GOLD, command,
-						ChatColor.WHITE.toString(), ChatColor.WHITE,
-						description).replace("[", ChatColor.RED + "[")
-				.replace("]", "]" + ChatColor.GOLD);
+		return String.format("%s/%s%s : %s",
+				ChatColor.getByChar(ConfigEnum.H_C_CMD.getString()),
+				addColors(command, false),
+				ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()),
+				description);
+	}
+
+	private String addColors(final String msg, final boolean description) {
+		return msg
+				.replace(
+						"[",
+						ChatColor.getByChar(ConfigEnum.H_C_REQ_PARAM
+								.getString()) + "[")
+				.replace(
+						"]",
+						"]"
+								+ ChatColor
+										.getByChar(description ? ConfigEnum.H_C_NORMAL
+												.getString()
+												: ConfigEnum.H_C_CMD
+														.getString()))
+				.replace(
+						"<",
+						ChatColor.getByChar(ConfigEnum.H_C_OPT_PARAM
+								.getString()) + "<")
+				.replace(
+						">",
+						">"
+								+ ChatColor
+										.getByChar(description ? ConfigEnum.H_C_NORMAL
+												.getString()
+												: ConfigEnum.H_C_CMD
+														.getString()));
 	}
 
 	public String chatString(final boolean detailed) {
@@ -88,15 +116,12 @@ class HelpEntry {
 			descriptionSize = ACMinecraftFontWidthCalculator
 					.strLen(detailedDesc);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-					detailedDesc.replace("[", ChatColor.DARK_RED + "[")
-							.replace("]", "]" + ChatColor.WHITE),
-					sizeRemaining, ' ');
+					addColors(detailedDesc, true), sizeRemaining, ' ');
 		} else {
 			descriptionSize = ACMinecraftFontWidthCalculator
 					.strLen(description);
 			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-					description.replace("[", ChatColor.DARK_RED + "[").replace(
-							"]", "]" + ChatColor.WHITE), sizeRemaining, ' ');
+					addColors(description, true), sizeRemaining, ' ');
 		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
@@ -113,8 +138,7 @@ class HelpEntry {
 	}
 
 	public String consoleString(final boolean detailed) {
-		final int width = System.getProperty("os.name").startsWith("Windows")
-				? 80 - 17
+		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17
 				: 90;
 		String line = getFormatedCmd();
 
@@ -125,15 +149,12 @@ class HelpEntry {
 			descriptionSize = ACMinecraftFontWidthCalculator
 					.strLen(detailedDesc);
 			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-					detailedDesc.replace("[", ChatColor.DARK_RED + "[")
-							.replace("]", "]" + ChatColor.WHITE),
-					sizeRemaining, ' ');
+					addColors(detailedDesc, true), sizeRemaining, ' ');
 		} else {
 			descriptionSize = ACMinecraftFontWidthCalculator
 					.strLen(description);
 			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-					description.replace("[", ChatColor.DARK_RED + "[").replace(
-							"]", "]" + ChatColor.WHITE), sizeRemaining, ' ');
+					addColors(description, true), sizeRemaining, ' ');
 		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
@@ -151,11 +172,10 @@ class HelpEntry {
 	}
 
 	private String getFormatedCmd() {
-		return String.format(
-				"%s/%s%s : ",
-				ChatColor.GOLD,
-				command.replace("[", ChatColor.DARK_RED + "[").replace("]",
-						"]" + ChatColor.GOLD), ChatColor.WHITE);
+		return String.format("%s/%s%s : ",
+				ChatColor.getByChar(ConfigEnum.H_C_CMD.getString()),
+				addColors(command, false),
+				ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()));
 	}
 
 	/**

@@ -738,8 +738,9 @@ acserverlockdown:
     cmdname: bal_lockdown
 
 acserverhelp:
-    command: help [page#]
-    description: "Displays page [#] of the AdminCmd help or page 1."
+    command: help <page#> <-s command|-d command>
+    description: "Displays page <#> of the AdminCmd help or page 1.\n /help -d help for more details"
+    detailed: " <-s cmd> is used to search for a command in every plugins.\n <-d cmd> is used to get the detailed information of the command"
     plugin: AdminCmd
     permissions: admincmd.server.help
     cmdname: bal_help

@@ -148,6 +148,22 @@ public enum ConfigEnum {
 			true,
 			"If set to true, get the commands of every plugins installed\n"
 					+ "Else only from the folder HelpFiles where you set your help files."),
+	H_C_NORMAL(
+			"help.color.normal",
+			"f",
+			"Number (hexa decimal) representing the normal color of the help text."),
+	H_C_REQ_PARAM(
+			"help.color.required",
+			"c",
+			"Number (hexa decimal) representing the color of the required params in the help text."),
+	H_C_OPT_PARAM(
+			"help.color.optional",
+			2,
+			"Number (hexa decimal) representing the color of the optional params in the help text."),
+	H_C_CMD(
+			"help.color.command",
+			6,
+			"Number (hexa decimal) representing the color of the requiered params in the help text."),
 	SB_ITEM(
 			"superBreakerItem",
 			278,
