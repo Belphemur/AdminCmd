@@ -65,7 +65,6 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
@@ -75,7 +74,6 @@ import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Exceptions.InvalidInputException;
-import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
 import be.Balor.Tools.Threads.SetTimeTask;
@@ -88,7 +86,6 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
-import com.google.common.base.Joiner;
 import com.miraclem4n.mchat.api.Reader;
 import com.miraclem4n.mchat.types.EventType;
 
@@ -1279,48 +1276,6 @@ public final class Utils {
 		if (locale != null && !locale.isEmpty()) {
 			sender.sendMessage(locale);
 		}
-	}
-
-	public static void sParsedLocale(final Player p, final String locale) {
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
-		final long total = acPlayer.getCurrentPlayedTime();
-		replace.putAll(playedTime(getPlayerName(p), total));
-		replace.put(
-				"nb",
-				String.valueOf(p.getServer().getOnlinePlayers().length
-						- InvisibleWorker.getInstance().nbInvisibles()));
-		final Collection<String> list = Utils.getPlayerList(p);
-		String connected = Joiner.on(", ").join(list);
-		if (connected.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
-			final String tmp = connected.substring(0,
-					ACMinecraftFontWidthCalculator.chatwidth);
-			final String tmp2 = connected.substring(
-					ACMinecraftFontWidthCalculator.chatwidth,
-					connected.length());
-			connected = tmp + "//n" + tmp2;
-		}
-		replace.put("connected", connected);
-		final String serverTime = replaceDateAndTimeFormat(getServerRealTime("GMT"
-				+ ConfigEnum.DT_GMT.getString()));
-		replace.put("time", serverTime);
-		final String date = replaceDateAndTimeFormat(acPlayer, Whois.LOGIN);
-		if (date == null) {
-			replace.put("lastlogin", I18n("noLoginInformation"));
-		} else {
-			replace.put("lastlogin", date);
-		}
-		final String messageToSend = I18n(locale, replace);
-		if (messageToSend != null) {
-			messageToSend.replace("\\n", "\n").replace("//n", "\n");
-			for (final String toSend : messageToSend.split("\n")) {
-				if (toSend.isEmpty()) {
-					continue;
-				}
-				p.sendMessage(toSend);
-			}
-		}
-
 	}
 
 	public static boolean timeSet(final CommandSender sender, final String time) {

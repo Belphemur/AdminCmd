@@ -138,20 +138,25 @@ public class ACPlayerListener implements Listener {
 						DebugLog.INSTANCE.info("LastConn start");
 						final long lastConn = player.getInformation(
 								"lastConnection").getLong(0);
-						player.setInformation("lastConnection",
-								System.currentTimeMillis());
 						DebugLog.INSTANCE.info("LastConn stop");
 						DebugLog.INSTANCE.info("TextLocale start");
 						final long modifTime = TextLocale.NEWS.getModifTime();
 						if (ConfigEnum.NEWS.getBoolean()
 								&& (modifTime == 0 || lastConn <= modifTime)) {
-							Utils.sParsedLocale(p, "NEWS");
+							TextLocale.NEWS.sendText(p);
 						}
 						DebugLog.INSTANCE.info("TextLocale stop");
+						DebugLog.INSTANCE.info("MOTD start");
+						if (!player.getInformation("firstTime")
+								.getBoolean(true)
+								&& ConfigEnum.MOTD.getBoolean()) {
+							TextLocale.MOTD.sendText(p);
+						}
+						DebugLog.INSTANCE.info("MOTD stop");
 						DebugLog.INSTANCE.info("Rules start");
 						if (ConfigEnum.RULES.getBoolean()
 								&& !ConfigEnum.FJ_RULES.getBoolean()) {
-							Utils.sParsedLocale(p, "Rules");
+							TextLocale.RULES.sendText(p);
 						}
 						DebugLog.INSTANCE.info("Rules stop");
 						DebugLog.INSTANCE.info("TPREQUEST start");
@@ -162,7 +167,8 @@ public class ACPlayerListener implements Listener {
 							player.setPower(Type.TP_REQUEST);
 						}
 						DebugLog.INSTANCE.info("TPREQUEST stop");
-
+						player.setInformation("lastConnection",
+								System.currentTimeMillis());
 					}
 				});
 
@@ -190,13 +196,11 @@ public class ACPlayerListener implements Listener {
 				ACHelper.getInstance().groupSpawn(p);
 			}
 			if (ConfigEnum.FJ_RULES.getBoolean()) {
-				Utils.sParsedLocale(p, "Rules");
+				TextLocale.RULES.sendText(p);
 			}
 			if (ConfigEnum.MOTD.getBoolean()) {
-				Utils.sParsedLocale(p, "MOTDNewUser");
+				TextLocale.MOTD_NEW.sendText(p);
 			}
-		} else if (ConfigEnum.MOTD.getBoolean()) {
-			Utils.sParsedLocale(p, "MOTD");
 		}
 		DebugLog.INSTANCE.info("Player " + p.getName() + " joined sucessfully");
 	}

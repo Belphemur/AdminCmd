@@ -24,6 +24,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.TextLocale;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -51,7 +52,7 @@ public class Rules extends ServerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender, false)) {
-			Utils.sParsedLocale((Player) sender, "Rules");
+			TextLocale.RULES.sendText((Player) sender);
 		} else {
 			Utils.sI18n(sender, "Rules");
 		}
