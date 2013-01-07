@@ -191,7 +191,6 @@ public class TpAll extends TeleportCommand {
 				continue;
 			}
 			p.teleport(loc);
-			replace.clear();
 			LocaleHelper.TP_ALL.sendLocale(p, replace);
 		}
 	}
@@ -213,7 +212,6 @@ public class TpAll extends TeleportCommand {
 				continue;
 			}
 			p.teleport(loc);
-			replace.clear();
 			LocaleHelper.TP_ALL.sendLocale(p, replace);
 		}
 	}
