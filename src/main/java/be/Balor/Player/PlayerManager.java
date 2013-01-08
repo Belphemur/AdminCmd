@@ -18,17 +18,19 @@ package be.Balor.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Converter.PlayerConverter;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.collect.MapMaker;
 
@@ -74,56 +76,7 @@ public class PlayerManager {
 	 * @param playerFactory
 	 */
 	public void convertFactory(final IPlayerFactory factory) {
-		ACLogger.info("Converting player to the new type.");
-		for (final String name : this.playerFactory.getExistingPlayers()) {
-			ACLogger.info("Convert player : " + name);
-			DebugLog.INSTANCE.info("Convert player : " + name);
-			factory.addExistingPlayer(name);
-			final ACPlayer oldPlayer = playerFactory.createPlayer(name);
-			final ACPlayer newPlayer = factory.createPlayer(name);
-			DebugLog.INSTANCE.info("Convert lastLoc");
-			newPlayer.setLastLocation(oldPlayer.getLastLocation());
-			DebugLog.INSTANCE.info("Convert presentation");
-			newPlayer.setPresentation(oldPlayer.getPresentation());
-			DebugLog.INSTANCE.info("Convert homes");
-			for (final String home : oldPlayer.getHomeList()) {
-				final Location homeLoc = oldPlayer.getHome(home);
-				if (homeLoc == null) {
-					ACLogger.warning("The home "
-							+ home
-							+ " of player "
-							+ name
-							+ " has not been converted because the world is not loaded.");
-				} else {
-					newPlayer.setHome(home, homeLoc);
-				}
-			}
-			DebugLog.INSTANCE.info("Convert Powers");
-			for (final Entry<Type, Object> entry : oldPlayer.getPowers()
-					.entrySet()) {
-				newPlayer.setPower(entry.getKey(), entry.getValue());
-			}
-			DebugLog.INSTANCE.info("Convert Custom Powers");
-			for (final Entry<String, Object> entry : oldPlayer
-					.getCustomPowers().entrySet()) {
-				newPlayer.setCustomPower(entry.getKey(), entry.getValue());
-			}
-			DebugLog.INSTANCE.info("Convert Infos");
-			for (final String info : oldPlayer.getInformationsList()) {
-				if (info.equals("lastLoc") || info.equals("presentation")) {
-					continue;
-				}
-				newPlayer.setInformation(info, oldPlayer.getInformation(info)
-						.getObj());
-			}
-			DebugLog.INSTANCE.info("Convert Kit");
-			for (final String kit : oldPlayer.getKitUseList()) {
-				newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
-			}
-			newPlayer.forceSave();
-		}
-		this.playerFactory = factory;
-		ACLogger.info("Conversion finished.");
+		new PlayerConverter(playerFactory, factory).convert();
 	}
 
 	/**
@@ -250,7 +203,7 @@ public class PlayerManager {
 		return acPlayer;
 	}
 
-	ACPlayer demandACPlayer(final String name) {
+	synchronized ACPlayer demandACPlayer(final String name) {
 		if (name == null) {
 			return getPlayer("serverConsole");
 		}
@@ -273,7 +226,7 @@ public class PlayerManager {
 		return result;
 	}
 
-	ACPlayer demandACPlayer(final Player player) {
+	synchronized ACPlayer demandACPlayer(final Player player) {
 		if (player == null) {
 			return getPlayer("serverConsole");
 		}
@@ -295,6 +248,35 @@ public class PlayerManager {
 			result = getPlayer(playerName);
 		}
 		return result;
+	}
+
+	/**
+	 * @param newFactory
+	 */
+	synchronized void afterFactoryConversion(final IPlayerFactory newFactory) {
+		DebugLog.INSTANCE.info("After Conversion launched");
+		final Map<ACPlayer, Boolean> onlineCopy = new HashMap<ACPlayer, Boolean>();
+		onlineCopy.putAll(onlinePlayers);
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+
+			@Override
+			public void run() {
+				ACLogger.info("Update status of online players : "
+						+ onlineCopy.size());
+				for (final ACPlayer p : onlineCopy.keySet()) {
+					if (!(p instanceof EmptyPlayer)) {
+						new PlayerConvertTask(newFactory, p).run();
+					}
+				}
+				ACLogger.info("Players conversion Finished");
+
+			}
+		});
+		this.onlinePlayers.clear();
+		this.players.clear();
+		this.playerFactory = newFactory;
+		DebugLog.INSTANCE.info("Player Conversion Finished (ASYNC)");
+
 	}
 
 }

@@ -14,39 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Exceptions;
+package be.Balor.Player;
+
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Antoine
  * 
  */
-public class WorldNotLoaded extends IllegalArgumentException {
+public class AfterPlayerConvertTask implements Runnable {
+	private final IPlayerFactory newFactory;
 
-	/**
+	/*
+	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Runnable#run()
 	 */
-	private static final long serialVersionUID = 912385840330135161L;
-
 	/**
-	 * @param s
+	 * @param newFactory
 	 */
-	public WorldNotLoaded(final String s) {
-		super(s);
+	public AfterPlayerConvertTask(final IPlayerFactory newFactory) {
+		super();
+		this.newFactory = newFactory;
 	}
 
-	/**
-	 * @param cause
-	 */
-	public WorldNotLoaded(final Throwable cause) {
-		super(cause);
-	}
+	@Override
+	public void run() {
+		PlayerManager.getInstance().afterFactoryConversion(newFactory);
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public WorldNotLoaded(final String message, final Throwable cause) {
-		super(message, cause);
 	}
-
 }

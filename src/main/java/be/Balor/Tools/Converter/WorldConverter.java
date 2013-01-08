@@ -14,39 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Exceptions;
+package be.Balor.Tools.Converter;
+
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+
+import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.World.IWorldFactory;
+import be.Balor.World.WorldConvertTask;
 
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Antoine
  * 
  */
-public class WorldNotLoaded extends IllegalArgumentException {
+public class WorldConverter {
+	private final IWorldFactory oldFactory, newFactory;
 
 	/**
-	 * 
+	 * @param oldFactory
+	 * @param newFactory
 	 */
-	private static final long serialVersionUID = 912385840330135161L;
-
-	/**
-	 * @param s
-	 */
-	public WorldNotLoaded(final String s) {
-		super(s);
+	public WorldConverter(final IWorldFactory oldFactory,
+			final IWorldFactory newFactory) {
+		super();
+		this.oldFactory = oldFactory;
+		this.newFactory = newFactory;
 	}
 
-	/**
-	 * @param cause
-	 */
-	public WorldNotLoaded(final Throwable cause) {
-		super(cause);
-	}
-
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public WorldNotLoaded(final String message, final Throwable cause) {
-		super(message, cause);
+	public synchronized void convert() {
+		final List<World> worlds = Bukkit.getServer().getWorlds();
+		ACLogger.info("Begin Conversion of " + worlds.size() + " worlds");
+		for (final World world : worlds) {
+			new WorldConvertTask(oldFactory, newFactory, world).run();
+		}
 	}
 
 }

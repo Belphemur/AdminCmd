@@ -18,7 +18,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +32,7 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,7 +40,8 @@ import com.google.common.base.Joiner;
  */
 public class SQLPlayerFactory implements IPlayerFactory {
 	private final PreparedStatement insertPlayer;
-	private final Map<String, Long> players = new HashMap<String, Long>();
+	private final Map<String, Long> players = new MapMaker()
+			.concurrencyLevel(6).makeMap();
 
 	/**
  * 
@@ -114,18 +115,29 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	@Override
 	public void addExistingPlayer(final String player) {
 		if (!players.containsKey(player)) {
+			ResultSet rs = null;
 			try {
-				insertPlayer.clearParameters();
-				insertPlayer.setString(1, player);
-				synchronized (insertPlayer.getConnection()) {
+				synchronized (insertPlayer) {
+					insertPlayer.clearParameters();
+					insertPlayer.setString(1, player);
 					insertPlayer.executeUpdate();
-				}
-				final ResultSet rs = insertPlayer.getGeneratedKeys();
-				if (rs.next()) {
-					players.put(player, rs.getLong(1));
+
+					rs = insertPlayer.getGeneratedKeys();
+					if (rs.next()) {
+						players.put(player, rs.getLong(1));
+					}
+					if (rs != null) {
+						rs.close();
+					}
 				}
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem when adding player to the DB", e);
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (final SQLException e1) {
+					}
+				}
 			}
 		}
 

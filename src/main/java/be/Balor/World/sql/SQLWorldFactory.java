@@ -20,6 +20,8 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import lib.SQL.PatPeter.SQLibrary.Database;
 
@@ -38,6 +40,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class SQLWorldFactory implements IWorldFactory {
 	private final PreparedStatement insertWorld, getWorld;
+	private final Map<String, World> bukkitWorlds = new HashMap<String, World>();
 
 	/**
  * 
@@ -47,6 +50,9 @@ public class SQLWorldFactory implements IWorldFactory {
 				.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
 		getWorld = Database.DATABASE
 				.prepare("SELECT id FROM ac_worlds WHERE name=?");
+		for (final World w : ACPluginManager.getServer().getWorlds()) {
+			bukkitWorlds.put(w.getName().toLowerCase(), w);
+		}
 	}
 
 	/*
@@ -57,7 +63,7 @@ public class SQLWorldFactory implements IWorldFactory {
 	@Override
 	public synchronized ACWorld createWorld(final String worldName)
 			throws WorldNotLoaded {
-		final World w = ACPluginManager.getServer().getWorld(worldName);
+		World w = bukkitWorlds.get(worldName.toLowerCase());
 		if (w == null) {
 			File worldFile = new File(ACPluginManager.getServer()
 					.getWorldContainer(), worldName);
@@ -71,8 +77,10 @@ public class SQLWorldFactory implements IWorldFactory {
 						.toUpperCase() + worldName.substring(1).toLowerCase());
 			}
 			if (isExistingWorld(worldFile)) {
-				return createWorld(ACPluginManager.getServer().createWorld(
-						new WorldCreator(worldFile.getName())));
+				w = ACPluginManager.getServer().createWorld(
+						new WorldCreator(worldFile.getName()));
+				bukkitWorlds.put(w.getName().toLowerCase(), w);
+				return createWorld(w);
 			}
 			throw new WorldNotLoaded(worldName);
 		}
