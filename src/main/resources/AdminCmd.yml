@@ -233,8 +233,8 @@ acplayerkill:
     cmdname: bal_playerkill
 
 acplayerclear:
-    command: clear [playername] <material>
-    description: "Clear the inventory of the\n [player], defaults to yourself. You can specify the\n <item/block> to be removed."
+    command: clear <-p playername> <material> <amount>
+    description: "Clear the inventory of the\n <player>, defaults to yourself. You can specify the\n <material> to be removed.\n And it's <amount>."
     plugin: AdminCmd
     permissions: admincmd.player.clear
     cmdname: bal_pclear
