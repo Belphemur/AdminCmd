@@ -142,6 +142,7 @@ public class UpdateChecker {
 			final Node title = rssItem.getElementsByTagName("title").item(0);
 			final Node node = title;
 			rssVersion = new AdminCmdVersion(node.getTextContent());
+			DebugLog.INSTANCE.fine("This version : " + currentVersion);
 			DebugLog.INSTANCE.fine("Distant version found : " + rssVersion);
 			return rssVersion.isNewerThan(currentVersion);
 

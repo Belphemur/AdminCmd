@@ -23,11 +23,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import com.google.common.collect.ComparisonChain;
+
 /**
  * @author Antoine
  * 
  */
-public class AdminCmdVersion {
+public class AdminCmdVersion implements Comparable<AdminCmdVersion> {
 	private final static Pattern admincmdVersion = Pattern
 			.compile("([\\d]*)\\.([\\d]*)\\.([\\d]*)(-SNAPSHOT | )\\(BUILD (.*)\\)");
 	private int major, minor, build;
@@ -69,19 +71,7 @@ public class AdminCmdVersion {
 	 * @return true if newer.
 	 */
 	public boolean isNewerThan(final AdminCmdVersion version) {
-		if (this.major > version.major) {
-			return true;
-		}
-		if (this.minor > version.minor) {
-			return true;
-		}
-		if (this.build > version.build) {
-			return true;
-		}
-		if (this.buildDate.after(version.buildDate)) {
-			return true;
-		}
-		return false;
+		return compareTo(version) == 1;
 	}
 
 	/*
@@ -158,6 +148,22 @@ public class AdminCmdVersion {
 	 */
 	public String getVersion() {
 		return version;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(final AdminCmdVersion o) {
+		if (o == null) {
+			return 1;
+		}
+
+		return ComparisonChain.start().compare(major, o.major)
+				.compare(minor, o.minor).compare(build, o.build)
+				.compare(buildDate, o.buildDate).result();
 	}
 
 }
