@@ -98,7 +98,7 @@ public class ACPlayerListener implements Listener {
 		final ACPlayer player = PlayerManager.getInstance().setOnline(p);
 		InvisibleWorker.getInstance().makeInvisibleToPlayer(p);
 		final InetAddress address = p.getAddress().getAddress();
-		player.setInformation("last-ip", address.toString().substring(1));
+
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 			replace.put("name", Utils.getPlayerName(p, null, true));
@@ -117,6 +117,8 @@ public class ACPlayerListener implements Listener {
 						DebugLog.INSTANCE
 								.info("ASync Task for optimization for "
 										+ p.getName());
+						player.setInformation("last-ip", address.toString()
+								.substring(1));
 						DebugLog.INSTANCE.info("AFK start");
 						if (ConfigEnum.AUTO_AFK.getBoolean()) {
 							AFKWorker.getInstance().updateTimeStamp(p);
@@ -251,25 +253,29 @@ public class ACPlayerListener implements Listener {
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player p = event.getPlayer();
 		final ACPlayer player = ACPlayer.getPlayer(p);
-		player.setInformation("lastDisconnect", System.currentTimeMillis());
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 
-		final int imLvl = ACHelper.getInstance().getLimit(p,
-				Type.Limit.IMMUNITY, "defaultImmunityLvl");
-		player.setInformation("immunityLvl",
-				imLvl == Integer.MAX_VALUE ? ConfigEnum.DIMMUNITY.getInt()
-						: imLvl);
+			@Override
+			public void run() {
+				player.setInformation("lastDisconnect",
+						System.currentTimeMillis());
+				player.setInformation("gameMode", p.getGameMode());
 
-		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", Utils.getPlayerName(p, null, true));
-			event.setQuitMessage(Utils.I18n("quitMessage", replace));
-		}
+			}
+		});
+
 		if (player.hasPower(Type.FAKEQUIT)) {
 			event.setQuitMessage(null);
 		} else if (InvisibleWorker.getInstance().hasInvisiblePowers(p)) {
 			event.setQuitMessage(null);
 		}
-		player.setInformation("gameMode", p.getGameMode());
+		if (event.getQuitMessage() != null && ConfigEnum.JQMSG.getBoolean()
+				&& !SuperPermissions.isApiSet()) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("name", Utils.getPlayerName(p, null, true));
+			event.setQuitMessage(Utils.I18n("quitMessage", replace));
+		}
+
 		PlayerManager.getInstance().setOffline(player);
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}

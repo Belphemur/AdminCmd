@@ -133,7 +133,7 @@ public class ACDeathListener implements Listener {
 				}
 			}
 		} catch (final NullPointerException ex) {
-			message = null;
+			return;
 		}
 		if (message == null) {
 			return;
@@ -181,8 +181,8 @@ public class ACDeathListener implements Listener {
 				}
 			}
 		} else if (damager instanceof LivingEntity) {
-			return (ACHelper.getInstance().getDeathMessage("mob")
-					+ damager.getType().getName());
+			return (ACHelper.getInstance().getDeathMessage("mob") + damager
+					.getType().getName());
 		}
 		return ACHelper.getInstance().getDeathMessage("default");
 	}

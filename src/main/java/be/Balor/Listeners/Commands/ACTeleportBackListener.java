@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,6 +41,15 @@ public class ACTeleportBackListener implements Listener {
 		if (event.getCause() != TeleportCause.PLUGIN) {
 			return;
 		}
-		ACPlayer.getPlayer(event.getPlayer()).setLastLocation(event.getFrom());
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
+
+			@Override
+			public void run() {
+				ACPlayer.getPlayer(event.getPlayer()).setLastLocation(
+						event.getFrom());
+
+			}
+		});
+
 	}
 }

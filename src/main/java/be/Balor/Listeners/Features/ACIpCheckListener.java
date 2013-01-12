@@ -45,16 +45,23 @@ public class ACIpCheckListener implements Listener {
 
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent event) {
-		final Player p = event.getPlayer();
-		final InetAddress address = p.getAddress().getAddress();
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		final Player sameIP = addIP(p, address);
-		if (sameIP != null) {
-			replace.put("player", Utils.getPlayerName(p));
-			replace.put("player2", Utils.getPlayerName(sameIP));
-			replace.put("ip", address.toString().substring(1));
-			broadcastIP(replace);
-		}
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
+
+			@Override
+			public void run() {
+				final Player p = event.getPlayer();
+				final InetAddress address = p.getAddress().getAddress();
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				final Player sameIP = addIP(p, address);
+				if (sameIP != null) {
+					replace.put("player", Utils.getPlayerName(p));
+					replace.put("player2", Utils.getPlayerName(sameIP));
+					replace.put("ip", address.toString().substring(1));
+					broadcastIP(replace);
+				}
+
+			}
+		});
 
 	}
 
@@ -83,7 +90,15 @@ public class ACIpCheckListener implements Listener {
 		if (message == null) {
 			return;
 		}
-		Bukkit.getServer().broadcast(message, "admincmd.spec.ipbroadcast");
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+
+			@Override
+			public void run() {
+				Bukkit.getServer().broadcast(message,
+						"admincmd.spec.ipbroadcast");
+			}
+		});
+
 		ACLogger.info(message);
 	}
 
