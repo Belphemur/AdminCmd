@@ -29,6 +29,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -75,6 +76,13 @@ public class Home extends HomeCommand {
 				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
 			} else {
+				if (!ConfigEnum.CHECKTP.getBoolean()
+						&& ConfigEnum.TP_DELAY.getLong() <= 0) {
+					ACPluginManager.scheduleSyncTask(new TeleportTask(player,
+							loc));
+
+					return;
+				}
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 						ACHelper.getInstance().getCoreInstance(),
 						new DelayedTeleport(loc, player, home, sender),
@@ -120,11 +128,6 @@ public class Home extends HomeCommand {
 
 		@Override
 		public void run() {
-			if (!ConfigEnum.CHECKTP.getBoolean()) {
-				Utils.teleportWithChunkCheck(target, teleportToLoc);
-				Utils.sI18n(sender, "multiHome", "home", home.home);
-				return;
-			}
 			if (locBefore.equals(target.getLocation())) {
 				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
