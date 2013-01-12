@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.Workers.InvisibleWorker;
 
 /**
@@ -39,7 +40,16 @@ public class ACEntityListener implements Listener {
 			return;
 		}
 		final Player player = (Player) event.getEntity();
-		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
+
+			@Override
+			public void run() {
+				ACPlayer.getPlayer(player)
+						.setLastLocation(player.getLocation());
+
+			}
+		});
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

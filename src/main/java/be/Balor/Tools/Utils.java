@@ -1612,7 +1612,17 @@ public final class Utils {
 		if (!toLocation.getWorld().isChunkLoaded(x, z)) {
 			toLocation.getWorld().loadChunk(x, z);
 		}
-		ACPlayer.getPlayer(player).setLastLocation(player.getLocation());
+		final Location playerLoc = player.getLocation();
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
+
+			@Override
+			public void run() {
+
+				ACPlayer.getPlayer(player).setLastLocation(playerLoc);
+
+			}
+		});
+
 		teleport(player, toLocation);
 
 	}
