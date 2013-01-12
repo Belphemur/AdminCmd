@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Level;
 
 import lib.SQL.PatPeter.SQLibrary.Database;
 
@@ -37,7 +36,6 @@ import org.bukkit.entity.Player;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 
@@ -308,7 +306,7 @@ public class SQLPlayer extends ACPlayer {
 			}
 			loc = homes.get(homeName);
 		}
-		return loc; 
+		return loc;
 	}
 
 	/*
@@ -690,10 +688,6 @@ public class SQLPlayer extends ACPlayer {
 	 */
 	@Override
 	protected void forceSave() {
-		DebugLog.INSTANCE
-				.log(Level.WARNING,
-						"Force Save shouldn't be called for SQLPlayer",
-						new Throwable());
 	}
 
 	/*
