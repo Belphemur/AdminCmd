@@ -1199,6 +1199,9 @@ public class ACHelper {
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
 
+		// IMPORTANT : NO MORE SQLITE SUPPORT
+		convertSQLiteToYml();
+
 		dataWrapperInit();
 
 		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
@@ -1244,6 +1247,28 @@ public class ACHelper {
 		} catch (final IOException e) {
 		}
 		init();
+	}
+
+	/**
+	 * Remove support for sqlite.
+	 */
+	private void convertSQLiteToYml() {
+		final String wrapper = ConfigEnum.DATA_WRAPPER.getString();
+		final String convertTo = ConfigEnum.CONVERT_INTO.getString();
+		if (wrapper.equalsIgnoreCase("sqlite")
+				&& convertTo.equalsIgnoreCase("sqlite")) {
+			ConfigEnum.CONVERT_INTO.setValue("yml");
+		} else if (convertTo.equalsIgnoreCase("sqlite")) {
+			ACLogger.info("SQLite support has been removed because it was causing too much lag.");
+			ACLogger.info("Converting to YML.");
+			ConfigEnum.CONVERT_INTO.setValue("yml");
+			try {
+				ConfigEnum.save();
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+			}
+		}
+
 	}
 
 	/**
