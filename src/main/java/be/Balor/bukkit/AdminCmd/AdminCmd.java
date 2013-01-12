@@ -167,7 +167,6 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Egg.EggTypeClassLoader;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Metrics.Metrics;
-import be.Balor.Tools.Update.UpdateChecker;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -212,8 +211,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	public void onEnable() {
-		new UpdateChecker("http://www.admincmd.com/category/dev/feed/")
-				.needUpdate();
+
 		ExtendedConfiguration.setClassLoader(this.getClassLoader());
 		DebugLog.setFile(getDataFolder().getPath());
 
@@ -526,6 +524,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		spec.addChild("admincmd.spec.noloss");
 		spec.addChild("admincmd.spec.signedit");
 		spec.addChild("admincmd.spec.ipbroadcast");
+		spec.addChild("admincmd.spec.versionbcast");
 		player.addChild("admincmd.player.fly.allowed");
 		new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);
 		for (final World w : this.getServer().getWorlds()) {

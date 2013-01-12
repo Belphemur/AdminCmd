@@ -75,6 +75,8 @@ import be.Balor.Tools.Lister.Lister;
 import be.Balor.Tools.Threads.SetTimeTask;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.Tools.Threads.UndoBlockTask;
+import be.Balor.Tools.Update.UpdateChecker;
+import be.Balor.Tools.Update.UpdateChecker.Channel;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
@@ -1179,6 +1181,7 @@ public class ACHelper {
 		mainThreadID = Thread.currentThread().getId();
 		ACPluginManager.setCorePlugin(pluginInstance);
 		this.coreInstance = pluginInstance;
+
 		fManager = FileManager.getInstance();
 		fManager.setPath(pluginInstance.getDataFolder().getPath());
 		dataManager = fManager;
@@ -1198,7 +1201,11 @@ public class ACHelper {
 				"textFile.yml")));
 		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
 		ConfigEnum.setConfig(pluginConfig);
-
+		if (ConfigEnum.CHECK_UPDATE.getBoolean()) {
+			new UpdateChecker(ConfigEnum.UPDATE_SRC.getString()
+					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV,
+					coreInstance);
+		}
 		// IMPORTANT : NO MORE SQLITE SUPPORT
 		convertSQLiteToYml();
 

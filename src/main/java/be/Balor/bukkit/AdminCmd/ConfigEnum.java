@@ -372,7 +372,15 @@ public enum ConfigEnum {
 	ADD_BANNER_IN_BAN(
 			"addBannerNameInBan",
 			true,
-			"Add or not the 'by Player' in the ban reason");
+			"Add or not the 'by Player' in the ban reason"),
+	CHECK_UPDATE(
+			"checkForUpdate.status",
+			true,
+			"If AdminCmd has to check if there is a new version of the plugin."),
+	UPDATE_SRC(
+			"checkForUpdate.updateChannel",
+			"stable",
+			"Which version to check. Can be stable or dev.");
 
 	private final String confVal;
 	private final Object defaultVal;

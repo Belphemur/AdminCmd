@@ -158,7 +158,10 @@ public enum LocaleHelper {
 	TIME_LEFT("tempBanTimeLeft", "Time left: %d d %h h %m m %s s"),
 	DEFAULT_BAN_MESSAGE(
 			"defaultBanMessage",
-			"You have been banned from the server !");
+			"You have been banned from the server !"),
+	NEW_VERSION(
+			"newVersionFound",
+			"There is a new version of AdminCmd on www.admincmd.com : %version");
 
 	private final String key;
 	private final String locale;
