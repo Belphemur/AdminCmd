@@ -100,6 +100,7 @@ public class Home extends HomeCommand {
 		protected Player target;
 		protected be.Balor.Tools.Home home;
 		protected CommandSender sender;
+		private final boolean checkTp = ConfigEnum.CHECKTP.getBoolean();
 
 		public DelayedTeleport(final Location teleportLoc, final Player target,
 				final be.Balor.Tools.Home home, final CommandSender sender) {
@@ -120,7 +121,7 @@ public class Home extends HomeCommand {
 
 		@Override
 		public void run() {
-			if (!ConfigEnum.CHECKTP.getBoolean()) {
+			if (!checkTp) {
 				Utils.teleportWithChunkCheck(target, teleportToLoc);
 				Utils.sI18n(sender, "multiHome", "home", home.home);
 				return;
