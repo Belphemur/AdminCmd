@@ -348,11 +348,11 @@ public enum ConfigEnum {
 			"yml",
 			"DON'T TOUCH !\n"
 					+ "IF YOU WANT TO CHANGE IT USE THE CONVERTINTO.\n"
-					+ "How the player data, world data are saved. Possible options : mysql,yml."),
+					+ "How the player data, world data are saved. Possible options : mysql,sqlite,yml."),
 	CONVERT_INTO(
 			"convertInto",
 			"yml",
-			"By setting this parameter, you tell AdminCmd that it have to convert the data to the new format. Possible format : mysql,yml.\n Mysql need the host,user,database,password to be set"
+			"By setting this parameter, you tell AdminCmd that it have to convert the data to the new format. Possible format : mysql,sqlite,yml.\n Mysql need the host,user,database,password to be set"
 					+ "IF the DataWrapper is the same as the convertInto NO CONVERSION WILL BE DONE."),
 	MYSQL_HOST("mysql.host", "localhost", "Host to be set if mysql used."),
 	MYSQL_USER("mysql.user", "root", "Username to connect to mysql database"),
