@@ -113,8 +113,8 @@ public class PlayerConvertTask implements Runnable {
 		for (final String kit : oldPlayer.getKitUseList()) {
 			newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
 		}
-		if (newPlayer instanceof FilePlayer) {
-			((FilePlayer) newPlayer).writeFile();
+		if (!(newPlayer instanceof FilePlayer)) {
+			newPlayer.forceSave();
 		}
 
 	}

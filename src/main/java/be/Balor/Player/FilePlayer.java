@@ -334,7 +334,7 @@ public class FilePlayer extends ACPlayer {
 		return result;
 	}
 
-	void writeFile() {
+	private void writeFile() {
 		IOSAVET_TASK.addConfigurationToSave(datas);
 	}
 
