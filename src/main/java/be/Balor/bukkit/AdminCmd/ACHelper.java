@@ -1207,7 +1207,7 @@ public class ACHelper {
 					coreInstance);
 		}
 		// IMPORTANT : NO MORE SQLITE SUPPORT
-		convertSQLiteToYml();
+		// convertSQLiteToYml();
 
 		dataWrapperInit();
 
