@@ -1207,7 +1207,7 @@ public class ACHelper {
 					coreInstance);
 		}
 		// IMPORTANT : NO MORE SQLITE SUPPORT
-		// convertSQLiteToYml();
+		checkSQLite();
 
 		dataWrapperInit();
 
@@ -1259,21 +1259,14 @@ public class ACHelper {
 	/**
 	 * Remove support for sqlite.
 	 */
-	private void convertSQLiteToYml() {
+	private void checkSQLite() {
 		final String wrapper = ConfigEnum.DATA_WRAPPER.getString();
 		final String convertTo = ConfigEnum.CONVERT_INTO.getString();
 		if (wrapper.equalsIgnoreCase("sqlite")
 				&& convertTo.equalsIgnoreCase("sqlite")) {
-			ConfigEnum.CONVERT_INTO.setValue("yml");
+			ACLogger.warning("SQLite wrapper can add some lag to the server.");
 		} else if (convertTo.equalsIgnoreCase("sqlite")) {
-			ACLogger.info("SQLite support has been removed because it was causing too much lag.");
-			ACLogger.info("Converting to YML.");
-			ConfigEnum.CONVERT_INTO.setValue("yml");
-			try {
-				ConfigEnum.save();
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-			}
+			ACLogger.warning("SQLite wrapper can add some lag to the server.");
 		}
 
 	}
