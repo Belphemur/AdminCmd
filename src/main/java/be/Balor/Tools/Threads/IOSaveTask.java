@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.Tools.Threads;
 
-import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -80,7 +79,7 @@ public class IOSaveTask implements Runnable {
 			while (!configurations.isEmpty()) {
 				try {
 					configurations.poll().save();
-				} catch (final IOException e) {
+				} catch (final Exception e) {
 					ACLogger.severe(
 							"Problem while saving ExtendedConfiguration file",
 							e);

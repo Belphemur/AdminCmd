@@ -21,6 +21,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import be.Balor.Player.AfterPlayerConvertTask;
+import be.Balor.Player.FilePlayer;
+import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.IPlayerFactory;
 import be.Balor.Player.PlayerConvertTask;
 import be.Balor.Tools.Debug.ACLogger;
@@ -45,6 +47,9 @@ public class PlayerConverter {
 	}
 
 	public synchronized void convert() {
+		if (newFactory instanceof FilePlayerFactory) {
+			FilePlayer.scheduleAsyncSave();
+		}
 		final Set<String> existingPlayers = oldFactory.getExistingPlayers();
 		ACLogger.info("Begin conversion of " + existingPlayers.size()
 				+ " players");
