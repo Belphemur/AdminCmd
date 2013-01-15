@@ -415,5 +415,5 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bukkit.version>1.4.6-R0.4-SNAPSHOT</bukkit.version>
 	</properties>
-	<version>7.1.1</version>
+	<version>7.2.0-SNAPSHOT</version>
 </project>
