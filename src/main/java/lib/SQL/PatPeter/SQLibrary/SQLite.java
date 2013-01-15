@@ -50,7 +50,8 @@ public class SQLite extends Database {
 			if (!sqlFile.exists()) {
 				try {
 					sqlFile.createNewFile();
-				} catch (final IOException e) {}
+				} catch (final IOException e) {
+				}
 			}
 		} catch (final ClassNotFoundException e) {
 			throw new SQLException("Can't load JDBC Driver", e);
@@ -71,32 +72,33 @@ public class SQLite extends Database {
 		ResultSet result = null;
 
 		try {
+			autoReconnect();
 			synchronized (connection) {
 				statement = connection.createStatement();
 
 				switch (this.getStatement(query)) {
-					case SELECT :
-						result = statement.executeQuery(query);
-						break;
+				case SELECT:
+					result = statement.executeQuery(query);
+					break;
 
-					case INSERT :
-					case UPDATE :
-					case DELETE :
-					case CREATE :
-					case ALTER :
-					case DROP :
-					case TRUNCATE :
-					case RENAME :
-					case DO :
-					case REPLACE :
-					case LOAD :
-					case HANDLER :
-					case CALL :
-						this.lastUpdate = statement.executeUpdate(query);
-						break;
+				case INSERT:
+				case UPDATE:
+				case DELETE:
+				case CREATE:
+				case ALTER:
+				case DROP:
+				case TRUNCATE:
+				case RENAME:
+				case DO:
+				case REPLACE:
+				case LOAD:
+				case HANDLER:
+				case CALL:
+					this.lastUpdate = statement.executeUpdate(query);
+					break;
 
-					default :
-						result = statement.executeQuery(query);
+				default:
+					result = statement.executeQuery(query);
 
 				}
 			}
@@ -175,6 +177,7 @@ public class SQLite extends Database {
 
 		return null;
 	}
+
 	/*
 	 * (Non javadoc)
 	 * 

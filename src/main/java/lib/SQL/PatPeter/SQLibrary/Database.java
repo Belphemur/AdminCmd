@@ -27,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
@@ -110,15 +111,9 @@ public abstract class Database {
 	// http://dev.mysql.com/doc/refman/5.6/en/sql-syntax.html
 	// http://sqlite.org/lang.html
 	protected enum Statements {
-		SELECT,
-		INSERT,
-		UPDATE,
-		DELETE,
-		DO,
-		REPLACE,
-		LOAD,
-		HANDLER,
-		CALL, // Data manipulation statements
+		SELECT, INSERT, UPDATE, DELETE, DO, REPLACE, LOAD, HANDLER, CALL, // Data
+																			// manipulation
+																			// statements
 		CREATE,
 		ALTER,
 		DROP,
@@ -300,6 +295,7 @@ public abstract class Database {
 	 */
 	public PreparedStatement prepare(final String query) {
 		try {
+			autoReconnect();
 			final PreparedStatement ps;
 			synchronized (connection) {
 				ps = connection.prepareStatement(query);
@@ -433,4 +429,52 @@ public abstract class Database {
 	 * @return type of the database
 	 */
 	public abstract DatabaseType getType();
+
+	/**
+	 * Check if the connection is valid
+	 * 
+	 * @return true if it is
+	 */
+	private boolean isConnectionValid() {
+		synchronized (this.connection) {
+			if (checkConnection()) {
+				try {
+					return this.connection.isValid(3);
+				} catch (final SQLException e) {
+					DebugLog.INSTANCE.log(Level.INFO,
+							"Problem when checking connection state", e);
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Try to reconnect.
+	 */
+	private void reconnect() {
+		synchronized (this.connection) {
+			try {
+				this.connection.close();
+			} catch (final SQLException e) {
+			}
+			this.connection = null;
+			try {
+				open();
+			} catch (final SQLException e) {
+				writeError(
+						"Problem while reconnection to the database :\n"
+								+ e.getMessage(), true);
+			}
+		}
+	}
+
+	/**
+	 * Check if the connection is valid, if not try to reconnect.
+	 */
+	public void autoReconnect() {
+		if (!isConnectionValid()) {
+			reconnect();
+		}
+	}
 }

@@ -59,6 +59,7 @@ public class MySQL extends Database {
 		Statement statement = null;
 		ResultSet result = null;
 		try {
+			autoReconnect();
 			synchronized (connection) {
 				statement = this.connection.createStatement();
 
@@ -138,6 +139,7 @@ public class MySQL extends Database {
 	public PreparedStatement prepare(final String query) {
 		try {
 			final PreparedStatement ps;
+			autoReconnect();
 			synchronized (connection) {
 				if (getStatement(query) == Statements.INSERT) {
 					ps = connection.prepareStatement(query,
