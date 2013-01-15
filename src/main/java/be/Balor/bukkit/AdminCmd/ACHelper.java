@@ -1210,8 +1210,6 @@ public class ACHelper {
 					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV,
 					coreInstance);
 		}
-		// IMPORTANT : NO MORE SQLITE SUPPORT
-		checkSQLite();
 
 		dataWrapperInit();
 
@@ -1258,21 +1256,6 @@ public class ACHelper {
 		} catch (final IOException e) {
 		}
 		init();
-	}
-
-	/**
-	 * Remove support for sqlite.
-	 */
-	private void checkSQLite() {
-		final String wrapper = ConfigEnum.DATA_WRAPPER.getString();
-		final String convertTo = ConfigEnum.CONVERT_INTO.getString();
-		if (wrapper.equalsIgnoreCase("sqlite")
-				&& convertTo.equalsIgnoreCase("sqlite")) {
-			ACLogger.warning("SQLite wrapper can add some lag to the server.");
-		} else if (convertTo.equalsIgnoreCase("sqlite")) {
-			ACLogger.warning("SQLite wrapper can add some lag to the server.");
-		}
-
 	}
 
 	/**
