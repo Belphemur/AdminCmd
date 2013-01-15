@@ -36,8 +36,13 @@ import org.bukkit.entity.Player;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.Tools.Threads.PrepStmtExecutorTask;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -56,36 +61,16 @@ public class SQLPlayer extends ACPlayer {
 			.synchronizedMap(new HashMap<String, Long>());
 	private Location lastLoc;
 	private final long id;
-	private static PreparedStatement INSERT_HOME, DELETE_HOME, INSERT_INFO,
-			DELETE_INFO, UPDATE_LASTLOC, INSERT_POWER, DELETE_POWER,
-			DELETE_SUPERPOWERS, INSERT_KIT_USE;
 	private static PreparedStatement GET_HOMES, GET_INFOS, GET_POWERS,
 			GET_KIT_USES, GET_LASTLOC;
+	private static int prepStmtTaskID;
+	private static final PrepStmtExecutorTask PREP_STMT_TASK = new PrepStmtExecutorTask();
 	static {
 		initPrepStmt();
 	}
 
 	public static void initPrepStmt() {
-		INSERT_HOME = Database.DATABASE
-				.prepare("REPLACE INTO `ac_homes` (`name`, `player_id`, `world`, `x`, `y`, `z`, `yaw`, `pitch`)"
-						+ " VALUES (?,?,?,?,?,?,?,?)");
-		DELETE_HOME = Database.DATABASE
-				.prepare("DELETE FROM `ac_homes` WHERE `player_id`=? AND `name`=?");
-		INSERT_INFO = Database.DATABASE
-				.prepare("REPLACE INTO `ac_informations` (`key` ,`player_id` ,`info`) VALUES (?, ?, ?)");
-		DELETE_INFO = Database.DATABASE
-				.prepare("DELETE FROM `ac_informations` WHERE `player_id`=? AND `key`=?");
-		UPDATE_LASTLOC = Database.DATABASE
-				.prepare("UPDATE `ac_players` SET `world` = ?, `x` = ?, `y` = ?, `z` = ?, `yaw` = ?, `pitch` = ? WHERE `ac_players`.`id` = ?;");
-		INSERT_POWER = Database.DATABASE
-				.prepare("REPLACE INTO `ac_powers` (`key`, `player_id`, `info`, `category`) VALUES (?, ?, ?, ?);");
-		DELETE_POWER = Database.DATABASE
-				.prepare("DELETE FROM `ac_powers` WHERE `player_id`=? AND `key`=?");
-		DELETE_SUPERPOWERS = Database.DATABASE
-				.prepare("DELETE FROM `ac_powers` WHERE `player_id`=? AND `category`='"
-						+ Type.Category.SUPER_POWER.name() + "'");
-		INSERT_KIT_USE = Database.DATABASE
-				.prepare("REPLACE INTO `ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
+
 		GET_HOMES = Database.DATABASE
 				.prepare("SELECT `name`,`world`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_homes` WHERE `player_id` = ?");
 		GET_POWERS = Database.DATABASE
@@ -236,6 +221,43 @@ public class SQLPlayer extends ACPlayer {
 		}
 	}
 
+	/**
+	 * To be sure that all waiting prepStmt will be executed when this is called
+	 */
+	public static void forceExecuteStmts() {
+		PREP_STMT_TASK.run();
+	}
+
+	/**
+	 * To Schedule the Async task
+	 */
+	public static void scheduleAsyncSave() {
+		if (ACPluginManager.getScheduler().isCurrentlyRunning(prepStmtTaskID)
+				|| ACPluginManager.getScheduler().isQueued(prepStmtTaskID)) {
+			return;
+		}
+		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY
+				.getInt() : 30;
+		prepStmtTaskID = ACPluginManager
+				.getScheduler()
+				.runTaskTimerAsynchronously(
+						ACHelper.getInstance().getCoreInstance(),
+						PREP_STMT_TASK, 20 * 60, 20 * delay).getTaskId();
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
+				+ prepStmtTaskID);
+	}
+
+	/**
+	 * To stop the saving task.
+	 */
+	public static void stopSavingTask() {
+		if (!ACPluginManager.getScheduler().isCurrentlyRunning(prepStmtTaskID)
+				&& !ACPluginManager.getScheduler().isQueued(prepStmtTaskID)) {
+			return;
+		}
+		ACPluginManager.getScheduler().cancelTask(prepStmtTaskID);
+	}
+
 	/*
 	 * (Non javadoc)
 	 * 
@@ -245,23 +267,23 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void setHome(final String home, final Location loc) {
 		homes.put(home, loc);
-		synchronized (INSERT_HOME) {
-			try {
-				INSERT_HOME.clearParameters();
-				INSERT_HOME.setString(1, home);
-				INSERT_HOME.setLong(2, id);
-				INSERT_HOME.setString(3, loc.getWorld().getName());
-				INSERT_HOME.setDouble(4, loc.getX());
-				INSERT_HOME.setDouble(5, loc.getY());
-				INSERT_HOME.setDouble(6, loc.getZ());
-				INSERT_HOME.setFloat(7, loc.getYaw());
-				INSERT_HOME.setFloat(8, loc.getPitch());
-				synchronized (INSERT_HOME.getConnection()) {
-					INSERT_HOME.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with inserting the home in the DB", e);
-			}
+
+		try {
+			final PreparedStatement insertHome = Database.DATABASE
+					.prepare("REPLACE INTO `ac_homes` (`name`, `player_id`, `world`, `x`, `y`, `z`, `yaw`, `pitch`)"
+							+ " VALUES (?,?,?,?,?,?,?,?)");
+			insertHome.setString(1, home);
+			insertHome.setLong(2, id);
+			insertHome.setString(3, loc.getWorld().getName());
+			insertHome.setDouble(4, loc.getX());
+			insertHome.setDouble(5, loc.getY());
+			insertHome.setDouble(6, loc.getZ());
+			insertHome.setFloat(7, loc.getYaw());
+			insertHome.setFloat(8, loc.getPitch());
+			PREP_STMT_TASK.addPreparedStmt(insertHome);
+
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with inserting the home in the DB", e);
 		}
 	}
 
@@ -273,20 +295,18 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void removeHome(final String home) {
 		if (homes.remove(home) != null) {
-			synchronized (DELETE_HOME) {
-				try {
-					DELETE_HOME.clearParameters();
-					DELETE_HOME.setLong(1, id);
-					DELETE_HOME.setString(2, home);
-					synchronized (DELETE_HOME.getConnection()) {
-						DELETE_HOME.executeUpdate();
-					}
-				} catch (final SQLException e) {
-					ACLogger.severe(
-							"Problem with deleting the home from the DB", e);
-				}
+			final PreparedStatement deleteHome = Database.DATABASE
+					.prepare("delete FROM `ac_homes` WHERE `player_id`=? AND `name`=?");
 
+			try {
+				deleteHome.setLong(1, id);
+				deleteHome.setString(2, home);
+				PREP_STMT_TASK.addPreparedStmt(deleteHome);
+
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with deleting the home from the DB", e);
 			}
+
 		}
 
 	}
@@ -331,19 +351,15 @@ public class SQLPlayer extends ACPlayer {
 			return;
 		}
 		infos.put(info, value);
-		synchronized (INSERT_INFO) {
-			try {
-				INSERT_INFO.clearParameters();
-				INSERT_INFO.setString(1, info);
-				INSERT_INFO.setLong(2, id);
-				INSERT_INFO.setString(3, value.toString());
-				synchronized (INSERT_INFO.getConnection()) {
-					INSERT_INFO.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with insert info in the DB", e);
-			}
-
+		final PreparedStatement insertInfo = Database.DATABASE
+				.prepare("REPLACE INTO `ac_informations` (`key` ,`player_id` ,`info`) VALUES (?, ?, ?)");
+		try {
+			insertInfo.setString(1, info);
+			insertInfo.setLong(2, id);
+			insertInfo.setString(3, value.toString());
+			PREP_STMT_TASK.addPreparedStmt(insertInfo);
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with insert info in the DB", e);
 		}
 
 	}
@@ -356,20 +372,17 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void removeInformation(final String info) {
 		if (infos.remove(info) != null) {
-			synchronized (DELETE_INFO) {
-				try {
-					DELETE_INFO.clearParameters();
-					DELETE_INFO.setLong(1, id);
-					DELETE_INFO.setString(2, info);
-					synchronized (DELETE_INFO.getConnection()) {
-						DELETE_INFO.executeUpdate();
-					}
-				} catch (final SQLException e) {
-					ACLogger.severe(
-							"Problem with deleting the info from the DB", e);
-				}
+			final PreparedStatement deleteInfo = Database.DATABASE
+					.prepare("delete FROM `ac_informations` WHERE `player_id`=? AND `key`=?");
+			try {
+				deleteInfo.setLong(1, id);
+				deleteInfo.setString(2, info);
+				PREP_STMT_TASK.addPreparedStmt(deleteInfo);
 
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with deleting the info from the DB", e);
 			}
+
 		}
 
 	}
@@ -402,31 +415,29 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void setLastLocation(final Location loc) {
 		lastLoc = loc;
-		synchronized (UPDATE_LASTLOC) {
-			try {
-				UPDATE_LASTLOC.clearParameters();
-				if (loc != null) {
-					UPDATE_LASTLOC.setString(1, loc.getWorld().getName());
-					UPDATE_LASTLOC.setDouble(2, loc.getX());
-					UPDATE_LASTLOC.setDouble(3, loc.getY());
-					UPDATE_LASTLOC.setDouble(4, loc.getZ());
-					UPDATE_LASTLOC.setFloat(5, loc.getYaw());
-					UPDATE_LASTLOC.setFloat(6, loc.getPitch());
-				} else {
-					UPDATE_LASTLOC.setNull(1, Types.VARCHAR);
-					UPDATE_LASTLOC.setNull(2, Types.DOUBLE);
-					UPDATE_LASTLOC.setNull(3, Types.DOUBLE);
-					UPDATE_LASTLOC.setNull(4, Types.DOUBLE);
-					UPDATE_LASTLOC.setNull(5, Types.FLOAT);
-					UPDATE_LASTLOC.setNull(6, Types.FLOAT);
-				}
-				UPDATE_LASTLOC.setLong(7, id);
-				synchronized (UPDATE_LASTLOC.getConnection()) {
-					UPDATE_LASTLOC.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with updating lastLoc in the DB", e);
+		final PreparedStatement updateLastLoc = Database.DATABASE
+				.prepare("UPDATE `ac_players` SET `world` = ?, `x` = ?, `y` = ?, `z` = ?, `yaw` = ?, `pitch` = ? WHERE `ac_players`.`id` = ?;");
+		try {
+			updateLastLoc.clearParameters();
+			if (loc != null) {
+				updateLastLoc.setString(1, loc.getWorld().getName());
+				updateLastLoc.setDouble(2, loc.getX());
+				updateLastLoc.setDouble(3, loc.getY());
+				updateLastLoc.setDouble(4, loc.getZ());
+				updateLastLoc.setFloat(5, loc.getYaw());
+				updateLastLoc.setFloat(6, loc.getPitch());
+			} else {
+				updateLastLoc.setNull(1, Types.VARCHAR);
+				updateLastLoc.setNull(2, Types.DOUBLE);
+				updateLastLoc.setNull(3, Types.DOUBLE);
+				updateLastLoc.setNull(4, Types.DOUBLE);
+				updateLastLoc.setNull(5, Types.FLOAT);
+				updateLastLoc.setNull(6, Types.FLOAT);
 			}
+			updateLastLoc.setLong(7, id);
+			PREP_STMT_TASK.addPreparedStmt(updateLastLoc);
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with updating lastLoc in the DB", e);
 		}
 
 	}
@@ -450,28 +461,25 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void setPower(final Type power, final Object value) {
 		powers.put(power, value);
-		synchronized (INSERT_POWER) {
-			try {
-				INSERT_POWER.clearParameters();
-				INSERT_POWER.setString(1, power.name());
-				INSERT_POWER.setLong(2, id);
-				if (power == Type.EGG) {
-					synchronized (SQLObjectContainer.yaml) {
-						INSERT_POWER.setString(3,
-								SQLObjectContainer.yaml.dump(value));
-					}
-				} else {
-					INSERT_POWER.setString(3, value.toString());
-				}
-				INSERT_POWER.setString(4, power.getCategory().name());
-				synchronized (INSERT_POWER.getConnection()) {
-					INSERT_POWER.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with inserting power in the DB", e);
-			}
-		}
+		final PreparedStatement insertPower = Database.DATABASE
+				.prepare("REPLACE INTO `ac_powers` (`key`, `player_id`, `info`, `category`) VALUES (?, ?, ?, ?);");
+		try {
 
+			insertPower.setString(1, power.name());
+			insertPower.setLong(2, id);
+			if (power == Type.EGG) {
+				synchronized (SQLObjectContainer.yaml) {
+					insertPower.setString(3,
+							SQLObjectContainer.yaml.dump(value));
+				}
+			} else {
+				insertPower.setString(3, value.toString());
+			}
+			insertPower.setString(4, power.getCategory().name());
+			PREP_STMT_TASK.addPreparedStmt(insertPower);
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with inserting power in the DB", e);
+		}
 	}
 
 	/*
@@ -483,21 +491,18 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void setCustomPower(final String power, final Object value) {
 		customPowers.put(power, value);
-		synchronized (INSERT_POWER) {
-			try {
-				INSERT_POWER.clearParameters();
-				INSERT_POWER.setString(1, power);
-				INSERT_POWER.setLong(2, id);
-				INSERT_POWER.setString(3, value.toString());
-				INSERT_POWER.setString(4, Type.Category.OTHER.name());
-				synchronized (INSERT_POWER.getConnection()) {
-					INSERT_POWER.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with inserting power in the DB", e);
-			}
+		final PreparedStatement insertPower = Database.DATABASE
+				.prepare("REPLACE INTO `ac_powers` (`key`, `player_id`, `info`, `category`) VALUES (?, ?, ?, ?);");
+		try {
+			insertPower.clearParameters();
+			insertPower.setString(1, power);
+			insertPower.setLong(2, id);
+			insertPower.setString(3, value.toString());
+			insertPower.setString(4, Type.Category.OTHER.name());
+			PREP_STMT_TASK.addPreparedStmt(insertPower);
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with inserting power in the DB", e);
 		}
-
 	}
 
 	/*
@@ -528,20 +533,18 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void removeCustomPower(final String power) {
 		if (customPowers.remove(power) != null) {
-			synchronized (DELETE_POWER) {
-				try {
-					DELETE_POWER.clearParameters();
-					DELETE_POWER.setLong(1, id);
-					DELETE_POWER.setString(2, power);
-					synchronized (DELETE_POWER.getConnection()) {
-						DELETE_POWER.executeUpdate();
-					}
-				} catch (final SQLException e) {
-					ACLogger.severe(
-							"Problem with deleting customPower in the DB", e);
-				}
-
+			final PreparedStatement deletePower = Database.DATABASE
+					.prepare("delete FROM `ac_powers` WHERE `player_id`=? AND `key`=?");
+			try {
+				deletePower.clearParameters();
+				deletePower.setLong(1, id);
+				deletePower.setString(2, power);
+				PREP_STMT_TASK.addPreparedStmt(deletePower);
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with deleting customPower in the DB",
+						e);
 			}
+
 		}
 
 	}
@@ -574,20 +577,17 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void removePower(final Type power) {
 		if (powers.remove(power) != null) {
-			synchronized (DELETE_POWER) {
-				try {
-					DELETE_POWER.clearParameters();
-					DELETE_POWER.setLong(1, id);
-					DELETE_POWER.setString(2, power.name());
-					synchronized (DELETE_POWER.getConnection()) {
-						DELETE_POWER.executeUpdate();
-					}
-				} catch (final SQLException e) {
-					ACLogger.severe("Problem with deleting power from the DB",
-							e);
-				}
-
+			final PreparedStatement deletePower = Database.DATABASE
+					.prepare("delete FROM `ac_powers` WHERE `player_id`=? AND `key`=?");
+			try {
+				deletePower.clearParameters();
+				deletePower.setLong(1, id);
+				deletePower.setString(2, power.name());
+				PREP_STMT_TASK.addPreparedStmt(deletePower);
+			} catch (final SQLException e) {
+				ACLogger.severe("Problem with deleting power from the DB", e);
 			}
+
 		}
 
 	}
@@ -616,19 +616,18 @@ public class SQLPlayer extends ACPlayer {
 			handler.setAllowFlight(false);
 		}
 		if (found) {
-			synchronized (DELETE_SUPERPOWERS) {
-				try {
-					DELETE_SUPERPOWERS.clearParameters();
-					DELETE_SUPERPOWERS.setLong(1, id);
-					synchronized (DELETE_SUPERPOWERS.getConnection()) {
-						DELETE_SUPERPOWERS.executeUpdate();
-					}
-				} catch (final SQLException e) {
-					ACLogger.severe(
-							"Problem with deleting super powers from the DB", e);
-				}
-
+			final PreparedStatement deleteSuperPowers = Database.DATABASE
+					.prepare("delete FROM `ac_powers` WHERE `player_id`=? AND `category`='"
+							+ Type.Category.SUPER_POWER.name() + "'");
+			try {
+				deleteSuperPowers.clearParameters();
+				deleteSuperPowers.setLong(1, id);
+				PREP_STMT_TASK.addPreparedStmt(deleteSuperPowers);
+			} catch (final SQLException e) {
+				ACLogger.severe(
+						"Problem with deleting super powers from the DB", e);
 			}
+
 		}
 
 	}
@@ -641,20 +640,19 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void setLastKitUse(final String kit, final long timestamp) {
 		kitUses.put(kit, timestamp);
-		synchronized (INSERT_KIT_USE) {
-			try {
-				INSERT_KIT_USE.clearParameters();
+		final PreparedStatement insertKitUse = Database.DATABASE
+				.prepare("REPLACE INTO `ac_kit_uses` (`kit`, `player_id`, `use`) VALUES (?, ?, ?);");
+		try {
+			insertKitUse.clearParameters();
 
-				INSERT_KIT_USE.setString(1, kit);
-				INSERT_KIT_USE.setLong(2, id);
-				INSERT_KIT_USE.setLong(3, timestamp);
-				synchronized (INSERT_KIT_USE.getConnection()) {
-					INSERT_KIT_USE.executeUpdate();
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with inserting kit_use in the DB", e);
-			}
+			insertKitUse.setString(1, kit);
+			insertKitUse.setLong(2, id);
+			insertKitUse.setLong(3, timestamp);
+			PREP_STMT_TASK.addPreparedStmt(insertKitUse);
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with inserting kit_use in the DB", e);
 		}
+
 	}
 
 	/*
