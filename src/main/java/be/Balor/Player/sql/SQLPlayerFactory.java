@@ -40,8 +40,9 @@ import com.google.common.collect.MapMaker;
  */
 public class SQLPlayerFactory implements IPlayerFactory {
 	private final PreparedStatement insertPlayer;
-	private final Map<String, Long> players = new MapMaker()
+	private final Map<String, Long> playersID = new MapMaker()
 			.concurrencyLevel(6).makeMap();
+	private final PreparedStatement doubleCheckPlayer;
 
 	/**
  * 
@@ -51,17 +52,59 @@ public class SQLPlayerFactory implements IPlayerFactory {
 				.prepare("INSERT INTO `ac_players` (`name`) VALUES (?);");
 		final ResultSet rs = Database.DATABASE
 				.query("SELECT `name`,`id` FROM `ac_players`");
+		doubleCheckPlayer = Database.DATABASE
+				.prepare("SELECT `id` FROM `ac_players` WHERE `name` = ?");
 		try {
 			while (rs.next()) {
-				players.put(rs.getString("name"), rs.getLong("id"));
+				playersID.put(rs.getString("name"), rs.getLong("id"));
 			}
 			rs.close();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem when getting players from the DB", e);
 		}
 		DebugLog.INSTANCE.info("Players found : "
-				+ Joiner.on(", ").join(players.keySet()));
+				+ Joiner.on(", ").join(playersID.keySet()));
 
+	}
+
+	private Long getPlayerID(final String playername) {
+		Long id = playersID.get(playername);
+		if (id != null) {
+			return id;
+		}
+
+		Database.DATABASE.autoReconnect();
+		ResultSet rs = null;
+		synchronized (doubleCheckPlayer) {
+			try {
+				doubleCheckPlayer.clearParameters();
+				doubleCheckPlayer.setString(1, playername);
+				doubleCheckPlayer.execute();
+				rs = doubleCheckPlayer.getResultSet();
+				if (rs == null) {
+					return null;
+				}
+				if (!rs.next()) {
+					return null;
+				}
+				id = rs.getLong(1);
+				if (id != null) {
+					playersID.put(playername, id);
+				}
+			} catch (final SQLException e) {
+				return null;
+			} finally {
+				try {
+					if (rs != null) {
+						rs.close();
+					}
+				} catch (final SQLException e) {
+
+				}
+			}
+
+		}
+		return id;
 	}
 
 	/*
@@ -71,7 +114,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 */
 	@Override
 	public ACPlayer createPlayer(final String playername) {
-		final Long id = players.get(playername);
+		final Long id = getPlayerID(playername);
 		if (id == null) {
 			return new EmptyPlayer(playername);
 		} else {
@@ -88,7 +131,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 */
 	@Override
 	public ACPlayer createPlayer(final Player player) {
-		final Long id = players.get(player.getName());
+		final Long id = getPlayerID(player.getName());
 		if (id == null) {
 			return new EmptyPlayer(player);
 		} else {
@@ -104,7 +147,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 */
 	@Override
 	public Set<String> getExistingPlayers() {
-		return Collections.unmodifiableSet(players.keySet());
+		return Collections.unmodifiableSet(playersID.keySet());
 	}
 
 	/*
@@ -114,7 +157,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 */
 	@Override
 	public void addExistingPlayer(final String player) {
-		if (!players.containsKey(player)) {
+		if (!playersID.containsKey(player)) {
 			ResultSet rs = null;
 			try {
 				synchronized (insertPlayer) {
@@ -124,7 +167,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 
 					rs = insertPlayer.getGeneratedKeys();
 					if (rs.next()) {
-						players.put(player, rs.getLong(1));
+						playersID.put(player, rs.getLong(1));
 					}
 					if (rs != null) {
 						rs.close();
