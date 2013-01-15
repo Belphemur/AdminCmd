@@ -57,11 +57,15 @@ public class UpdateChecker {
 			this.url = url;
 		}
 
-		/**
-		 * @return the url
-		 */
-		public String getUrl() {
-			return url;
+		private Document getRss() throws ParserConfigurationException,
+				SAXException, IOException {
+			final DocumentBuilderFactory factory = DocumentBuilderFactory
+					.newInstance();
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder;
+			builder = factory.newDocumentBuilder();
+			return builder.parse(this.url);
+
 		}
 	}
 
@@ -77,23 +81,13 @@ public class UpdateChecker {
 		this.channel = channel;
 		currentVersion = new AdminCmdVersion(plugin.getDescription()
 				.getVersion());
-		final DocumentBuilderFactory factory = DocumentBuilderFactory
-				.newInstance();
-		factory.setNamespaceAware(true);
-		DocumentBuilder builder;
 		try {
-			builder = factory.newDocumentBuilder();
-			rss = builder.parse(channel.getUrl());
-		} catch (final ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (final SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			rss = this.channel.getRss();
+			scheduleCheck();
+		} catch (final Exception e) {
+			DebugLog.INSTANCE.log(Level.SEVERE,
+					"Can't get the RSS feed for the update checker", e);
 		}
-		scheduleCheck();
 
 	}
 
