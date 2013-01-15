@@ -848,6 +848,8 @@ public class ACHelper {
 		// file system
 		if (!isSqlWrapper()) {
 			FilePlayer.scheduleAsyncSave();
+		} else {
+			SQLPlayer.scheduleAsyncSave();
 		}
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
@@ -985,6 +987,8 @@ public class ACHelper {
 		// TODO: check datawrapper
 		if (!isSqlWrapper()) {
 			FilePlayer.forceSaveList();
+		} else {
+			SQLPlayer.forceExecuteStmts();
 		}
 		alias.clear();
 		itemBlacklist.clear();
@@ -1690,6 +1694,7 @@ public class ACHelper {
 					new FilePlayerFactory(coreInstance.getDataFolder()
 							.getPath() + File.separator + "userData"));
 			FilePlayer.scheduleAsyncSave();
+			SQLPlayer.stopSavingTask();
 		} else if (isSqlWrapper()
 				&& (convertTo.equalsIgnoreCase("sqlite") || convertTo
 						.equalsIgnoreCase("mysql"))) {
@@ -1714,6 +1719,7 @@ public class ACHelper {
 				return;
 			}
 			SQLPlayer.initPrepStmt();
+			SQLPlayer.scheduleAsyncSave();
 			SQLWorld.initPrepStmt();
 			WorldManager.getInstance().convertFactory(new SQLWorldFactory());
 			PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
