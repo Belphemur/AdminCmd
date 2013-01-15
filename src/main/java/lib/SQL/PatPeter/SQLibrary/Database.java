@@ -295,7 +295,6 @@ public abstract class Database {
 	 */
 	public PreparedStatement prepare(final String query) {
 		try {
-			autoReconnect();
 			final PreparedStatement ps;
 			synchronized (connection) {
 				ps = connection.prepareStatement(query);

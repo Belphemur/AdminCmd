@@ -72,7 +72,6 @@ public class SQLite extends Database {
 		ResultSet result = null;
 
 		try {
-			autoReconnect();
 			synchronized (connection) {
 				statement = connection.createStatement();
 
