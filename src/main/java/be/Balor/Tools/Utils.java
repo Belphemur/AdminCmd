@@ -1197,11 +1197,13 @@ public final class Utils {
 	 *            word
 	 * @param arg
 	 *            keyword or time to set
-	 * @return the newtime or the current time of the world if something goes
-	 *         wrong.
+	 * @return the newtime
 	 */
 	public static long calculNewTime(final World w, final String arg) {
 		final long curtime = w.getTime();
+		if (arg.equalsIgnoreCase("normal")) {
+			return curtime;
+		}
 		long newtime = curtime - (curtime % 24000);
 		if (arg.equalsIgnoreCase("day")) {
 			newtime += 0;
@@ -1212,11 +1214,7 @@ public final class Utils {
 		} else if (arg.equalsIgnoreCase("dawn")) {
 			newtime += 23000;
 		} else {
-			try {
-				newtime = Long.parseLong(arg);
-			} catch (final Exception e) {
-				return curtime;
-			}
+			newtime = Long.parseLong(arg);
 
 		}
 		return newtime;
