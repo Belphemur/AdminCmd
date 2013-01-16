@@ -380,7 +380,12 @@ public enum ConfigEnum {
 	UPDATE_SRC(
 			"checkForUpdate.updateChannel",
 			"stable",
-			"Which version to check. Can be stable or dev.");
+			"Which version to check. Can be stable or dev."),
+	E_PST_DELAY(
+			"delayBeforeSendToDb",
+			10,
+			"Number of seconds before the plugin execute the request to the database (in case of SQLite or MySQL).\n"
+					+ "This feature have been done to avoid lag by execut the request in another thread than the main one.");
 
 	private final String confVal;
 	private final Object defaultVal;

@@ -35,6 +35,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
@@ -236,13 +237,14 @@ public class SQLPlayer extends ACPlayer {
 				|| ACPluginManager.getScheduler().isQueued(prepStmtTaskID)) {
 			return;
 		}
-		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY
-				.getInt() : 30;
+		final int delay = ConfigEnum.E_PST_DELAY.getInt() >= 30 ? ConfigEnum.E_PST_DELAY
+				.getInt() : 10;
 		prepStmtTaskID = ACPluginManager
 				.getScheduler()
 				.runTaskTimerAsynchronously(
 						ACHelper.getInstance().getCoreInstance(),
-						PREP_STMT_TASK, 20 * 60, 20 * delay).getTaskId();
+						PREP_STMT_TASK, Utils.secInTick * 2 * delay,
+						Utils.secInTick * delay).getTaskId();
 		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
 				+ prepStmtTaskID);
 	}
