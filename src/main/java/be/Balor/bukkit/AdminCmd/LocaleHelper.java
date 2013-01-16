@@ -161,7 +161,10 @@ public enum LocaleHelper {
 			"You have been banned from the server !"),
 	NEW_VERSION(
 			"newVersionFound",
-			"There is a new version of AdminCmd on www.admincmd.com : %version");
+			"There is a new version of AdminCmd on www.admincmd.com : %version"),
+	PTIME_SET("playerTime", ChatColor.GREEN + "The time for the player "
+			+ ChatColor.GOLD + "%player" + ChatColor.GREEN + " is now set to "
+			+ ChatColor.AQUA + "%time");
 
 	private final String key;
 	private final String locale;

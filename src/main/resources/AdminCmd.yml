@@ -766,9 +766,15 @@ acserverbroadcast:
     permissions: admincmd.server.broadcast
     cmdname: bal_broadcast
 
-acserverbroadcast:
+acserverreloadtxt:
     command: rtxt
     description: "Reload all the text locale file (News,Rules,Motd)"
     plugin: AdminCmd
     permissions: admincmd.server.reloadtxt
     cmdname: bal_rtxt
+actimeplayerset:
+    command: pt [day|night|dusk|dawn|raw|normal] <player> <-f>
+    description: "Set the [time] for the player <player> or for yourself if no player given.\n If <-f> is given, the time will be fixed for the player to.\n [normal] is used to return to the time of the world."
+    plugin: AdminCmd
+    permissions: admincmd.time.ptime
+    cmdname: bal_ptime

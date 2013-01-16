@@ -133,6 +133,7 @@ import be.Balor.Manager.Commands.Spawn.SetGroupSpawn;
 import be.Balor.Manager.Commands.Spawn.SetSpawn;
 import be.Balor.Manager.Commands.Spawn.Spawn;
 import be.Balor.Manager.Commands.Time.Day;
+import be.Balor.Manager.Commands.Time.PlayerTime;
 import be.Balor.Manager.Commands.Time.SetTime;
 import be.Balor.Manager.Commands.Tp.LastLocation;
 import be.Balor.Manager.Commands.Tp.TpAll;
@@ -484,6 +485,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			cmdManager.registerCommand(SetGroupSpawn.class);
 			cmdManager.registerCommand(GroupSpawn.class);
 		}
+		cmdManager.registerCommand(PlayerTime.class);
 	}
 
 	@Override
