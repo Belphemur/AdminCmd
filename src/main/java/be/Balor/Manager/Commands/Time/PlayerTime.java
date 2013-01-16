@@ -54,7 +54,7 @@ public class PlayerTime extends TimeCommand {
 		if (target == null) {
 			return;
 		}
-		final boolean relative = args.hasFlag('f');
+		final boolean relative = !args.hasFlag('f');
 		target.setPlayerTime(
 				Utils.calculNewTime(target.getWorld(), args.getString(0)),
 				relative);
