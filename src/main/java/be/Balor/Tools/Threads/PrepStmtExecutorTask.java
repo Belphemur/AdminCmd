@@ -18,9 +18,8 @@ package be.Balor.Tools.Threads;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import be.Balor.Tools.Debug.DebugLog;
@@ -30,16 +29,10 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public class PrepStmtExecutorTask implements Runnable {
-	private final LinkedBlockingQueue<PreparedStatement> preparedStatments = new LinkedBlockingQueue<PreparedStatement>();
-	private final Lock lock = new ReentrantLock();
+	private final Queue<PreparedStatement> preparedStatments = new LinkedBlockingQueue<PreparedStatement>();
 
 	public void addPreparedStmt(final PreparedStatement stmt) {
-		lock.lock();
-		try {
-			preparedStatments.add(stmt);
-		} finally {
-			lock.unlock();
-		}
+		preparedStatments.add(stmt);
 	}
 
 	/*
@@ -49,25 +42,21 @@ public class PrepStmtExecutorTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		lock.lock();
-		try {
-			DebugLog.INSTANCE.info("Begin Execution of preparedStmt with "
-					+ preparedStatments.size() + " stmt(s)");
-			while (!preparedStatments.isEmpty()) {
-				final PreparedStatement prepStmt = preparedStatments.poll();
-				try {
-					prepStmt.executeUpdate();
-					prepStmt.close();
-				} catch (final SQLException e) {
-					DebugLog.INSTANCE.log(Level.WARNING,
-							"Problem with a prepared statement :", e);
-				}
+		DebugLog.INSTANCE.info("Begin Execution of preparedStmt with "
+				+ preparedStatments.size() + " stmt(s)");
+		int count = 0;
+		while (!preparedStatments.isEmpty()) {
+			final PreparedStatement prepStmt = preparedStatments.poll();
+			try {
+				prepStmt.executeUpdate();
+				prepStmt.close();
+				count++;
+			} catch (final SQLException e) {
+				DebugLog.INSTANCE.log(Level.WARNING,
+						"Problem with a prepared statement :", e);
 			}
-			DebugLog.INSTANCE.info("All PreparedStmt executed.");
-
-		} finally {
-			lock.unlock();
 		}
+		DebugLog.INSTANCE.info(count + " PreparedStmt(s) executed.");
 
 	}
 

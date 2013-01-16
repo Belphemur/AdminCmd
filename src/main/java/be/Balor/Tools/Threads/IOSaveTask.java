@@ -16,9 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Threads;
 
+import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -30,8 +29,7 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public class IOSaveTask implements Runnable {
-	private final LinkedBlockingQueue<ExtendedConfiguration> configurations = new LinkedBlockingQueue<ExtendedConfiguration>();
-	private final Lock lock = new ReentrantLock(true);
+	private final Queue<ExtendedConfiguration> configurations = new LinkedBlockingQueue<ExtendedConfiguration>();
 
 	/**
 	 * Add an ExtendedConfiguration to save
@@ -39,18 +37,14 @@ public class IOSaveTask implements Runnable {
 	 * @param ex
 	 */
 	public void addConfigurationToSave(final ExtendedConfiguration ex) {
-		lock.lock();
-		try {
-			if (!configurations.contains(ex)) {
-				configurations.add(ex);
-				DebugLog.INSTANCE.fine("Added ExtendedConfiguration : " + ex);
-			} else {
-				DebugLog.INSTANCE.info("ALREADY IN ExtendedConfiguration : "
-						+ ex);
-			}
-		} finally {
-			lock.unlock();
+
+		if (!configurations.contains(ex)) {
+			configurations.add(ex);
+			DebugLog.INSTANCE.fine("Added ExtendedConfiguration : " + ex);
+		} else {
+			DebugLog.INSTANCE.info("ALREADY IN ExtendedConfiguration : " + ex);
 		}
+
 	}
 
 	/**
@@ -60,36 +54,26 @@ public class IOSaveTask implements Runnable {
 	 * @return
 	 */
 	public boolean removeConfiguration(final ExtendedConfiguration ex) {
-		boolean remove = false;
-		lock.lock();
-		try {
-			remove = configurations.remove(ex);
-		} finally {
-			lock.unlock();
-		}
-		return remove;
+
+		return configurations.remove(ex);
+
 	}
 
 	@Override
 	public void run() {
-		lock.lock();
-		try {
-			DebugLog.INSTANCE.info("Begin Configuration save with "
-					+ configurations.size() + " file(s)");
-			while (!configurations.isEmpty()) {
-				try {
-					configurations.poll().save();
-				} catch (final Exception e) {
-					ACLogger.severe(
-							"Problem while saving ExtendedConfiguration file",
-							e);
-					DebugLog.INSTANCE.log(Level.SEVERE,
-							"Problem while saving config files", e);
-				}
+		DebugLog.INSTANCE.info("Begin Configuration save with "
+				+ configurations.size() + " file(s)");
+		while (!configurations.isEmpty()) {
+			try {
+				configurations.poll().save();
+			} catch (final Exception e) {
+				ACLogger.severe(
+						"Problem while saving ExtendedConfiguration file", e);
+				DebugLog.INSTANCE.log(Level.SEVERE,
+						"Problem while saving config files", e);
 			}
-			DebugLog.INSTANCE.info("All Configuration File saved.");
-		} finally {
-			lock.unlock();
 		}
+		DebugLog.INSTANCE.info("All Configuration File saved.");
+
 	}
 }
