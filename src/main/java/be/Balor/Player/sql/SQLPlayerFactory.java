@@ -72,8 +72,11 @@ public class SQLPlayerFactory implements IPlayerFactory {
 		if (id != null) {
 			return id;
 		}
+		try {
+			Database.DATABASE.autoReconnect();
+		} catch (final Throwable e) {
+		}
 
-		Database.DATABASE.autoReconnect();
 		ResultSet rs = null;
 		synchronized (doubleCheckPlayer) {
 			try {
