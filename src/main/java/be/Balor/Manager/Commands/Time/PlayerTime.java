@@ -25,6 +25,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -54,13 +55,27 @@ public class PlayerTime extends TimeCommand {
 		if (target == null) {
 			return;
 		}
-		final boolean relative = !args.hasFlag('f');
-		target.setPlayerTime(
-				Utils.calculNewTime(target.getWorld(), args.getString(0)),
-				relative);
+
+		final String option = args.getString(0);
+		long newTime;
+		boolean relative = false;
+		if (option.equalsIgnoreCase("normal")) {
+			newTime = 0;
+			relative = true;
+		} else {
+			newTime = Utils.calculNewTime(target.getWorld(), option);
+		}
+		final long finalNewTime = newTime;
+		final boolean finalRelative = relative;
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+			@Override
+			public void run() {
+				target.setPlayerTime(finalNewTime, finalRelative);
+			}
+		});
 		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("time", option);
 		replace.put("player", Utils.getPlayerName(target, sender));
-		replace.put("time", args.getString(0));
 		LocaleHelper.PTIME_SET.sendLocale(sender, replace);
 		if (!sender.equals(target)) {
 			LocaleHelper.PTIME_SET.sendLocale(target, replace);
