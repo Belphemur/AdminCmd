@@ -19,9 +19,15 @@ package be.Balor.Tools;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import be.Balor.Tools.Help.String.Str;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -32,6 +38,35 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	private short dmg = 0;
 	private int amount = 1;
 	private final Map<Enchantment, Integer> enchantments;
+	private Color color = null;
+	private static final Map<String, Color> colors = new HashMap<String, Color>();
+	static {
+		colors.put("AQUA".toLowerCase(), Color.AQUA);
+		colors.put("BLACK".toLowerCase(), Color.BLACK);
+		colors.put("BLUE".toLowerCase(), Color.BLUE);
+		colors.put("FUCHSIA".toLowerCase(), Color.FUCHSIA);
+		colors.put("GRAY".toLowerCase(), Color.GRAY);
+		colors.put("GREEN".toLowerCase(), Color.GREEN);
+		colors.put("LIME".toLowerCase(), Color.LIME);
+		colors.put("MAROON".toLowerCase(), Color.MAROON);
+		colors.put("NAVY".toLowerCase(), Color.NAVY);
+		colors.put("OLIVE".toLowerCase(), Color.OLIVE);
+		colors.put("PURPLE".toLowerCase(), Color.PURPLE);
+		colors.put("RED".toLowerCase(), Color.RED);
+		colors.put("SILVER".toLowerCase(), Color.SILVER);
+		colors.put("TEAL".toLowerCase(), Color.TEAL);
+		colors.put("WHITE".toLowerCase(), Color.WHITE);
+		colors.put("YELLOW".toLowerCase(), Color.YELLOW);
+	}
+
+	/**
+	 * Possible color for LEATHER ARMOR
+	 * 
+	 * @return
+	 */
+	public static String possibleColors() {
+		return Joiner.on(", ").join(colors.keySet());
+	}
 
 	public MaterialContainer(final ItemStack is) {
 		material = is.getType();
@@ -85,7 +120,8 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		short d = 0;
 		try {
 			d = Short.parseShort(damage);
-		} catch (final NumberFormatException e) {}
+		} catch (final NumberFormatException e) {
+		}
 		this.dmg = d;
 	}
 
@@ -102,6 +138,12 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 
 	public ItemStack getItemStack() {
 		final ItemStack toReturn = new ItemStack(material, amount, dmg);
+		if (color != null) {
+			final LeatherArmorMeta meta = (LeatherArmorMeta) toReturn
+					.getItemMeta();
+			meta.setColor(color);
+			toReturn.setItemMeta(meta);
+		}
 		toReturn.addUnsafeEnchantments(enchantments);
 		return toReturn;
 	}
@@ -219,6 +261,42 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Try to set the color of the item
+	 * 
+	 * @param color
+	 * @throws IllegalArgumentException
+	 *             if the material can't be colored
+	 */
+	public boolean setColor(final String color) throws IllegalArgumentException {
+		Color foundColor = colors.get(color);
+		if (foundColor != null) {
+			setColor(foundColor);
+			return true;
+		}
+		final String found = Str.matchString(colors.keySet(), color);
+		if (found == null) {
+			return false;
+		}
+		foundColor = colors.get(found);
+		setColor(foundColor);
+		return true;
+	}
+
+	private void setColor(final Color color) throws IllegalArgumentException {
+		switch (material) {
+		case LEATHER_HELMET:
+		case LEATHER_CHESTPLATE:
+		case LEATHER_LEGGINGS:
+		case LEATHER_BOOTS:
+			this.color = color;
+			break;
+		default:
+			throw new IllegalArgumentException("This material :" + material
+					+ " can't be modified");
+		}
 	}
 
 }
