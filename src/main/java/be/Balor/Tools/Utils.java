@@ -1190,52 +1190,81 @@ public final class Utils {
 		return true;
 	}
 
-	private static void setTime(final CommandSender sender, final World w,
-			final String arg) {
+	/**
+	 * Calcul the new time to set for the wanted world.
+	 * 
+	 * @param w
+	 *            word
+	 * @param arg
+	 *            keyword or time to set
+	 * @return the newtime or the current time of the world if something goes
+	 *         wrong.
+	 */
+	public static long calculNewTime(final World w, final String arg) {
 		final long curtime = w.getTime();
 		long newtime = curtime - (curtime % 24000);
+		if (arg.equalsIgnoreCase("day")) {
+			newtime += 0;
+		} else if (arg.equalsIgnoreCase("night")) {
+			newtime += 14000;
+		} else if (arg.equalsIgnoreCase("dusk")) {
+			newtime += 12500;
+		} else if (arg.equalsIgnoreCase("dawn")) {
+			newtime += 23000;
+		} else {
+			try {
+				newtime = Long.parseLong(arg);
+			} catch (final Exception e) {
+				return curtime;
+			}
+
+		}
+		return newtime;
+	}
+
+	private static void setTime(final CommandSender sender, final World w,
+			final String arg) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("type", arg);
 		replace.put("world", w.getName());
 		if (ACWorld.getWorld(w.getName())
 				.getInformation(Type.TIME_FREEZED.toString()).isNull()) {
-			if (arg.equalsIgnoreCase("day")) {
-				newtime += 0;
-			} else if (arg.equalsIgnoreCase("night")) {
-				newtime += 14000;
-			} else if (arg.equalsIgnoreCase("dusk")) {
-				newtime += 12500;
-			} else if (arg.equalsIgnoreCase("dawn")) {
-				newtime += 23000;
-			} else if (arg.equalsIgnoreCase("pause")) {
-				final int taskId = ACPluginManager.getScheduler()
-						.scheduleSyncRepeatingTask(
-								ACHelper.getInstance().getCoreInstance(),
-								new SetTimeTask(w), 0, 5L);
-				ACWorld.getWorld(w.getName()).setInformation(
-						Type.TIME_FREEZED.toString(), taskId);
+			if (arg.equalsIgnoreCase("pause")) {
+				pauseTime(w);
+
+			} else if (arg.equalsIgnoreCase("unpause")) {
+				unPauseTime(w);
+				sI18n(sender, "timeSet", replace);
 			} else {
-				// if not a constant, use raw time
-				try {
-					newtime += Integer.parseInt(arg);
-				} catch (final Exception e) {
-					sI18n(sender, "timeNotSet", replace);
-					return;
-				}
+				final long newtime = calculNewTime(w, arg);
+				ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
 			}
-			sI18n(sender, "timeSet", replace);
-		} else if (arg.equalsIgnoreCase("unpause")) {
-			final int removeTask = ACWorld.getWorld(w.getName())
-					.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
-			ACPluginManager.getScheduler().cancelTask(removeTask);
-			ACWorld.getWorld(w.getName()).removeInformation(
-					Type.TIME_FREEZED.toString());
-			sI18n(sender, "timeSet", replace);
 		} else {
 			sI18n(sender, "timePaused", "world", w.getName());
 		}
 
-		ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
+	}
+
+	/**
+	 * @param w
+	 */
+	private static void unPauseTime(final World w) {
+		final int removeTask = ACWorld.getWorld(w)
+				.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
+		ACPluginManager.getScheduler().cancelTask(removeTask);
+		ACWorld.getWorld(w).removeInformation(Type.TIME_FREEZED.toString());
+	}
+
+	/**
+	 * @param w
+	 */
+	private static void pauseTime(final World w) {
+		final int taskId = ACPluginManager.getScheduler()
+				.scheduleSyncRepeatingTask(
+						ACHelper.getInstance().getCoreInstance(),
+						new SetTimeTask(w), 0, 5L);
+		ACWorld.getWorld(w.getName()).setInformation(
+				Type.TIME_FREEZED.toString(), taskId);
 	}
 
 	public static void sI18n(final CommandSender sender, final String key) {
