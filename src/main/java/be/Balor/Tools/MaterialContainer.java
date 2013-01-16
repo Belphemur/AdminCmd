@@ -19,10 +19,12 @@ package be.Balor.Tools;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import be.Balor.Tools.Help.String.Str;
@@ -38,7 +40,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	private short dmg = 0;
 	private int amount = 1;
 	private final Map<Enchantment, Integer> enchantments;
-	private Color color = null;
+	private ItemMeta meta;
 	private static final Map<String, Color> colors = new HashMap<String, Color>();
 	static {
 		colors.put("AQUA".toLowerCase(), Color.AQUA);
@@ -138,10 +140,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 
 	public ItemStack getItemStack() {
 		final ItemStack toReturn = new ItemStack(material, amount, dmg);
-		if (color != null) {
-			final LeatherArmorMeta meta = (LeatherArmorMeta) toReturn
-					.getItemMeta();
-			meta.setColor(color);
+		if (meta != null) {
 			toReturn.setItemMeta(meta);
 		}
 		toReturn.addUnsafeEnchantments(enchantments);
@@ -273,7 +272,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	public boolean setColor(final String color) throws IllegalArgumentException {
 		Color foundColor = colors.get(color);
 		if (foundColor != null) {
-			setColor(foundColor);
+			setColorMeta(foundColor);
 			return true;
 		}
 		final String found = Str.matchString(colors.keySet(), color);
@@ -281,17 +280,18 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 			return false;
 		}
 		foundColor = colors.get(found);
-		setColor(foundColor);
+		setColorMeta(foundColor);
 		return true;
 	}
 
-	private void setColor(final Color color) throws IllegalArgumentException {
+	private void setColorMeta(final Color color) throws IllegalArgumentException {
 		switch (material) {
 		case LEATHER_HELMET:
 		case LEATHER_CHESTPLATE:
 		case LEATHER_LEGGINGS:
 		case LEATHER_BOOTS:
-			this.color = color;
+			this.meta = Bukkit.getItemFactory().getItemMeta(material);
+			((LeatherArmorMeta) this.meta).setColor(color);
 			break;
 		default:
 			throw new IllegalArgumentException("This material :" + material
