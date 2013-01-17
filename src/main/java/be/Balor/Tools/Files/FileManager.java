@@ -389,7 +389,7 @@ public class FileManager implements DataManager {
 			if (csv != null) {
 				try {
 					csv.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -580,7 +580,7 @@ public class FileManager implements DataManager {
 			ConfigEnum.IMPORT_BAN_TXT.setValue(false);
 			try {
 				ConfigEnum.save();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 		}
 		return result;
@@ -649,10 +649,12 @@ public class FileManager implements DataManager {
 			ConfigurationSection kitItems = null;
 			ConfigurationSection armorItems = null;
 			List<String> parents = null;
+			String color = null;
 			try {
 				kitItems = kitNode.getConfigurationSection("items");
 				armorItems = kitNode.getConfigurationSection("armor");
 				parents = kitNode.getStringList("parents");
+				color = kitNode.getString("color", null);
 			} catch (final NullPointerException e) {
 				DebugLog.INSTANCE.warning("Problem with kit " + kitName);
 				continue;
@@ -690,9 +692,12 @@ public class FileManager implements DataManager {
 								"Problem with kit : " + partId, e);
 					}
 				}
-				result.put(kitName, new ArmoredKitInstance(kitName, delay,
+				final ArmoredKitInstance armoredKit = new ArmoredKitInstance(
+						kitName, delay,
 						new ArrayList<MaterialContainer>(items),
-						new EnumMap<Type.ArmorPart, MaterialContainer>(armor)));
+						new EnumMap<Type.ArmorPart, MaterialContainer>(armor));
+				armoredKit.setColor(color);
+				result.put(kitName, armoredKit);
 			} else {
 				result.put(kitName, new KitInstance(kitName, delay,
 						new ArrayList<MaterialContainer>(items)));

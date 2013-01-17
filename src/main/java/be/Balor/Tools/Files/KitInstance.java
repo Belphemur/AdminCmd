@@ -38,10 +38,6 @@ public class KitInstance {
 	 */
 	public List<ItemStack> getItemStacks() {
 		final ArrayList<ItemStack> result = new ArrayList<ItemStack>();
-		try {
-			// return Utils.oddItem.getItemGroup(kit, -1));
-		} catch (final Throwable e) {
-		}
 		for (final MaterialContainer mc : items) {
 			result.add(mc.getItemStack());
 		}

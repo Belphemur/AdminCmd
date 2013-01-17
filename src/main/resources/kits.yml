@@ -24,4 +24,13 @@ kits:
         armor:
         items:
         parents: [Tools,darmor]
+    blue:
+	    delay: 0
+	    items:
+	    color: blue 
+	    armor:
+          head: 298
+          chest: 299
+          legs: 300
+          boots: 301
           

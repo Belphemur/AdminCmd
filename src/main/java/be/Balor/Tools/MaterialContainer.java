@@ -284,6 +284,9 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 *             if the material can't be colored
 	 */
 	public boolean setColor(final String color) throws IllegalArgumentException {
+		if (color == null) {
+			return false;
+		}
 		Color foundColor = colors.get(color);
 		if (foundColor != null) {
 			setColorMeta(foundColor);

@@ -37,6 +37,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * 
  */
 public class ArmoredKitInstance extends KitInstance {
+	private String color;
 	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 			Type.ArmorPart.class);
 
@@ -73,6 +74,10 @@ public class ArmoredKitInstance extends KitInstance {
 		final MaterialContainer mat = armor.get(part);
 		if (mat == null) {
 			return null;
+		}
+		try {
+			mat.setColor(color);
+		} catch (final Exception e) {
 		}
 		return mat.getItemStack();
 	}
@@ -145,4 +150,13 @@ public class ArmoredKitInstance extends KitInstance {
 		}
 
 	}
+
+	/**
+	 * @param color
+	 *            the color to set
+	 */
+	public void setColor(final String color) {
+		this.color = color;
+	}
+
 }
