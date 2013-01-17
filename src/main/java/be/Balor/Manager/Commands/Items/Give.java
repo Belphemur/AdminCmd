@@ -31,6 +31,7 @@ import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -59,6 +60,7 @@ public class Give extends ItemCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		// which material?
 		MaterialContainer mat = null;
+		final String color = args.getValueFlag('c');
 		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
 		if (mat.isNull()) {
 			return;
@@ -70,9 +72,27 @@ public class Give extends ItemCommand {
 			Utils.sI18n(sender, "airForbidden");
 			return;
 		}
+		if (color != null) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+
+			try {
+				if (!mat.setColor(color)) {
+					replace.put("color", color);
+					replace.put("colors", MaterialContainer.possibleColors());
+					LocaleHelper.COLOR_D_EXISTS.sendLocale(sender, replace);
+					return;
+				}
+			} catch (final IllegalArgumentException e) {
+				replace.put("item", mat.getMaterial().toString());
+				replace.put("items", MaterialContainer.possibleColoredItems());
+				LocaleHelper.CANT_COLOR.sendLocale(sender, replace);
+				return;
+			}
+		}
 		// amount, damage and target player
 		int cnt = 1;
 		Player target = null;
+
 		if (args.length >= 2) {
 
 			try {

@@ -70,6 +70,18 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		return Joiner.on(", ").join(colors.keySet());
 	}
 
+	/**
+	 * Colorable items.
+	 * 
+	 * @return
+	 */
+	public static String possibleColoredItems() {
+		return Joiner.on(", ").join(
+				new Material[] { Material.LEATHER_HELMET,
+						Material.LEATHER_LEGGINGS, Material.LEATHER_CHESTPLATE,
+						Material.LEATHER_BOOTS });
+	}
+
 	public MaterialContainer(final ItemStack is) {
 		material = is.getType();
 		dmg = is.getDurability();
@@ -266,6 +278,8 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * Try to set the color of the item
 	 * 
 	 * @param color
+	 * 
+	 * @return false if we can't find the wanted color
 	 * @throws IllegalArgumentException
 	 *             if the material can't be colored
 	 */
@@ -284,7 +298,8 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		return true;
 	}
 
-	private void setColorMeta(final Color color) throws IllegalArgumentException {
+	private void setColorMeta(final Color color)
+			throws IllegalArgumentException {
 		switch (material) {
 		case LEATHER_HELMET:
 		case LEATHER_CHESTPLATE:

@@ -164,7 +164,14 @@ public enum LocaleHelper {
 			"There is a new version of AdminCmd on www.admincmd.com : %version"),
 	PTIME_SET("playerTime", ChatColor.GREEN + "The time for the player "
 			+ ChatColor.GOLD + "%player" + ChatColor.GREEN + " is now set to "
-			+ ChatColor.AQUA + "%time");
+			+ ChatColor.AQUA + "%time"),
+	CANT_COLOR("itemCantColor", ChatColor.RED + "This items " + ChatColor.GOLD
+			+ "(%item)" + ChatColor.RED
+			+ " can't be colored ! Possible Items: " + ChatColor.WHITE
+			+ "%items"),
+	COLOR_D_EXISTS("colorDontExists", ChatColor.RED + "This color "
+			+ ChatColor.GOLD + "(%color)" + ChatColor.RED
+			+ " don't exists. Possible Colors : " + ChatColor.WHITE + "%colors");
 
 	private final String key;
 	private final String locale;
