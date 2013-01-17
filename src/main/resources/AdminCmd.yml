@@ -22,8 +22,8 @@ actimeday:
     cmdname: bal_timeday
 
 acitemitem:
-    command: item [name|alias|item id]:<damage> <#> <player>
-    description: To give a given amount <#> of an [item] to the <player>. Defaults to yourself.
+    command: item [name|alias|item id]:<damage> <#> <player> <enchantments> <-c color>
+    description: To give a given amount <#> of an [item] to the <player> with the wanted <enchantments> (enchant:lvl).\n<-c color> is to color items like armors.\n Defaults to yourself.
     plugin: AdminCmd
     permissions: admincmd.item.add
     cmdname: bal_item
