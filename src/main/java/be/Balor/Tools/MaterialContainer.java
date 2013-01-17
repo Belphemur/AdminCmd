@@ -144,6 +144,23 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	}
 
 	/**
+	 * Add the wanted enchantment to the item with the wanted lvl
+	 * 
+	 * @param enchant
+	 *            enchantment
+	 * @param lvl
+	 *            level
+	 * @return false if the enchantment is already set
+	 */
+	public boolean addEnchantment(final Enchantment enchant, final int lvl) {
+		if (enchantments.containsKey(enchant)) {
+			return false;
+		}
+		enchantments.put(enchant, lvl);
+		return true;
+	}
+
+	/**
 	 * Transform the MaterialContainer to an ItemStack
 	 * 
 	 * @param amount
@@ -195,13 +212,6 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	public short getDmg() {
 		return dmg;
-	}
-
-	/**
-	 * @return the enchantments
-	 */
-	public Map<Enchantment, Integer> getEnchantments() {
-		return enchantments;
 	}
 
 	/**
