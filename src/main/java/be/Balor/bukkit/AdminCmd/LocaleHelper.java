@@ -48,10 +48,9 @@ public enum LocaleHelper {
 	CANT_ENCHANT("cantEnchantItem", ChatColor.RED + "This item "
 			+ ChatColor.GOLD + "%item" + ChatColor.RED
 			+ " can't be enchanted with " + ChatColor.GREEN + "%enchant"),
-	SUCCESS_ENCHANT("enchantSuccess", ChatColor.GREEN + "Your item "
-			+ ChatColor.GOLD + "%item" + ChatColor.GREEN + " is now with "
-			+ ChatColor.BLUE + "%enchant" + ChatColor.GREEN + " lvl "
-			+ ChatColor.LIGHT_PURPLE + "%lvl"),
+	SUCCESS_ENCHANT("echantmentsAdded", ChatColor.GREEN + "Your item "
+			+ ChatColor.GOLD + "%item" + ChatColor.GREEN
+			+ " is now enchanted !"),
 	HIGH_EFFECT("highEggEffect", ChatColor.GREEN + "You are now "
 			+ ChatColor.GOLD + "HIGH" + ChatColor.GREEN
 			+ ", prepare to see ... the world differently !"),

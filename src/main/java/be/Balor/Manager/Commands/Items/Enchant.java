@@ -16,36 +16,25 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Help.String.Str;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
-
-import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class Enchant extends ItemCommand {
-	private final static List<String> enchantList = new ArrayList<String>();
-	static {
-		for (final Enchantment enchant : Enchantment.values()) {
-			enchantList.add(enchant.getName());
-		}
-	}
 
 	/**
 	 * 
@@ -65,46 +54,34 @@ public class Enchant extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUserParam(sender, args, permNode);
+		Player target;
+		try {
+			target = Utils.getUser(sender, args, permNode);
+		} catch (final PlayerNotFound e) {
+			target = Utils.getUserParam(sender, args, permNode);
+		}
 
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
 			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(enchantList)
-							.toLowerCase());
+					+ MaterialContainer.possibleEnchantment());
 			return;
 		}
-		final String enchantString = args.getString(0);
-		int lvl;
-		try {
-			lvl = args.getInt(1);
-		} catch (final NumberFormatException e) {
-			lvl = 1;
-		}
-		final String found = Str.matchString(enchantList, enchantString);
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		if (found == null) {
-			replace.put("value", enchantString);
-			replace.put("type", LocaleHelper.TYPE_ENCHANTMENT.getLocale());
-			LocaleHelper.DONT_EXISTS.sendLocale(sender, replace);
-			sender.sendMessage(ChatColor.YELLOW + "Echantment list :");
-			sender.sendMessage(ChatColor.GOLD
-					+ Joiner.on(", ").skipNulls().join(enchantList)
-							.toLowerCase());
-			return;
-		}
-		final Enchantment enchantment = Enchantment.getByName(found);
-		final ItemStack itemInHand = target.getItemInHand();
-		if (!enchantment.canEnchantItem(itemInHand)) {
-			replace.put("item", itemInHand.getType().toString());
-			replace.put("enchant", enchantment.getName());
-			LocaleHelper.CANT_ENCHANT.sendLocale(sender, replace);
-			return;
-		}
-		itemInHand.addUnsafeEnchantment(enchantment, lvl);
-		replace.put("item", itemInHand.getType().toString());
-		replace.put("enchant", enchantment.getName());
-		replace.put("lvl", String.valueOf(lvl));
+		final MaterialContainer inHand = new MaterialContainer(
+				target.getItemInHand());
+		Give.setEnchantements(sender, args, inHand, target.equals(sender) ? 0
+				: 1);
+		final Player finalTarget = target;
+		ACPluginManager.scheduleSyncTask(new Runnable() {
+
+			@Override
+			public void run() {
+				finalTarget.setItemInHand(inHand.getItemStack());
+
+			}
+		});
+		replace.put("item", target.getItemInHand().getType().name());
 		LocaleHelper.SUCCESS_ENCHANT.sendLocale(sender, replace);
 		if (!sender.equals(target)) {
 			LocaleHelper.SUCCESS_ENCHANT.sendLocale(target, replace);
