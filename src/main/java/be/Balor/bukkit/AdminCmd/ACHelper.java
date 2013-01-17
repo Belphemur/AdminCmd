@@ -492,7 +492,11 @@ public class ACHelper {
 	}
 
 	public MaterialContainer getAlias(final String name) {
-		return alias.get(name);
+		final MaterialContainer materialContainer = alias.get(name);
+		if (materialContainer != null) {
+			return new MaterialContainer(materialContainer);
+		}
+		return null;
 	}
 
 	/**

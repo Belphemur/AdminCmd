@@ -37,8 +37,7 @@ import com.google.common.base.Joiner;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MaterialContainer implements Comparable<MaterialContainer>,
-		Cloneable {
+public class MaterialContainer implements Comparable<MaterialContainer> {
 	private Material material = null;
 	private short dmg = 0;
 	private int amount = 1;
@@ -101,7 +100,18 @@ public class MaterialContainer implements Comparable<MaterialContainer>,
 	public MaterialContainer(final ItemStack is) {
 		material = is.getType();
 		dmg = is.getDurability();
-		this.enchantments = is.getEnchantments();
+		this.enchantments = new HashMap<Enchantment, Integer>(
+				is.getEnchantments());
+		amount = is.getAmount();
+		meta = is.getItemMeta();
+	}
+
+	public MaterialContainer(final MaterialContainer from) {
+		material = from.material;
+		dmg = from.dmg;
+		enchantments = new HashMap<Enchantment, Integer>(from.enchantments);
+		amount = from.amount;
+		meta = from.meta;
 	}
 
 	public MaterialContainer(final String mat) {
@@ -392,20 +402,6 @@ public class MaterialContainer implements Comparable<MaterialContainer>,
 		default:
 			throw new IllegalArgumentException("This material :" + material
 					+ " can't be modified");
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	@Override
-	public MaterialContainer clone() {
-		try {
-			return (MaterialContainer) super.clone();
-		} catch (final CloneNotSupportedException e) {
-			throw new Error(e);
 		}
 	}
 
