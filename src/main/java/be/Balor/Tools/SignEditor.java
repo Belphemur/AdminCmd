@@ -41,7 +41,7 @@ public class SignEditor {
 		this.updated = (Sign) this.updatedSignBlk.getState();
 		this.editor = (Sign) this.editorBlk.getState();
 		int i = 0;
-		for (final String line : SignEditor.this.updated.getLines()) {
+		for (final String line : updated.getLines()) {
 			this.editor.setLine(i++, line.replace(ChatColor.COLOR_CHAR, '&'));
 		}
 		this.editor.update();
@@ -53,7 +53,7 @@ public class SignEditor {
 	 * @param lines
 	 */
 	public void updateSign(final String[] lines) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < lines.length; i++) {
 			this.updated.setLine(i, lines[i]);
 		}
 		this.updated.update();
