@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import be.Balor.Manager.Exceptions.CantEnchantItemException;
 import be.Balor.Manager.Exceptions.EnchantmentConflictException;
 import be.Balor.Tools.Help.String.Str;
 
@@ -36,7 +37,8 @@ import com.google.common.base.Joiner;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MaterialContainer implements Comparable<MaterialContainer> {
+public class MaterialContainer implements Comparable<MaterialContainer>,
+		Cloneable {
 	private Material material = null;
 	private short dmg = 0;
 	private int amount = 1;
@@ -168,22 +170,24 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * @throws EnchantmentConflictException
 	 *             if there is a conflict between an already existed enchantment
 	 *             on the item.
+	 * @throws CantEnchantItemException
+	 *             if the item can't be enchanted by this enchantment.
 	 */
 	public boolean addEnchantment(final Enchantment enchant, final int lvl)
-			throws EnchantmentConflictException {
+			throws EnchantmentConflictException, CantEnchantItemException {
 		if (enchantments.containsKey(enchant)) {
 			return false;
 		}
-		if (enchant.canEnchantItem(getItemStack())) {
-			for (final Enchantment e : enchantments.keySet()) {
-				if (e.conflictsWith(enchant)) {
-					throw new EnchantmentConflictException(enchant, e);
-				}
-			}
-			enchantments.put(enchant, lvl);
-			return true;
+		if (!enchant.canEnchantItem(getItemStack())) {
+			throw new CantEnchantItemException(enchant, this.material);
 		}
-		return false;
+		for (final Enchantment e : enchantments.keySet()) {
+			if (e.conflictsWith(enchant)) {
+				throw new EnchantmentConflictException(enchant, e);
+			}
+		}
+		enchantments.put(enchant, lvl);
+		return true;
 	}
 
 	/**
@@ -197,9 +201,11 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * @throws EnchantmentConflictException
 	 *             if there is a conflict between an already existed enchantment
 	 *             on the item.
+	 * @throws CantEnchantItemException
+	 *             if the item can't be enchanted by this enchantment.
 	 */
 	public boolean addEnchantment(final String enchant)
-			throws EnchantmentConflictException {
+			throws EnchantmentConflictException, CantEnchantItemException {
 		final String split[] = enchant.split(":");
 		if (split.length < 2) {
 			return false;
@@ -386,6 +392,20 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		default:
 			throw new IllegalArgumentException("This material :" + material
 					+ " can't be modified");
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public MaterialContainer clone() {
+		try {
+			return (MaterialContainer) super.clone();
+		} catch (final CloneNotSupportedException e) {
+			throw new Error(e);
 		}
 	}
 

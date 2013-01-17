@@ -171,7 +171,12 @@ public enum LocaleHelper {
 			+ "%items"),
 	COLOR_D_EXISTS("colorDontExists", ChatColor.RED + "This color "
 			+ ChatColor.GOLD + "(%color)" + ChatColor.RED
-			+ " don't exists. Possible Colors : " + ChatColor.WHITE + "%colors");
+			+ " don't exists. Possible Colors : " + ChatColor.WHITE + "%colors"),
+	ENCHANT_EXIST("enchantExists", ChatColor.GOLD + "%enchant" + ChatColor.RED
+			+ " does't exist or is already presents on the item."),
+	ENCHANT_CONFLICT("enchantConflict", ChatColor.RED
+			+ "Conflict between 2 enchantments : " + ChatColor.WHITE
+			+ "%e1 and " + ChatColor.GOLD + "%e2");
 
 	private final String key;
 	private final String locale;
