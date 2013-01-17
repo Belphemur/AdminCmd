@@ -24,6 +24,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.CantEnchantItemException;
+import be.Balor.Manager.Exceptions.EnchantmentConflictException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
@@ -115,6 +117,33 @@ public class Give extends ItemCommand {
 				target = Utils.getUser(sender, args, permNode, 2, true);
 				if (target == null) {
 					return;
+				}
+				if (args.length >= 4) {
+					final HashMap<String, String> replace = new HashMap<String, String>();
+					for (int i = 3; i < args.length; i++) {
+
+						try {
+							final String enchant = args.getString(i);
+							if (!mat.addEnchantment(enchant)) {
+								replace.clear();
+								replace.put("enchant", enchant);
+								LocaleHelper.ENCHANT_EXIST.sendLocale(sender,
+										replace);
+							}
+						} catch (final EnchantmentConflictException e) {
+							replace.clear();
+							replace.put("e1", e.getTriedEnchant().getName());
+							replace.put("e2", e.getConflictEnchant().getName());
+							LocaleHelper.ENCHANT_CONFLICT.sendLocale(sender,
+									replace);
+						} catch (final CantEnchantItemException e) {
+							replace.clear();
+							replace.put("enchant", e.getEnchant().getName());
+							replace.put("item", e.getMaterial().name());
+							LocaleHelper.CANT_ENCHANT.sendLocale(sender,
+									replace);
+						}
+					}
 				}
 			}
 		}
