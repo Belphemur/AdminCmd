@@ -3,7 +3,6 @@ package be.Balor.bukkit.AdminCmd;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.permissions.PermissionDefault;
@@ -13,7 +12,6 @@ import org.bukkit.plugin.PluginManager;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACChatListener;
 import be.Balor.Listeners.ACEntityListener;
-import be.Balor.Listeners.ACOldChatListener;
 import be.Balor.Listeners.ACPlayerListener;
 import be.Balor.Listeners.ACPluginListener;
 import be.Balor.Listeners.ACWeatherListener;
@@ -1069,11 +1067,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 				pm.registerEvents(new ACDeathListener(true), this);
 			}
 		}
-		if (Bukkit.getVersion().contains("1.3")) {
-			pm.registerEvents(new ACChatListener(), this);
-		} else {
-			pm.registerEvents(new ACOldChatListener(), this);
-		}
+		pm.registerEvents(new ACChatListener(), this);
 
 	}
 }
