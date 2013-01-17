@@ -361,14 +361,15 @@ public enum ConfigEnum {
 			"toor",
 			"Password to connect to mysql database"),
 	MYSQL_DB("mysql.database", "minecraft", "Database name"),
+	RESPAWN_BEHAVIOR(
+			"respawn.changeDestination",
+			false,
+			"If set to true, the player will respawn in the world defined by respawn.world if he died in the nether/the_end."),
 	RESPAWN_WORLD(
 			"respawn.world",
 			"world",
-			"The worlds' name where a player respawns after death."),
-	RESPAWN_BEHAVIOR(
-			"respawn.inNormalWorld",
-			true,
-			"If set to false a player will respawn in the same world he died in."),
+			"The worlds' name where a player respawns after death.\n"
+					+ "If the world can't be found, a warning will be displayed in the console when a player die."),
 	ADD_BANNER_IN_BAN(
 			"addBannerNameInBan",
 			true,

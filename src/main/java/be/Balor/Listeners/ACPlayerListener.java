@@ -20,7 +20,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 
 import org.bukkit.Location;
-import org.bukkit.World.Environment;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -280,43 +280,33 @@ public class ACPlayerListener implements Listener {
 		ACHelper.getInstance().removeDisconnectedPlayer(p);
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerRespawn(final PlayerRespawnEvent event) {
 		final Player player = event.getPlayer();
 		final String spawn = ConfigEnum.GSPAWN.getString();
 		Location loc = null;
-		String worldName = player.getWorld().getName();
-		final Environment worldEnv = player.getWorld().getEnvironment();
-		if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {
-			if (worldEnv.equals(Environment.NETHER)
-					|| worldEnv.equals(Environment.THE_END)) {
-				worldName = ACWorld.getWorld(
-						ConfigEnum.RESPAWN_WORLD.getString()).getName();
-				if (worldName.isEmpty() || worldName == null) {
-					worldName = player.getWorld().getName();
-				}
-			}
-		}
+		final World world = player.getWorld();
+
 		try {
 			if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
 
-				loc = ACWorld.getWorld(worldName).getSpawn();
+				loc = ACWorld.getWorld(world).getSpawn();
 
 				event.setRespawnLocation(loc);
 			} else if (spawn.equalsIgnoreCase("home")) {
-				loc = ACPlayer.getPlayer(player).getHome(worldName);
+				loc = ACPlayer.getPlayer(player).getHome(world.getName());
 				if (loc == null) {
-					loc = ACWorld.getWorld(worldName).getSpawn();
+					loc = ACWorld.getWorld(world).getSpawn();
 				}
 				event.setRespawnLocation(loc);
 			} else if (spawn.equalsIgnoreCase("bed")) {
 				try {
 					loc = player.getBedSpawnLocation();
 					if (loc == null) {
-						loc = ACWorld.getWorld(worldName).getSpawn();
+						loc = ACWorld.getWorld(world).getSpawn();
 					}
 				} catch (final NullPointerException e) {
-					loc = ACWorld.getWorld(worldName).getSpawn();
+					loc = ACWorld.getWorld(world).getSpawn();
 				}
 				event.setRespawnLocation(loc);
 			} else if (spawn.equalsIgnoreCase("group")) {

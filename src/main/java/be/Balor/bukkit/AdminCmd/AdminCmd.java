@@ -36,6 +36,7 @@ import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
 import be.Balor.Listeners.Features.ACPowerOffListener;
 import be.Balor.Listeners.Features.ACResetPowerListener;
+import be.Balor.Listeners.Features.ACRespawnWorldFeature;
 import be.Balor.Listeners.Features.ACSignEditListener;
 import be.Balor.Listeners.Features.ACSuperBlacklistListener;
 import be.Balor.Manager.CommandManager;
@@ -1068,6 +1069,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			}
 		}
 		pm.registerEvents(new ACChatListener(), this);
+		if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {
+			pm.registerEvents(new ACRespawnWorldFeature(), this);
+		}
 
 	}
 }
