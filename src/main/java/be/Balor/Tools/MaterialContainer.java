@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import be.Balor.Manager.Exceptions.EnchantmentConflictException;
 import be.Balor.Tools.Help.String.Str;
 
 import com.google.common.base.Joiner;
@@ -41,24 +42,28 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	private int amount = 1;
 	private final Map<Enchantment, Integer> enchantments;
 	private ItemMeta meta;
-	private static final Map<String, Color> colors = new HashMap<String, Color>();
+	private static final Map<String, Color> COLORS = new HashMap<String, Color>();
+	private final static Map<String, Enchantment> ENCHANT_LIST = new HashMap<String, Enchantment>();
 	static {
-		colors.put("AQUA".toLowerCase(), Color.AQUA);
-		colors.put("BLACK".toLowerCase(), Color.BLACK);
-		colors.put("BLUE".toLowerCase(), Color.BLUE);
-		colors.put("FUCHSIA".toLowerCase(), Color.FUCHSIA);
-		colors.put("GRAY".toLowerCase(), Color.GRAY);
-		colors.put("GREEN".toLowerCase(), Color.GREEN);
-		colors.put("LIME".toLowerCase(), Color.LIME);
-		colors.put("MAROON".toLowerCase(), Color.MAROON);
-		colors.put("NAVY".toLowerCase(), Color.NAVY);
-		colors.put("OLIVE".toLowerCase(), Color.OLIVE);
-		colors.put("PURPLE".toLowerCase(), Color.PURPLE);
-		colors.put("RED".toLowerCase(), Color.RED);
-		colors.put("SILVER".toLowerCase(), Color.SILVER);
-		colors.put("TEAL".toLowerCase(), Color.TEAL);
-		colors.put("WHITE".toLowerCase(), Color.WHITE);
-		colors.put("YELLOW".toLowerCase(), Color.YELLOW);
+		COLORS.put("AQUA".toLowerCase(), Color.AQUA);
+		COLORS.put("BLACK".toLowerCase(), Color.BLACK);
+		COLORS.put("BLUE".toLowerCase(), Color.BLUE);
+		COLORS.put("FUCHSIA".toLowerCase(), Color.FUCHSIA);
+		COLORS.put("GRAY".toLowerCase(), Color.GRAY);
+		COLORS.put("GREEN".toLowerCase(), Color.GREEN);
+		COLORS.put("LIME".toLowerCase(), Color.LIME);
+		COLORS.put("MAROON".toLowerCase(), Color.MAROON);
+		COLORS.put("NAVY".toLowerCase(), Color.NAVY);
+		COLORS.put("OLIVE".toLowerCase(), Color.OLIVE);
+		COLORS.put("PURPLE".toLowerCase(), Color.PURPLE);
+		COLORS.put("RED".toLowerCase(), Color.RED);
+		COLORS.put("SILVER".toLowerCase(), Color.SILVER);
+		COLORS.put("TEAL".toLowerCase(), Color.TEAL);
+		COLORS.put("WHITE".toLowerCase(), Color.WHITE);
+		COLORS.put("YELLOW".toLowerCase(), Color.YELLOW);
+		for (final Enchantment enchant : Enchantment.values()) {
+			ENCHANT_LIST.put(enchant.getName().toLowerCase(), enchant);
+		}
 	}
 
 	/**
@@ -67,7 +72,7 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * @return
 	 */
 	public static String possibleColors() {
-		return Joiner.on(", ").join(colors.keySet());
+		return Joiner.on(", ").join(COLORS.keySet());
 	}
 
 	/**
@@ -80,6 +85,15 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 				new Material[] { Material.LEATHER_HELMET,
 						Material.LEATHER_LEGGINGS, Material.LEATHER_CHESTPLATE,
 						Material.LEATHER_BOOTS });
+	}
+
+	/**
+	 * Existing Enchantment
+	 * 
+	 * @return
+	 */
+	public static String possibleEnchantment() {
+		return Joiner.on(", ").join(ENCHANT_LIST.keySet());
 	}
 
 	public MaterialContainer(final ItemStack is) {
@@ -151,13 +165,61 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 * @param lvl
 	 *            level
 	 * @return false if the enchantment is already set
+	 * @throws EnchantmentConflictException
+	 *             if there is a conflict between an already existed enchantment
+	 *             on the item.
 	 */
-	public boolean addEnchantment(final Enchantment enchant, final int lvl) {
+	public boolean addEnchantment(final Enchantment enchant, final int lvl)
+			throws EnchantmentConflictException {
 		if (enchantments.containsKey(enchant)) {
 			return false;
 		}
-		enchantments.put(enchant, lvl);
-		return true;
+		if (enchant.canEnchantItem(getItemStack())) {
+			for (final Enchantment e : enchantments.keySet()) {
+				if (e.conflictsWith(enchant)) {
+					throw new EnchantmentConflictException(enchant, e);
+				}
+			}
+			enchantments.put(enchant, lvl);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Try to add an Enchantment to the item by parsing it
+	 * 
+	 * @param enchant
+	 *            string containing the enchantment like
+	 *            <code>enchant:lvl</code>
+	 * @return true if we can add the enchantment on the item, false if the
+	 *         enchantment don't exist or already present.
+	 * @throws EnchantmentConflictException
+	 *             if there is a conflict between an already existed enchantment
+	 *             on the item.
+	 */
+	public boolean addEnchantment(final String enchant)
+			throws EnchantmentConflictException {
+		final String split[] = enchant.split(":");
+		if (split.length < 2) {
+			return false;
+		}
+		int lvl;
+		try {
+			lvl = Integer.parseInt(split[1]);
+		} catch (final NumberFormatException e) {
+			lvl = 1;
+		}
+		final Enchantment e = ENCHANT_LIST.get(split[0]);
+		if (e != null) {
+			return addEnchantment(e, lvl);
+		}
+		final String found = Str.matchString(ENCHANT_LIST.keySet(), split[0]);
+		if (found == null) {
+			return false;
+		}
+		return addEnchantment(ENCHANT_LIST.get(found), lvl);
+
 	}
 
 	/**
@@ -297,16 +359,16 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		if (color == null) {
 			return false;
 		}
-		Color foundColor = colors.get(color);
+		Color foundColor = COLORS.get(color);
 		if (foundColor != null) {
 			setColorMeta(foundColor);
 			return true;
 		}
-		final String found = Str.matchString(colors.keySet(), color);
+		final String found = Str.matchString(COLORS.keySet(), color);
 		if (found == null) {
 			return false;
 		}
-		foundColor = colors.get(found);
+		foundColor = COLORS.get(found);
 		setColorMeta(foundColor);
 		return true;
 	}
