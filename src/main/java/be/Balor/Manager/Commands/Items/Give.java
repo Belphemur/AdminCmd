@@ -119,31 +119,7 @@ public class Give extends ItemCommand {
 					return;
 				}
 				if (args.length >= 4) {
-					final HashMap<String, String> replace = new HashMap<String, String>();
-					for (int i = 3; i < args.length; i++) {
-
-						try {
-							final String enchant = args.getString(i);
-							if (!mat.addEnchantment(enchant)) {
-								replace.clear();
-								replace.put("enchant", enchant);
-								LocaleHelper.ENCHANT_EXIST.sendLocale(sender,
-										replace);
-							}
-						} catch (final EnchantmentConflictException e) {
-							replace.clear();
-							replace.put("e1", e.getTriedEnchant().getName());
-							replace.put("e2", e.getConflictEnchant().getName());
-							LocaleHelper.ENCHANT_CONFLICT.sendLocale(sender,
-									replace);
-						} catch (final CantEnchantItemException e) {
-							replace.clear();
-							replace.put("enchant", e.getEnchant().getName());
-							replace.put("item", e.getMaterial().name());
-							LocaleHelper.CANT_ENCHANT.sendLocale(sender,
-									replace);
-						}
-					}
+					setEnchantements(sender, args, mat, 3);
 				}
 			}
 		}
@@ -184,6 +160,45 @@ public class Give extends ItemCommand {
 			}
 		});
 
+	}
+
+	/**
+	 * Set enchantments given in the args on the given MaterialContainer.
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param args
+	 *            args of the command
+	 * @param mat
+	 *            to which material add the enchantments
+	 * @param startIndex
+	 *            where to start to parse the args
+	 */
+	public static void setEnchantements(final CommandSender sender,
+			final CommandArgs args, final MaterialContainer mat,
+			final int startIndex) {
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		for (int i = startIndex; i < args.length; i++) {
+			final String enchant = args.getString(i);
+			try {
+
+				if (!mat.addEnchantment(enchant)) {
+					replace.clear();
+					replace.put("enchant", enchant);
+					LocaleHelper.ENCHANT_EXIST.sendLocale(sender, replace);
+				}
+			} catch (final EnchantmentConflictException e) {
+				replace.clear();
+				replace.put("e1", e.getTriedEnchant().getName());
+				replace.put("e2", e.getConflictEnchant().getName());
+				LocaleHelper.ENCHANT_CONFLICT.sendLocale(sender, replace);
+			} catch (final CantEnchantItemException e) {
+				replace.clear();
+				replace.put("enchant", e.getEnchant().getName());
+				replace.put("item", e.getMaterial().name());
+				LocaleHelper.CANT_ENCHANT.sendLocale(sender, replace);
+			}
+		}
 	}
 
 	/*
