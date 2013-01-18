@@ -76,7 +76,6 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Exceptions.InvalidInputException;
 import be.Balor.Tools.Threads.CheckingBlockTask;
 import be.Balor.Tools.Threads.ReplaceBlockTask;
-import be.Balor.Tools.Threads.SetTimeTask;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -1190,81 +1189,6 @@ public final class Utils {
 		return true;
 	}
 
-	/**
-	 * Calcul the new time to set for the wanted world.
-	 * 
-	 * @param w
-	 *            word
-	 * @param arg
-	 *            keyword or time to set
-	 * @return the newtime
-	 */
-	public static long calculNewTime(final World w, final String arg) {
-		final long curtime = w.getTime();
-		if (arg.equalsIgnoreCase("normal")) {
-			return curtime;
-		}
-		long newtime = curtime - (curtime % 24000);
-		if (arg.equalsIgnoreCase("day")) {
-			newtime += 0;
-		} else if (arg.equalsIgnoreCase("night")) {
-			newtime += 14000;
-		} else if (arg.equalsIgnoreCase("dusk")) {
-			newtime += 12500;
-		} else if (arg.equalsIgnoreCase("dawn")) {
-			newtime += 23000;
-		} else {
-			newtime = Long.parseLong(arg);
-
-		}
-		return newtime;
-	}
-
-	private static void setTime(final CommandSender sender, final World w,
-			final String arg) {
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("type", arg);
-		replace.put("world", w.getName());
-		if (ACWorld.getWorld(w.getName())
-				.getInformation(Type.TIME_FREEZED.toString()).isNull()) {
-			if (arg.equalsIgnoreCase("pause")) {
-				pauseTime(w);
-
-			} else if (arg.equalsIgnoreCase("unpause")) {
-				unPauseTime(w);
-				sI18n(sender, "timeSet", replace);
-			} else {
-				final long newtime = calculNewTime(w, arg);
-				ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
-			}
-		} else {
-			sI18n(sender, "timePaused", "world", w.getName());
-		}
-
-	}
-
-	/**
-	 * @param w
-	 */
-	private static void unPauseTime(final World w) {
-		final int removeTask = ACWorld.getWorld(w)
-				.getInformation(Type.TIME_FREEZED.toString()).getInt(-1);
-		ACPluginManager.getScheduler().cancelTask(removeTask);
-		ACWorld.getWorld(w).removeInformation(Type.TIME_FREEZED.toString());
-	}
-
-	/**
-	 * @param w
-	 */
-	private static void pauseTime(final World w) {
-		final int taskId = ACPluginManager.getScheduler()
-				.scheduleSyncRepeatingTask(
-						ACHelper.getInstance().getCoreInstance(),
-						new SetTimeTask(w), 0, 5L);
-		ACWorld.getWorld(w.getName()).setInformation(
-				Type.TIME_FREEZED.toString(), taskId);
-	}
-
 	public static void sI18n(final CommandSender sender, final String key) {
 		sI18n(sender, key, null);
 	}
@@ -1303,37 +1227,6 @@ public final class Utils {
 		if (locale != null && !locale.isEmpty()) {
 			sender.sendMessage(locale);
 		}
-	}
-
-	public static boolean timeSet(final CommandSender sender, final String time) {
-		return timeSet(sender, time, null);
-	}
-
-	// all functions return if they handled the command
-	// false then means to show the default handle
-	// ! make sure the player variable IS a player!
-	// set world time to a new value
-	public static boolean timeSet(final CommandSender sender,
-			final String time, final String world) {
-		if (isPlayer(sender, false) && world == null) {
-			final Player p = (Player) sender;
-			setTime(sender, p.getWorld(), time);
-		} else if (world != null) {
-			final World w = sender.getServer().getWorld(world);
-			if (w == null) {
-				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put("world", world);
-				Utils.sI18n(sender, "worldNotFound", replace);
-				return true;
-			}
-			setTime(sender, w, time);
-		} else {
-			for (final World w : sender.getServer().getWorlds()) {
-				setTime(sender, w, time);
-			}
-		}
-		return true;
-
 	}
 
 	public static void tpP2P(final CommandSender sender, final String nFrom,

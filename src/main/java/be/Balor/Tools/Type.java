@@ -42,7 +42,7 @@ public enum Type {
 	NO_PICKUP(Category.SUPER_POWER),
 	WEATHER_FROZEN(Category.WORLD),
 	REPEAT_CMD(Category.OTHER),
-	TIME_FREEZED(Category.WORLD),
+	TIME_FROZEN(Category.WORLD),
 	TP_REQUEST(Category.OTHER),
 	TP_AT_SEE(Category.SUPER_POWER),
 	SUPER_BREAKER(Category.SUPER_POWER),

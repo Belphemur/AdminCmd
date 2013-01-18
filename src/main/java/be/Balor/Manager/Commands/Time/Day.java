@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -47,7 +46,7 @@ public class Day extends TimeCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		Utils.timeSet(sender, "day", args.getString(0));
+		TimeCommand.timeSet(sender, "day", args.getString(0));
 	}
 
 	/*

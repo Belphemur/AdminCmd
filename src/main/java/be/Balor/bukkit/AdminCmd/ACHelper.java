@@ -72,7 +72,6 @@ import be.Balor.Tools.Files.KitInstance;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Lister.Lister;
-import be.Balor.Tools.Threads.SetTimeTask;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.Tools.Update.UpdateChecker;
@@ -861,18 +860,6 @@ public class ACHelper {
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
 				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
-			}
-		}
-		for (final World w : coreInstance.getServer().getWorlds()) {
-			final ACWorld world = ACWorld.getWorld(w);
-			int task = world.getInformation(Type.TIME_FREEZED.toString())
-					.getInt(-1);
-			if (task != -1) {
-				task = ACPluginManager.getScheduler()
-						.scheduleSyncRepeatingTask(
-								ACHelper.getInstance().getCoreInstance(),
-								new SetTimeTask(w), 0, 5L);
-				world.setInformation(Type.TIME_FREEZED.toString(), task);
 			}
 		}
 	}
