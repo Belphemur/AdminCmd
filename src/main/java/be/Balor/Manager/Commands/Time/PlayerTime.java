@@ -63,7 +63,7 @@ public class PlayerTime extends TimeCommand {
 			newTime = 0;
 			relative = true;
 		} else {
-			newTime = Utils.calculNewTime(target.getWorld(), option);
+			newTime = TimeCommand.calculNewTime(target.getWorld(), option);
 		}
 		final long finalNewTime = newTime;
 		final boolean finalRelative = relative;

@@ -22,7 +22,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -54,7 +53,7 @@ public class SetTime extends TimeCommand {
 			return;
 		}
 
-		Utils.timeSet(sender, args.getString(0), args.getString(1));
+		TimeCommand.timeSet(sender, args.getString(0), args.getString(1));
 	}
 
 	/*

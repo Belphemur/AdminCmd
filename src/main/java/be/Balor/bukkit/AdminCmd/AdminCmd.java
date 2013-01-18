@@ -27,6 +27,7 @@ import be.Balor.Listeners.Commands.ACOpenInvListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACTeleportBackListener;
 import be.Balor.Listeners.Commands.ACThorListener;
+import be.Balor.Listeners.Commands.ACTimePausedListener;
 import be.Balor.Listeners.Commands.ACTpAtSeeListener;
 import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Listeners.Features.ACColorSignListener;
@@ -158,9 +159,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -191,8 +190,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onDisable() {
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		getServer().getScheduler().cancelTasks(this);
-		FilePlayer.forceSaveList();
-		SQLPlayer.forceExecuteStmts();
 		for (final ACPlayer p : PlayerManager.getInstance()
 				.getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);
@@ -341,7 +338,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(SetSpawn.class);
 		cmdManager.registerCommand(Spawn.class);
 		cmdManager.registerCommand(Memory.class);
-		cmdManager.registerCommand(SetTime.class);
+		if (cmdManager.registerCommand(SetTime.class)) {
+			pm.registerEvents(new ACTimePausedListener(), this);
+		}
 		cmdManager.registerCommand(ClearInventory.class);
 		cmdManager.registerCommand(Give.class);
 		cmdManager.registerCommand(AddBlackList.class);
