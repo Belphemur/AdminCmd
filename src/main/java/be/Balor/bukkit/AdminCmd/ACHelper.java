@@ -32,7 +32,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -633,10 +632,10 @@ public class ACHelper {
 	}
 
 	public int getLimit(final CommandSender sender, final Type.Limit type) {
-		if (sender instanceof ConsoleCommandSender) {
-			return Integer.MAX_VALUE;
+		if (sender instanceof Player) {
+			return getLimit((Player) sender, type, type.toString());
 		}
-		return getLimit((Player) sender, type, type.toString());
+		return Integer.MAX_VALUE;
 	}
 
 	public int getLimit(final Player player, final Type.Limit type) {
