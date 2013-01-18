@@ -842,9 +842,9 @@ public class MinecraftReflection {
 	}
 	
 	/**
-	 * Retrieve the NMS Packet29DestroyEntit class.
+	 * Retrieve the NMS Packet29DestroyEntity class.
 	 * 
-	 * @return The Packet29DestroyEntit class.
+	 * @return The Packet29DestroyEntity class.
 	 */
 	public static Class<?> getPacket29DestroyEntityClass() {
 		return getMinecraftClass("Packet29DestroyEntity");
