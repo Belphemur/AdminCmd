@@ -18,18 +18,16 @@ package be.Balor.Manager.Commands.Items;
 
 import java.util.HashMap;
 
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.Items.Give.GiveData;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -56,54 +54,13 @@ public class Drop extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		// which material?
-		MaterialContainer mat = null;
-		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
-		if (mat.isNull()) {
+		final GiveData data = Give.getGiveData(sender, args, permNode);
+		if (data == null) {
 			return;
 		}
-		if (ACHelper.getInstance().inBlackListItem(sender, mat)) {
-			return;
-		}
-		if (mat.getMaterial().equals(Material.AIR)) {
-			Utils.sI18n(sender, "airForbidden");
-			return;
-		}
-		// amount, damage and target player
-		int cnt = 1;
-		Player target = null;
-		if (args.length >= 2) {
-			try {
-				cnt = args.getInt(1);
-			} catch (final Exception e) {
-				return;
-			}
-			if (cnt > ACHelper.getInstance().getLimit(sender,
-					Type.Limit.MAX_ITEMS)
-					&& !(sender.hasPermission("admincmd.item.infinity"))) {
-				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put(
-						"limit",
-						String.valueOf(ACHelper.getInstance().getLimit(sender,
-								Type.Limit.MAX_ITEMS)));
-				Utils.sI18n(sender, "itemLimit", replace);
-				return;
-			}
-			if (args.length >= 3) {
-				target = Utils.getUser(sender, args, permNode, 2, true);
-				if (target == null) {
-					return;
-				}
-			}
-		}
-		if (target == null) {
-			if (Utils.isPlayer(sender)) {
-				target = ((Player) sender);
-			} else {
-				return;
-			}
-		}
-		mat.setAmount(cnt);
+		final MaterialContainer mat = data.getMat();
+		final Player target = data.getTarget();
+
 		final ItemStack stack = mat.getItemStack();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(mat.getAmount()));

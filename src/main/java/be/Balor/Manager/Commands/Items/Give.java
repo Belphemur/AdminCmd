@@ -41,6 +41,36 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  */
 public class Give extends ItemCommand {
 
+	public static class GiveData {
+		private final MaterialContainer mat;
+		private final Player target;
+
+		/**
+		 * @param mat
+		 * @param target
+		 */
+		public GiveData(final MaterialContainer mat, final Player target) {
+			super();
+			this.mat = mat;
+			this.target = target;
+		}
+
+		/**
+		 * @return the mat
+		 */
+		public MaterialContainer getMat() {
+			return mat;
+		}
+
+		/**
+		 * @return the target
+		 */
+		public Player getTarget() {
+			return target;
+		}
+
+	}
+
 	/**
 	 *
 	 */
@@ -60,77 +90,13 @@ public class Give extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		// which material?
-		MaterialContainer mat = null;
-		final String color = args.getValueFlag('c');
-		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
-		if (mat.isNull()) {
+		final GiveData data = getGiveData(sender, args, permNode);
+		if (data == null) {
 			return;
 		}
-		if (ACHelper.getInstance().inBlackListItem(sender, mat)) {
-			return;
-		}
-		if (mat.getMaterial().equals(Material.AIR)) {
-			Utils.sI18n(sender, "airForbidden");
-			return;
-		}
-		if (color != null) {
-			final HashMap<String, String> replace = new HashMap<String, String>();
+		final MaterialContainer mat = data.getMat();
+		final Player target = data.getTarget();
 
-			try {
-				if (!mat.setColor(color)) {
-					replace.put("color", color);
-					replace.put("colors", MaterialContainer.possibleColors());
-					LocaleHelper.COLOR_D_EXISTS.sendLocale(sender, replace);
-					return;
-				}
-			} catch (final IllegalArgumentException e) {
-				replace.put("item", mat.getMaterial().toString());
-				replace.put("items", MaterialContainer.possibleColoredItems());
-				LocaleHelper.CANT_COLOR.sendLocale(sender, replace);
-				return;
-			}
-		}
-		// amount, damage and target player
-		int cnt = 1;
-		Player target = null;
-
-		if (args.length >= 2) {
-
-			try {
-				cnt = args.getInt(1);
-			} catch (final Exception e) {
-				return;
-			}
-			if (cnt > ACHelper.getInstance().getLimit(sender,
-					Type.Limit.MAX_ITEMS)
-					&& !(sender.hasPermission("admincmd.item.infinity"))) {
-				final HashMap<String, String> replace = new HashMap<String, String>();
-				replace.put(
-						"limit",
-						String.valueOf(ACHelper.getInstance().getLimit(sender,
-								Type.Limit.MAX_ITEMS)));
-				Utils.sI18n(sender, "itemLimit", replace);
-				return;
-			}
-			if (args.length >= 3) {
-				target = Utils.getUser(sender, args, permNode, 2, true);
-				if (target == null) {
-					return;
-				}
-				if (args.length >= 4) {
-					setEnchantements(sender, args, mat, 3);
-				}
-			}
-		}
-		if (target == null) {
-			if (Utils.isPlayer(sender)) {
-				target = ((Player) sender);
-			} else {
-				return;
-			}
-		}
-		mat.setAmount(cnt);
 		final ItemStack stack = mat.getItemStack();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(mat.getAmount()));
@@ -211,4 +177,95 @@ public class Give extends ItemCommand {
 		return args != null && args.length >= 1;
 	}
 
+	/**
+	 * Parse all argument, check all condition and create the item that will be
+	 * given to the player
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param args
+	 *            arguments of the command
+	 * @param permNode
+	 *            permission needed by the command
+	 * @return a {@link GiveData} containing the {@link Player} and the
+	 *         {@link MaterialContainer}
+	 * @throws ActionNotPermitedException
+	 * @throws PlayerNotFound
+	 */
+	public static GiveData getGiveData(final CommandSender sender,
+			final CommandArgs args, final String permNode)
+			throws ActionNotPermitedException, PlayerNotFound {
+		// which material?
+		MaterialContainer mat = null;
+		final String color = args.getValueFlag('c');
+		mat = ACHelper.getInstance().checkMaterial(sender, args.getString(0));
+		if (mat.isNull()) {
+			return null;
+		}
+		if (ACHelper.getInstance().inBlackListItem(sender, mat)) {
+			return null;
+		}
+		if (mat.getMaterial().equals(Material.AIR)) {
+			Utils.sI18n(sender, "airForbidden");
+			return null;
+		}
+		if (color != null) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+
+			try {
+				if (!mat.setColor(color)) {
+					replace.put("color", color);
+					replace.put("colors", MaterialContainer.possibleColors());
+					LocaleHelper.COLOR_D_EXISTS.sendLocale(sender, replace);
+					return null;
+				}
+			} catch (final IllegalArgumentException e) {
+				replace.put("item", mat.getMaterial().toString());
+				replace.put("items", MaterialContainer.possibleColoredItems());
+				LocaleHelper.CANT_COLOR.sendLocale(sender, replace);
+				return null;
+			}
+		}
+		// amount, damage and target player
+		int cnt = 1;
+		Player target = null;
+
+		if (args.length >= 2) {
+
+			try {
+				cnt = args.getInt(1);
+			} catch (final Exception e) {
+				cnt = 1;
+			}
+			if (cnt > ACHelper.getInstance().getLimit(sender,
+					Type.Limit.MAX_ITEMS)
+					&& !(sender.hasPermission("admincmd.item.infinity"))) {
+				final HashMap<String, String> replace = new HashMap<String, String>();
+				replace.put(
+						"limit",
+						String.valueOf(ACHelper.getInstance().getLimit(sender,
+								Type.Limit.MAX_ITEMS)));
+				Utils.sI18n(sender, "itemLimit", replace);
+				return null;
+			}
+			if (args.length >= 3) {
+				target = Utils.getUser(sender, args, permNode, 2, true);
+				if (target == null) {
+					return null;
+				}
+				if (args.length >= 4) {
+					setEnchantements(sender, args, mat, 3);
+				}
+			}
+		}
+		if (target == null) {
+			if (Utils.isPlayer(sender)) {
+				target = ((Player) sender);
+			} else {
+				return null;
+			}
+		}
+		mat.setAmount(cnt);
+		return new GiveData(mat, target);
+	}
 }
