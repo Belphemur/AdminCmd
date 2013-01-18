@@ -158,9 +158,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Player.FilePlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -191,8 +189,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	public void onDisable() {
 		final PluginDescriptionFile pdfFile = this.getDescription();
 		getServer().getScheduler().cancelTasks(this);
-		FilePlayer.forceSaveList();
-		SQLPlayer.forceExecuteStmts();
 		for (final ACPlayer p : PlayerManager.getInstance()
 				.getOnlineACPlayers()) {
 			PlayerManager.getInstance().setOffline(p);

@@ -115,7 +115,10 @@ public class ACHelper {
 		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
 		if (dbWrap.equalsIgnoreCase("mysql")
 				|| dbWrap.equalsIgnoreCase("sqlite")) {
+			SQLPlayer.forceExecuteStmts();
 			Database.DATABASE.close();
+		} else {
+			FilePlayer.forceSaveList();
 		}
 		instance = null;
 	}
