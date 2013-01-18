@@ -413,7 +413,7 @@
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.4.6-R0.4-SNAPSHOT</bukkit.version>
+		<bukkit.version>1.4.7-R0.2-SNAPSHOT</bukkit.version>
 	</properties>
 	<version>7.2.0-SNAPSHOT</version>
 </project>
