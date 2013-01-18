@@ -94,14 +94,14 @@ public abstract class TimeCommand extends CoreCommand {
 				.isNull()) {
 			if (arg.equalsIgnoreCase("pause")) {
 				pauseTime(w);
-
-			} else if (arg.equalsIgnoreCase("unpause")) {
-				unPauseTime(w);
-				Utils.sI18n(sender, "timeSet", replace);
 			} else {
 				final long newtime = calculNewTime(w, arg);
 				ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
 			}
+			Utils.sI18n(sender, "timeSet", replace);
+		} else if (arg.equalsIgnoreCase("unpause")) {
+			unPauseTime(w);
+			Utils.sI18n(sender, "timeSet", replace);
 		} else {
 			Utils.sI18n(sender, "timePaused", "world", w.getName());
 		}
