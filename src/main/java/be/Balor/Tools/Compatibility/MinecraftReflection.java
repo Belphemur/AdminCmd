@@ -840,7 +840,25 @@ public class MinecraftReflection {
 	public static Class<?> getPacket201PlayerInfoClass() {
 		return getMinecraftClass("Packet201PlayerInfo");
 	}
+	
+	/**
+	 * Retrieve the NMS Packet29DestroyEntity class.
+	 * 
+	 * @return The Packet29DestroyEntity class.
+	 */
+	public static Class<?> getPacket29DestroyEntityClass() {
+		return getMinecraftClass("Packet29DestroyEntity");
+	}
 
+	/**
+	 * Retrieve the NMS Packet20NamedEntitySpawn class.
+	 * 
+	 * @return The Packet20NamedEntitySpawn class.
+	 */
+	public static Class<?> getPacket20NamedEntitySpawnClass() {
+		return getMinecraftClass("Packet20NamedEntitySpawn");
+	}
+	
 	/**
 	 * Retrieve the NMS EntityHuman class.
 	 * 
@@ -858,7 +876,7 @@ public class MinecraftReflection {
 	public static Class<?> getCraftHumanEntityClass() {
 		return getCraftBukkitClass("entity.CraftHumanEntity");
 	}
-
+	
 	/**
 	 * Get the NMS inventory of the given player
 	 * 
