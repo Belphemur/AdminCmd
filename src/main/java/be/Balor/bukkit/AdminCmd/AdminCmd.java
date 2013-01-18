@@ -27,6 +27,7 @@ import be.Balor.Listeners.Commands.ACOpenInvListener;
 import be.Balor.Listeners.Commands.ACSuperBreaker;
 import be.Balor.Listeners.Commands.ACTeleportBackListener;
 import be.Balor.Listeners.Commands.ACThorListener;
+import be.Balor.Listeners.Commands.ACTimePausedListener;
 import be.Balor.Listeners.Commands.ACTpAtSeeListener;
 import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Listeners.Features.ACColorSignListener;
@@ -337,7 +338,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(SetSpawn.class);
 		cmdManager.registerCommand(Spawn.class);
 		cmdManager.registerCommand(Memory.class);
-		cmdManager.registerCommand(SetTime.class);
+		if (cmdManager.registerCommand(SetTime.class)) {
+			pm.registerEvents(new ACTimePausedListener(), this);
+		}
 		cmdManager.registerCommand(ClearInventory.class);
 		cmdManager.registerCommand(Give.class);
 		cmdManager.registerCommand(AddBlackList.class);
