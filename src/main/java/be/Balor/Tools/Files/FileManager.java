@@ -630,11 +630,8 @@ public class FileManager implements DataManager {
 	 */
 	public Map<String, KitInstance> loadKits() {
 		final Map<String, KitInstance> result = new LinkedHashMap<String, KitInstance>();
-		final List<MaterialContainer> items = new ArrayList<MaterialContainer>();
 		final ExtendedConfiguration kits = getYml("kits");
 		final Map<String, List<String>> kitParents = new HashMap<String, List<String>>();
-		final Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
-				ArmorPart.class);
 
 		final ConfigurationSection kitNodes = kits
 				.getConfigurationSection("kits");
@@ -649,54 +646,25 @@ public class FileManager implements DataManager {
 			ConfigurationSection kitItems = null;
 			ConfigurationSection armorItems = null;
 			List<String> parents = null;
-			String color = null;
+
 			try {
 				kitItems = kitNode.getConfigurationSection("items");
 				armorItems = kitNode.getConfigurationSection("armor");
 				parents = kitNode.getStringList("parents");
-				color = kitNode.getString("color", null);
 			} catch (final NullPointerException e) {
 				DebugLog.INSTANCE.warning("Problem with kit " + kitName);
 				continue;
 			}
-
-			if (kitItems != null) {
-				for (final String item : kitItems.getKeys(false)) {
-					try {
-						final MaterialContainer m = Utils.checkMaterial(item);
-						m.setAmount(kitItems.getInt(item, 1));
-						if (!m.isNull()) {
-							items.add(m);
-						}
-					} catch (final InvalidInputException e) {
-						DebugLog.INSTANCE.log(Level.WARNING,
-								"Problem with kit : " + item, e);
-					}
-				}
-			}
+			final List<MaterialContainer> items = getItemsFromKit(kitItems);
 			delay = kitNode.getInt("delay", 0);
 
 			if (armorItems != null) {
-				for (final ArmorPart part : ArmorPart.values()) {
-					final String partId = armorItems.getString(part.toString());
-					if (partId == null) {
-						continue;
-					}
-					try {
-						final MaterialContainer m = Utils.checkMaterial(partId);
-						if (!m.isNull()) {
-							armor.put(part, m);
-						}
-					} catch (final InvalidInputException e) {
-						DebugLog.INSTANCE.log(Level.WARNING,
-								"Problem with kit : " + partId, e);
-					}
-				}
+				final Map<ArmorPart, MaterialContainer> armor = getArmorFromKit(armorItems);
 				final ArmoredKitInstance armoredKit = new ArmoredKitInstance(
 						kitName, delay,
 						new ArrayList<MaterialContainer>(items),
 						new EnumMap<Type.ArmorPart, MaterialContainer>(armor));
-				armoredKit.setColor(color);
+				armoredKit.setColor(kitNode.getString("color", null));
 				result.put(kitName, armoredKit);
 			} else {
 				result.put(kitName, new KitInstance(kitName, delay,
@@ -709,9 +677,23 @@ public class FileManager implements DataManager {
 				ACLogger.info(kitName + " has no parents");
 			}
 
-			items.clear();
-			armor.clear();
 		}
+		checkParents(result, kitParents);
+
+		/*
+		 * if (convert) try { kits.save(); } catch (IOException e) { }
+		 */
+		return result;
+	}
+
+	/**
+	 * Check parent to be sure that every kit is correctly related to its parent
+	 * 
+	 * @param result
+	 * @param kitParents
+	 */
+	private void checkParents(final Map<String, KitInstance> result,
+			final Map<String, List<String>> kitParents) {
 		for (final Entry<String, List<String>> entry : kitParents.entrySet()) {
 			KitInstance kit = result.get(entry.getKey());
 			for (final String parent : entry.getValue()) {
@@ -727,11 +709,121 @@ public class FileManager implements DataManager {
 				kit.addParent(parentKit);
 			}
 		}
+	}
 
-		/*
-		 * if (convert) try { kits.save(); } catch (IOException e) { }
-		 */
-		return result;
+	/**
+	 * @param armorItems
+	 * @return
+	 */
+	private Map<ArmorPart, MaterialContainer> getArmorFromKit(
+			final ConfigurationSection armorItems) {
+		final Map<ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
+				ArmorPart.class);
+
+		for (final ArmorPart part : ArmorPart.values()) {
+			try {
+				final MaterialContainer m = createArmorMaterialContainer(
+						armorItems, part);
+
+				if (m == null || m.isNull()) {
+					continue;
+				}
+
+				armor.put(part, m);
+
+			} catch (final InvalidInputException e) {
+				DebugLog.INSTANCE.log(Level.WARNING, "Problem with kit : "
+						+ part, e);
+			}
+		}
+		return armor;
+	}
+
+	/**
+	 * @param armorItems
+	 * @param part
+	 * @return
+	 * @throws InvalidInputException
+	 */
+	private MaterialContainer createArmorMaterialContainer(
+			final ConfigurationSection armorItems, final ArmorPart part)
+			throws InvalidInputException {
+		final ConfigurationSection newTemplate = armorItems
+				.getConfigurationSection(part.toString());
+		MaterialContainer m;
+		if (newTemplate != null) {
+			m = Utils.checkMaterial(newTemplate.getString("item"));
+			m.setDmg((short) newTemplate.getInt("durability"));
+			for (final String enchant : newTemplate
+					.getStringList("echantments")) {
+				try {
+					m.addEnchantment(enchant);
+				} catch (final Exception e) {
+					DebugLog.INSTANCE
+							.log(Level.WARNING,
+									"Problem with enchantments in ArmoredKit : "
+											+ part, e);
+				}
+			}
+
+		} else {
+			m = Utils.checkMaterial(armorItems.getString(part.toString()));
+		}
+		return m;
+	}
+
+	/**
+	 * @param kitItems
+	 * @return
+	 */
+	private List<MaterialContainer> getItemsFromKit(
+			final ConfigurationSection kitItems) {
+		final List<MaterialContainer> items = new ArrayList<MaterialContainer>();
+		if (kitItems != null) {
+			for (final String item : kitItems.getKeys(false)) {
+				try {
+					final MaterialContainer m = createMaterialContainer(
+							kitItems, item);
+					if (!m.isNull()) {
+						items.add(m);
+					}
+				} catch (final InvalidInputException e) {
+					DebugLog.INSTANCE.log(Level.WARNING, "Problem with kit : "
+							+ item, e);
+				}
+			}
+		}
+		return items;
+	}
+
+	/**
+	 * @param kitItems
+	 * @param item
+	 * @return
+	 * @throws InvalidInputException
+	 */
+	private MaterialContainer createMaterialContainer(
+			final ConfigurationSection kitItems, final String item)
+			throws InvalidInputException {
+		final MaterialContainer m = Utils.checkMaterial(item);
+		final ConfigurationSection newTemplateItem = kitItems
+				.getConfigurationSection(item);
+		if (newTemplateItem != null) {
+			m.setAmount(newTemplateItem.getInt("amount", 1));
+			m.setDmg((short) newTemplateItem.getInt("durability", 0));
+			for (final String enchant : newTemplateItem
+					.getStringList("echantments")) {
+				try {
+					m.addEnchantment(enchant);
+				} catch (final Exception e) {
+					DebugLog.INSTANCE.log(Level.WARNING,
+							"Problem with enchantments in kit : " + item, e);
+				}
+			}
+		} else {
+			m.setAmount(kitItems.getInt(item, 1));
+		}
+		return m;
 	}
 
 	/*
