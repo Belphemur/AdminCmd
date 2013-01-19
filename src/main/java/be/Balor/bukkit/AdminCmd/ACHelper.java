@@ -1179,38 +1179,31 @@ public class ACHelper {
 		ACPluginManager.setCorePlugin(pluginInstance);
 		this.coreInstance = pluginInstance;
 
-		fManager = FileManager.getInstance();
-		fManager.setPath(pluginInstance.getDataFolder().getPath());
-		dataManager = fManager;
-
-		// convertBannedMuted();
-		convertSpawnWarp();
-		fManager.getInnerFile("kits.yml");
-		fManager.getInnerFile("deathMessages.yml");
-		fManager.getInnerFile("ReadMe.txt", null, true);
-		fManager.getInnerFile("LiesMich.txt", null, true);
-		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
-				+ "AdminCmd", true);
-		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(
-				coreInstance.getDataFolder(), "config.yml"));
-		TextLocale.setVersion(ExtendedConfiguration.loadConfiguration(new File(
-				new File(coreInstance.getDataFolder(), "locales"),
-				"textFile.yml")));
-		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
-		ConfigEnum.setConfig(pluginConfig);
-		if (ConfigEnum.CHECK_UPDATE.getBoolean()) {
-			new UpdateChecker(ConfigEnum.UPDATE_SRC.getString()
-					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV,
-					coreInstance);
-		}
+		initFileManager();
+		initPluginConfig(pluginInstance);
+		initUpdateChecker();
 
 		dataWrapperInit();
 
-		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
-			final IImport importer = new EssentialsImport(
-					ImportTools.getPluginsFolder(coreInstance.getDataFolder()));
-			importer.initImport();
+		initEssentialImporter();
+		checkDebugStatus();
+		initCommandsYml();
+		init();
+	}
+
+	/**
+	 * 
+	 */
+	private void checkDebugStatus() {
+		if (!pluginConfig.getBoolean("debug")) {
+			DebugLog.stopLogging();
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private void initCommandsYml() {
 		List<String> disabled = new ArrayList<String>();
 		List<String> priority = new ArrayList<String>();
 		if (pluginConfig.get("disabledCommands") != null) {
@@ -1225,9 +1218,7 @@ public class ACHelper {
 		if (pluginConfig.get("respawnAtSpawnPoint") != null) {
 			pluginConfig.remove("respawnAtSpawnPoint");
 		}
-		if (!pluginConfig.getBoolean("debug")) {
-			DebugLog.stopLogging();
-		}
+
 		final ExtendedConfiguration commands = ExtendedConfiguration
 				.loadConfiguration(new File(coreInstance.getDataFolder(),
 						"commands.yml"));
@@ -1248,7 +1239,59 @@ public class ACHelper {
 			commands.save();
 		} catch (final IOException e) {
 		}
-		init();
+	}
+
+	/**
+	 * 
+	 */
+	private void initEssentialImporter() {
+		if (ConfigEnum.IMPORT_ESSENTIALS.getBoolean()) {
+			final IImport importer = new EssentialsImport(
+					ImportTools.getPluginsFolder(coreInstance.getDataFolder()));
+			importer.initImport();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void initUpdateChecker() {
+		if (ConfigEnum.CHECK_UPDATE.getBoolean()) {
+			new UpdateChecker(ConfigEnum.UPDATE_SRC.getString()
+					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV,
+					coreInstance);
+		}
+	}
+
+	/**
+	 * @param pluginInstance
+	 */
+	private void initPluginConfig(final AdminCmd pluginInstance) {
+		pluginConfig = ExtendedConfiguration.loadConfiguration(new File(
+				coreInstance.getDataFolder(), "config.yml"));
+		TextLocale.setVersion(ExtendedConfiguration.loadConfiguration(new File(
+				new File(coreInstance.getDataFolder(), "locales"),
+				"textFile.yml")));
+		ConfigEnum.setPluginInfos(pluginInstance.getDescription());
+		ConfigEnum.setConfig(pluginConfig);
+	}
+
+	/**
+	 * 
+	 */
+	private void initFileManager() {
+		fManager = FileManager.getInstance();
+		fManager.setPath(coreInstance.getDataFolder().getPath());
+		dataManager = fManager;
+
+		// convertBannedMuted();
+		convertSpawnWarp();
+		fManager.getInnerFile("kits.yml");
+		fManager.getInnerFile("deathMessages.yml");
+		fManager.getInnerFile("ReadMe.txt", null, true);
+		fManager.getInnerFile("LiesMich.txt", null, true);
+		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
+				+ "AdminCmd", true);
 	}
 
 	/**
