@@ -71,6 +71,8 @@ import be.Balor.Tools.Files.KitInstance;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Lister.Lister;
+import be.Balor.Tools.Metrics.Metrics.Graph;
+import be.Balor.Tools.Metrics.UpdateChannelPlotter;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.Tools.Threads.UndoBlockTask;
 import be.Balor.Tools.Update.UpdateChecker;
@@ -1271,9 +1273,12 @@ public class ACHelper {
 	 */
 	private void initUpdateChecker() {
 		if (ConfigEnum.CHECK_UPDATE.getBoolean()) {
-			new UpdateChecker(ConfigEnum.UPDATE_SRC.getString()
-					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV,
-					coreInstance);
+			final Channel channel = ConfigEnum.UPDATE_SRC.getString()
+					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV;
+			new UpdateChecker(channel, coreInstance);
+			final Graph updateChannelGraph = coreInstance.getMetrics().createGraph(
+					"Update Channels");
+			updateChannelGraph.addPlotter(new UpdateChannelPlotter(channel));
 		}
 	}
 

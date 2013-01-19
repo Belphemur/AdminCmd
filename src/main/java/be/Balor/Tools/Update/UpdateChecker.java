@@ -46,8 +46,18 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  */
 public class UpdateChecker {
 	public enum Channel {
-		DEV("http://www.admincmd.com/category/dev/feed/"), STABLE(
-				"http://www.admincmd.com/category/stable/feed/");
+		DEV("http://www.admincmd.com/category/dev/feed/") {
+			@Override
+			public String toString() {
+				return "Development Version";
+			}
+		},
+		STABLE("http://www.admincmd.com/category/stable/feed/") {
+			@Override
+			public String toString() {
+				return "Stable Version";
+			}
+		};
 		/**
 		 * 
 		 */
