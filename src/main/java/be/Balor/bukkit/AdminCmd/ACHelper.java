@@ -782,29 +782,42 @@ public class ACHelper {
 	 */
 	private void init() {
 		AFKWorker.createInstance();
-		if (pluginConfig.getBoolean("autoAfk", true)) {
-			AFKWorker.getInstance().setAfkTime(
-					pluginConfig.getInt("afkTimeInSecond", 60));
-			AFKWorker.getInstance().setKickTime(
-					pluginConfig.getInt("afkKickInMinutes", 3));
-
-			this.coreInstance
-					.getServer()
-					.getScheduler()
-					.runTaskTimerAsynchronously(this.coreInstance,
-							AFKWorker.getInstance().getAfkChecker(), 0,
-							pluginConfig.getInt("statutCheckInSec", 20) * 20);
-			if (pluginConfig.getBoolean("autoKickAfkPlayer", false)) {
-				this.coreInstance
-						.getServer()
-						.getScheduler()
-						.runTaskTimerAsynchronously(
-								this.coreInstance,
-								AFKWorker.getInstance().getKickChecker(),
-								0,
-								pluginConfig.getInt("statutCheckInSec", 20) * 20);
+		initAutoAfk();
+		initLocale();
+		HelpLoader.load(coreInstance.getDataFolder());
+		CommandManager.createInstance().setCorePlugin(coreInstance);
+		if (pluginConfig.get("pluginStarted") != null) {
+			pluginStarted = Long.parseLong(pluginConfig
+					.getString("pluginStarted"));
+			pluginConfig.remove("pluginStarted");
+			try {
+				pluginConfig.save();
+			} catch (final IOException e) {
+			}
+		} else {
+			pluginStarted = System.currentTimeMillis();
+		}
+		for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
+			PlayerManager.getInstance().setOnline(p);
+		}
+		// TODO : Don't forget to check if the admin use a MySQL database or the
+		// file system
+		if (!isSqlWrapper()) {
+			FilePlayer.scheduleAsyncSave();
+		} else {
+			SQLPlayer.scheduleAsyncSave();
+		}
+		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
+			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
+				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
 			}
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private void initLocale() {
 		final ExtendedConfiguration localeFile = ExtendedConfiguration
 				.loadConfiguration(new File(coreInstance.getDataFolder(),
 						"locales" + File.separator
@@ -833,32 +846,33 @@ public class ACHelper {
 						"kickMessages.yml", "locales", false)));
 		LocaleManager.getInstance().setNoMsg(
 				pluginConfig.getBoolean("noMessage", false));
-		HelpLoader.load(coreInstance.getDataFolder());
-		CommandManager.createInstance().setCorePlugin(coreInstance);
-		if (pluginConfig.get("pluginStarted") != null) {
-			pluginStarted = Long.parseLong(pluginConfig
-					.getString("pluginStarted"));
-			pluginConfig.remove("pluginStarted");
-			try {
-				pluginConfig.save();
-			} catch (final IOException e) {
-			}
-		} else {
-			pluginStarted = System.currentTimeMillis();
-		}
-		for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
-			PlayerManager.getInstance().setOnline(p);
-		}
-		// TODO : Don't forget to check if the admin use a MySQL database or the
-		// file system
-		if (!isSqlWrapper()) {
-			FilePlayer.scheduleAsyncSave();
-		} else {
-			SQLPlayer.scheduleAsyncSave();
-		}
-		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
-			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
-				ACPlayer.getPlayer(p).setPower(Type.TP_REQUEST);
+	}
+
+	/**
+	 * 
+	 */
+	private void initAutoAfk() {
+		if (pluginConfig.getBoolean("autoAfk", true)) {
+			AFKWorker.getInstance().setAfkTime(
+					pluginConfig.getInt("afkTimeInSecond", 60));
+			AFKWorker.getInstance().setKickTime(
+					pluginConfig.getInt("afkKickInMinutes", 3));
+
+			this.coreInstance
+					.getServer()
+					.getScheduler()
+					.runTaskTimerAsynchronously(this.coreInstance,
+							AFKWorker.getInstance().getAfkChecker(), 0,
+							pluginConfig.getInt("statutCheckInSec", 20) * 20);
+			if (pluginConfig.getBoolean("autoKickAfkPlayer", false)) {
+				this.coreInstance
+						.getServer()
+						.getScheduler()
+						.runTaskTimerAsynchronously(
+								this.coreInstance,
+								AFKWorker.getInstance().getKickChecker(),
+								0,
+								pluginConfig.getInt("statutCheckInSec", 20) * 20);
 			}
 		}
 	}
