@@ -2,10 +2,24 @@ kits:
     Tools:
         delay: 0
         items:
-            '276' : 1
-            '278' : 1
-            '277' : 1
-            'Diamond_Axe' : 1
+            '276' :
+                amount : 1
+                echantments : []
+                durability : 0
+            '278' :
+                amount : 1
+                echantments : []
+                durability : 0            
+            '277' :
+                amount : 1
+                echantments : []
+                durability : 0
+            'Diamond_Axe' :
+                amount : 1
+                echantments :
+                    - 'dur:5'
+                    - 'dmg:2'
+                durability : 0
     dirt:
         delay: 60
         items:
@@ -15,10 +29,24 @@ kits:
         delay: 0
         items:
         armor:
-          head: 310
-          chest: 311
-          legs: 312
-          boots: 313
+          head:
+              item : 310
+              echantments :
+                  - 'dur:5'
+                  - 'oxy:4'
+              durability : 0
+          chest: 
+              item : 311
+              echantments : []
+              durability : 0
+          legs:
+              item : 312
+              echantments : []
+              durability : 0
+          boots:
+              item : 313
+              echantments : []
+              durability : 0
     dequip:
         delay: 0
         armor:
