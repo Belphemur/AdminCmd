@@ -318,6 +318,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		boolean banCommands = false;
 		boolean lockCommand = false;
 		final CommandManager cmdManager = CommandManager.getInstance();
+		DebugLog.beginInfo("Register all Commands");
 		cmdManager.registerCommand(Day.class);
 		cmdManager.registerCommand(Repair.class);
 		cmdManager.registerCommand(RepairAll.class);
@@ -483,6 +484,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			cmdManager.registerCommand(GroupSpawn.class);
 		}
 		cmdManager.registerCommand(PlayerTime.class);
+
+		DebugLog.endInfo();
 	}
 
 	@Override
