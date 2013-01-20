@@ -18,6 +18,7 @@ package be.Balor.Tools.Debug;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Stack;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -31,6 +32,10 @@ import com.google.common.io.Files;
  */
 public class DebugLog {
 	public static final Logger INSTANCE = Logger.getLogger("AdminCmd");
+	public static final String BEGIN_PREFIX = "[BEGIN] ";
+	public static final String END_PREFIX = "[END] ";
+	private static final Stack<String> blockMsg = new Stack<String>();
+	private static final Stack<Long> timestamp = new Stack<Long>();
 	static {
 		INSTANCE.setUseParentHandlers(false);
 		INSTANCE.setLevel(Level.ALL);
@@ -66,5 +71,41 @@ public class DebugLog {
 			h.close();
 			INSTANCE.removeHandler(h);
 		}
+	}
+
+	/**
+	 * Begin logging of a block of code
+	 * 
+	 * @param msg
+	 */
+	public static void beginInfo(final String msg) {
+		timestamp.add(System.currentTimeMillis());
+		blockMsg.add(msg);
+		INSTANCE.info(getSpaces() + BEGIN_PREFIX + msg);
+
+	}
+
+	/**
+	 * @return
+	 */
+	private static String getSpaces() {
+		final StringBuffer space = new StringBuffer();
+		for (int i = 0; i < timestamp.size(); i++) {
+			space.append("\t");
+		}
+		return space.toString();
+	}
+
+	/**
+	 * End logging a block of code
+	 */
+	public static void endInfo() {
+		try {
+			INSTANCE.info(getSpaces() + END_PREFIX + blockMsg.pop() + " => "
+					+ (System.currentTimeMillis() - timestamp.pop())
+					+ " milisec");
+		} catch (final Exception e) {
+		}
+
 	}
 }
