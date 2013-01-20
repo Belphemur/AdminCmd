@@ -54,7 +54,7 @@ public class LogFormatter extends Formatter {
 
 	private final MessageFormat messageFormat;
 
-	private final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
 	/** */
 	public LogFormatter() {
