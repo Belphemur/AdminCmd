@@ -28,6 +28,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
@@ -154,8 +155,14 @@ public abstract class CoreCommand {
 	 * Register the bukkit Permission
 	 */
 	public void registerBukkitPerm() {
-		if (permNode != null && !permNode.isEmpty()) {
+		DebugLog.beginInfo("Registering permission");
+		try {
+			if (permNode == null && permNode.isEmpty()) {
+				return;
+			}
+
 			if (permParent != null) {
+				DebugLog.beginInfo("Register permission in the permParent");
 				final PermChild child = new PermChild(permNode, bukkitDefault);
 				permParent.addChild(child);
 				bukkitPerm = child.getBukkitPerm();
@@ -163,15 +170,19 @@ public abstract class CoreCommand {
 					permParent.addChild(new PermChild(permNode + ".other",
 							bukkitDefault));
 				}
-
+				DebugLog.endInfo();
 				return;
 			}
+			DebugLog.beginInfo("Register permission without a PermParent");
 			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode,
 					bukkitDefault);
 			if (other) {
 				plugin.getPermissionLinker().addPermChild(permNode + ".other",
 						bukkitDefault);
 			}
+			DebugLog.endInfo();
+		} finally {
+			DebugLog.endInfo();
 		}
 	}
 
@@ -192,16 +203,22 @@ public abstract class CoreCommand {
 	 * @throws CommandAlreadyExist
 	 */
 	public void initializeCommand() throws CommandNotFound, CommandAlreadyExist {
-		if ((pluginCommand = plugin.getCommand(cmdName)) == null) {
-			throw new CommandNotFound(cmdName
-					+ " is not loaded in bukkit. Command deactivated", this);
-		}
-
-		if (pluginCommand.getAliases().isEmpty()) {
-			throw new CommandAlreadyExist(
-					cmdName
-							+ " has all his alias already registered. Command deactivated",
-					this);
+		DebugLog.beginInfo("Check for bukkit command and status of the command");
+		try {
+			if ((pluginCommand = plugin.getCommand(cmdName)) == null) {
+				throw new CommandNotFound(cmdName
+						+ " is not loaded in bukkit. Command deactivated", this);
+			}
+			DebugLog.beginInfo("Check Alias of the commands");
+			if (pluginCommand.getAliases().isEmpty()) {
+				throw new CommandAlreadyExist(
+						cmdName
+								+ " has all his alias already registered. Command deactivated",
+						this);
+			}
+		} finally {
+			DebugLog.endInfo();
+			DebugLog.endInfo();
 		}
 	}
 
