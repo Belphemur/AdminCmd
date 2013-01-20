@@ -43,8 +43,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class Memory extends ServerCommand {
-	private final PermChild full, animal, xp, item, mob, npc, cart, boat,
-			vehicle;
+	private PermChild full, animal, xp, item, mob, npc, cart, boat, vehicle;
 
 	/**
      *
@@ -52,15 +51,6 @@ public class Memory extends ServerCommand {
 	public Memory() {
 		permNode = "admincmd.server.memory";
 		cmdName = "bal_memory";
-		full = new PermChild(permNode + ".full");
-		animal = new PermChild(permNode + ".animal");
-		mob = new PermChild(permNode + ".mob");
-		item = new PermChild(permNode + ".item");
-		xp = new PermChild(permNode + ".xp");
-		npc = new PermChild(permNode + ".npc");
-		cart = new PermChild(permNode + ".cart");
-		boat = new PermChild(permNode + ".boat");
-		vehicle = new PermChild(permNode + ".vehicle");
 	}
 
 	/*
@@ -219,6 +209,15 @@ public class Memory extends ServerCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
+		full = new PermChild(permNode + ".full");
+		animal = new PermChild(permNode + ".animal");
+		mob = new PermChild(permNode + ".mob");
+		item = new PermChild(permNode + ".item");
+		xp = new PermChild(permNode + ".xp");
+		npc = new PermChild(permNode + ".npc");
+		cart = new PermChild(permNode + ".cart");
+		boat = new PermChild(permNode + ".boat");
+		vehicle = new PermChild(permNode + ".vehicle");
 		final PermParent parent = new PermParent(permNode + ".*");
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
