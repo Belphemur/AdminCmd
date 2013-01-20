@@ -94,6 +94,7 @@ public abstract class AbstractAdminCmdPlugin extends JavaPlugin {
 		registerPermParents();
 		CommandManager.getInstance().registerACPlugin(this);
 		registerCmds();
+		getPermissionLinker().registerAllPermParent();
 		CommandManager.getInstance().checkAlias(this);
 		setDefaultLocale();
 	}

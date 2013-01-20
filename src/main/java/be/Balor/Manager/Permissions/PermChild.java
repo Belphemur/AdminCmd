@@ -27,7 +27,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermChild {
-	protected Permission bukkitPerm;
+	protected Permission bukkitPerm = null;
 
 	public PermChild(final String permName) {
 		this(permName, PermissionDefault.OP);
@@ -59,6 +59,10 @@ public class PermChild {
 		} finally {
 			DebugLog.endInfo();
 		}
+	}
+
+	protected PermChild() {
+
 	}
 
 	/**

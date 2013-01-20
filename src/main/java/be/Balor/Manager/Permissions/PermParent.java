@@ -16,7 +16,17 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -24,6 +34,10 @@ import org.bukkit.permissions.PermissionDefault;
  */
 public class PermParent extends PermChild {
 	protected final String compareName;
+	protected String permName;
+	protected PermissionDefault permissionDefault;
+	private final Map<String, Boolean> children = new HashMap<String, Boolean>();
+	private final Set<PermParent> permParentChildren = new HashSet<PermParent>();
 
 	public PermParent(final String perm) {
 		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
@@ -32,8 +46,9 @@ public class PermParent extends PermChild {
 
 	public PermParent(final String perm, final String compare,
 			final PermissionDefault def) {
-		super(perm, def);
 		this.compareName = compare;
+		this.permissionDefault = def;
+		this.permName = perm;
 	}
 
 	/**
@@ -54,8 +69,46 @@ public class PermParent extends PermChild {
 		if (perm.equals(this)) {
 			throw new IllegalArgumentException("The Child can't be the parent.");
 		}
-		perm.bukkitPerm.addParent(bukkitPerm, true);
+		children.put(perm.getPermName(), true);
+		if (perm instanceof PermParent) {
+			permParentChildren.add((PermParent) perm);
+		}
 		return this;
+	}
+
+	/**
+	 * Register the permParent.
+	 * 
+	 * @return
+	 */
+	public Permission registerPermission() {
+		DebugLog.beginInfo("Registering PermParent : " + this.permName);
+		try {
+			if (this.bukkitPerm != null) {
+				return this.bukkitPerm;
+			}
+			for (final PermParent perm : permParentChildren) {
+				perm.registerPermission();
+			}
+			this.bukkitPerm = new Permission(this.permName,
+					this.permissionDefault, children);
+			try {
+				ACPluginManager.getServer().getPluginManager()
+						.addPermission(bukkitPerm);
+			} catch (final Exception e) {
+				DebugLog.INSTANCE
+						.warning("Trying to register an existing PermParent : "
+								+ this.permName);
+				this.bukkitPerm = Bukkit.getPluginManager().getPermission(
+						permName);
+				this.bukkitPerm.getChildren().putAll(children);
+				this.bukkitPerm.recalculatePermissibles();
+			}
+
+			return this.bukkitPerm;
+		} finally {
+			DebugLog.endInfo();
+		}
 	}
 
 	/**
@@ -108,6 +161,26 @@ public class PermParent extends PermChild {
 			return false;
 		}
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Permissions.PermChild#getPermDefault()
+	 */
+	@Override
+	public PermissionDefault getPermDefault() {
+		return this.permissionDefault;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Permissions.PermChild#getPermName()
+	 */
+	@Override
+	public String getPermName() {
+		return this.permName;
 	}
 
 }

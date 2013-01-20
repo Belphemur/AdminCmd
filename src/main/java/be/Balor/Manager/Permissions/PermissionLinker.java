@@ -142,8 +142,7 @@ public class PermissionLinker {
 	}
 
 	public void addPermParent(final String toAdd) {
-		final PermParent pp = new PermParent(toAdd);
-		permissions.put(pp.getPermName(), pp);
+		addPermParent(new PermParent(toAdd));
 	}
 
 	/**
@@ -264,6 +263,13 @@ public class PermissionLinker {
 	 * Register all parent node.
 	 */
 	public void registerAllPermParent() {
+		DebugLog.beginInfo("Register all Permissions");
+		try {
+			majorPerm.registerPermission();
+		} finally {
+			DebugLog.endInfo();
+		}
+
 	}
 
 	/**
@@ -279,10 +285,7 @@ public class PermissionLinker {
 	}
 
 	public void setMajorPerm(final String major) {
-		majorPerm = new PermParent(major);
-		for (final PermParent pp : permissions.values()) {
-			majorPerm.addChild(pp);
-		}
+		this.setMajorPerm(new PermParent(major));
 	}
 
 	/*

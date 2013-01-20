@@ -227,7 +227,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		worker.loadInfos();
 		super.onEnable();
 		TerminalCommandManager.getInstance().setPerm(this);
-		permissionLinker.registerAllPermParent();
 		pm.registerEvents(new ACBlockListener(), this);
 		pm.registerEvents(new ACEntityListener(), this);
 		pm.registerEvents(new ACPlayerListener(), this);
