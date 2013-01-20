@@ -16,9 +16,14 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -27,6 +32,18 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class PermChild {
 	protected Permission bukkitPerm;
+	private static final Map<String, Permission> ALL_PERMS = new HashMap<String, Permission>();
+	static {
+		try {
+			DebugLog.beginInfo("Loading all Bukkit Permissions for cache");
+			for (final Permission perm : Bukkit.getPluginManager()
+					.getPermissions()) {
+				ALL_PERMS.put(perm.getName().toLowerCase(), perm);
+			}
+		} finally {
+			DebugLog.endInfo();
+		}
+	}
 
 	public PermChild(final String permName) {
 		this(permName, PermissionDefault.OP);
@@ -39,20 +56,26 @@ public class PermChild {
 	 * @param permDefault
 	 */
 	public PermChild(final String permName, final PermissionDefault permDefault) {
-		if (permName == null) {
-			return;
+		DebugLog.beginInfo("Creation of a Bukkit Permission for : " + permName);
+		try {
+			if (permName == null) {
+				return;
+			}
+			if (ACPluginManager.getServer() == null) {
+				return;
+			}
+			final String lowerCasePermName = permName.toLowerCase();
+			if ((bukkitPerm = ALL_PERMS.get(lowerCasePermName)) != null) {
+				bukkitPerm.setDefault(permDefault);
+				return;
+			}
+			bukkitPerm = new Permission(permName, permDefault);
+			ACPluginManager.getServer().getPluginManager()
+					.addPermission(bukkitPerm);
+			ALL_PERMS.put(lowerCasePermName, bukkitPerm);
+		} finally {
+			DebugLog.endInfo();
 		}
-		if (ACPluginManager.getServer() == null) {
-			return;
-		}
-		if ((bukkitPerm = ACPluginManager.getServer().getPluginManager()
-				.getPermission(permName)) != null) {
-			bukkitPerm.setDefault(permDefault);
-			return;
-		}
-		bukkitPerm = new Permission(permName, permDefault);
-		ACPluginManager.getServer().getPluginManager()
-				.addPermission(bukkitPerm);
 	}
 
 	/**
