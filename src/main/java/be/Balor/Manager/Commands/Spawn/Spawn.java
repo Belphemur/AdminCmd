@@ -50,9 +50,6 @@ public class Spawn extends SpawnCommand {
 	public Spawn() {
 		permNode = "admincmd.spawn.tp";
 		cmdName = "bal_spawn";
-		for (final World world : Bukkit.getWorlds()) {
-			this.permParent.addChild("admincmd.spawn.tp." + world.getName());
-		}
 	}
 
 	/*
@@ -84,6 +81,19 @@ public class Spawn extends SpawnCommand {
 					new DelayedTeleport(target, sender, null),
 					ConfigEnum.TP_DELAY.getLong());
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
+	 */
+	@Override
+	public void registerBukkitPerm() {
+		for (final World world : Bukkit.getWorlds()) {
+			this.permParent.addChild("admincmd.spawn.tp." + world.getName());
+		}
+		super.registerBukkitPerm();
 	}
 
 	/*
