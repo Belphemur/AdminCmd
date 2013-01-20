@@ -44,13 +44,12 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  */
 public class TpWorld extends TeleportCommand {
 
-	private final PermChild list;
+	private PermChild list;
 
 	public TpWorld() {
 		permNode = "admincmd.tp.world";
 		cmdName = "bal_tpworld";
 		other = true;
-		list = new PermChild(permNode + ".list");
 	}
 
 	/*
@@ -118,6 +117,7 @@ public class TpWorld extends TeleportCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
+		list = new PermChild(permNode + ".list");
 		final PermParent parent = new PermParent(permNode + ".*");
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);

@@ -73,6 +73,7 @@ public class PermParent extends PermChild {
 		if (perm instanceof PermParent) {
 			permParentChildren.add((PermParent) perm);
 		}
+		perm.parent = this;
 		return this;
 	}
 
@@ -125,6 +126,26 @@ public class PermParent extends PermChild {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see be.Balor.Manager.Permissions.PermChild#getPermDefault()
+	 */
+	@Override
+	public PermissionDefault getPermDefault() {
+		return this.permissionDefault;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Manager.Permissions.PermChild#getPermName()
+	 */
+	@Override
+	public String getPermName() {
+		return this.permName;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -133,6 +154,12 @@ public class PermParent extends PermChild {
 		int result = super.hashCode();
 		result = prime * result
 				+ ((compareName == null) ? 0 : compareName.hashCode());
+		result = prime * result
+				+ ((permName == null) ? 0 : permName.hashCode());
+		result = prime
+				* result
+				+ ((permissionDefault == null) ? 0 : permissionDefault
+						.hashCode());
 		return result;
 	}
 
@@ -149,7 +176,7 @@ public class PermParent extends PermChild {
 		if (!super.equals(obj)) {
 			return false;
 		}
-		if (!(obj instanceof PermParent)) {
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		final PermParent other = (PermParent) obj;
@@ -160,27 +187,17 @@ public class PermParent extends PermChild {
 		} else if (!compareName.equals(other.compareName)) {
 			return false;
 		}
+		if (permName == null) {
+			if (other.permName != null) {
+				return false;
+			}
+		} else if (!permName.equals(other.permName)) {
+			return false;
+		}
+		if (permissionDefault != other.permissionDefault) {
+			return false;
+		}
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.Permissions.PermChild#getPermDefault()
-	 */
-	@Override
-	public PermissionDefault getPermDefault() {
-		return this.permissionDefault;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.Permissions.PermChild#getPermName()
-	 */
-	@Override
-	public String getPermName() {
-		return this.permName;
 	}
 
 }

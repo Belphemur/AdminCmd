@@ -73,7 +73,7 @@ public class SetTime extends TimeCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.time.pause");
+		permParent.addChild("admincmd.time.pause");
 		super.registerBukkitPerm();
 	}
 }

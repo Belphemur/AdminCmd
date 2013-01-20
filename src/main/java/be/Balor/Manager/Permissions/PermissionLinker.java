@@ -138,7 +138,17 @@ public class PermissionLinker {
 	 * @param toAdd
 	 */
 	public void addPermParent(final PermParent toAdd) {
-		permissions.put(toAdd.getPermName(), toAdd);
+		addPermParent0(toAdd);
+	}
+
+	private PermParent addPermParent0(final PermParent toAdd) {
+		final PermParent registeredPermParent = permissions.get(toAdd
+				.getPermName());
+		if (registeredPermParent == null) {
+			permissions.put(toAdd.getPermName(), toAdd);
+			return toAdd;
+		}
+		return registeredPermParent;
 	}
 
 	public void addPermParent(final String toAdd) {
