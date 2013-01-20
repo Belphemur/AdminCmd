@@ -425,7 +425,7 @@ public class CommandManager implements CommandExecutor {
 	 * @param clazz
 	 */
 	public boolean registerCommand(final Class<? extends CoreCommand> clazz) {
-		DebugLog.beginInfo("Begin registering Command " + clazz.getName());
+		DebugLog.beginInfo("Register command " + clazz.getName());
 		try {
 			registerCommand0(clazz);
 			final IncrementalPlotter plotter = new ClassPlotter(clazz);
