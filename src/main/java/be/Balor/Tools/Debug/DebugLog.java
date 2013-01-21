@@ -31,11 +31,39 @@ import com.google.common.io.Files;
  * 
  */
 public class DebugLog {
+	private static class DebugInfo {
+		private final String blockMsg;
+		private final Long timeStamp;
+
+		/**
+		 * @param blockMsg
+		 * @param timeStamp
+		 */
+		public DebugInfo(final String blockMsg) {
+			this.blockMsg = blockMsg;
+			this.timeStamp = System.currentTimeMillis();
+		}
+
+		/**
+		 * @return the blockMsg
+		 */
+		public String getBlockMsg() {
+			return blockMsg;
+		}
+
+		/**
+		 * @return the timeStamp
+		 */
+		public Long getElapsedTime() {
+			return System.currentTimeMillis() - timeStamp;
+		}
+
+	}
+
 	public static final Logger INSTANCE = Logger.getLogger("AdminCmd");
 	public static final String BEGIN_PREFIX = "[BEGIN] ";
 	public static final String END_PREFIX = "[END] ";
-	private static final Stack<String> blockMsg = new Stack<String>();
-	private static final Stack<Long> timestamp = new Stack<Long>();
+	private static final Stack<DebugInfo> debugInfos = new Stack<DebugInfo>();
 	static {
 		INSTANCE.setUseParentHandlers(false);
 		INSTANCE.setLevel(Level.ALL);
@@ -79,8 +107,7 @@ public class DebugLog {
 	 * @param msg
 	 */
 	public static void beginInfo(final String msg) {
-		timestamp.add(System.currentTimeMillis());
-		blockMsg.add(msg);
+		debugInfos.add(new DebugInfo(msg));
 		INSTANCE.info(getSpaces() + BEGIN_PREFIX + msg);
 
 	}
@@ -90,7 +117,7 @@ public class DebugLog {
 	 */
 	private static String getSpaces() {
 		final StringBuffer space = new StringBuffer();
-		for (int i = 0; i < timestamp.size(); i++) {
+		for (int i = 0; i < debugInfos.size(); i++) {
 			space.append("\t");
 		}
 		return space.toString();
@@ -101,9 +128,10 @@ public class DebugLog {
 	 */
 	public static void endInfo() {
 		try {
-			INSTANCE.info(getSpaces() + END_PREFIX + blockMsg.pop() + " => "
-					+ (System.currentTimeMillis() - timestamp.pop())
-					+ " milisec");
+			final String spaces = getSpaces();
+			final DebugInfo info = debugInfos.pop();
+			INSTANCE.info(spaces + END_PREFIX + info.getBlockMsg() + " => "
+					+ info.getElapsedTime() + " milisec");
 		} catch (final Exception e) {
 		}
 
