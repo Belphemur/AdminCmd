@@ -215,7 +215,7 @@ public class Memory extends ServerCommand {
 		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp)
 				.addChild(item).addChild(full).addChild(npc).addChild(vehicle)
 				.addChild(cart).addChild(boat);
-		bukkitPerm = child;
+		permChild = child;
 	}
 
 	private class CheckTicks implements Runnable {

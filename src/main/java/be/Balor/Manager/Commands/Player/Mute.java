@@ -253,6 +253,6 @@ public class Mute extends PlayerCommand {
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child).addChild(cmdMute);
-		bukkitPerm = child;
+		permChild = child;
 	}
 }

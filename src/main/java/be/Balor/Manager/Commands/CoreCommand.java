@@ -18,6 +18,7 @@ package be.Balor.Manager.Commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
@@ -38,12 +39,17 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 public abstract class CoreCommand {
 	protected String permNode = "";
 	protected String cmdName = "";
-	protected PermChild bukkitPerm = null;
+	protected PermChild permChild = null;
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
 	protected PluginCommand pluginCommand;
 	protected final AbstractAdminCmdPlugin plugin;
 	protected PermParent permParent;
+	@Deprecated
+	/**
+	 * Remove the use of Permission in the command, better use the PermChild.
+	 */
+	protected Permission bukkitPerm = null;
 
 	/**
 	 * Constructor of CoreCommand
@@ -130,7 +136,7 @@ public abstract class CoreCommand {
 	 */
 	public boolean permissionCheck(final CommandSender sender) {
 		if (permNode != null && !permNode.isEmpty()) {
-			return PermissionManager.hasPerm(sender, bukkitPerm.getPermName());
+			return PermissionManager.hasPerm(sender, permChild.getPermName());
 		} else {
 			return true;
 		}
@@ -164,7 +170,7 @@ public abstract class CoreCommand {
 				DebugLog.beginInfo("Register permission in the permParent");
 				final PermChild child = new PermChild(permNode, bukkitDefault);
 				permParent.addChild(child);
-				bukkitPerm = child;
+				permChild = child;
 				if (other) {
 					permParent.addChild(new PermChild(permNode + ".other",
 							bukkitDefault));
@@ -173,7 +179,7 @@ public abstract class CoreCommand {
 				return;
 			}
 			DebugLog.beginInfo("Register permission without a PermParent");
-			bukkitPerm = plugin.getPermissionLinker().addPermChild(permNode,
+			permChild = plugin.getPermissionLinker().addPermChild(permNode,
 					bukkitDefault);
 			if (other) {
 				plugin.getPermissionLinker().addPermChild(permNode + ".other",

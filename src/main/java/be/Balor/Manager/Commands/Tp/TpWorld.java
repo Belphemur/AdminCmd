@@ -122,6 +122,6 @@ public class TpWorld extends TeleportCommand {
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child).addChild(list);
-		bukkitPerm = child;
+		permChild = child;
 	}
 }
