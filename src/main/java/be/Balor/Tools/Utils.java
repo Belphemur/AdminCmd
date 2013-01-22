@@ -1611,22 +1611,30 @@ public final class Utils {
 		final Object entityPlayer = MinecraftReflection.getHandle(player);
 		final Object toWorld = MinecraftReflection.getHandle(toLocation
 				.getWorld());
-		final int dimension = FieldUtils.getField(toWorld, "dimension");
-		final Object activeContainer = FieldUtils.getField(entityPlayer,
-				"activeContainer");
-		final Object defaultContainer = FieldUtils.getField(entityPlayer,
-				"defaultContainer");
 
 		// Check if the fromWorld and toWorld are the same.
 		if (player.getWorld().equals(toLocation.getWorld())) {
 			MinecraftReflection.teleportPlayer(player, toLocation);
 		} else {
-			// Close any foreign inventory
-			if (activeContainer != defaultContainer) {
-				final MethodHandler closeInventory = new MethodHandler(
-						entityPlayer.getClass(), "closeInventory");
-				closeInventory.invoke(entityPlayer);
+			try {
+				final Object activeContainer = FieldUtils.getField(
+						entityPlayer, "activeContainer");
+				final Object defaultContainer = FieldUtils.getField(
+						entityPlayer, "defaultContainer");
+
+				// Close any foreign inventory
+				if (activeContainer != defaultContainer) {
+					final MethodHandler closeInventory = new MethodHandler(
+							entityPlayer.getClass(), "closeInventory");
+					closeInventory.invoke(entityPlayer);
+				}
+			} catch (final Throwable e) {
+				DebugLog.INSTANCE.log(Level.SEVERE,
+						"Problem when trying to containers of : "
+								+ entityPlayer + " (" + entityPlayer.getClass()
+								+ ")", e);
 			}
+			final int dimension = FieldUtils.getField(toWorld, "dimension");
 			final MethodHandler moveToWorld = new MethodHandler(
 					server.getClass(), "moveToWorld", entityPlayer.getClass(),
 					int.class, boolean.class, toLocation.getClass());
