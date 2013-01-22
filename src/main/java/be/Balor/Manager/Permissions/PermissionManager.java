@@ -84,6 +84,22 @@ public class PermissionManager {
 	}
 
 	public static boolean hasPerm(final CommandSender player,
+			final PermChild perm) throws NullPointerException {
+		return hasPerm(player, perm, true);
+	}
+
+	/**
+	 * @param sender
+	 * @param permChild
+	 * @param msg
+	 * @return
+	 */
+	public static boolean hasPerm(final CommandSender sender,
+			final PermChild permChild, final boolean msg) {
+		return hasPerm(sender, permChild.getPermName(), true);
+	}
+
+	public static boolean hasPerm(final CommandSender player,
 			final Permission perm, final boolean errorMsg)
 			throws NullPointerException {
 		if (perm == null) {
@@ -355,4 +371,5 @@ public class PermissionManager {
 		}
 		return perm;
 	}
+
 }

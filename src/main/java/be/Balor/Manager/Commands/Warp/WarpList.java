@@ -63,7 +63,7 @@ public class WarpList extends WarpCommand {
 			String msg = "";
 			Set<String> wp;
 			if (args.hasFlag('a')) {
-				if (!PermissionManager.hasPerm(sender, tpAll.getBukkitPerm())) {
+				if (!PermissionManager.hasPerm(sender, tpAll)) {
 					return;
 				}
 				wp = WorldManager.getInstance().getAllWarpList();

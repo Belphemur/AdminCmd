@@ -65,7 +65,7 @@ public class TpWorld extends TeleportCommand {
 		assert (target != null);
 		final Map<String, String> replace = new HashMap<String, String>();
 		if (args.length < 1) {
-			if (PermissionManager.hasPerm(target, permNode + ".list")) {
+			if (PermissionManager.hasPerm(target, list)) {
 				final List<World> worlds = ACPluginManager.getServer()
 						.getWorlds();
 				String worldList = "";
@@ -122,6 +122,6 @@ public class TpWorld extends TeleportCommand {
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child).addChild(list);
-		bukkitPerm = child.getBukkitPerm();
+		bukkitPerm = child;
 	}
 }

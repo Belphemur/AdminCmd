@@ -27,7 +27,8 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  * 
  */
 public class PermChild {
-	protected Permission bukkitPerm = null;
+	protected final String permName;
+	protected final PermissionDefault permissionDefault;
 	protected PermParent parent = null;
 
 	public PermChild(final String permName) {
@@ -41,91 +42,13 @@ public class PermChild {
 	 * @param permDefault
 	 */
 	public PermChild(final String permName, final PermissionDefault permDefault) {
-		DebugLog.beginInfo("Creation of a Bukkit Permission for : " + permName);
+		DebugLog.beginInfo("Creation of a PermChild for : " + permName);
 		try {
-			if (permName == null) {
-				return;
-			}
-			if (ACPluginManager.getServer() == null) {
-				return;
-			}
-			if ((bukkitPerm = ACPluginManager.getServer().getPluginManager()
-					.getPermission(permName)) != null) {
-				bukkitPerm.setDefault(permDefault);
-				return;
-			}
-			bukkitPerm = new Permission(permName, permDefault);
-			ACPluginManager.getServer().getPluginManager()
-					.addPermission(bukkitPerm);
+			this.permName = permName;
+			this.permissionDefault = permDefault;
 		} finally {
 			DebugLog.endInfo();
 		}
-	}
-
-	protected PermChild() {
-
-	}
-
-	/**
-	 * @return the permName
-	 */
-	public String getPermName() {
-		return bukkitPerm.getName();
-	}
-
-	/**
-	 * @return the permDefault
-	 */
-	public PermissionDefault getPermDefault() {
-		return bukkitPerm.getDefault();
-	}
-
-	/**
-	 * @return the bukkitPerm
-	 */
-	public Permission getBukkitPerm() {
-		return bukkitPerm;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((bukkitPerm == null) ? 0 : bukkitPerm.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof PermChild)) {
-			return false;
-		}
-		final PermChild other = (PermChild) obj;
-		if (bukkitPerm == null) {
-			if (other.bukkitPerm != null) {
-				return false;
-			}
-		} else if (!bukkitPerm.equals(other.bukkitPerm)) {
-			return false;
-		}
-		return true;
 	}
 
 	/*
@@ -144,6 +67,44 @@ public class PermChild {
 	 */
 	public PermParent getParent() {
 		return parent;
+	}
+
+	/**
+	 * @return the permName
+	 */
+	public String getPermName() {
+		return permName;
+	}
+
+	/**
+	 * @return the permissionDefault
+	 */
+	public PermissionDefault getPermDefault() {
+		return permissionDefault;
+	}
+
+	/**
+	 * @return the bukkitPerm
+	 */
+	public Permission getBukkitPerm() {
+		DebugLog.beginInfo("Creation of a BukkitPerm for : " + permName);
+		try {
+			if (permName == null) {
+				return null;
+			}
+			Permission bukkitPerm;
+			if ((bukkitPerm = ACPluginManager.getServer().getPluginManager()
+					.getPermission(permName)) != null) {
+				bukkitPerm.setDefault(permissionDefault);
+				return bukkitPerm;
+			}
+			bukkitPerm = new Permission(permName, permissionDefault);
+			ACPluginManager.getServer().getPluginManager()
+					.addPermission(bukkitPerm);
+			return bukkitPerm;
+		} finally {
+			DebugLog.endInfo();
+		}
 	}
 
 }

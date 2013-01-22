@@ -73,8 +73,8 @@ public class TerminalCommandManager {
 				toAdd = new WindowsTerminalCommand(cmdName,
 						conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec."
-						+ cmdName));
+				toAdd.setBukkitPerm(perm.addPermChild(
+						"admincmd.server.exec." + cmdName).getBukkitPerm());
 				commands.put(cmdName, toAdd);
 
 			}
@@ -83,8 +83,8 @@ public class TerminalCommandManager {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName
 						+ ".exec"), conf.getString(cmdName + ".args"),
 						workingDir);
-				toAdd.setBukkitPerm(perm.addPermChild("admincmd.server.exec."
-						+ cmdName));
+				toAdd.setBukkitPerm(perm.addPermChild(
+						"admincmd.server.exec." + cmdName).getBukkitPerm());
 				commands.put(cmdName, toAdd);
 			}
 		}

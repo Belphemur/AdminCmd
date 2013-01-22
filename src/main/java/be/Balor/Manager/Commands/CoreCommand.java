@@ -18,7 +18,6 @@ package be.Balor.Manager.Commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
@@ -39,7 +38,7 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 public abstract class CoreCommand {
 	protected String permNode = "";
 	protected String cmdName = "";
-	protected Permission bukkitPerm = null;
+	protected PermChild bukkitPerm = null;
 	protected PermissionDefault bukkitDefault = PermissionDefault.OP;
 	protected boolean other = false;
 	protected PluginCommand pluginCommand;
@@ -131,7 +130,7 @@ public abstract class CoreCommand {
 	 */
 	public boolean permissionCheck(final CommandSender sender) {
 		if (permNode != null && !permNode.isEmpty()) {
-			return PermissionManager.hasPerm(sender, bukkitPerm);
+			return PermissionManager.hasPerm(sender, bukkitPerm.getPermName());
 		} else {
 			return true;
 		}
@@ -165,7 +164,7 @@ public abstract class CoreCommand {
 				DebugLog.beginInfo("Register permission in the permParent");
 				final PermChild child = new PermChild(permNode, bukkitDefault);
 				permParent.addChild(child);
-				bukkitPerm = child.getBukkitPerm();
+				bukkitPerm = child;
 				if (other) {
 					permParent.addChild(new PermChild(permNode + ".other",
 							bukkitDefault));

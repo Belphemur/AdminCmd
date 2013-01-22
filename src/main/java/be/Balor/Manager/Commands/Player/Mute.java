@@ -62,7 +62,7 @@ public class Mute extends PlayerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Utils.getPlayer(args.getString(0));
 		if (args.hasFlag('c')
-				&& !PermissionManager.hasPerm(sender, cmdMute.getBukkitPerm())) {
+				&& !PermissionManager.hasPerm(sender, cmdMute.getPermName())) {
 			return;
 		}
 		if (player != null) {
@@ -253,6 +253,6 @@ public class Mute extends PlayerCommand {
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		parent.addChild(child).addChild(cmdMute);
-		bukkitPerm = child.getBukkitPerm();
+		bukkitPerm = child;
 	}
 }

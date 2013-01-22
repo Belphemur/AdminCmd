@@ -34,10 +34,9 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class PermParent extends PermChild {
 	protected final String compareName;
-	protected String permName;
-	protected PermissionDefault permissionDefault;
 	private final Map<String, Boolean> children = new HashMap<String, Boolean>();
 	private final Set<PermParent> permParentChildren = new HashSet<PermParent>();
+	private final boolean registered = false;
 
 	public PermParent(final String perm) {
 		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
@@ -46,9 +45,9 @@ public class PermParent extends PermChild {
 
 	public PermParent(final String perm, final String compare,
 			final PermissionDefault def) {
+		super(perm, def);
 		this.compareName = compare;
-		this.permissionDefault = def;
-		this.permName = perm;
+
 	}
 
 	/**
@@ -82,16 +81,16 @@ public class PermParent extends PermChild {
 	 * 
 	 * @return
 	 */
-	public Permission registerPermission() {
+	public void registerPermission() {
 		DebugLog.beginInfo("Registering PermParent : " + this.permName);
 		try {
-			if (this.bukkitPerm != null) {
-				return this.bukkitPerm;
+			if (registered) {
+				return;
 			}
 			for (final PermParent perm : permParentChildren) {
 				perm.registerPermission();
 			}
-			this.bukkitPerm = new Permission(this.permName,
+			Permission bukkitPerm = new Permission(this.permName,
 					this.permissionDefault, children);
 			try {
 				ACPluginManager.getServer().getPluginManager()
@@ -100,13 +99,10 @@ public class PermParent extends PermChild {
 				DebugLog.INSTANCE
 						.warning("Trying to register an existing PermParent : "
 								+ this.permName);
-				this.bukkitPerm = Bukkit.getPluginManager().getPermission(
-						permName);
-				this.bukkitPerm.getChildren().putAll(children);
-				this.bukkitPerm.recalculatePermissibles();
+				bukkitPerm = Bukkit.getPluginManager().getPermission(permName);
+				bukkitPerm.getChildren().putAll(children);
+				bukkitPerm.recalculatePermissibles();
 			}
-
-			return this.bukkitPerm;
 		} finally {
 			DebugLog.endInfo();
 		}

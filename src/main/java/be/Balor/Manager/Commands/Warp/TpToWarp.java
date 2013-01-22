@@ -77,8 +77,7 @@ public class TpToWarp extends WarpCommand {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 
 				if (args.getString(0).contains(":")) {
-					if (!PermissionManager.hasPerm(sender,
-							tpAll.getBukkitPerm())) {
+					if (!PermissionManager.hasPerm(sender, tpAll)) {
 						return;
 					}
 					final String[] split = args.getString(0).split(":");
@@ -96,10 +95,11 @@ public class TpToWarp extends WarpCommand {
 						if (warpPoint.permission != null
 								&& !warpPoint.permission.isEmpty()
 								&& !warpPoint.permission.equalsIgnoreCase("")
-								&& !PermissionManager.hasPerm(sender, 
-										permNode + "." + warpPoint.permission, false)) {
+								&& !PermissionManager.hasPerm(sender, permNode
+										+ "." + warpPoint.permission, false)) {
 							replace.put("point", warp);
-							LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
+							LocaleHelper.WARP_NO_PERM.sendLocale(sender,
+									replace);
 							return;
 						}
 						loc = warpPoint.loc;
@@ -124,10 +124,11 @@ public class TpToWarp extends WarpCommand {
 						if (warpPoint.permission != null
 								&& !warpPoint.permission.isEmpty()
 								&& !warpPoint.permission.equalsIgnoreCase("")
-								&& !PermissionManager.hasPerm(sender, 
-										permNode + "." + warpPoint.permission, false)) {
+								&& !PermissionManager.hasPerm(sender, permNode
+										+ "." + warpPoint.permission, false)) {
 							replace.put("point", args.getString(0));
-							LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
+							LocaleHelper.WARP_NO_PERM.sendLocale(sender,
+									replace);
 							return;
 						}
 						loc = warpPoint.loc;

@@ -63,40 +63,31 @@ public class Memory extends ServerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (args.hasFlag('f')
-				&& !PermissionManager.hasPerm(sender, full.getBukkitPerm())) {
+		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full)) {
 			return;
 		}
-		if (args.hasFlag('a')
-				&& !PermissionManager.hasPerm(sender, animal.getBukkitPerm())) {
+		if (args.hasFlag('a') && !PermissionManager.hasPerm(sender, animal)) {
 			return;
 		}
-		if (args.hasFlag('m')
-				&& !PermissionManager.hasPerm(sender, mob.getBukkitPerm())) {
+		if (args.hasFlag('m') && !PermissionManager.hasPerm(sender, mob)) {
 			return;
 		}
-		if (args.hasFlag('i')
-				&& !PermissionManager.hasPerm(sender, item.getBukkitPerm())) {
+		if (args.hasFlag('i') && !PermissionManager.hasPerm(sender, item)) {
 			return;
 		}
-		if (args.hasFlag('x')
-				&& !PermissionManager.hasPerm(sender, xp.getBukkitPerm())) {
+		if (args.hasFlag('x') && !PermissionManager.hasPerm(sender, xp)) {
 			return;
 		}
-		if (args.hasFlag('n')
-				&& !PermissionManager.hasPerm(sender, npc.getBukkitPerm())) {
+		if (args.hasFlag('n') && !PermissionManager.hasPerm(sender, npc)) {
 			return;
 		}
-		if (args.hasFlag('c')
-				&& !PermissionManager.hasPerm(sender, cart.getBukkitPerm())) {
+		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cart)) {
 			return;
 		}
-		if (args.hasFlag('b')
-				&& !PermissionManager.hasPerm(sender, boat.getBukkitPerm())) {
+		if (args.hasFlag('b') && !PermissionManager.hasPerm(sender, boat)) {
 			return;
 		}
-		if (args.hasFlag('v')
-				&& !PermissionManager.hasPerm(sender, vehicle.getBukkitPerm())) {
+		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle)) {
 			return;
 		}
 		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i')
@@ -224,7 +215,7 @@ public class Memory extends ServerCommand {
 		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp)
 				.addChild(item).addChild(full).addChild(npc).addChild(vehicle)
 				.addChild(cart).addChild(boat);
-		bukkitPerm = child.getBukkitPerm();
+		bukkitPerm = child;
 	}
 
 	private class CheckTicks implements Runnable {
