@@ -55,39 +55,44 @@ public class Search extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
+		String ip = null;
 		if (args.hasFlag('i')) {
-			final String ip = args.getValueFlag('i');
-			if (ip == null || ip.equals("") || ip.length() == 0) {
-				return;
-			}
-			final Player[] onPlayers = ACPluginManager.getServer()
-					.getOnlinePlayers();
-			final List<ACPlayer> exPlayers = PlayerManager.getInstance()
-					.getExistingPlayers();
-			final TreeSet<String> players = new TreeSet<String>();
-			final TreeSet<String> playersOld = new TreeSet<String>();
-			final String on = "[ON] ", off = "[OFF] ";
-			InetAddress ipAdress;
-			for (final Player p : onPlayers) {
-				ipAdress = p.getAddress().getAddress();
-				if (ipAdress != null
-						&& ipAdress.toString().substring(1).equals(ip)) {
-					players.add(on + Utils.getPlayerName(p));
-					playersOld.add(p.getName());
-				}
-			}
-			String ip2;
-			for (final ACPlayer p : exPlayers) {
-				ip2 = p.getInformation("last-ip").getString();
-				if (ip2 != null && ip2.contains(ip)
-						&& !playersOld.contains(p.getName())) {
-					players.add(off + p.getName());
-				}
-			}
-			final String found = Joiner.on(", ").join(players);
-			sender.sendMessage(found);
+			ip = args.getValueFlag('i');
+		} else if (args.hasFlag('p')) {
+			ip = Utils.getACPlayerParam(sender, args, permNode)
+					.getInformation("last-ip").getString();
+		}
+
+		if (ip == null || ip.equals("") || ip.length() == 0) {
 			return;
 		}
+		final Player[] onPlayers = ACPluginManager.getServer()
+				.getOnlinePlayers();
+		final List<ACPlayer> exPlayers = PlayerManager.getInstance()
+				.getExistingPlayers();
+		final TreeSet<String> players = new TreeSet<String>();
+		final TreeSet<String> playersOld = new TreeSet<String>();
+		final String on = "[ON] ", off = "[OFF] ";
+		InetAddress ipAdress;
+		for (final Player p : onPlayers) {
+			ipAdress = p.getAddress().getAddress();
+			if (ipAdress != null && ipAdress.toString().substring(1).equals(ip)) {
+				players.add(on + Utils.getPlayerName(p));
+				playersOld.add(p.getName());
+			}
+		}
+		String ip2;
+		for (final ACPlayer p : exPlayers) {
+			ip2 = p.getInformation("last-ip").getString();
+			if (ip2 != null && ip2.contains(ip)
+					&& !playersOld.contains(p.getName())) {
+				players.add(off + p.getName());
+			}
+		}
+		final String found = Joiner.on(", ").join(players);
+		sender.sendMessage(found);
+		return;
+
 	}
 
 	/*

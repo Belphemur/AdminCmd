@@ -503,28 +503,87 @@ public final class Utils {
 	public static ACPlayer getACPlayer(final CommandSender sender,
 			final CommandArgs args, final String permNode)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUser(sender, args, permNode, 0, false);
+		Player target;
+		try {
+			target = Utils.getUser(sender, args, permNode, 0, false);
+		} catch (final Exception ex) {
+			target = null;
+		}
 		ACPlayer actarget;
 		if (target == null) {
 			if (args.length == 0) {
 				sender.sendMessage("You must type the player name");
 				return null;
 			}
-			actarget = ACPlayer.getPlayer(args.getString(0));
-			if (actarget instanceof EmptyPlayer) {
-				Utils.sI18n(sender, "playerNotFound", "player",
-						actarget.getName());
-				return null;
-			}
-			if (!Utils.checkImmunity(sender, args, 0)) {
-				sI18n(sender, "insufficientLvl");
-				return null;
-			}
+			final String playername = args.getString(0);
+			actarget = getACPlayer(sender, playername);
 		} else {
 			if (!checkImmunity(sender, target)) {
-				return null;
+				throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 			}
 			actarget = ACPlayer.getPlayer(target);
+		}
+		return actarget;
+	}
+
+	/**
+	 * Get the ACPlayer, useful when working with only the AC user informations
+	 * using the -P parameter.
+	 * 
+	 * @param sender
+	 *            sender of the command
+	 * @param args
+	 *            args in the command
+	 * @param permNode
+	 *            permission node to execute the command
+	 * @return null if the ACPlayer can't be get else the ACPlayer
+	 * @throws ActionNotPermitedException
+	 * @throws PlayerNotFound
+	 */
+	public static ACPlayer getACPlayerParam(final CommandSender sender,
+			final CommandArgs args, final String permNode)
+			throws PlayerNotFound, ActionNotPermitedException {
+		Player target;
+		try {
+			target = Utils.getUserParam(sender, args, permNode);
+		} catch (final Exception ex) {
+			target = null;
+		}
+		ACPlayer actarget;
+		if (target == null) {
+			if (args.length == 0) {
+				sender.sendMessage("You must type the player name");
+				return null;
+			}
+			final String playername = args.getValueFlag('P');
+			actarget = getACPlayer(sender, playername);
+		} else {
+			if (!checkImmunity(sender, target)) {
+				throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
+			}
+			actarget = ACPlayer.getPlayer(target);
+		}
+		return actarget;
+	}
+
+	/**
+	 * @param sender
+	 * @param playername
+	 * @return
+	 * @throws PlayerNotFound
+	 */
+	private static ACPlayer getACPlayer(final CommandSender sender,
+			final String playername) throws PlayerNotFound {
+		ACPlayer actarget;
+		actarget = ACPlayer.getPlayer(playername);
+		if (actarget instanceof EmptyPlayer) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("player", playername);
+			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+					sender);
+		}
+		if (!Utils.checkImmunity(sender, actarget)) {
+			throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 		}
 		return actarget;
 	}
