@@ -551,9 +551,9 @@ public final class Utils {
 		}
 		ACPlayer actarget;
 		if (target == null) {
-			if (args.length == 0) {
-				sender.sendMessage("You must type the player name");
-				return null;
+			if (!args.hasFlag('P')) {
+				throw new PlayerNotFound("You must type the player name!",
+						sender);
 			}
 			final String playername = args.getValueFlag('P');
 			actarget = getACPlayer(sender, playername);

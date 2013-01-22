@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
@@ -159,9 +160,14 @@ public class PlayerManager {
 	public List<ACPlayer> getExistingPlayers() {
 		final ArrayList<ACPlayer> list = new ArrayList<ACPlayer>();
 		for (final String name : playerFactory.getExistingPlayers()) {
-			final ACPlayer player = demandACPlayer(name);
-			if (!(player instanceof EmptyPlayer)) {
-				list.add(player);
+			try {
+				final ACPlayer player = demandACPlayer(name);
+				if (!(player instanceof EmptyPlayer)) {
+					list.add(player);
+				}
+			} catch (final Exception e) {
+				DebugLog.INSTANCE.log(Level.WARNING,
+						"Problem with instancing ACPlayer : " + name, e);
 			}
 		}
 		return list;
