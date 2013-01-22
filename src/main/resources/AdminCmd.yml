@@ -471,8 +471,8 @@ acplayerbanlis:
     cmdname: bal_banlist
 
 acplayersearch:
-    command: search <-i ip>
-    description: "Search if different things associated with a player, currenty only ip via -i ip"
+    command: search [-i ip | -p player]
+    description: "Search for player having the same ip as [-i ip] or the player [-p player]"
     plugin: AdminCmd
     permissions: admincmd.player.search
     cmdname: bal_search
