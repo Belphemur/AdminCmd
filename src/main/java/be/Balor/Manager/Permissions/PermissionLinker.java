@@ -107,8 +107,9 @@ public class PermissionLinker {
 	 * @param permNode
 	 * @return
 	 */
-	public PermChild addPermChild(final String permNode) {
-		return addPermChild(permNode, PermissionDefault.OP);
+	@Deprecated
+	public Permission addPermChild(final String permNode) {
+		return addPermChild(permNode, PermissionDefault.OP).getBukkitPerm();
 	}
 
 	/**

@@ -22,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.TextLocale;
@@ -123,9 +124,11 @@ public class Set extends ServerCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.server.set.motd");
-		plugin.getPermissionLinker().addPermChild("admincmd.server.set.news");
-		plugin.getPermissionLinker().addPermChild("admincmd.server.set.rules");
+		final PermParent set = new PermParent("admincmd.server.set.*");
+		plugin.getPermissionLinker().addChildPermParent(set, permParent);
+		set.addChild("admincmd.server.set.motd");
+		set.addChild("admincmd.server.set.news");
+		set.addChild("admincmd.server.set.rules");
 	}
 
 	/*

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Permissions.PermissionLinker;
@@ -73,8 +74,9 @@ public class TerminalCommandManager {
 				toAdd = new WindowsTerminalCommand(cmdName,
 						conf.getString(cmdName + ".exec"),
 						conf.getString(cmdName + ".args"), workingDir);
-				toAdd.setBukkitPerm(perm.addPermChild(
-						"admincmd.server.exec." + cmdName).getBukkitPerm());
+				toAdd.setBukkitPerm(perm
+						.addPermChild("admincmd.server.exec." + cmdName,
+								PermissionDefault.OP).getBukkitPerm());
 				commands.put(cmdName, toAdd);
 
 			}
@@ -83,8 +85,9 @@ public class TerminalCommandManager {
 				toAdd = new UnixTerminalCommand(cmdName, conf.getString(cmdName
 						+ ".exec"), conf.getString(cmdName + ".args"),
 						workingDir);
-				toAdd.setBukkitPerm(perm.addPermChild(
-						"admincmd.server.exec." + cmdName).getBukkitPerm());
+				toAdd.setBukkitPerm(perm
+						.addPermChild("admincmd.server.exec." + cmdName,
+								PermissionDefault.OP).getBukkitPerm());
 				commands.put(cmdName, toAdd);
 			}
 		}

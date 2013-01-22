@@ -508,23 +508,25 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		final PermParent server = new PermParent("admincmd.server.*");
 		permissionLinker.addPermParent(server);
 		final PermParent sExec = new PermParent("admincmd.server.exec.*");
-		final PermParent sSet = new PermParent("admincmd.server.set.*");
 		permissionLinker.addChildPermParent(sExec, server);
-		permissionLinker.addChildPermParent(sSet, server);
 		permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));
 		permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));
 		final PermParent spec = new PermParent("admincmd.spec.*");
 		permissionLinker.addPermParent(spec);
 
 		player.addChild("admincmd.player.bypass");
-		permissionLinker.addPermChild("admincmd.spec.noblacklist");
+		permissionLinker.addPermChild("admincmd.spec.noblacklist",
+				PermissionDefault.OP);
 		player.addChild("admincmd.player.noreset");
-		permissionLinker.addPermChild("admincmd.spec.notprequest");
+		permissionLinker.addPermChild("admincmd.spec.notprequest",
+				PermissionDefault.OP);
 		player.addChild("admincmd.player.noafkkick");
 		final PermParent majorPerm = new PermParent("admincmd.*");
 
-		permissionLinker.addPermChild("admincmd.admin.home");
-		permissionLinker.addPermChild("admincmd.item.infinity");
+		permissionLinker.addPermChild("admincmd.admin.home",
+				PermissionDefault.OP);
+		permissionLinker.addPermChild("admincmd.item.infinity",
+				PermissionDefault.OP);
 		spec.addChild("admincmd.spec.noloss");
 		spec.addChild("admincmd.spec.signedit");
 		spec.addChild("admincmd.spec.ipbroadcast");
@@ -547,7 +549,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			permissionLinker.addPermChild("admincmd.respawn." + group,
 					PermissionDefault.FALSE);
 		}
-		permissionLinker.addPermChild("admincmd.respawn.admin");
+		permissionLinker.addPermChild("admincmd.respawn.admin",
+				PermissionDefault.OP);
 		permissionLinker.setMajorPerm(majorPerm);
 
 	}

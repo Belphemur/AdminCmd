@@ -99,7 +99,7 @@ public class LockServer extends ServerCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		plugin.getPermissionLinker().addPermChild("admincmd.server.lockdown");
+		permParent.addChild("admincmd.server.lockdown");
 		super.registerBukkitPerm();
 	}
 
