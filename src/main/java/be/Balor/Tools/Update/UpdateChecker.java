@@ -26,7 +26,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -82,7 +81,6 @@ public class UpdateChecker {
 	private Document rss = null;
 
 	private final AdminCmdVersion currentVersion;
-	private BukkitTask task;
 	private final Channel channel;
 
 	private AdminCmdVersion rssVersion;
@@ -105,31 +103,18 @@ public class UpdateChecker {
 	 * 
 	 */
 	private void scheduleCheck() {
-		if (channel == Channel.DEV) {
-			task = ACPluginManager.getScheduler().runTaskTimerAsynchronously(
-					ACPluginManager.getCorePlugin(), new Runnable() {
+		ACPluginManager.getScheduler().runTaskTimerAsynchronously(
+				ACPluginManager.getCorePlugin(), new Runnable() {
 
-						@Override
-						public void run() {
-							if (checkForUpdate()) {
-								notifyNewVersion();
-								task.cancel();
-							}
-
+					@Override
+					public void run() {
+						if (checkForUpdate()) {
+							notifyNewVersion();
 						}
-					}, 0, 48 * 24 * 3600 * Utils.secInTick);
-		} else {
-			ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 
-				@Override
-				public void run() {
-					if (checkForUpdate()) {
-						notifyNewVersion();
 					}
+				}, 0, 48 * 24 * 3600 * Utils.secInTick);
 
-				}
-			});
-		}
 	}
 
 	/**
