@@ -36,7 +36,7 @@ public class PermParent extends PermChild {
 	protected final String compareName;
 	private final Map<String, Boolean> children = new HashMap<String, Boolean>();
 	private final Set<PermParent> permParentChildren = new HashSet<PermParent>();
-	private final boolean registered = false;
+	private boolean registered = false;
 
 	public PermParent(final String perm) {
 		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
@@ -103,6 +103,7 @@ public class PermParent extends PermChild {
 				bukkitPerm.getChildren().putAll(children);
 				bukkitPerm.recalculatePermissibles();
 			}
+			registered = true;
 		} finally {
 			DebugLog.endInfo();
 		}
@@ -132,16 +133,6 @@ public class PermParent extends PermChild {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see be.Balor.Manager.Permissions.PermChild#getPermName()
-	 */
-	@Override
-	public String getPermName() {
-		return this.permName;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -150,12 +141,7 @@ public class PermParent extends PermChild {
 		int result = super.hashCode();
 		result = prime * result
 				+ ((compareName == null) ? 0 : compareName.hashCode());
-		result = prime * result
-				+ ((permName == null) ? 0 : permName.hashCode());
-		result = prime
-				* result
-				+ ((permissionDefault == null) ? 0 : permissionDefault
-						.hashCode());
+		result = prime * result + (registered ? 1231 : 1237);
 		return result;
 	}
 
@@ -183,14 +169,7 @@ public class PermParent extends PermChild {
 		} else if (!compareName.equals(other.compareName)) {
 			return false;
 		}
-		if (permName == null) {
-			if (other.permName != null) {
-				return false;
-			}
-		} else if (!permName.equals(other.permName)) {
-			return false;
-		}
-		if (permissionDefault != other.permissionDefault) {
+		if (registered != other.registered) {
 			return false;
 		}
 		return true;
