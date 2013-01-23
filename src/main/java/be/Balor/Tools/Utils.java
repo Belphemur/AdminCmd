@@ -1607,16 +1607,18 @@ public final class Utils {
 	}
 
 	private static void teleport(final Player player, final Location toLocation) {
-		final Object server = MinecraftReflection.getHandle(player.getServer());
-		final Object entityPlayer = MinecraftReflection.getHandle(player);
-		final Object toWorld = MinecraftReflection.getHandle(toLocation
-				.getWorld());
+		try {
+			final Object server = MinecraftReflection.getHandle(player
+					.getServer());
+			final Object entityPlayer = MinecraftReflection.getHandle(player);
+			final Object toWorld = MinecraftReflection.getHandle(toLocation
+					.getWorld());
 
-		// Check if the fromWorld and toWorld are the same.
-		if (player.getWorld().equals(toLocation.getWorld())) {
-			MinecraftReflection.teleportPlayer(player, toLocation);
-		} else {
-			try {
+			// Check if the fromWorld and toWorld are the same.
+			if (player.getWorld().equals(toLocation.getWorld())) {
+				MinecraftReflection.teleportPlayer(player, toLocation);
+			} else {
+
 				final Object activeContainer = FieldUtils.getField(
 						entityPlayer, "activeContainer");
 				final Object defaultContainer = FieldUtils.getField(
@@ -1628,18 +1630,21 @@ public final class Utils {
 							entityPlayer.getClass(), "closeInventory");
 					closeInventory.invoke(entityPlayer);
 				}
-			} catch (final Throwable e) {
-				DebugLog.INSTANCE.log(Level.SEVERE,
-						"Problem when trying to containers of : "
-								+ entityPlayer + " (" + entityPlayer.getClass()
-								+ ")", e);
+
+				final int dimension = FieldUtils.getField(toWorld, "dimension");
+				final MethodHandler moveToWorld = new MethodHandler(
+						server.getClass(), "moveToWorld",
+						entityPlayer.getClass(), int.class, boolean.class,
+						toLocation.getClass());
+				moveToWorld.invoke(server, entityPlayer, dimension, true,
+						toLocation);
 			}
-			final int dimension = FieldUtils.getField(toWorld, "dimension");
-			final MethodHandler moveToWorld = new MethodHandler(
-					server.getClass(), "moveToWorld", entityPlayer.getClass(),
-					int.class, boolean.class, toLocation.getClass());
-			moveToWorld.invoke(server, entityPlayer, dimension, true,
-					toLocation);
+		} catch (final Throwable e) {
+			DebugLog.INSTANCE.log(
+					Level.SEVERE,
+					"Problem when trying to teleport" + player + " ("
+							+ player.getClass() + ")", e);
+			player.teleport(toLocation);
 		}
 
 	}
