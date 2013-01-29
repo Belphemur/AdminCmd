@@ -50,7 +50,7 @@ public class AsUser extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final String playerName = args.getString(1);
+		final String playerName = args.getString(0);
 		final Player target = Bukkit.getPlayer(playerName);
 		if (target == null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
