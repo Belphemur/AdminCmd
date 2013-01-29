@@ -66,6 +66,7 @@ import be.Balor.Manager.Commands.Mob.KillMob;
 import be.Balor.Manager.Commands.Mob.MobLimit;
 import be.Balor.Manager.Commands.Mob.SpawnMob;
 import be.Balor.Manager.Commands.Player.Afk;
+import be.Balor.Manager.Commands.Player.AsUser;
 import be.Balor.Manager.Commands.Player.BanList;
 import be.Balor.Manager.Commands.Player.BanPlayer;
 import be.Balor.Manager.Commands.Player.ClearInventory;
@@ -484,6 +485,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			cmdManager.registerCommand(GroupSpawn.class);
 		}
 		cmdManager.registerCommand(PlayerTime.class);
+		cmdManager.registerCommand(AsUser.class);
 
 		DebugLog.endInfo();
 	}

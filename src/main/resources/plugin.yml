@@ -457,3 +457,7 @@ commands:
     description: set the time for the player
     aliases: [pt,timep]
     usage: /<command> [time] <player> <-f>
+  bal_asuser:
+    description: execute a command as another user
+    aliases: [asuser,au]
+    usage: /<command> [player] [command] [args]
