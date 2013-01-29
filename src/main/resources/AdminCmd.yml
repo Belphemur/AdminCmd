@@ -772,9 +772,17 @@ acserverreloadtxt:
     plugin: AdminCmd
     permissions: admincmd.server.reloadtxt
     cmdname: bal_rtxt
+    
 actimeplayerset:
     command: pt [day|night|dusk|dawn|raw|normal] <player>
     description: "Set the [time] for the player <player> or for yourself if no player given.\n [normal] is used to return to the time of the world."
     plugin: AdminCmd
     permissions: admincmd.time.ptime
     cmdname: bal_ptime
+    
+acplayerexeccmd:
+    command: au [player] [command] [args]
+    description: "Execute the wanted [command] as the wanted [player] with the wanted [arguments]."
+    plugin: AdminCmd
+    permissions: admincmd.player.asuser
+    cmdname: bal_asuser
