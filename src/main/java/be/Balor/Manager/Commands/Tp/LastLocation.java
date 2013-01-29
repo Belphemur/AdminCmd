@@ -51,20 +51,18 @@ public class LastLocation extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
-			final Player player = (Player) sender;
-			Location loc = null;
-			final ACPlayer p = ACPlayer.getPlayer(player.getName());
-			loc = p.getLastLocation();
-			if (loc == null) {
-				Utils.sI18n(sender, "noLastLocation");
-				return;
-			}
-			final Location copyLoc = loc;
-			ACPluginManager.scheduleSyncTask(new TeleportTask(player, copyLoc));
-			Utils.sI18n(sender, "telportSuccess");
-			p.setLastLocation(null);
+		final Player player = Utils.getUserParam(sender, args, permNode);
+		Location loc = null;
+		final ACPlayer target = ACPlayer.getPlayer(player);
+		loc = target.getLastLocation();
+		if (loc == null) {
+			Utils.sI18n(sender, "noLastLocation");
+			return;
 		}
+		ACPluginManager.scheduleSyncTask(new TeleportTask(target.getHandler(),
+				loc));
+		Utils.sI18n(sender, "telportSuccess");
+		target.setLastLocation(null);
 
 	}
 
