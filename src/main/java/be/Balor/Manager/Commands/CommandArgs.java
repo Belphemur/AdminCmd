@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.base.Joiner;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -35,6 +37,7 @@ public class CommandArgs implements Iterable<String> {
 	protected final Map<Character, String> valueFlags = new HashMap<Character, String>();
 	protected final Set<Character> booleanFlags = new HashSet<Character>();
 	public int length;
+	protected final String[] args;
 
 	public CommandArgs(final String args) {
 		this(args.split(" "));
@@ -44,6 +47,7 @@ public class CommandArgs implements Iterable<String> {
 		 *
 		 */
 	public CommandArgs(final String[] args) {
+		this.args = args;
 		final List<Integer> argIndexList = new ArrayList<Integer>(args.length);
 		final List<String> argList = new ArrayList<String>(args.length);
 		for (int i = 0; i < args.length; ++i) {
@@ -55,44 +59,44 @@ public class CommandArgs implements Iterable<String> {
 			argIndexList.add(i);
 
 			switch (arg.charAt(0)) {
-				case '\'' :
-				case '"' :
-					final StringBuilder build = new StringBuilder();
-					final char quotedChar = arg.charAt(0);
+			case '\'':
+			case '"':
+				final StringBuilder build = new StringBuilder();
+				final char quotedChar = arg.charAt(0);
 
-					int endIndex;
-					for (endIndex = i; endIndex < args.length; ++endIndex) {
-						final String arg2 = args[endIndex];
-						if (arg2.isEmpty()) {
-							continue;
-						}
-						if (arg2.charAt(arg2.length() - 1) == quotedChar) {
-							if (endIndex != i) {
-								build.append(' ');
-							}
-							if (endIndex == i && arg2.length() == 1) {
-								continue;
-							}
-							build.append(arg2.substring(endIndex == i ? 1 : 0,
-									arg2.length() - 1));
-							break;
-						} else if (endIndex == i) {
-							build.append(arg2.substring(1));
-						} else {
-							build.append(' ').append(arg2);
-						}
-					}
-
-					if (endIndex < args.length) {
-						arg = build.toString();
-						i = endIndex;
-					}
-
-					// In case there is an empty quoted string
-					if (arg.length() == 0) {
+				int endIndex;
+				for (endIndex = i; endIndex < args.length; ++endIndex) {
+					final String arg2 = args[endIndex];
+					if (arg2.isEmpty()) {
 						continue;
 					}
-					// else raise exception about hanging quotes?
+					if (arg2.charAt(arg2.length() - 1) == quotedChar) {
+						if (endIndex != i) {
+							build.append(' ');
+						}
+						if (endIndex == i && arg2.length() == 1) {
+							continue;
+						}
+						build.append(arg2.substring(endIndex == i ? 1 : 0,
+								arg2.length() - 1));
+						break;
+					} else if (endIndex == i) {
+						build.append(arg2.substring(1));
+					} else {
+						build.append(' ').append(arg2);
+					}
+				}
+
+				if (endIndex < args.length) {
+					arg = build.toString();
+					i = endIndex;
+				}
+
+				// In case there is an empty quoted string
+				if (arg.length() == 0) {
+					continue;
+				}
+				// else raise exception about hanging quotes?
 			}
 			argList.add(arg);
 		}
@@ -225,9 +229,9 @@ public class CommandArgs implements Iterable<String> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(parsedArgs.toArray(new String[]{}))
+		return Arrays.toString(parsedArgs.toArray(new String[] {}))
 				+ " BoolFlags : "
-				+ Arrays.toString(booleanFlags.toArray(new Character[]{}))
+				+ Arrays.toString(booleanFlags.toArray(new Character[] {}))
 				+ " ValFlags : "
 				+ (valueFlags.isEmpty() ? "[]" : "[" + valueFlagsToString()
 						+ "]");
@@ -252,5 +256,20 @@ public class CommandArgs implements Iterable<String> {
 	@Override
 	public Iterator<String> iterator() {
 		return parsedArgs.iterator();
+	}
+
+	public String concatWithout(final int index) {
+		final StringBuffer buffer = new StringBuffer();
+		for (int i = 0; i < args.length; i++) {
+			if (i == index) {
+				continue;
+			}
+			buffer.append(args[i]).append(" ");
+		}
+		return buffer.toString().trim();
+	}
+
+	public String concat() {
+		return Joiner.on(' ').join(args);
 	}
 }

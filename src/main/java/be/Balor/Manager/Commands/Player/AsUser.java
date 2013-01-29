@@ -61,15 +61,11 @@ public class AsUser extends PlayerCommand {
 		if (!Utils.checkImmunity(sender, target)) {
 			throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
 		}
-		final StringBuffer argsBuffer = new StringBuffer();
-		for (int i = 1; i < args.length; i++) {
-			argsBuffer.append(args.getString(i)).append(" ");
-		}
+		final String argsString = args.concatWithout(0);
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
-				Bukkit.getServer().dispatchCommand(target,
-						argsBuffer.toString().trim());
+				Bukkit.getServer().dispatchCommand(target, argsString);
 
 			}
 		});
