@@ -129,6 +129,10 @@ public enum TextLocale {
 				"nb",
 				String.valueOf(p.getServer().getOnlinePlayers().length
 						- InvisibleWorker.getInstance().nbInvisibles()));
+		replace.put("world", p.getWorld().getName());
+		replace.put("x", String.valueOf(p.getLocation().getX()));
+		replace.put("y", String.valueOf(p.getLocation().getY()));
+		replace.put("z", String.valueOf(p.getLocation().getZ()));
 		final Collection<String> list = Utils.getPlayerList(p);
 		String connected = Joiner.on(", ").join(list);
 		if (connected.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
