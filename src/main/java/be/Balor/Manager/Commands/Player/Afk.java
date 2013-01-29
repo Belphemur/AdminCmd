@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Listeners.Events.ACGoAFKEvent.Reason;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
@@ -60,9 +61,10 @@ public class Afk extends PlayerCommand {
 						for (int i = 0; i < args.length; i++) {
 							msg += args.getString(i) + " ";
 						}
-						AFKWorker.getInstance().setAfk(player, msg.trim());
+						AFKWorker.getInstance().setAfk(player, msg.trim(),
+								Reason.DECIDED);
 					} else {
-						AFKWorker.getInstance().setAfk(player);
+						AFKWorker.getInstance().setAfk(player, Reason.DECIDED);
 					}
 				}
 

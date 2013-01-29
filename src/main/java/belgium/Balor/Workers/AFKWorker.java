@@ -19,10 +19,14 @@ package belgium.Balor.Workers;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Listeners.Events.ACGoAFKEvent;
+import be.Balor.Listeners.Events.ACGoAFKEvent.Reason;
+import be.Balor.Listeners.Events.ACReturnedAFKEvent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
@@ -35,7 +39,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- *
+ * 
  */
 final public class AFKWorker {
 	private int afkTime = 60000;
@@ -114,7 +118,7 @@ final public class AFKWorker {
 
 	/**
 	 * Get the number of afk players
-	 *
+	 * 
 	 * @return
 	 */
 	public int nbAfk() {
@@ -123,7 +127,7 @@ final public class AFKWorker {
 
 	/**
 	 * update a player timeStamp (last time the player moved)
-	 *
+	 * 
 	 * @param player
 	 * @param timestamp
 	 */
@@ -133,7 +137,7 @@ final public class AFKWorker {
 
 	/**
 	 * Remove the player from the check
-	 *
+	 * 
 	 * @param player
 	 */
 	public void removePlayer(final Player player) {
@@ -142,21 +146,29 @@ final public class AFKWorker {
 	}
 
 	/**
-	 * Set the player AFK
-	 *
+	 * Set player afk with the wanted reason
+	 * 
 	 * @param p
+	 * @param reason
 	 */
-	public void setAfk(final Player p) {
-		setAfk(p, null);
+	public void setAfk(final Player p, final ACGoAFKEvent.Reason reason) {
+		setAfk(p, null, reason);
 	}
 
 	/**
 	 * Set the player AFK with the given msg
-	 *
+	 * 
 	 * @param p
-	 * @param msg
+	 * @param message
 	 */
-	public void setAfk(final Player p, final String msg) {
+	public void setAfk(final Player p, final String message,
+			final ACGoAFKEvent.Reason reason) {
+		final ACGoAFKEvent event = new ACGoAFKEvent(p, reason, message);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return;
+		}
+		final String msg = event.getMessage();
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
 			String afkString = Utils.I18n("afk", "player",
@@ -177,7 +189,7 @@ final public class AFKWorker {
 
 	/**
 	 * Send the corresponding afk message to the user
-	 *
+	 * 
 	 * @param sender
 	 * @param buddy
 	 */
@@ -202,7 +214,7 @@ final public class AFKWorker {
 
 	/**
 	 * Set the player Online
-	 *
+	 * 
 	 * @param p
 	 */
 	public void setOnline(final Player p) {
@@ -216,10 +228,11 @@ final public class AFKWorker {
 		}
 		p.setSleepingIgnored(false);
 		playersAfk.remove(p);
+		Bukkit.getPluginManager().callEvent(new ACReturnedAFKEvent(p));
 	}
 
 	/**
-	 *
+	 * 
 	 * @param p
 	 * @return if the player is afk
 	 */
@@ -231,7 +244,7 @@ final public class AFKWorker {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -241,7 +254,7 @@ final public class AFKWorker {
 				final Long timeStamp = playerTimeStamp.get(p);
 				if (timeStamp != null && !playersAfk.containsKey(p)
 						&& (now - timeStamp) >= afkTime) {
-					setAfk(p);
+					setAfk(p, Reason.AUTO);
 				}
 			}
 
@@ -253,7 +266,7 @@ final public class AFKWorker {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
@@ -272,7 +285,8 @@ final public class AFKWorker {
 							final HashMap<String, String> replace = new HashMap<String, String>();
 							replace.put("player", Utils.getPlayerName(p));
 							p.kickPlayer(Utils.I18n("afkKick"));
-							final String msg = LocaleHelper.AFK_KICK_BCAST.getLocale(replace);
+							final String msg = LocaleHelper.AFK_KICK_BCAST
+									.getLocale(replace);
 							Utils.broadcastMessage(msg);
 							ACLogger.info(msg);
 							playersAfk.remove(p);
