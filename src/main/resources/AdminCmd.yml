@@ -113,8 +113,8 @@ acitemid:
     cmdname: bal_itemid
 
 acitemenchant:
-    command: enchant <-p player> enchantment lvl
-    description: "Enchant the item in hand with the wanted enchant. If player is defined, set the enchantment for that player."
+    command: enchant <-p player> [enchantments]
+    description: "Enchant the item in hand with the wanted [enchantements] with the form like <enchant:lvl>. If player is defined, set the enchantment for that player."
     plugin: AdminCmd
     permissions: admincmd.item.enchant
     cmdname: bal_enchant
