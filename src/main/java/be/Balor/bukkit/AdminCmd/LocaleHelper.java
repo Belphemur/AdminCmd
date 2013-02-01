@@ -175,7 +175,10 @@ public enum LocaleHelper {
 			+ " does't exist or is already presents on the item."),
 	ENCHANT_CONFLICT("enchantConflict", ChatColor.RED
 			+ "Conflict between 2 enchantments : " + ChatColor.WHITE
-			+ "%e1 and " + ChatColor.GOLD + "%e2");
+			+ "%e1 and " + ChatColor.GOLD + "%e2"),
+	WALK_SPEED_SET("walkspeed", ChatColor.GREEN + "The walkspeed of "
+			+ ChatColor.GOLD + "%player" + ChatColor.GREEN + " is now set to "
+			+ ChatColor.WHITE + "%value");
 
 	private final String key;
 	private final String locale;
