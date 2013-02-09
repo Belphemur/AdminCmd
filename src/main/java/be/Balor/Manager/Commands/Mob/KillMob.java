@@ -28,9 +28,9 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.ComplexLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Golem;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowman;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -151,7 +151,7 @@ public class KillMob extends MobCommand {
 			for (final String type : types) {
 				if (type.equalsIgnoreCase("monsters")) {
 					classes.add(Monster.class);
-					classes.add(Golem.class);
+					classes.add(Snowman.class);
 					classes.add(ComplexLivingEntity.class);
 				} else if (type.equalsIgnoreCase("animals")) {
 					classes.add(Animals.class);
@@ -171,7 +171,7 @@ public class KillMob extends MobCommand {
 			classes.add(Monster.class);
 			classes.add(Animals.class);
 			classes.add(ComplexLivingEntity.class);
-			classes.add(Golem.class);
+			classes.add(Snowman.class);
 		}
 
 		final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(
