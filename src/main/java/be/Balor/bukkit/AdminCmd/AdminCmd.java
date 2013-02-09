@@ -106,6 +106,7 @@ import be.Balor.Manager.Commands.Player.UnBan;
 import be.Balor.Manager.Commands.Player.UnMute;
 import be.Balor.Manager.Commands.Player.UnMuteAll;
 import be.Balor.Manager.Commands.Player.Vulcan;
+import be.Balor.Manager.Commands.Player.WalkSpeed;
 import be.Balor.Manager.Commands.Player.Whois;
 import be.Balor.Manager.Commands.Player.Withdraw;
 import be.Balor.Manager.Commands.Server.Broadcast;
@@ -486,6 +487,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		}
 		cmdManager.registerCommand(PlayerTime.class);
 		cmdManager.registerCommand(AsUser.class);
+		cmdManager.registerCommand(WalkSpeed.class);
 
 		DebugLog.endInfo();
 	}

@@ -461,3 +461,7 @@ commands:
     description: execute a command as another user
     aliases: [asuser,au]
     usage: /<command> [player] [command] [args]
+  bal_walk
+    description: change the walkspeed of the user
+    aliases : [walk,ws]
+    usage: /<command> <player>
