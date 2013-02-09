@@ -78,19 +78,10 @@
 				<filtering>true</filtering>
 				<directory>${basedir}/src/main/resources/</directory>
 				<includes>
-					<include>plugin.yml</include>
-					<include>ReadMe.txt</include>
-					<include>LiesMich.txt</include>
 					<include>**/*.properties</include>
 					<include>items.csv</include>
-					<include>AdminCmd.yml</include>
-					<include>acmotd.yml</include>
-					<include>rules.txt</include>
-					<include>news.txt</include>
-					<include>motd.txt</include>
-					<include>motdNewUser.txt</include>
-					<include>kickMessages.yml</include>
-					<include>default_locale.yml</include>
+					<include>**/*.txt</include>
+					<include>**/*.yml</include>
 				</includes>
 			</resource>
 			<resource>

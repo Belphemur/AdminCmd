@@ -1276,8 +1276,8 @@ public class ACHelper {
 			final Channel channel = ConfigEnum.UPDATE_SRC.getString()
 					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV;
 			new UpdateChecker(channel, coreInstance);
-			final Graph updateChannelGraph = coreInstance.getMetrics().createGraph(
-					"Update Channels");
+			final Graph updateChannelGraph = coreInstance.getMetrics()
+					.createGraph("Update Channels");
 			updateChannelGraph.addPlotter(new UpdateChannelPlotter(channel));
 		}
 	}
@@ -1309,6 +1309,7 @@ public class ACHelper {
 		fManager.getInnerFile("deathMessages.yml");
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("LiesMich.txt", null, true);
+		fManager.getInnerFile("de_DE.yml", "locales", true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
 				+ "AdminCmd", true);
 	}
