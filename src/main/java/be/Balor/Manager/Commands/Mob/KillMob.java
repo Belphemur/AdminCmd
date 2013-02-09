@@ -25,11 +25,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.ComplexLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.Monster;
-import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
@@ -69,7 +69,7 @@ public class KillMob extends MobCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final List<String> types = new ArrayList<String>();
-		Integer range = null;
+		Integer range = 25;
 		if (args.hasFlag('r')) {
 			range = Integer.parseInt(args.getValueFlag('r'));
 			range *= range;
@@ -151,7 +151,8 @@ public class KillMob extends MobCommand {
 			for (final String type : types) {
 				if (type.equalsIgnoreCase("monsters")) {
 					classes.add(Monster.class);
-
+					classes.add(Golem.class);
+					classes.add(ComplexLivingEntity.class);
 				} else if (type.equalsIgnoreCase("animals")) {
 					classes.add(Animals.class);
 				} else {
@@ -166,31 +167,24 @@ public class KillMob extends MobCommand {
 					classes.add(ct.getEntityClass());
 				}
 			}
-		}
-		if (classes.isEmpty()) {
-			for (final World w : worlds) {
-				for (final Entity m : w.getEntities()) {
-					if ((m instanceof HumanEntity) || m instanceof Painting) {
-						continue;
-					}
-					if (killEntity(m, sender, range)) {
-						mobKilled++;
-					}
-
-				}
-			}
 		} else {
-			final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(
-					Entity.class.getClass(), classes.size());
-			for (final World w : worlds) {
-				for (final Entity m : w.getEntitiesByClasses(classes
-						.toArray(array))) {
-					if (killEntity(m, sender, range)) {
-						mobKilled++;
-					}
+			classes.add(Monster.class);
+			classes.add(Animals.class);
+			classes.add(ComplexLivingEntity.class);
+			classes.add(Golem.class);
+		}
+
+		final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(
+				Entity.class.getClass(), classes.size());
+		for (final World w : worlds) {
+			for (final Entity m : w
+					.getEntitiesByClasses(classes.toArray(array))) {
+				if (killEntity(m, sender, range)) {
+					mobKilled++;
 				}
 			}
 		}
+
 		Utils.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
 	}
 
