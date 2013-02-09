@@ -66,7 +66,7 @@ public class KickAllPlayers extends PlayerCommand {
 		}
 		message = message.trim();
 		for (final Player toKick : Utils.getOnlinePlayers()) {
-			if (!toKick.getName().equals(((Player) sender).getName())) {
+			if (!toKick.equals(sender)) {
 				new KickTask(toKick, message).scheduleSync();
 			}
 		}
