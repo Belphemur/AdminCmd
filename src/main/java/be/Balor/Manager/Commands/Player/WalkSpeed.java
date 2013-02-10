@@ -46,7 +46,18 @@ public class WalkSpeed extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Utils.getUserParam(sender, args, permNode);
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("player", Utils.getPlayerName(target));
+		if (args.hasFlag('g')) {
+			replace.put("value", String.valueOf(target.getWalkSpeed()));
+			LocaleHelper.WALK_SPEED_GET.sendLocale(sender, replace);
+			return;
+		}
 		final float speed = args.getFloat(0);
+		if (speed > 1F || speed < -1F) {
+			LocaleHelper.WALK_SPEED_ERROR.sendLocale(sender);
+			return;
+		}
 
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
@@ -54,8 +65,7 @@ public class WalkSpeed extends PlayerCommand {
 				target.setWalkSpeed(speed);
 			}
 		});
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(target));
+
 		replace.put("value", String.valueOf(speed));
 		LocaleHelper.WALK_SPEED_SET.sendLocale(sender, replace);
 		if (!sender.equals(target)) {

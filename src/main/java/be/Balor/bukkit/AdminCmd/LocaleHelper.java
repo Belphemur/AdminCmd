@@ -176,9 +176,16 @@ public enum LocaleHelper {
 	ENCHANT_CONFLICT("enchantConflict", ChatColor.RED
 			+ "Conflict between 2 enchantments : " + ChatColor.WHITE
 			+ "%e1 and " + ChatColor.GOLD + "%e2"),
-	WALK_SPEED_SET("walkspeed", ChatColor.GREEN + "The walkspeed of "
+	WALK_SPEED_SET("walkspeed.success", ChatColor.GREEN + "The walkspeed of "
 			+ ChatColor.GOLD + "%player" + ChatColor.GREEN + " is now set to "
-			+ ChatColor.WHITE + "%value");
+			+ ChatColor.WHITE + "%value"),
+	WALK_SPEED_ERROR(
+			"walkspeed.error",
+			ChatColor.RED
+					+ "The Walkspeed must be between -1 and 1 and could be decimal (0.8545)."),
+	WALK_SPEED_GET("walkspeed.get", ChatColor.YELLOW + "The WalkSpeed of "
+			+ ChatColor.GOLD + "%player " + ChatColor.YELLOW + "is "
+			+ ChatColor.GOLD + "%value");
 
 	private final String key;
 	private final String locale;
