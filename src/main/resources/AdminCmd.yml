@@ -788,8 +788,8 @@ acplayerexeccmd:
     cmdname: bal_asuser
     
 acplayerwalkspeed:
-    command: ws <player> [walkspeed]
-    description: "Change the [walkspeed] of the [player] "
+    command: walk <player> [walkspeed]
+    description: "Change the [walkspeed] of the <player>"
     plugin: AdminCmd
     permissions: admincmd.player.walk
-    cmdname: bal_walk
+    cmdname: bal_walkspeed
