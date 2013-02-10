@@ -45,18 +45,13 @@ public class WalkSpeed extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player target = Utils.getUser(sender, args, permNode);
-		float speed;
-		if (args.length == 1) {
-			speed = args.getFloat(0);
-		} else {
-			speed = args.getFloat(1);
-		}
-		final float speedFinal = speed;
+		final Player target = Utils.getUserParam(sender, args, permNode);
+		final float speed = args.getFloat(0);
+
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 			@Override
 			public void run() {
-				target.setWalkSpeed(speedFinal);
+				target.setWalkSpeed(speed);
 			}
 		});
 		final HashMap<String, String> replace = new HashMap<String, String>();
