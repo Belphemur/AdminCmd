@@ -17,11 +17,16 @@
 package be.Balor.Tools;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +42,8 @@ import com.google.common.base.Joiner;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class MaterialContainer implements Comparable<MaterialContainer> {
+public class MaterialContainer implements Comparable<MaterialContainer>,
+		ConfigurationSerializable {
 	private Material material = null;
 	private short dmg = 0;
 	private int amount = 1;
@@ -114,6 +120,14 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		meta = from.meta;
 	}
 
+	/**
+	 * @return the meta
+	 */
+	public ItemMeta getMeta() {
+		return (meta == null ? meta = Bukkit.getItemFactory().getItemMeta(
+				material) : meta);
+	}
+
 	public MaterialContainer(final String mat) {
 		String[] info = new String[2];
 		if (mat.contains(":")) {
@@ -185,18 +199,35 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 	 */
 	public boolean addEnchantment(final Enchantment enchant, final int lvl)
 			throws EnchantmentConflictException, CantEnchantItemException {
-		if (enchantments.containsKey(enchant)) {
-			return false;
+		try {
+			if (getMeta().hasEnchant(enchant)) {
+				return false;
+			}
+		} catch (final Exception ex) {
+			if (enchantments.containsKey(enchant)) {
+				return false;
+			}
 		}
 		if (!enchant.canEnchantItem(getItemStack())) {
 			throw new CantEnchantItemException(enchant, this.material);
 		}
-		for (final Enchantment e : enchantments.keySet()) {
+		Set<Enchantment> enchants = new HashSet<Enchantment>();
+		try {
+			enchants = getMeta().getEnchants().keySet();
+		} catch (final Exception e) {
+			enchants = enchantments.keySet();
+		}
+		for (final Enchantment e : enchants) {
 			if (e.conflictsWith(enchant)) {
 				throw new EnchantmentConflictException(enchant, e);
 			}
 		}
-		enchantments.put(enchant, lvl);
+		try {
+			getMeta().addEnchant(enchant, lvl, true);
+		} catch (final Exception ex) {
+			enchantments.put(enchant, lvl);
+		}
+
 		return true;
 	}
 
@@ -396,13 +427,100 @@ public class MaterialContainer implements Comparable<MaterialContainer> {
 		case LEATHER_CHESTPLATE:
 		case LEATHER_LEGGINGS:
 		case LEATHER_BOOTS:
-			this.meta = Bukkit.getItemFactory().getItemMeta(material);
-			((LeatherArmorMeta) this.meta).setColor(color);
+			((LeatherArmorMeta) getMeta()).setColor(color);
 			break;
 		default:
 			throw new IllegalArgumentException("This material :" + material
 					+ " can't be modified");
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.bukkit.configuration.serialization.ConfigurationSerializable#serialize
+	 * ()
+	 */
+	@Override
+	public Map<String, Object> serialize() {
+		final Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+		result.put("type", material.name());
+
+		if (this.dmg != 0) {
+			result.put("damage", this.dmg);
+		}
+
+		if (getAmount() != 1) {
+			result.put("amount", getAmount());
+		}
+
+		final ItemMeta meta = this.meta;
+		if (!Bukkit.getItemFactory().equals(meta, null)) {
+			result.put("meta", meta);
+		} else if (!enchantments.isEmpty()) {
+			final Map<String, Integer> convert = new LinkedHashMap<String, Integer>();
+			for (final Entry<Enchantment, Integer> entry : enchantments
+					.entrySet()) {
+				convert.put(entry.getKey().getName(), entry.getValue());
+			}
+			result.put("enchantements", convert);
+		}
+		return result;
+	}
+
+	/**
+	 * Required method for configuration serialization
+	 * 
+	 * @param args
+	 *            map to deserialize
+	 * @return deserialized item stack
+	 * @see ConfigurationSerializable
+	 */
+	public static MaterialContainer deserialize(final Map<String, Object> args) {
+		final Material type = Material.getMaterial((String) args.get("type"));
+		short damage = 0;
+		int amount = 1;
+
+		if (args.containsKey("damage")) {
+			damage = ((Number) args.get("damage")).shortValue();
+		}
+
+		if (args.containsKey("amount")) {
+			amount = (Integer) args.get("amount");
+		}
+
+		final ItemStack result = new ItemStack(type, amount, damage);
+
+		if (args.containsKey("enchantments")) { // Backward compatiblity,
+												// @deprecated
+			final Object raw = args.get("enchantments");
+
+			if (raw instanceof Map) {
+				final Map<?, ?> map = (Map<?, ?>) raw;
+
+				for (final Map.Entry<?, ?> entry : map.entrySet()) {
+					final Enchantment enchantment = Enchantment.getByName(entry
+							.getKey().toString());
+
+					if ((enchantment != null)
+							&& (entry.getValue() instanceof Integer)) {
+						result.addUnsafeEnchantment(enchantment,
+								(Integer) entry.getValue());
+					}
+				}
+			}
+		} else if (args.containsKey("meta")) { // We cannot and will not have
+												// meta when enchantments
+												// (pre-ItemMeta) exist
+			final Object raw = args.get("meta");
+			if (raw instanceof ItemMeta) {
+				result.setItemMeta((ItemMeta) raw);
+			}
+		}
+
+		return new MaterialContainer(result);
 	}
 
 }
