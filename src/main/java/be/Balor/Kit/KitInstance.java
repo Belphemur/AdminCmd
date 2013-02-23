@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Permissions.PermParent;
@@ -27,6 +28,21 @@ public class KitInstance {
 		this.name = name;
 		this.delay = delay;
 		this.items = items;
+		perm.addChild("admincmd.kit." + this.name);
+	}
+
+	/**
+	 * @param name
+	 * @param delay
+	 */
+	public KitInstance(final String name, final int delay, final Player player) {
+		super();
+		this.name = name;
+		this.delay = delay;
+		this.items = new ArrayList<MaterialContainer>();
+		for (final ItemStack item : player.getInventory()) {
+			items.add(new MaterialContainer(item));
+		}
 		perm.addChild("admincmd.kit." + this.name);
 	}
 

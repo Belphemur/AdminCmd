@@ -60,6 +60,25 @@ public class ArmoredKitInstance extends KitInstance {
 
 	}
 
+	/**
+	 * @param name
+	 * @param delay
+	 * @param player
+	 */
+	public ArmoredKitInstance(final String name, final int delay,
+			final Player player) {
+		super(name, delay, player);
+		final PlayerInventory inventory = player.getInventory();
+		this.armor.put(ArmorPart.BOOTS,
+				new MaterialContainer(inventory.getBoots()));
+		this.armor.put(ArmorPart.CHEST,
+				new MaterialContainer(inventory.getChestplate()));
+		this.armor.put(ArmorPart.HEAD,
+				new MaterialContainer(inventory.getHelmet()));
+		this.armor.put(ArmorPart.LEGS,
+				new MaterialContainer(inventory.getLeggings()));
+	}
+
 	public ArmoredKitInstance(final KitInstance kit) {
 		super(kit.name, kit.delay, kit.items);
 	}
