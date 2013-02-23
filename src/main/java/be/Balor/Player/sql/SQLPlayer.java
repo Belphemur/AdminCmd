@@ -41,6 +41,7 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Threads.PrepStmtExecutorTask;
+import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -112,7 +113,10 @@ public class SQLPlayer extends ACPlayer {
 				if (rs.next()) {
 					final String worldName = rs.getString("world");
 					if (worldName != null && !worldName.isEmpty()) {
-						final World world = Bukkit.getWorld(worldName);
+						World world = Bukkit.getWorld(worldName);
+						if (world == null) {
+							world = ACWorld.getWorld(world).getHandle();
+						}
 						if (world != null) {
 							lastLoc = new Location(world, rs.getDouble("x"),
 									rs.getDouble("y"), rs.getDouble("z"),
@@ -138,7 +142,10 @@ public class SQLPlayer extends ACPlayer {
 				}
 				while (rs.next()) {
 					final String worldName = rs.getString("world");
-					final World world = Bukkit.getWorld(worldName);
+					World world = Bukkit.getWorld(worldName);
+					if (world == null) {
+						world = ACWorld.getWorld(world).getHandle();
+					}
 					if (world != null) {
 						homes.put(
 								rs.getString("name"),

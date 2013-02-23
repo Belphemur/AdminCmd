@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -257,7 +258,10 @@ public class FilePlayer extends ACPlayer {
 		if (world == null) {
 			return null;
 		}
-		final World w = ACWorld.getWorld(world).getHandle();
+		World w = Bukkit.getWorld(world);
+		if (w == null) {
+			w = ACWorld.getWorld(world).getHandle();
+		}
 		if (w != null) {
 			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
 					0), node.getDouble("z", 0), Float.parseFloat(node

@@ -110,10 +110,6 @@ public class WorldManager {
 		final String name = world.getName();
 		ACWorld result = worlds.get(name);
 		if (result == null) {
-			final String found = Str.matchString(worlds.keySet(), name);
-			if (found != null) {
-				return worlds.get(found);
-			}
 			result = worldFactory.createWorld(world);
 			addWorld(result);
 			result = worlds.get(name);
