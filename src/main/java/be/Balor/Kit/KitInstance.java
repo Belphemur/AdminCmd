@@ -1,4 +1,4 @@
-package be.Balor.Tools.Files;
+package be.Balor.Kit;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -43,6 +43,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 import au.com.bytecode.opencsv.CSVReader;
+import be.Balor.Kit.ArmoredKitInstance;
+import be.Balor.Kit.KitInstance;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.Ban;
 import be.Balor.Player.BannedIP;
