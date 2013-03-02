@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -81,6 +82,11 @@ public class ArmoredKitInstance extends KitInstance {
 
 	public ArmoredKitInstance(final KitInstance kit) {
 		super(kit.name, kit.delay, kit.items);
+	}
+
+	private ArmoredKitInstance(final KitInstance kit,
+			final Map<Type.ArmorPart, MaterialContainer> armor) {
+		this(kit.name, kit.delay, kit.items, armor);
 	}
 
 	/**
@@ -178,4 +184,31 @@ public class ArmoredKitInstance extends KitInstance {
 		this.color = color;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.Kit.KitInstance#serialize()
+	 */
+	@Override
+	public Map<String, Object> serialize() {
+		final Map<String, Object> serialized = super.serialize();
+		serialized.put("color", color);
+		serialized.put("armor", armor);
+		return serialized;
+	}
+
+	/**
+	 * Required method for configuration serialization
+	 * 
+	 * @param args
+	 *            map to deserialize
+	 * @return deserialized item stack
+	 * @see ConfigurationSerializable
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArmoredKitInstance deserialize(final Map<String, Object> args) {
+		final KitInstance kit = KitInstance.deserialize(args);
+		return new ArmoredKitInstance(kit,
+				(Map<Type.ArmorPart, MaterialContainer>) args.get("armor"));
+	}
 }

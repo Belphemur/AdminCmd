@@ -2,8 +2,11 @@ package be.Balor.Kit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,7 +14,7 @@ import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
-public class KitInstance {
+public class KitInstance implements ConfigurationSerializable {
 
 	protected final String name;
 	protected int delay = 0;
@@ -97,6 +100,48 @@ public class KitInstance {
 	public String toString() {
 		return "KitInstance [name=" + name + ", delay=" + delay + ", items="
 				+ Arrays.toString(items.toArray()) + "]";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.bukkit.configuration.serialization.ConfigurationSerializable#serialize
+	 * ()
+	 */
+	@Override
+	public Map<String, Object> serialize() {
+		final Map<String, Object> serialized = new LinkedHashMap<String, Object>();
+		serialized.put("name", name);
+		serialized.put("delay", delay);
+		serialized.put("items", items);
+		return serialized;
+	}
+
+	/**
+	 * Required method for configuration serialization
+	 * 
+	 * @param args
+	 *            map to deserialize
+	 * @return deserialized item stack
+	 * @see ConfigurationSerializable
+	 */
+	@SuppressWarnings("unchecked")
+	public static KitInstance deserialize(final Map<String, Object> args) {
+		if (!args.containsKey("name")) {
+			return null;
+		}
+		final String name = (String) args.get("name");
+		int delay = 0;
+		List<MaterialContainer> items = new ArrayList<MaterialContainer>();
+		if (args.containsKey("delay")) {
+			delay = (Integer) args.get("delay");
+		}
+		if (args.containsKey("items")) {
+			items = (List<MaterialContainer>) args.get("items");
+		}
+		return new KitInstance(name, delay, items);
+
 	}
 
 }
