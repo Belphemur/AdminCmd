@@ -153,6 +153,16 @@ public enum Type {
 		private final int placeInInventory;
 		private final List<Integer> possibleId = new ArrayList<Integer>();
 		private static final int nbEquipment = 5;
+		private static Map<String, ArmorPart> perName = new HashMap<String, Type.ArmorPart>();
+		static {
+			for (final ArmorPart part : ArmorPart.values()) {
+				perName.put(part.name().toLowerCase(), part);
+			}
+		}
+
+		public static ArmorPart getByName(final String name) {
+			return perName.get(name.toLowerCase());
+		}
 
 		/**
 		 * @param placeInInventory

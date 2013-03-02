@@ -22,6 +22,7 @@ import static org.junit.Assert.assertFalse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -61,11 +62,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import be.Balor.Kit.ArmoredKitInstance;
 import be.Balor.Kit.KitInstance;
 import be.Balor.Manager.Exceptions.CantEnchantItemException;
 import be.Balor.Manager.Exceptions.EnchantmentConflictException;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.MaterialContainer;
+import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 
 import com.avaje.ebean.config.ServerConfig;
@@ -650,6 +653,28 @@ public class ExtendedConfigurationTest {
 		conf.save();
 		conf.reload();
 		assertEquals(kit, conf.get("serial.kit"));
+	}
+
+	@Test
+	public void serializeAmoredKitInstanceTest() throws IOException,
+			InvalidConfigurationException, EnchantmentConflictException,
+			CantEnchantItemException {
+		final ExtendedConfiguration conf = ExtendedConfiguration
+				.loadConfiguration(file);
+		final MaterialContainer mat = new MaterialContainer(new ItemStack(
+				Material.DIAMOND_AXE, 5));
+		final List<MaterialContainer> mats = new ArrayList<MaterialContainer>();
+		mats.add(mat);
+		final Map<ArmorPart, MaterialContainer> armor = new HashMap<ArmorPart, MaterialContainer>();
+		armor.put(ArmorPart.BOOTS, new MaterialContainer(new ItemStack(
+				Material.LEATHER_BOOTS)));
+		final ArmoredKitInstance kit = new ArmoredKitInstance("Test", 0, mats,
+				armor);
+		kit.setColor("blue");
+		conf.set("serial.armKit", kit);
+		conf.save();
+		conf.reload();
+		assertEquals(kit, conf.get("serial.armKit"));
 	}
 
 	@Test

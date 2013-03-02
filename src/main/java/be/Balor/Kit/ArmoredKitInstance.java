@@ -17,7 +17,9 @@
 package be.Balor.Kit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -198,6 +200,11 @@ public class ArmoredKitInstance extends KitInstance {
 	public Map<String, Object> serialize() {
 		final Map<String, Object> serialized = super.serialize();
 		serialized.put("color", color);
+		final Map<String, MaterialContainer> armor = new LinkedHashMap<String, MaterialContainer>();
+		for (final Entry<ArmorPart, MaterialContainer> armPart : this.armor
+				.entrySet()) {
+			armor.put(armPart.getKey().name().toLowerCase(), armPart.getValue());
+		}
 		serialized.put("armor", armor);
 		return serialized;
 	}
@@ -210,11 +217,21 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @return deserialized item stack
 	 * @see ConfigurationSerializable
 	 */
-	@SuppressWarnings("unchecked")
 	public static ArmoredKitInstance deserialize(final Map<String, Object> args) {
 		final KitInstance kit = KitInstance.deserialize(args);
-		return new ArmoredKitInstance(kit,
-				(Map<Type.ArmorPart, MaterialContainer>) args.get("armor"));
+		final Map<Type.ArmorPart, MaterialContainer> armor = new LinkedHashMap<Type.ArmorPart, MaterialContainer>();
+		final Object armorObj = args.get("armor");
+		if (armorObj instanceof Map<?, ?>) {
+			for (final Entry<?, ?> entry : ((Map<?, ?>) armorObj).entrySet()) {
+				armor.put(ArmorPart.getByName(entry.getKey().toString()),
+						(MaterialContainer) entry.getValue());
+			}
+		}
+		final ArmoredKitInstance armKit = new ArmoredKitInstance(kit, armor);
+		if (args.containsKey("color")) {
+			armKit.setColor(args.get("color").toString());
+		}
+		return armKit;
 	}
 
 	/*
@@ -263,6 +280,19 @@ public class ArmoredKitInstance extends KitInstance {
 			return false;
 		}
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format(
+				"ArmoredKitInstance [color=%s, armor=%s, toString()=%s]",
+				color, Arrays.toString(armor.entrySet().toArray()),
+				super.toString());
 	}
 
 }
