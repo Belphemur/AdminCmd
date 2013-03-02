@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,8 +23,11 @@ public class KitInstance implements ConfigurationSerializable {
 	private static final PermParent perm;
 	static {
 		perm = new PermParent("admincmd.kit.*");
-		ACPluginManager.getCorePlugin().getPermissionLinker()
-				.addPermParent(perm);
+		if (ACPluginManager.getCorePlugin() != null) {
+			ACPluginManager.getCorePlugin().getPermissionLinker()
+					.addPermParent(perm);
+		}
+		ConfigurationSerialization.registerClass(KitInstance.class);
 	}
 
 	public KitInstance(final String name, final int delay,
@@ -142,6 +146,58 @@ public class KitInstance implements ConfigurationSerializable {
 		}
 		return new KitInstance(name, delay, items);
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + delay;
+		result = prime * result + ((items == null) ? 0 : items.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final KitInstance other = (KitInstance) obj;
+		if (delay != other.delay) {
+			return false;
+		}
+		if (items == null) {
+			if (other.items != null) {
+				return false;
+			}
+		} else if (!items.equals(other.items)) {
+			return false;
+		}
+		if (name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!name.equals(other.name)) {
+			return false;
+		}
+		return true;
 	}
 
 }

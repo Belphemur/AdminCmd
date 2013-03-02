@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -41,6 +42,10 @@ public class ArmoredKitInstance extends KitInstance {
 	private String color;
 	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 			Type.ArmorPart.class);
+
+	static {
+		ConfigurationSerialization.registerClass(ArmoredKitInstance.class);
+	}
 
 	/**
 	 * @param name
@@ -211,4 +216,53 @@ public class ArmoredKitInstance extends KitInstance {
 		return new ArmoredKitInstance(kit,
 				(Map<Type.ArmorPart, MaterialContainer>) args.get("armor"));
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((armor == null) ? 0 : armor.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ArmoredKitInstance other = (ArmoredKitInstance) obj;
+		if (armor == null) {
+			if (other.armor != null) {
+				return false;
+			}
+		} else if (!armor.equals(other.armor)) {
+			return false;
+		}
+		if (color == null) {
+			if (other.color != null) {
+				return false;
+			}
+		} else if (!color.equals(other.color)) {
+			return false;
+		}
+		return true;
+	}
+
 }

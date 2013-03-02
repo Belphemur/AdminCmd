@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -71,6 +72,7 @@ public class MaterialContainer implements Comparable<MaterialContainer>,
 		for (final Enchantment enchant : Enchantment.values()) {
 			ENCHANT_LIST.put(enchant.getName().toLowerCase(), enchant);
 		}
+		ConfigurationSerialization.registerClass(MaterialContainer.class);
 	}
 
 	/**
