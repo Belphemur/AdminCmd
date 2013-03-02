@@ -31,6 +31,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -43,7 +44,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.craftbukkit.inventory.CraftItemFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.help.HelpMap;
@@ -52,6 +52,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -426,7 +427,60 @@ public class ExtendedConfigurationTest {
 
 			@Override
 			public ItemFactory getItemFactory() {
-				return CraftItemFactory.instance();
+				return new ItemFactory() {
+
+					@Override
+					public boolean isApplicable(final ItemMeta meta,
+							final Material material)
+							throws IllegalArgumentException {
+						// TODO Auto-generated method stub
+						return true;
+					}
+
+					@Override
+					public boolean isApplicable(final ItemMeta meta,
+							final ItemStack stack)
+							throws IllegalArgumentException {
+						// TODO Auto-generated method stub
+						return true;
+					}
+
+					@Override
+					public ItemMeta getItemMeta(final Material material) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public Color getDefaultLeatherColor() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public boolean equals(final ItemMeta meta1,
+							final ItemMeta meta2)
+							throws IllegalArgumentException {
+						// TODO Auto-generated method stub
+						return true;
+					}
+
+					@Override
+					public ItemMeta asMetaFor(final ItemMeta meta,
+							final Material material)
+							throws IllegalArgumentException {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public ItemMeta asMetaFor(final ItemMeta meta,
+							final ItemStack stack)
+							throws IllegalArgumentException {
+						// TODO Auto-generated method stub
+						return null;
+					}
+				};
 			}
 
 			@Override
@@ -610,8 +664,6 @@ public class ExtendedConfigurationTest {
 		conf.add("test", "blah");
 		conf.createSection("yatta").set("test", "blah");
 		conf.save();
-		getClass().getClassLoader().loadClass(
-				"net.minecraft.server.Enchantment");
 
 	}
 
@@ -656,7 +708,7 @@ public class ExtendedConfigurationTest {
 	}
 
 	@Test
-	public void serializeAmoredKitInstanceTest() throws IOException,
+	public void serializeArmoredKitInstanceTest() throws IOException,
 			InvalidConfigurationException, EnchantmentConflictException,
 			CantEnchantItemException {
 		final ExtendedConfiguration conf = ExtendedConfiguration
