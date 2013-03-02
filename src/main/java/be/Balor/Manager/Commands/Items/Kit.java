@@ -69,7 +69,6 @@ public class Kit extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		// which material?
 		Player target;
 		if (args.length == 0) {
 			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance()
@@ -87,8 +86,7 @@ public class Kit extends ItemCommand {
 		if (target == null) {
 			return;
 		}
-		if (!PermissionManager.hasPerm(sender,
-				"admincmd.kit." + args.getString(0))) {
+		if (!kit.canUse(sender)) {
 			return;
 		}
 		final ACPlayer actarget = ACPlayer.getPlayer(target);

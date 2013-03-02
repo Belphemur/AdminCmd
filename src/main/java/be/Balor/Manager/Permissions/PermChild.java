@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -49,6 +50,10 @@ public class PermChild {
 		} finally {
 			DebugLog.endInfo();
 		}
+	}
+
+	public boolean hasPermission(final CommandSender player) {
+		return PermissionManager.hasPerm(player, this);
 	}
 
 	/*

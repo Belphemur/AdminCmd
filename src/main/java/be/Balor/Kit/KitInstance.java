@@ -6,11 +6,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -20,6 +22,7 @@ public class KitInstance implements ConfigurationSerializable {
 	protected final String name;
 	protected int delay = 0;
 	protected final List<MaterialContainer> items;
+	private final PermChild permission;
 	private static final PermParent perm;
 	static {
 		perm = new PermParent("admincmd.kit.*");
@@ -35,7 +38,8 @@ public class KitInstance implements ConfigurationSerializable {
 		this.name = name;
 		this.delay = delay;
 		this.items = items;
-		perm.addChild("admincmd.kit." + this.name);
+		permission = new PermChild("admincmd.kit." + this.name);
+		perm.addChild(permission);
 	}
 
 	/**
@@ -50,7 +54,18 @@ public class KitInstance implements ConfigurationSerializable {
 		for (final ItemStack item : player.getInventory()) {
 			items.add(new MaterialContainer(item));
 		}
-		perm.addChild("admincmd.kit." + this.name);
+		permission = new PermChild("admincmd.kit." + this.name);
+		perm.addChild(permission);
+	}
+
+	/**
+	 * Check if the sender have the permission to use the kit.
+	 * 
+	 * @param sender
+	 * @return
+	 */
+	public boolean canUse(final CommandSender sender) {
+		return permission.hasPermission(sender);
 	}
 
 	/**
