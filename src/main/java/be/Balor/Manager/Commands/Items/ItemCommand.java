@@ -32,4 +32,15 @@ public abstract class ItemCommand extends CoreCommand {
 				"admincmd.item.*");
 	}
 
+	/**
+	 * @param string
+	 * @param string2
+	 */
+	public ItemCommand(final String cmd, final String permission) {
+		this();
+		this.cmdName = cmd;
+		this.permNode = permission;
+
+	}
+
 }

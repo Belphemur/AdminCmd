@@ -681,11 +681,37 @@ public class FileManager implements DataManager {
 
 		}
 		checkParents(result, kitParents);
-
-		/*
-		 * if (convert) try { kits.save(); } catch (IOException e) { }
-		 */
+		loadDynamicKits(kits, result);
 		return result;
+	}
+
+	/**
+	 * @param kits
+	 * @param result
+	 */
+	private void loadDynamicKits(final ExtendedConfiguration kits,
+			final Map<String, KitInstance> result) {
+
+		final ConfigurationSection kitNodes = kits
+				.getConfigurationSection("dynKits");
+		for (final String kitName : kitNodes.getKeys(false)) {
+			result.put(kitName, (KitInstance) kitNodes.get(kitName));
+		}
+	}
+
+	/**
+	 * Save a Dynamic kit in the kit file.
+	 * 
+	 * @param kit
+	 *            to be saved
+	 */
+	public void saveDynamicKit(final KitInstance kit) {
+		final ExtendedConfiguration kits = getYml("kits");
+		kits.set("dynKits." + kit.getName(), kit);
+		try {
+			kits.save();
+		} catch (final IOException e) {
+		}
 	}
 
 	/**

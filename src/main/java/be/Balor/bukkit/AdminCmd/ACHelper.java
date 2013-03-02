@@ -1765,4 +1765,14 @@ public class ACHelper {
 		}
 
 	}
+
+	/**
+	 * Save a kit dynamically, replace any old one if it was existing.
+	 * 
+	 * @param kit
+	 */
+	public void saveDynamicKit(final KitInstance kit) {
+		kits.put(kit.getName(), kit);
+		fManager.saveDynamicKit(kit);
+	}
 }
