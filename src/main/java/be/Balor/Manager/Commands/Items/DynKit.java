@@ -16,12 +16,20 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
-import org.bukkit.command.CommandSender;
+import java.util.HashMap;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import be.Balor.Kit.ArmoredKitInstance;
+import be.Balor.Kit.KitInstance;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
+import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACHelper;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Antoine
@@ -48,8 +56,35 @@ public class DynKit extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		// TODO Auto-generated method stub
+		if (!Utils.isPlayer(sender)) {
+			return;
+		}
 
+		final String kitName = args.getString(0);
+		final KitInstance kit = ACHelper.getInstance().getKit(kitName);
+		if (kit != null && !replacePerm.hasPermission(sender)) {
+			LocaleHelper.REPLACE_KIT_NOT_PERM.sendLocale(sender);
+			return;
+		}
+		KitInstance dynKit;
+		boolean armoredKit = false;
+		int delay = 0;
+		try {
+			delay = args.getInt(1);
+		} catch (final Exception e) {
+		}
+		if (args.hasFlag('a')) {
+			dynKit = new ArmoredKitInstance(kitName, delay, (Player) sender);
+			armoredKit = true;
+		} else {
+			dynKit = new KitInstance(kitName, delay, (Player) sender);
+		}
+		ACHelper.getInstance().saveDynamicKit(dynKit);
+		final HashMap<String, String> replace = new HashMap<String, String>();
+		replace.put("type", armoredKit ? LocaleHelper.ARMORED_KIT.getLocale()
+				: LocaleHelper.NORMAL_KIT.getLocale());
+		replace.put("kit", dynKit.getName());
+		LocaleHelper.SUCCESS_DYN_KIT.sendLocale(sender, replace);
 	}
 
 	/*

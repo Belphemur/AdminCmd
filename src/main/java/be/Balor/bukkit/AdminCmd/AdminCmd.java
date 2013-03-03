@@ -50,6 +50,7 @@ import be.Balor.Manager.Commands.Items.AddAlias;
 import be.Balor.Manager.Commands.Items.AddBlackList;
 import be.Balor.Manager.Commands.Items.Coloring;
 import be.Balor.Manager.Commands.Items.Drop;
+import be.Balor.Manager.Commands.Items.DynKit;
 import be.Balor.Manager.Commands.Items.Enchant;
 import be.Balor.Manager.Commands.Items.GetItemId;
 import be.Balor.Manager.Commands.Items.Give;
@@ -488,7 +489,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(PlayerTime.class);
 		cmdManager.registerCommand(AsUser.class);
 		cmdManager.registerCommand(WalkSpeed.class);
-
+		cmdManager.registerCommand(DynKit.class);
 		DebugLog.endInfo();
 	}
 

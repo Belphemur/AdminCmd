@@ -185,7 +185,15 @@ public enum LocaleHelper {
 					+ "The Walkspeed must be between -1 and 1 and could be decimal (0.8545)."),
 	WALK_SPEED_GET("walkspeed.get", ChatColor.YELLOW + "The WalkSpeed of "
 			+ ChatColor.GOLD + "%player " + ChatColor.YELLOW + "is "
-			+ ChatColor.GOLD + "%value");
+			+ ChatColor.GOLD + "%value"),
+	REPLACE_KIT_NOT_PERM("kit.notPermReplace", ChatColor.RED
+			+ "You don't have the permission to replace an existing kit."),
+	KIT("kit.kitKeyword", "Kit"),
+	ARMORED_KIT("kit.armored", ChatColor.GOLD + "Armored #kit.kitKeyword#"),
+	NORMAL_KIT("kit.normal", ChatColor.GOLD + "Normal #kit.kitKeyword#"),
+	SUCCESS_DYN_KIT("kit.successDynKit", ChatColor.GREEN + "The %type"
+			+ ChatColor.GREEN + " named " + ChatColor.GOLD + "%kit"
+			+ ChatColor.GREEN + " has been successfully created.");
 
 	private final String key;
 	private final String locale;
