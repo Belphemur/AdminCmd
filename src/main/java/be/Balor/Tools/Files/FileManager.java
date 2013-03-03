@@ -694,6 +694,9 @@ public class FileManager implements DataManager {
 
 		final ConfigurationSection kitNodes = kits
 				.getConfigurationSection("dynKits");
+		if (kitNodes == null) {
+			return;
+		}
 		for (final String kitName : kitNodes.getKeys(false)) {
 			result.put(kitName, (KitInstance) kitNodes.get(kitName));
 		}
