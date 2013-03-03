@@ -793,3 +793,10 @@ acplayerwalkspeed:
     plugin: AdminCmd
     permissions: admincmd.player.walk
     cmdname: bal_walkspeed
+    
+acitemdynamickit:
+    command: dk [kitName] <delay> <-a>
+    description: "Create a new kit using the inventory of the player with the [kitName] and the wanted <delay>.\n If <-a> is used, it'll create an Armored Kit (taking also the armor of the player)."
+    plugin: AdminCmd
+    permissions: admincmd.item.dynkit
+    cmdname: bal_dynkit
