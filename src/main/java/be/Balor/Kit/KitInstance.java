@@ -52,6 +52,9 @@ public class KitInstance implements ConfigurationSerializable {
 		this.delay = delay;
 		this.items = new ArrayList<MaterialContainer>();
 		for (final ItemStack item : player.getInventory()) {
+			if (item == null) {
+				continue;
+			}
 			items.add(new MaterialContainer(item));
 		}
 		permission = new PermChild("admincmd.kit." + this.name);
