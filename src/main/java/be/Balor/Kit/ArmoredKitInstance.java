@@ -228,8 +228,9 @@ public class ArmoredKitInstance extends KitInstance {
 			}
 		}
 		final ArmoredKitInstance armKit = new ArmoredKitInstance(kit, armor);
-		if (args.containsKey("color")) {
-			armKit.setColor(args.get("color").toString());
+		final Object color = args.get("color");
+		if (color != null) {
+			armKit.setColor(color.toString());
 		}
 		return armKit;
 	}

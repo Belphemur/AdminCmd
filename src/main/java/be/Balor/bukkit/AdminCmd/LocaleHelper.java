@@ -188,9 +188,8 @@ public enum LocaleHelper {
 			+ ChatColor.GOLD + "%value"),
 	REPLACE_KIT_NOT_PERM("kit.notPermReplace", ChatColor.RED
 			+ "You don't have the permission to replace an existing kit."),
-	KIT("kit.kitKeyword", "Kit"),
-	ARMORED_KIT("kit.armored", ChatColor.GOLD + "Armored #kit.kitKeyword#"),
-	NORMAL_KIT("kit.normal", ChatColor.GOLD + "Normal #kit.kitKeyword#"),
+	ARMORED_KIT("kit.armored", ChatColor.GOLD + "Armored Kit"),
+	NORMAL_KIT("kit.normal", ChatColor.GOLD + "Normal Kit"),
 	SUCCESS_DYN_KIT("kit.successDynKit", ChatColor.GREEN + "The %type"
 			+ ChatColor.GREEN + " named " + ChatColor.GOLD + "%kit"
 			+ ChatColor.GREEN + " has been successfully created.");
