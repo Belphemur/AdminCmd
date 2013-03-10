@@ -467,5 +467,5 @@ commands:
     usage: /<command> <player>
   bal_dynkit:
     description: Create a kit dynamically using the inventory of the player
-    aliases : [dkit,ckit,dk]
+    aliases : [dkit,ckit,dk,dynkit]
     usage: /<command> <kitName> <delay>
