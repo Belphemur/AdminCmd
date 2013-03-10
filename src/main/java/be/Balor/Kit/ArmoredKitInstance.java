@@ -77,14 +77,26 @@ public class ArmoredKitInstance extends KitInstance {
 			final Player player) {
 		super(name, delay, player);
 		final PlayerInventory inventory = player.getInventory();
-		this.armor.put(ArmorPart.BOOTS,
-				new MaterialContainer(inventory.getBoots()));
-		this.armor.put(ArmorPart.CHEST,
-				new MaterialContainer(inventory.getChestplate()));
-		this.armor.put(ArmorPart.HEAD,
-				new MaterialContainer(inventory.getHelmet()));
-		this.armor.put(ArmorPart.LEGS,
-				new MaterialContainer(inventory.getLeggings()));
+		ItemStack boots = inventory.getBoots();
+		if (boots != null) {
+			this.armor.put(ArmorPart.BOOTS,
+					new MaterialContainer(boots));
+		}
+		ItemStack chestplate = inventory.getChestplate();
+		if (chestplate != null) {
+			this.armor.put(ArmorPart.CHEST,
+					new MaterialContainer(chestplate));
+		}
+		ItemStack helmet = inventory.getHelmet();
+		if (helmet != null) {
+			this.armor.put(ArmorPart.HEAD,
+					new MaterialContainer(helmet));
+		}
+		ItemStack leggings = inventory.getLeggings();
+		if (leggings != null) {
+			this.armor.put(ArmorPart.LEGS,
+					new MaterialContainer(leggings));
+		}
 	}
 
 	public ArmoredKitInstance(final KitInstance kit) {
