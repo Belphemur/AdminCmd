@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * This file is part of AdminCmd.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * AdminCmd is free software: you can redistribute it and/or modify<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * it under the terms of the GNU General Public License as published by<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * the Free Software Foundation, either version 3 of the License, or<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * (at your option) any later version.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * AdminCmd is distributed in the hope that it will be useful,<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * but WITHOUT ANY WARRANTY; without even the implied warranty of<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * GNU General Public License for more details.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * You should have received a copy of the GNU General Public License<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * along with AdminCmd.  If not, see &lt;http://www.gnu.org/licenses/&gt;.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> ************************************************************************/<a name="line.16"></a>
+<span class="sourceLineNo">017</span>package be.Balor.Manager.Commands.Player;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.util.Map;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.util.Map.Entry;<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.bukkit.ChatColor;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.bukkit.GameMode;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.bukkit.command.CommandSender;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.bukkit.entity.Player;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>import be.Balor.Manager.Commands.CommandArgs;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import be.Balor.Manager.Exceptions.PlayerNotFound;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import be.Balor.Manager.Exceptions.WorldNotLoaded;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import be.Balor.Manager.Permissions.ActionNotPermitedException;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import be.Balor.Manager.Permissions.PermissionManager;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import be.Balor.Player.ACPlayer;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import be.Balor.Player.IBan;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import be.Balor.Player.ITempBan;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import be.Balor.Tools.Type;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import be.Balor.Tools.Utils;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import be.Balor.World.ACWorld;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import be.Balor.bukkit.AdminCmd.ACHelper;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import be.Balor.bukkit.AdminCmd.ConfigEnum;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import be.Balor.bukkit.AdminCmd.LocaleHelper;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import belgium.Balor.Workers.InvisibleWorker;<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>/**<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * @author Balor (aka Antoine Aflalo)<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * <a name="line.46"></a>
+<span class="sourceLineNo">047</span> */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>public class Whois extends PlayerCommand {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        /**<a name="line.49"></a>
+<span class="sourceLineNo">050</span>         *<a name="line.50"></a>
+<span class="sourceLineNo">051</span>         */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        public Whois() {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                super("bal_whois", "admincmd.player.whois");<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                other = true;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>        /*<a name="line.57"></a>
+<span class="sourceLineNo">058</span>         * (non-Javadoc)<a name="line.58"></a>
+<span class="sourceLineNo">059</span>         * <a name="line.59"></a>
+<span class="sourceLineNo">060</span>         * @see be.Balor.Manager.Commands.CoreCommand#execute(org.bukkit.command.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>         * CommandSender, be.Balor.Manager.Commands.CommandArgs)<a name="line.61"></a>
+<span class="sourceLineNo">062</span>         */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        @Override<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        public void execute(final CommandSender sender, final CommandArgs args)<a name="line.64"></a>
+<span class="sourceLineNo">065</span>                        throws ActionNotPermitedException, PlayerNotFound {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                if (args.hasFlag('w')) {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                        ACWorld w;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                        try {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                                if (args.length &gt;= 1) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                                        w = ACWorld.getWorld(args.getString(0));<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                                } else if (Utils.isPlayer(sender)) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                                        w = ACWorld<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                                                        .getWorld(((Player) sender).getWorld().getName());<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                                } else {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                                        return;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                                }<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                        } catch (final WorldNotLoaded e) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                                Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                                return;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                        }<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                        sender.sendMessage(ChatColor.GREEN<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                                        + ACMinecraftFontWidthCalculator.strPadCenterChat(<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                                                        ChatColor.AQUA + " " + w.getName() + " "<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                                                                        + ChatColor.GREEN, '='));<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                        for (final Entry&lt;String, String&gt; power : w.getInformationsList()<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                                        .entrySet()) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                                String line = ChatColor.GOLD + power.getKey() + ChatColor.WHITE<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                                                + " : ";<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                                final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth<a name="line.89"></a>
+<span class="sourceLineNo">090</span>                                                - ACMinecraftFontWidthCalculator.getStringWidth(line);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                                line += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                                                ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                                sender.sendMessage(line);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                        }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                        return;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                final ACPlayer actarget = Utils.getACPlayer(sender, args, permNode);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                if (actarget == null) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                        return;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                }<a name="line.100"></a>
+<span class="sourceLineNo">101</span>                sender.sendMessage(ChatColor.AQUA<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                                + ACMinecraftFontWidthCalculator.strPadCenterChat(<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                                                ChatColor.DARK_GREEN<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                                                                + " "<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                                                                + (actarget.isOnline()<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                                                                                ? Utils.getPlayerName(<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                                                                                                actarget.getHandler(), sender)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                                                                                : actarget.getName()) + " "<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                                                                + ChatColor.AQUA, '='));<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                // Login<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                String loginDate = ChatColor.GOLD + "Last Login" + ChatColor.WHITE<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                                + " : ";<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                final int logSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(loginDate);<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                loginDate += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                                ChatColor.GREEN<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                                                + Utils.replaceDateAndTimeFormat(actarget,<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                                                                Type.Whois.LOGIN), logSizeRemaining, ' ');<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                sender.sendMessage(loginDate);<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>                // Logout<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                String logoutDate = ChatColor.GOLD + "Last Quit" + ChatColor.WHITE<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                                + " : ";<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                final int logoutSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(logoutDate);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                logoutDate += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                                ChatColor.GREEN<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                                                + Utils.replaceDateAndTimeFormat(actarget,<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                                                                Type.Whois.LOGOUT), logoutSizeRemaining, ' ');<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                sender.sendMessage(logoutDate);<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>                // Presentation<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                String presentation = ChatColor.GOLD + "Presentation" + ChatColor.WHITE<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                                + " : ";<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                final int presSizeRemaining = ACMinecraftFontWidthCalculator.chatwidth<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(presentation);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                presentation += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                                ChatColor.GREEN + actarget.getPresentation(),<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                                presSizeRemaining, ' ');<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                sender.sendMessage(presentation);<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>                // Played<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                final long total = actarget.getCurrentPlayedTime();<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                final Map&lt;String, String&gt; replace = Utils.playedTime(<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                                actarget.getName(), total);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                String played = ChatColor.GOLD + "Time Played" + ChatColor.WHITE<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                                + " : ";<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(played);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                played += ACMinecraftFontWidthCalculator.strPadLeftChat(ChatColor.GREEN<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                                + Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                sender.sendMessage(played);<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                // Banned<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                final IBan ban = ACHelper.getInstance().getBan(actarget.getName());<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                if (ban != null) {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                        String banned = ChatColor.GOLD + "Banned" + ChatColor.WHITE + " : ";<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                        final int banSizeRem = ACMinecraftFontWidthCalculator.chatwidth<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                                        - ACMinecraftFontWidthCalculator.getStringWidth(banned);<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                        banned += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                                        ChatColor.GREEN<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                                                        + (ban instanceof ITempBan ? Utils<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                                                                        .replaceDateAndTimeFormat(((ITempBan) ban)<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                                                                                        .getEndBan()) : "Permanent"),<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                                        banSizeRem, ' ');<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                        sender.sendMessage(banned);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                }<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                // Powers<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                for (final Entry&lt;String, String&gt; power : actarget.getPowersString()<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                                .entrySet()) {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                        final Type powerType = Type.matchType(power.getKey());<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                        if (powerType == Type.INVISIBLE) {<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                                continue;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                        }<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                        String line = ChatColor.GOLD + powerType.display()<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                                        + ChatColor.WHITE + " : ";<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                        final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                                        - ACMinecraftFontWidthCalculator.getStringWidth(line);<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                        line += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                                        ChatColor.GREEN + power.getValue(), sizeRemaining, ' ');<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                        sender.sendMessage(line);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                }<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                // Invisible<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                String line = ChatColor.GOLD + "invisible" + ChatColor.WHITE + " : ";<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(line);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                line += ACMinecraftFontWidthCalculator<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                                .strPadLeftChat(<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                                                ChatColor.GREEN<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                                                                + String.valueOf((InvisibleWorker.getInstance()<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                                                                                .hasInvisiblePowers(<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                                                                                                actarget.getHandler()) &amp;&amp; PermissionManager<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                                                                                .hasPerm(sender,<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                                                                                                "admincmd.invisible.cansee",<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                                                                                                false))), sizeRemaining, ' ');<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                sender.sendMessage(line);<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>                // Immunity Level<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                final int level = actarget.getInformation("immunityLvl").getInt(<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                                ConfigEnum.DIMMUNITY.getInt());<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                String immuLvl = ChatColor.GOLD + "Immunity Level" + ChatColor.WHITE<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                                + " : ";<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                strSizeRem = ACMinecraftFontWidthCalculator.chatwidth<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(immuLvl);<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                immuLvl += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                                ChatColor.GREEN + String.valueOf(level), strSizeRem, ' ');<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                sender.sendMessage(immuLvl);<a name="line.206"></a>
+<span class="sourceLineNo">207</span><a name="line.207"></a>
+<span class="sourceLineNo">208</span>                // GameMode<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                String gameMode = ChatColor.GREEN + "Current GameMode: "<a name="line.209"></a>
+<span class="sourceLineNo">210</span>                                + ChatColor.GOLD;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>                String currentMode = "";<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                if (actarget.isOnline()) {<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                        if (actarget.getHandler().getGameMode() == GameMode.CREATIVE) {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                                currentMode = "Creative";<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                        } else {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                                currentMode = "Survival";<a name="line.216"></a>
+<span class="sourceLineNo">217</span>                        }<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                } else {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                        currentMode = actarget.getInformation("gameMode").getString();<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                        if (currentMode == null) {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                                currentMode = LocaleHelper.UNKNOWN.getLocale();<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                        }<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                }<a name="line.223"></a>
+<span class="sourceLineNo">224</span><a name="line.224"></a>
+<span class="sourceLineNo">225</span>                strSizeRem = ACMinecraftFontWidthCalculator.chatwidth<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                                - ACMinecraftFontWidthCalculator.getStringWidth(gameMode);<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                gameMode += ACMinecraftFontWidthCalculator.strPadLeftChat(<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                                ChatColor.GREEN + String.valueOf(currentMode), strSizeRem, ' ');<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                sender.sendMessage(gameMode);<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        }<a name="line.230"></a>
+<span class="sourceLineNo">231</span><a name="line.231"></a>
+<span class="sourceLineNo">232</span>        /*<a name="line.232"></a>
+<span class="sourceLineNo">233</span>         * (non-Javadoc)<a name="line.233"></a>
+<span class="sourceLineNo">234</span>         * <a name="line.234"></a>
+<span class="sourceLineNo">235</span>         * @see be.Balor.Manager.Commands.CoreCommand#argsCheck(java.lang.String[])<a name="line.235"></a>
+<span class="sourceLineNo">236</span>         */<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        @Override<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        public boolean argsCheck(final String... args) {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                return args != null;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>        }<a name="line.240"></a>
+<span class="sourceLineNo">241</span><a name="line.241"></a>
+<span class="sourceLineNo">242</span>}<a name="line.242"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

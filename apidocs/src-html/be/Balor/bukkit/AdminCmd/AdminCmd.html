@@ -1,0 +1,1158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package be.Balor.bukkit.AdminCmd;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.io.IOException;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.util.logging.Level;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import org.bukkit.ChatColor;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.bukkit.World;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import org.bukkit.permissions.PermissionDefault;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import org.bukkit.plugin.PluginDescriptionFile;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import org.bukkit.plugin.PluginManager;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>import be.Balor.Listeners.ACBlockListener;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import be.Balor.Listeners.ACChatListener;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import be.Balor.Listeners.ACEntityListener;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import be.Balor.Listeners.ACPlayerListener;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import be.Balor.Listeners.ACPluginListener;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import be.Balor.Listeners.ACWeatherListener;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import be.Balor.Listeners.Commands.ACBanListener;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import be.Balor.Listeners.Commands.ACEggListener;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import be.Balor.Listeners.Commands.ACFireballListener;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import be.Balor.Listeners.Commands.ACFlyListener;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import be.Balor.Listeners.Commands.ACFoodListener;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import be.Balor.Listeners.Commands.ACFrozenPlayerListener;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import be.Balor.Listeners.Commands.ACGodListener;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import be.Balor.Listeners.Commands.ACLockedServerListener;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import be.Balor.Listeners.Commands.ACOpenInvListener;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>import be.Balor.Listeners.Commands.ACSuperBreaker;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import be.Balor.Listeners.Commands.ACTeleportBackListener;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import be.Balor.Listeners.Commands.ACThorListener;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import be.Balor.Listeners.Commands.ACTimePausedListener;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import be.Balor.Listeners.Commands.ACTpAtSeeListener;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import be.Balor.Listeners.Commands.ACVulcanListener;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import be.Balor.Listeners.Features.ACColorSignListener;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import be.Balor.Listeners.Features.ACCreatureSpawnListener;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import be.Balor.Listeners.Features.ACDeathListener;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import be.Balor.Listeners.Features.ACIpCheckListener;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import be.Balor.Listeners.Features.ACNoDropListener;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import be.Balor.Listeners.Features.ACPowerOffListener;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>import be.Balor.Listeners.Features.ACResetPowerListener;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>import be.Balor.Listeners.Features.ACRespawnWorldFeature;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import be.Balor.Listeners.Features.ACSignEditListener;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>import be.Balor.Listeners.Features.ACSuperBlacklistListener;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>import be.Balor.Manager.CommandManager;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>import be.Balor.Manager.LocaleManager;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>import be.Balor.Manager.Commands.Home.DeleteHome;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import be.Balor.Manager.Commands.Home.Home;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>import be.Balor.Manager.Commands.Home.ListHomes;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>import be.Balor.Manager.Commands.Home.SetHome;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>import be.Balor.Manager.Commands.Items.AddAlias;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>import be.Balor.Manager.Commands.Items.AddBlackList;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>import be.Balor.Manager.Commands.Items.Coloring;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>import be.Balor.Manager.Commands.Items.Drop;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>import be.Balor.Manager.Commands.Items.DynKit;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>import be.Balor.Manager.Commands.Items.Enchant;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>import be.Balor.Manager.Commands.Items.GetItemId;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>import be.Balor.Manager.Commands.Items.Give;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>import be.Balor.Manager.Commands.Items.Kit;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>import be.Balor.Manager.Commands.Items.More;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>import be.Balor.Manager.Commands.Items.MoreAll;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>import be.Balor.Manager.Commands.Items.RemoveAlias;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>import be.Balor.Manager.Commands.Items.RemoveBlackList;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>import be.Balor.Manager.Commands.Items.Repair;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>import be.Balor.Manager.Commands.Items.RepairAll;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>import be.Balor.Manager.Commands.Mob.ChangeMobSpawner;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>import be.Balor.Manager.Commands.Mob.EggSpawner;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>import be.Balor.Manager.Commands.Mob.KillMob;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>import be.Balor.Manager.Commands.Mob.MobLimit;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>import be.Balor.Manager.Commands.Mob.SpawnMob;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>import be.Balor.Manager.Commands.Player.Afk;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>import be.Balor.Manager.Commands.Player.AsUser;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>import be.Balor.Manager.Commands.Player.BanList;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>import be.Balor.Manager.Commands.Player.BanPlayer;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>import be.Balor.Manager.Commands.Player.ClearInventory;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>import be.Balor.Manager.Commands.Player.Eternal;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>import be.Balor.Manager.Commands.Player.Experience;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>import be.Balor.Manager.Commands.Player.FakeQuit;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>import be.Balor.Manager.Commands.Player.Feed;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>import be.Balor.Manager.Commands.Player.Fireball;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>import be.Balor.Manager.Commands.Player.Fly;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>import be.Balor.Manager.Commands.Player.Freeze;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>import be.Balor.Manager.Commands.Player.GameModeSwitch;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>import be.Balor.Manager.Commands.Player.God;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>import be.Balor.Manager.Commands.Player.Heal;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>import be.Balor.Manager.Commands.Player.Invisible;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>import be.Balor.Manager.Commands.Player.Ip;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>import be.Balor.Manager.Commands.Player.KickAllPlayers;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>import be.Balor.Manager.Commands.Player.KickPlayer;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>import be.Balor.Manager.Commands.Player.Kill;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>import be.Balor.Manager.Commands.Player.Mute;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>import be.Balor.Manager.Commands.Player.MuteList;<a name="line.90"></a>
+<span class="sourceLineNo">091</span>import be.Balor.Manager.Commands.Player.NoDrop;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>import be.Balor.Manager.Commands.Player.NoPickup;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>import be.Balor.Manager.Commands.Player.OpenInventory;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>import be.Balor.Manager.Commands.Player.Played;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>import be.Balor.Manager.Commands.Player.PlayerList;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>import be.Balor.Manager.Commands.Player.PlayerLocation;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>import be.Balor.Manager.Commands.Player.Potion;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>import be.Balor.Manager.Commands.Player.Presentation;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>import be.Balor.Manager.Commands.Player.PrivateMessage;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>import be.Balor.Manager.Commands.Player.Quit;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>import be.Balor.Manager.Commands.Player.Reply;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>import be.Balor.Manager.Commands.Player.Roll;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>import be.Balor.Manager.Commands.Player.Search;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>import be.Balor.Manager.Commands.Player.SpyMsg;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>import be.Balor.Manager.Commands.Player.SuperBreaker;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>import be.Balor.Manager.Commands.Player.UnBan;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>import be.Balor.Manager.Commands.Player.UnMute;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>import be.Balor.Manager.Commands.Player.UnMuteAll;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>import be.Balor.Manager.Commands.Player.Vulcan;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>import be.Balor.Manager.Commands.Player.WalkSpeed;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>import be.Balor.Manager.Commands.Player.Whois;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>import be.Balor.Manager.Commands.Player.Withdraw;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>import be.Balor.Manager.Commands.Server.Broadcast;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>import be.Balor.Manager.Commands.Server.Execution;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>import be.Balor.Manager.Commands.Server.Extinguish;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>import be.Balor.Manager.Commands.Server.Help;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>import be.Balor.Manager.Commands.Server.ListValues;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>import be.Balor.Manager.Commands.Server.LockServer;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>import be.Balor.Manager.Commands.Server.MOTD;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>import be.Balor.Manager.Commands.Server.Memory;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>import be.Balor.Manager.Commands.Server.News;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>import be.Balor.Manager.Commands.Server.Reload;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>import be.Balor.Manager.Commands.Server.ReloadAll;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>import be.Balor.Manager.Commands.Server.ReloadTxt;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>import be.Balor.Manager.Commands.Server.RepeatCmd;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>import be.Balor.Manager.Commands.Server.ReplaceBlock;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>import be.Balor.Manager.Commands.Server.Rules;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>import be.Balor.Manager.Commands.Server.Set;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>import be.Balor.Manager.Commands.Server.StopServer;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>import be.Balor.Manager.Commands.Server.Undo;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>import be.Balor.Manager.Commands.Server.Uptime;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>import be.Balor.Manager.Commands.Server.Version;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>import be.Balor.Manager.Commands.Server.WorldDifficulty;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>import be.Balor.Manager.Commands.Spawn.GroupSpawn;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>import be.Balor.Manager.Commands.Spawn.SetGroupSpawn;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>import be.Balor.Manager.Commands.Spawn.SetSpawn;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>import be.Balor.Manager.Commands.Spawn.Spawn;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>import be.Balor.Manager.Commands.Time.Day;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>import be.Balor.Manager.Commands.Time.PlayerTime;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>import be.Balor.Manager.Commands.Time.SetTime;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>import be.Balor.Manager.Commands.Tp.LastLocation;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>import be.Balor.Manager.Commands.Tp.TpAll;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>import be.Balor.Manager.Commands.Tp.TpAtSee;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>import be.Balor.Manager.Commands.Tp.TpHere;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>import be.Balor.Manager.Commands.Tp.TpLoc;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>import be.Balor.Manager.Commands.Tp.TpPlayerToPlayer;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>import be.Balor.Manager.Commands.Tp.TpTo;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>import be.Balor.Manager.Commands.Tp.TpToggle;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>import be.Balor.Manager.Commands.Tp.TpWorld;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>import be.Balor.Manager.Commands.Warp.AddWarp;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>import be.Balor.Manager.Commands.Warp.RemoveWarp;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>import be.Balor.Manager.Commands.Warp.TpToWarp;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>import be.Balor.Manager.Commands.Warp.WarpList;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>import be.Balor.Manager.Commands.Weather.ClearSky;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>import be.Balor.Manager.Commands.Weather.FreezeWeather;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>import be.Balor.Manager.Commands.Weather.Rain;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>import be.Balor.Manager.Commands.Weather.Storm;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>import be.Balor.Manager.Commands.Weather.Strike;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>import be.Balor.Manager.Commands.Weather.Thor;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>import be.Balor.Manager.Permissions.PermChild;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>import be.Balor.Manager.Permissions.PermParent;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>import be.Balor.Manager.Terminal.TerminalCommandManager;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>import be.Balor.OpenInv.InventoryManager;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>import be.Balor.Player.ACPlayer;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>import be.Balor.Player.PlayerManager;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>import be.Balor.Tools.Utils;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>import be.Balor.Tools.Configuration.File.ExtendedConfiguration;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>import be.Balor.Tools.Debug.ACLogger;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>import be.Balor.Tools.Debug.DebugLog;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>import be.Balor.Tools.Egg.EggTypeClassLoader;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>import be.Balor.Tools.Help.HelpLister;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>import be.Balor.Tools.Metrics.Metrics;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>import belgium.Balor.Workers.AFKWorker;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>import belgium.Balor.Workers.InvisibleWorker;<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>/**<a name="line.176"></a>
+<span class="sourceLineNo">177</span> * AdminCmd for Bukkit (fork of PlgEssentials)<a name="line.177"></a>
+<span class="sourceLineNo">178</span> * <a name="line.178"></a>
+<span class="sourceLineNo">179</span> * @authors Plague, Balor, Lathanael<a name="line.179"></a>
+<span class="sourceLineNo">180</span> */<a name="line.180"></a>
+<span class="sourceLineNo">181</span>public final class AdminCmd extends AbstractAdminCmdPlugin {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        private ACHelper worker;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        private Metrics metrics;<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>        /**<a name="line.185"></a>
+<span class="sourceLineNo">186</span>         * @return the metrics<a name="line.186"></a>
+<span class="sourceLineNo">187</span>         */<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        public Metrics getMetrics() {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                return metrics;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>        @Override<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        public void onDisable() {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                final PluginDescriptionFile pdfFile = this.getDescription();<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                getServer().getScheduler().cancelTasks(this);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                for (final ACPlayer p : PlayerManager.getInstance()<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                                .getOnlineACPlayers()) {<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                        PlayerManager.getInstance().setOffline(p);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                }<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                ACPluginManager.getInstance().stopChildrenPlugins();<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                CommandManager.getInstance().stopAllExecutorThreads();<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                worker = null;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                ACHelper.killInstance();<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                InvisibleWorker.killInstance();<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                AFKWorker.killInstance();<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                CommandManager.killInstance();<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                HelpLister.killInstance();<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                DebugLog.stopLogging();<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                System.gc();<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>                ACLogger.info("Plugin Disabled. (version " + pdfFile.getVersion() + ")");<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        }<a name="line.212"></a>
+<span class="sourceLineNo">213</span><a name="line.213"></a>
+<span class="sourceLineNo">214</span>        @Override<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        public void onEnable() {<a name="line.215"></a>
+<span class="sourceLineNo">216</span><a name="line.216"></a>
+<span class="sourceLineNo">217</span>                ExtendedConfiguration.setClassLoader(this.getClassLoader());<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                DebugLog.setFile(getDataFolder().getPath());<a name="line.218"></a>
+<span class="sourceLineNo">219</span><a name="line.219"></a>
+<span class="sourceLineNo">220</span>                setMetrics();<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>                final PluginDescriptionFile pdfFile = this.getDescription();<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                DebugLog.INSTANCE.info("Plugin Version : " + pdfFile.getVersion());<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                final PluginManager pm = getServer().getPluginManager();<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                ACLogger.info("Plugin Enabled. (version " + pdfFile.getVersion() + ")");<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                pm.registerEvents(new ACPluginListener(), this);<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                worker = ACHelper.getInstance();<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                worker.setCoreInstance(this);<a name="line.228"></a>
+<span class="sourceLineNo">229</span><a name="line.229"></a>
+<span class="sourceLineNo">230</span>                worker.loadInfos();<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                super.onEnable();<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                TerminalCommandManager.getInstance().setPerm(this);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                pm.registerEvents(new ACBlockListener(), this);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                pm.registerEvents(new ACEntityListener(), this);<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                pm.registerEvents(new ACPlayerListener(), this);<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                pm.registerEvents(new ACWeatherListener(), this);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                checkModulableFeatures(pm);<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                System.gc();<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>        /**<a name="line.241"></a>
+<span class="sourceLineNo">242</span>         * <a name="line.242"></a>
+<span class="sourceLineNo">243</span>         */<a name="line.243"></a>
+<span class="sourceLineNo">244</span>        private void setMetrics() {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>                try {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                        metrics = new Metrics(this);<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                } catch (final IOException e) {<a name="line.247"></a>
+<span class="sourceLineNo">248</span>                        DebugLog.INSTANCE.log(Level.SEVERE, "Stats problem", e);<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                }<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                ACPluginManager.setMetrics(metrics);<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>                metrics.addCustomData(new Metrics.Plotter() {<a name="line.252"></a>
+<span class="sourceLineNo">253</span>                        @Override<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                        public String getColumnName() {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>                                return "Total Banned Players";<a name="line.255"></a>
+<span class="sourceLineNo">256</span>                        }<a name="line.256"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>                        @Override<a name="line.258"></a>
+<span class="sourceLineNo">259</span>                        public int getValue() {<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                                return worker.countBannedPlayers();<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                        }<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                });<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                metrics.addCustomData(new Metrics.Plotter() {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>                        @Override<a name="line.264"></a>
+<span class="sourceLineNo">265</span>                        public String getColumnName() {<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                                return "Total Kits";<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                        }<a name="line.267"></a>
+<span class="sourceLineNo">268</span><a name="line.268"></a>
+<span class="sourceLineNo">269</span>                        @Override<a name="line.269"></a>
+<span class="sourceLineNo">270</span>                        public int getValue() {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>                                return worker.getNbKit();<a name="line.271"></a>
+<span class="sourceLineNo">272</span>                        }<a name="line.272"></a>
+<span class="sourceLineNo">273</span>                });<a name="line.273"></a>
+<span class="sourceLineNo">274</span>                metrics.addCustomData(new Metrics.Plotter() {<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                        @Override<a name="line.275"></a>
+<span class="sourceLineNo">276</span>                        public String getColumnName() {<a name="line.276"></a>
+<span class="sourceLineNo">277</span>                                return "Total Blacklisted Items";<a name="line.277"></a>
+<span class="sourceLineNo">278</span>                        }<a name="line.278"></a>
+<span class="sourceLineNo">279</span><a name="line.279"></a>
+<span class="sourceLineNo">280</span>                        @Override<a name="line.280"></a>
+<span class="sourceLineNo">281</span>                        public int getValue() {<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                                return worker.countBlackListedItems();<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                        }<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                });<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                metrics.addCustomData(new Metrics.Plotter() {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                        @Override<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                        public String getColumnName() {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                                return "Total Invisible Players";<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                        }<a name="line.289"></a>
+<span class="sourceLineNo">290</span><a name="line.290"></a>
+<span class="sourceLineNo">291</span>                        @Override<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                        public int getValue() {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                                return InvisibleWorker.getInstance().nbInvisibles();<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                        }<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                });<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                metrics.addCustomData(new Metrics.Plotter() {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                        @Override<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                        public String getColumnName() {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                                return "Total Afk Players";<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                        }<a name="line.300"></a>
+<span class="sourceLineNo">301</span><a name="line.301"></a>
+<span class="sourceLineNo">302</span>                        @Override<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                        public int getValue() {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                                return AFKWorker.getInstance().nbAfk();<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                        }<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                });<a name="line.306"></a>
+<span class="sourceLineNo">307</span>                getServer().getScheduler().runTaskLaterAsynchronously(this,<a name="line.307"></a>
+<span class="sourceLineNo">308</span>                                new Runnable() {<a name="line.308"></a>
+<span class="sourceLineNo">309</span><a name="line.309"></a>
+<span class="sourceLineNo">310</span>                                        @Override<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                                        public void run() {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                                                metrics.start();<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                                                DebugLog.INSTANCE.info("Stats started");<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                                        }<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                                }, 30 * Utils.secInTick);<a name="line.315"></a>
+<span class="sourceLineNo">316</span>        }<a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>        @Override<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        public void registerCmds() {<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                final PluginManager pm = getServer().getPluginManager();<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                boolean banCommands = false;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                boolean lockCommand = false;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>                final CommandManager cmdManager = CommandManager.getInstance();<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                DebugLog.beginInfo("Register all Commands");<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                cmdManager.registerCommand(Day.class);<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                cmdManager.registerCommand(Repair.class);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                cmdManager.registerCommand(RepairAll.class);<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                cmdManager.registerCommand(More.class);<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                cmdManager.registerCommand(PlayerList.class);<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                cmdManager.registerCommand(PlayerLocation.class);<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                if (cmdManager.registerCommand(God.class)) {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                        pm.registerEvents(new ACGodListener(), this);<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                }<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                if (cmdManager.registerCommand(Thor.class)) {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                        pm.registerEvents(new ACThorListener(), this);<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                }<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                cmdManager.registerCommand(Kill.class);<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                cmdManager.registerCommand(Heal.class);<a name="line.338"></a>
+<span class="sourceLineNo">339</span>                cmdManager.registerCommand(ClearSky.class);<a name="line.339"></a>
+<span class="sourceLineNo">340</span>                cmdManager.registerCommand(Storm.class);<a name="line.340"></a>
+<span class="sourceLineNo">341</span>                cmdManager.registerCommand(SetSpawn.class);<a name="line.341"></a>
+<span class="sourceLineNo">342</span>                cmdManager.registerCommand(Spawn.class);<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                cmdManager.registerCommand(Memory.class);<a name="line.343"></a>
+<span class="sourceLineNo">344</span>                if (cmdManager.registerCommand(SetTime.class)) {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>                        pm.registerEvents(new ACTimePausedListener(), this);<a name="line.345"></a>
+<span class="sourceLineNo">346</span>                }<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                cmdManager.registerCommand(ClearInventory.class);<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                cmdManager.registerCommand(Give.class);<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                cmdManager.registerCommand(AddBlackList.class);<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                cmdManager.registerCommand(RemoveBlackList.class);<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                cmdManager.registerCommand(TpHere.class);<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                cmdManager.registerCommand(TpTo.class);<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                cmdManager.registerCommand(Coloring.class);<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                cmdManager.registerCommand(Strike.class);<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                cmdManager.registerCommand(RemoveAlias.class);<a name="line.355"></a>
+<span class="sourceLineNo">356</span>                cmdManager.registerCommand(SpawnMob.class);<a name="line.356"></a>
+<span class="sourceLineNo">357</span><a name="line.357"></a>
+<span class="sourceLineNo">358</span>                cmdManager.registerCommand(KickPlayer.class);<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                cmdManager.registerCommand(PrivateMessage.class);<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                cmdManager.registerCommand(AddAlias.class);<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                cmdManager.registerCommand(TpPlayerToPlayer.class);<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                cmdManager.registerCommand(TpLoc.class);<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                cmdManager.registerCommand(KickAllPlayers.class);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>                if (cmdManager.registerCommand(Vulcan.class)) {<a name="line.364"></a>
+<span class="sourceLineNo">365</span>                        pm.registerEvents(new ACVulcanListener(), this);<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                }<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                cmdManager.registerCommand(Drop.class);<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                cmdManager.registerCommand(Invisible.class);<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                cmdManager.registerCommand(SpyMsg.class);<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                if (cmdManager.registerCommand(Fireball.class)) {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                        pm.registerEvents(new ACFireballListener(), this);<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                }<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                cmdManager.registerCommand(Home.class);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                cmdManager.registerCommand(SetHome.class);<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                cmdManager.registerCommand(AddWarp.class);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                cmdManager.registerCommand(RemoveWarp.class);<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                cmdManager.registerCommand(TpToWarp.class);<a name="line.377"></a>
+<span class="sourceLineNo">378</span>                cmdManager.registerCommand(WarpList.class);<a name="line.378"></a>
+<span class="sourceLineNo">379</span>                cmdManager.registerCommand(Ip.class);<a name="line.379"></a>
+<span class="sourceLineNo">380</span>                if (cmdManager.registerCommand(BanPlayer.class)) {<a name="line.380"></a>
+<span class="sourceLineNo">381</span>                        banCommands = true;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>                }<a name="line.382"></a>
+<span class="sourceLineNo">383</span>                if (cmdManager.registerCommand(UnBan.class)) {<a name="line.383"></a>
+<span class="sourceLineNo">384</span>                        banCommands = true;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>                }<a name="line.385"></a>
+<span class="sourceLineNo">386</span>                if (banCommands) {<a name="line.386"></a>
+<span class="sourceLineNo">387</span>                        pm.registerEvents(new ACBanListener(), this);<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                }<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                cmdManager.registerCommand(KillMob.class);<a name="line.389"></a>
+<span class="sourceLineNo">390</span>                if (cmdManager.registerCommand(Fly.class)) {<a name="line.390"></a>
+<span class="sourceLineNo">391</span>                        pm.registerEvents(new ACFlyListener(), this);<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                }<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                cmdManager.registerCommand(DeleteHome.class);<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                cmdManager.registerCommand(ListHomes.class);<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                if (cmdManager.registerCommand(Freeze.class)) {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                        pm.registerEvents(new ACFrozenPlayerListener(), this);<a name="line.396"></a>
+<span class="sourceLineNo">397</span>                }<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                cmdManager.registerCommand(Mute.class);<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                cmdManager.registerCommand(UnMute.class);<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                if (cmdManager.registerCommand(MobLimit.class)) {<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                        pm.registerEvents(new ACCreatureSpawnListener(), this);<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                }<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                cmdManager.registerCommand(NoPickup.class);<a name="line.403"></a>
+<span class="sourceLineNo">404</span>                cmdManager.registerCommand(FreezeWeather.class);<a name="line.404"></a>
+<span class="sourceLineNo">405</span>                cmdManager.registerCommand(MOTD.class);<a name="line.405"></a>
+<span class="sourceLineNo">406</span>                cmdManager.registerCommand(Execution.class);<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                cmdManager.registerCommand(News.class);<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                cmdManager.registerCommand(Rain.class);<a name="line.408"></a>
+<span class="sourceLineNo">409</span>                cmdManager.registerCommand(Roll.class);<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                cmdManager.registerCommand(Extinguish.class);<a name="line.410"></a>
+<span class="sourceLineNo">411</span>                cmdManager.registerCommand(Reload.class);<a name="line.411"></a>
+<span class="sourceLineNo">412</span>                cmdManager.registerCommand(ReplaceBlock.class);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>                cmdManager.registerCommand(Undo.class);<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                cmdManager.registerCommand(ReloadAll.class);<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                cmdManager.registerCommand(RepeatCmd.class);<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                cmdManager.registerCommand(Afk.class);<a name="line.416"></a>
+<span class="sourceLineNo">417</span>                cmdManager.registerCommand(MoreAll.class);<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                cmdManager.registerCommand(TpToggle.class);<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                if (cmdManager.registerCommand(TpAtSee.class)) {<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                        pm.registerEvents(new ACTpAtSeeListener(), this);<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                }<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                cmdManager.registerCommand(Uptime.class);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                cmdManager.registerCommand(Kit.class);<a name="line.423"></a>
+<span class="sourceLineNo">424</span>                cmdManager.registerCommand(Version.class);<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                cmdManager.registerCommand(ListValues.class);<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                if (cmdManager.registerCommand(LastLocation.class)) {<a name="line.426"></a>
+<span class="sourceLineNo">427</span>                        pm.registerEvents(new ACTeleportBackListener(), this);<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                }<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                if (cmdManager.registerCommand(SuperBreaker.class)) {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                        pm.registerEvents(new ACSuperBreaker(), this);<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                }<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                cmdManager.registerCommand(Help.class);<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                cmdManager.registerCommand(Played.class);<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                if (cmdManager.registerCommand(LockServer.class)) {<a name="line.434"></a>
+<span class="sourceLineNo">435</span>                        lockCommand = true;<a name="line.435"></a>
+<span class="sourceLineNo">436</span>                }<a name="line.436"></a>
+<span class="sourceLineNo">437</span>                cmdManager.registerCommand(Set.class);<a name="line.437"></a>
+<span class="sourceLineNo">438</span>                cmdManager.registerCommand(Rules.class);<a name="line.438"></a>
+<span class="sourceLineNo">439</span>                if (cmdManager.registerCommand(Eternal.class)) {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                        pm.registerEvents(new ACFoodListener(), this);<a name="line.440"></a>
+<span class="sourceLineNo">441</span>                }<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                cmdManager.registerCommand(FakeQuit.class);<a name="line.442"></a>
+<span class="sourceLineNo">443</span>                cmdManager.registerCommand(Feed.class);<a name="line.443"></a>
+<span class="sourceLineNo">444</span>                cmdManager.registerCommand(GameModeSwitch.class);<a name="line.444"></a>
+<span class="sourceLineNo">445</span>                cmdManager.registerCommand(Whois.class);<a name="line.445"></a>
+<span class="sourceLineNo">446</span>                cmdManager.registerCommand(ChangeMobSpawner.class);<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                cmdManager.registerCommand(Reply.class);<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                cmdManager.registerCommand(WorldDifficulty.class);<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                cmdManager.registerCommand(Presentation.class);<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                cmdManager.registerCommand(Experience.class);<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                cmdManager.registerCommand(Broadcast.class);<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                if (cmdManager.registerCommand(StopServer.class)) {<a name="line.452"></a>
+<span class="sourceLineNo">453</span>                        lockCommand = true;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>                }<a name="line.454"></a>
+<span class="sourceLineNo">455</span>                if (lockCommand) {<a name="line.455"></a>
+<span class="sourceLineNo">456</span>                        pm.registerEvents(new ACLockedServerListener(), this);<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                }<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                if (cmdManager.registerCommand(NoDrop.class)) {<a name="line.458"></a>
+<span class="sourceLineNo">459</span>                        pm.registerEvents(new ACNoDropListener(), this);<a name="line.459"></a>
+<span class="sourceLineNo">460</span>                }<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                if (cmdManager.registerCommand(EggSpawner.class)) {<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                        EggTypeClassLoader.addPackage(this, "be.Balor.Tools.Egg.Types");<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                        pm.registerEvents(new ACEggListener(), this);<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>                cmdManager.registerCommand(GetItemId.class);<a name="line.465"></a>
+<span class="sourceLineNo">466</span>                cmdManager.registerCommand(Enchant.class);<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                cmdManager.registerCommand(Potion.class);<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                cmdManager.registerCommand(TpWorld.class);<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                cmdManager.registerCommand(TpAll.class);<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                cmdManager.registerCommand(Quit.class);<a name="line.470"></a>
+<span class="sourceLineNo">471</span>                cmdManager.registerCommand(BanList.class);<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                cmdManager.registerCommand(Search.class);<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                cmdManager.registerCommand(Withdraw.class);<a name="line.473"></a>
+<span class="sourceLineNo">474</span>                if (ConfigEnum.SUPER_BLACKLIST.getBoolean()) {<a name="line.474"></a>
+<span class="sourceLineNo">475</span>                        pm.registerEvents(new ACSuperBlacklistListener(), this);<a name="line.475"></a>
+<span class="sourceLineNo">476</span>                }<a name="line.476"></a>
+<span class="sourceLineNo">477</span>                cmdManager.registerCommand(MuteList.class);<a name="line.477"></a>
+<span class="sourceLineNo">478</span>                cmdManager.registerCommand(UnMuteAll.class);<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                cmdManager.registerCommand(ReloadTxt.class);<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                if (cmdManager.registerCommand(OpenInventory.class)) {<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                        InventoryManager.createInstance();<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                        pm.registerEvents(new ACOpenInvListener(), this);<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                }<a name="line.483"></a>
+<span class="sourceLineNo">484</span><a name="line.484"></a>
+<span class="sourceLineNo">485</span>                if (ConfigEnum.GSPAWN.getString().equalsIgnoreCase("group")) {<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                        cmdManager.registerCommand(SetGroupSpawn.class);<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                        cmdManager.registerCommand(GroupSpawn.class);<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                }<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                cmdManager.registerCommand(PlayerTime.class);<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                cmdManager.registerCommand(AsUser.class);<a name="line.490"></a>
+<span class="sourceLineNo">491</span>                cmdManager.registerCommand(WalkSpeed.class);<a name="line.491"></a>
+<span class="sourceLineNo">492</span>                cmdManager.registerCommand(DynKit.class);<a name="line.492"></a>
+<span class="sourceLineNo">493</span>                DebugLog.endInfo();<a name="line.493"></a>
+<span class="sourceLineNo">494</span>        }<a name="line.494"></a>
+<span class="sourceLineNo">495</span><a name="line.495"></a>
+<span class="sourceLineNo">496</span>        @Override<a name="line.496"></a>
+<span class="sourceLineNo">497</span>        protected void registerPermParents() {<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                permissionLinker.addPermParent(new PermParent("admincmd.item.*"));<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                final PermParent player = new PermParent("admincmd.player.*");<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                permissionLinker.addPermParent(player);<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                permissionLinker.addPermParent(new PermParent("admincmd.mob.*"));<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                permissionLinker.addPermParent(new PermParent("admincmd.spawn.*"));<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                permissionLinker.addPermParent(new PermParent("admincmd.time.*"));<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                final PermParent tp = new PermParent("admincmd.tp.*");<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                final PermParent worldTp = new PermParent("admincmd.tp.world.*");<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                permissionLinker.addPermParent(tp);<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                permissionLinker.addChildPermParent(worldTp, tp);<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                permissionLinker.addChildPermParent(new PermParent(<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                                "admincmd.tp.toggle.*"), tp);<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                permissionLinker.addPermParent(new PermParent("admincmd.weather.*"));<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                permissionLinker.addPermParent(new PermParent("admincmd.warp.*"));<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                permissionLinker.addPermParent(new PermParent("admincmd.invisible.*"));<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                final PermParent server = new PermParent("admincmd.server.*");<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                permissionLinker.addPermParent(server);<a name="line.514"></a>
+<span class="sourceLineNo">515</span>                final PermParent sExec = new PermParent("admincmd.server.exec.*");<a name="line.515"></a>
+<span class="sourceLineNo">516</span>                permissionLinker.addChildPermParent(sExec, server);<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                permissionLinker.addPermParent(new PermParent("admincmd.admin.*"));<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                permissionLinker.addPermParent(new PermParent("admincmd.egg.*"));<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                final PermParent spec = new PermParent("admincmd.spec.*");<a name="line.519"></a>
+<span class="sourceLineNo">520</span>                permissionLinker.addPermParent(spec);<a name="line.520"></a>
+<span class="sourceLineNo">521</span><a name="line.521"></a>
+<span class="sourceLineNo">522</span>                player.addChild("admincmd.player.bypass");<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                permissionLinker.addPermChild("admincmd.spec.noblacklist",<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                                PermissionDefault.OP);<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                player.addChild("admincmd.player.noreset");<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                permissionLinker.addPermChild("admincmd.spec.notprequest",<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                                PermissionDefault.OP);<a name="line.527"></a>
+<span class="sourceLineNo">528</span>                player.addChild("admincmd.player.noafkkick");<a name="line.528"></a>
+<span class="sourceLineNo">529</span>                final PermParent majorPerm = new PermParent("admincmd.*");<a name="line.529"></a>
+<span class="sourceLineNo">530</span><a name="line.530"></a>
+<span class="sourceLineNo">531</span>                permissionLinker.addPermChild("admincmd.admin.home",<a name="line.531"></a>
+<span class="sourceLineNo">532</span>                                PermissionDefault.OP);<a name="line.532"></a>
+<span class="sourceLineNo">533</span>                permissionLinker.addPermChild("admincmd.item.infinity",<a name="line.533"></a>
+<span class="sourceLineNo">534</span>                                PermissionDefault.OP);<a name="line.534"></a>
+<span class="sourceLineNo">535</span>                spec.addChild("admincmd.spec.noloss");<a name="line.535"></a>
+<span class="sourceLineNo">536</span>                spec.addChild("admincmd.spec.signedit");<a name="line.536"></a>
+<span class="sourceLineNo">537</span>                spec.addChild("admincmd.spec.ipbroadcast");<a name="line.537"></a>
+<span class="sourceLineNo">538</span>                spec.addChild("admincmd.spec.versionbcast");<a name="line.538"></a>
+<span class="sourceLineNo">539</span>                player.addChild("admincmd.player.fly.allowed");<a name="line.539"></a>
+<span class="sourceLineNo">540</span>                new PermChild("admincmd.immunityLvl.samelvl", PermissionDefault.FALSE);<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                for (final World w : this.getServer().getWorlds()) {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                        worldTp.addChild("admincmd.tp.world."<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                                        + w.getName().replace(' ', '_'));<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                }<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                majorPerm.addChild(new PermChild("admincmd.coloredsign.create"));<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                for (int i = 0; i &lt;= 150; i++) {<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                        new PermChild("admincmd.maxHomeByUser." + i,<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                                        PermissionDefault.FALSE);<a name="line.548"></a>
+<span class="sourceLineNo">549</span>                        new PermChild("admincmd.immunityLvl." + i, PermissionDefault.FALSE);<a name="line.549"></a>
+<span class="sourceLineNo">550</span>                        new PermChild("admincmd.maxItemAmount." + i,<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                                        PermissionDefault.FALSE);<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                }<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                for (final String group : worker.getGroupList()) {<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                        permissionLinker.addPermChild("admincmd.respawn." + group,<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                                        PermissionDefault.FALSE);<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                }<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                permissionLinker.addPermChild("admincmd.respawn.admin",<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                                PermissionDefault.OP);<a name="line.558"></a>
+<span class="sourceLineNo">559</span>                permissionLinker.setMajorPerm(majorPerm);<a name="line.559"></a>
+<span class="sourceLineNo">560</span><a name="line.560"></a>
+<span class="sourceLineNo">561</span>        }<a name="line.561"></a>
+<span class="sourceLineNo">562</span><a name="line.562"></a>
+<span class="sourceLineNo">563</span>        @Override<a name="line.563"></a>
+<span class="sourceLineNo">564</span>        protected void setDefaultLocale() {<a name="line.564"></a>
+<span class="sourceLineNo">565</span>                Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: "<a name="line.565"></a>
+<span class="sourceLineNo">566</span>                                + ChatColor.WHITE + "%player");<a name="line.566"></a>
+<span class="sourceLineNo">567</span>                Utils.addLocale("kitNotFound", ChatColor.RED + "No such kit: "<a name="line.567"></a>
+<span class="sourceLineNo">568</span>                                + ChatColor.WHITE + "%kit");<a name="line.568"></a>
+<span class="sourceLineNo">569</span>                Utils.addLocale("pluginNotFound", ChatColor.RED + "No such Plugin: "<a name="line.569"></a>
+<span class="sourceLineNo">570</span>                                + ChatColor.WHITE + "%plugin");<a name="line.570"></a>
+<span class="sourceLineNo">571</span>                Utils.addLocale("worldNotFound", ChatColor.RED + "No such world: "<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                                + ChatColor.WHITE + "%world");<a name="line.572"></a>
+<span class="sourceLineNo">573</span>                Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : "<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                                + ChatColor.WHITE + "%material");<a name="line.574"></a>
+<span class="sourceLineNo">575</span>                Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players: ");<a name="line.575"></a>
+<span class="sourceLineNo">576</span>                Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");<a name="line.576"></a>
+<span class="sourceLineNo">577</span>                Utils.addLocale(<a name="line.577"></a>
+<span class="sourceLineNo">578</span>                                "changedWorld",<a name="line.578"></a>
+<span class="sourceLineNo">579</span>                                ChatColor.DARK_RED<a name="line.579"></a>
+<span class="sourceLineNo">580</span>                                                + "All your powers have been deactivated because you teleported to an another world");<a name="line.580"></a>
+<span class="sourceLineNo">581</span>                Utils.addLocale("stillInv", ChatColor.RED + "You are still Invisible");<a name="line.581"></a>
+<span class="sourceLineNo">582</span>                Utils.addLocale("errorNotPerm", ChatColor.RED<a name="line.582"></a>
+<span class="sourceLineNo">583</span>                                + "You don't have the Permissions to do that " + ChatColor.BLUE<a name="line.583"></a>
+<span class="sourceLineNo">584</span>                                + "(%p)");<a name="line.584"></a>
+<span class="sourceLineNo">585</span>                Utils.addLocale("dropItemOtherPlayer", ChatColor.RED + "[%sender]"<a name="line.585"></a>
+<span class="sourceLineNo">586</span>                                + ChatColor.WHITE + " dropped at your feet " + ChatColor.GOLD<a name="line.586"></a>
+<span class="sourceLineNo">587</span>                                + "%amount %material");<a name="line.587"></a>
+<span class="sourceLineNo">588</span>                Utils.addLocale("dropItemCommandSender", ChatColor.RED + "Dropped "<a name="line.588"></a>
+<span class="sourceLineNo">589</span>                                + ChatColor.GOLD + "%amount %material to " + ChatColor.WHITE<a name="line.589"></a>
+<span class="sourceLineNo">590</span>                                + "%target");<a name="line.590"></a>
+<span class="sourceLineNo">591</span>                Utils.addLocale("dropItemYourself", ChatColor.RED + "Dropped "<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                                + ChatColor.GOLD + "%amount %material");<a name="line.592"></a>
+<span class="sourceLineNo">593</span>                Utils.addLocale("giveItemOtherPlayer", ChatColor.RED + "[%sender]"<a name="line.593"></a>
+<span class="sourceLineNo">594</span>                                + ChatColor.WHITE + " send you " + ChatColor.GOLD<a name="line.594"></a>
+<span class="sourceLineNo">595</span>                                + "%amount %material");<a name="line.595"></a>
+<span class="sourceLineNo">596</span>                Utils.addLocale("giveItemCommandSender", ChatColor.RED + "Added "<a name="line.596"></a>
+<span class="sourceLineNo">597</span>                                + ChatColor.GOLD + "%amount %material to " + ChatColor.WHITE<a name="line.597"></a>
+<span class="sourceLineNo">598</span>                                + "%target's inventory");<a name="line.598"></a>
+<span class="sourceLineNo">599</span>                Utils.addLocale("giveItemYourself", ChatColor.RED + "Added "<a name="line.599"></a>
+<span class="sourceLineNo">600</span>                                + ChatColor.GOLD + "%amount %material" + ChatColor.WHITE<a name="line.600"></a>
+<span class="sourceLineNo">601</span>                                + " to your inventory");<a name="line.601"></a>
+<span class="sourceLineNo">602</span>                Utils.addLocale("errorHolding", ChatColor.RED<a name="line.602"></a>
+<span class="sourceLineNo">603</span>                                + "You have to be holding something!");<a name="line.603"></a>
+<span class="sourceLineNo">604</span>                Utils.addLocale("moreTooMuch", "Excedent(s) item(s) (" + ChatColor.BLUE<a name="line.604"></a>
+<span class="sourceLineNo">605</span>                                + "%amount" + ChatColor.WHITE<a name="line.605"></a>
+<span class="sourceLineNo">606</span>                                + ") have been stored in your inventory");<a name="line.606"></a>
+<span class="sourceLineNo">607</span>                Utils.addLocale("repairTarget", "Your item " + ChatColor.RED + "%type"<a name="line.607"></a>
+<span class="sourceLineNo">608</span>                                + ChatColor.WHITE + " has been successfully repaired.");<a name="line.608"></a>
+<span class="sourceLineNo">609</span>                Utils.addLocale("repair", "%player" + "'s item " + ChatColor.RED<a name="line.609"></a>
+<span class="sourceLineNo">610</span>                                + "%type" + ChatColor.WHITE<a name="line.610"></a>
+<span class="sourceLineNo">611</span>                                + " has been successfully repaired.");<a name="line.611"></a>
+<span class="sourceLineNo">612</span>                Utils.addLocale("errorRepair", "You can't repair this item : "<a name="line.612"></a>
+<span class="sourceLineNo">613</span>                                + ChatColor.RED + "%type");<a name="line.613"></a>
+<span class="sourceLineNo">614</span>                Utils.addLocale("repairAll", "All %player's items have been repaired.");<a name="line.614"></a>
+<span class="sourceLineNo">615</span>                Utils.addLocale("repairAllTarget", "All your items have been repaired.");<a name="line.615"></a>
+<span class="sourceLineNo">616</span>                Utils.addLocale("errorMob", ChatColor.RED + "No such creature: "<a name="line.616"></a>
+<span class="sourceLineNo">617</span>                                + ChatColor.WHITE + "%mob");<a name="line.617"></a>
+<span class="sourceLineNo">618</span>                Utils.addLocale("spawnMob", ChatColor.BLUE + "Spawned "<a name="line.618"></a>
+<span class="sourceLineNo">619</span>                                + ChatColor.WHITE + "%nb %mob");<a name="line.619"></a>
+<span class="sourceLineNo">620</span>                Utils.addLocale("spawnMobOther", ChatColor.GOLD + "%player "<a name="line.620"></a>
+<span class="sourceLineNo">621</span>                                + ChatColor.BLUE + "spawned " + ChatColor.WHITE<a name="line.621"></a>
+<span class="sourceLineNo">622</span>                                + "%nb %mob (s)" + ChatColor.BLUE + " at your location.");<a name="line.622"></a>
+<span class="sourceLineNo">623</span>                Utils.addLocale("clear", ChatColor.RED<a name="line.623"></a>
+<span class="sourceLineNo">624</span>                                + "Your inventory has been cleared");<a name="line.624"></a>
+<span class="sourceLineNo">625</span>                Utils.addLocale("clearTarget", ChatColor.RED + "Inventory of "<a name="line.625"></a>
+<span class="sourceLineNo">626</span>                                + ChatColor.WHITE + "%player" + ChatColor.RED + " cleared");<a name="line.626"></a>
+<span class="sourceLineNo">627</span>                Utils.addLocale("fireballDisabled", ChatColor.DARK_RED<a name="line.627"></a>
+<span class="sourceLineNo">628</span>                                + "Fireball mode disabled.");<a name="line.628"></a>
+<span class="sourceLineNo">629</span>                Utils.addLocale("fireballDisabledTarget", ChatColor.DARK_RED<a name="line.629"></a>
+<span class="sourceLineNo">630</span>                                + "Fireball mode disabled for %player");<a name="line.630"></a>
+<span class="sourceLineNo">631</span>                Utils.addLocale("fireballEnabled", ChatColor.DARK_RED<a name="line.631"></a>
+<span class="sourceLineNo">632</span>                                + "Fireball mode enabled.");<a name="line.632"></a>
+<span class="sourceLineNo">633</span>                Utils.addLocale("fireballEnabledTarget", ChatColor.DARK_RED<a name="line.633"></a>
+<span class="sourceLineNo">634</span>                                + "Fireball mode enabled for %player");<a name="line.634"></a>
+<span class="sourceLineNo">635</span>                Utils.addLocale("godDisabled", ChatColor.DARK_AQUA<a name="line.635"></a>
+<span class="sourceLineNo">636</span>                                + "GOD mode disabled.");<a name="line.636"></a>
+<span class="sourceLineNo">637</span>                Utils.addLocale("godDisabledTarget", ChatColor.DARK_AQUA<a name="line.637"></a>
+<span class="sourceLineNo">638</span>                                + "GOD mode disabled for %player");<a name="line.638"></a>
+<span class="sourceLineNo">639</span>                Utils.addLocale("godEnabled", ChatColor.DARK_AQUA + "GOD mode enabled.");<a name="line.639"></a>
+<span class="sourceLineNo">640</span>                Utils.addLocale("godEnabledTarget", ChatColor.DARK_AQUA<a name="line.640"></a>
+<span class="sourceLineNo">641</span>                                + "GOD mode enabled for %player");<a name="line.641"></a>
+<span class="sourceLineNo">642</span>                Utils.addLocale("noDropDisabled", ChatColor.DARK_AQUA<a name="line.642"></a>
+<span class="sourceLineNo">643</span>                                + "NO DROP mode disabled.");<a name="line.643"></a>
+<span class="sourceLineNo">644</span>                Utils.addLocale("noDropDisabledTarget", ChatColor.DARK_AQUA<a name="line.644"></a>
+<span class="sourceLineNo">645</span>                                + "NO DROP mode disabled for %player");<a name="line.645"></a>
+<span class="sourceLineNo">646</span>                Utils.addLocale("noDropEnabled", ChatColor.DARK_AQUA<a name="line.646"></a>
+<span class="sourceLineNo">647</span>                                + "NO DROP mode enabled.");<a name="line.647"></a>
+<span class="sourceLineNo">648</span>                Utils.addLocale("noDropEnabledTarget", ChatColor.DARK_AQUA<a name="line.648"></a>
+<span class="sourceLineNo">649</span>                                + "NO DROP mode enabled for %player");<a name="line.649"></a>
+<span class="sourceLineNo">650</span>                Utils.addLocale("thorDisabled", ChatColor.DARK_AQUA<a name="line.650"></a>
+<span class="sourceLineNo">651</span>                                + "THOR mode disabled.");<a name="line.651"></a>
+<span class="sourceLineNo">652</span>                Utils.addLocale("thorDisabledTarget", ChatColor.DARK_AQUA<a name="line.652"></a>
+<span class="sourceLineNo">653</span>                                + "THOR mode disabled for %player");<a name="line.653"></a>
+<span class="sourceLineNo">654</span>                Utils.addLocale("thorEnabled", ChatColor.DARK_AQUA<a name="line.654"></a>
+<span class="sourceLineNo">655</span>                                + "THOR mode enabled.");<a name="line.655"></a>
+<span class="sourceLineNo">656</span>                Utils.addLocale("thorEnabledTarget", ChatColor.DARK_AQUA<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                                + "THOR mode enabled for %player");<a name="line.657"></a>
+<span class="sourceLineNo">658</span>                Utils.addLocale("vulcanDisabled", ChatColor.DARK_RED<a name="line.658"></a>
+<span class="sourceLineNo">659</span>                                + "VULCAN mode disabled.");<a name="line.659"></a>
+<span class="sourceLineNo">660</span>                Utils.addLocale("vulcanDisabledTarget", ChatColor.DARK_RED<a name="line.660"></a>
+<span class="sourceLineNo">661</span>                                + "VULCAN mode disabled for %player");<a name="line.661"></a>
+<span class="sourceLineNo">662</span>                Utils.addLocale("vulcanEnabled", ChatColor.DARK_RED<a name="line.662"></a>
+<span class="sourceLineNo">663</span>                                + "VULCAN mode enabled.");<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                Utils.addLocale("vulcanEnabledTarget", ChatColor.DARK_RED<a name="line.664"></a>
+<span class="sourceLineNo">665</span>                                + "VULCAN mode enabled for %player");<a name="line.665"></a>
+<span class="sourceLineNo">666</span>                Utils.addLocale("spymsgDisabled", ChatColor.DARK_AQUA<a name="line.666"></a>
+<span class="sourceLineNo">667</span>                                + "SPYMSG mode disabled.");<a name="line.667"></a>
+<span class="sourceLineNo">668</span>                Utils.addLocale("spymsgEnabled", ChatColor.DARK_AQUA<a name="line.668"></a>
+<span class="sourceLineNo">669</span>                                + "SPYMSG mode enabled.");<a name="line.669"></a>
+<span class="sourceLineNo">670</span>                Utils.addLocale("invisibleEnabled", ChatColor.RED<a name="line.670"></a>
+<span class="sourceLineNo">671</span>                                + "You are now Invisible");<a name="line.671"></a>
+<span class="sourceLineNo">672</span>                Utils.addLocale("invisibleEnabledTarget", ChatColor.DARK_AQUA<a name="line.672"></a>
+<span class="sourceLineNo">673</span>                                + "INVISIBLE mode enabled for %player");<a name="line.673"></a>
+<span class="sourceLineNo">674</span>                Utils.addLocale("invisibleDisabled", ChatColor.GREEN<a name="line.674"></a>
+<span class="sourceLineNo">675</span>                                + "You are now Visible");<a name="line.675"></a>
+<span class="sourceLineNo">676</span>                Utils.addLocale("invisibleDisabledTarget", ChatColor.DARK_AQUA<a name="line.676"></a>
+<span class="sourceLineNo">677</span>                                + "INVISIBLE mode disabled for %player");<a name="line.677"></a>
+<span class="sourceLineNo">678</span>                Utils.addLocale("errorMultiHome", ChatColor.DARK_GREEN + "Home "<a name="line.678"></a>
+<span class="sourceLineNo">679</span>                                + ChatColor.RED + "%home" + ChatColor.WHITE + " not set.");<a name="line.679"></a>
+<span class="sourceLineNo">680</span>                Utils.addLocale("multiHome", ChatColor.DARK_GREEN + "Teleported"<a name="line.680"></a>
+<span class="sourceLineNo">681</span>                                + ChatColor.WHITE + " to your home " + ChatColor.DARK_AQUA<a name="line.681"></a>
+<span class="sourceLineNo">682</span>                                + "%home.");<a name="line.682"></a>
+<span class="sourceLineNo">683</span>                Utils.addLocale("setMultiHome", ChatColor.DARK_GREEN + "Home "<a name="line.683"></a>
+<span class="sourceLineNo">684</span>                                + ChatColor.DARK_AQUA + "%home" + ChatColor.WHITE + " set.");<a name="line.684"></a>
+<span class="sourceLineNo">685</span>                Utils.addLocale("rmHome", ChatColor.RED + "Home " + ChatColor.DARK_AQUA<a name="line.685"></a>
+<span class="sourceLineNo">686</span>                                + "%home" + ChatColor.WHITE + " removed.");<a name="line.686"></a>
+<span class="sourceLineNo">687</span>                Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "<a name="line.687"></a>
+<span class="sourceLineNo">688</span>                                + ChatColor.DARK_GREEN + "home limit");<a name="line.688"></a>
+<span class="sourceLineNo">689</span>                Utils.addLocale("itemLimit", ChatColor.RED + "You have exceeded your "<a name="line.689"></a>
+<span class="sourceLineNo">690</span>                                + ChatColor.DARK_GREEN + "item limit" + ChatColor.RED<a name="line.690"></a>
+<span class="sourceLineNo">691</span>                                + " of %limit items per command.");<a name="line.691"></a>
+<span class="sourceLineNo">692</span>                Utils.addLocale("errorLocation", ChatColor.RED<a name="line.692"></a>
+<span class="sourceLineNo">693</span>                                + "Location has to be formed by numbers");<a name="line.693"></a>
+<span class="sourceLineNo">694</span>                Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name"<a name="line.694"></a>
+<span class="sourceLineNo">695</span>                                + ChatColor.WHITE + " added.");<a name="line.695"></a>
+<span class="sourceLineNo">696</span>                Utils.addLocale("rmWarp", ChatColor.RED + "WarpPoint %name"<a name="line.696"></a>
+<span class="sourceLineNo">697</span>                                + ChatColor.WHITE + " removed.");<a name="line.697"></a>
+<span class="sourceLineNo">698</span>                Utils.addLocale("errorWarp", ChatColor.DARK_RED<a name="line.698"></a>
+<span class="sourceLineNo">699</span>                                + "WarpPoint %name not found");<a name="line.699"></a>
+<span class="sourceLineNo">700</span>                Utils.addLocale("tpWarp", ChatColor.GREEN + "Teleported to "<a name="line.700"></a>
+<span class="sourceLineNo">701</span>                                + ChatColor.WHITE + "%name");<a name="line.701"></a>
+<span class="sourceLineNo">702</span>                Utils.addLocale("strike", "%player was striked by Thor");<a name="line.702"></a>
+<span class="sourceLineNo">703</span>                Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE<a name="line.703"></a>
+<span class="sourceLineNo">704</span>                                + "%fromPlayer" + ChatColor.WHITE + " to " + ChatColor.GREEN<a name="line.704"></a>
+<span class="sourceLineNo">705</span>                                + "%toPlayer");<a name="line.705"></a>
+<span class="sourceLineNo">706</span>                Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item ("<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                                + ChatColor.WHITE + "%material" + ChatColor.GREEN<a name="line.707"></a>
+<span class="sourceLineNo">708</span>                                + ") added to the Black List for i, give and drop.");<a name="line.708"></a>
+<span class="sourceLineNo">709</span>                Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block ("<a name="line.709"></a>
+<span class="sourceLineNo">710</span>                                + ChatColor.WHITE + "%material" + ChatColor.GREEN<a name="line.710"></a>
+<span class="sourceLineNo">711</span>                                + ") added to the BlockPlace Black List.");<a name="line.711"></a>
+<span class="sourceLineNo">712</span>                Utils.addLocale("rmBlacklistItem", ChatColor.GREEN + "Item ("<a name="line.712"></a>
+<span class="sourceLineNo">713</span>                                + ChatColor.WHITE + "%material" + ChatColor.GREEN<a name="line.713"></a>
+<span class="sourceLineNo">714</span>                                + ") removed from the Blacklist.");<a name="line.714"></a>
+<span class="sourceLineNo">715</span>                Utils.addLocale("rmBlacklistBlock", ChatColor.GREEN + "Block ("<a name="line.715"></a>
+<span class="sourceLineNo">716</span>                                + ChatColor.WHITE + "%material" + ChatColor.GREEN<a name="line.716"></a>
+<span class="sourceLineNo">717</span>                                + ") removed from the Blacklist.");<a name="line.717"></a>
+<span class="sourceLineNo">718</span>                Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item ("<a name="line.718"></a>
+<span class="sourceLineNo">719</span>                                + ChatColor.WHITE + "%material" + ChatColor.DARK_RED<a name="line.719"></a>
+<span class="sourceLineNo">720</span>                                + ") is black listed.");<a name="line.720"></a>
+<span class="sourceLineNo">721</span>                Utils.addLocale("inBlacklistBlock", ChatColor.DARK_RED + "This block ("<a name="line.721"></a>
+<span class="sourceLineNo">722</span>                                + ChatColor.WHITE + "%material" + ChatColor.DARK_RED<a name="line.722"></a>
+<span class="sourceLineNo">723</span>                                + ") is black listed.");<a name="line.723"></a>
+<span class="sourceLineNo">724</span>                Utils.addLocale("errorSpawn", ChatColor.DARK_GREEN + "spawn"<a name="line.724"></a>
+<span class="sourceLineNo">725</span>                                + ChatColor.WHITE + " not set for this world.");<a name="line.725"></a>
+<span class="sourceLineNo">726</span>                Utils.addLocale("spawn", ChatColor.DARK_GREEN + "Teleported"<a name="line.726"></a>
+<span class="sourceLineNo">727</span>                                + ChatColor.WHITE + " to your spawn.");<a name="line.727"></a>
+<span class="sourceLineNo">728</span>                Utils.addLocale("setSpawn", ChatColor.DARK_GREEN + "spawn"<a name="line.728"></a>
+<span class="sourceLineNo">729</span>                                + ChatColor.WHITE + " set.");<a name="line.729"></a>
+<span class="sourceLineNo">730</span>                Utils.addLocale("sClear", "Sky cleared in world :");<a name="line.730"></a>
+<span class="sourceLineNo">731</span>                Utils.addLocale("sStorm", "Storm set for %duration mins in world : ");<a name="line.731"></a>
+<span class="sourceLineNo">732</span>                Utils.addLocale("sRain", "Rain set for %duration mins in world : ");<a name="line.732"></a>
+<span class="sourceLineNo">733</span>                Utils.addLocale("afk", "%player " + ChatColor.RED + "is AFK");<a name="line.733"></a>
+<span class="sourceLineNo">734</span>                Utils.addLocale("online", "%player " + ChatColor.GREEN + "is Online");<a name="line.734"></a>
+<span class="sourceLineNo">735</span>                Utils.addLocale("afkTitle", ChatColor.BLUE + "[AFK]" + ChatColor.WHITE);<a name="line.735"></a>
+<span class="sourceLineNo">736</span>                Utils.addLocale("ip", ChatColor.YELLOW + "IP adress of "<a name="line.736"></a>
+<span class="sourceLineNo">737</span>                                + ChatColor.WHITE + "%player - %ip");<a name="line.737"></a>
+<span class="sourceLineNo">738</span>                Utils.addLocale("ban", ChatColor.YELLOW<a name="line.738"></a>
+<span class="sourceLineNo">739</span>                                + "%player has been banned, reason: " + ChatColor.RED<a name="line.739"></a>
+<span class="sourceLineNo">740</span>                                + "%reason");<a name="line.740"></a>
+<span class="sourceLineNo">741</span>                Utils.addLocale("unban", ChatColor.YELLOW + "%player is now unbanned.");<a name="line.741"></a>
+<span class="sourceLineNo">742</span>                Utils.addLocale("killMob", ChatColor.RED + "Killing mobs ("<a name="line.742"></a>
+<span class="sourceLineNo">743</span>                                + ChatColor.WHITE + "%type" + ChatColor.RED + ") of worlds : "<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                                + ChatColor.DARK_PURPLE + "%worlds");<a name="line.744"></a>
+<span class="sourceLineNo">745</span>                Utils.addLocale("killedMobs", "%nbKilled" + ChatColor.DARK_RED<a name="line.745"></a>
+<span class="sourceLineNo">746</span>                                + " mobs have been killed.");<a name="line.746"></a>
+<span class="sourceLineNo">747</span>                Utils.addLocale("flyDisabled", ChatColor.GOLD + "FLY mode disabled.");<a name="line.747"></a>
+<span class="sourceLineNo">748</span>                Utils.addLocale("flyDisabledTarget", ChatColor.GOLD<a name="line.748"></a>
+<span class="sourceLineNo">749</span>                                + "FLY mode disabled for %player");<a name="line.749"></a>
+<span class="sourceLineNo">750</span>                Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");<a name="line.750"></a>
+<span class="sourceLineNo">751</span>                Utils.addLocale("flyEnabledTarget", ChatColor.GOLD<a name="line.751"></a>
+<span class="sourceLineNo">752</span>                                + "FLY mode enabled for %player");<a name="line.752"></a>
+<span class="sourceLineNo">753</span>                Utils.addLocale("npDisabled", ChatColor.GOLD<a name="line.753"></a>
+<span class="sourceLineNo">754</span>                                + "No Pickup mode disabled.");<a name="line.754"></a>
+<span class="sourceLineNo">755</span>                Utils.addLocale("npDisabledTarget", ChatColor.GOLD<a name="line.755"></a>
+<span class="sourceLineNo">756</span>                                + "No Pickup mode disabled for %player");<a name="line.756"></a>
+<span class="sourceLineNo">757</span>                Utils.addLocale("npEnabled", ChatColor.GOLD + "No Pickup mode enabled.");<a name="line.757"></a>
+<span class="sourceLineNo">758</span>                Utils.addLocale("npEnabledTarget", ChatColor.GOLD<a name="line.758"></a>
+<span class="sourceLineNo">759</span>                                + "No Pickup mode enabled for %player");<a name="line.759"></a>
+<span class="sourceLineNo">760</span>                Utils.addLocale("afkKick", "You have been kicked because you were AFK");<a name="line.760"></a>
+<span class="sourceLineNo">761</span>                Utils.addLocale("freezeDisabled", ChatColor.DARK_GREEN<a name="line.761"></a>
+<span class="sourceLineNo">762</span>                                + "You can now move again.");<a name="line.762"></a>
+<span class="sourceLineNo">763</span>                Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN<a name="line.763"></a>
+<span class="sourceLineNo">764</span>                                + "Freeze mode disabled for %player");<a name="line.764"></a>
+<span class="sourceLineNo">765</span>                Utils.addLocale("freezeEnabled", ChatColor.DARK_RED<a name="line.765"></a>
+<span class="sourceLineNo">766</span>                                + "You can't move until you are defrozen.");<a name="line.766"></a>
+<span class="sourceLineNo">767</span>                Utils.addLocale("freezeEnabledTarget", ChatColor.DARK_RED<a name="line.767"></a>
+<span class="sourceLineNo">768</span>                                + "Freeze mode enabled for %player");<a name="line.768"></a>
+<span class="sourceLineNo">769</span>                Utils.addLocale("muteDisabled", ChatColor.DARK_GREEN<a name="line.769"></a>
+<span class="sourceLineNo">770</span>                                + "You can chat again.");<a name="line.770"></a>
+<span class="sourceLineNo">771</span>                Utils.addLocale("muteDisabledTarget", ChatColor.DARK_GREEN<a name="line.771"></a>
+<span class="sourceLineNo">772</span>                                + "%player is unmuted.");<a name="line.772"></a>
+<span class="sourceLineNo">773</span>                Utils.addLocale("muteEnabled", ChatColor.DARK_RED<a name="line.773"></a>
+<span class="sourceLineNo">774</span>                                + "You can't chat anymore. Reason: %reason");<a name="line.774"></a>
+<span class="sourceLineNo">775</span>                Utils.addLocale(<a name="line.775"></a>
+<span class="sourceLineNo">776</span>                                "tmpMuteEnabled",<a name="line.776"></a>
+<span class="sourceLineNo">777</span>                                ChatColor.DARK_RED<a name="line.777"></a>
+<span class="sourceLineNo">778</span>                                                + "You can't chat anymore for %minutes minutes. Reason: %reason");<a name="line.778"></a>
+<span class="sourceLineNo">779</span>                Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED<a name="line.779"></a>
+<span class="sourceLineNo">780</span>                                + "%player is muted.");<a name="line.780"></a>
+<span class="sourceLineNo">781</span>                Utils.addLocale(<a name="line.781"></a>
+<span class="sourceLineNo">782</span>                                "alreadyMuted",<a name="line.782"></a>
+<span class="sourceLineNo">783</span>                                ChatColor.DARK_AQUA<a name="line.783"></a>
+<span class="sourceLineNo">784</span>                                                + "This player is already muted. To unmute him use the unmute command.");<a name="line.784"></a>
+<span class="sourceLineNo">785</span>                Utils.addLocale("commandMuteDisabled", ChatColor.DARK_GREEN<a name="line.785"></a>
+<span class="sourceLineNo">786</span>                                + "You can use commands again.");<a name="line.786"></a>
+<span class="sourceLineNo">787</span>                Utils.addLocale("commandMuteDisabledTarget", ChatColor.DARK_GREEN<a name="line.787"></a>
+<span class="sourceLineNo">788</span>                                + "%player can use commands again.");<a name="line.788"></a>
+<span class="sourceLineNo">789</span>                Utils.addLocale("commandMuteEnabled", ChatColor.DARK_RED<a name="line.789"></a>
+<span class="sourceLineNo">790</span>                                + "You can't use commands anymore. Reason: %reason");<a name="line.790"></a>
+<span class="sourceLineNo">791</span>                Utils.addLocale(<a name="line.791"></a>
+<span class="sourceLineNo">792</span>                                "commandTmpMuteEnabled",<a name="line.792"></a>
+<span class="sourceLineNo">793</span>                                ChatColor.DARK_RED<a name="line.793"></a>
+<span class="sourceLineNo">794</span>                                                + "You can't use commands anymore for %minutes minutes. Reason: %reason");<a name="line.794"></a>
+<span class="sourceLineNo">795</span>                Utils.addLocale("commandMuteEnabledTarget", ChatColor.DARK_RED<a name="line.795"></a>
+<span class="sourceLineNo">796</span>                                + "%player is now unable to use commands.");<a name="line.796"></a>
+<span class="sourceLineNo">797</span>                Utils.addLocale(<a name="line.797"></a>
+<span class="sourceLineNo">798</span>                                "alreadyCommandMuted",<a name="line.798"></a>
+<span class="sourceLineNo">799</span>                                ChatColor.DARK_AQUA<a name="line.799"></a>
+<span class="sourceLineNo">800</span>                                                + "This player already can't use commands. To let him use commands again use the unmute command.");<a name="line.800"></a>
+<span class="sourceLineNo">801</span>                Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED<a name="line.801"></a>
+<span class="sourceLineNo">802</span>                                + "is not a number.");<a name="line.802"></a>
+<span class="sourceLineNo">803</span>                Utils.addLocale("mobLimit", ChatColor.GOLD<a name="line.803"></a>
+<span class="sourceLineNo">804</span>                                + "Mob limit (%number) set for world : %world");<a name="line.804"></a>
+<span class="sourceLineNo">805</span>                Utils.addLocale("mobLimitPerMob", "#mobLimit# " + ChatColor.RED<a name="line.805"></a>
+<span class="sourceLineNo">806</span>                                + "for mob %mob");<a name="line.806"></a>
+<span class="sourceLineNo">807</span>                Utils.addLocale("mobLimitRemoved", ChatColor.GREEN<a name="line.807"></a>
+<span class="sourceLineNo">808</span>                                + "Mob limit is removed for world : %world");<a name="line.808"></a>
+<span class="sourceLineNo">809</span>                Utils.addLocale("mobLimitRemovedPerMob", "#mobLimitRemoved# "<a name="line.809"></a>
+<span class="sourceLineNo">810</span>                                + ChatColor.AQUA + " for mob %mob");<a name="line.810"></a>
+<span class="sourceLineNo">811</span>                Utils.addLocale("wFrozen", "Weather is frozen in world :");<a name="line.811"></a>
+<span class="sourceLineNo">812</span>                Utils.addLocale("wUnFrozen", "Weather can change in world :");<a name="line.812"></a>
+<span class="sourceLineNo">813</span>                Utils.addLocale("invTitle", "[INV]");<a name="line.813"></a>
+<span class="sourceLineNo">814</span>                Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] "<a name="line.814"></a>
+<span class="sourceLineNo">815</span>                                + ChatColor.WHITE + "rolled a " + ChatColor.GOLD<a name="line.815"></a>
+<span class="sourceLineNo">816</span>                                + "%face dice : " + ChatColor.YELLOW + "%result");<a name="line.816"></a>
+<span class="sourceLineNo">817</span>                Utils.addLocale("extinguish", ChatColor.AQUA + "%nb blocks"<a name="line.817"></a>
+<span class="sourceLineNo">818</span>                                + ChatColor.DARK_AQUA + " have been extinguished.");<a name="line.818"></a>
+<span class="sourceLineNo">819</span>                Utils.addLocale("pluginReloaded", ChatColor.YELLOW<a name="line.819"></a>
+<span class="sourceLineNo">820</span>                                + "This plugin has been reloaded : " + ChatColor.WHITE<a name="line.820"></a>
+<span class="sourceLineNo">821</span>                                + "%plugin");<a name="line.821"></a>
+<span class="sourceLineNo">822</span>                Utils.addLocale("replaced", ChatColor.RED + "%nb blocks of "<a name="line.822"></a>
+<span class="sourceLineNo">823</span>                                + ChatColor.DARK_PURPLE + "%mat" + ChatColor.DARK_AQUA<a name="line.823"></a>
+<span class="sourceLineNo">824</span>                                + " are now AIR.");<a name="line.824"></a>
+<span class="sourceLineNo">825</span>                Utils.addLocale("undo", ChatColor.GREEN + "%nb blocks "<a name="line.825"></a>
+<span class="sourceLineNo">826</span>                                + ChatColor.DARK_GREEN + "have been replaced");<a name="line.826"></a>
+<span class="sourceLineNo">827</span>                Utils.addLocale("nothingToUndo", ChatColor.DARK_PURPLE<a name="line.827"></a>
+<span class="sourceLineNo">828</span>                                + "Nothing to undo.");<a name="line.828"></a>
+<span class="sourceLineNo">829</span>                Utils.addLocale("noRepeat", ChatColor.DARK_RED<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                                + "No command to repeat.");<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                Utils.addLocale("reExec", ChatColor.YELLOW<a name="line.831"></a>
+<span class="sourceLineNo">832</span>                                + "Repeating the last command.");<a name="line.832"></a>
+<span class="sourceLineNo">833</span>                Utils.addLocale("timeSet", ChatColor.GOLD<a name="line.833"></a>
+<span class="sourceLineNo">834</span>                                + "Time set to %type in world : " + ChatColor.WHITE + "%world");<a name="line.834"></a>
+<span class="sourceLineNo">835</span>                Utils.addLocale("timeNotSet", ChatColor.RED + "%type doesn't exist.");<a name="line.835"></a>
+<span class="sourceLineNo">836</span>                Utils.addLocale("timePaused", ChatColor.DARK_RED + "Time is paused in "<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                                + ChatColor.WHITE + "%world. " + ChatColor.DARK_GREEN<a name="line.837"></a>
+<span class="sourceLineNo">838</span>                                + "To unpause : /time unpause .");<a name="line.838"></a>
+<span class="sourceLineNo">839</span>                Utils.addLocale("moreAll", ChatColor.AQUA<a name="line.839"></a>
+<span class="sourceLineNo">840</span>                                + "All your items are now at their max stack size.");<a name="line.840"></a>
+<span class="sourceLineNo">841</span>                Utils.addLocale("tpRequestTo", ChatColor.BLUE + "%player "<a name="line.841"></a>
+<span class="sourceLineNo">842</span>                                + ChatColor.GOLD + "wants to teleport to you. "<a name="line.842"></a>
+<span class="sourceLineNo">843</span>                                + ChatColor.DARK_GREEN + "Type " + ChatColor.GREEN<a name="line.843"></a>
+<span class="sourceLineNo">844</span>                                + "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");<a name="line.844"></a>
+<span class="sourceLineNo">845</span>                Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE<a name="line.845"></a>
+<span class="sourceLineNo">846</span>                                + "You send a Teleport request to " + ChatColor.WHITE<a name="line.846"></a>
+<span class="sourceLineNo">847</span>                                + "%player" + ChatColor.DARK_PURPLE + " for a teleport "<a name="line.847"></a>
+<span class="sourceLineNo">848</span>                                + ChatColor.AQUA + "%tp_type");<a name="line.848"></a>
+<span class="sourceLineNo">849</span>                Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player "<a name="line.849"></a>
+<span class="sourceLineNo">850</span>                                + ChatColor.DARK_AQUA<a name="line.850"></a>
+<span class="sourceLineNo">851</span>                                + "wants to teleport you to their location. "<a name="line.851"></a>
+<span class="sourceLineNo">852</span>                                + ChatColor.DARK_GREEN + "Type " + ChatColor.GREEN<a name="line.852"></a>
+<span class="sourceLineNo">853</span>                                + "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");<a name="line.853"></a>
+<span class="sourceLineNo">854</span>                Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN<a name="line.854"></a>
+<span class="sourceLineNo">855</span>                                + "Tp Request system Disabled.");<a name="line.855"></a>
+<span class="sourceLineNo">856</span>                Utils.addLocale("tpRequestOn", ChatColor.DARK_RED<a name="line.856"></a>
+<span class="sourceLineNo">857</span>                                + "Tp Request system Enabled.");<a name="line.857"></a>
+<span class="sourceLineNo">858</span>                Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN<a name="line.858"></a>
+<span class="sourceLineNo">859</span>                                + "You Tp at see when you left click.");<a name="line.859"></a>
+<span class="sourceLineNo">860</span>                Utils.addLocale("tpSeeDisabled", ChatColor.DARK_RED<a name="line.860"></a>
+<span class="sourceLineNo">861</span>                                + "TP AT SEE mode disabled.");<a name="line.861"></a>
+<span class="sourceLineNo">862</span>                Utils.addLocale("elapsedTime", "Uptime : " + ChatColor.YELLOW<a name="line.862"></a>
+<span class="sourceLineNo">863</span>                                + "%d day(s) %h:%m:%s");<a name="line.863"></a>
+<span class="sourceLineNo">864</span>                Utils.addLocale("kitList", ChatColor.GOLD + "Available Kits : "<a name="line.864"></a>
+<span class="sourceLineNo">865</span>                                + ChatColor.AQUA + "%list");<a name="line.865"></a>
+<span class="sourceLineNo">866</span>                Utils.addLocale("kitOtherPlayer", ChatColor.RED + "[%sender]"<a name="line.866"></a>
+<span class="sourceLineNo">867</span>                                + ChatColor.WHITE + " send you the kit : " + ChatColor.GOLD<a name="line.867"></a>
+<span class="sourceLineNo">868</span>                                + "%kit");<a name="line.868"></a>
+<span class="sourceLineNo">869</span>                Utils.addLocale("kitCommandSender", ChatColor.RED + "Added "<a name="line.869"></a>
+<span class="sourceLineNo">870</span>                                + ChatColor.GOLD + "%kit to " + ChatColor.WHITE<a name="line.870"></a>
+<span class="sourceLineNo">871</span>                                + "%target's inventory");<a name="line.871"></a>
+<span class="sourceLineNo">872</span>                Utils.addLocale("kitYourself", ChatColor.RED + "Added "<a name="line.872"></a>
+<span class="sourceLineNo">873</span>                                + ChatColor.GOLD + "%kit" + ChatColor.WHITE<a name="line.873"></a>
+<span class="sourceLineNo">874</span>                                + " to your inventory");<a name="line.874"></a>
+<span class="sourceLineNo">875</span>                Utils.addLocale("tpRequestTimeOut", ChatColor.RED<a name="line.875"></a>
+<span class="sourceLineNo">876</span>                                + "This tp request has timed out and will not be executed.");<a name="line.876"></a>
+<span class="sourceLineNo">877</span>                Utils.addLocale("noTpRequest", ChatColor.GREEN<a name="line.877"></a>
+<span class="sourceLineNo">878</span>                                + "There is no tp request to execute");<a name="line.878"></a>
+<span class="sourceLineNo">879</span>                Utils.addLocale("noteAfk", ChatColor.DARK_RED + "Note: "<a name="line.879"></a>
+<span class="sourceLineNo">880</span>                                + ChatColor.WHITE + "%player is AFK at the moment:");<a name="line.880"></a>
+<span class="sourceLineNo">881</span>                Utils.addLocale("idleTime", ChatColor.DARK_AQUA<a name="line.881"></a>
+<span class="sourceLineNo">882</span>                                + "Idle for %mins minute(s)");<a name="line.882"></a>
+<span class="sourceLineNo">883</span>                Utils.addLocale("pluginVersion", ChatColor.YELLOW + "Version of "<a name="line.883"></a>
+<span class="sourceLineNo">884</span>                                + ChatColor.WHITE + "%plugin: " + ChatColor.GREEN + "%version");<a name="line.884"></a>
+<span class="sourceLineNo">885</span>                Utils.addLocale("emptyList", ChatColor.RED<a name="line.885"></a>
+<span class="sourceLineNo">886</span>                                + "Empty list or the selected type don't exists.");<a name="line.886"></a>
+<span class="sourceLineNo">887</span>                Utils.addLocale("telportSuccess", ChatColor.DARK_GREEN<a name="line.887"></a>
+<span class="sourceLineNo">888</span>                                + "You have been successfully teleported.");<a name="line.888"></a>
+<span class="sourceLineNo">889</span>                Utils.addLocale("noLastLocation", ChatColor.RED<a name="line.889"></a>
+<span class="sourceLineNo">890</span>                                + "You don't have a last location to tp back");<a name="line.890"></a>
+<span class="sourceLineNo">891</span>                Utils.addLocale("super_breakerDisabled", ChatColor.GOLD<a name="line.891"></a>
+<span class="sourceLineNo">892</span>                                + "Super Breaker mode disabled.");<a name="line.892"></a>
+<span class="sourceLineNo">893</span>                Utils.addLocale("super_breakerDisabledTarget", ChatColor.GOLD<a name="line.893"></a>
+<span class="sourceLineNo">894</span>                                + "Super Breaker mode disabled for %player");<a name="line.894"></a>
+<span class="sourceLineNo">895</span>                Utils.addLocale("super_breakerEnabled", ChatColor.GOLD<a name="line.895"></a>
+<span class="sourceLineNo">896</span>                                + "Super Breaker mode enabled.");<a name="line.896"></a>
+<span class="sourceLineNo">897</span>                Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD<a name="line.897"></a>
+<span class="sourceLineNo">898</span>                                + "Super Breaker mode enabled for %player");<a name="line.898"></a>
+<span class="sourceLineNo">899</span>                Utils.addLocale("airForbidden", ChatColor.DARK_RED<a name="line.899"></a>
+<span class="sourceLineNo">900</span>                                + "You can't give AIR item.");<a name="line.900"></a>
+<span class="sourceLineNo">901</span>                Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player "<a name="line.901"></a>
+<span class="sourceLineNo">902</span>                                + ChatColor.WHITE + "played " + ChatColor.AQUA<a name="line.902"></a>
+<span class="sourceLineNo">903</span>                                + "#elapsedTotalTime#");<a name="line.903"></a>
+<span class="sourceLineNo">904</span>                Utils.addLocale("serverUnlock", ChatColor.GREEN<a name="line.904"></a>
+<span class="sourceLineNo">905</span>                                + "Server is now UnLocked.");<a name="line.905"></a>
+<span class="sourceLineNo">906</span>                Utils.addLocale("serverLock", ChatColor.RED<a name="line.906"></a>
+<span class="sourceLineNo">907</span>                                + "Server will be lock in 5 seconds,"<a name="line.907"></a>
+<span class="sourceLineNo">908</span>                                + " you'll be kicked if you don't have the Permission to stay.");<a name="line.908"></a>
+<span class="sourceLineNo">909</span>                Utils.addLocale("eternalDisabled", ChatColor.DARK_RED<a name="line.909"></a>
+<span class="sourceLineNo">910</span>                                + "ETERNAL mode disabled.");<a name="line.910"></a>
+<span class="sourceLineNo">911</span>                Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED<a name="line.911"></a>
+<span class="sourceLineNo">912</span>                                + "ETERNAL mode disabled for %player");<a name="line.912"></a>
+<span class="sourceLineNo">913</span>                Utils.addLocale("eternalEnabled", ChatColor.DARK_RED<a name="line.913"></a>
+<span class="sourceLineNo">914</span>                                + "ETERNAL mode enabled.");<a name="line.914"></a>
+<span class="sourceLineNo">915</span>                Utils.addLocale("eternalEnabledTarget", ChatColor.DARK_RED<a name="line.915"></a>
+<span class="sourceLineNo">916</span>                                + "ETERNAL mode enabled for %player");<a name="line.916"></a>
+<span class="sourceLineNo">917</span>                Utils.addLocale("fakeQuitDisabled", ChatColor.DARK_AQUA<a name="line.917"></a>
+<span class="sourceLineNo">918</span>                                + "FakeQuit mode disabled, you are now listed online again.");<a name="line.918"></a>
+<span class="sourceLineNo">919</span>                Utils.addLocale("fakeQuitDisabledTarget", ChatColor.DARK_AQUA<a name="line.919"></a>
+<span class="sourceLineNo">920</span>                                + "FakeQuit mode disabled for %player");<a name="line.920"></a>
+<span class="sourceLineNo">921</span>                Utils.addLocale(<a name="line.921"></a>
+<span class="sourceLineNo">922</span>                                "fakeQuitEnabled",<a name="line.922"></a>
+<span class="sourceLineNo">923</span>                                ChatColor.DARK_AQUA<a name="line.923"></a>
+<span class="sourceLineNo">924</span>                                                + "FakeQuit mode enabled, you are now not listed online anymore.");<a name="line.924"></a>
+<span class="sourceLineNo">925</span>                Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA<a name="line.925"></a>
+<span class="sourceLineNo">926</span>                                + "FakeQuit mode enabled for %player");<a name="line.926"></a>
+<span class="sourceLineNo">927</span>                Utils.addLocale("noLoginInformation", "No login information available");<a name="line.927"></a>
+<span class="sourceLineNo">928</span>                Utils.addLocale("insufficientLvl", ChatColor.DARK_RED<a name="line.928"></a>
+<span class="sourceLineNo">929</span>                                + "You don't have the sufficient lvl to do that.");<a name="line.929"></a>
+<span class="sourceLineNo">930</span>                Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for "<a name="line.930"></a>
+<span class="sourceLineNo">931</span>                                + ChatColor.GOLD + "%player " + ChatColor.GREEN<a name="line.931"></a>
+<span class="sourceLineNo">932</span>                                + "switched to : " + ChatColor.WHITE + "%gamemode");<a name="line.932"></a>
+<span class="sourceLineNo">933</span>                Utils.addLocale("kitDelayNotUp", ChatColor.RED<a name="line.933"></a>
+<span class="sourceLineNo">934</span>                                + "You cannot use that kit for another " + ChatColor.WHITE<a name="line.934"></a>
+<span class="sourceLineNo">935</span>                                + "%delay");<a name="line.935"></a>
+<span class="sourceLineNo">936</span>                Utils.addLocale("days", "%d day(s)");<a name="line.936"></a>
+<span class="sourceLineNo">937</span>                Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");<a name="line.937"></a>
+<span class="sourceLineNo">938</span>                Utils.addLocale("spawnerSetDelay", ChatColor.GREEN + "Delay set to: "<a name="line.938"></a>
+<span class="sourceLineNo">939</span>                                + ChatColor.GOLD + "%delay");<a name="line.939"></a>
+<span class="sourceLineNo">940</span>                Utils.addLocale("spawnerSetType", ChatColor.GREEN<a name="line.940"></a>
+<span class="sourceLineNo">941</span>                                + "CreatureType of the Mob Spawner changed to: "<a name="line.941"></a>
+<span class="sourceLineNo">942</span>                                + ChatColor.GOLD + "%type");<a name="line.942"></a>
+<span class="sourceLineNo">943</span>                Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA<a name="line.943"></a>
+<span class="sourceLineNo">944</span>                                + "This Mob Spawner spawns " + ChatColor.GOLD + "%mob" + "s"<a name="line.944"></a>
+<span class="sourceLineNo">945</span>                                + ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD<a name="line.945"></a>
+<span class="sourceLineNo">946</span>                                + "%delay" + ChatColor.DARK_AQUA + ".");<a name="line.946"></a>
+<span class="sourceLineNo">947</span>                Utils.addLocale("spawnerNaN", ChatColor.RED<a name="line.947"></a>
+<span class="sourceLineNo">948</span>                                + "Your input is not a number!");<a name="line.948"></a>
+<span class="sourceLineNo">949</span>                Utils.addLocale("addSpawnWarp", ChatColor.GREEN<a name="line.949"></a>
+<span class="sourceLineNo">950</span>                                + "Spawnpoint for the group " + ChatColor.DARK_AQUA + " %name"<a name="line.950"></a>
+<span class="sourceLineNo">951</span>                                + ChatColor.GREEN + " added.");<a name="line.951"></a>
+<span class="sourceLineNo">952</span>                Utils.addLocale("tpTO", "to them.");<a name="line.952"></a>
+<span class="sourceLineNo">953</span>                Utils.addLocale("tpHERE", "to you.");<a name="line.953"></a>
+<span class="sourceLineNo">954</span>                Utils.addLocale("tpPLAYERSTO", "of %target to you.");<a name="line.954"></a>
+<span class="sourceLineNo">955</span>                Utils.addLocale("tpPLAYERSFROM", "you to %target.");<a name="line.955"></a>
+<span class="sourceLineNo">956</span>                Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");<a name="line.956"></a>
+<span class="sourceLineNo">957</span>                Utils.addLocale(<a name="line.957"></a>
+<span class="sourceLineNo">958</span>                                "noPlayerToReply",<a name="line.958"></a>
+<span class="sourceLineNo">959</span>                                ChatColor.RED<a name="line.959"></a>
+<span class="sourceLineNo">960</span>                                                + "You can't reply to a message if none did send you a private message.");<a name="line.960"></a>
+<span class="sourceLineNo">961</span>                Utils.addLocale("mustBePlayer",<a name="line.961"></a>
+<span class="sourceLineNo">962</span>                                "[AdminCmd] You must be a player to use this command.");<a name="line.962"></a>
+<span class="sourceLineNo">963</span>                Utils.addLocale("errorInsufficientArguments",<a name="line.963"></a>
+<span class="sourceLineNo">964</span>                                "You have to specify a %argument to use this command from the command line.");<a name="line.964"></a>
+<span class="sourceLineNo">965</span>                Utils.addLocale("setDifficutly", ChatColor.DARK_AQUA<a name="line.965"></a>
+<span class="sourceLineNo">966</span>                                + "The Difficulty of " + ChatColor.GOLD + "%world"<a name="line.966"></a>
+<span class="sourceLineNo">967</span>                                + ChatColor.DARK_AQUA + " has been set to: " + ChatColor.GOLD<a name="line.967"></a>
+<span class="sourceLineNo">968</span>                                + "%difficulty");<a name="line.968"></a>
+<span class="sourceLineNo">969</span>                Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA<a name="line.969"></a>
+<span class="sourceLineNo">970</span>                                + "The Difficulty of " + ChatColor.GOLD + "%world"<a name="line.970"></a>
+<span class="sourceLineNo">971</span>                                + ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD<a name="line.971"></a>
+<span class="sourceLineNo">972</span>                                + "%difficulty");<a name="line.972"></a>
+<span class="sourceLineNo">973</span>                Utils.addLocale("serverLockMessage", "The server is locked!");<a name="line.973"></a>
+<span class="sourceLineNo">974</span>                Utils.addLocale(<a name="line.974"></a>
+<span class="sourceLineNo">975</span>                                "errorMoved",<a name="line.975"></a>
+<span class="sourceLineNo">976</span>                                ChatColor.RED<a name="line.976"></a>
+<span class="sourceLineNo">977</span>                                                + "You have moved since you issued the %cmdname command, teleportation aborted!");<a name="line.977"></a>
+<span class="sourceLineNo">978</span>                Utils.addLocale("privateTitle", ChatColor.RED + "[Private]"<a name="line.978"></a>
+<span class="sourceLineNo">979</span>                                + ChatColor.WHITE);<a name="line.979"></a>
+<span class="sourceLineNo">980</span>                Utils.addLocale("privateMessageHeader", "#privateTitle# " + "%sender"<a name="line.980"></a>
+<span class="sourceLineNo">981</span>                                + "-" + "%receiver" + ChatColor.WHITE + ": ");<a name="line.981"></a>
+<span class="sourceLineNo">982</span>                Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW<a name="line.982"></a>
+<span class="sourceLineNo">983</span>                                + " joined the game!");<a name="line.983"></a>
+<span class="sourceLineNo">984</span>                Utils.addLocale("joinMessageFirstTime", "%name" + ChatColor.YELLOW<a name="line.984"></a>
+<span class="sourceLineNo">985</span>                                + " joined the game " + ChatColor.GOLD + "for the first time!");<a name="line.985"></a>
+<span class="sourceLineNo">986</span>                Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW<a name="line.986"></a>
+<span class="sourceLineNo">987</span>                                + " left the game!");<a name="line.987"></a>
+<span class="sourceLineNo">988</span>                Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for"<a name="line.988"></a>
+<span class="sourceLineNo">989</span>                                + ChatColor.WHITE + " %player" + ChatColor.YELLOW<a name="line.989"></a>
+<span class="sourceLineNo">990</span>                                + " set to : " + ChatColor.GOLD + "%pres");<a name="line.990"></a>
+<span class="sourceLineNo">991</span>                Utils.addLocale("expAdded", ChatColor.GOLD + "%amount "<a name="line.991"></a>
+<span class="sourceLineNo">992</span>                                + ChatColor.DARK_AQUA + "has been added to your experience.");<a name="line.992"></a>
+<span class="sourceLineNo">993</span>                Utils.addLocale("expLevelSet", ChatColor.DARK_AQUA<a name="line.993"></a>
+<span class="sourceLineNo">994</span>                                + "Your current level has been set to " + ChatColor.GOLD<a name="line.994"></a>
+<span class="sourceLineNo">995</span>                                + "%amount");<a name="line.995"></a>
+<span class="sourceLineNo">996</span>                Utils.addLocale("expProgressionSet", ChatColor.DARK_AQUA<a name="line.996"></a>
+<span class="sourceLineNo">997</span>                                + "Your current level progression has been set to "<a name="line.997"></a>
+<span class="sourceLineNo">998</span>                                + ChatColor.GOLD + "%amount");<a name="line.998"></a>
+<span class="sourceLineNo">999</span>                Utils.addLocale("expDropped", ChatColor.DARK_AQUA<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>                                + "An experience orb has been dropped near your location!");<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>                Utils.addLocale("expTotal", ChatColor.DARK_AQUA<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span>                                + "Your total experience is: " + ChatColor.GOLD + "%exp");<a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>                Utils.addLocale("expAddedTarget", ChatColor.GREEN + "You have added"<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>                                + ChatColor.GOLD + " %amount " + ChatColor.GREEN + "to %target"<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>                                + "s total experience.");<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>                Utils.addLocale("expLevelSetTarget", ChatColor.GREEN + "%target"<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>                                + "s level now is:" + ChatColor.GOLD + " %amount");<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>                Utils.addLocale("expProgressionSetTarget", ChatColor.GREEN<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>                                + "You have set %target" + "s current " + "progression to "<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>                                + ChatColor.GOLD + "%amount");<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>                Utils.addLocale("expDroppedTarget", ChatColor.GREEN<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>                                + "You have dropped an experience" + " orb at %target"<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>                                + "s location.");<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>                Utils.addLocale("expTotalTarget", ChatColor.DARK_AQUA + "%target"<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>                                + "s total experience is: " + ChatColor.GOLD + "%exp");<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>                Utils.addLocale("kitOnce", ChatColor.RED + "The kit " + ChatColor.GOLD<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>                                + "%kit" + ChatColor.RED + " can be only used once.");<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>                Utils.addLocale("MOTDset", ChatColor.YELLOW<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>                                + "The new Message Of The Day is : %motd");<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span>                Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");<a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>                Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>                Utils.addLocale("timeOutPower", ChatColor.GOLD<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>                                + "Time Out of the power %power. " + ChatColor.DARK_RED<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span>                                + "You lost it.");<a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>                Utils.addLocale("timeOutPowerSender", ChatColor.DARK_RED + "Power "<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>                                + ChatColor.GOLD + "%power " + ChatColor.DARK_RED<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>                                + "disabled for %player, reason: %reason");<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>                Utils.addLocale("serverStop", "The server is stopping.");<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>                Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] "<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>                                + ChatColor.YELLOW + "The server will " + ChatColor.DARK_RED<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>                                + "STOP " + ChatColor.YELLOW + "in " + ChatColor.GOLD<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span>                                + "%sec seconds.");<a name="line.1032"></a>
+<span class="sourceLineNo">1033</span>                Utils.addLocale("diffWorld", ChatColor.AQUA + "%player" + ChatColor.RED<a name="line.1033"></a>
+<span class="sourceLineNo">1034</span>                                + " is in a different world as " + ChatColor.DARK_PURPLE<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>                                + "%to" + ChatColor.DARK_RED + " . He can't be tp there.");<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span>                Utils.addLocale("paramMissing", ChatColor.RED<a name="line.1036"></a>
+<span class="sourceLineNo">1037</span>                                + "This command need the parameter " + ChatColor.GOLD<a name="line.1037"></a>
+<span class="sourceLineNo">1038</span>                                + "-%param .");<a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>                Utils.addLocale("eggDontExists", ChatColor.RED + "This Egg Type ("<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>                                + ChatColor.GOLD + "%egg" + ChatColor.RED + ") don't exists.");<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>                Utils.addLocale("eggEnabled", ChatColor.DARK_AQUA + "EGG "<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>                                + ChatColor.GOLD + "(%egg)" + ChatColor.AQUA + " mode enabled.");<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>                Utils.addLocale("eggNormal", ChatColor.GREEN<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span>                                + "EGG return to normality.");<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>                Utils.addLocale("eggNoParamGiven", ChatColor.RED<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>                                + "You need to specify an egg-type for the /egg -E command.");<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>                Utils.addLocale("entityDontExists", ChatColor.RED + "The Entity id "<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>                                + ChatColor.GOLD + "%entity" + ChatColor.RED + " don't exists.");<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>                Utils.addLocale("eggCustomError", ChatColor.RED<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>                                + "Problem with the egg " + ChatColor.GOLD + "%egg"<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>                                + ChatColor.RED + " : " + ChatColor.YELLOW + "%error");<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>                LocaleHelper.addAllLocales();<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>                LocaleManager.getInstance().save();<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span>        }<a name="line.1054"></a>
+<span class="sourceLineNo">1055</span><a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>        private void checkModulableFeatures(final PluginManager pm) {<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span><a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>                if (ConfigEnum.EDIT_SIGN.getBoolean()) {<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>                        pm.registerEvents(new ACSignEditListener(), this);<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span>                }<a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>                if (ConfigEnum.LOG_SAME_IP.getBoolean()) {<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span>                        pm.registerEvents(new ACIpCheckListener(), this);<a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>                }<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span>                if (ConfigEnum.COLSIGN.getBoolean()) {<a name="line.1064"></a>
+<span class="sourceLineNo">1065</span>                        pm.registerEvents(new ACColorSignListener(), this);<a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>                }<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span>                if (ConfigEnum.RESET_POWERS.getBoolean()) {<a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>                        pm.registerEvents(new ACResetPowerListener(), this);<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>                }<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>                if (ConfigEnum.POWERS_OFF.getBoolean()) {<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>                        pm.registerEvents(new ACPowerOffListener(), this);<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span>                }<a name="line.1072"></a>
+<span class="sourceLineNo">1073</span>                if (!ConfigEnum.DEATH_MSG_OFF.getBoolean()) {<a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>                        if (ConfigEnum.DEATH_MSG.getBoolean()) {<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span>                                pm.registerEvents(new ACDeathListener(false), this);<a name="line.1075"></a>
+<span class="sourceLineNo">1076</span>                        } else {<a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>                                pm.registerEvents(new ACDeathListener(true), this);<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>                        }<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>                }<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>                pm.registerEvents(new ACChatListener(), this);<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span>                if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {<a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>                        pm.registerEvents(new ACRespawnWorldFeature(), this);<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>                }<a name="line.1083"></a>
+<span class="sourceLineNo">1084</span><a name="line.1084"></a>
+<span class="sourceLineNo">1085</span>        }<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>}<a name="line.1086"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

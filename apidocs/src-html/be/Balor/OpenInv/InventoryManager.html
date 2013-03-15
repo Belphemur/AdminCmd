@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * This file is part of AdminCmd.                                                                       <a name="line.2"></a>
+<span class="sourceLineNo">003</span> *                                                                                                                                              <a name="line.3"></a>
+<span class="sourceLineNo">004</span> * AdminCmd is free software: you can redistribute it and/or modify<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * it under the terms of the GNU General Public License as published by <a name="line.5"></a>
+<span class="sourceLineNo">006</span> * the Free Software Foundation, either version 3 of the License, or            <a name="line.6"></a>
+<span class="sourceLineNo">007</span> * (at your option) any later version.                                                                  <a name="line.7"></a>
+<span class="sourceLineNo">008</span> *                                                                                                                                              <a name="line.8"></a>
+<span class="sourceLineNo">009</span> * AdminCmd is distributed in the hope that it will be useful,  <a name="line.9"></a>
+<span class="sourceLineNo">010</span> * but WITHOUT ANY WARRANTY; without even the implied warranty of               <a name="line.10"></a>
+<span class="sourceLineNo">011</span> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                        <a name="line.11"></a>
+<span class="sourceLineNo">012</span> * GNU General Public License for more details.                                                 <a name="line.12"></a>
+<span class="sourceLineNo">013</span> *                                                                                                                                              <a name="line.13"></a>
+<span class="sourceLineNo">014</span> * You should have received a copy of the GNU General Public License<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * along with AdminCmd.  If not, see &lt;http://www.gnu.org/licenses/&gt;.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> ************************************************************************/<a name="line.16"></a>
+<span class="sourceLineNo">017</span>package be.Balor.OpenInv;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import java.io.File;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import java.lang.reflect.Proxy;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import java.util.Arrays;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import java.util.Collection;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import java.util.HashMap;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import java.util.Map;<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.bukkit.entity.Player;<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>import be.Balor.Manager.Exceptions.PlayerNotFound;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>import be.Balor.Manager.Exceptions.WorldNotLoaded;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>import be.Balor.Tools.Utils;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>import be.Balor.Tools.Compatibility.MinecraftReflection;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>import be.Balor.Tools.Compatibility.NMSBuilder;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import be.Balor.Tools.Compatibility.Reflect.FieldUtils;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import be.Balor.Tools.Compatibility.Reflect.MethodHandler;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import be.Balor.Tools.Debug.DebugLog;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import be.Balor.Tools.Files.Filters.DatFilter;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>import be.Balor.World.ACWorld;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>import be.Balor.bukkit.AdminCmd.LocaleHelper;<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>import com.google.common.collect.MapMaker;<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>/**<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * @author Balor (aka Antoine Aflalo)<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * <a name="line.44"></a>
+<span class="sourceLineNo">045</span> */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>public class InventoryManager {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        public static InventoryManager INSTANCE;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        private final Map&lt;String, Object&gt; replacedInv = new MapMaker().makeMap();<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        private final Map&lt;String, Object&gt; offlineInv = new MapMaker().makeMap();<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>        /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * <a name="line.52"></a>
+<span class="sourceLineNo">053</span> */<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        private InventoryManager() {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>        public static void createInstance() {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                if (INSTANCE == null) {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                        INSTANCE = new InventoryManager();<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                }<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        }<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>        public void onQuit(final Player p) {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                final String name = p.getName();<a name="line.64"></a>
+<span class="sourceLineNo">065</span>                final Object inv = replacedInv.get(name);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                if (inv == null) {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                        return;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                }<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                final MethodHandler getViewers = new MethodHandler(inv.getClass(),<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                                "getViewers");<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                final Object viewers = getViewers.invoke(inv);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                final MethodHandler isEmpty = new MethodHandler(viewers.getClass(),<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                                "isEmpty");<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                final boolean empty = isEmpty.invoke(viewers);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                if (empty) {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                        replacedInv.remove(name);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                }<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        }<a name="line.78"></a>
+<span class="sourceLineNo">079</span><a name="line.79"></a>
+<span class="sourceLineNo">080</span>        void closeOfflineInv(final Player p) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                onQuit(p);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                offlineInv.remove(p.getName());<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                p.saveData();<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                DebugLog.INSTANCE.info("Saving Offline Inventory of " + p.getName());<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        }<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>        public void onJoin(final Player p) {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                final String name = p.getName();<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                Object inv = offlineInv.get(name);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>                if (inv == null) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                        inv = replacedInv.get(name);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                }<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                if (inv == null) {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                        return;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                }<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                final PlayerInventoryProxy proxy = (PlayerInventoryProxy) Proxy<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                                .getInvocationHandler(inv);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                final Object inventory = MinecraftReflection.getInventory(p);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                FieldUtils.setField(inventory, "armor", proxy.getArmor());<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                FieldUtils.setField(inventory, "items", proxy.getItems());<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>        }<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>        /**<a name="line.104"></a>
+<span class="sourceLineNo">105</span>         * Open the inventory of an offline player<a name="line.105"></a>
+<span class="sourceLineNo">106</span>         * <a name="line.106"></a>
+<span class="sourceLineNo">107</span>         * @param sender<a name="line.107"></a>
+<span class="sourceLineNo">108</span>         * @param name<a name="line.108"></a>
+<span class="sourceLineNo">109</span>         * @throws PlayerNotFound<a name="line.109"></a>
+<span class="sourceLineNo">110</span>         * @author lishd {@link https<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         *         ://github.com/lishd/OpenInv/blob/master/src/lishid<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         *         /openinv/commands/OpenInvPluginCommand.java}<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         */<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        public void openOfflineInv(final Player sender, final String name,<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                        final String world) throws PlayerNotFound {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                Player target = null;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                final HashMap&lt;String, String&gt; replace = new HashMap&lt;String, String&gt;();<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                replace.put("player", name);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                // Offline inv here...<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                // See if the player has data files<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>                // Find the player folder<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                ACWorld acworld = null;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                try {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                        acworld = ACWorld.getWorld(world);<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                } catch (final WorldNotLoaded e) {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                        replace.put("message", world);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                        LocaleHelper.WORLD_NOT_LOADED.sendLocale(sender, replace);<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                        return;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                }<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                final File playerfolder = new File(acworld.getHandle()<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                                .getWorldFolder(), "players");<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                if (!playerfolder.exists()) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                        throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                                        sender);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>                final String playername = matchUser(<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                                Arrays.asList(DatFilter.INSTANCE.listRecursively(playerfolder)),<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                                name);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                if (playername == null) {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                        throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                                        sender);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                }<a name="line.144"></a>
+<span class="sourceLineNo">145</span><a name="line.145"></a>
+<span class="sourceLineNo">146</span>                // Create an entity to load the player data<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                final Object entity = NMSBuilder.buildEntityPlayer(playername);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                if (entity == null) {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                        target = null;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                } else {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                        target = MinecraftReflection.getBukkitEntity(entity);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                }<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                if (target != null) {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                        target.loadData();<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                } else {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                        throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                                        sender);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                }<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                if (Utils.checkImmunity(sender, target)) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                        openInv(sender, target, true);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                } else {<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                        Utils.sI18n(sender, "insufficientLvl");<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                }<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>        /**<a name="line.166"></a>
+<span class="sourceLineNo">167</span>         * Open the inventory of the connected player<a name="line.167"></a>
+<span class="sourceLineNo">168</span>         * <a name="line.168"></a>
+<span class="sourceLineNo">169</span>         * @param sender<a name="line.169"></a>
+<span class="sourceLineNo">170</span>         *            the user who'll see the inventory<a name="line.170"></a>
+<span class="sourceLineNo">171</span>         * @param target<a name="line.171"></a>
+<span class="sourceLineNo">172</span>         *            player to have his inventory opened<a name="line.172"></a>
+<span class="sourceLineNo">173</span>         */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        public void openInv(final Player sender, final Player target) {<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                openInv(sender, target, false);<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        }<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>        private void openInv(final Player sender, final Player target,<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                        final boolean offline) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                final Object inventory = getInventory(target, offline);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                final Object eh = MinecraftReflection.getHandle(sender);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                final MethodHandler openContainer = new MethodHandler(<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                                MinecraftReflection.getEntityPlayerClass(), "openContainer",<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                                MinecraftReflection.getIInventoryClass());<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                openContainer.invoke(eh, inventory);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>        private Object getInventory(final Player player, final boolean offline) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                Object inventory = replacedInv.get(player.getName());<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                if (inventory == null) {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                        final Object playerInv = NMSBuilder.buildPlayerInventory(player);<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                        if (offline) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                                inventory = OfflinePlayerInventoryProxy.newInstance(player,<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                                                playerInv);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                                offlineInv.put(player.getName(), inventory);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                        } else {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                                inventory = PlayerInventoryProxy.newInstance(player, playerInv);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                                replacedInv.put(player.getName(), inventory);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                        }<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                return inventory;<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>        }<a name="line.203"></a>
+<span class="sourceLineNo">204</span><a name="line.204"></a>
+<span class="sourceLineNo">205</span>        private String matchUser(final Collection&lt;File&gt; container,<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                        final String search) {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                String found = null;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                if (search == null) {<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                        return found;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>                }<a name="line.210"></a>
+<span class="sourceLineNo">211</span>                final String lowerSearch = search.toLowerCase();<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                int delta = Integer.MAX_VALUE;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                for (final File file : container) {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                        final String filename = file.getName();<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                        final String str = filename.substring(0, filename.length() - 4);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                        if (!str.toLowerCase().startsWith(lowerSearch)) {<a name="line.216"></a>
+<span class="sourceLineNo">217</span>                                continue;<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                        }<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                        final int curDelta = str.length() - lowerSearch.length();<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                        if (curDelta &lt; delta) {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                                found = str;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                                delta = curDelta;<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                        }<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                        if (curDelta == 0) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                                break;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                        }<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span>                }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                return found;<a name="line.229"></a>
+<span class="sourceLineNo">230</span><a name="line.230"></a>
+<span class="sourceLineNo">231</span>        }<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>}<a name="line.233"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
