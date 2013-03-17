@@ -115,7 +115,7 @@ public class SQLPlayer extends ACPlayer {
 					if (worldName != null && !worldName.isEmpty()) {
 						World world = Bukkit.getWorld(worldName);
 						if (world == null) {
-							world = ACWorld.getWorld(world).getHandle();
+							world = ACWorld.getWorld(worldName).getHandle();
 						}
 						if (world != null) {
 							lastLoc = new Location(world, rs.getDouble("x"),
