@@ -28,9 +28,11 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.ComplexLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowman;
+import org.bukkit.entity.Villager;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -40,6 +42,7 @@ import be.Balor.Tools.Utils;
 import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.google.common.base.Joiner;
 
@@ -69,7 +72,8 @@ public class KillMob extends MobCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final List<String> types = new ArrayList<String>();
-		Integer range = 25;
+		Integer range = ConfigEnum.MK_DEF_RADIUS.getInt();
+		range *= range;
 		if (args.hasFlag('r')) {
 			range = Integer.parseInt(args.getValueFlag('r'));
 			range *= range;
@@ -153,6 +157,9 @@ public class KillMob extends MobCommand {
 					classes.add(Monster.class);
 					classes.add(Snowman.class);
 					classes.add(ComplexLivingEntity.class);
+					if (ConfigEnum.MK_V_G_KILL.getBoolean()) {
+						classes.add(Golem.class);
+					}
 				} else if (type.equalsIgnoreCase("animals")) {
 					classes.add(Animals.class);
 				} else {
@@ -172,6 +179,10 @@ public class KillMob extends MobCommand {
 			classes.add(Animals.class);
 			classes.add(ComplexLivingEntity.class);
 			classes.add(Snowman.class);
+			if (ConfigEnum.MK_V_G_KILL.getBoolean()) {
+				classes.add(Golem.class);
+				classes.add(Villager.class);
+			}
 		}
 
 		final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(

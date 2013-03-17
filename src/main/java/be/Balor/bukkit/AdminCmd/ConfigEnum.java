@@ -386,7 +386,15 @@ public enum ConfigEnum {
 			"delayBeforeSendToDb",
 			10,
 			"Number of seconds before the plugin execute the request to the database (in case of SQLite or MySQL).\n"
-					+ "This feature have been done to avoid lag by execut the request in another thread than the main one.");
+					+ "This feature have been done to avoid lag by execut the request in another thread than the main one."),
+	MK_V_G_KILL(
+			"mk.KillVillagerAndGolem",
+			false,
+			"If set to true, the mobkill command when used with ALL will also kill the vilager and the golem."),
+	MK_DEF_RADIUS(
+			"mk.DefaultRadiusInBlock",
+			5,
+			"Set the default radius for the mobkill command.");
 
 	private final String confVal;
 	private final Object defaultVal;
