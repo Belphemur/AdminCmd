@@ -31,6 +31,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.bukkit.AdminCmd.TextLocale;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -169,7 +170,7 @@ public class LocaleManager {
 	 * @return
 	 */
 	public String get(final String key, final Map<String, String> values) {
-		if (noMsg) {
+		if (noMsg && !TextLocale.LOCALES.contains(key)) {
 			return null;
 		}
 		String locale = getLocale(key);
@@ -262,7 +263,8 @@ public class LocaleManager {
 				final String replaceValue = values.get(ResultString);
 				if (replaceValue != null) {
 					try {
-						result = regexMatcher.replaceFirst(Matcher.quoteReplacement(replaceValue));
+						result = regexMatcher.replaceFirst(Matcher
+								.quoteReplacement(replaceValue));
 					} catch (final StringIndexOutOfBoundsException e) {
 						result = regexMatcher.replaceFirst(replaceValue
 								.replaceAll("\\W", ""));

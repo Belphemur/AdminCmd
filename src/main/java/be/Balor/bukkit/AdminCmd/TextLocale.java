@@ -17,8 +17,10 @@
 package be.Balor.bukkit.AdminCmd;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 
@@ -44,10 +46,17 @@ public enum TextLocale {
 	private final String locale;
 	private final String file;
 	private static ExtendedConfiguration version;
+	public static final List<String> LOCALES = new ArrayList<String>();
 
 	/**
  * 
  */
+	static {
+		for (final TextLocale text : TextLocale.values()) {
+			LOCALES.add(text.locale);
+		}
+	}
+
 	private TextLocale(final String locale) {
 		this.locale = locale;
 		this.file = this.locale.toLowerCase();
@@ -79,6 +88,9 @@ public enum TextLocale {
 	 * @param content
 	 */
 	private String parseContent(final String content) {
+		if (content == null) {
+			return "";
+		}
 		return Utils.colorParser(content.replaceAll("\\n", "\n").replaceAll(
 				"//n", "\n"));
 	}
