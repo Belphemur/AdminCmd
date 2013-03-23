@@ -62,9 +62,8 @@ public class ACNoDropListener implements Listener {
 		if (checkNoLoss(p, player)) {
 			return;
 		}
-		for (final ItemStack item : event.getDrops()) {
-			item.setAmount(0);
-		}
+		event.getDrops().clear();
+
 		event.setDroppedExp(0);
 		itemsDrops.put(p, new PlayerInformation(p));
 	}
