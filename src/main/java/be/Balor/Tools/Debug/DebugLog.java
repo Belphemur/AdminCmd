@@ -60,10 +60,23 @@ public class DebugLog {
 
 	}
 
+	private static class DebugThreadLocale extends
+			ThreadLocal<Stack<DebugInfo>> {
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.ThreadLocal#initialValue()
+		 */
+		@Override
+		protected Stack<DebugInfo> initialValue() {
+			return new Stack<DebugInfo>();
+		}
+	}
+
 	public static final Logger INSTANCE = Logger.getLogger("AdminCmd");
 	public static final String BEGIN_PREFIX = "[BEGIN] ";
 	public static final String END_PREFIX = "[END] ";
-	private static final Stack<DebugInfo> debugInfos = new Stack<DebugInfo>();
+	private static final ThreadLocal<Stack<DebugInfo>> debugInfos = new DebugThreadLocale();
 	static {
 		INSTANCE.setUseParentHandlers(false);
 		INSTANCE.setLevel(Level.ALL);
@@ -107,7 +120,7 @@ public class DebugLog {
 	 * @param msg
 	 */
 	public static void beginInfo(final String msg) {
-		debugInfos.add(new DebugInfo(msg));
+		debugInfos.get().add(new DebugInfo(msg));
 		INSTANCE.info(getSpaces() + BEGIN_PREFIX + msg);
 
 	}
@@ -117,7 +130,7 @@ public class DebugLog {
 	 */
 	private static String getSpaces() {
 		final StringBuffer space = new StringBuffer();
-		for (int i = 0; i < debugInfos.size(); i++) {
+		for (int i = 0; i < debugInfos.get().size(); i++) {
 			space.append("\t");
 		}
 		return space.toString();
@@ -129,7 +142,7 @@ public class DebugLog {
 	public static void endInfo() {
 		try {
 			final String spaces = getSpaces();
-			final DebugInfo info = debugInfos.pop();
+			final DebugInfo info = debugInfos.get().pop();
 			INSTANCE.info(spaces + END_PREFIX + info.getBlockMsg() + " => "
 					+ info.getElapsedTime() + " milisec");
 		} catch (final Exception e) {
