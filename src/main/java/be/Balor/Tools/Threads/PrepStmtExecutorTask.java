@@ -42,7 +42,7 @@ public class PrepStmtExecutorTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		DebugLog.INSTANCE.info("Begin Execution of preparedStmt with "
+		DebugLog.beginInfo("Begin Execution of preparedStmt with "
 				+ preparedStatments.size() + " stmt(s)");
 		int count = 0;
 		while (!preparedStatments.isEmpty()) {
@@ -57,6 +57,7 @@ public class PrepStmtExecutorTask implements Runnable {
 			}
 		}
 		DebugLog.INSTANCE.info(count + " PreparedStmt(s) executed.");
+		DebugLog.endInfo();
 
 	}
 
