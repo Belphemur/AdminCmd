@@ -63,7 +63,7 @@ public class PlayerConvertTask implements Runnable {
 	public void run() {
 		final String name = oldPlayer.getName();
 		ACLogger.info("Convert player : " + name);
-		DebugLog.INSTANCE.info("Convert player : " + name);
+		DebugLog.beginInfo("Convert player : " + name);
 		newFactory.addExistingPlayer(name);
 		final ACPlayer newPlayer = newFactory.createPlayer(name);
 		DebugLog.INSTANCE.info("Convert lastLoc");
@@ -80,6 +80,12 @@ public class PlayerConvertTask implements Runnable {
 							+ " of player "
 							+ name
 							+ " has not been converted because the world is not loaded.");
+					DebugLog.INSTANCE
+							.info("The home "
+									+ home
+									+ " of player "
+									+ name
+									+ " has not been converted because the world is not loaded.");
 				} else {
 					newPlayer.setHome(home, homeLoc);
 				}
@@ -116,6 +122,7 @@ public class PlayerConvertTask implements Runnable {
 		if (!(newPlayer instanceof FilePlayer)) {
 			newPlayer.forceSave();
 		}
+		DebugLog.endInfo();
 
 	}
 }
