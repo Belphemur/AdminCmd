@@ -148,6 +148,8 @@ public class ACPlayerListener implements Listener {
 							TextLocale.NEWS.sendText(p);
 						}
 						DebugLog.INSTANCE.info("TextLocale stop");
+						player.setInformation("lastConnection",
+								System.currentTimeMillis());
 						DebugLog.INSTANCE.info("MOTD start");
 						if (p.hasPlayedBefore() && ConfigEnum.MOTD.getBoolean()) {
 							TextLocale.MOTD.sendText(p);
@@ -167,8 +169,7 @@ public class ACPlayerListener implements Listener {
 							player.setPower(Type.TP_REQUEST);
 						}
 						DebugLog.INSTANCE.info("TPREQUEST stop");
-						player.setInformation("lastConnection",
-								System.currentTimeMillis());
+
 					}
 				});
 
