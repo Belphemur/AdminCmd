@@ -16,68 +16,20 @@
  ************************************************************************/
 package be.Balor.World;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
-
-import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class FileWorldFactory implements IWorldFactory {
+public class FileWorldFactory extends AbstractWorldFactory {
 	final String directory;
-	private final Map<String, World> bukkitWorlds = new HashMap<String, World>();
 
 	/**
 	 * 
 	 */
 	public FileWorldFactory(final String directory) {
 		this.directory = directory;
-		for (final World w : ACPluginManager.getServer().getWorlds()) {
-			bukkitWorlds.put(w.getName().toLowerCase(), w);
-		}
-
-	}
-
-	@Override
-	public synchronized ACWorld createWorld(final String worldName)
-			throws WorldNotLoaded {
-		World w = bukkitWorlds.get(worldName.toLowerCase());
-		if (w == null) {
-			File worldFile = new File(ACPluginManager.getServer()
-					.getWorldContainer(), worldName);
-			if (!isExistingWorld(worldFile)) {
-				worldFile = new File(ACPluginManager.getServer()
-						.getWorldContainer(), worldName.toLowerCase());
-			}
-			if (!isExistingWorld(worldFile)) {
-				worldFile = new File(ACPluginManager.getServer()
-						.getWorldContainer(), worldName.substring(0, 1)
-						.toUpperCase() + worldName.substring(1).toLowerCase());
-			}
-			if (isExistingWorld(worldFile)) {
-				w = ACPluginManager.getServer().createWorld(
-						new WorldCreator(worldFile.getName()));
-				bukkitWorlds.put(w.getName().toLowerCase(), w);
-				return createWorld(w);
-			}
-			throw new WorldNotLoaded(worldName);
-		}
-		return createWorld(w);
-	}
-
-	/**
-	 * @param worldFile
-	 * @return
-	 */
-	private boolean isExistingWorld(final File worldFile) {
-		return worldFile.exists() && worldFile.isDirectory();
 	}
 
 	/*

@@ -30,7 +30,7 @@ import be.Balor.Tools.Debug.DebugLog;
  * 
  */
 public class WorldConvertTask implements Runnable {
-	private final IWorldFactory oldFactory, newFactory;
+	private final AbstractWorldFactory oldFactory, newFactory;
 	private final World world;
 
 	/**
@@ -38,8 +38,8 @@ public class WorldConvertTask implements Runnable {
 	 * @param newFactory
 	 * @param world
 	 */
-	public WorldConvertTask(final IWorldFactory oldFactory,
-			final IWorldFactory newFactory, final World world) {
+	public WorldConvertTask(final AbstractWorldFactory oldFactory,
+			final AbstractWorldFactory newFactory, final World world) {
 		super();
 		this.oldFactory = oldFactory;
 		this.newFactory = newFactory;

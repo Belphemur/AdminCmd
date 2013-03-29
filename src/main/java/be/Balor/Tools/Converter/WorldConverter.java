@@ -22,7 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.World.IWorldFactory;
+import be.Balor.World.AbstractWorldFactory;
 import be.Balor.World.WorldConvertTask;
 
 /**
@@ -30,14 +30,14 @@ import be.Balor.World.WorldConvertTask;
  * 
  */
 public class WorldConverter {
-	private final IWorldFactory oldFactory, newFactory;
+	private final AbstractWorldFactory oldFactory, newFactory;
 
 	/**
 	 * @param oldFactory
 	 * @param newFactory
 	 */
-	public WorldConverter(final IWorldFactory oldFactory,
-			final IWorldFactory newFactory) {
+	public WorldConverter(final AbstractWorldFactory oldFactory,
+			final AbstractWorldFactory newFactory) {
 		super();
 		this.oldFactory = oldFactory;
 		this.newFactory = newFactory;

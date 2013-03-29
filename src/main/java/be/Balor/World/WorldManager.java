@@ -36,7 +36,7 @@ import com.google.common.collect.MapMaker;
 public class WorldManager {
 	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
 			.makeMap();
-	private IWorldFactory worldFactory;
+	private AbstractWorldFactory worldFactory;
 	private static final WorldManager INSTANCE = new WorldManager();
 
 	/**
@@ -75,7 +75,7 @@ public class WorldManager {
 	 * @param worldFactory
 	 *            the worldFactory to set
 	 */
-	public void setWorldFactory(final IWorldFactory worldFactory) {
+	public void setWorldFactory(final AbstractWorldFactory worldFactory) {
 		if (this.worldFactory == null) {
 			this.worldFactory = worldFactory;
 		}
@@ -86,7 +86,7 @@ public class WorldManager {
 	 * 
 	 * @param factory
 	 */
-	public void convertFactory(final IWorldFactory factory) {
+	public void convertFactory(final AbstractWorldFactory factory) {
 		new WorldConverter(worldFactory, factory).convert();
 		DebugLog.INSTANCE.info("Setting new Factory");
 		this.worldFactory = factory;
