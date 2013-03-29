@@ -144,7 +144,7 @@ public class SQLPlayer extends ACPlayer {
 					final String worldName = rs.getString("world");
 					World world = Bukkit.getWorld(worldName);
 					if (world == null) {
-						world = ACWorld.getWorld(world).getHandle();
+						world = ACWorld.getWorld(worldName).getHandle();
 					}
 					if (world != null) {
 						homes.put(
