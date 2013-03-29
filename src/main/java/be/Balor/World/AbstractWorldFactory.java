@@ -26,6 +26,7 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -46,33 +47,41 @@ public abstract class AbstractWorldFactory {
 	}
 
 	public ACWorld createWorld(final String worldName) throws WorldNotLoaded {
-		World w = bukkitWorlds.get(worldName.toLowerCase());
-		if (w == null) {
-			w = Bukkit.getServer().getWorld(worldName);
+		DebugLog.beginInfo("Loading World " + worldName);
+		try {
+			World w = bukkitWorlds.get(worldName.toLowerCase());
+			if (w == null) {
+				w = Bukkit.getServer().getWorld(worldName);
+			}
+			if (w == null) {
+				DebugLog.beginInfo("World not loaded in bukkit : Check for a folder");
+				File worldFile = new File(ACPluginManager.getServer()
+						.getWorldContainer(), worldName);
+				if (!isExistingWorld(worldFile)) {
+					worldFile = new File(ACPluginManager.getServer()
+							.getWorldContainer(), worldName.toLowerCase());
+				}
+				if (!isExistingWorld(worldFile)) {
+					worldFile = new File(ACPluginManager.getServer()
+							.getWorldContainer(), worldName.substring(0, 1)
+							.toUpperCase()
+							+ worldName.substring(1).toLowerCase());
+				}
+				if (isExistingWorld(worldFile)) {
+					w = ACPluginManager.getServer().createWorld(
+							new WorldCreator(worldFile.getName()));
+					bukkitWorlds.put(w.getName().toLowerCase(), w);
+					return createWorld(w);
+				}
+				DebugLog.endInfo();
+				throw new WorldNotLoaded(worldName);
+			} else {
+				bukkitWorlds.put(worldName.toLowerCase(), w);
+			}
+			return createWorld(w);
+		} finally {
+			DebugLog.endInfo();
 		}
-		if (w == null) {
-			File worldFile = new File(ACPluginManager.getServer()
-					.getWorldContainer(), worldName);
-			if (!isExistingWorld(worldFile)) {
-				worldFile = new File(ACPluginManager.getServer()
-						.getWorldContainer(), worldName.toLowerCase());
-			}
-			if (!isExistingWorld(worldFile)) {
-				worldFile = new File(ACPluginManager.getServer()
-						.getWorldContainer(), worldName.substring(0, 1)
-						.toUpperCase() + worldName.substring(1).toLowerCase());
-			}
-			if (isExistingWorld(worldFile)) {
-				w = ACPluginManager.getServer().createWorld(
-						new WorldCreator(worldFile.getName()));
-				bukkitWorlds.put(w.getName().toLowerCase(), w);
-				return createWorld(w);
-			}
-			throw new WorldNotLoaded(worldName);
-		} else {
-			bukkitWorlds.put(worldName.toLowerCase(), w);
-		}
-		return createWorld(w);
 	}
 
 	/**
