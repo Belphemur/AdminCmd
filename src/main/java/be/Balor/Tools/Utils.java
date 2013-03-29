@@ -1632,12 +1632,21 @@ public final class Utils {
 				}
 
 				final int dimension = FieldUtils.getField(toWorld, "dimension");
-				final MethodHandler moveToWorld = new MethodHandler(
-						server.getClass(), "moveToWorld",
-						entityPlayer.getClass(), int.class, boolean.class,
-						toLocation.getClass());
-				moveToWorld.invoke(server, entityPlayer, dimension, true,
-						toLocation);
+				try {
+					final MethodHandler moveToWorld = new MethodHandler(
+							server.getClass(), "moveToWorld",
+							entityPlayer.getClass(), int.class, boolean.class,
+							toLocation.getClass());
+					moveToWorld.invoke(server, entityPlayer, dimension, true,
+							toLocation);
+				} catch (final RuntimeException e2) {
+					final MethodHandler moveToWorld = new MethodHandler(
+							server.getClass(), "moveToWorld",
+							entityPlayer.getClass(), int.class, boolean.class,
+							toLocation.getClass(), boolean.class);
+					moveToWorld.invoke(server, entityPlayer, dimension, true,
+							toLocation, true);
+				}
 			}
 		} catch (final Throwable e) {
 			DebugLog.INSTANCE.log(
