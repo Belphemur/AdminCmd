@@ -149,9 +149,7 @@ public class ACPlayerListener implements Listener {
 						}
 						DebugLog.INSTANCE.info("TextLocale stop");
 						DebugLog.INSTANCE.info("MOTD start");
-						if (!player.getInformation("firstTime")
-								.getBoolean(true)
-								&& ConfigEnum.MOTD.getBoolean()) {
+						if (p.hasPlayedBefore() && ConfigEnum.MOTD.getBoolean()) {
 							TextLocale.MOTD.sendText(p);
 						}
 						DebugLog.INSTANCE.info("MOTD stop");
@@ -179,7 +177,7 @@ public class ACPlayerListener implements Listener {
 			ACHelper.getInstance().addFakeQuit(p);
 		}
 
-		if (player.getInformation("firstTime").getBoolean(true)) {
+		if (!p.hasPlayedBefore()) {
 			if (ConfigEnum.COMMANDS_ONJOIN.getBoolean()) {
 				CommandManager.getInstance().executeFirstJoinCommands(p);
 			}
