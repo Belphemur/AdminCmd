@@ -81,7 +81,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 			return getContents();
 		} else if (methodName.equals("getSize")) {
 			return getSize();
-		} else if (methodName.equals("a_")) {
+		} else if (methodName.equals("a_") || methodName.equals("a")) {
 			return a_();
 		} else if (methodName.equals("getName")) {
 			return getName();
