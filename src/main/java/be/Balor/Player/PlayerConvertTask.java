@@ -67,7 +67,14 @@ public class PlayerConvertTask implements Runnable {
 		newFactory.addExistingPlayer(name);
 		final ACPlayer newPlayer = newFactory.createPlayer(name);
 		DebugLog.INSTANCE.info("Convert lastLoc");
-		newPlayer.setLastLocation(oldPlayer.getLastLocation());
+		try {
+			newPlayer.setLastLocation(oldPlayer.getLastLocation());
+		} catch (final WorldNotLoaded e) {
+			ACLogger.warning("The lastLocation  of player "
+					+ name
+					+ " has not been converted because the world is not loaded.");
+		}
+
 		DebugLog.INSTANCE.info("Convert presentation");
 		newPlayer.setPresentation(oldPlayer.getPresentation());
 		DebugLog.INSTANCE.info("Convert homes");
@@ -80,12 +87,7 @@ public class PlayerConvertTask implements Runnable {
 							+ " of player "
 							+ name
 							+ " has not been converted because the world is not loaded.");
-					DebugLog.INSTANCE
-							.info("The home "
-									+ home
-									+ " of player "
-									+ name
-									+ " has not been converted because the world is not loaded.");
+
 				} else {
 					newPlayer.setHome(home, homeLoc);
 				}
@@ -93,6 +95,12 @@ public class PlayerConvertTask implements Runnable {
 				ACLogger.warning("The home " + home + " of player " + name
 						+ " has not been converted because the world "
 						+ e.getMessage() + " don't exist anymore");
+				DebugLog.INSTANCE
+						.info("The home "
+								+ home
+								+ " of player "
+								+ name
+								+ " has not been converted because the world is not loaded.");
 			} catch (final Exception e) {
 				ACLogger.warning("The home " + home + " of player " + name
 						+ " has not been converted because : " + e.getMessage());
