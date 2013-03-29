@@ -23,11 +23,13 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.yaml.snakeyaml.constructor.AbstractConstruct;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import be.Balor.Tools.TpRequest;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -36,17 +38,13 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
  */
 public class YamlConstructor extends Constructor {
 	private class ConstructCustomObject extends ConstructYamlMap {
-		@SuppressWarnings("unchecked")
 		@Override
 		public Object construct(final Node node) {
 			if (node.isTwoStepsConstruction()) {
-				throw new YAMLException(
-						"Unexpected referential mapping structure. Node: "
-								+ node);
+				return createDefaultMap();
 			}
 
-			final Map<Object, Object> raw = (Map<Object, Object>) super
-					.construct(node);
+			final Map<Object, Object> raw = constructMapping((MappingNode) node);
 
 			if (raw.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
 				final Map<String, Object> typed = new LinkedHashMap<String, Object>(
@@ -66,9 +64,10 @@ public class YamlConstructor extends Constructor {
 		}
 
 		@Override
-		public void construct2ndStep(final Node node, final Object object) {
-			throw new YAMLException(
-					"Unexpected referential mapping structure. Node: " + node);
+		public void construct2ndStep(final Node node, Object object) {
+			object = createDefaultMap();
+			DebugLog.INSTANCE.warning("Problem with an YAML MappingNode : "
+					+ node);
 		}
 	}
 
