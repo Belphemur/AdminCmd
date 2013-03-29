@@ -33,6 +33,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
@@ -113,10 +114,7 @@ public class SQLPlayer extends ACPlayer {
 				if (rs.next()) {
 					final String worldName = rs.getString("world");
 					if (worldName != null && !worldName.isEmpty()) {
-						World world = Bukkit.getWorld(worldName);
-						if (world == null) {
-							world = ACWorld.getWorld(worldName).getHandle();
-						}
+						final World world = loadWorld(worldName);
 						if (world != null) {
 							lastLoc = new Location(world, rs.getDouble("x"),
 									rs.getDouble("y"), rs.getDouble("z"),
@@ -142,10 +140,7 @@ public class SQLPlayer extends ACPlayer {
 				}
 				while (rs.next()) {
 					final String worldName = rs.getString("world");
-					World world = Bukkit.getWorld(worldName);
-					if (world == null) {
-						world = ACWorld.getWorld(worldName).getHandle();
-					}
+					final World world = loadWorld(worldName);
 					if (world != null) {
 						homes.put(
 								rs.getString("name"),
@@ -227,6 +222,21 @@ public class SQLPlayer extends ACPlayer {
 				ACLogger.severe("Problem with getting kit uses from the DB", e);
 			}
 		}
+	}
+
+	/**
+	 * @param worldName
+	 * @return
+	 */
+	private World loadWorld(final String worldName) {
+		World world = Bukkit.getWorld(worldName);
+		if (world == null) {
+			try {
+				world = ACWorld.getWorld(worldName).getHandle();
+			} catch (final WorldNotLoaded e) {
+			}
+		}
+		return world;
 	}
 
 	/**
