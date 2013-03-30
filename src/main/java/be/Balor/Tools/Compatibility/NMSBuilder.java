@@ -38,11 +38,11 @@ public class NMSBuilder {
 	 */
 	public static Object buildPacket201PlayerInfo(final Player player,
 			final boolean online, final int ping) {
-		final Object playerHandle = MinecraftReflection.getHandle(player);
+		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
 			final String listName = FieldUtils.getField(playerHandle,
 					"listName");
-			final Class<?> packetClass = MinecraftReflection
+			final Class<?> packetClass = ACMinecraftReflection
 					.getPacket201PlayerInfoClass();
 			final Constructor<?> packetConstructor = packetClass
 					.getConstructor(String.class, boolean.class, int.class);
@@ -60,12 +60,12 @@ public class NMSBuilder {
 	 * @return instance of PlayerInventory
 	 */
 	public static Object buildPlayerInventory(final Player player) {
-		final Object playerHandle = MinecraftReflection.getHandle(player);
+		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
-			final Class<?> playerInventoryClass = MinecraftReflection
+			final Class<?> playerInventoryClass = ACMinecraftReflection
 					.getPlayerInventoryClass();
 			final Constructor<?> invConstructor = playerInventoryClass
-					.getConstructor(MinecraftReflection.getEntityHumanClass());
+					.getConstructor(ACMinecraftReflection.getEntityHumanClass());
 			return invConstructor.newInstance(playerHandle);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);
@@ -80,7 +80,8 @@ public class NMSBuilder {
 	 * @return instance NMS of EntityPlayer
 	 */
 	public static Object buildEntityPlayer(final String name) {
-		final Object minecraftServer = MinecraftReflection.getMinecraftServer();
+		final Object minecraftServer = ACMinecraftReflection
+				.getMinecraftServer();
 		try {
 			final MethodHandler getWorldServer = new MethodHandler(
 					minecraftServer.getClass(), "getWorldServer", int.class);
@@ -90,9 +91,9 @@ public class NMSBuilder {
 			final Class<?> entityPlayer = MinecraftReflection
 					.getEntityPlayerClass();
 			final Constructor<?> ePConstructor = entityPlayer.getConstructor(
-					MinecraftReflection.getMinecraftServerClass(),
-					MinecraftReflection.getNMSWorldClass(), String.class,
-					MinecraftReflection.getItemInWorldManagerClass());
+					ACMinecraftReflection.getMinecraftServerClass(),
+					ACMinecraftReflection.getNMSWorldClass(), String.class,
+					ACMinecraftReflection.getItemInWorldManagerClass());
 			return ePConstructor.newInstance(minecraftServer, worldServer,
 					name, itemInWorldManager);
 		} catch (final Exception e) {
@@ -112,7 +113,8 @@ public class NMSBuilder {
 			throw new RuntimeException("The constructor need a "
 					+ MinecraftReflection.getWorldServerClass().getSimpleName());
 		}
-		final Class<?> clazz = MinecraftReflection.getItemInWorldManagerClass();
+		final Class<?> clazz = ACMinecraftReflection
+				.getItemInWorldManagerClass();
 		try {
 			final Constructor<?> constructor = clazz
 					.getConstructor(MinecraftReflection.getWorldServerClass());

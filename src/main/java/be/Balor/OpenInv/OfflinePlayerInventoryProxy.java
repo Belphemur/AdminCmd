@@ -20,7 +20,7 @@ import java.lang.reflect.Proxy;
 
 import org.bukkit.entity.Player;
 
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 
@@ -39,7 +39,7 @@ public class OfflinePlayerInventoryProxy extends PlayerInventoryProxy {
 	}
 
 	public static Object newInstance(final Player prop, final Object obj) {
-		if (!MinecraftReflection.getPlayerInventoryClass().isAssignableFrom(
+		if (!ACMinecraftReflection.getPlayerInventoryClass().isAssignableFrom(
 				obj.getClass())) {
 			throw new RuntimeException(
 					"The object must be of the type of PlayerInventory");

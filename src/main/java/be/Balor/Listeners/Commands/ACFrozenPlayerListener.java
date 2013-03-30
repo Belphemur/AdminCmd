@@ -27,7 +27,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -39,7 +39,8 @@ public class ACFrozenPlayerListener implements Listener {
 		if (!ACPlayer.getPlayer(event.getPlayer()).hasPower(Type.FROZEN)) {
 			return;
 		}
-		MinecraftReflection.teleportPlayer(event.getPlayer(), event.getFrom());
+		ACMinecraftReflection
+				.teleportPlayer(event.getPlayer(), event.getFrom());
 
 	}
 

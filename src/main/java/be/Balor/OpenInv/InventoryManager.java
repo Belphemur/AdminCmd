@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
@@ -95,7 +95,7 @@ public class InventoryManager {
 		}
 		final PlayerInventoryProxy proxy = (PlayerInventoryProxy) Proxy
 				.getInvocationHandler(inv);
-		final Object inventory = MinecraftReflection.getInventory(p);
+		final Object inventory = ACMinecraftReflection.getInventory(p);
 		FieldUtils.setField(inventory, "armor", proxy.getArmor());
 		FieldUtils.setField(inventory, "items", proxy.getItems());
 
@@ -128,8 +128,8 @@ public class InventoryManager {
 			LocaleHelper.WORLD_NOT_LOADED.sendLocale(sender, replace);
 			return;
 		}
-		final File playerfolder = new File(acworld.getHandle()
-				.getWorldFolder(), "players");
+		final File playerfolder = new File(
+				acworld.getHandle().getWorldFolder(), "players");
 		if (!playerfolder.exists()) {
 			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
 					sender);
@@ -148,7 +148,7 @@ public class InventoryManager {
 		if (entity == null) {
 			target = null;
 		} else {
-			target = MinecraftReflection.getBukkitEntity(entity);
+			target = ACMinecraftReflection.getBukkitEntityCasted(entity);
 		}
 		if (target != null) {
 			target.loadData();
@@ -178,10 +178,10 @@ public class InventoryManager {
 	private void openInv(final Player sender, final Player target,
 			final boolean offline) {
 		final Object inventory = getInventory(target, offline);
-		final Object eh = MinecraftReflection.getHandle(sender);
+		final Object eh = ACMinecraftReflection.getHandle(sender);
 		final MethodHandler openContainer = new MethodHandler(
-				MinecraftReflection.getEntityPlayerClass(), "openContainer",
-				MinecraftReflection.getIInventoryClass());
+				ACMinecraftReflection.getEntityPlayerClass(), "openContainer",
+				ACMinecraftReflection.getIInventoryClass());
 		openContainer.invoke(eh, inventory);
 	}
 

@@ -406,5 +406,5 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bukkit.version>1.5.1-R0.1-SNAPSHOT</bukkit.version>
 	</properties>
-	<version>7.3.2-SNAPSHOT</version>
+	<version>7.3.5-SNAPSHOT</version>
 </project>

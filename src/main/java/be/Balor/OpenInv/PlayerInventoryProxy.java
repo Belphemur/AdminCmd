@@ -23,7 +23,7 @@ import java.lang.reflect.Proxy;
 
 import org.bukkit.entity.Player;
 
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 
@@ -44,7 +44,8 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	protected PlayerInventoryProxy(final Player prop, final Object obj) {
 		this.proprietary = prop;
 		this.obj = obj;
-		final Object playerHandle = MinecraftReflection.getHandle(proprietary);
+		final Object playerHandle = ACMinecraftReflection
+				.getHandle(proprietary);
 		final Object inventory = FieldUtils.getField(playerHandle, "inventory");
 		final Object[] armor = FieldUtils.getField(inventory, "armor");
 		final Object[] items = FieldUtils.getField(inventory, "items");
@@ -54,7 +55,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	public static Object newInstance(final Player prop, final Object obj) {
-		if (!MinecraftReflection.getPlayerInventoryClass().isAssignableFrom(
+		if (!ACMinecraftReflection.getPlayerInventoryClass().isAssignableFrom(
 				obj.getClass())) {
 			throw new RuntimeException(
 					"The object must be of the type of PlayerInventory");
@@ -117,7 +118,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	private void onClose(final Object who) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		final MethodHandler superOnClose = new MethodHandler(obj.getClass(),
-				"onClose", MinecraftReflection.getCraftHumanEntityClass());
+				"onClose", ACMinecraftReflection.getCraftHumanEntityClass());
 		superOnClose.invoke(obj, who);
 		checkCloseEvent();
 	}

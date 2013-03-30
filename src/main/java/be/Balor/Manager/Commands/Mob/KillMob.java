@@ -39,7 +39,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -204,7 +204,7 @@ public class KillMob extends MobCommand {
 		if (!checkKillCondition(e, sender, range)) {
 			return false;
 		}
-		final Object entity = MinecraftReflection.getHandle(e);
+		final Object entity = ACMinecraftReflection.getHandle(e);
 		final MethodHandler die = new MethodHandler(entity.getClass(), "die");
 		die.invoke(entity);
 		return true;

@@ -32,7 +32,7 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -104,7 +104,7 @@ public class Memory extends ServerCommand {
 						@Override
 						public void run() {
 							for (final World w : worlds) {
-								final Object cWorld = MinecraftReflection
+								final Object cWorld = ACMinecraftReflection
 										.getHandle(w);
 								List<Object> wEntityList = null;
 								try {
@@ -125,7 +125,7 @@ public class Memory extends ServerCommand {
 						}
 					});
 			final MethodHandler die = new MethodHandler(
-					MinecraftReflection.getEntityClass(), "die");
+					ACMinecraftReflection.getEntityClass(), "die");
 			for (final World w : worlds) {
 				try {
 					sema.acquire();
@@ -255,39 +255,41 @@ public class Memory extends ServerCommand {
 	private boolean dontKill(final CommandArgs args, final Object toKill) {
 		boolean dontKill = true;
 		if (args.hasFlag('f')) {
-			dontKill = (MinecraftReflection
-					.instanceOfNMS(toKill, "EntityHuman") || MinecraftReflection
-					.instanceOfNMS(toKill, "EntityPainting"));
+			dontKill = (ACMinecraftReflection.instanceOfNMS(toKill,
+					"EntityHuman") || ACMinecraftReflection.instanceOfNMS(
+					toKill, "EntityPainting"));
 		}
 		if (args.hasFlag('x')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
 					"EntityExperienceOrb");
 		}
 		if (args.hasFlag('i')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill, "EntityItem");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
+					"EntityItem");
 		}
 		if (args.hasFlag('m')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
 					"EntityMonster");
 		}
 		if (args.hasFlag('a')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
 					"EntityAnimal");
 		}
 		if (args.hasFlag('n')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
 					"EntityVillager");
 		}
 		if (args.hasFlag('c')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill,
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
 					"EntityMinecart");
 		}
 		if (args.hasFlag('b')) {
-			dontKill = !MinecraftReflection.instanceOfNMS(toKill, "EntityBoat");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
+					"EntityBoat");
 		}
 		if (args.hasFlag('v')) {
-			dontKill = !(MinecraftReflection.instanceOfNMS(toKill,
-					"EntityMinecart") || MinecraftReflection.instanceOfNMS(
+			dontKill = !(ACMinecraftReflection.instanceOfNMS(toKill,
+					"EntityMinecart") || ACMinecraftReflection.instanceOfNMS(
 					toKill, "EntityBoat"));
 		}
 		return dontKill;

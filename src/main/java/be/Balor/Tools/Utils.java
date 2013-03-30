@@ -68,7 +68,7 @@ import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Blocks.BlockRemanence;
 import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
-import be.Balor.Tools.Compatibility.MinecraftReflection;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
@@ -147,9 +147,10 @@ public final class Utils {
 	 *            player to remove
 	 */
 	public static void addPlayerInOnlineList(final Player player) {
-		final Object server = MinecraftReflection.getHandle(player.getServer());
+		final Object server = ACMinecraftReflection.getHandle(player
+				.getServer());
 		final MethodHandler sendAll = new MethodHandler(server.getClass(),
-				"sendAll", MinecraftReflection.getPacketClass());
+				"sendAll", ACMinecraftReflection.getPacketClass());
 		sendAll.invoke(server,
 				NMSBuilder.buildPacket201PlayerInfo(player, true, 1000));
 	}
@@ -1008,9 +1009,10 @@ public final class Utils {
 	 *            player to remove
 	 */
 	public static void removePlayerFromOnlineList(final Player player) {
-		final Object server = MinecraftReflection.getHandle(player.getServer());
+		final Object server = ACMinecraftReflection.getHandle(player
+				.getServer());
 		final MethodHandler sendAll = new MethodHandler(server.getClass(),
-				"sendAll", MinecraftReflection.getPacketClass());
+				"sendAll", ACMinecraftReflection.getPacketClass());
 		sendAll.invoke(server,
 				NMSBuilder.buildPacket201PlayerInfo(player, false, 9999));
 	}
@@ -1608,15 +1610,15 @@ public final class Utils {
 
 	private static void teleport(final Player player, final Location toLocation) {
 		try {
-			final Object server = MinecraftReflection.getHandle(player
+			final Object server = ACMinecraftReflection.getHandle(player
 					.getServer());
-			final Object entityPlayer = MinecraftReflection.getHandle(player);
-			final Object toWorld = MinecraftReflection.getHandle(toLocation
+			final Object entityPlayer = ACMinecraftReflection.getHandle(player);
+			final Object toWorld = ACMinecraftReflection.getHandle(toLocation
 					.getWorld());
 
 			// Check if the fromWorld and toWorld are the same.
 			if (player.getWorld().equals(toLocation.getWorld())) {
-				MinecraftReflection.teleportPlayer(player, toLocation);
+				ACMinecraftReflection.teleportPlayer(player, toLocation);
 			} else {
 
 				final Object activeContainer = FieldUtils.getField(
