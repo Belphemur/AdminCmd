@@ -18,9 +18,9 @@ package be.Balor.Listeners.Features;
 
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,6 +29,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -90,12 +92,19 @@ public class ACIpCheckListener implements Listener {
 		if (message == null) {
 			return;
 		}
+		final List<Player> online = PlayerManager.getInstance()
+				.getOnlinePlayers();
 		ACPluginManager.scheduleSyncTask(new Runnable() {
 
 			@Override
 			public void run() {
-				Bukkit.getServer().broadcast(message,
-						"admincmd.spec.ipbroadcast");
+				for (final Player player : online) {
+					if (!PermissionManager.hasPerm(player,
+							"admincmd.spec.ipbroadcast", false)) {
+						continue;
+					}
+					player.sendMessage(message);
+				}
 			}
 		});
 
