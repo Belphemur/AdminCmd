@@ -67,7 +67,7 @@ public class Reply extends PlayerCommand {
 		final Player buddy = ACHelper.getInstance().getReplyPlayer(pSender);
 		if (buddy != null) {
 			if (!buddy.isOnline()) {
-				Utils.sI18n(sender, "offline");
+				Utils.sI18n(sender, "offline", "player", buddy.getDisplayName());
 				ACHelper.getInstance().removeReplyPlayer(pSender);
 				return;
 			}
