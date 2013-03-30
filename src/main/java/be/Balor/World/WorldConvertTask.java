@@ -58,26 +58,26 @@ public class WorldConvertTask implements Runnable {
 		final ACWorld newWorld = newFactory.createWorld(world);
 		final ACWorld oldWorld = oldFactory.createWorld(world);
 		ACLogger.info("Converting World : " + worldName);
-		DebugLog.INSTANCE.info("Convert Difficulty");
+		DebugLog.addInfo("Convert Difficulty");
 		newWorld.setDifficulty(oldWorld.getDifficulty());
-		DebugLog.INSTANCE.info("Convert Default Spawn");
+		DebugLog.addInfo("Convert Default Spawn");
 		newWorld.setSpawn(oldWorld.getSpawn());
-		DebugLog.INSTANCE.info("Convert Warps");
+		DebugLog.addInfo("Convert Warps");
 		for (final String warp : oldWorld.getWarpList()) {
 			final Warp w = oldWorld.getWarp(warp);
 			newWorld.addWarp(w.name, w.loc);
 		}
-		DebugLog.INSTANCE.info("Convert Informations");
+		DebugLog.addInfo("Convert Informations");
 		for (final Entry<String, Object> info : oldWorld.getInformations()
 				.entrySet()) {
 			newWorld.setInformation(info.getKey(), info.getValue());
 		}
-		DebugLog.INSTANCE.info("Convert MobLimit");
+		DebugLog.addInfo("Convert MobLimit");
 		for (final Entry<String, Integer> ml : oldWorld.getMobLimits()
 				.entrySet()) {
 			newWorld.setMobLimit(ml.getKey(), ml.getValue());
 		}
-		DebugLog.INSTANCE.info("Convert groupSpawn");
+		DebugLog.addInfo("Convert groupSpawn");
 		for (final Entry<String, Location> groupSpawn : oldWorld
 				.getGroupSpawns().entrySet()) {
 			newWorld.setGroupSpawn(groupSpawn.getKey(), groupSpawn.getValue());

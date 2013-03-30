@@ -1742,43 +1742,50 @@ public final class Utils {
 	 */
 	public static int timeParser(final String toParse)
 			throws NotANumberException {
-		int tmpBan;
-		final String[] tmpTimeParsed = Utils.tempStringParser(toParse);
-		if (tmpTimeParsed[0] == null) {
-			return -1;
-		}
-		if (tmpTimeParsed[1] == null) {
-			try {
-				return Integer.parseInt(tmpTimeParsed[0]);
-			} catch (final NumberFormatException e) {
-				throw new NotANumberException("Time given : "
-						+ tmpTimeParsed[0], e);
+		DebugLog.beginInfo("Parsing time : " + toParse);
+		try {
+			int tmpBan;
+			final String[] tmpTimeParsed = Utils.tempStringParser(toParse);
+			if (tmpTimeParsed[0] == null) {
+				return -1;
 			}
-		} else {
-			try {
-				tmpBan = Integer.parseInt(tmpTimeParsed[0]);
-			} catch (final NumberFormatException e) {
-				throw new NotANumberException("Time given : "
-						+ tmpTimeParsed[0], e);
+			if (tmpTimeParsed[1] == null) {
+				try {
+					return Integer.parseInt(tmpTimeParsed[0]);
+				} catch (final NumberFormatException e) {
+					throw new NotANumberException("Time given : "
+							+ tmpTimeParsed[0], e);
+				}
+			} else {
+				DebugLog.addInfo("Parsed ouput : " + tmpTimeParsed[0] + "-"
+						+ tmpTimeParsed[1]);
+				try {
+					tmpBan = Integer.parseInt(tmpTimeParsed[0]);
+				} catch (final NumberFormatException e) {
+					throw new NotANumberException("Time given : "
+							+ tmpTimeParsed[0], e);
+				}
+				final String timeMulti = tmpTimeParsed[1];
+				if (timeMulti.contains("month") || timeMulti.contains("m")) {
+					return tmpBan * 43200;
+				}
+				if (timeMulti.contains("week") || timeMulti.contains("w")) {
+					return tmpBan * 10080;
+				}
+				if (timeMulti.contains("day") || timeMulti.contains("d")) {
+					return tmpBan * 1440;
+				}
+				if (timeMulti.contains("hour") || timeMulti.contains("h")) {
+					return tmpBan * 60;
+				}
+				if (timeMulti.contains("year") || timeMulti.contains("y")) {
+					return tmpBan * 525600;
+				}
+				throw new NotANumberException("Can't parse the time : "
+						+ tmpTimeParsed[1]);
 			}
-			final String timeMulti = tmpTimeParsed[1];
-			if (timeMulti.contains("month") || timeMulti.contains("m")) {
-				return tmpBan * 43200;
-			}
-			if (timeMulti.contains("week") || timeMulti.contains("w")) {
-				return tmpBan * 10080;
-			}
-			if (timeMulti.contains("day") || timeMulti.contains("d")) {
-				return tmpBan * 1440;
-			}
-			if (timeMulti.contains("hour") || timeMulti.contains("h")) {
-				return tmpBan * 60;
-			}
-			if (timeMulti.contains("year") || timeMulti.contains("y")) {
-				return tmpBan * 525600;
-			}
-			throw new NotANumberException("Can't parse the time : "
-					+ tmpTimeParsed[1]);
+		} finally {
+			DebugLog.endInfo();
 		}
 	}
 }

@@ -128,12 +128,38 @@ public class DebugLog {
 	/**
 	 * @return
 	 */
-	private static String getSpaces() {
+	private static String getSpaces(final int add) {
 		final StringBuffer space = new StringBuffer();
-		for (int i = 0; i < debugInfos.get().size(); i++) {
+		for (int i = 0; i < debugInfos.get().size() + add; i++) {
 			space.append("\t");
 		}
 		return space.toString();
+	}
+
+	private static String getSpaces() {
+		return getSpaces(0);
+	}
+
+	/**
+	 * Add a message between beginInfo and endInfo
+	 * 
+	 * @param message
+	 *            message
+	 * @param level
+	 *            level of the log
+	 */
+	public static void addInfo(final String message, final Level level) {
+		INSTANCE.log(level, getSpaces(1) + message);
+	}
+
+	/**
+	 * Add a message between beginInfo and endInfo
+	 * 
+	 * @param message
+	 *            message
+	 */
+	public static void addInfo(final String message) {
+		addInfo(message, Level.INFO);
 	}
 
 	/**

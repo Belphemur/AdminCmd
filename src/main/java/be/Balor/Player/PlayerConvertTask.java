@@ -66,7 +66,7 @@ public class PlayerConvertTask implements Runnable {
 		DebugLog.beginInfo("Convert player : " + name);
 		newFactory.addExistingPlayer(name);
 		final ACPlayer newPlayer = newFactory.createPlayer(name);
-		DebugLog.INSTANCE.info("Convert lastLoc");
+		DebugLog.addInfo("Convert lastLoc");
 		try {
 			newPlayer.setLastLocation(oldPlayer.getLastLocation());
 		} catch (final WorldNotLoaded e) {
@@ -75,9 +75,9 @@ public class PlayerConvertTask implements Runnable {
 					+ " has not been converted because the world is not loaded.");
 		}
 
-		DebugLog.INSTANCE.info("Convert presentation");
+		DebugLog.addInfo("Convert presentation");
 		newPlayer.setPresentation(oldPlayer.getPresentation());
-		DebugLog.INSTANCE.info("Convert homes");
+		DebugLog.addInfo("Convert homes");
 		for (final String home : oldPlayer.getHomeList()) {
 			try {
 				final Location homeLoc = oldPlayer.getHome(home);
@@ -106,16 +106,16 @@ public class PlayerConvertTask implements Runnable {
 						+ " has not been converted because : " + e.getMessage());
 			}
 		}
-		DebugLog.INSTANCE.info("Convert Powers");
+		DebugLog.addInfo("Convert Powers");
 		for (final Entry<Type, Object> entry : oldPlayer.getPowers().entrySet()) {
 			newPlayer.setPower(entry.getKey(), entry.getValue());
 		}
-		DebugLog.INSTANCE.info("Convert Custom Powers");
+		DebugLog.addInfo("Convert Custom Powers");
 		for (final Entry<String, Object> entry : oldPlayer.getCustomPowers()
 				.entrySet()) {
 			newPlayer.setCustomPower(entry.getKey(), entry.getValue());
 		}
-		DebugLog.INSTANCE.info("Convert Infos");
+		DebugLog.addInfo("Convert Infos");
 		for (final String info : oldPlayer.getInformationsList()) {
 			if (info.equals("lastLoc") || info.equals("presentation")) {
 				continue;
@@ -123,7 +123,7 @@ public class PlayerConvertTask implements Runnable {
 			newPlayer.setInformation(info, oldPlayer.getInformation(info)
 					.getObj());
 		}
-		DebugLog.INSTANCE.info("Convert Kit");
+		DebugLog.addInfo("Convert Kit");
 		for (final String kit : oldPlayer.getKitUseList()) {
 			newPlayer.setLastKitUse(kit, oldPlayer.getLastKitUse(kit));
 		}
