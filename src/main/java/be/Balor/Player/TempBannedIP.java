@@ -36,12 +36,16 @@ public class TempBannedIP extends BannedIP implements ITempBan {
 	}
 
 	/**
+	 * 
 	 * @param ip
 	 * @param reason
+	 * @param time
+	 *            time in second
 	 */
 	public TempBannedIP(final String ip, final String reason, final long time) {
 		super(ip, reason);
-		endBan = new Date(System.currentTimeMillis() + time);
+		endBan = new Date(System.currentTimeMillis() + time
+				* Utils.secondInMillis);
 	}
 
 	/**

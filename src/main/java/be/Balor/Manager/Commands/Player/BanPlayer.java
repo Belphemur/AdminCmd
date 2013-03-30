@@ -154,10 +154,10 @@ public class BanPlayer extends PlayerCommand {
 						return null;
 					}
 					toDo = new TempBannedIP(banPlayerString, message,
-							tmpBan * 60 * 1000);
+							tmpBan * 60);
 				} else {
 					toDo = new TempBannedPlayer(banPlayerString, message,
-							tmpBan * 60 * 1000);
+							tmpBan * 60);
 				}
 				DebugLog.addInfo("Banned for : "
 						+ ((ITempBan) toDo).getReadableTimeLeft());
