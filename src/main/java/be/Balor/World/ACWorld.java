@@ -142,7 +142,7 @@ public abstract class ACWorld {
 	 *            location of the warp
 	 */
 	public abstract void addWarp(String name, Location loc);
-	
+
 	/**
 	 * Add a warp point with a permission
 	 * 
@@ -151,7 +151,7 @@ public abstract class ACWorld {
 	 * @param loc
 	 *            location of the warp
 	 * @param perm
-	 * ...........permission needed to use this warp
+	 *            ...........permission needed to use this warp
 	 */
 	public abstract void addPermWarp(String name, Location loc, String perm);
 
@@ -175,7 +175,7 @@ public abstract class ACWorld {
 	 * @return a List containing the name of each warp of the World
 	 */
 	public abstract Set<String> getWarpList();
-	
+
 	/**
 	 * Remove the warp
 	 * 
@@ -291,6 +291,13 @@ public abstract class ACWorld {
 	 * @return
 	 */
 	protected abstract Map<String, Object> getInformations();
+
+	/**
+	 * Get all mob limits
+	 * 
+	 * @return
+	 */
+	protected abstract Map<String, Integer> getMobLimits();
 
 	/*
 	 * (non-Javadoc)

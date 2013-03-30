@@ -33,6 +33,7 @@ import be.Balor.Tools.Warp;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 
@@ -130,8 +131,9 @@ public class FileWorld extends ACWorld {
 		}
 		try {
 			return new Warp(warpName, ((SimpleLocation) warp).getLocation());
-		} catch (ClassCastException e) {
-			return new Warp(warpName, ((PermLocation) warp).getLocation(), ((PermLocation) warp).getPerm());
+		} catch (final ClassCastException e) {
+			return new Warp(warpName, ((PermLocation) warp).getLocation(),
+					((PermLocation) warp).getPerm());
 		}
 	}
 
@@ -158,12 +160,15 @@ public class FileWorld extends ACWorld {
 
 	/*
 	 * (non-Javadoc)
-	 * @see be.Balor.World.ACWorld#addPermWarp(java.lang.String, org.bukkit.Location, java.lang.String)
+	 * 
+	 * @see be.Balor.World.ACWorld#addPermWarp(java.lang.String,
+	 * org.bukkit.Location, java.lang.String)
 	 */
 	@Override
-	public void addPermWarp(String name, Location loc, String perm) {
+	public void addPermWarp(final String name, final Location loc,
+			final String perm) {
 		warps.set(name, new PermLocation(loc, perm));
-		writeFile();		
+		writeFile();
 	}
 
 	/*
@@ -353,10 +358,32 @@ public class FileWorld extends ACWorld {
 			}
 			result.put(entry.getKey(), entry.getValue());
 		}
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getMobLimits()
+	 */
+	@Override
+	protected Map<String, Integer> getMobLimits() {
+		final Map<String, Integer> result = new HashMap<String, Integer>();
 		for (final Entry<String, Object> entry : mobLimits.getValues(false)
 				.entrySet()) {
-			result.put("mobLimit:" + entry.getKey(), entry.getValue()
-					.toString());
+			final Object value = entry.getValue();
+			if (value instanceof Integer) {
+				result.put(entry.getKey(), (Integer) value);
+			} else {
+				try {
+					result.put(entry.getKey(),
+							Integer.parseInt(value.toString()));
+				} catch (final Exception e) {
+					DebugLog.INSTANCE.warning("Can't get the mob limit for : "
+							+ entry.getKey());
+				}
+			}
+
 		}
 		return result;
 	}

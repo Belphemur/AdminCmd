@@ -540,9 +540,16 @@ public class SQLWorld extends ACWorld {
 	protected Map<String, Object> getInformations() {
 		final HashMap<String, Object> result = new HashMap<String, Object>();
 		result.putAll(informations);
-		for (final Entry<String, Integer> entry : mobLimits.entrySet()) {
-			result.put("mobLimit:" + entry.getKey(), entry.getValue());
-		}
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.World.ACWorld#getMobLimits()
+	 */
+	@Override
+	protected Map<String, Integer> getMobLimits() {
+		return Collections.unmodifiableMap(mobLimits);
 	}
 }

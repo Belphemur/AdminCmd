@@ -54,10 +54,10 @@ public class WorldConvertTask implements Runnable {
 	@Override
 	public void run() {
 		final String worldName = world.getName();
+		DebugLog.beginInfo("Begin conversion of " + worldName);
 		final ACWorld newWorld = newFactory.createWorld(world);
 		final ACWorld oldWorld = oldFactory.createWorld(world);
 		ACLogger.info("Converting World : " + worldName);
-		DebugLog.INSTANCE.info("Converting " + worldName);
 		DebugLog.INSTANCE.info("Convert Difficulty");
 		newWorld.setDifficulty(oldWorld.getDifficulty());
 		DebugLog.INSTANCE.info("Convert Default Spawn");
@@ -70,19 +70,19 @@ public class WorldConvertTask implements Runnable {
 		DebugLog.INSTANCE.info("Convert Informations");
 		for (final Entry<String, Object> info : oldWorld.getInformations()
 				.entrySet()) {
-			final String key = info.getKey();
-			if (key.startsWith("mobLimit:")) {
-				newWorld.setMobLimit(key.substring(9),
-						(Integer) info.getValue());
-			} else {
-				newWorld.setInformation(key, info.getValue());
-			}
+			newWorld.setInformation(info.getKey(), info.getValue());
+		}
+		DebugLog.INSTANCE.info("Convert MobLimit");
+		for (final Entry<String, Integer> ml : oldWorld.getMobLimits()
+				.entrySet()) {
+			newWorld.setMobLimit(ml.getKey(), ml.getValue());
 		}
 		DebugLog.INSTANCE.info("Convert groupSpawn");
 		for (final Entry<String, Location> groupSpawn : oldWorld
 				.getGroupSpawns().entrySet()) {
 			newWorld.setGroupSpawn(groupSpawn.getKey(), groupSpawn.getValue());
 		}
+		DebugLog.endInfo();
 
 	}
 
