@@ -52,9 +52,21 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 	protected static final String COMMENT_PREFIX = "#";
 	protected static final String BLANK_CONFIG = "{}\n";
-	private static DumperOptions yamlOptions = new DumperOptions();
-	private static Representer yamlRepresenter = new ExtendedRepresenter();
-	protected static Yaml yaml;
+	private final DumperOptions yamlOptions = new DumperOptions();
+	private final Representer yamlRepresenter = new ExtendedRepresenter();
+	private static ClassLoader cLoader;
+	private final Yaml yaml;
+
+	/**
+	 * 
+	 */
+	public ExtendedConfiguration() {
+		yamlOptions.setIndent(options().indent());
+		yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		yaml = new Yaml(new YamlConstructor(cLoader), yamlRepresenter,
+				yamlOptions);
+	}
 
 	/**
 	 * Creates a new {@link ExtendedConfiguration}, loading from the given file.
@@ -78,7 +90,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 
 		try {
 			config.load(file);
-		} catch (final FileNotFoundException ex) {} catch (final IOException ex) {
+		} catch (final FileNotFoundException ex) {
+		} catch (final IOException ex) {
 			Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
 		} catch (final InvalidConfigurationException ex) {
 			if (ex.getCause() instanceof YAMLException) {
@@ -97,8 +110,7 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 	}
 
 	public static void setClassLoader(final ClassLoader loader) {
-		yaml = new Yaml(new YamlConstructor(loader), yamlRepresenter,
-				yamlOptions);
+		cLoader = loader;
 	}
 
 	@Override
@@ -192,7 +204,9 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 						+ " DELETED");
 				try {
 					load(file);
-				} catch (final FileNotFoundException e1) {} catch (final IOException e1) {}
+				} catch (final FileNotFoundException e1) {
+				} catch (final IOException e1) {
+				}
 			} catch (final ParserException e) {
 				ACLogger.severe(
 						"File : "
@@ -335,7 +349,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 				if (br != null) {
 					br.close();
 				}
-			} catch (final IOException e) {}
+			} catch (final IOException e) {
+			}
 		}
 	}
 
@@ -364,10 +379,6 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		String header = "";
 		String dump = "";
 		try {
-			yamlOptions.setIndent(options().indent());
-			yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-			yamlRepresenter.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-
 			header = buildHeader();
 			dump = yaml.dump(getValues(false));
 
