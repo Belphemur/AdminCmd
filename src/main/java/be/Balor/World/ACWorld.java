@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Warp;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -195,6 +196,18 @@ public abstract class ACWorld {
 	public abstract void setInformation(String info, Object value);
 
 	/**
+	 * Set player information
+	 * 
+	 * @param info
+	 *            key of the information
+	 * @param value
+	 *            information to set
+	 */
+	public void setInformation(final Type info, final Object value) {
+		setInformation(info.toString(), value);
+	}
+
+	/**
 	 * Remove the information
 	 * 
 	 * @param info
@@ -209,6 +222,40 @@ public abstract class ACWorld {
 	 *            key of the information
 	 */
 	public abstract ObjectContainer getInformation(String info);
+
+	/**
+	 * 
+	 * Get the information
+	 * 
+	 * @param info
+	 *            key of the information
+	 * @return
+	 */
+	public ObjectContainer getInformation(final Type info) {
+		return getInformation(info.toString());
+	}
+
+	/**
+	 * Check if the world have an information set
+	 * 
+	 * @param info
+	 *            to be checked
+	 * @return true if this information exists, else false
+	 */
+	public boolean hasInformation(final String info) {
+		return !getInformation(info).isNull();
+	}
+
+	/**
+	 * Check if the world have an information set
+	 * 
+	 * @param info
+	 *            to be checked
+	 * @return true if this information exists, else false
+	 */
+	public boolean hasInformation(final Type info) {
+		return !getInformation(info).isNull();
+	}
 
 	/**
 	 * Get all informations about the world
