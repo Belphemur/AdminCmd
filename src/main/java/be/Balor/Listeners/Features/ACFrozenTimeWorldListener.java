@@ -54,7 +54,6 @@ public class ACFrozenTimeWorldListener implements Listener {
 			player.setPlayerTime(acToWorld.getInformation(Type.TIME_FROZEN)
 					.getLong(0), false);
 		} else {
-			player.sendMessage("Yatta");
 			player.setPlayerTime(0, true);
 		}
 	}
