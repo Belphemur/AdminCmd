@@ -16,13 +16,11 @@
  ************************************************************************/
 package be.Balor.Listeners.Features;
 
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 
-import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.World.ACWorld;
 
@@ -40,23 +38,24 @@ public class ACFrozenTimeWorldListener implements Listener {
 	}
 
 	@EventHandler
-	void onPlayerWorldChange(final PlayerTeleportEvent event) {
-		final Player player = event.getPlayer();
-		if (ACPlayer.getPlayer(player).hasPower(Type.BLOCK_IN_TIME)) {
-			return;
-		}
-		final World newWorld = event.getTo().getWorld();
-		final World fromWorld = event.getFrom().getWorld();
-		if (!newWorld.equals(fromWorld)) {
-			return;
-		}
-		final ACWorld acToWorld = ACWorld.getWorld(newWorld);
+	void onPlayerWorldChange(final PlayerChangedWorldEvent event) {
+		setPlayerTime(event.getPlayer());
+
+	}
+
+	/**
+	 * @param player
+	 * @param newWorld
+	 */
+	private void setPlayerTime(final Player player) {
+		final ACWorld acToWorld = ACWorld.getWorld(player.getLocation()
+				.getWorld());
 		if (acToWorld.hasInformation(Type.TIME_FROZEN)) {
 			player.setPlayerTime(acToWorld.getInformation(Type.TIME_FROZEN)
 					.getLong(0), false);
 		} else {
+			player.sendMessage("Yatta");
 			player.setPlayerTime(0, true);
 		}
-
 	}
 }
