@@ -5,10 +5,13 @@ import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
+import be.Balor.Kit.ArmoredKitInstance;
+import be.Balor.Kit.KitInstance;
 import be.Balor.Listeners.ACBlockListener;
 import be.Balor.Listeners.ACChatListener;
 import be.Balor.Listeners.ACEntityListener;
@@ -163,6 +166,7 @@ import be.Balor.Manager.Terminal.TerminalCommandManager;
 import be.Balor.OpenInv.InventoryManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
+import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -214,7 +218,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	@Override
 	public void onEnable() {
 
-		ExtendedConfiguration.setClassLoader(this.getClassLoader());
+		registerConfigurationClass();
+
 		DebugLog.setFile(getDataFolder().getPath());
 
 		setMetrics();
@@ -236,6 +241,16 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		pm.registerEvents(new ACWeatherListener(), this);
 		checkModulableFeatures(pm);
 		System.gc();
+	}
+
+	/**
+	 * 
+	 */
+	private void registerConfigurationClass() {
+		ExtendedConfiguration.setClassLoader(this.getClassLoader());
+		ConfigurationSerialization.registerClass(KitInstance.class);
+		ConfigurationSerialization.registerClass(ArmoredKitInstance.class);
+		ConfigurationSerialization.registerClass(MaterialContainer.class);
 	}
 
 	/**

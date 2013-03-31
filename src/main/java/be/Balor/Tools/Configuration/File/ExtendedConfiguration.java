@@ -94,6 +94,8 @@ public class ExtendedConfiguration extends ExFileConfiguration {
 		} catch (final IOException ex) {
 			Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
 		} catch (final InvalidConfigurationException ex) {
+			DebugLog.INSTANCE.log(Level.SEVERE, "Config file " + file
+					+ " isn't valid! ", ex.getCause().getCause());
 			if (ex.getCause() instanceof YAMLException) {
 				ACLogger.severe("Config file " + file + " isn't valid! "
 						+ ex.getCause());

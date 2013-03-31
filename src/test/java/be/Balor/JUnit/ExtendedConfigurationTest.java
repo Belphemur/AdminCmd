@@ -44,6 +44,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.help.HelpMap;
@@ -658,6 +659,9 @@ public class ExtendedConfigurationTest {
 	@Before
 	public void setUp() throws Exception {
 		ExtendedConfiguration.setClassLoader(this.getClass().getClassLoader());
+		ConfigurationSerialization.registerClass(KitInstance.class);
+		ConfigurationSerialization.registerClass(ArmoredKitInstance.class);
+		ConfigurationSerialization.registerClass(MaterialContainer.class);
 		file = new File("test.yml");
 		final ExtendedConfiguration conf = ExtendedConfiguration
 				.loadConfiguration(file);

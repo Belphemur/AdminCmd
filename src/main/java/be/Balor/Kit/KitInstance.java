@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,7 +29,6 @@ public class KitInstance implements ConfigurationSerializable {
 			ACPluginManager.getCorePlugin().getPermissionLinker()
 					.addPermParent(perm);
 		}
-		ConfigurationSerialization.registerClass(KitInstance.class);
 	}
 
 	public KitInstance(final String name, final int delay,

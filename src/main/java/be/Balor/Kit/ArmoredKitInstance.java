@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -44,10 +43,6 @@ public class ArmoredKitInstance extends KitInstance {
 	private String color;
 	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
 			Type.ArmorPart.class);
-
-	static {
-		ConfigurationSerialization.registerClass(ArmoredKitInstance.class);
-	}
 
 	/**
 	 * @param name
@@ -77,25 +72,21 @@ public class ArmoredKitInstance extends KitInstance {
 			final Player player) {
 		super(name, delay, player);
 		final PlayerInventory inventory = player.getInventory();
-		ItemStack boots = inventory.getBoots();
+		final ItemStack boots = inventory.getBoots();
 		if (boots != null) {
-			this.armor.put(ArmorPart.BOOTS,
-					new MaterialContainer(boots));
+			this.armor.put(ArmorPart.BOOTS, new MaterialContainer(boots));
 		}
-		ItemStack chestplate = inventory.getChestplate();
+		final ItemStack chestplate = inventory.getChestplate();
 		if (chestplate != null) {
-			this.armor.put(ArmorPart.CHEST,
-					new MaterialContainer(chestplate));
+			this.armor.put(ArmorPart.CHEST, new MaterialContainer(chestplate));
 		}
-		ItemStack helmet = inventory.getHelmet();
+		final ItemStack helmet = inventory.getHelmet();
 		if (helmet != null) {
-			this.armor.put(ArmorPart.HEAD,
-					new MaterialContainer(helmet));
+			this.armor.put(ArmorPart.HEAD, new MaterialContainer(helmet));
 		}
-		ItemStack leggings = inventory.getLeggings();
+		final ItemStack leggings = inventory.getLeggings();
 		if (leggings != null) {
-			this.armor.put(ArmorPart.LEGS,
-					new MaterialContainer(leggings));
+			this.armor.put(ArmorPart.LEGS, new MaterialContainer(leggings));
 		}
 	}
 
