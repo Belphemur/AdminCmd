@@ -24,6 +24,8 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -62,8 +64,10 @@ public class PlayerTime extends TimeCommand {
 		if (option.equalsIgnoreCase("normal")) {
 			newTime = 0;
 			relative = true;
+			ACPlayer.getPlayer(target).removePower(Type.BLOCK_IN_TIME);
 		} else {
 			newTime = TimeCommand.calculNewTime(target.getWorld(), option);
+			ACPlayer.getPlayer(target).setPower(Type.BLOCK_IN_TIME);
 		}
 		final long finalNewTime = newTime;
 		final boolean finalRelative = relative;

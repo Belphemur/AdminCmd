@@ -51,6 +51,7 @@ public enum Type {
 	ETERNAL(Category.SUPER_POWER),
 	NO_DROP(Category.SUPER_POWER),
 	EGG(Category.SUPER_POWER),
+	BLOCK_IN_TIME(Category.OTHER),
 	CUSTOM(Category.MISC);
 
 	private static final Map<String, Type> lookupName = new HashMap<String, Type>();

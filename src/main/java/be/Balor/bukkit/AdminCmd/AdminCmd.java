@@ -36,6 +36,7 @@ import be.Balor.Listeners.Commands.ACVulcanListener;
 import be.Balor.Listeners.Features.ACColorSignListener;
 import be.Balor.Listeners.Features.ACCreatureSpawnListener;
 import be.Balor.Listeners.Features.ACDeathListener;
+import be.Balor.Listeners.Features.ACFrozenTimeWorldListener;
 import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
 import be.Balor.Listeners.Features.ACPowerOffListener;
@@ -1069,7 +1070,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 	}
 
 	private void checkModulableFeatures(final PluginManager pm) {
-
+		DebugLog.beginInfo("Loading modulable features");
 		if (ConfigEnum.EDIT_SIGN.getBoolean()) {
 			pm.registerEvents(new ACSignEditListener(), this);
 		}
@@ -1096,6 +1097,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {
 			pm.registerEvents(new ACRespawnWorldFeature(), this);
 		}
-
+		pm.registerEvents(new ACFrozenTimeWorldListener(), this);
+		DebugLog.endInfo();
 	}
 }
