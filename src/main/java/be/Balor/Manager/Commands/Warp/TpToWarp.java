@@ -21,6 +21,7 @@ import static be.Balor.Tools.Utils.sendMessage;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -108,12 +109,20 @@ public class TpToWarp extends WarpCommand {
 				Utils.sI18n(sender, "worldNotFound", "world", world);
 				return;
 			}
-		} else if (Utils.isPlayer(sender, false)) {
-			final Player p = (Player) sender;
+		} else {
+			World world;
+			if (Utils.isPlayer(sender, false)) {
+				world = ((Player) sender).getWorld();
+			} else if (sender instanceof BlockCommandSender) {
+				world = ((BlockCommandSender) sender).getBlock().getWorld();
+			} else {
+				LocaleHelper.ERROR_EXTERNAL_WARP.sendLocale(sender);
+				return;
+			}
 			replace.put("name", args.getString(0));
 
 			try {
-				final Warp warpPoint = ACWorld.getWorld(p.getWorld()).getWarp(
+				final Warp warpPoint = ACWorld.getWorld(world).getWarp(
 						args.getString(0));
 				if (warpPoint == null) {
 					replace.put("name", args.getString(0));
@@ -132,12 +141,6 @@ public class TpToWarp extends WarpCommand {
 				loc = warpPoint.loc;
 				replace.put("name", warpPoint.name);
 			} catch (final WorldNotLoaded e) {
-			}
-		} else {
-			if (sender instanceof BlockCommandSender) {
-				LocaleHelper.ERROR_EXTERNAL_WARP.sendLocale(target);
-			} else {
-				LocaleHelper.ERROR_EXTERNAL_WARP.sendLocale(sender);
 			}
 		}
 		if (loc == null) {
