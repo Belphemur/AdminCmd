@@ -82,8 +82,15 @@ public class CommandManager implements CommandExecutor {
 
 		protected void processCmd() throws PlayerNotFound,
 				ActionNotPermitedException {
-			acc.processArguments();
-			acc.execute();
+			DebugLog.beginInfo(acc.getCommandName());
+			try {
+				acc.processArguments();
+				DebugLog.addInfo("[Args] " + acc.getArgumentsString());
+				DebugLog.addInfo("[SENDER] " + acc.getSender());
+				acc.execute();
+			} finally {
+				DebugLog.endInfo();
+			}
 		}
 
 		/*

@@ -1217,8 +1217,18 @@ public final class Utils {
 	public static void sI18n(final CommandSender sender, final String key,
 			final String alias, final String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
+		sendLocale(sender, locale);
+	}
+
+	/**
+	 * @param sender
+	 * @param locale
+	 */
+	private static void sendLocale(final CommandSender sender,
+			final String locale) {
 		if (locale != null && !locale.isEmpty()) {
 			sender.sendMessage(locale);
+			DebugLog.addInfo("(" + sender + ") " + ChatColor.stripColor(locale));
 		}
 	}
 
@@ -1229,17 +1239,13 @@ public final class Utils {
 	public static void sI18n(final CommandSender sender,
 			final LocaleHelper key, final Map<String, String> replace) {
 		final String locale = I18n(key, replace);
-		if (locale != null && !locale.isEmpty()) {
-			sender.sendMessage(locale);
-		}
+		sendLocale(sender, locale);
 	}
 
 	public static void sI18n(final CommandSender sender,
 			final LocaleHelper key, final String alias, final String toReplace) {
 		final String locale = I18n(key, alias, toReplace);
-		if (locale != null && !locale.isEmpty()) {
-			sender.sendMessage(locale);
-		}
+		sendLocale(sender, locale);
 	}
 
 	public static void tpP2P(final CommandSender sender, final String nFrom,
@@ -1532,31 +1538,36 @@ public final class Utils {
 	 */
 	public static void teleportWithChunkCheck(final Player player,
 			final Location loc) {
-
-		final PlayerTeleportEvent event = new ACTeleportEvent(player,
-				player.getLocation(), loc, TeleportCause.PLUGIN);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
-			return;
-		}
-		final Location toLocation = event.getTo();
-		final int x = toLocation.getBlockX() >> 4;
-		final int z = toLocation.getBlockZ() >> 4;
-		if (!toLocation.getWorld().isChunkLoaded(x, z)) {
-			toLocation.getWorld().loadChunk(x, z);
-		}
-		final Location playerLoc = player.getLocation();
-		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
-
-			@Override
-			public void run() {
-
-				ACPlayer.getPlayer(player).setLastLocation(playerLoc);
-
+		DebugLog.beginInfo("Teleport player (" + player.getName() + ")");
+		DebugLog.addInfo("[TO] " + loc);
+		try {
+			final PlayerTeleportEvent event = new ACTeleportEvent(player,
+					player.getLocation(), loc, TeleportCause.PLUGIN);
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.isCancelled()) {
+				return;
 			}
-		});
+			final Location toLocation = event.getTo();
+			final int x = toLocation.getBlockX() >> 4;
+			final int z = toLocation.getBlockZ() >> 4;
+			if (!toLocation.getWorld().isChunkLoaded(x, z)) {
+				toLocation.getWorld().loadChunk(x, z);
+			}
+			final Location playerLoc = player.getLocation();
+			ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 
-		teleport(player, toLocation);
+				@Override
+				public void run() {
+
+					ACPlayer.getPlayer(player).setLastLocation(playerLoc);
+
+				}
+			});
+
+			teleport(player, toLocation);
+		} finally {
+			DebugLog.endInfo();
+		}
 
 	}
 

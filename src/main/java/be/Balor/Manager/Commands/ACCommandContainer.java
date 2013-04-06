@@ -104,6 +104,14 @@ public class ACCommandContainer {
 		return cmd.getClass();
 	}
 
+	public String getCommandName() {
+		return cmd.getCmdName();
+	}
+
+	public String getArgumentsString() {
+		return args.toString();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
