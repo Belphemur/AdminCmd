@@ -21,6 +21,7 @@ import static be.Balor.Tools.Utils.sendMessage;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -70,83 +71,83 @@ public class TpToWarp extends WarpCommand {
 			return;
 		}
 		final Player target = Utils.getUser(sender, args, permNode, 1, true);
-		if (Utils.isPlayer(sender)) {
-			final Player p = (Player) sender;
-			Location loc = null;
-			if (target != null) {
-				final HashMap<String, String> replace = new HashMap<String, String>();
+		Location loc = null;
+		if (target == null) {
+			return;
+		}
+		final HashMap<String, String> replace = new HashMap<String, String>();
 
-				if (args.getString(0).contains(":")) {
-					if (!PermissionManager.hasPerm(sender, tpAll)) {
-						return;
-					}
-					final String[] split = args.getString(0).split(":");
-					final String world = split[0];
-					final String warp = split[1];
-					replace.put("name", world + ":" + warp);
-					try {
-						final ACWorld acWorld = ACWorld.getWorld(world);
-						final Warp warpPoint = acWorld.getWarp(warp);
-						if (warpPoint == null) {
-							replace.put("name", args.getString(0));
-							Utils.sI18n(sender, "errorWarp", replace);
-							return;
-						}
-						if (warpPoint.permission != null
-								&& !warpPoint.permission.isEmpty()
-								&& !warpPoint.permission.equalsIgnoreCase("")
-								&& !PermissionManager.hasPerm(sender, permNode
-										+ "." + warpPoint.permission, false)) {
-							replace.put("point", warp);
-							LocaleHelper.WARP_NO_PERM.sendLocale(sender,
-									replace);
-							return;
-						}
-						loc = warpPoint.loc;
-						replace.put("name", acWorld.getName() + ":"
-								+ warpPoint.name);
-					} catch (final WorldNotLoaded e) {
-						Utils.sI18n(sender, "worldNotFound", "world", world);
-						return;
-					}
-				} else {
+		if (args.getString(0).contains(":")) {
+			if (!PermissionManager.hasPerm(sender, tpAll)) {
+				return;
+			}
+			final String[] split = args.getString(0).split(":");
+			final String world = split[0];
+			final String warp = split[1];
+			replace.put("name", world + ":" + warp);
+			try {
+				final ACWorld acWorld = ACWorld.getWorld(world);
+				final Warp warpPoint = acWorld.getWarp(warp);
+				if (warpPoint == null) {
 					replace.put("name", args.getString(0));
-
-					try {
-						final Warp warpPoint = ACWorld.getWorld(
-								p.getWorld().getName()).getWarp(
-								args.getString(0));
-						if (warpPoint == null) {
-							replace.put("name", args.getString(0));
-							Utils.sI18n(sender, "errorWarp", replace);
-							return;
-						}
-						if (warpPoint.permission != null
-								&& !warpPoint.permission.isEmpty()
-								&& !warpPoint.permission.equalsIgnoreCase("")
-								&& !PermissionManager.hasPerm(sender, permNode
-										+ "." + warpPoint.permission, false)) {
-							replace.put("point", args.getString(0));
-							LocaleHelper.WARP_NO_PERM.sendLocale(sender,
-									replace);
-							return;
-						}
-						loc = warpPoint.loc;
-						replace.put("name", warpPoint.name);
-					} catch (final WorldNotLoaded e) {
-					}
-				}
-				if (loc == null) {
 					Utils.sI18n(sender, "errorWarp", replace);
 					return;
-				} else {
-					ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-							ACHelper.getInstance().getCoreInstance(),
-							new DelayedTeleport(target.getLocation(), loc,
-									target, replace, sender),
-							ConfigEnum.TP_DELAY.getLong());
 				}
+				if (warpPoint.permission != null
+						&& !warpPoint.permission.isEmpty()
+						&& !warpPoint.permission.equalsIgnoreCase("")
+						&& !PermissionManager.hasPerm(sender, permNode + "."
+								+ warpPoint.permission, false)) {
+					replace.put("point", warp);
+					LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
+					return;
+				}
+				loc = warpPoint.loc;
+				replace.put("name", acWorld.getName() + ":" + warpPoint.name);
+			} catch (final WorldNotLoaded e) {
+				Utils.sI18n(sender, "worldNotFound", "world", world);
+				return;
 			}
+		} else if (Utils.isPlayer(sender, false)) {
+			final Player p = (Player) sender;
+			replace.put("name", args.getString(0));
+
+			try {
+				final Warp warpPoint = ACWorld.getWorld(p.getWorld()).getWarp(
+						args.getString(0));
+				if (warpPoint == null) {
+					replace.put("name", args.getString(0));
+					Utils.sI18n(sender, "errorWarp", replace);
+					return;
+				}
+				if (warpPoint.permission != null
+						&& !warpPoint.permission.isEmpty()
+						&& !warpPoint.permission.equalsIgnoreCase("")
+						&& !PermissionManager.hasPerm(sender, permNode + "."
+								+ warpPoint.permission, false)) {
+					replace.put("point", args.getString(0));
+					LocaleHelper.WARP_NO_PERM.sendLocale(sender, replace);
+					return;
+				}
+				loc = warpPoint.loc;
+				replace.put("name", warpPoint.name);
+			} catch (final WorldNotLoaded e) {
+			}
+		} else {
+			if (sender instanceof BlockCommandSender) {
+				LocaleHelper.ERROR_EXTERNAL_WARP.sendLocale(target);
+			} else {
+				LocaleHelper.ERROR_EXTERNAL_WARP.sendLocale(sender);
+			}
+		}
+		if (loc == null) {
+			Utils.sI18n(sender, "errorWarp", replace);
+			return;
+		} else {
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+					ACHelper.getInstance().getCoreInstance(),
+					new DelayedTeleport(target.getLocation(), loc, target,
+							replace, sender), ConfigEnum.TP_DELAY.getLong());
 		}
 
 	}

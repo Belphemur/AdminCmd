@@ -194,7 +194,10 @@ public enum LocaleHelper {
 			+ ChatColor.GREEN + " named " + ChatColor.GOLD + "%kit"
 			+ ChatColor.GREEN + " has been successfully created."),
 	ERROR_DOT_HOME("home.dotError", ChatColor.RED + "You can't use the "
-			+ ChatColor.GOLD + "dot (.)" + ChatColor.RED + " in a home name.");
+			+ ChatColor.GOLD + "dot (.)" + ChatColor.RED + " in a home name."),
+	ERROR_EXTERNAL_WARP("warp.nonPlayer", ChatColor.RED
+			+ "You have to set the world name in the command. "
+			+ ChatColor.GOLD + "Eg : /twp world:test");
 
 	private final String key;
 	private final String locale;
