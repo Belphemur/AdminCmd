@@ -57,7 +57,7 @@ public class Home extends HomeCommand {
 		if (Utils.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			be.Balor.Tools.Home home = null;
-			home = Utils.getHome(sender, args.getString(0));
+			home = getHome(sender, args.getString(0));
 			if (home == null) {
 				return;
 			}

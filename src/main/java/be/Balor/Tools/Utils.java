@@ -611,54 +611,6 @@ public final class Utils {
 	}
 
 	/**
-	 * Get the home by checking the colon
-	 * 
-	 * @param sender
-	 *            who send the command
-	 * @param toParse
-	 *            what args was send
-	 * @return the home containing the player and the home name
-	 */
-	public static Home getHome(final CommandSender sender, final String toParse) {
-		final Home result = new Home();
-		if (toParse != null && toParse.contains(":")) {
-			try {
-				final String[] split = toParse.split(":");
-				result.player = split[0];
-				if (split[1] == null) {
-					final HashMap<String, String> replace = new HashMap<String, String>();
-					replace.put("arg", "home name after the ':'");
-					replace.put("cmdName", "/home");
-					LocaleHelper.MISSING_ARG.sendLocale(sender, replace);
-					return null;
-				}
-				result.home = split[1];
-			} catch (final ArrayIndexOutOfBoundsException e) {
-			}
-			if (isPlayer(sender, false)) {
-				final Player p = (Player) sender;
-				if (!p.getName().equals(result.player)
-						&& !PermissionManager.hasPerm(p, "admincmd.admin.home")) {
-					return null;
-				}
-			}
-			return result;
-		}
-		if (!isPlayer(sender)) {
-			return null;
-		}
-		final Player p = ((Player) sender);
-		result.player = p.getName();
-		if (toParse != null) {
-			result.home = toParse;
-		} else {
-			result.home = p.getWorld().getName();
-		}
-
-		return result;
-	}
-
-	/**
 	 * Shortcut to online players.
 	 * 
 	 * @return

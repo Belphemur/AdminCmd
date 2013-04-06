@@ -192,7 +192,9 @@ public enum LocaleHelper {
 	NORMAL_KIT("kit.normal", ChatColor.GOLD + "Normal Kit"),
 	SUCCESS_DYN_KIT("kit.successDynKit", ChatColor.GREEN + "The %type"
 			+ ChatColor.GREEN + " named " + ChatColor.GOLD + "%kit"
-			+ ChatColor.GREEN + " has been successfully created.");
+			+ ChatColor.GREEN + " has been successfully created."),
+	ERROR_DOT_HOME("home.dotError", ChatColor.RED + "You can't use the "
+			+ ChatColor.GOLD + "dot (.)" + ChatColor.RED + " in a home name.");
 
 	private final String key;
 	private final String locale;

@@ -57,8 +57,7 @@ public class SetHome extends HomeCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (Utils.isPlayer(sender)) {
 			final Player p = ((Player) sender);
-			final be.Balor.Tools.Home home = Utils.getHome(sender,
-					args.getString(0));
+			final be.Balor.Tools.Home home = getHome(sender, args.getString(0));
 			if (home == null) {
 				return;
 			}
