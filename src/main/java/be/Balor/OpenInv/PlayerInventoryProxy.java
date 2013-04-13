@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.OpenInv;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -79,7 +80,8 @@ public class PlayerInventoryProxy implements InvocationHandler {
 			this.onClose(args[0]);
 			return null;
 		} else if (methodName.equals("getContents")) {
-			return getContents();
+			return ACMinecraftReflection.getItemStackArrayClass().cast(
+					getContents());
 		} else if (methodName.equals("getSize")) {
 			return getSize();
 		} else if (methodName.equals("a_") || methodName.equals("a")) {
@@ -133,8 +135,9 @@ public class PlayerInventoryProxy implements InvocationHandler {
 		}
 	}
 
-	protected Object[] getContents() {
-		final Object[] C = new Object[getSize()];
+	protected Object getContents() {
+		final Object C = Array.newInstance(
+				ACMinecraftReflection.getItemStackClass(), getSize());
 		final Object[] items = getItems();
 		final Object[] armor = getArmor();
 		System.arraycopy(items, 0, C, 0, items.length);
