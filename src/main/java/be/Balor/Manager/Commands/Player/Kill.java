@@ -22,7 +22,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type.Health;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -55,7 +54,7 @@ public class Kill extends PlayerCommand {
 			@Override
 			public void run() {
 				try {
-					Utils.setPlayerHealth(sender, args, Health.KILL);
+					setPlayerHealth(sender, args, Health.KILL);
 				} catch (final PlayerNotFound e) {
 					e.getSender().sendMessage(e.getMessage());
 				} catch (final ActionNotPermitedException e) {

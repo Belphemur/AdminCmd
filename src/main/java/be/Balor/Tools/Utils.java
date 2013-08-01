@@ -46,14 +46,9 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
 
 import be.Balor.Listeners.Events.ACTeleportEvent;
 import be.Balor.Manager.LocaleManager;
@@ -1104,102 +1099,6 @@ public final class Utils {
 	public static void setLogBlock(final Consumer logBlock) {
 		Utils.logBlock = logBlock;
 		IBlockRemanenceFactory.FACTORY = new LogBlockRemanenceFactory();
-	}
-
-	/**
-	 * Heal or refill the FoodBar of the selected player.
-	 * 
-	 * @param name
-	 * @return
-	 * @throws ActionNotPermitedException
-	 * @throws PlayerNotFound
-	 */
-	public static boolean setPlayerHealth(final CommandSender sender,
-			final CommandArgs name, final Type.Health toDo)
-			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = getUser(sender, name, "admincmd.player." + toDo);
-		if (target == null) {
-			return false;
-		}
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", getPlayerName(target));
-		final PluginManager pluginManager = ACPluginManager.getServer()
-				.getPluginManager();
-		final String newStateLocale = LocaleHelper.NEW_STATE.getLocale();
-		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER
-				.getLocale(replace);
-		switch (toDo) {
-		case HEAL:
-			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(
-					target, 20, RegainReason.CUSTOM);
-			pluginManager.callEvent(heal);
-			if (!heal.isCancelled()) {
-				target.setHealth(heal.getAmount());
-				target.setFireTicks(0);
-				final String msg = newStateLocale
-						+ LocaleHelper.HEALED.getLocale();
-				target.sendMessage(msg);
-				if (!target.equals(sender)) {
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.HEALED.getLocale();
-					sender.sendMessage(newStateMsg);
-				}
-			}
-			break;
-		case FEED:
-			final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(
-					target, 20);
-			pluginManager.callEvent(foodEvent);
-			if (!foodEvent.isCancelled()) {
-				target.setFoodLevel(foodEvent.getFoodLevel());
-				final String msg = newStateLocale
-						+ LocaleHelper.FEEDED.getLocale();
-				target.sendMessage(msg);
-				if (!target.equals(sender)) {
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.FEEDED.getLocale();
-					sender.sendMessage(newStateMsg);
-				}
-			}
-			break;
-		case KILL:
-			if (target.equals(sender)) {
-				final EntityDamageEvent dmgEvent = new EntityDamageEvent(
-						target, EntityDamageEvent.DamageCause.SUICIDE,
-						Short.MAX_VALUE);
-				pluginManager.callEvent(dmgEvent);
-				if (!dmgEvent.isCancelled()) {
-					target.damage(Short.MAX_VALUE);
-					LocaleHelper.SUICIDE.sendLocale(target);
-				}
-			} else {
-				final EntityDamageEvent dmgEvent = new EntityDamageEvent(
-						target, EntityDamageEvent.DamageCause.CUSTOM,
-						Short.MAX_VALUE);
-				pluginManager.callEvent(dmgEvent);
-				if (!dmgEvent.isCancelled()) {
-					if (isPlayer(sender, false)) {
-						target.damage(dmgEvent.getDamage(), (Player) sender);
-					} else {
-						target.damage(dmgEvent.getDamage());
-					}
-					final String msg = newStateLocale
-							+ LocaleHelper.KILLED.getLocale();
-					target.sendMessage(msg);
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.KILLED.getLocale();
-					sender.sendMessage(newStateMsg);
-				}
-			}
-			if (logBlock != null) {
-				logBlock.queueKill(isPlayer(sender, false) ? (Player) sender
-						: null, target);
-			}
-			break;
-		default:
-			return false;
-		}
-		return true;
 	}
 
 	public static void sI18n(final CommandSender sender, final String key) {
