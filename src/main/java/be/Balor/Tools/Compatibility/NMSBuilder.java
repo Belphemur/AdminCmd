@@ -104,23 +104,31 @@ public class NMSBuilder {
 	/**
 	 * Build a ItemInWorldManager
 	 * 
-	 * @param worldServer
+	 * @param world
 	 * @return return instance of ItemInWorldManager
 	 */
-	public static Object buildItemInWorldManager(final Object worldServer) {
-		if (!MinecraftReflection.getWorldServerClass().isAssignableFrom(
-				worldServer.getClass())) {
+	public static Object buildItemInWorldManager(final Object world) {
+		if (!ACMinecraftReflection.getNMSWorldClass().isAssignableFrom(
+				world.getClass())) {
 			throw new RuntimeException("The constructor need a "
-					+ MinecraftReflection.getWorldServerClass().getSimpleName());
+					+ ACMinecraftReflection.getNMSWorldClass().getSimpleName());
 		}
 		final Class<?> clazz = ACMinecraftReflection
 				.getItemInWorldManagerClass();
 		try {
 			final Constructor<?> constructor = clazz
-					.getConstructor(MinecraftReflection.getWorldServerClass());
-			return constructor.newInstance(worldServer);
+					.getConstructor(ACMinecraftReflection.getNMSWorldClass());
+			return constructor.newInstance(world);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't build ItemInWorldManager", e);
+			try {
+				final Constructor<?> constructor = clazz
+						.getConstructor(MinecraftReflection
+								.getWorldServerClass());
+				return constructor.newInstance(world);
+
+			} catch (final Exception e2) {
+				throw new RuntimeException("Can't build ItemInWorldManager", e2);
+			}
 		}
 
 	}
