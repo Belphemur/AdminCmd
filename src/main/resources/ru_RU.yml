@@ -1,0 +1,307 @@
+#version: ${git.commit.id}
+#By DarkSharkZX
+playerNotFound: '§cНе существует такого игрока: §f%player'
+kitNotFound: §cНе существует набора §f%kit
+pluginNotFound: §cПлагин §f%plugin §cне установлен на нашем сервере!
+worldNotFound: §cМир §f%world §cне найден!
+unknownMat: '§cНеизвестный материал: §f%material'
+onlinePlayers: '§2Сейчас на сервере: '
+serverReload: §aСервер перезагружен успешно!.
+changedWorld: §4Все Ваши возможности временно отключены, так как Вы вошли в другой мир.
+stillInv: §cВы все еще невидимы!.
+errorNotPerm: §fУ вас нет права §c%p §fчтобы сделать это!
+dropItemOtherPlayer: §c[%sender]§f бросил §6%amount %material §fоколо Вас.
+dropItemCommandSender: §cБрошено §6%amount %material §fоколо §2%target
+dropItemYourself: §cБрошено §6%amount %material
+giveItemOtherPlayer: §c[%sender]§f дал Вам §6%amount %material
+giveItemCommandSender: §cДобавлено §6%amount %material игроку §2%target.
+giveItemYourself: §cДобавлено §6%amount %material§f в §2Ваш §fинвентарь
+errorHolding: §cПохоже, вы уже выполняете другое действие!
+moreTooMuch: У вас в инвентаре максимально допустимое кол-во предметов (§9%amount§f) .
+repairTarget: Ваш §c%type§f был успешно починен!.
+repair: Вы починили игроку %player §c%type§f.
+errorRepair: Вы не можете чинить §c%type
+repairAll: Все вещи игрока %player были успешно починены.
+repairAllTarget: Все ваши вещи были успешно починены!
+errorMob: §cНе существует моба §f%mob
+spawnMob: §9Вы заспавнили §f%nb %mob
+spawnMobOther: §9Игрок §6%player §9заспавнил §f%nb %mob.
+clear: §cВаш инвентарь очищен.
+clearTarget: §fИнвентарь игрока §c%player§f' очищен.
+fireballDisabled: §4Огненные шары отключены!
+fireballDisabledTarget: §4Огненные шары отключены для игрока %player.
+fireballEnabled: §4Огненные шары включены!
+fireballEnabledTarget: §4Огненные шары включены для игрока %player.
+godDisabled: §3Режим "God" выключен.
+godDisabledTarget: §3Вы отключили режим "God" игроку §c%player.
+godEnabled: §3Режим "God" включен
+godEnabledTarget: §3Вы включили режим "God" игроку §c%player.
+noDropDisabled: §3Режим "Без Дропа" выключен!
+noDropDisabledTarget: §3Режим "Без Дропа" выключен для игрока %player.
+noDropEnabled: §3Режим "Без Дропа" включен!
+noDropEnabledTarget: §3Режим "Без Дропа" включен для игрока %player.
+thorDisabled: §3Сила Тора покинула вас.
+thorDisabledTarget: §3Сила Тора покинула игрока %player.
+thorEnabled: §3Вы приобрели Силу Тора!
+thorEnabledTarget: §3Игрок %player приобрел Силу Тора!
+vulcanDisabled: §4Режим "Вулкан" выключен.
+vulcanDisabledTarget: §4Режим "Вулкан" выключен для игрока %player
+vulcanEnabled: §4Режим "Вулкан" включен.
+vulcanEnabledTarget: §4Режим "Вулкан" включен для игрока %player
+spymsgDisabled: §3Шпионаж личных сообщений  выключен!
+spymsgEnabled: §3Шпионаж личных сообщений включен!
+invisibleEnabled: §cВы теперь невидимы!
+invisibleEnabledTarget: §3Игрок §c%player теперь невидим!
+invisibleDisabled: §aВы снова видимы!
+invisibleDisabledTarget: §3Игрок %player снова видим!
+errorMultiHome: §2Дом §c%home§f не установлен.
+multiHome: §2Вы телепортированы§f в Ваш §3%home дом.
+setMultiHome: §2Дом §3%home§f успешно установлен.
+rmHome: §cДом §3%home§f убран.
+homeLimit: §cВы не можете установить больше точек /home.
+itemLimit: §cYou have exceeded your §2item limit§c of %limit items per command.
+errorLocation: §cМестность должна быть обозначена!.
+addWarp: §aТочка телепортации %name§f успешно создана.
+rmWarp: §cТочка телепортации %name§f удалена.
+errorWarp: §4Точки телепортации %name не существует.
+tpWarp: §aВы успешно телепортировались на точку телепортации §f%name.
+strike: '%player был убит прямым попаданием молнии. Везунчик.'
+tp: Игрок §9%fromPlayer§f успешно телепортирован к игроку §a%toPlayer
+addBlacklistItem: §aПредмет(§f%material§a) занесен в черный список и не может быть выдан.
+addBlacklistBlock: §aБлок (§f%material§a) занесен в черный список и не может быть установлен.
+rmBlacklistItem: §aПредмет (§f%material§a) удален из черного списка.
+rmBlacklistBlock: §aБлок (§f%material§a) удален из черного списка.
+inBlacklistItem: §4Предмет (§f%material§4) успешно занесен в черный список.
+inBlacklistBlock: §4Блок (§f%material§4) успешно занесен в черный список.
+errorSpawn: §2Спавн§f не установлен.
+spawn: §2Вы были телепортированы на §9Спавн.
+setSpawn: §2Спавн§f успешно установлен.
+sClear: 'Небо очищено в мире  '
+sStorm: 'Установлен тип погоды §4шторм§f длительностью %duration минут в мире: '
+sRain: 'Установлен тип погоды §4дождь§f длительностью %duration минут в мире: '
+afk: '%player §cсейчас AFK'
+online: '%player §aвернулся'
+afkTitle: §9[§2AFK§9]§f
+ip: §eIP адресс игрока §f%player - %ip
+ban: '§e%player был забанен! Причина: §c%reason'
+unban: §e%player был разбанен.
+killMob: §cВсе (§f%type§c) были уничтожены.
+killedMobs: '%nbKilled§4 мобов было убито.'
+flyDisabled: §6Режим полёта отключен
+flyDisabledTarget: §6Вы отключили режим полёта игроку %player.
+flyEnabled: §6Режим полёта включен.
+flyEnabledTarget: §6Вы включили режим полёта игроку %player.
+npDisabled: §6Теперь Вы можете подбирать предметы.
+npDisabledTarget: §6Игрок %player теперь может подбирать предметы.
+npEnabled: §6Теперь Вы не можете подбирать предметы.
+npEnabledTarget: §6Игрок %player теперь не может подбирать предметы.
+afkKick: Вы были кикнуты за очень долгий AFK.
+freezeDisabled: §2Теперь вы можете двигаться.
+freezeDisabledTarget: §2Игрок %player теперь может двигаться.
+freezeEnabled: §4Вас заморозили, вы не сможете двигаться.
+freezeEnabledTarget: §4%player был заморожен.
+muteDisabled: §2Теперь вы можете использовать чат!
+muteDisabledTarget: §2%player получил доступ к чату.
+muteEnabled: §4Вам выдали молчанку. Вы не можете писать в чат!
+tmpMuteEnabled: §4Вам выдали молчанку на %minutes минут.
+muteEnabledTarget: §4%player получил молчанку
+alreadyMuted: §3Этот игрок уже получил молчанку. Для снятия используйте /unmute ник.
+notMuted: §f%player §cне получал молчанку.
+commandMuteDisabled: §2Вы снова имеете доступ к командам.
+commandMuteDisabledTarget: §2%player получил доступ к командам.
+commandMuteEnabled: §4Доступ к командам закрыт.
+commandTmpMuteEnabled: §4Вам закрыли доступ к командам на %minutes минут.
+commandMuteEnabledTarget: Игроку §4%player закрыт доступ к командам.
+alreadyCommandMuted: §3Этому игроку уже закрыт доступ к командам.
+NaN: '%number §4не является числом.'
+mobLimit: §6Лимит мобов в мире %world изменен на %number.
+mobLimitPerMob: '#mobLimit# §cдля моба %mob'
+mobLimitRemoved: §aУбран лимит на мобов в мире %world
+mobLimitRemovedPerMob: '#mobLimitRemoved# §b на моба %mob'
+wFrozen: 'Погода зафиксирована в мире:'
+wUnFrozen: 'Погода рассредоточена в мире:'
+invTitle: '[§9INV§f]'
+roll: '§2[%player] §fраскрутил §6%face рулетку, его результат: §e%result'
+extinguish: §b%nb blocks§3 было потушено.
+pluginReloaded: §f%plugin §eперезагружен успешно.
+replaced: §c%nb §5%mat§3 были заменены на воздух.
+undo: §a%nb блоков §2было заменено.
+nothingToUndo: §5Нет действий для отката.
+noRepeat: §4Нет действий для повтора.
+reExec: §eПовтор последней команды.
+timeSet: §6Время было изменено на %type
+timeNotSet: §cПеременной %type не существует.
+timePaused: §4Время остановлено. §2Для возобновления хода времени используйте /time unpause.
+moreAll: §bВсе ваши вещи раскиданы по стакам.
+tpRequestTo: §9%player §6хочет телепортироваться к Вам. §2Введите §a/tpt yes §2чтобы принять запрос.
+tpRequestSend: §5Вы послали запрос на телепортацию игроку §f%player§5.
+tpRequestFrom: §9%player §3хочет телепортировать Вас к себе. §2Введите §a/tpt yes §2чтобы принять запрос.
+tpRequestOff: §2Система запросов на телепорт отключена.
+tpRequestOn: §4Система запросов на телепорт включена.
+tpSeeEnabled: §2Теперь вы можете телепортироваться туда, куда кликните левой кнопкой мыши.
+tpSeeDisabled: §4Телепорт при помощи левой кнопки мыши отключен.
+elapsedTime: 'Сервер работает: §e%d дней %h:%m:%s'
+kitList: '§6Доступные для Вас наборы: §b%list'
+kitOtherPlayer: '§c[%sender]§f передал вам набор: §6%kit'
+kitCommandSender: §cДобавлен набор §6%kit §cв инвентарь игрока §f%target.
+kitYourself: §cНабор §6%kit§c выдан.
+tpRequestTimeOut: §cЗапрос на телепорт уже не актуален.
+noTpRequest: §aЗапросов на телепорт не найдено.
+noteAfk: §f%player §eсейчас AFK
+idleTime: §3Бездействие в течении %mins минут.
+pluginVersion: '§eТекущая версия плагина §f%plugin: §a%version'
+emptyList: §cСписок пуст, или его не существует.
+telportSuccess: §2Вы телепортариваны.
+noLastLocation: §cВам некуда телепортироваться, последняя локация не зафиксирована.
+super_breakerDisabled: §6Супер Разрушитель выключен.
+super_breakerDisabledTarget: §6Супер Разрушитель выключен для игрока %player
+super_breakerEnabled: §6Супер Разрушитель включен. Осторожно!
+super_breakerEnabledTarget: §6Супер Разрушитель включен для игрока %player
+airForbidden: §4Воздух не может быть выдан.
+playedTime: §3%player §fиграет на нашем сервере уже §b#elapsedTotalTime# (общее время).
+serverUnlock: §aСервер восстановлен.
+serverLock: §cСервер временно переходит в режим приватной работы, Вы будете кикнуты, если у Вас нет права находиться на закрытом сервере.
+eternalDisabled: §4Теперь голод будет возрастать.
+eternalDisabledTarget: §4Теперь голод будет возрастать у игрока%player.
+eternalEnabled: §4Теперь вы не голодаете
+eternalEnabledTarget: §4Теперь игрок %player не голодает.
+fakeQuitDisabled: §3Режим "Fake Quit" выключен, Вы снова числитесь онлайн.
+fakeQuitDisabledTarget: §3Режим "Fake Quit" выключен у игрока %player, и он снова числится онлайн.
+fakeQuitEnabled: §3Режим "Fake Quit" включен, Ваше имя больше не отображается в панели TAB, и в чат отправлено сообщение о Вашем выходе с сервера.
+fakeQuitEnabledTarget: §3Режим "Fake Quit" включен для игрока %player, его больше "нет" на сервере.
+noLoginInformation: Нет доступной информации.
+insufficientLvl: §4Ваш уровень слишком низок для этого действия.
+gmSwitch: '§aРежим игры игрока §6%player §aизменен на: §f%gamemode'
+kitDelayNotUp: §cВы не можете брать этот набор так часто! Подождите еще§f%delay
+days: '%d Дней'
+elapsedTotalTime: '#days# %h:%m:%s'
+spawnerSetDelay: '§aПромежуток выполнения функции спавнера установлен: §6%delay'
+spawnerSetType: §aТеперь спавнер будет производить §6%type
+spawnerGetData: §3Данный спавнер производит §6%mobs§3 с промежутком в §6%delay§3.
+spawnerNaN: §cТо, что Вы ввели - не переменная!
+addSpawnWarp: §aТочка спавна для группы §3%name§a добавлена.
+tpTO: к ним.
+tpHERE: к Вам.
+tpPLAYERSTO: §4%target§f к Вам.
+tpPLAYERSFROM: Вас к %target.
+offline: '%player §cсейчас не в сети!'
+noPlayerToReply: §cВам не присылали сообщений, чтобы отвечать на них!
+mustBePlayer: '[AdminCmd] Только игрок может использовать эту команду!'
+errorInsufficientArguments: Вы должны ввести определенную переменную %argument для использования этой команды.
+setDifficutly: §3Сложность мира §6%world§3 была изменена на §6%difficulty
+getDifficulty: '§3Сложность мира §6%world§3 на данный момент: §6%difficulty'
+serverLockMessage: Доступ к серверу временно ограничен.
+errorMoved: §cВы сдвинулись с места после использования команды %cmdname, телепортация прервана!
+privateTitle: §c[§6Личные сообщения]§f
+privateMessageHeader: '#privateTitle# %sender§f: '
+joinMessage: '%name§e зашел в игру!'
+joinMessageFirstTime: '%name§e зашел на сервер §6впервые! Приветствуем его!'
+quitMessage: '%name§e покинул игру!'
+presSet: '§ePresentation for§f %player§e set to : §6%pres'
+expAdded: §3Добавлено §6%amount §3единиц опыта.
+expLevelSet: §3Ваш уровень имзенен на §6%amount.
+expProgressionSet: §3Прогрессирующая вашего уровня была изменена на §6%amount.
+expDropped: §3Определенное количество сфер опыта создано рядом с Вами!
+expTotal: '§3Ваш общий набранный опыт: §6%exp'
+expAddedTarget: §aВы добавили§6 %amount §aигроку %target к его общему количеству опыта.
+expLevelSetTarget: §aуУровень игрока §a%target изменен на:§6 %amount
+expProgressionSetTarget: §aВы изменили прогрессирующую уровня игрока %target на §6%amount
+expDroppedTarget: §aВы бросили несколько сфер опыта возле игрока %target.
+expTotalTarget: '§3Общий опыт игрока §3%target равен: §6%exp'
+kitOnce: §cНабор §6%kit§c может быть использован только один раз!
+MOTDset: '§eСтатус сервера изменен на: %motd'
+NEWSset: '§eНовости сервера изменены на: %news'
+RulesSet: §eПравила сервера изменены на://n%rules
+timeOutPower: §6Ваша способность %power иссякла.
+timeOutPowerSender: §6Способность %power игрока §4%player §6иссякла.
+serverStop: Сервер временно останавливает свою работу.
+serverWillStop: §c[Важно!] §eСервер §4остановит свою работу §eчерез §6%sec секунд.
+diffWorld: §bИгрок %player§c находится в другом мире, поэтому к нему нельзя телепортироваться.
+paramMissing: §cВы должны задать параметр к этой команде§6-%param .
+eggDontExists: §cТакого типа яйца (§6%egg§c) не существует.
+eggEnabled: §3Яйцо §6(%egg)§b активировано.
+eggNormal: §aЯйцо вернулось в нормальное состояние.
+eggNoParamGiven: §cВам нужно указать тип яйца моба, введя /egg -E command.
+entityDontExists: §cВведенного Вами ID несуществует (§6%entity) .
+eggCustomError: '§cПроблема яйца призыва: §6%egg§c: §e%error'
+itemId: §7Игрок §6%player§7 держит вещь §%item§f:§c%data
+eggCmdParam: §cНеобходим параметр §6-E§c для выбора типа яйца.
+eggBlockParam: §cНеобходим параметр §6-b§c для выбора блока на замену.
+eggEntityParam: §cНеобходим параметр §6-e§c для указания ID предмета и его созадния.
+eggMobParam: §cНеобходим параметр §6-m§c для выбора моба на создание.
+dontExists: §cЗначения %type §6%value §cнесуществует!
+cantEnchantItem: На §6%item§c не может быть наложено зачарование §a%enchant.
+enchantSuccess: §aВаш §6%item§a успешно зачарован на §9%enchant§a §d%lvl.
+highEggEffect: §aВы включили режим §6HIGH§a, готовьтесь увидеть мир с высоты :)!
+potionEffect: §ka§b%player§d Выпил зелье §6%potion!§kz
+spymsgTitle: §a[Шпионаж ЛС]§f
+spymsgMessageHeader: '#spymsgTitle# %sender-%receiver§f: '
+dontExistsType:
+  enchant: enchantment
+  potion: potion
+  cmd: command
+  mat: material
+playerKicked: §6%player §eбыл кикнут с сервера, причина:§c %reason
+quitCmdMsg: '§6%player §eпокинул игру: %reason'
+worldNotLoaded: §cДанный мир не загружен:§6 %message
+missingArg: §cВы должны указать %arg как аргумент для использования команды §b%cmdName.
+dimensionTeleport: §aВы телепортированы в мир %world!
+dimTpList: '§aДоступные для телепортации миры:  //n §6%list'
+tpAll: §aВы телепортированы в §6%loc§a игроком §6%sender.
+itemBlAlready: §cДанный предмет §6%item §cуже заблокирован.
+blItemSaveProb: §6Невозможно сохранить чёрный список.
+blItemNotBl: §cДанный предмет §6%item§c не заблокирован.
+banList: §6%player, §bзабанен по причине :§6 %reason  %date.
+inaccurateIp: §cДанный IP-адрес §6%ip §введен неверен!
+notBanned: §6Отсутствует бан§c %ban.
+powersClearedSender: §aВсе эффекты сняты с игрока %target!
+powersClearedTarget: §bВсе эффекты сняты игроком§6 %sender§b!
+powersCleared: §aВы сняли все эффекты!
+muteList: §6%player, §b%msg
+noMutedPlayers: §cОтсутствуют игроки, получившие молчанку.
+unMutedPlayers: §b%nb §aТеперь приглушенные игроки могут писать.
+allTxtReloaded: §aВсе текстовые файлы перезагружены.
+kill: §cубиты
+feed: §5накормлены
+heal: §aвылечены
+nState: '§6Вы были '
+pNewState: '§6%player был '
+suicide: §cВы сделали харакири.
+broadcast: §e[ОБЪЯВЛЕНИЕ]§6%message
+unknown: неизвестно
+ipBroadcast: '§6%player §cиспользует IP-адрес §6 игрока %player2§c. IP: §b%ip'
+echantmentsAdded: §aВаш предмет §6%item§a зачарован !
+banListUpdated: '#banList# обновлен §c%banner'
+noBannedPlayers: §cОтсутствуют забаненные игроки.
+groupSpawnSet: §aСпаун для группы§6%groupName§a установлен.
+groupSpawn: '§aВы телепортированы на спаун группы: §6%groupName'
+noGroupSpawn: §cГруппа §b%groupName§c не имеет личного спауна
+noSuchGroup: §cГруппы с названием §b%groupName§c не существует.
+deathMessage: §b%player §e%msg
+tpSoonMsg: §bВы будете телепортированы через §a%sec секунд
+afkKickBroadcast: §b%player§6 кикнут из игры за длительное бездействие.
+notABlock: §cВы указали неверный ID блока!
+noWarpPerm: '§cУ вас нет права телепортироваться в локацию: §6%point'
+MuteBroadcast: '§c%player был заглушен игроком%muter на %time, по причине: %reason'
+tempBanTimeLeft: 'Осталось времени: %d дней %h часов %m минут %s секунд до разбана'
+defaultBanMessage: Вы были забанены. По всем вопросам в Skype:§ skillofcrash !
+newVersionFound: 'Появилась новая версия AdminCmd на сайте www.admincmd.com : %version'
+playerTime: §aВремя для игрока §6%player§ установлено на §b%time
+itemCantColor: '§cДанный предмет §6(%item)§c не может быть перекрашен ! Доступные
+  предметы: §f%items'
+colorDontExists: '§cДанный цвет §6(%color)§c отсутствует. Доступные цвета : §f%colors'
+enchantExists: §6%enchant§c отсутствует или уже наложено на предмет.
+enchantConflict: '§cКонфликт между двумя зачарованиями: §f%e1 и §6%e2'
+walkspeed:
+  success: §aСкорость бега игрока §6%player§a изменена на §f%value
+  error: §cСкорость бега должна быть не больше §21 §4и не меньше §2-1§4, например 0.8545.
+  get: §eТекущая скорость бега игрока §6%player §e- §6%value
+kit:
+  notPermReplace: §cУ вас нет права заменять уже существующий §4набор.
+  armored: §6Бронированный набор
+  normal: §6Стандартный набор
+  successDynKit: §aТип набора %type,§a названный §6%kit§был успешно создан!!!.
+home:
+  dotError: §cВы не можете использовать §6точку (.)§c в названии точки /home.
+warp:
+  nonPlayer: '§cВы должны установить название мира. §6Например : /twp world:test'

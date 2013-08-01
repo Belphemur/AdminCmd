@@ -1310,6 +1310,7 @@ public class ACHelper {
 		fManager.getInnerFile("ReadMe.txt", null, true);
 		fManager.getInnerFile("LiesMich.txt", null, true);
 		fManager.getInnerFile("de_DE.yml", "locales", true);
+		fManager.getInnerFile("ru_RU.yml", "locales", true);
 		fManager.getInnerFile("AdminCmd.yml", "HelpFiles" + File.separator
 				+ "AdminCmd", true);
 	}
