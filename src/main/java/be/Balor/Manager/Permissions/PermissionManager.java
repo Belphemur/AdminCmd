@@ -37,6 +37,7 @@ import be.Balor.Manager.Permissions.Plugins.VaultWrapperPermission;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -66,7 +67,16 @@ public class PermissionManager {
 	}
 
 	public static String getPermissionLimit(final Player p, final String limit) {
-		return permissionHandler.getPermissionLimit(p, limit);
+		DebugLog.beginInfo("[" + p.getName() + "] Check Limit : " + limit);
+		try {
+			final String limitFound = permissionHandler.getPermissionLimit(p,
+					limit);
+			DebugLog.addInfo("Limit found : " + limitFound);
+			return limitFound;
+		} finally {
+			DebugLog.endInfo();
+		}
+
 	}
 
 	public static String getPrefix(final Player player) {
@@ -111,7 +121,16 @@ public class PermissionManager {
 		if (player == null) {
 			throw new NullPointerException("The CommandSender can't be NULL");
 		}
-		return permissionHandler.hasPerm(player, perm, errorMsg);
+		DebugLog.beginInfo("[" + player.getName() + "] Check Permission : "
+				+ perm);
+		try {
+			final boolean result = permissionHandler.hasPerm(player, perm,
+					errorMsg);
+			DebugLog.addInfo("Result : " + result);
+			return result;
+		} finally {
+			DebugLog.endInfo();
+		}
 
 	}
 
@@ -155,7 +174,16 @@ public class PermissionManager {
 		if (player == null) {
 			throw new NullPointerException("The CommandSender can't be NULL");
 		}
-		return permissionHandler.hasPerm(player, perm, errorMsg);
+		DebugLog.beginInfo("[" + player.getName() + "] Check Permission : "
+				+ perm);
+		try {
+			final boolean result = permissionHandler.hasPerm(player, perm,
+					errorMsg);
+			DebugLog.addInfo("Result : " + result);
+			return result;
+		} finally {
+			DebugLog.endInfo();
+		}
 
 	}
 
@@ -254,6 +282,7 @@ public class PermissionManager {
 		if (vault) {
 			return false;
 		}
+		DebugLog.beginInfo("Register Vault");
 		final RegisteredServiceProvider<Chat> rspChat = ACPluginManager
 				.getServer().getServicesManager().getRegistration(Chat.class);
 		final Chat chat = rspChat.getProvider();
@@ -271,6 +300,7 @@ public class PermissionManager {
 			ACLogger.info("Use Vault instead of PermissionsEX.");
 		}
 		vault = true;
+		DebugLog.endInfo();
 		return true;
 	}
 

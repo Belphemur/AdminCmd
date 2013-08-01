@@ -163,6 +163,18 @@ public class DebugLog {
 	}
 
 	/**
+	 * Log the exception betwen beginInfo and endInfo
+	 * 
+	 * @param message
+	 *            message
+	 * @param thrown
+	 *            the exception
+	 */
+	public static void addException(final String message, final Exception thrown) {
+		INSTANCE.log(Level.SEVERE, getSpaces(1) + message, thrown);
+	}
+
+	/**
 	 * End logging a block of code
 	 */
 	public static void endInfo() {

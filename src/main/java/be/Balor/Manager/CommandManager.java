@@ -88,6 +88,9 @@ public class CommandManager implements CommandExecutor {
 				DebugLog.addInfo("[Args] " + acc.getArgumentsString());
 				DebugLog.addInfo("[SENDER] " + acc.getSender());
 				acc.execute();
+			} catch (final RuntimeException re) {
+				DebugLog.addException("Process Command Exception", re);
+				throw re;
 			} finally {
 				DebugLog.endInfo();
 			}
