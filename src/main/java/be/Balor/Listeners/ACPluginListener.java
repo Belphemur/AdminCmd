@@ -55,6 +55,12 @@ public class ACPluginListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(final PluginEnableEvent event) {
+		if (!PermissionManager.isVault()
+				&& ACPluginManager.getServer().getPluginManager()
+						.getPlugin("Vault") != null) {
+			PermissionManager.setVault();
+
+		}
 		if (!PermissionManager.isPermissionsExSet()) {
 			final Plugin Permissions = ACPluginManager.getServer()
 					.getPluginManager().getPlugin("PermissionsEx");

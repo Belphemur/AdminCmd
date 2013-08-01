@@ -19,10 +19,13 @@ package be.Balor.Manager.Permissions;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 
+import net.milkbowl.vault.chat.Chat;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
@@ -30,9 +33,11 @@ import be.Balor.Manager.Permissions.Plugins.DinnerPermissions;
 import be.Balor.Manager.Permissions.Plugins.EssentialsGroupManager;
 import be.Balor.Manager.Permissions.Plugins.IPermissionPlugin;
 import be.Balor.Manager.Permissions.Plugins.PermissionsEx;
+import be.Balor.Manager.Permissions.Plugins.VaultWrapperPermission;
 import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -43,12 +48,13 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
  * 
  */
 public class PermissionManager {
-	private static PermissionManager instance = null;
+	private static PermissionManager instance = new PermissionManager();
 	private static boolean permissionsEx = false;
 	private static boolean yetiPermissions = false;
 	private static boolean bPermissions = false;
 	private static boolean permissionsBukkit = false;
 	private static boolean groupManager = false;
+	private static boolean vault = false;
 	private static IPermissionPlugin permissionHandler;
 	private static boolean warningSend = false;
 
@@ -56,9 +62,6 @@ public class PermissionManager {
 	 * @return the instance
 	 */
 	public static PermissionManager getInstance() {
-		if (instance == null) {
-			instance = new PermissionManager();
-		}
 		return instance;
 	}
 
@@ -197,6 +200,13 @@ public class PermissionManager {
 	}
 
 	/**
+	 * @return the vault
+	 */
+	public static boolean isVault() {
+		return vault;
+	}
+
+	/**
 	 * Set bPermission Plugin
 	 * 
 	 * @param plugin
@@ -240,13 +250,37 @@ public class PermissionManager {
 		return true;
 	}
 
+	public static boolean setVault() {
+		if (vault) {
+			return false;
+		}
+		final RegisteredServiceProvider<Chat> rspChat = ACPluginManager
+				.getServer().getServicesManager().getRegistration(Chat.class);
+		final Chat chat = rspChat.getProvider();
+		final RegisteredServiceProvider<net.milkbowl.vault.permission.Permission> rspPerm = ACPluginManager
+				.getServer()
+				.getServicesManager()
+				.getRegistration(net.milkbowl.vault.permission.Permission.class);
+		final net.milkbowl.vault.permission.Permission perms = rspPerm
+				.getProvider();
+		permissionHandler = new VaultWrapperPermission(perms, chat);
+
+		if (!permissionsEx) {
+			ACLogger.info("Successfully linked with Vault");
+		} else {
+			ACLogger.info("Use Vault instead of PermissionsEX.");
+		}
+		vault = true;
+		return true;
+	}
+
 	/**
 	 * @param pEX
 	 *            the pEX to set
 	 */
 	public static boolean setPEX(
 			final ru.tehkode.permissions.PermissionManager pEX) {
-		if (!permissionsEx) {
+		if (!permissionsEx && !vault) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				permissionsEx = true;
 				permissionHandler = new PermissionsEx(pEX);
@@ -272,7 +306,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setYetiPermissions(final PermissionHandler plugin) {
-		if (!yetiPermissions && !permissionsEx && !groupManager) {
+		if (!yetiPermissions && !permissionsEx && !groupManager && !vault) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				yetiPermissions = true;
 				permissionHandler = new YetiPermissions(plugin);
@@ -294,7 +328,7 @@ public class PermissionManager {
 	 * @return
 	 */
 	public static boolean setGroupManager(final Plugin plugin) {
-		if (!groupManager && !permissionsEx) {
+		if (!groupManager && !permissionsEx && !vault) {
 			if (!ConfigEnum.SUPERPERM.getBoolean()) {
 				groupManager = true;
 				permissionHandler = new EssentialsGroupManager(plugin);
