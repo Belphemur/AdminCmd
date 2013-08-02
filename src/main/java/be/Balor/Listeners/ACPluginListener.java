@@ -55,40 +55,38 @@ public class ACPluginListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPluginEnable(final PluginEnableEvent event) {
-		if (!PermissionManager.isVault()
-				&& ACPluginManager.getServer().getPluginManager()
-						.getPlugin("Vault") != null) {
-			PermissionManager.setVault();
 
+		if (!PermissionManager.isVault()) {
+			final Plugin vault = ACPluginManager.getServer().getPluginManager()
+					.getPlugin("Vault");
+			if (vault != null && vault.isEnabled()) {
+				PermissionManager.setVault();
+			}
 		}
 		if (!PermissionManager.isPermissionsExSet()) {
 			final Plugin Permissions = ACPluginManager.getServer()
 					.getPluginManager().getPlugin("PermissionsEx");
-			if (Permissions != null) {
-				if (Permissions.isEnabled()) {
-					PermissionManager.setPEX(PermissionsEx
-							.getPermissionManager());
-				}
+			if (Permissions != null && Permissions.isEnabled()) {
+				PermissionManager.setPEX(PermissionsEx.getPermissionManager());
 			}
+
 		}
 		if (!PermissionManager.isGroupManagerSet()) {
 			final Plugin GMplugin = ACPluginManager.getServer()
 					.getPluginManager().getPlugin("GroupManager");
-			if (GMplugin != null) {
-				if (GMplugin.isEnabled()) {
-					PermissionManager.setGroupManager(GMplugin);
-				}
+			if (GMplugin != null && GMplugin.isEnabled()) {
+				PermissionManager.setGroupManager(GMplugin);
 			}
+
 		}
 		if (!PermissionManager.isYetiPermissionsSet()) {
 			final Plugin Permissions = ACPluginManager.getServer()
 					.getPluginManager().getPlugin("Permissions");
-			if (Permissions != null) {
-				if (Permissions.isEnabled()) {
-					PermissionManager
-							.setYetiPermissions(((Permissions) Permissions)
-									.getHandler());
-				}
+			if (Permissions != null && Permissions.isEnabled()) {
+				PermissionManager
+						.setYetiPermissions(((Permissions) Permissions)
+								.getHandler());
+
 			}
 		}
 		if (!PermissionManager.isbPermissionsSet()) {
