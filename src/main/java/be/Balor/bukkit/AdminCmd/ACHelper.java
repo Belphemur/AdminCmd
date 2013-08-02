@@ -37,6 +37,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.mcstats.Metrics.Graph;
 
 import be.Balor.Importer.IImport;
 import be.Balor.Importer.ImportTools;
@@ -71,7 +72,6 @@ import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.HelpLoader;
 import be.Balor.Tools.Lister.Lister;
-import be.Balor.Tools.Metrics.Metrics.Graph;
 import be.Balor.Tools.Metrics.UpdateChannelPlotter;
 import be.Balor.Tools.Threads.UnBanTask;
 import be.Balor.Tools.Threads.UndoBlockTask;

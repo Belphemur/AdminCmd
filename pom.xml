@@ -135,7 +135,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-				<optimize>true</optimize>
+					<optimize>true</optimize>
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
@@ -161,7 +161,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.4</version>
+				<version>2.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -169,9 +169,13 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<shadedGroupFilter>
-								net.sf.opencsv
-							</shadedGroupFilter>
+							<minimizeJar>true</minimizeJar>
+							<artifactSet>
+								<includes>
+									<include>net.sf.opencsv:opencsv</include>
+									<include>org.mcstats:metrics</include>
+								</includes>	
+							</artifactSet>
 						</configuration>
 					</execution>
 				</executions>
@@ -405,6 +409,12 @@
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
 			<version>[1.2,)</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mcstats</groupId>
+			<artifactId>metrics</artifactId>
+			<version>[1.,)</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	<properties>

@@ -39,6 +39,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.mcstats.Metrics.Graph;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Commands.CommandAlias;
@@ -61,7 +62,6 @@ import be.Balor.Tools.Files.PluginCommandUtil;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Metrics.ClassPlotter;
 import be.Balor.Tools.Metrics.IncrementalPlotter;
-import be.Balor.Tools.Metrics.Metrics.Graph;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 import be.Balor.bukkit.AdminCmd.AdminCmd;

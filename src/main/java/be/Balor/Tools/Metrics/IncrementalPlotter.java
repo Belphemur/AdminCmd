@@ -18,7 +18,7 @@ package be.Balor.Tools.Metrics;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import be.Balor.Tools.Metrics.Metrics.Plotter;
+import org.mcstats.Metrics.Plotter;
 
 /**
  * @author Balor (aka Antoine Aflalo)

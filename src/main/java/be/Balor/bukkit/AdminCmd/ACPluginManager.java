@@ -25,14 +25,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.mcstats.Metrics;
+import org.mcstats.Metrics.Graph;
 
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.Tools.Metrics.Metrics;
-import be.Balor.Tools.Metrics.Metrics.Graph;
-import be.Balor.Tools.Metrics.Metrics.Plotter;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -165,7 +164,7 @@ public class ACPluginManager {
 			if (corePlugin == null || addon.equals(corePlugin)) {
 				return;
 			}
-			graph.addPlotter(new Plotter() {
+			graph.addPlotter(new Metrics.Plotter() {
 
 				@Override
 				public int getValue() {
@@ -201,7 +200,7 @@ public class ACPluginManager {
 	protected void unRegisterPlugin(final AbstractAdminCmdPlugin addon) {
 		pluginInstances.remove(addon.getAddonName());
 		if (!addon.equals(corePlugin)) {
-			graph.removePlotter(new Plotter() {
+			graph.removePlotter(new Metrics.Plotter() {
 
 				@Override
 				public int getValue() {

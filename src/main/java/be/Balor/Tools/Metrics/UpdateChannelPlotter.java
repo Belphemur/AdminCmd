@@ -16,7 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Metrics;
 
-import be.Balor.Tools.Metrics.Metrics.Plotter;
+import org.mcstats.Metrics.Plotter;
+
 import be.Balor.Tools.Update.UpdateChecker.Channel;
 
 /**
