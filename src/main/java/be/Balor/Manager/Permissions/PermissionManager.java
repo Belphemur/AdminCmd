@@ -19,13 +19,10 @@ package be.Balor.Manager.Permissions;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 
-import net.milkbowl.vault.chat.Chat;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Plugins.BukkitPermissions;
@@ -38,7 +35,6 @@ import be.Balor.Manager.Permissions.Plugins.YetiPermissions;
 import be.Balor.Manager.Permissions.Plugins.bPermissions;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 import com.nijiko.permissions.PermissionHandler;
@@ -264,7 +260,7 @@ public class PermissionManager {
 	 */
 	public static boolean setPermissionsBukkit(final PermissionsPlugin plugin) {
 		if (!permissionsBukkit && !bPermissions && !permissionsEx
-				&& !groupManager) {
+				&& !groupManager && !vault) {
 			permissionsBukkit = true;
 			permissionHandler = new BukkitPermissions(plugin);
 			if (!yetiPermissions) {
@@ -283,16 +279,7 @@ public class PermissionManager {
 			return false;
 		}
 		DebugLog.beginInfo("Register Vault");
-		final RegisteredServiceProvider<Chat> rspChat = ACPluginManager
-				.getServer().getServicesManager().getRegistration(Chat.class);
-		final Chat chat = rspChat.getProvider();
-		final RegisteredServiceProvider<net.milkbowl.vault.permission.Permission> rspPerm = ACPluginManager
-				.getServer()
-				.getServicesManager()
-				.getRegistration(net.milkbowl.vault.permission.Permission.class);
-		final net.milkbowl.vault.permission.Permission perms = rspPerm
-				.getProvider();
-		permissionHandler = new VaultWrapperPermission(perms, chat);
+		permissionHandler = new VaultWrapperPermission();
 
 		if (!permissionsEx) {
 			ACLogger.info("Successfully linked with Vault");

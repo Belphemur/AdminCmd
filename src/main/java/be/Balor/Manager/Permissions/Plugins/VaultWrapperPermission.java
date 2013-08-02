@@ -23,29 +23,41 @@ import net.milkbowl.vault.chat.Chat;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Group;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Antoine
  * 
  */
-public class VaultWrapperPermission implements IPermissionPlugin {
+public class VaultWrapperPermission extends SuperPermissions {
 	protected net.milkbowl.vault.permission.Permission vaultPerm;
 	protected Chat vaultChat;
 
 	/**
-	 * @param vaultPerm
-	 * @param vaultChat
-	 */
-	public VaultWrapperPermission(
-			final net.milkbowl.vault.permission.Permission vaultPerm,
-			final Chat vaultChat) {
-		super();
-		this.vaultPerm = vaultPerm;
-		this.vaultChat = vaultChat;
+ * 
+ */
+	public VaultWrapperPermission() {
+		final RegisteredServiceProvider<Chat> rspChat = ACPluginManager
+				.getServer().getServicesManager().getRegistration(Chat.class);
+		if (rspChat != null) {
+			vaultChat = rspChat.getProvider();
+		}
+		final RegisteredServiceProvider<net.milkbowl.vault.permission.Permission> rspPerm = ACPluginManager
+				.getServer()
+				.getServicesManager()
+				.getRegistration(net.milkbowl.vault.permission.Permission.class);
+		if (rspPerm != null) {
+			vaultPerm = rspPerm.getProvider();
+		}
+	}
+
+	protected boolean isChatEnabled() {
+		return vaultChat != null && vaultChat.isEnabled();
 	}
 
 	/*
@@ -57,8 +69,8 @@ public class VaultWrapperPermission implements IPermissionPlugin {
 	 */
 	@Override
 	public String getPermissionLimit(final Player p, final String limit) {
-		if (!vaultChat.isEnabled()) {
-			return "";
+		if (!isChatEnabled()) {
+			return super.getPermissionLimit(p, limit);
 		}
 		return vaultChat.getPlayerInfoString(p, "admincmd." + limit, "");
 	}
@@ -72,7 +84,7 @@ public class VaultWrapperPermission implements IPermissionPlugin {
 	 */
 	@Override
 	public String getPrefix(final Player player) {
-		if (!vaultChat.isEnabled()) {
+		if (!isChatEnabled()) {
 			return "";
 		}
 		return vaultChat.getPlayerPrefix(player);
@@ -87,7 +99,7 @@ public class VaultWrapperPermission implements IPermissionPlugin {
 	 */
 	@Override
 	public String getSuffix(final Player player) {
-		if (!vaultChat.isEnabled()) {
+		if (!isChatEnabled()) {
 			return "";
 		}
 		return vaultChat.getPlayerSuffix(player);
