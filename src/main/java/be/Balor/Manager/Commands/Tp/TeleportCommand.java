@@ -33,7 +33,6 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Type.Tp;
 import be.Balor.Tools.CommandUtils.Immunity;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
@@ -49,7 +48,7 @@ import belgium.Balor.Workers.InvisibleWorker;
  * 
  */
 public abstract class TeleportCommand extends CoreCommand {
-	/**
+	/** 
  *
  */
 	public TeleportCommand() {
@@ -85,7 +84,7 @@ public abstract class TeleportCommand extends CoreCommand {
 			LocaleManager.sI18n(sender, "playerNotFound", replace);
 			found = false;
 		}
-	
+
 		if (!found) {
 			return;
 		}
@@ -148,12 +147,13 @@ public abstract class TeleportCommand extends CoreCommand {
 				replace2.put("tp_type", type.toString());
 			}
 			LocaleManager.sI18n(pFrom, "tpRequestSend", replace2);
-	
+
 		} else if ((type.equals(Type.Tp.HERE) || type.equals(Type.Tp.PLAYERS))
 				&& ACPlayer.getPlayer(pFrom.getName())
 						.hasPower(Type.TP_REQUEST)) {
 			ACPlayer.getPlayer(pFrom).setTpRequest(new TpRequest(pFrom, pTo));
-			LocaleManager.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
+			LocaleManager
+					.sI18n(pFrom, "tpRequestFrom", "player", pTo.getName());
 			final HashMap<String, String> replace2 = new HashMap<String, String>();
 			replace2.put("player", pFrom.getName());
 			if (type.toString().equalsIgnoreCase("here")) {
@@ -165,14 +165,14 @@ public abstract class TeleportCommand extends CoreCommand {
 				replace2.put("tp_type", type.toString());
 			}
 			LocaleManager.sI18n(pTo, "tpRequestSend", replace2);
-	
+
 		} else {
 			ACPluginManager.scheduleSyncTask(new TeleportTask(pFrom, pTo
 					.getLocation()));
 			replace.put("fromPlayer", pFrom.getName());
 			replace.put("toPlayer", pTo.getName());
 			LocaleManager.sI18n(sender, "tp", replace);
-	
+
 		}
 	}
 
@@ -203,20 +203,20 @@ public abstract class TeleportCommand extends CoreCommand {
 			}
 			final Location playerLoc = player.getLocation();
 			ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
-	
+
 				@Override
 				public void run() {
-	
+
 					ACPlayer.getPlayer(player).setLastLocation(playerLoc);
-	
+
 				}
 			});
-	
+
 			TeleportCommand.teleport(player, toLocation);
 		} finally {
 			DebugLog.endInfo();
 		}
-	
+
 	}
 
 	public static void teleport(final Player player, final Location toLocation) {
@@ -226,24 +226,24 @@ public abstract class TeleportCommand extends CoreCommand {
 			final Object entityPlayer = ACMinecraftReflection.getHandle(player);
 			final Object toWorld = ACMinecraftReflection.getHandle(toLocation
 					.getWorld());
-	
+
 			// Check if the fromWorld and toWorld are the same.
 			if (player.getWorld().equals(toLocation.getWorld())) {
 				ACMinecraftReflection.teleportPlayer(player, toLocation);
 			} else {
-	
+
 				final Object activeContainer = FieldUtils.getField(
 						entityPlayer, "activeContainer");
 				final Object defaultContainer = FieldUtils.getField(
 						entityPlayer, "defaultContainer");
-	
+
 				// Close any foreign inventory
 				if (activeContainer != defaultContainer) {
 					final MethodHandler closeInventory = new MethodHandler(
 							entityPlayer.getClass(), "closeInventory");
 					closeInventory.invoke(entityPlayer);
 				}
-	
+
 				final int dimension = FieldUtils.getField(toWorld, "dimension");
 				try {
 					final MethodHandler moveToWorld = new MethodHandler(
@@ -268,6 +268,6 @@ public abstract class TeleportCommand extends CoreCommand {
 							+ player.getClass() + ")", e);
 			player.teleport(toLocation);
 		}
-	
+
 	}
 }
