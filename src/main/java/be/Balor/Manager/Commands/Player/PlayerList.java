@@ -21,10 +21,11 @@ import java.util.Collection;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 
 import com.google.common.base.Joiner;
@@ -55,8 +56,8 @@ public class PlayerList extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 
-		final Collection<String> list = Utils.getPlayerList(sender);
-		sender.sendMessage(Utils.I18n("onlinePlayers") + " " + ChatColor.WHITE
+		final Collection<String> list = Users.getPlayerList(sender);
+		sender.sendMessage(LocaleManager.I18n("onlinePlayers") + " " + ChatColor.WHITE
 				+ list.size());
 		final String toDisplay = Joiner.on(", ").join(list);
 		if (toDisplay.length() >= ACMinecraftFontWidthCalculator.chatwidth) {

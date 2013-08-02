@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.CantEnchantItemException;
 import be.Balor.Manager.Exceptions.EnchantmentConflictException;
@@ -30,7 +31,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -101,22 +102,22 @@ public class Give extends ItemCommand {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(mat.getAmount()));
 		replace.put("material", mat.getMaterial().toString());
-		if (Utils.isPlayer(sender, false)) {
+		if (Users.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
-				replace.put("sender", Utils.getPlayerName((Player) sender));
-				Utils.sI18n(target, "giveItemOtherPlayer", replace);
+				replace.put("sender", Users.getPlayerName((Player) sender));
+				LocaleManager.sI18n(target, "giveItemOtherPlayer", replace);
 				replace.remove("sender");
-				replace.put("target", Utils.getPlayerName(target));
-				Utils.sI18n(sender, "giveItemCommandSender", replace);
+				replace.put("target", Users.getPlayerName(target));
+				LocaleManager.sI18n(sender, "giveItemCommandSender", replace);
 			} else {
-				Utils.sI18n(sender, "giveItemYourself", replace);
+				LocaleManager.sI18n(sender, "giveItemYourself", replace);
 			}
 		} else {
 			replace.put("sender", "Server Admin");
-			Utils.sI18n(target, "giveItemOtherPlayer", replace);
+			LocaleManager.sI18n(target, "giveItemOtherPlayer", replace);
 			replace.remove("sender");
-			replace.put("target", Utils.getPlayerName(target));
-			Utils.sI18n(sender, "giveItemCommandSender", replace);
+			replace.put("target", Users.getPlayerName(target));
+			LocaleManager.sI18n(sender, "giveItemCommandSender", replace);
 		}
 		final Player taskTarget = target;
 		ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -206,7 +207,7 @@ public class Give extends ItemCommand {
 			return null;
 		}
 		if (mat.getMaterial().equals(Material.AIR)) {
-			Utils.sI18n(sender, "airForbidden");
+			LocaleManager.sI18n(sender, "airForbidden");
 			return null;
 		}
 		if (color != null) {
@@ -245,11 +246,11 @@ public class Give extends ItemCommand {
 						"limit",
 						String.valueOf(ACHelper.getInstance().getLimit(sender,
 								Type.Limit.MAX_ITEMS)));
-				Utils.sI18n(sender, "itemLimit", replace);
+				LocaleManager.sI18n(sender, "itemLimit", replace);
 				return null;
 			}
 			if (args.length >= 3) {
-				target = Utils.getUser(sender, args, permNode, 2, true);
+				target = Users.getUser(sender, args, permNode, 2, true);
 				if (target == null) {
 					return null;
 				}
@@ -259,7 +260,7 @@ public class Give extends ItemCommand {
 			}
 		}
 		if (target == null) {
-			if (Utils.isPlayer(sender)) {
+			if (Users.isPlayer(sender)) {
 				target = ((Player) sender);
 			} else {
 				return null;

@@ -34,11 +34,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Villager;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -90,14 +91,14 @@ public class KillMob extends MobCommand {
 
 		final List<World> worldList = new ArrayList<World>();
 
-		if (Utils.isPlayer(sender, false)) {
+		if (Users.isPlayer(sender, false)) {
 			World w = ((Player) sender).getWorld();
 			if (worldString != null) {
 				w = getWorld(worldString);
 			}
 			worldList.add(w);
 			replace.put("worlds", w.getName());
-			Utils.sI18n(sender, "killMob", replace);
+			LocaleManager.sI18n(sender, "killMob", replace);
 		} else {
 			if (worldString != null) {
 				worldList.add(getWorld(worldString));
@@ -112,7 +113,7 @@ public class KillMob extends MobCommand {
 						worlds = worlds.substring(0, worlds.lastIndexOf(","));
 					}
 					replace.put("worlds", worlds);
-					Utils.sI18n(sender, "killMob", replace);
+					LocaleManager.sI18n(sender, "killMob", replace);
 				}
 			}
 		}
@@ -168,7 +169,7 @@ public class KillMob extends MobCommand {
 					if (ct == null) {
 						final HashMap<String, String> replace = new HashMap<String, String>();
 						replace.put("mob", type);
-						Utils.sI18n(sender, "errorMob", replace);
+						LocaleManager.sI18n(sender, "errorMob", replace);
 						continue;
 					}
 					classes.add(ct.getEntityClass());
@@ -196,7 +197,7 @@ public class KillMob extends MobCommand {
 			}
 		}
 
-		Utils.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
+		LocaleManager.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
 	}
 
 	private boolean killEntity(final Entity e, final CommandSender sender,
@@ -225,7 +226,7 @@ public class KillMob extends MobCommand {
 	private boolean checkKillCondition(final Entity toCheck,
 			final CommandSender sender, final Integer range) {
 		boolean result = true;
-		if (range != null && Utils.isPlayer(sender, false)) {
+		if (range != null && Users.isPlayer(sender, false)) {
 			result = toCheck.getLocation().distanceSquared(
 					((Player) sender).getLocation()) <= range;
 		}

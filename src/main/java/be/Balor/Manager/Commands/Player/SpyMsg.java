@@ -19,12 +19,14 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -55,16 +57,16 @@ public class SpyMsg extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final ACPlayer acp = ACPlayer.getPlayer(((Player) sender));
 			if (acp.hasPower(Type.SPYMSG)) {
 				acp.removePower(Type.SPYMSG);
 				ACHelper.getInstance().removeSpy((Player) sender);
-				Utils.sI18n(sender, "spymsgDisabled");
+				LocaleManager.sI18n(sender, "spymsgDisabled");
 			} else {
 				acp.setPower(Type.SPYMSG);
 				ACHelper.getInstance().addSpy((Player) sender);
-				Utils.sI18n(sender, "spymsgEnabled");
+				LocaleManager.sI18n(sender, "spymsgEnabled");
 				if (timeOut == null) {
 					return;
 				}
@@ -72,7 +74,7 @@ public class SpyMsg extends PlayerCommand {
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
+					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				final CommandSender newSender = sender;

@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Tp;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
@@ -27,7 +28,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,7 +52,7 @@ public class TpToggle extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)
@@ -65,7 +66,7 @@ public class TpToggle extends TeleportCommand {
 					request.teleport(player);
 					acp.removeTpRequest();
 				} else {
-					Utils.sI18n(sender, "noTpRequest");
+					LocaleManager.sI18n(sender, "noTpRequest");
 				}
 			} else {
 				if (!PermissionManager
@@ -74,10 +75,10 @@ public class TpToggle extends TeleportCommand {
 				}
 				if (acp.hasPower(Type.TP_REQUEST)) {
 					acp.removePower(Type.TP_REQUEST);
-					Utils.sI18n(player, "tpRequestOff");
+					LocaleManager.sI18n(player, "tpRequestOff");
 				} else {
 					acp.setPower(Type.TP_REQUEST);
-					Utils.sI18n(player, "tpRequestOn");
+					LocaleManager.sI18n(player, "tpRequestOn");
 				}
 			}
 		}

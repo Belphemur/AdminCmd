@@ -30,7 +30,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.google.common.base.Joiner;
@@ -59,7 +59,7 @@ public class Search extends PlayerCommand {
 		if (args.hasFlag('i')) {
 			ip = args.getValueFlag('i');
 		} else if (args.hasFlag('p')) {
-			ip = Utils.getACPlayerParam(sender, args, permNode)
+			ip = Users.getACPlayerParam(sender, args, permNode)
 					.getInformation("last-ip").getString();
 		}
 
@@ -77,7 +77,7 @@ public class Search extends PlayerCommand {
 		for (final Player p : onPlayers) {
 			ipAdress = p.getAddress().getAddress();
 			if (ipAdress != null && ipAdress.toString().substring(1).equals(ip)) {
-				players.add(on + Utils.getPlayerName(p));
+				players.add(on + Users.getPlayerName(p));
 				playersOld.add(p.getName());
 			}
 		}

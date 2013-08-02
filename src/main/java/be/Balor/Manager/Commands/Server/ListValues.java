@@ -22,12 +22,12 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -89,7 +89,7 @@ public class ListValues extends ServerCommand {
 					sender.sendMessage(buffer);
 				}
 			} else {
-				Utils.sI18n(sender, "emptyList");
+				LocaleManager.sI18n(sender, "emptyList");
 			}
 		}
 

@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Egg.SimpleRadiusEgg;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -61,7 +62,7 @@ public class HighEgg extends SimpleRadiusEgg {
 		final int radius = value * value;
 		final int timeout = ConfigEnum.EGG_HIGH_TIMEOUT.getInt()
 				* Utils.secInTick;
-		for (final Player player : Utils.getOnlinePlayers()) {
+		for (final Player player : Users.getOnlinePlayers()) {
 			if (!player.getWorld().equals(loc.getWorld())) {
 				continue;
 			}

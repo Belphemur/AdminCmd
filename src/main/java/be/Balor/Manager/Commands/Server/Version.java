@@ -22,10 +22,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -57,14 +57,14 @@ public class Version extends ServerCommand {
 					.getPlugin(args.getString(0));
 		}
 		if (plug == null) {
-			Utils.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
+			LocaleManager.sI18n(sender, "pluginNotFound", "plugin", args.getString(0));
 			return;
 		}
 		final PluginDescriptionFile pdf = plug.getDescription();
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("plugin", pdf.getName());
 		replace.put("version", pdf.getVersion());
-		Utils.sI18n(sender, "pluginVersion", replace);
+		LocaleManager.sI18n(sender, "pluginVersion", replace);
 
 	}
 

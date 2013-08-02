@@ -24,9 +24,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import be.Balor.Manager.Commands.Tp.TeleportCommand;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
 /**
@@ -53,7 +53,7 @@ public class ACTpAtSeeListener implements Listener {
 				final Location loc = toTp.getLocation().clone();
 				loc.setPitch(p.getLocation().getPitch());
 				loc.setYaw(p.getLocation().getYaw());
-				Utils.teleportWithChunkCheck(p, loc);
+				TeleportCommand.teleportWithChunkCheck(p, loc);
 			}
 		} catch (final Exception e) {}
 	}

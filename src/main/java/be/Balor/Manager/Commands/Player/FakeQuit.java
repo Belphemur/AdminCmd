@@ -22,12 +22,13 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -56,28 +57,28 @@ public class FakeQuit extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player player = Utils.getUser(sender, args, permNode);
+		final Player player = Users.getUser(sender, args, permNode);
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.FAKEQUIT)) {
 				acp.removePower(Type.FAKEQUIT);
-				Utils.broadcastFakeJoin(player);
-				Utils.addPlayerInOnlineList(player);
+				PlayerCommand.broadcastFakeJoin(player);
+				PlayerCommand.addPlayerInOnlineList(player);
 				ACHelper.getInstance().removeFakeQuit(player);
-				Utils.sI18n(player, "fakeQuitDisabled");
+				LocaleManager.sI18n(player, "fakeQuitDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "fakeQuitDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "fakeQuitDisabledTarget", replace);
 				}
 			} else {
 				acp.setPower(Type.FAKEQUIT);
-				Utils.sI18n(player, "fakeQuitEnabled");
-				Utils.broadcastFakeQuit(player);
+				LocaleManager.sI18n(player, "fakeQuitEnabled");
+				PlayerCommand.broadcastFakeQuit(player);
 				ACHelper.getInstance().addFakeQuit(player);
-				Utils.removePlayerFromOnlineList(player);
+				Users.removePlayerFromOnlineList(player);
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "fakeQuitEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "fakeQuitEnabledTarget", replace);
 				}
 			}
 		}

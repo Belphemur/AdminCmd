@@ -20,8 +20,8 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.Exceptions.ProcessingArgsException;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -67,7 +67,7 @@ public class ExplosionEgg extends EggType<Float> {
 			try {
 				power = Float.parseFloat(flag);
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", flag);
+				LocaleManager.sI18n(sender, "NaN", "number", flag);
 				return;
 			}
 		}

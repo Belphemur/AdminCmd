@@ -23,12 +23,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Egg.EggPermissionManager;
 import be.Balor.Tools.Egg.EggType;
@@ -62,7 +63,7 @@ public class EggSpawner extends MobCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (!Utils.isPlayer(sender)) {
+		if (!Users.isPlayer(sender)) {
 			return;
 		}
 		final Player player = (Player) sender;
@@ -81,22 +82,22 @@ public class EggSpawner extends MobCommand {
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else {
-				Utils.sI18n(sender, "paramMissing", "param",
+				LocaleManager.sI18n(sender, "paramMissing", "param",
 						String.valueOf(e.getParam()));
 				sender.sendMessage(e.getMessage());
 			}
 			return;
 		} catch (final ProcessingArgsException e) {
 			if (e.getType().equals(ExceptionType.NO_CLASS)) {
-				Utils.sI18n(sender, "eggDontExists", "egg", e.getMessage());
+				LocaleManager.sI18n(sender, "eggDontExists", "egg", e.getMessage());
 			} else if (e.getType().equals(ExceptionType.DONT_EXISTS)) {
-				Utils.sI18n(sender, "entityDontExists", "entity",
+				LocaleManager.sI18n(sender, "entityDontExists", "entity",
 						e.getMessage());
 			} else if (e.getType().equals(ExceptionType.CUSTOM)) {
 				final Map<String, String> replace = new HashMap<String, String>();
 				replace.put("egg", args.getValueFlag('t'));
 				replace.put("error", e.getMessage());
-				Utils.sI18n(sender, "eggCustomError", replace);
+				LocaleManager.sI18n(sender, "eggCustomError", replace);
 			} else {
 				ACLogger.severe("Problem with an Egg Type : " + e.getMessage(),
 						e);
@@ -115,17 +116,17 @@ public class EggSpawner extends MobCommand {
 				sender.sendMessage(ChatColor.GOLD + "Egg List : ");
 				sender.sendMessage(ChatColor.YELLOW + list);
 			} else {
-				Utils.sI18n(sender, "eggNoParamGiven");
+				LocaleManager.sI18n(sender, "eggNoParamGiven");
 				sender.sendMessage(e.getMessage());
 			}
 			return;
 		}
 		if (egg instanceof NormalEgg) {
 			acp.removePower(Type.EGG);
-			Utils.sI18n(sender, "eggNormal");
+			LocaleManager.sI18n(sender, "eggNormal");
 		} else {
 			acp.setPower(Type.EGG, egg);
-			Utils.sI18n(sender, "eggEnabled", "egg", egg.toString());
+			LocaleManager.sI18n(sender, "eggEnabled", "egg", egg.toString());
 		}
 
 	}

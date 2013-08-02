@@ -22,10 +22,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -53,8 +54,8 @@ public class Repair extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
-			final Player player = Utils.getUser(sender, args, permNode);
+		if (Users.isPlayer(sender)) {
+			final Player player = Users.getUser(sender, args, permNode);
 			if (player == null) {
 				return;
 			}
@@ -69,13 +70,13 @@ public class Repair extends ItemCommand {
 						item.setDurability((short) 0);
 					}
 				});
-				replace.put("player", Utils.getPlayerName(player));
+				replace.put("player", Users.getPlayerName(player));
 				if (!sender.equals(player)) {
-					Utils.sI18n(sender, "repair", replace);
+					LocaleManager.sI18n(sender, "repair", replace);
 				}
-				Utils.sI18n(player, "repairTarget", replace);
+				LocaleManager.sI18n(player, "repairTarget", replace);
 			} else {
-				Utils.sI18n(sender, "errorRepair", replace);
+				LocaleManager.sI18n(sender, "errorRepair", replace);
 			}
 		}
 	}

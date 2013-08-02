@@ -22,8 +22,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.CreaturesInEgg;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
@@ -76,7 +76,7 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 			try {
 				nbre = Integer.parseInt(valFlag);
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", valFlag);
+				LocaleManager.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
 		}
@@ -86,7 +86,7 @@ public class MobEgg extends EggType<CreaturesInEgg> {
 		if (ct == null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("mob", mob);
-			Utils.sI18n(sender, "errorMob", replace);
+			LocaleManager.sI18n(sender, "errorMob", replace);
 			return;
 		}
 		value = new CreaturesInEgg(ct, Integer.valueOf(nbre).byteValue());

@@ -22,10 +22,11 @@ import java.util.Random;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -64,13 +65,13 @@ public class Roll extends PlayerCommand {
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("face", String.valueOf(dice));
-		if (Utils.isPlayer(sender, false)) {
-			replace.put("player", Utils.getPlayerName((Player) sender));
+		if (Users.isPlayer(sender, false)) {
+			replace.put("player", Users.getPlayerName((Player) sender));
 		} else {
 			replace.put("player", "Server Admin");
 		}
 		replace.put("result", String.valueOf(rand.nextInt(dice) + 1));
-		Utils.broadcastMessage(Utils.I18n("roll", replace));
+		Users.broadcastMessage(LocaleManager.I18n("roll", replace));
 
 	}
 

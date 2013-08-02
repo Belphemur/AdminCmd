@@ -18,7 +18,7 @@ package be.Balor.Manager.Permissions;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Tools.Utils;
+import be.Balor.Manager.LocaleManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -37,7 +37,7 @@ public class ActionNotPermitedException extends Exception {
 	 */
 	public ActionNotPermitedException(final CommandSender sender,
 			final String perm) {
-		super(Utils.I18n("errorNotPerm", "p", perm));
+		super(LocaleManager.I18n("errorNotPerm", "p", perm));
 		this.sender = sender;
 	}
 

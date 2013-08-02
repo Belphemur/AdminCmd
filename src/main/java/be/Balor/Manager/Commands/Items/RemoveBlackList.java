@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -53,7 +53,7 @@ public class RemoveBlackList extends ItemCommand {
 			if (args.length >= 1) {
 				ACHelper.getInstance().removeBlackListedItem(sender,
 						args.getString(0));
-			} else if (Utils.isPlayer(sender)) {
+			} else if (Users.isPlayer(sender)) {
 				final Player player = (Player) sender;
 				ACHelper.getInstance().removeBlackListedItem(sender,
 						player.getItemInHand());

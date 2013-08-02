@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Permissions.Group;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -39,7 +40,7 @@ public class PlayerComparator implements Comparator<Player> {
 		final Group g1 = PermissionManager.getGroup(o1);
 		final Group g2 = PermissionManager.getGroup(o2);
 		if (g1.equals(g2)) {
-			return Utils.getPlayerName(o1).compareTo(Utils.getPlayerName(o2));
+			return Users.getPlayerName(o1).compareTo(Users.getPlayerName(o2));
 		}
 		return g1.compareTo(g2);
 	}

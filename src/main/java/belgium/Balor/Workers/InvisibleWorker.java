@@ -23,8 +23,9 @@ import java.util.concurrent.ConcurrentMap;
 import org.bukkit.entity.Player;
 import org.dynmap.DynmapAPI;
 
+import be.Balor.Manager.Commands.Player.PlayerCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -104,13 +105,13 @@ final public class InvisibleWorker {
 				ACPluginManager.getCorePlugin(), new Runnable() {
 					@Override
 					public void run() {
-						for (final Player p : Utils.getOnlinePlayers()) {
+						for (final Player p : Users.getOnlinePlayers()) {
 							uninvisible(toReappear, p);
 						}
 					}
 				});
 		if (ConfigEnum.FQINVISIBLE.getBoolean()) {
-			Utils.broadcastFakeJoin(toReappear);
+			PlayerCommand.broadcastFakeJoin(toReappear);
 		}
 
 	}
@@ -194,7 +195,7 @@ final public class InvisibleWorker {
 
 						@Override
 						public void run() {
-							for (final Player p : Utils.getOnlinePlayers()) {
+							for (final Player p : Users.getOnlinePlayers()) {
 								invisible(toVanish, p);
 							}
 
@@ -202,7 +203,7 @@ final public class InvisibleWorker {
 					});
 		}
 		if (!onJoinEvent && ConfigEnum.FQINVISIBLE.getBoolean()) {
-			Utils.broadcastFakeQuit(toVanish);
+			PlayerCommand.broadcastFakeQuit(toVanish);
 		}
 
 	}

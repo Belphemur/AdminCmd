@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Warp;
 
-import static be.Balor.Tools.Utils.sendMessage;
-
 import java.util.HashMap;
 
 import org.bukkit.Location;
@@ -26,14 +24,16 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.Tp.TeleportCommand;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Warp;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -68,10 +68,11 @@ public class TpToWarp extends WarpCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
-			Utils.sI18n(sender, "errorWarp", new HashMap<String, String>());
+			LocaleManager.sI18n(sender, "errorWarp",
+					new HashMap<String, String>());
 			return;
 		}
-		final Player target = Utils.getUser(sender, args, permNode, 1, true);
+		final Player target = Users.getUser(sender, args, permNode, 1, true);
 		Location loc = null;
 		if (target == null) {
 			return;
@@ -91,7 +92,7 @@ public class TpToWarp extends WarpCommand {
 				final Warp warpPoint = acWorld.getWarp(warp);
 				if (warpPoint == null) {
 					replace.put("name", args.getString(0));
-					Utils.sI18n(sender, "errorWarp", replace);
+					LocaleManager.sI18n(sender, "errorWarp", replace);
 					return;
 				}
 				if (warpPoint.permission != null
@@ -106,12 +107,12 @@ public class TpToWarp extends WarpCommand {
 				loc = warpPoint.loc;
 				replace.put("name", acWorld.getName() + ":" + warpPoint.name);
 			} catch (final WorldNotLoaded e) {
-				Utils.sI18n(sender, "worldNotFound", "world", world);
+				LocaleManager.sI18n(sender, "worldNotFound", "world", world);
 				return;
 			}
 		} else {
 			World world;
-			if (Utils.isPlayer(sender, false)) {
+			if (Users.isPlayer(sender, false)) {
 				world = ((Player) sender).getWorld();
 			} else if (sender instanceof BlockCommandSender) {
 				world = ((BlockCommandSender) sender).getBlock().getWorld();
@@ -126,7 +127,7 @@ public class TpToWarp extends WarpCommand {
 						args.getString(0));
 				if (warpPoint == null) {
 					replace.put("name", args.getString(0));
-					Utils.sI18n(sender, "errorWarp", replace);
+					LocaleManager.sI18n(sender, "errorWarp", replace);
 					return;
 				}
 				if (warpPoint.permission != null
@@ -144,7 +145,7 @@ public class TpToWarp extends WarpCommand {
 			}
 		}
 		if (loc == null) {
-			Utils.sI18n(sender, "errorWarp", replace);
+			LocaleManager.sI18n(sender, "errorWarp", replace);
 			return;
 		} else {
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
@@ -199,15 +200,15 @@ public class TpToWarp extends WarpCommand {
 		public void run() {
 			if (locBefore.equals(target.getLocation())
 					&& ConfigEnum.CHECKTP.getBoolean()) {
-				Utils.teleportWithChunkCheck(target, teleportToLoc);
-				sendMessage(sender, target, "tpWarp", replace);
+				TeleportCommand.teleportWithChunkCheck(target, teleportToLoc);
+				Users.sendMessage(sender, target, "tpWarp", replace);
 			} else if (!ConfigEnum.CHECKTP.getBoolean()) {
-				Utils.teleportWithChunkCheck(target, teleportToLoc);
-				sendMessage(sender, target, "tpWarp", replace);
+				TeleportCommand.teleportWithChunkCheck(target, teleportToLoc);
+				Users.sendMessage(sender, target, "tpWarp", replace);
 			} else {
 				replace.clear();
 				replace.put("cmdname", "Warp");
-				sendMessage(sender, target, "errorMoved", replace);
+				Users.sendMessage(sender, target, "errorMoved", replace);
 			}
 		}
 	}

@@ -18,10 +18,11 @@ package be.Balor.Manager.Commands.Server;
 
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -59,9 +60,9 @@ public class ReloadAll extends ServerCommand {
 			}
 		});
 		if (bcast) {
-			Utils.broadcastMessage(Utils.I18n("serverReload"));
+			Users.broadcastMessage(LocaleManager.I18n("serverReload"));
 		} else {
-			Utils.sI18n(sender, "serverReload");
+			LocaleManager.sI18n(sender, "serverReload");
 		}
 	}
 

@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -60,33 +62,33 @@ public class Vulcan extends PlayerCommand {
 		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
 			try {
-				player = Utils.getUser(sender, args, permNode, 1, false);
+				player = Users.getUser(sender, args, permNode, 1, false);
 				power = args.getFloat(0);
 			} catch (final NumberFormatException e) {
 				power = ConfigEnum.DVULCAN.getFloat();
-				player = Utils.getUser(sender, args, permNode);
+				player = Users.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2) {
-				player = Utils.getUser(sender, args, permNode, 1, true);
+				player = Users.getUser(sender, args, permNode, 1, true);
 			}
 		} else {
-			player = Utils.getUser(sender, args, permNode);
+			player = Users.getUser(sender, args, permNode);
 		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.VULCAN)) {
 				acp.removePower(Type.VULCAN);
-				Utils.sI18n(player, "vulcanDisabled");
+				LocaleManager.sI18n(player, "vulcanDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "vulcanDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "vulcanDisabledTarget", replace);
 				}
 			} else {
 				acp.setPower(Type.VULCAN, power);
-				Utils.sI18n(player, "vulcanEnabled");
+				LocaleManager.sI18n(player, "vulcanEnabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "vulcanEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "vulcanEnabledTarget", replace);
 				}
 				if (timeOut == null) {
 					return;
@@ -95,7 +97,7 @@ public class Vulcan extends PlayerCommand {
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
+					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().runTaskLaterAsynchronously(

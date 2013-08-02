@@ -25,10 +25,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -55,7 +56,7 @@ public class ChangeMobSpawner extends MobCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final Player player = (Player) sender;
 			final Block block = player.getTargetBlock(null, 100);
@@ -72,7 +73,7 @@ public class ChangeMobSpawner extends MobCommand {
 				final EntityType type = EntityType.fromName(name);
 				if (type == null) {
 					replace.put("mob", args.getString(0));
-					Utils.sI18n(sender, "errorMob", replace);
+					LocaleManager.sI18n(sender, "errorMob", replace);
 				}
 
 				ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -83,13 +84,13 @@ public class ChangeMobSpawner extends MobCommand {
 					}
 				});
 				replace.put("type", args.getString(0));
-				Utils.sI18n(sender, "spawnerSetType", replace);
+				LocaleManager.sI18n(sender, "spawnerSetType", replace);
 			} else if (args.hasFlag('d')) {
 				int delay;
 				try {
 					delay = args.getInt(0);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "spawnerNaN");
+					LocaleManager.sI18n(sender, "spawnerNaN");
 					return;
 				}
 				final int fDelay = delay;
@@ -102,13 +103,13 @@ public class ChangeMobSpawner extends MobCommand {
 				});
 
 				replace.put("delay", String.valueOf(args.getInt(0)));
-				Utils.sI18n(sender, "spawnerSetDelay", replace);
+				LocaleManager.sI18n(sender, "spawnerSetDelay", replace);
 			} else if (args.hasFlag('g')) {
 				final int delay = spawner.getDelay();
 				final String type = spawner.getCreatureTypeName();
 				replace.put("mob", type);
 				replace.put("delay", String.valueOf(delay));
-				Utils.sI18n(sender, "spawnerGetData", replace);
+				LocaleManager.sI18n(sender, "spawnerGetData", replace);
 			}
 		}
 	}

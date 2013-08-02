@@ -27,10 +27,12 @@ import org.bukkit.entity.Player;
 import be.Balor.Listeners.Events.ACGoAFKEvent;
 import be.Balor.Listeners.Events.ACGoAFKEvent.Reason;
 import be.Balor.Listeners.Events.ACReturnedAFKEvent;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -171,12 +173,12 @@ final public class AFKWorker {
 		final String msg = event.getMessage();
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p).hasPower(Type.FAKEQUIT)) {
-			String afkString = Utils.I18n("afk", "player",
-					Utils.getPlayerName(p, null));
+			String afkString = LocaleManager.I18n("afk", "player",
+					Users.getPlayerName(p, null));
 			if (afkString != null) {
 				afkString += (msg != null ? " : " + ChatColor.GOLD + msg : "");
 			}
-			Utils.broadcastMessage(afkString);
+			Users.broadcastMessage(afkString);
 
 		}
 		if (msg == null || (msg != null && msg.isEmpty())) {
@@ -200,13 +202,13 @@ final public class AFKWorker {
 		}
 		final Object obj = playersAfk.get(buddy);
 		if (obj != null) {
-			Utils.sI18n(sender, "noteAfk", "player",
-					Utils.getPlayerName(buddy, sender));
+			LocaleManager.sI18n(sender, "noteAfk", "player",
+					Users.getPlayerName(buddy, sender));
 			if (obj instanceof String) {
 				sender.sendMessage((String) obj);
 			} else if (obj instanceof Long) {
 				final Long[] time = Utils.getElapsedTime((Long) obj);
-				Utils.sI18n(sender, "idleTime", "mins", time[2].toString());
+				LocaleManager.sI18n(sender, "idleTime", "mins", time[2].toString());
 			}
 
 		}
@@ -220,10 +222,10 @@ final public class AFKWorker {
 	public void setOnline(final Player p) {
 		if (!InvisibleWorker.getInstance().hasInvisiblePowers(p)
 				&& !ACPlayer.getPlayer(p.getName()).hasPower(Type.FAKEQUIT)) {
-			final String online = Utils.I18n("online", "player",
-					Utils.getPlayerName(p, null));
+			final String online = LocaleManager.I18n("online", "player",
+					Users.getPlayerName(p, null));
 			if (online != null) {
-				Utils.broadcastMessage(online);
+				Users.broadcastMessage(online);
 			}
 		}
 		p.setSleepingIgnored(false);
@@ -250,7 +252,7 @@ final public class AFKWorker {
 		@Override
 		public void run() {
 			final long now = System.currentTimeMillis();
-			for (final Player p : Utils.getOnlinePlayers()) {
+			for (final Player p : Users.getOnlinePlayers()) {
 				final Long timeStamp = playerTimeStamp.get(p);
 				if (timeStamp != null && !playersAfk.containsKey(p)
 						&& (now - timeStamp) >= afkTime) {
@@ -283,11 +285,11 @@ final public class AFKWorker {
 						@Override
 						public void run() {
 							final HashMap<String, String> replace = new HashMap<String, String>();
-							replace.put("player", Utils.getPlayerName(p));
-							p.kickPlayer(Utils.I18n("afkKick"));
+							replace.put("player", Users.getPlayerName(p));
+							p.kickPlayer(LocaleManager.I18n("afkKick"));
 							final String msg = LocaleHelper.AFK_KICK_BCAST
 									.getLocale(replace);
-							Utils.broadcastMessage(msg);
+							Users.broadcastMessage(msg);
 							ACLogger.info(msg);
 							playersAfk.remove(p);
 							playerTimeStamp.remove(p);

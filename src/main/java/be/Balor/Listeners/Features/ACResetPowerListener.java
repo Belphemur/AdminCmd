@@ -22,9 +22,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -40,7 +40,7 @@ public class ACResetPowerListener implements Listener {
 		}
 		final ACPlayer player = ACPlayer.getPlayer(bPlayer);
 		player.removeAllSuperPower();
-		Utils.sI18n(bPlayer, "changedWorld");
+		LocaleManager.sI18n(bPlayer, "changedWorld");
 
 	}
 }

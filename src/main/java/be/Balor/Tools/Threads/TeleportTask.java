@@ -17,7 +17,7 @@ package be.Balor.Tools.Threads;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import be.Balor.Tools.Utils;
+import be.Balor.Manager.Commands.Tp.TeleportCommand;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -44,7 +44,7 @@ public class TeleportTask implements Runnable {
 	 */
 	@Override
 	public void run() {
-		Utils.teleportWithChunkCheck(player, loc);
+		TeleportCommand.teleportWithChunkCheck(player, loc);
 	}
 
 }

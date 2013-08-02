@@ -18,8 +18,8 @@ package be.Balor.Tools.Egg;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,7 +51,7 @@ public abstract class RadiusEgg<T> extends EggType<T> {
 			try {
 				radius = Integer.parseInt(valFlag);
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", valFlag);
+				LocaleManager.sI18n(sender, "NaN", "number", valFlag);
 				return -1;
 			}
 		}

@@ -19,10 +19,11 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -49,14 +50,14 @@ public class Undo extends ServerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			int count = 0;
 			try {
 				count = ACHelper.getInstance().undoLastModification(
 						((Player) sender).getName());
-				Utils.sI18n(sender, "undo", "nb", String.valueOf(count));
+				LocaleManager.sI18n(sender, "undo", "nb", String.valueOf(count));
 			} catch (final Exception e) {
-				Utils.sI18n(sender, "nothingToUndo");
+				LocaleManager.sI18n(sender, "nothingToUndo");
 			}
 		}
 	}

@@ -22,7 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -58,7 +58,7 @@ class HelpEntry {
 	public boolean hasPerm(final CommandSender p) {
 		for (final String perm : permissions) {
 			if (perm.equals("OP")) {
-				if (Utils.isPlayer(p, false)) {
+				if (Users.isPlayer(p, false)) {
 					return p.isOp();
 				} else {
 					return true;

@@ -19,11 +19,13 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.OpenInv.InventoryManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -47,11 +49,11 @@ public class OpenInventory extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		if (!Utils.isPlayer(sender)) {
+		if (!Users.isPlayer(sender)) {
 			return;
 		}
 		final String playerName = args.getString(0);
-		final Player target = Utils.getPlayer(playerName);
+		final Player target = Users.getPlayer(playerName);
 		final Player pSender = (Player) sender;
 		if (target == null) {
 			String world = args.getValueFlag('w');
@@ -62,8 +64,8 @@ public class OpenInventory extends PlayerCommand {
 					.openOfflineInv(pSender, playerName, world);
 			return;
 		}
-		if (!Utils.checkImmunity(sender, target)) {
-			Utils.sI18n(sender, "insufficientLvl");
+		if (!Immunity.checkImmunity(sender, target)) {
+			LocaleManager.sI18n(sender, "insufficientLvl");
 			return;
 		}
 

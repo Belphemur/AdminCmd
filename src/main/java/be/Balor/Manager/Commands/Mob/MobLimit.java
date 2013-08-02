@@ -21,12 +21,12 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.World.ACWorld;
 
 /**
@@ -60,12 +60,12 @@ public class MobLimit extends MobCommand {
 			try {
 				world = ACWorld.getWorld(args.getString(0));
 			} catch (final WorldNotLoaded e) {
-				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+				LocaleManager.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
 			final EntityType ct = EntityType.fromName(name);
 			if (ct == null) {
-				Utils.sI18n(sender, "errorMob", "mob", name);
+				LocaleManager.sI18n(sender, "errorMob", "mob", name);
 				return;
 			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
@@ -75,16 +75,16 @@ public class MobLimit extends MobCommand {
 				replace.put("number", args.getString(1));
 				replace.put("world", world.getName());
 				replace.put("mob", name);
-				Utils.sI18n(sender, "mobLimitPerMob", replace);
+				LocaleManager.sI18n(sender, "mobLimitPerMob", replace);
 			} catch (final NumberFormatException e) {
 				if (args.getString(1).equals("none")) {
 					replace.put("world", world.getName());
 					replace.put("mob", name);
 					ACWorld.getWorld(world.getName()).removeMobLimit(
 							"Craft" + ct.getName());
-					Utils.sI18n(sender, "mobLimitRemovedPerMob", replace);
+					LocaleManager.sI18n(sender, "mobLimitRemovedPerMob", replace);
 				} else {
-					Utils.sI18n(sender, "NaN", "number", args.getString(1));
+					LocaleManager.sI18n(sender, "NaN", "number", args.getString(1));
 				}
 			}
 			return;
@@ -92,7 +92,7 @@ public class MobLimit extends MobCommand {
 		try {
 			world = ACWorld.getWorld(args.getString(0));
 		} catch (final WorldNotLoaded e) {
-			Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+			LocaleManager.sI18n(sender, "worldNotFound", "world", args.getString(0));
 			return;
 		}
 		try {
@@ -101,13 +101,13 @@ public class MobLimit extends MobCommand {
 			world.setInformation(Type.MOB_LIMIT.toString(), limit);
 			replace.put("number", args.getString(1));
 			replace.put("world", args.getString(0));
-			Utils.sI18n(sender, "mobLimit", replace);
+			LocaleManager.sI18n(sender, "mobLimit", replace);
 		} catch (final NumberFormatException e) {
 			if (args.getString(1).equals("none")) {
 				world.removeInformation(Type.MOB_LIMIT.toString());
-				Utils.sI18n(sender, "mobLimitRemoved", "world", world.getName());
+				LocaleManager.sI18n(sender, "mobLimitRemoved", "world", world.getName());
 			} else {
-				Utils.sI18n(sender, "NaN", "number", args.getString(1));
+				LocaleManager.sI18n(sender, "NaN", "number", args.getString(1));
 			}
 		}
 

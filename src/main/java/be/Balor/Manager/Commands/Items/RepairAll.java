@@ -22,10 +22,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -54,7 +55,7 @@ public class RepairAll extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player player = Utils.getUser(sender, args, permNode);
+		final Player player = Users.getUser(sender, args, permNode);
 		if (player == null) {
 			return;
 		}
@@ -78,11 +79,11 @@ public class RepairAll extends ItemCommand {
 		});
 
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(player));
+		replace.put("player", Users.getPlayerName(player));
 		if (!sender.equals(player)) {
-			Utils.sI18n(sender, "repairAll", replace);
+			LocaleManager.sI18n(sender, "repairAll", replace);
 		}
-		Utils.sI18n(player, "repairAllTarget");
+		LocaleManager.sI18n(player, "repairAllTarget");
 
 	}
 

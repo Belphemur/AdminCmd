@@ -21,10 +21,11 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -55,7 +56,7 @@ public class PlayerLocation extends PlayerCommand {
 		String msg;
 		Player target;
 		if (args.length == 0) {
-			if (Utils.isPlayer(sender)) {
+			if (Users.isPlayer(sender)) {
 				target = (Player) sender;
 				loc = target.getLocation();
 				msg = "You are";
@@ -64,11 +65,11 @@ public class PlayerLocation extends PlayerCommand {
 			}
 		} else {
 			try {
-				target = Utils.getUser(sender, args, permNode);
+				target = Users.getUser(sender, args, permNode);
 				loc = target.getLocation();
-				msg = Utils.getPlayerName(target) + " is";
+				msg = Users.getPlayerName(target) + " is";
 			} catch (final NullPointerException ex) {
-				Utils.sI18n(sender, "playerNotFound", "player",
+				LocaleManager.sI18n(sender, "playerNotFound", "player",
 						args.getString(0));
 				return;
 			}

@@ -19,10 +19,11 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.TextLocale;
 
 /**
@@ -49,10 +50,10 @@ public class News extends ServerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender, false)) {
+		if (Users.isPlayer(sender, false)) {
 			TextLocale.NEWS.sendText((Player) sender);
 		} else {
-			Utils.sI18n(sender, "NEWS");
+			LocaleManager.sI18n(sender, "NEWS");
 		}
 		return;
 	}

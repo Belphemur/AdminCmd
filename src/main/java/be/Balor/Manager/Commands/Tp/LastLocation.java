@@ -20,11 +20,12 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -51,17 +52,17 @@ public class LastLocation extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player player = Utils.getUserParam(sender, args, permNode);
+		final Player player = Users.getUserParam(sender, args, permNode);
 		Location loc = null;
 		final ACPlayer target = ACPlayer.getPlayer(player);
 		loc = target.getLastLocation();
 		if (loc == null) {
-			Utils.sI18n(sender, "noLastLocation");
+			LocaleManager.sI18n(sender, "noLastLocation");
 			return;
 		}
 		ACPluginManager.scheduleSyncTask(new TeleportTask(target.getHandler(),
 				loc));
-		Utils.sI18n(sender, "telportSuccess");
+		LocaleManager.sI18n(sender, "telportSuccess");
 		target.setLastLocation(null);
 
 	}

@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Kit.ArmoredKitInstance;
 import be.Balor.Kit.KitInstance;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
@@ -31,6 +32,7 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -71,18 +73,18 @@ public class Kit extends ItemCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		Player target;
 		if (args.length == 0) {
-			Utils.sI18n(sender, "kitList", "list", ACHelper.getInstance()
+			LocaleManager.sI18n(sender, "kitList", "list", ACHelper.getInstance()
 					.getKitList(sender));
 			return;
 		}
 		final KitInstance kit = ACHelper.getInstance()
 				.getKit(args.getString(0));
 		if (kit == null) {
-			Utils.sI18n(sender, "kitNotFound", "kit", args.getString(0));
+			LocaleManager.sI18n(sender, "kitNotFound", "kit", args.getString(0));
 			return;
 		}
 
-		target = Utils.getUser(sender, args, permNode, 1, true);
+		target = Users.getUser(sender, args, permNode, 1, true);
 		if (target == null) {
 			return;
 		}
@@ -97,7 +99,7 @@ public class Kit extends ItemCommand {
 				if (kitLastUse == 0) {
 					actarget.updateLastKitUse(kit.getName());
 				} else {
-					Utils.sI18n(sender, "kitOnce", "kit", kit.getName());
+					LocaleManager.sI18n(sender, "kitOnce", "kit", kit.getName());
 					return;
 				}
 			} else {
@@ -111,12 +113,12 @@ public class Kit extends ItemCommand {
 					replace.put("h", timeLeft[1].toString());
 					replace.put("m", timeLeft[2].toString());
 					replace.put("s", timeLeft[3].toString());
-					final String timestamp = (timeLeft[0] > 0 ? (Utils.I18n(
+					final String timestamp = (timeLeft[0] > 0 ? (LocaleManager.I18n(
 							"days", "d", timeLeft[0].toString())) : "")
 							+ (timeLeft[1] > 0 ? (timeLeft[1] + "h ") : "")
 							+ (timeLeft[2] > 0 ? (timeLeft[2] + "m ") : "")
 							+ (timeLeft[3] > 0 ? (timeLeft[3] + "s") : "");
-					Utils.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
+					LocaleManager.sI18n(sender, "kitDelayNotUp", "delay", timestamp);
 					return;
 				}
 
@@ -125,22 +127,22 @@ public class Kit extends ItemCommand {
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("kit", args.getString(0));
-		if (Utils.isPlayer(sender, false)) {
+		if (Users.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
-				replace.put("sender", Utils.getPlayerName((Player) sender));
-				Utils.sI18n(target, "kitOtherPlayer", replace);
+				replace.put("sender", Users.getPlayerName((Player) sender));
+				LocaleManager.sI18n(target, "kitOtherPlayer", replace);
 				replace.remove("sender");
-				replace.put("target", Utils.getPlayerName(target));
-				Utils.sI18n(sender, "kitCommandSender", replace);
+				replace.put("target", Users.getPlayerName(target));
+				LocaleManager.sI18n(sender, "kitCommandSender", replace);
 			} else {
-				Utils.sI18n(sender, "kitYourself", replace);
+				LocaleManager.sI18n(sender, "kitYourself", replace);
 			}
 		} else {
 			replace.put("sender", "Server Admin");
-			Utils.sI18n(target, "kitOtherPlayer", replace);
+			LocaleManager.sI18n(target, "kitOtherPlayer", replace);
 			replace.remove("sender");
-			replace.put("target", Utils.getPlayerName(target));
-			Utils.sI18n(sender, "kitCommandSender", replace);
+			replace.put("target", Users.getPlayerName(target));
+			LocaleManager.sI18n(sender, "kitCommandSender", replace);
 		}
 		final ItemStack[] items = kit.getItemStacks().toArray(
 				new ItemStack[] {});

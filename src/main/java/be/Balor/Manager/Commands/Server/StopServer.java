@@ -20,10 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -57,13 +59,13 @@ public class StopServer extends ServerCommand {
 			try {
 				timeOutValue = Integer.parseInt(timeOut);
 			} catch (final Exception e) {
-				Utils.sI18n(sender, "NaN", "number", timeOut);
+				LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
 		} else {
 			timeOutValue = ConfigEnum.TIME_STOP.getInt();
 		}
-		Utils.broadcastMessage(Utils.I18n("serverWillStop", "sec",
+		Users.broadcastMessage(LocaleManager.I18n("serverWillStop", "sec",
 				String.valueOf(timeOutValue)));
 		ACHelper.getInstance().setServerLocked(true);
 		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
@@ -73,7 +75,7 @@ public class StopServer extends ServerCommand {
 					public void run() {
 						for (final Player p : Bukkit.getServer()
 								.getOnlinePlayers()) {
-							p.kickPlayer(Utils.I18n("serverStop"));
+							p.kickPlayer(LocaleManager.I18n("serverStop"));
 						}
 						Bukkit.getServer().shutdown();
 					}

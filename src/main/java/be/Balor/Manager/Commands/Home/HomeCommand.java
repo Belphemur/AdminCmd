@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Home;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -66,7 +66,7 @@ public abstract class HomeCommand extends CoreCommand {
 				result.home = split[1];
 			} catch (final ArrayIndexOutOfBoundsException e) {
 			}
-			if (Utils.isPlayer(sender, false)) {
+			if (Users.isPlayer(sender, false)) {
 				final Player p = (Player) sender;
 				if (!p.getName().equals(result.player)
 						&& !PermissionManager.hasPerm(p, "admincmd.admin.home")) {
@@ -74,7 +74,7 @@ public abstract class HomeCommand extends CoreCommand {
 				}
 			}
 		} else {
-			if (!Utils.isPlayer(sender)) {
+			if (!Users.isPlayer(sender)) {
 				return null;
 			}
 			final Player p = ((Player) sender);

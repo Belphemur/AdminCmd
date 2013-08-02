@@ -22,8 +22,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.EggType;
 import be.Balor.Tools.Egg.EntityInEgg;
 import be.Balor.Tools.Egg.Exceptions.ExceptionType;
@@ -82,7 +82,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 		try {
 			entityNb = Integer.parseInt(entityParam);
 		} catch (final NumberFormatException e) {
-			Utils.sI18n(sender, "NaN", "number", valFlag);
+			LocaleManager.sI18n(sender, "NaN", "number", valFlag);
 			return;
 		}
 		if (args.hasFlag('n')) {
@@ -90,7 +90,7 @@ public class EntityEgg extends EggType<EntityInEgg> {
 				nbre = Integer.parseInt(valFlag);
 				entityNb = Integer.parseInt(entityParam);
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", valFlag);
+				LocaleManager.sI18n(sender, "NaN", "number", valFlag);
 				return;
 			}
 		}

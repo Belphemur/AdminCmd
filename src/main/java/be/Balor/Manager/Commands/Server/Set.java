@@ -19,12 +19,13 @@ package be.Balor.Manager.Commands.Server;
 
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
 import be.Balor.bukkit.AdminCmd.TextLocale;
 
 /**
@@ -58,12 +59,12 @@ public class Set extends ServerCommand {
 					message += msg + " ";
 				}
 				message = message.trim();
-				String result = Utils.colorParser(message);
+				String result = Materials.colorParser(message);
 				if (result == null) {
 					result = message;
 				}
 				TextLocale.MOTD.saveContent(result);
-				Utils.sI18n(sender, "MOTDset", "motd", result);
+				LocaleManager.sI18n(sender, "MOTDset", "motd", result);
 			}
 		} else if (args.hasFlag('n')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.news")) {
@@ -71,12 +72,12 @@ public class Set extends ServerCommand {
 					message += msg + " ";
 				}
 				message = message.trim();
-				String result = Utils.colorParser(message);
+				String result = Materials.colorParser(message);
 				if (result == null) {
 					result = message;
 				}
 				TextLocale.NEWS.saveContent(result);
-				Utils.sI18n(sender, "NEWSset", "news", result);
+				LocaleManager.sI18n(sender, "NEWSset", "news", result);
 			}
 		} else if (args.hasFlag('r')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.rules")) {
@@ -84,12 +85,12 @@ public class Set extends ServerCommand {
 					message += msg + " ";
 				}
 				message = message.trim();
-				String result = Utils.colorParser(message);
+				String result = Materials.colorParser(message);
 				if (result == null) {
 					result = message;
 				}
 				TextLocale.RULES.saveContent(result);
-				Utils.sI18n(sender, "RulesSet", "rules", result);
+				LocaleManager.sI18n(sender, "RulesSet", "rules", result);
 			}
 		} else if (args.hasFlag('u')) {
 			if (PermissionManager.hasPerm(sender, "admincmd.server.set.motd")) {
@@ -97,12 +98,12 @@ public class Set extends ServerCommand {
 					message += msg + " ";
 				}
 				message = message.trim();
-				String result = Utils.colorParser(message);
+				String result = Materials.colorParser(message);
 				if (result == null) {
 					result = message;
 				}
 				TextLocale.MOTD_NEW.saveContent(result);
-				Utils.sI18n(sender, "MOTDset", "motd", result);
+				LocaleManager.sI18n(sender, "MOTDset", "motd", result);
 			}
 		}
 	}

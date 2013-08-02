@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -56,7 +56,7 @@ public class SetGroupSpawn extends SpawnCommand {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 
 		if (args.length < 1) {
-			if (Utils.isPlayer(sender)) {
+			if (Users.isPlayer(sender)) {
 				final Player player = (Player) sender;
 				for (String groupName : ACHelper.getInstance().getGroupList()) {
 					groupName = groupName.toLowerCase();
@@ -72,7 +72,7 @@ public class SetGroupSpawn extends SpawnCommand {
 				}
 			}
 		} else if (args.length >= 1) {
-			if (Utils.isPlayer(sender)) {
+			if (Users.isPlayer(sender)) {
 				final Player player = (Player) sender;
 				final String groupName = args.getString(0).toLowerCase();
 				if (ACHelper.getInstance().getGroupList().contains(groupName)) {

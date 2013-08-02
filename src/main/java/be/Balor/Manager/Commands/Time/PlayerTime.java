@@ -26,7 +26,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -53,7 +53,7 @@ public class PlayerTime extends TimeCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player target = Utils.getUser(sender, args, permNode, 1, true);
+		final Player target = Users.getUser(sender, args, permNode, 1, true);
 		if (target == null) {
 			return;
 		}
@@ -79,7 +79,7 @@ public class PlayerTime extends TimeCommand {
 		});
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("time", option);
-		replace.put("player", Utils.getPlayerName(target, sender));
+		replace.put("player", Users.getPlayerName(target, sender));
 		LocaleHelper.PTIME_SET.sendLocale(sender, replace);
 		if (!sender.equals(target)) {
 			LocaleHelper.PTIME_SET.sendLocale(target, replace);

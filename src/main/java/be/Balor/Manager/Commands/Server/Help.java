@@ -21,10 +21,10 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Help.HelpLister;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -104,7 +104,7 @@ public class Help extends ServerCommand {
 			if (args.length == 1) {
 				if (!HelpLister.getInstance().sendHelpPage(args.getString(0),
 						1, sender)) {
-					Utils.sI18n(sender, "pluginNotFound", "plugin",
+					LocaleManager.sI18n(sender, "pluginNotFound", "plugin",
 							args.getString(0));
 				}
 			} else {
@@ -112,11 +112,11 @@ public class Help extends ServerCommand {
 					page = args.getInt(1);
 					if (!HelpLister.getInstance().sendHelpPage(
 							args.getString(0), page, sender)) {
-						Utils.sI18n(sender, "pluginNotFound", "plugin",
+						LocaleManager.sI18n(sender, "pluginNotFound", "plugin",
 								args.getString(0));
 					}
 				} catch (final NumberFormatException e1) {
-					Utils.sI18n(sender, "NaN", "number", args.getString(1));
+					LocaleManager.sI18n(sender, "NaN", "number", args.getString(1));
 				}
 			}
 		}

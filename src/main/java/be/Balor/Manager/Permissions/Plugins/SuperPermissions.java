@@ -31,8 +31,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -87,7 +87,7 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 			return true;
 		} else {
 			if (errorMsg) {
-				Utils.sI18n(player, "errorNotPerm", "p", perm);
+				LocaleManager.sI18n(player, "errorNotPerm", "p", perm);
 			}
 
 			return false;
@@ -111,7 +111,7 @@ public abstract class SuperPermissions implements IPermissionPlugin {
 			return true;
 		} else {
 			if (errorMsg) {
-				Utils.sI18n(player, "errorNotPerm", "p", perm.getName());
+				LocaleManager.sI18n(player, "errorNotPerm", "p", perm.getName());
 			}
 			return false;
 		}

@@ -22,11 +22,12 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Blocks;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -65,14 +66,14 @@ public class ReplaceBlock extends ServerCommand {
 		} else if (mc.getMaterial().equals(Material.WATER)) {
 			mats.add(Material.STATIONARY_WATER);
 		}
-		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 10);
+		final Integer count = Blocks.replaceBlockByAir(sender, args, mats, 10);
 		if (count == null) {
 			return;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("nb", String.valueOf(count));
 		replace.put("mat", mc.getMaterial().toString());
-		Utils.sI18n(sender, "replaced", replace);
+		LocaleManager.sI18n(sender, "replaced", replace);
 	}
 
 	/*

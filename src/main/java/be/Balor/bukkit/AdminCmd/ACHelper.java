@@ -46,6 +46,7 @@ import be.Balor.Kit.KitInstance;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.Tp.TeleportCommand;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
@@ -62,6 +63,8 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.Blocks.BlockRemanence;
+import be.Balor.Tools.CommandUtils.Materials;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -239,7 +242,7 @@ public class ACHelper {
 			blockBlacklist.add(m.getMaterial().getId());
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
-			Utils.sI18n(sender, "addBlacklistBlock", replace);
+			LocaleManager.sI18n(sender, "addBlacklistBlock", replace);
 			return true;
 		}
 		return false;
@@ -296,7 +299,7 @@ public class ACHelper {
 			LocaleHelper.BL_ITEM_PROBLEM.sendLocale(sender);
 			return false;
 		}
-		Utils.sI18n(sender, "addBlacklistItem", "material", mat.display());
+		LocaleManager.sI18n(sender, "addBlacklistItem", "material", mat.display());
 		return true;
 	}
 
@@ -325,51 +328,66 @@ public class ACHelper {
 		String locale = fManager.getTextFile("motd.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motd.txt. Using default values for the MotD!");
-			Utils.addLocale("MOTD", ChatColor.GOLD + "Welcome "
-					+ ChatColor.WHITE + "%player" + ChatColor.GOLD
-					+ ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD
-					+ "%connected //n" + ChatColor.DARK_GREEN
-					+ "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN
-					+ "Your last login was: " + ChatColor.AQUA + "%lastlogin",
-					true);
+			LocaleManager.getInstance().addLocale(
+					"MOTD",
+					ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+							+ ChatColor.GOLD + ", there is currently "
+							+ ChatColor.DARK_RED
+							+ "%nb players connected : //n" + ChatColor.GOLD
+							+ "%connected //n" + ChatColor.DARK_GREEN
+							+ "You've played so far : " + ChatColor.AQUA
+							+ "#elapsedTotalTime# //n" + ChatColor.DARK_GREEN
+							+ "Your last login was: " + ChatColor.AQUA
+							+ "%lastlogin", true);
 		} else {
 			ACLogger.info("motd.txt loaded");
-			Utils.addLocale("MOTD", Utils.colorParser(locale), true);
+			LocaleManager.getInstance().addLocale("MOTD",
+					Materials.colorParser(locale), true);
 		}
 		locale = fManager.getTextFile("motdNewUser.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotDNewUser!");
-			Utils.addLocale("MOTDNewUser", ChatColor.GOLD + "Welcome "
-					+ ChatColor.WHITE + "%player" + ChatColor.GOLD
-					+ ", there is currently " + ChatColor.DARK_RED
-					+ "%nb players connected : //n" + ChatColor.GOLD
-					+ "%connected //n" + ChatColor.DARK_GREEN
-					+ "You've played so far : " + ChatColor.AQUA
-					+ "#elapsedTotalTime#", true);
+			LocaleManager.getInstance().addLocale(
+					"MOTDNewUser",
+					ChatColor.GOLD + "Welcome " + ChatColor.WHITE + "%player"
+							+ ChatColor.GOLD + ", there is currently "
+							+ ChatColor.DARK_RED
+							+ "%nb players connected : //n" + ChatColor.GOLD
+							+ "%connected //n" + ChatColor.DARK_GREEN
+							+ "You've played so far : " + ChatColor.AQUA
+							+ "#elapsedTotalTime#", true);
 		} else {
 			ACLogger.info("motdNewUser.txt loaded");
-			Utils.addLocale("MOTDNewUser", Utils.colorParser(locale), true);
+			LocaleManager.getInstance().addLocale("MOTDNewUser",
+					Materials.colorParser(locale), true);
 		}
 		locale = fManager.getTextFile("news.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read news.txt. Using default values for the MotD!");
-			Utils.addLocale("NEWS", ChatColor.DARK_GREEN
-					+ "News : AdminCmd Plugin has been installed", true);
+			LocaleManager
+					.getInstance()
+					.addLocale(
+							"NEWS",
+							ChatColor.DARK_GREEN
+									+ "News : AdminCmd Plugin has been installed",
+							true);
 		} else {
 			ACLogger.info("news.txt loaded");
-			Utils.addLocale("NEWS", Utils.colorParser(locale), true);
+			LocaleManager.getInstance().addLocale("NEWS",
+					Materials.colorParser(locale), true);
 		}
 		locale = fManager.getTextFile("rules.txt");
 		if (locale == null) {
 			ACLogger.info("Could not read motdNewUser.txt. Using default values for the MotD!");
-			Utils.addLocale("Rules", "1. Do not grief! //n"
-					+ "2. Do not use strong language! //n"
-					+ "3. Be friendly to other players!", true);
+			LocaleManager.getInstance().addLocale(
+					"Rules",
+					"1. Do not grief! //n"
+							+ "2. Do not use strong language! //n"
+							+ "3. Be friendly to other players!", true);
 		} else {
 			ACLogger.info("rules.txt loaded");
-			Utils.addLocale("Rules", Utils.colorParser(locale), true);
+			LocaleManager.getInstance().addLocale("Rules",
+					Materials.colorParser(locale), true);
 		}
 		LocaleManager.getInstance().save();
 	}
@@ -427,17 +445,17 @@ public class ACHelper {
 			final String mat) {
 		MaterialContainer m = null;
 		try {
-			m = Utils.checkMaterial(mat);
+			m = Materials.checkMaterial(mat);
 		} catch (final InvalidInputException e) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat);
-			Utils.sI18n(sender, "unknownMat", replace);
+			LocaleManager.sI18n(sender, "unknownMat", replace);
 			return new MaterialContainer();
 		}
 		if (m.isNull()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat);
-			Utils.sI18n(sender, "unknownMat", replace);
+			LocaleManager.sI18n(sender, "unknownMat", replace);
 		}
 		return m;
 
@@ -699,7 +717,7 @@ public class ACHelper {
 	public void groupSpawn(final Player player) {
 		final Location loc = getGroupSpawnLocation(player);
 		player.teleport(loc);
-		Utils.sI18n(player, "spawn");
+		LocaleManager.sI18n(player, "spawn");
 	}
 
 	/**
@@ -740,7 +758,7 @@ public class ACHelper {
 				false) && blockBlacklist.contains(mat.getTypeId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.getType().toString());
-			Utils.sI18n(sender, "inBlacklistBlock", replace);
+			LocaleManager.sI18n(sender, "inBlacklistBlock", replace);
 			return true;
 		}
 		return false;
@@ -752,7 +770,7 @@ public class ACHelper {
 				false) && blockBlacklist.contains(mat.getMaterial().getId())) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", mat.display());
-			Utils.sI18n(sender, "inBlacklistBlock", replace);
+			LocaleManager.sI18n(sender, "inBlacklistBlock", replace);
 			return true;
 		}
 		return false;
@@ -774,7 +792,7 @@ public class ACHelper {
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("material", mat.display());
-		Utils.sI18n(sender, "inBlacklistItem", replace);
+		LocaleManager.sI18n(sender, "inBlacklistItem", replace);
 
 		return true;
 	}
@@ -899,7 +917,7 @@ public class ACHelper {
 
 	// changes the color of a colorable item in hand
 	public boolean itemColor(final CommandSender sender, final String color) {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			// help?
 			if (color.equalsIgnoreCase("help")) {
 				sender.sendMessage(ChatColor.RED + "Wool: " + ChatColor.WHITE
@@ -1036,7 +1054,7 @@ public class ACHelper {
 			}
 		}
 		if (pluginConfig.getBoolean("autoAfk", true)) {
-			for (final Player p : Utils.getOnlinePlayers()) {
+			for (final Player p : Users.getOnlinePlayers()) {
 				AFKWorker.getInstance().updateTimeStamp(p);
 			}
 		}
@@ -1069,7 +1087,7 @@ public class ACHelper {
 			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("material", m.getMaterial().toString());
-			Utils.sI18n(sender, "rmBlacklistBlock", replace);
+			LocaleManager.sI18n(sender, "rmBlacklistBlock", replace);
 			return true;
 		}
 		return false;
@@ -1129,7 +1147,7 @@ public class ACHelper {
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("material", mat.getMaterial().toString());
-		Utils.sI18n(sender, "rmBlacklistItem", replace);
+		LocaleManager.sI18n(sender, "rmBlacklistItem", replace);
 		return true;
 	}
 
@@ -1339,7 +1357,7 @@ public class ACHelper {
 	 * Set the spawn point.
 	 */
 	public void setSpawn(final CommandSender sender) {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Location loc = ((Player) sender).getLocation();
 			final World w = loc.getWorld();
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -1351,7 +1369,7 @@ public class ACHelper {
 			});
 
 			ACWorld.getWorld(w.getName()).setSpawn(loc);
-			Utils.sI18n(sender, "setSpawn");
+			LocaleManager.sI18n(sender, "setSpawn");
 		}
 	}
 
@@ -1370,7 +1388,7 @@ public class ACHelper {
 		if (loc == null) {
 			loc = player.getWorld().getSpawnLocation();
 		}
-		Utils.teleportWithChunkCheck(player, loc);
+		TeleportCommand.teleportWithChunkCheck(player, loc);
 	}
 
 	/**

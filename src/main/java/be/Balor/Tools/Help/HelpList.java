@@ -29,7 +29,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -188,7 +188,7 @@ class HelpList {
 						ChatColor.DARK_GREEN + " " + pluginName + " (" + page
 								+ "/" + maxPages + ") " + ChatColor.AQUA, '='));
 		final HelpEntry[] array = lastHelpEntries.toArray(new HelpEntry[]{});
-		if (Utils.isPlayer(sender, false)) {
+		if (Users.isPlayer(sender, false)) {
 			for (int i = start; i < end; i++) {
 				final HelpEntry he = array[i];
 				helpList.add(he.chatString(detailed));

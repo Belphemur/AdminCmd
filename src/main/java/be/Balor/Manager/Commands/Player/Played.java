@@ -18,11 +18,13 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -47,15 +49,15 @@ public class Played extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final ACPlayer target = Utils.getACPlayer(sender, args, permNode);
+		final ACPlayer target = Users.getACPlayer(sender, args, permNode);
 		if (target != null) {
 			final String playername;
 			if (target.isOnline()) {
-				playername = Utils.getPlayerName(target.getHandler(), sender);
+				playername = Users.getPlayerName(target.getHandler(), sender);
 			} else {
 				playername = target.getName();
 			}
-			Utils.sI18n(sender, "playedTime",
+			LocaleManager.sI18n(sender, "playedTime",
 					Utils.playedTime(playername, target.getCurrentPlayedTime()));
 
 		}

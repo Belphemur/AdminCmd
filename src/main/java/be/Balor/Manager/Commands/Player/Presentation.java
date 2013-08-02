@@ -21,11 +21,13 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -53,7 +55,7 @@ public class Presentation extends PlayerCommand {
 		ACPlayer actarget = null;
 		String pres = "";
 		if (args.hasFlag('p')) {
-			actarget = Utils.getACPlayer(sender, args, permNode);
+			actarget = Users.getACPlayer(sender, args, permNode);
 			if (actarget == null) {
 				return;
 			}
@@ -62,7 +64,7 @@ public class Presentation extends PlayerCommand {
 			}
 			pres = pres.trim();
 		} else {
-			if (Utils.isPlayer(sender)) {
+			if (Users.isPlayer(sender)) {
 				actarget = ACPlayer.getPlayer((Player) sender);
 				for (int i = 0; i < args.length; i++) {
 					pres += args.getString(i) + " ";
@@ -70,12 +72,12 @@ public class Presentation extends PlayerCommand {
 				pres = pres.trim();
 			}
 		}
-		pres = Utils.colorParser(pres);
+		pres = Materials.colorParser(pres);
 		actarget.setPresentation(pres);
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", actarget.getName());
 		replace.put("pres", pres);
-		Utils.sI18n(sender, "presSet", replace);
+		LocaleManager.sI18n(sender, "presSet", replace);
 
 	}
 

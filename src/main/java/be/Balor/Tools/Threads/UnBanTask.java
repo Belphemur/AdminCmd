@@ -16,8 +16,9 @@
  ************************************************************************/
 package be.Balor.Tools.Threads;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Player.ITempBan;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -50,10 +51,10 @@ public class UnBanTask implements Runnable {
 		if (!bcast) {
 			return;
 		}
-		final String unbanMsg = Utils.I18n("unban", "player",
+		final String unbanMsg = LocaleManager.I18n("unban", "player",
 				toUnBan.getPlayer());
 		if (unbanMsg != null) {
-			Utils.broadcastMessage(unbanMsg);
+			Users.broadcastMessage(unbanMsg);
 		}
 	}
 

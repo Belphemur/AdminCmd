@@ -25,7 +25,8 @@ import org.bukkit.command.CommandSender;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 import com.google.common.base.Joiner;
@@ -52,8 +53,8 @@ public class Broadcast extends ServerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final String message = Joiner.on(" ").skipNulls().join(args);
-		replace.put("message", Utils.colorParser(message));
-		Utils.broadcastMessage(LocaleHelper.BCAST.getLocale(replace));
+		replace.put("message", Materials.colorParser(message));
+		Users.broadcastMessage(LocaleHelper.BCAST.getLocale(replace));
 	}
 
 	/*

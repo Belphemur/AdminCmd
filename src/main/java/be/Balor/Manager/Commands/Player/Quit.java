@@ -27,7 +27,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.KickTask;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -51,7 +51,7 @@ public class Quit extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender, true)) {
+		if (Users.isPlayer(sender, true)) {
 			final Player quitting = (Player) sender;
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			String reason = "";
@@ -63,10 +63,10 @@ public class Quit extends PlayerCommand {
 				}
 			}
 			replace.put("reason", reason);
-			replace.put("player", Utils.getPlayerName(quitting));
+			replace.put("player", Users.getPlayerName(quitting));
 			ACPlayer.getPlayer(quitting).setPower(Type.KICKED);
 			new KickTask(quitting, "Disconnected").scheduleSync();
-			Utils.broadcastMessage(LocaleHelper.PLAYER_QUITCMD_MSG
+			Users.broadcastMessage(LocaleHelper.PLAYER_QUITCMD_MSG
 					.getLocale(replace));
 		}
 	}

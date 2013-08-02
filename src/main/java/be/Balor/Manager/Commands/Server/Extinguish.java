@@ -21,10 +21,11 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Blocks;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -52,9 +53,9 @@ public class Extinguish extends ServerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		final ArrayList<Material> mats = new ArrayList<Material>();
 		mats.add(Material.FIRE);
-		final Integer count = Utils.replaceBlockByAir(sender, args, mats, 20);
+		final Integer count = Blocks.replaceBlockByAir(sender, args, mats, 20);
 		if (count != null) {
-			Utils.sI18n(sender, "extinguish", "nb", String.valueOf(count));
+			LocaleManager.sI18n(sender, "extinguish", "nb", String.valueOf(count));
 		}
 
 	}

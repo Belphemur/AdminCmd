@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -54,14 +56,14 @@ public class UnMute extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player player = Utils.getPlayer(args.getString(0));
+		final Player player = Users.getPlayer(args.getString(0));
 
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", args.getString(0));
 		final ACPlayer acp = ACPlayer.getPlayer(args.getString(0));
 		if (acp.hasPower(Type.MUTED)) {
-			if (!Utils.checkImmunity(sender, acp)) {
-				Utils.sI18n(sender, "insufficientLvl");
+			if (!Immunity.checkImmunity(sender, acp)) {
+				LocaleManager.sI18n(sender, "insufficientLvl");
 				return;
 			}
 			acp.removePower(Type.MUTED);
@@ -70,16 +72,16 @@ public class UnMute extends PlayerCommand {
 				list.update();
 			}
 			if (player != null) {
-				Utils.sI18n(player, "muteDisabled");
+				LocaleManager.sI18n(player, "muteDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "muteDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "muteDisabledTarget", replace);
 				}
 			} else {
-				Utils.sI18n(sender, "muteDisabledTarget", replace);
+				LocaleManager.sI18n(sender, "muteDisabledTarget", replace);
 			}
 		} else if (acp.hasPower(Type.MUTED_COMMAND)) {
-			if (!Utils.checkImmunity(sender, acp.getHandler())) {
-				Utils.sI18n(sender, "insufficientLvl");
+			if (!Immunity.checkImmunity(sender, acp.getHandler())) {
+				LocaleManager.sI18n(sender, "insufficientLvl");
 				return;
 			}
 			acp.removePower(Type.MUTED_COMMAND);
@@ -88,12 +90,12 @@ public class UnMute extends PlayerCommand {
 				list.update();
 			}
 			if (player != null) {
-				Utils.sI18n(player, "commandMuteDisabled");
+				LocaleManager.sI18n(player, "commandMuteDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "commandMuteDisabledTarget", replace);
 				}
 			} else {
-				Utils.sI18n(sender, "commandMuteDisabledTarget", replace);
+				LocaleManager.sI18n(sender, "commandMuteDisabledTarget", replace);
 			}
 		} else {
 			LocaleHelper.PLAYER_NOT_MUTED.sendLocale(sender, replace);

@@ -23,9 +23,10 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.SetTimeTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -64,7 +65,7 @@ public abstract class TimeCommand extends CoreCommand {
 	// set world time to a new value
 	public static boolean timeSet(final CommandSender sender,
 			final String time, final String world) {
-		if (Utils.isPlayer(sender, false) && world == null) {
+		if (Users.isPlayer(sender, false) && world == null) {
 			final Player p = (Player) sender;
 			setTime(sender, p.getWorld(), time);
 		} else if (world != null) {
@@ -72,7 +73,7 @@ public abstract class TimeCommand extends CoreCommand {
 			if (w == null) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("world", world);
-				Utils.sI18n(sender, "worldNotFound", replace);
+				LocaleManager.sI18n(sender, "worldNotFound", replace);
 				return true;
 			}
 			setTime(sender, w, time);
@@ -98,12 +99,12 @@ public abstract class TimeCommand extends CoreCommand {
 				final long newtime = calculNewTime(w, arg);
 				ACPluginManager.scheduleSyncTask(new SetTimeTask(w, newtime));
 			}
-			Utils.sI18n(sender, "timeSet", replace);
+			LocaleManager.sI18n(sender, "timeSet", replace);
 		} else if (arg.equalsIgnoreCase("unpause")) {
 			unPauseTime(w);
-			Utils.sI18n(sender, "timeSet", replace);
+			LocaleManager.sI18n(sender, "timeSet", replace);
 		} else {
-			Utils.sI18n(sender, "timePaused", "world", w.getName());
+			LocaleManager.sI18n(sender, "timePaused", "world", w.getName());
 		}
 
 	}

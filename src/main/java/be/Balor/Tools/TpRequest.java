@@ -20,6 +20,8 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -43,12 +45,12 @@ public class TpRequest {
 
 	public void teleport(final Player sender) {
 		if (System.currentTimeMillis() > timeOut) {
-			Utils.sI18n(sender, "tpRequestTimeOut");
+			LocaleManager.sI18n(sender, "tpRequestTimeOut");
 			return;
 		}
 		if (from != null && to != null) {
-			final String fromName = Utils.getPlayerName(from);
-			final String toName = Utils.getPlayerName(to);
+			final String fromName = Users.getPlayerName(from);
+			final String toName = Users.getPlayerName(to);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
 				public void run() {
@@ -56,8 +58,8 @@ public class TpRequest {
 					final HashMap<String, String> replace = new HashMap<String, String>();
 					replace.put("fromPlayer", fromName);
 					replace.put("toPlayer", toName);
-					Utils.sI18n(to, "tp", replace);
-					Utils.sI18n(from, "tp", replace);
+					LocaleManager.sI18n(to, "tp", replace);
+					LocaleManager.sI18n(from, "tp", replace);
 
 				}
 			});

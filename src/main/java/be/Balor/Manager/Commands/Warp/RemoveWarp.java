@@ -21,10 +21,11 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.World.ACWorld;
 
 /**
@@ -51,12 +52,12 @@ public class RemoveWarp extends WarpCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Player p = (Player) sender;
 			ACWorld.getWorld(p.getWorld()).removeWarp(args.getString(0));
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("name", args.getString(0));
-			Utils.sI18n(sender, "rmWarp", replace);
+			LocaleManager.sI18n(sender, "rmWarp", replace);
 		}
 
 	}

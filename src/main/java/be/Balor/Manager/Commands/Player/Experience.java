@@ -23,10 +23,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -56,9 +57,9 @@ public class Experience extends PlayerCommand {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		boolean self = false;
 		if (args.hasFlag('p')) {
-			target = Utils.getPlayer(args.getValueFlag('p'));
+			target = Users.getPlayer(args.getValueFlag('p'));
 		} else {
-			if (!Utils.isPlayer(sender)) {
+			if (!Users.isPlayer(sender)) {
 				return;
 			}
 			target = (Player) sender;
@@ -70,17 +71,17 @@ public class Experience extends PlayerCommand {
 					amount = args.getFloat(0);
 				} catch (final NumberFormatException e) {
 					replace.put("number", args.getString(0));
-					Utils.I18n("NaN", replace);
+					LocaleManager.I18n("NaN", replace);
 					return;
 				}
 			}
 		} else {
-			if (Utils.isPlayer(sender, true)) {
+			if (Users.isPlayer(sender, true)) {
 				if (args.hasFlag('t')) {
 					target = (Player) sender;
 					replace.put("exp",
 							String.valueOf(target.getTotalExperience()));
-					sender.sendMessage(Utils.I18n("expTotal", replace));
+					sender.sendMessage(LocaleManager.I18n("expTotal", replace));
 					return;
 				}
 			} else {
@@ -106,11 +107,11 @@ public class Experience extends PlayerCommand {
 			});
 
 			if (self) {
-				target.sendMessage(Utils.I18n("expDropped", replace));
+				target.sendMessage(LocaleManager.I18n("expDropped", replace));
 			} else {
-				replace.put("target", Utils.getPlayerName(target));
-				target.sendMessage(Utils.I18n("expDropped", replace));
-				sender.sendMessage(Utils.I18n("expDroppedTarget", replace));
+				replace.put("target", Users.getPlayerName(target));
+				target.sendMessage(LocaleManager.I18n("expDropped", replace));
+				sender.sendMessage(LocaleManager.I18n("expDroppedTarget", replace));
 			}
 		} else if (args.hasFlag('a')) {
 
@@ -121,11 +122,11 @@ public class Experience extends PlayerCommand {
 				}
 			});
 			if (self) {
-				target.sendMessage(Utils.I18n("expAdded", replace));
+				target.sendMessage(LocaleManager.I18n("expAdded", replace));
 			} else {
-				replace.put("target", Utils.getPlayerName(target));
-				sender.sendMessage(Utils.I18n("expAddedTarget", replace));
-				target.sendMessage(Utils.I18n("expAdded", replace));
+				replace.put("target", Users.getPlayerName(target));
+				sender.sendMessage(LocaleManager.I18n("expAddedTarget", replace));
+				target.sendMessage(LocaleManager.I18n("expAdded", replace));
 			}
 		} else if (args.hasFlag('b')) {
 			final float exp = (amount > 1 ? 1 : amount);
@@ -137,11 +138,11 @@ public class Experience extends PlayerCommand {
 			});
 			replace.put("amount", String.valueOf(exp * 100.0F));
 			if (self) {
-				target.sendMessage(Utils.I18n("expProgressionSet", replace));
+				target.sendMessage(LocaleManager.I18n("expProgressionSet", replace));
 			} else {
-				replace.put("target", Utils.getPlayerName(target));
-				target.sendMessage(Utils.I18n("expProgressionSet", replace));
-				sender.sendMessage(Utils.I18n("expProgressionSetTarget",
+				replace.put("target", Users.getPlayerName(target));
+				target.sendMessage(LocaleManager.I18n("expProgressionSet", replace));
+				sender.sendMessage(LocaleManager.I18n("expProgressionSetTarget",
 						replace));
 			}
 		} else if (args.hasFlag('l')) {
@@ -152,19 +153,19 @@ public class Experience extends PlayerCommand {
 				}
 			});
 			if (self) {
-				target.sendMessage(Utils.I18n("expLevelSet", replace));
+				target.sendMessage(LocaleManager.I18n("expLevelSet", replace));
 			} else {
-				replace.put("target", Utils.getPlayerName(target));
-				target.sendMessage(Utils.I18n("expLevelSet", replace));
-				sender.sendMessage(Utils.I18n("expLevelSetTarget", replace));
+				replace.put("target", Users.getPlayerName(target));
+				target.sendMessage(LocaleManager.I18n("expLevelSet", replace));
+				sender.sendMessage(LocaleManager.I18n("expLevelSetTarget", replace));
 			}
 		} else if (args.hasFlag('t')) {
 			replace.put("exp", String.valueOf(target.getTotalExperience()));
 			if (self) {
-				sender.sendMessage(Utils.I18n("expTotal", replace));
+				sender.sendMessage(LocaleManager.I18n("expTotal", replace));
 			} else {
-				replace.put("target", Utils.getPlayerName(target));
-				sender.sendMessage(Utils.I18n("expTotalTarget", replace));
+				replace.put("target", Users.getPlayerName(target));
+				sender.sendMessage(LocaleManager.I18n("expTotalTarget", replace));
 			}
 		}
 	}

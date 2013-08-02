@@ -23,11 +23,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -56,7 +57,7 @@ public class ClearInventory extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUserParam(sender, args, permNode);
+		final Player target = Users.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;
 		}
@@ -126,10 +127,10 @@ public class ClearInventory extends PlayerCommand {
 		}
 		if (!sender.equals(target)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(target));
-			Utils.sI18n(sender, "clearTarget", replace);
+			replace.put("player", Users.getPlayerName(target));
+			LocaleManager.sI18n(sender, "clearTarget", replace);
 		}
-		Utils.sI18n(target, "clear");
+		LocaleManager.sI18n(target, "clear");
 
 	}
 

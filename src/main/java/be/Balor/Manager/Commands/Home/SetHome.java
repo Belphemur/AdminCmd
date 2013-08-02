@@ -22,13 +22,14 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -55,7 +56,7 @@ public class SetHome extends HomeCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Player p = ((Player) sender);
 			final be.Balor.Tools.Home home = getHome(sender, args.getString(0));
 			if (home == null) {
@@ -69,11 +70,11 @@ public class SetHome extends HomeCommand {
 							false)
 					&& tmp.size() + 1 > ACHelper.getInstance().getLimit(p,
 							Type.Limit.MAX_HOME)) {
-				Utils.sI18n(sender, "homeLimit");
+				LocaleManager.sI18n(sender, "homeLimit");
 				return;
 			}
 			player.setHome(home.home, loc);
-			Utils.sI18n(sender, "setMultiHome", "home", home.home);
+			LocaleManager.sI18n(sender, "setMultiHome", "home", home.home);
 		}
 
 	}

@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.KickTask;
 
 /**
@@ -57,15 +57,15 @@ public class KickAllPlayers extends PlayerCommand {
 			}
 		} else {
 			message = "You have been kick by ";
-			if (!Utils.isPlayer(sender, false)) {
+			if (!Users.isPlayer(sender, false)) {
 				playerName = "Server Admin";
 			} else {
-				playerName = Utils.getPlayerName(((Player) sender));
+				playerName = Users.getPlayerName(((Player) sender));
 			}
 			message += playerName;
 		}
 		message = message.trim();
-		for (final Player toKick : Utils.getOnlinePlayers()) {
+		for (final Player toKick : Users.getOnlinePlayers()) {
 			if (!toKick.equals(sender)) {
 				new KickTask(toKick, message).scheduleSync();
 			}

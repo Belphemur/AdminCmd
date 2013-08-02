@@ -27,7 +27,8 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.KickTask;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -59,11 +60,11 @@ public class KickPlayer extends PlayerCommand {
 		final Player toKick = sender.getServer().getPlayer(args.getString(0));
 		if (toKick == null) {
 			replace.put("player", args.getString(0));
-			Utils.sI18n(sender, "playerNotFound", replace);
+			LocaleManager.sI18n(sender, "playerNotFound", replace);
 			return;
 		}
-		if (!Utils.checkImmunity(sender, toKick)) {
-			Utils.sI18n(sender, "insufficientLvl");
+		if (!Immunity.checkImmunity(sender, toKick)) {
+			LocaleManager.sI18n(sender, "insufficientLvl");
 			return;
 		}
 		String message = "";
@@ -77,18 +78,18 @@ public class KickPlayer extends PlayerCommand {
 		}
 		if (message == null || (message != null && message.isEmpty())) {
 			message = "You have been kicked by ";
-			if (!Utils.isPlayer(sender, false)) {
+			if (!Users.isPlayer(sender, false)) {
 				message += "Server Admin";
 			} else {
-				message += Utils.getPlayerName((Player) sender);
+				message += Users.getPlayerName((Player) sender);
 			}
 		}
 
 		ACPlayer.getPlayer(toKick).setPower(Type.KICKED);
-		replace.put("player", Utils.getPlayerName(toKick));
+		replace.put("player", Users.getPlayerName(toKick));
 		new KickTask(toKick, message.trim()).scheduleSync();
 		replace.put("reason", message.trim());
-		Utils.broadcastMessage(LocaleHelper.PLAYER_KICKED.getLocale(replace));
+		Users.broadcastMessage(LocaleHelper.PLAYER_KICKED.getLocale(replace));
 	}
 
 	/*

@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -57,22 +59,22 @@ public class NoPickup extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
-		final Player player = Utils.getUser(sender, args, permNode);
+		final Player player = Users.getUser(sender, args, permNode);
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.NO_PICKUP)) {
 				acp.removePower(Type.NO_PICKUP);
-				Utils.sI18n(player, "npDisabled");
+				LocaleManager.sI18n(player, "npDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "npDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "npDisabledTarget", replace);
 				}
 			} else {
 				acp.setPower(Type.NO_PICKUP);
-				Utils.sI18n(player, "npEnabled");
+				LocaleManager.sI18n(player, "npEnabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "npEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "npEnabledTarget", replace);
 				}
 				if (timeOut == null) {
 					return;
@@ -81,7 +83,7 @@ public class NoPickup extends PlayerCommand {
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
+					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().runTaskLaterAsynchronously(

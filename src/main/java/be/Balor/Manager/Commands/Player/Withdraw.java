@@ -29,7 +29,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -56,7 +56,7 @@ public class Withdraw extends PlayerCommand {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (args.length == 0) {
-			if (Utils.isPlayer(sender, false)) {
+			if (Users.isPlayer(sender, false)) {
 				final ACPlayer p = ACPlayer.getPlayer((Player) sender);
 				if (p == null) {
 					return;
@@ -71,7 +71,7 @@ public class Withdraw extends PlayerCommand {
 				return;
 			}
 		}
-		target = Utils.getUserParam(sender, args, permNode);
+		target = Users.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;
 		}
@@ -80,9 +80,9 @@ public class Withdraw extends PlayerCommand {
 			return;
 		}
 		p.removeAllSuperPower();
-		replace.put("target", Utils.getPlayerName(target));
-		if (Utils.isPlayer(sender, false)) {
-			replace.put("sender", Utils.getPlayerName((Player) sender));
+		replace.put("target", Users.getPlayerName(target));
+		if (Users.isPlayer(sender, false)) {
+			replace.put("sender", Users.getPlayerName((Player) sender));
 		} else {
 			replace.put("sender", "Admin");
 		}

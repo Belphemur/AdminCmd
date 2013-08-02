@@ -28,6 +28,8 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type.Whois;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Files.FileManager;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
@@ -91,7 +93,7 @@ public enum TextLocale {
 		if (content == null) {
 			return "";
 		}
-		return Utils.colorParser(content.replaceAll("\\n", "\n").replaceAll(
+		return Materials.colorParser(content.replaceAll("\\n", "\n").replaceAll(
 				"//n", "\n"));
 	}
 
@@ -136,7 +138,7 @@ public enum TextLocale {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final ACPlayer acPlayer = ACPlayer.getPlayer(p);
 		final long total = acPlayer.getCurrentPlayedTime();
-		replace.putAll(Utils.playedTime(Utils.getPlayerName(p), total));
+		replace.putAll(Utils.playedTime(Users.getPlayerName(p), total));
 		replace.put(
 				"nb",
 				String.valueOf(p.getServer().getOnlinePlayers().length
@@ -145,7 +147,7 @@ public enum TextLocale {
 		replace.put("x", String.valueOf(p.getLocation().getX()));
 		replace.put("y", String.valueOf(p.getLocation().getY()));
 		replace.put("z", String.valueOf(p.getLocation().getZ()));
-		final Collection<String> list = Utils.getPlayerList(p);
+		final Collection<String> list = Users.getPlayerList(p);
 		String connected = Joiner.on(", ").join(list);
 		if (connected.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
 			final String tmp = connected.substring(0,
@@ -162,11 +164,11 @@ public enum TextLocale {
 		final String date = Utils.replaceDateAndTimeFormat(acPlayer,
 				Whois.LOGIN);
 		if (date == null) {
-			replace.put("lastlogin", Utils.I18n("noLoginInformation"));
+			replace.put("lastlogin", LocaleManager.I18n("noLoginInformation"));
 		} else {
 			replace.put("lastlogin", date);
 		}
-		final String messageToSend = parseContent(Utils.I18n(locale, replace));
+		final String messageToSend = parseContent(LocaleManager.I18n(locale, replace));
 		if (messageToSend != null) {
 			for (final String toSend : messageToSend.split("\n")) {
 				if (toSend.isEmpty()) {

@@ -31,7 +31,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -56,8 +56,8 @@ public class ACIpCheckListener implements Listener {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				final Player sameIP = addIP(p, address);
 				if (sameIP != null) {
-					replace.put("player", Utils.getPlayerName(p));
-					replace.put("player2", Utils.getPlayerName(sameIP));
+					replace.put("player", Users.getPlayerName(p));
+					replace.put("player2", Users.getPlayerName(sameIP));
 					replace.put("ip", address.toString().substring(1));
 					broadcastIP(replace);
 				}
@@ -128,7 +128,7 @@ public class ACIpCheckListener implements Listener {
 		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 			@Override
 			public void run() {
-				for (final Player p : Utils.getOnlinePlayers()) {
+				for (final Player p : Users.getOnlinePlayers()) {
 					if (p.equals(quits)) {
 						continue;
 					}

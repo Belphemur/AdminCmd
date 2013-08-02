@@ -22,8 +22,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -39,7 +39,7 @@ public class ACLockedServerListener implements Listener {
 		if (ACHelper.getInstance().isServerLocked()
 				&& !PermissionManager.hasPerm(event.getPlayer(),
 						"admincmd.server.lockdown", false)) {
-			event.disallow(Result.KICK_OTHER, Utils.I18n("serverLockMessage"));
+			event.disallow(Result.KICK_OTHER, LocaleManager.I18n("serverLockMessage"));
 		}
 	}
 }

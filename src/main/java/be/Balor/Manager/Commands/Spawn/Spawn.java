@@ -16,8 +16,6 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Spawn;
 
-import static be.Balor.Tools.Utils.sendMessage;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +30,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -62,7 +61,7 @@ public class Spawn extends SpawnCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (args.length >= 1 && Utils.isPlayer(sender, true)) {
+		if (args.length >= 1 && Users.isPlayer(sender, true)) {
 			final ACWorld w = ACWorld.getWorld(args.getString(0));
 			final Player target = (Player) sender;
 			if (!target.getWorld().equals(w.getHandle())
@@ -74,7 +73,7 @@ public class Spawn extends SpawnCommand {
 					ACHelper.getInstance().getCoreInstance(),
 					new DelayedTeleport(target, sender, w),
 					ConfigEnum.TP_DELAY.getLong());
-		} else if (Utils.isPlayer(sender, true)) {
+		} else if (Users.isPlayer(sender, true)) {
 			final Player target = (Player) sender;
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
 					ACHelper.getInstance().getCoreInstance(),
@@ -134,17 +133,17 @@ public class Spawn extends SpawnCommand {
 		public void run() {
 			if (!ConfigEnum.CHECKTP.getBoolean()) {
 				ACHelper.getInstance().spawn((Player) sender, world);
-				sendMessage(sender, target, "spawn");
+				Users.sendMessage(sender, target, "spawn");
 				return;
 			}
 
 			if (locBefore.equals(target.getLocation())) {
 				ACHelper.getInstance().spawn((Player) sender, world);
-				sendMessage(sender, target, "spawn");
+				Users.sendMessage(sender, target, "spawn");
 			} else {
 				replace = new HashMap<String, String>();
 				replace.put("cmdname", "Warp");
-				sendMessage(sender, target, "errorMoved", replace);
+				Users.sendMessage(sender, target, "errorMoved", replace);
 			}
 		}
 	}

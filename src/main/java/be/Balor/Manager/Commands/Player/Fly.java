@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -63,7 +65,7 @@ public class Fly extends PlayerCommand {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
 		try {
-			player = Utils.getUserParam(sender, args, permNode);
+			player = Users.getUserParam(sender, args, permNode);
 		} catch (final PlayerNotFound e) {
 			sender.sendMessage(e.getMessage());
 			return;
@@ -91,7 +93,7 @@ public class Fly extends PlayerCommand {
 			final String timeOut, final Type power, final FlyMode c,
 			final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(player));
+		replace.put("player", Users.getPlayerName(player));
 		final ACPlayer acp = ACPlayer.getPlayer(player);
 		final String powerValueString = args.getValueFlag('p');
 		float powerFloat = 0;
@@ -110,9 +112,9 @@ public class Fly extends PlayerCommand {
 				player.setFlying(false);
 			}
 			player.setFallDistance(0.0F);
-			Utils.sI18n(player, "flyDisabled");
+			LocaleManager.sI18n(player, "flyDisabled");
 			if (!player.equals(sender)) {
-				Utils.sI18n(sender, "flyDisabledTarget", replace);
+				LocaleManager.sI18n(sender, "flyDisabledTarget", replace);
 			}
 		} else {
 			if (c == FlyMode.NEW) {
@@ -129,9 +131,9 @@ public class Fly extends PlayerCommand {
 								: powerFloat);
 			}
 			player.setFallDistance(1F);
-			Utils.sI18n(player, "flyEnabled");
+			LocaleManager.sI18n(player, "flyEnabled");
 			if (!player.equals(sender)) {
-				Utils.sI18n(sender, "flyEnabledTarget", replace);
+				LocaleManager.sI18n(sender, "flyEnabledTarget", replace);
 			}
 			if (timeOut == null) {
 				return;
@@ -140,7 +142,7 @@ public class Fly extends PlayerCommand {
 			try {
 				timeOutValue = Integer.parseInt(timeOut);
 			} catch (final Exception e) {
-				Utils.sI18n(sender, "NaN", "number", timeOut);
+				LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
 			ACPluginManager.getScheduler().runTaskLaterAsynchronously(

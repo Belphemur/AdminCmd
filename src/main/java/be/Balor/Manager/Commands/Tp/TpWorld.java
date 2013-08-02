@@ -32,7 +32,7 @@ import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -61,7 +61,7 @@ public class TpWorld extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUserParam(sender, args, permNode);
+		final Player target = Users.getUserParam(sender, args, permNode);
 		assert (target != null);
 		final Map<String, String> replace = new HashMap<String, String>();
 		if (args.length < 1) {

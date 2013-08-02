@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -52,12 +52,12 @@ public class GetItemId extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUserParam(sender, args, permNode);
+		final Player target = Users.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(target));
+		replace.put("player", Users.getPlayerName(target));
 		final ItemStack inHand = target.getItemInHand();
 		replace.put("item", String.valueOf(inHand.getTypeId()));
 		replace.put("data", String.valueOf(inHand.getData().getData()));

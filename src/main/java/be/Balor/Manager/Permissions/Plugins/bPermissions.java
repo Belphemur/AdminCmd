@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Group;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
@@ -72,7 +72,7 @@ public class bPermissions extends SuperPermissions {
 	public Set<Player> getUsers(final String groupName)
 			throws NoPermissionsPlugin {
 		final Set<Player> players = new HashSet<Player>();
-		for (final Player player : Utils.getOnlinePlayers()) {
+		for (final Player player : Users.getOnlinePlayers()) {
 			if (ApiLayer.hasGroup(player.getWorld().getName(),
 					CalculableType.USER, player.getName(), groupName)) {
 				players.add(player);

@@ -42,7 +42,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -69,7 +69,7 @@ public class ACDeathListener implements Listener {
 			return;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(e.getEntity()));
+		replace.put("player", Users.getPlayerName(e.getEntity()));
 		String message = null;
 		final EntityDamageEvent cause = e.getEntity().getLastDamageCause();
 		try {
@@ -164,7 +164,7 @@ public class ACDeathListener implements Listener {
 					return ACHelper.getInstance().getDeathMessage("dispenser");
 				} else if (((Arrow) damager).getShooter() instanceof Player) {
 					return ACHelper.getInstance().getDeathMessage("playerBow")
-							+ Utils.getPlayerName(((Player) ((Arrow) damager)
+							+ Users.getPlayerName(((Player) ((Arrow) damager)
 									.getShooter()));
 				} else if (((Projectile) damager).getShooter() instanceof Skeleton) {
 					return ACHelper.getInstance().getDeathMessage("skeleton");

@@ -54,6 +54,7 @@ import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Type.ArmorPart;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
@@ -783,7 +784,7 @@ public class FileManager implements DataManager {
 				.getConfigurationSection(part.toString());
 		MaterialContainer m;
 		if (newTemplate != null) {
-			m = Utils.checkMaterial(newTemplate.getString("item"));
+			m = Materials.checkMaterial(newTemplate.getString("item"));
 			m.setDmg((short) newTemplate.getInt("durability"));
 			for (final String enchant : newTemplate
 					.getStringList("echantments")) {
@@ -798,7 +799,7 @@ public class FileManager implements DataManager {
 			}
 
 		} else {
-			m = Utils.checkMaterial(armorItems.getString(part.toString()));
+			m = Materials.checkMaterial(armorItems.getString(part.toString()));
 		}
 		return m;
 	}
@@ -836,7 +837,7 @@ public class FileManager implements DataManager {
 	private MaterialContainer createMaterialContainer(
 			final ConfigurationSection kitItems, final String item)
 			throws InvalidInputException {
-		final MaterialContainer m = Utils.checkMaterial(item);
+		final MaterialContainer m = Materials.checkMaterial(item);
 		final ConfigurationSection newTemplateItem = kitItems
 				.getConfigurationSection(item);
 		if (newTemplateItem != null) {

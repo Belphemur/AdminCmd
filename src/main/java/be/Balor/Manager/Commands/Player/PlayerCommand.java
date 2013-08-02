@@ -26,12 +26,20 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.plugin.PluginManager;
 
+import com.miraclem4n.mchat.api.Reader;
+import com.miraclem4n.mchat.types.EventType;
+
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
+import be.Balor.Tools.Compatibility.NMSBuilder;
+import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -70,13 +78,13 @@ public abstract class PlayerCommand extends CoreCommand {
 	public static boolean setPlayerHealth(final CommandSender sender,
 			final CommandArgs name, final Type.Health toDo)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUser(sender, name, "admincmd.player."
+		final Player target = Users.getUser(sender, name, "admincmd.player."
 				+ toDo);
 		if (target == null) {
 			return false;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(target));
+		replace.put("player", Users.getPlayerName(target));
 		final PluginManager pluginManager = ACPluginManager.getServer()
 				.getPluginManager();
 		final String newStateLocale = LocaleHelper.NEW_STATE.getLocale();
@@ -132,7 +140,7 @@ public abstract class PlayerCommand extends CoreCommand {
 						Double.MAX_VALUE);
 				pluginManager.callEvent(dmgEvent);
 				if (!dmgEvent.isCancelled()) {
-					if (Utils.isPlayer(sender, false)) {
+					if (Users.isPlayer(sender, false)) {
 						target.damage(dmgEvent.getDamage(), (Player) sender);
 					} else {
 						target.damage(dmgEvent.getDamage());
@@ -147,7 +155,7 @@ public abstract class PlayerCommand extends CoreCommand {
 			}
 			if (Utils.logBlock != null) {
 				Utils.logBlock.queueKill(
-						Utils.isPlayer(sender, false) ? (Player) sender : null,
+						Users.isPlayer(sender, false) ? (Player) sender : null,
 						target);
 			}
 			break;
@@ -155,5 +163,54 @@ public abstract class PlayerCommand extends CoreCommand {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Add the player in the online list (TAB key)
+	 * 
+	 * @param player
+	 *            player to remove
+	 */
+	public static void addPlayerInOnlineList(final Player player) {
+		final Object server = ACMinecraftReflection.getHandle(player
+				.getServer());
+		final MethodHandler sendAll = new MethodHandler(server.getClass(),
+				"sendAll", ACMinecraftReflection.getPacketClass());
+		sendAll.invoke(server,
+				NMSBuilder.buildPacket201PlayerInfo(player, true, 1000));
+	}
+
+	/**
+	 * Broadcast a fakeJoin message for the selected player
+	 * 
+	 * @param player
+	 *            that fake join.
+	 */
+	public static void broadcastFakeJoin(final Player player) {
+		if (Utils.mChatPresent) {
+			Users.broadcastMessage(Users.getPlayerName(player, null, true) + " "
+					+ Reader.getEventMessage(EventType.JOIN));
+		} else {
+			Users.broadcastMessage(LocaleManager.I18n("joinMessage", "name",
+					Users.getPlayerName(player, null, true)));
+		}
+	
+	}
+
+	/**
+	 * Broadcast a fakeQuit message for the selected player
+	 * 
+	 * @param player
+	 *            that fake quit.
+	 */
+	public static void broadcastFakeQuit(final Player player) {
+		if (Utils.mChatPresent) {
+			Users.broadcastMessage(Users.getPlayerName(player, null, true) + " "
+					+ Reader.getEventMessage(EventType.QUIT));
+		} else {
+			Users.broadcastMessage(LocaleManager.I18n("quitMessage", "name",
+					Users.getPlayerName(player, null, true)));
+		}
+	
 	}
 }

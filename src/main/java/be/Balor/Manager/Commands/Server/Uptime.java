@@ -20,10 +20,10 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -55,7 +55,7 @@ public class Uptime extends ServerCommand {
 		replace.put("h", time[1].toString());
 		replace.put("m", time[2].toString());
 		replace.put("s", time[3].toString());
-		Utils.sI18n(sender, "elapsedTime", replace);
+		LocaleManager.sI18n(sender, "elapsedTime", replace);
 	}
 
 	/*

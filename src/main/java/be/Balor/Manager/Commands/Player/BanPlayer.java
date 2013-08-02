@@ -38,6 +38,8 @@ import be.Balor.Player.TempBannedIP;
 import be.Balor.Player.TempBannedPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Threads.KickTask;
 import be.Balor.Tools.Threads.UnBanTask;
@@ -72,14 +74,14 @@ public class BanPlayer extends PlayerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		DebugLog.beginInfo("Banning : " + args.getString(0));
 		try {
-			final Player toBan = Utils.getPlayer(args.getString(0));
+			final Player toBan = Users.getPlayer(args.getString(0));
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			String message = null;
 			String banPlayerString;
 			if (toBan != null) {
 				banPlayerString = toBan.getName();
-				if (!Utils.checkImmunity(sender, toBan)) {
-					Utils.sI18n(sender, "insufficientLvl");
+				if (!Immunity.checkImmunity(sender, toBan)) {
+					LocaleManager.sI18n(sender, "insufficientLvl");
 					return;
 				}
 			} else {
@@ -119,7 +121,7 @@ public class BanPlayer extends PlayerCommand {
 				ACPlayer.getPlayer(toBan).setPower(Type.KICKED);
 				new KickTask(toBan, message).scheduleSync();
 			}
-			Utils.broadcastMessage(Utils.I18n("ban", replace));
+			Users.broadcastMessage(LocaleManager.I18n("ban", replace));
 		} finally {
 			DebugLog.endInfo();
 		}
@@ -176,10 +178,10 @@ public class BanPlayer extends PlayerCommand {
 					toDo = new BannedPlayer(banPlayerString, message);
 				}
 			}
-			if (!Utils.isPlayer(sender, false)) {
+			if (!Users.isPlayer(sender, false)) {
 				toDo.setBanner("Server Admin");
 			} else {
-				toDo.setBanner(ChatColor.stripColor(Utils
+				toDo.setBanner(ChatColor.stripColor(Users
 						.getPlayerName((Player) sender)));
 			}
 			return toDo;
@@ -232,7 +234,7 @@ public class BanPlayer extends PlayerCommand {
 				return tmpIntTime;
 			}
 		} catch (final NotANumberException e) {
-			Utils.sI18n(sender, "NaN", "number",
+			LocaleManager.sI18n(sender, "NaN", "number",
 					args.getString(args.length - 1));
 			return -1;
 		} catch (final Exception ex) {

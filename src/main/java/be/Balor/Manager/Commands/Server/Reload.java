@@ -19,10 +19,10 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -54,7 +54,7 @@ public class Reload extends ServerCommand {
 			final Plugin plugin = sender.getServer().getPluginManager()
 					.getPlugin(args.getString(0));
 			if (plugin == null) {
-				Utils.sI18n(sender, "pluginNotFound", "plugin",
+				LocaleManager.sI18n(sender, "pluginNotFound", "plugin",
 						args.getString(0));
 				return;
 			}
@@ -68,10 +68,10 @@ public class Reload extends ServerCommand {
 
 				}
 			});
-			Utils.sI18n(sender, "pluginReloaded", "plugin", args.getString(0));
+			LocaleManager.sI18n(sender, "pluginReloaded", "plugin", args.getString(0));
 		} else {
 			ACHelper.getInstance().reload();
-			Utils.sI18n(sender, "pluginReloaded", "plugin", "AdminCmd");
+			LocaleManager.sI18n(sender, "pluginReloaded", "plugin", "AdminCmd");
 		}
 
 	}

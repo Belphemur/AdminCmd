@@ -27,7 +27,7 @@ import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -53,12 +53,12 @@ public class GameModeSwitch extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player target = Utils.getUser(sender, args, permNode);
+		final Player target = Users.getUser(sender, args, permNode);
 		if (target == null) {
 			return;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("player", Utils.getPlayerName(target));
+		replace.put("player", Users.getPlayerName(target));
 		if (target.getGameMode() == GameMode.CREATIVE) {
 			final ACPlayer acTarget = ACPlayer.getPlayer(target);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -72,7 +72,7 @@ public class GameModeSwitch extends PlayerCommand {
 				}
 			});
 			replace.put("gamemode", GameMode.SURVIVAL.toString());
-			Utils.sendMessage(sender, target, "gmSwitch", replace);
+			Users.sendMessage(sender, target, "gmSwitch", replace);
 		} else {
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 
@@ -82,7 +82,7 @@ public class GameModeSwitch extends PlayerCommand {
 				}
 			});
 			replace.put("gamemode", GameMode.CREATIVE.toString());
-			Utils.sendMessage(sender, target, "gmSwitch", replace);
+			Users.sendMessage(sender, target, "gmSwitch", replace);
 		}
 	}
 

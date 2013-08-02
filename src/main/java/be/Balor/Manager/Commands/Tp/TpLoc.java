@@ -20,10 +20,11 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -52,7 +53,7 @@ public class TpLoc extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUserParam(sender, args, permNode);
+		final Player target = Users.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;
 		}
@@ -64,7 +65,7 @@ public class TpLoc extends TeleportCommand {
 			y = args.getDouble(1);
 			z = args.getDouble(2);
 		} catch (final Exception e) {
-			Utils.sI18n(sender, "errorLocation");
+			LocaleManager.sI18n(sender, "errorLocation");
 			return;
 		}
 		if (args.length <= 3){
@@ -75,7 +76,7 @@ public class TpLoc extends TeleportCommand {
 			try {
 				rot = args.getFloat(3);
 			} catch (final Exception e) {
-				Utils.sI18n(sender, "errorLocation");
+				LocaleManager.sI18n(sender, "errorLocation");
 				return;
 			}
 			ACPluginManager.scheduleSyncTask(new TeleportTask(target, new Location(

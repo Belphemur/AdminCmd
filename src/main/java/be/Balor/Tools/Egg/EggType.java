@@ -22,10 +22,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.permissions.Permission;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.Mob.EggSpawner;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Egg.Exceptions.DontHaveThePermissionException;
 import be.Balor.Tools.Egg.Exceptions.ExceptionType;
 import be.Balor.Tools.Egg.Exceptions.ParameterMissingException;
@@ -83,7 +83,7 @@ public abstract class EggType<T> implements Serializable {
 		final Permission perm = EggPermissionManager.INSTANCE
 				.getPermission(this);
 		if (!PermissionManager.hasPerm(player, perm, false)) {
-			throw new DontHaveThePermissionException(Utils.I18n("errorNotPerm",
+			throw new DontHaveThePermissionException(LocaleManager.I18n("errorNotPerm",
 					"p", perm.getName()));
 		}
 		return true;

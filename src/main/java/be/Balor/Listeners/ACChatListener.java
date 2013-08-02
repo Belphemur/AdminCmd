@@ -21,9 +21,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.AFKWorker;
 
@@ -44,7 +44,7 @@ public class ACChatListener implements Listener {
 		}
 		if (player.hasPower(Type.MUTED)) {
 			event.setCancelled(true);
-			Utils.sI18n(p, "muteEnabled");
+			LocaleManager.sI18n(p, "muteEnabled");
 		}
 	}
 }

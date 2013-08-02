@@ -22,9 +22,10 @@ import java.util.Map;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,7 +50,7 @@ public class RemovePowerTask implements Runnable {
 		this.sender = sender;
 		replace.put("power", this.power.display());
 		if (this.player.isOnline()) {
-			replace.put("player", Utils.getPlayerName(this.player.getHandler()));
+			replace.put("player", Users.getPlayerName(this.player.getHandler()));
 		} else {
 			replace.put("player", this.player.getName());
 		}
@@ -66,17 +67,17 @@ public class RemovePowerTask implements Runnable {
 		player.removePower(power);
 		final Player handler = player.getHandler();
 		if (handler != null) {
-			Utils.sI18n(handler, "timeOutPower", "power", power.display());
+			LocaleManager.sI18n(handler, "timeOutPower", "power", power.display());
 			if (power == Type.FLY) {
 				handler.setAllowFlight(false);
 				handler.setFlying(false);
 			}
 		}
 		if (!sender.equals(handler)) {
-			if (Utils.isPlayer(sender, false) && !((Player) sender).isOnline()) {
+			if (Users.isPlayer(sender, false) && !((Player) sender).isOnline()) {
 				return;
 			}
-			Utils.sI18n(sender, "timeOutPowerSender", replace);
+			LocaleManager.sI18n(sender, "timeOutPowerSender", replace);
 		}
 	}
 

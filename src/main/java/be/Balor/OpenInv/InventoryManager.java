@@ -25,9 +25,10 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
@@ -131,7 +132,7 @@ public class InventoryManager {
 		final File playerfolder = new File(
 				acworld.getHandle().getWorldFolder(), "players");
 		if (!playerfolder.exists()) {
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
 					sender);
 		}
 
@@ -139,7 +140,7 @@ public class InventoryManager {
 				Arrays.asList(DatFilter.INSTANCE.listRecursively(playerfolder)),
 				name);
 		if (playername == null) {
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
 					sender);
 		}
 
@@ -153,13 +154,13 @@ public class InventoryManager {
 		if (target != null) {
 			target.loadData();
 		} else {
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
 					sender);
 		}
-		if (Utils.checkImmunity(sender, target)) {
+		if (Immunity.checkImmunity(sender, target)) {
 			openInv(sender, target, true);
 		} else {
-			Utils.sI18n(sender, "insufficientLvl");
+			LocaleManager.sI18n(sender, "insufficientLvl");
 		}
 	}
 

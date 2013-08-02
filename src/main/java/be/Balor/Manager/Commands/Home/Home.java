@@ -23,12 +23,15 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Commands.Tp.TeleportCommand;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.SimplifiedLocation;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -54,7 +57,7 @@ public class Home extends HomeCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			be.Balor.Tools.Home home = null;
 			home = getHome(sender, args.getString(0));
@@ -72,7 +75,7 @@ public class Home extends HomeCommand {
 								+ home.home.substring(1));
 			}
 			if (loc == null) {
-				Utils.sI18n(sender, "errorMultiHome", "home", home.home);
+				LocaleManager.sI18n(sender, "errorMultiHome", "home", home.home);
 				return;
 			} else {
 				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
@@ -122,15 +125,15 @@ public class Home extends HomeCommand {
 		@Override
 		public void run() {
 			if (!checkTp) {
-				Utils.teleportWithChunkCheck(target, teleportToLoc);
-				Utils.sI18n(sender, "multiHome", "home", home.home);
+				TeleportCommand.teleportWithChunkCheck(target, teleportToLoc);
+				LocaleManager.sI18n(sender, "multiHome", "home", home.home);
 				return;
 			}
 			if (locBefore.equals(target.getLocation())) {
-				Utils.teleportWithChunkCheck(target, teleportToLoc);
-				Utils.sI18n(sender, "multiHome", "home", home.home);
+				TeleportCommand.teleportWithChunkCheck(target, teleportToLoc);
+				LocaleManager.sI18n(sender, "multiHome", "home", home.home);
 			} else {
-				Utils.sI18n(sender, "errorMoved", "cmdname", "Home");
+				LocaleManager.sI18n(sender, "errorMoved", "cmdname", "Home");
 			}
 		}
 	}

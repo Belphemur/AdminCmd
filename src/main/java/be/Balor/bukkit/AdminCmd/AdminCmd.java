@@ -578,493 +578,718 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 
 	@Override
 	protected void setDefaultLocale() {
-		Utils.addLocale("playerNotFound", ChatColor.RED + "No such player: "
-				+ ChatColor.WHITE + "%player");
-		Utils.addLocale("kitNotFound", ChatColor.RED + "No such kit: "
-				+ ChatColor.WHITE + "%kit");
-		Utils.addLocale("pluginNotFound", ChatColor.RED + "No such Plugin: "
-				+ ChatColor.WHITE + "%plugin");
-		Utils.addLocale("worldNotFound", ChatColor.RED + "No such world: "
-				+ ChatColor.WHITE + "%world");
-		Utils.addLocale("unknownMat", ChatColor.RED + "Unknown Material : "
-				+ ChatColor.WHITE + "%material");
-		Utils.addLocale("onlinePlayers", ChatColor.RED + "Online players: ");
-		Utils.addLocale("serverReload", ChatColor.YELLOW + "Server Reloaded.");
-		Utils.addLocale(
-				"changedWorld",
+		LocaleManager.getInstance().addLocale(
+				"playerNotFound",
+				ChatColor.RED + "No such player: " + ChatColor.WHITE
+						+ "%player");
+		LocaleManager.getInstance().addLocale("kitNotFound",
+				ChatColor.RED + "No such kit: " + ChatColor.WHITE + "%kit");
+		LocaleManager.getInstance().addLocale(
+				"pluginNotFound",
+				ChatColor.RED + "No such Plugin: " + ChatColor.WHITE
+						+ "%plugin");
+		LocaleManager.getInstance().addLocale("worldNotFound",
+				ChatColor.RED + "No such world: " + ChatColor.WHITE + "%world");
+		LocaleManager.getInstance().addLocale(
+				"unknownMat",
+				ChatColor.RED + "Unknown Material : " + ChatColor.WHITE
+						+ "%material");
+		LocaleManager.getInstance().addLocale("onlinePlayers",
+				ChatColor.RED + "Online players: ");
+		LocaleManager.getInstance().addLocale("serverReload",
+				ChatColor.YELLOW + "Server Reloaded.");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"changedWorld",
+						ChatColor.DARK_RED
+								+ "All your powers have been deactivated because you teleported to an another world");
+		LocaleManager.getInstance().addLocale("stillInv",
+				ChatColor.RED + "You are still Invisible");
+		LocaleManager.getInstance().addLocale(
+				"errorNotPerm",
+				ChatColor.RED + "You don't have the Permissions to do that "
+						+ ChatColor.BLUE + "(%p)");
+		LocaleManager.getInstance().addLocale(
+				"dropItemOtherPlayer",
+				ChatColor.RED + "[%sender]" + ChatColor.WHITE
+						+ " dropped at your feet " + ChatColor.GOLD
+						+ "%amount %material");
+		LocaleManager.getInstance()
+				.addLocale(
+						"dropItemCommandSender",
+						ChatColor.RED + "Dropped " + ChatColor.GOLD
+								+ "%amount %material to " + ChatColor.WHITE
+								+ "%target");
+		LocaleManager.getInstance().addLocale(
+				"dropItemYourself",
+				ChatColor.RED + "Dropped " + ChatColor.GOLD
+						+ "%amount %material");
+		LocaleManager.getInstance().addLocale(
+				"giveItemOtherPlayer",
+				ChatColor.RED + "[%sender]" + ChatColor.WHITE + " send you "
+						+ ChatColor.GOLD + "%amount %material");
+		LocaleManager.getInstance().addLocale(
+				"giveItemCommandSender",
+				ChatColor.RED + "Added " + ChatColor.GOLD
+						+ "%amount %material to " + ChatColor.WHITE
+						+ "%target's inventory");
+		LocaleManager.getInstance().addLocale(
+				"giveItemYourself",
+				ChatColor.RED + "Added " + ChatColor.GOLD + "%amount %material"
+						+ ChatColor.WHITE + " to your inventory");
+		LocaleManager.getInstance().addLocale("errorHolding",
+				ChatColor.RED + "You have to be holding something!");
+		LocaleManager.getInstance().addLocale(
+				"moreTooMuch",
+				"Excedent(s) item(s) (" + ChatColor.BLUE + "%amount"
+						+ ChatColor.WHITE
+						+ ") have been stored in your inventory");
+		LocaleManager.getInstance().addLocale(
+				"repairTarget",
+				"Your item " + ChatColor.RED + "%type" + ChatColor.WHITE
+						+ " has been successfully repaired.");
+		LocaleManager.getInstance().addLocale(
+				"repair",
+				"%player" + "'s item " + ChatColor.RED + "%type"
+						+ ChatColor.WHITE + " has been successfully repaired.");
+		LocaleManager.getInstance().addLocale("errorRepair",
+				"You can't repair this item : " + ChatColor.RED + "%type");
+		LocaleManager.getInstance().addLocale("repairAll",
+				"All %player's items have been repaired.");
+		LocaleManager.getInstance().addLocale("repairAllTarget",
+				"All your items have been repaired.");
+		LocaleManager.getInstance()
+				.addLocale(
+						"errorMob",
+						ChatColor.RED + "No such creature: " + ChatColor.WHITE
+								+ "%mob");
+		LocaleManager.getInstance().addLocale("spawnMob",
+				ChatColor.BLUE + "Spawned " + ChatColor.WHITE + "%nb %mob");
+		LocaleManager.getInstance().addLocale(
+				"spawnMobOther",
+				ChatColor.GOLD + "%player " + ChatColor.BLUE + "spawned "
+						+ ChatColor.WHITE + "%nb %mob (s)" + ChatColor.BLUE
+						+ " at your location.");
+		LocaleManager.getInstance().addLocale("clear",
+				ChatColor.RED + "Your inventory has been cleared");
+		LocaleManager.getInstance().addLocale(
+				"clearTarget",
+				ChatColor.RED + "Inventory of " + ChatColor.WHITE + "%player"
+						+ ChatColor.RED + " cleared");
+		LocaleManager.getInstance().addLocale("fireballDisabled",
+				ChatColor.DARK_RED + "Fireball mode disabled.");
+		LocaleManager.getInstance().addLocale("fireballDisabledTarget",
+				ChatColor.DARK_RED + "Fireball mode disabled for %player");
+		LocaleManager.getInstance().addLocale("fireballEnabled",
+				ChatColor.DARK_RED + "Fireball mode enabled.");
+		LocaleManager.getInstance().addLocale("fireballEnabledTarget",
+				ChatColor.DARK_RED + "Fireball mode enabled for %player");
+		LocaleManager.getInstance().addLocale("godDisabled",
+				ChatColor.DARK_AQUA + "GOD mode disabled.");
+		LocaleManager.getInstance().addLocale("godDisabledTarget",
+				ChatColor.DARK_AQUA + "GOD mode disabled for %player");
+		LocaleManager.getInstance().addLocale("godEnabled",
+				ChatColor.DARK_AQUA + "GOD mode enabled.");
+		LocaleManager.getInstance().addLocale("godEnabledTarget",
+				ChatColor.DARK_AQUA + "GOD mode enabled for %player");
+		LocaleManager.getInstance().addLocale("noDropDisabled",
+				ChatColor.DARK_AQUA + "NO DROP mode disabled.");
+		LocaleManager.getInstance().addLocale("noDropDisabledTarget",
+				ChatColor.DARK_AQUA + "NO DROP mode disabled for %player");
+		LocaleManager.getInstance().addLocale("noDropEnabled",
+				ChatColor.DARK_AQUA + "NO DROP mode enabled.");
+		LocaleManager.getInstance().addLocale("noDropEnabledTarget",
+				ChatColor.DARK_AQUA + "NO DROP mode enabled for %player");
+		LocaleManager.getInstance().addLocale("thorDisabled",
+				ChatColor.DARK_AQUA + "THOR mode disabled.");
+		LocaleManager.getInstance().addLocale("thorDisabledTarget",
+				ChatColor.DARK_AQUA + "THOR mode disabled for %player");
+		LocaleManager.getInstance().addLocale("thorEnabled",
+				ChatColor.DARK_AQUA + "THOR mode enabled.");
+		LocaleManager.getInstance().addLocale("thorEnabledTarget",
+				ChatColor.DARK_AQUA + "THOR mode enabled for %player");
+		LocaleManager.getInstance().addLocale("vulcanDisabled",
+				ChatColor.DARK_RED + "VULCAN mode disabled.");
+		LocaleManager.getInstance().addLocale("vulcanDisabledTarget",
+				ChatColor.DARK_RED + "VULCAN mode disabled for %player");
+		LocaleManager.getInstance().addLocale("vulcanEnabled",
+				ChatColor.DARK_RED + "VULCAN mode enabled.");
+		LocaleManager.getInstance().addLocale("vulcanEnabledTarget",
+				ChatColor.DARK_RED + "VULCAN mode enabled for %player");
+		LocaleManager.getInstance().addLocale("spymsgDisabled",
+				ChatColor.DARK_AQUA + "SPYMSG mode disabled.");
+		LocaleManager.getInstance().addLocale("spymsgEnabled",
+				ChatColor.DARK_AQUA + "SPYMSG mode enabled.");
+		LocaleManager.getInstance().addLocale("invisibleEnabled",
+				ChatColor.RED + "You are now Invisible");
+		LocaleManager.getInstance().addLocale("invisibleEnabledTarget",
+				ChatColor.DARK_AQUA + "INVISIBLE mode enabled for %player");
+		LocaleManager.getInstance().addLocale("invisibleDisabled",
+				ChatColor.GREEN + "You are now Visible");
+		LocaleManager.getInstance().addLocale("invisibleDisabledTarget",
+				ChatColor.DARK_AQUA + "INVISIBLE mode disabled for %player");
+		LocaleManager.getInstance().addLocale(
+				"errorMultiHome",
+				ChatColor.DARK_GREEN + "Home " + ChatColor.RED + "%home"
+						+ ChatColor.WHITE + " not set.");
+		LocaleManager.getInstance().addLocale(
+				"multiHome",
+				ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
+						+ " to your home " + ChatColor.DARK_AQUA + "%home.");
+		LocaleManager.getInstance().addLocale(
+				"setMultiHome",
+				ChatColor.DARK_GREEN + "Home " + ChatColor.DARK_AQUA + "%home"
+						+ ChatColor.WHITE + " set.");
+		LocaleManager.getInstance().addLocale(
+				"rmHome",
+				ChatColor.RED + "Home " + ChatColor.DARK_AQUA + "%home"
+						+ ChatColor.WHITE + " removed.");
+		LocaleManager.getInstance().addLocale(
+				"homeLimit",
+				ChatColor.RED + "You have reached your " + ChatColor.DARK_GREEN
+						+ "home limit");
+		LocaleManager.getInstance().addLocale(
+				"itemLimit",
+				ChatColor.RED + "You have exceeded your "
+						+ ChatColor.DARK_GREEN + "item limit" + ChatColor.RED
+						+ " of %limit items per command.");
+		LocaleManager.getInstance().addLocale("errorLocation",
+				ChatColor.RED + "Location has to be formed by numbers");
+		LocaleManager.getInstance().addLocale(
+				"addWarp",
+				ChatColor.GREEN + "WarpPoint %name" + ChatColor.WHITE
+						+ " added.");
+		LocaleManager.getInstance().addLocale(
+				"rmWarp",
+				ChatColor.RED + "WarpPoint %name" + ChatColor.WHITE
+						+ " removed.");
+		LocaleManager.getInstance().addLocale("errorWarp",
+				ChatColor.DARK_RED + "WarpPoint %name not found");
+		LocaleManager.getInstance().addLocale("tpWarp",
+				ChatColor.GREEN + "Teleported to " + ChatColor.WHITE + "%name");
+		LocaleManager.getInstance().addLocale("strike",
+				"%player was striked by Thor");
+		LocaleManager.getInstance().addLocale(
+				"tp",
+				"Successfully teleported " + ChatColor.BLUE + "%fromPlayer"
+						+ ChatColor.WHITE + " to " + ChatColor.GREEN
+						+ "%toPlayer");
+		LocaleManager.getInstance().addLocale(
+				"addBlacklistItem",
+				ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+						+ ChatColor.GREEN
+						+ ") added to the Black List for i, give and drop.");
+		LocaleManager.getInstance().addLocale(
+				"addBlacklistBlock",
+				ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
+						+ ChatColor.GREEN
+						+ ") added to the BlockPlace Black List.");
+		LocaleManager.getInstance().addLocale(
+				"rmBlacklistItem",
+				ChatColor.GREEN + "Item (" + ChatColor.WHITE + "%material"
+						+ ChatColor.GREEN + ") removed from the Blacklist.");
+		LocaleManager.getInstance().addLocale(
+				"rmBlacklistBlock",
+				ChatColor.GREEN + "Block (" + ChatColor.WHITE + "%material"
+						+ ChatColor.GREEN + ") removed from the Blacklist.");
+		LocaleManager.getInstance().addLocale(
+				"inBlacklistItem",
+				ChatColor.DARK_RED + "This item (" + ChatColor.WHITE
+						+ "%material" + ChatColor.DARK_RED
+						+ ") is black listed.");
+		LocaleManager.getInstance().addLocale(
+				"inBlacklistBlock",
+				ChatColor.DARK_RED + "This block (" + ChatColor.WHITE
+						+ "%material" + ChatColor.DARK_RED
+						+ ") is black listed.");
+		LocaleManager.getInstance().addLocale(
+				"errorSpawn",
+				ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE
+						+ " not set for this world.");
+		LocaleManager.getInstance().addLocale(
+				"spawn",
+				ChatColor.DARK_GREEN + "Teleported" + ChatColor.WHITE
+						+ " to your spawn.");
+		LocaleManager.getInstance().addLocale("setSpawn",
+				ChatColor.DARK_GREEN + "spawn" + ChatColor.WHITE + " set.");
+		LocaleManager.getInstance().addLocale("sClear",
+				"Sky cleared in world :");
+		LocaleManager.getInstance().addLocale("sStorm",
+				"Storm set for %duration mins in world : ");
+		LocaleManager.getInstance().addLocale("sRain",
+				"Rain set for %duration mins in world : ");
+		LocaleManager.getInstance().addLocale("afk",
+				"%player " + ChatColor.RED + "is AFK");
+		LocaleManager.getInstance().addLocale("online",
+				"%player " + ChatColor.GREEN + "is Online");
+		LocaleManager.getInstance().addLocale("afkTitle",
+				ChatColor.BLUE + "[AFK]" + ChatColor.WHITE);
+		LocaleManager.getInstance().addLocale(
+				"ip",
+				ChatColor.YELLOW + "IP adress of " + ChatColor.WHITE
+						+ "%player - %ip");
+		LocaleManager.getInstance().addLocale(
+				"ban",
+				ChatColor.YELLOW + "%player has been banned, reason: "
+						+ ChatColor.RED + "%reason");
+		LocaleManager.getInstance().addLocale("unban",
+				ChatColor.YELLOW + "%player is now unbanned.");
+		LocaleManager.getInstance().addLocale(
+				"killMob",
+				ChatColor.RED + "Killing mobs (" + ChatColor.WHITE + "%type"
+						+ ChatColor.RED + ") of worlds : "
+						+ ChatColor.DARK_PURPLE + "%worlds");
+		LocaleManager.getInstance().addLocale("killedMobs",
+				"%nbKilled" + ChatColor.DARK_RED + " mobs have been killed.");
+		LocaleManager.getInstance().addLocale("flyDisabled",
+				ChatColor.GOLD + "FLY mode disabled.");
+		LocaleManager.getInstance().addLocale("flyDisabledTarget",
+				ChatColor.GOLD + "FLY mode disabled for %player");
+		LocaleManager.getInstance().addLocale("flyEnabled",
+				ChatColor.GOLD + "FLY mode enabled.");
+		LocaleManager.getInstance().addLocale("flyEnabledTarget",
+				ChatColor.GOLD + "FLY mode enabled for %player");
+		LocaleManager.getInstance().addLocale("npDisabled",
+				ChatColor.GOLD + "No Pickup mode disabled.");
+		LocaleManager.getInstance().addLocale("npDisabledTarget",
+				ChatColor.GOLD + "No Pickup mode disabled for %player");
+		LocaleManager.getInstance().addLocale("npEnabled",
+				ChatColor.GOLD + "No Pickup mode enabled.");
+		LocaleManager.getInstance().addLocale("npEnabledTarget",
+				ChatColor.GOLD + "No Pickup mode enabled for %player");
+		LocaleManager.getInstance().addLocale("afkKick",
+				"You have been kicked because you were AFK");
+		LocaleManager.getInstance().addLocale("freezeDisabled",
+				ChatColor.DARK_GREEN + "You can now move again.");
+		LocaleManager.getInstance().addLocale("freezeDisabledTarget",
+				ChatColor.DARK_GREEN + "Freeze mode disabled for %player");
+		LocaleManager.getInstance().addLocale("freezeEnabled",
+				ChatColor.DARK_RED + "You can't move until you are defrozen.");
+		LocaleManager.getInstance().addLocale("freezeEnabledTarget",
+				ChatColor.DARK_RED + "Freeze mode enabled for %player");
+		LocaleManager.getInstance().addLocale("muteDisabled",
+				ChatColor.DARK_GREEN + "You can chat again.");
+		LocaleManager.getInstance().addLocale("muteDisabledTarget",
+				ChatColor.DARK_GREEN + "%player is unmuted.");
+		LocaleManager.getInstance().addLocale("muteEnabled",
+				ChatColor.DARK_RED + "You can't chat anymore. Reason: %reason");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"tmpMuteEnabled",
+						ChatColor.DARK_RED
+								+ "You can't chat anymore for %minutes minutes. Reason: %reason");
+		LocaleManager.getInstance().addLocale("muteEnabledTarget",
+				ChatColor.DARK_RED + "%player is muted.");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"alreadyMuted",
+						ChatColor.DARK_AQUA
+								+ "This player is already muted. To unmute him use the unmute command.");
+		LocaleManager.getInstance().addLocale("commandMuteDisabled",
+				ChatColor.DARK_GREEN + "You can use commands again.");
+		LocaleManager.getInstance().addLocale("commandMuteDisabledTarget",
+				ChatColor.DARK_GREEN + "%player can use commands again.");
+		LocaleManager.getInstance().addLocale(
+				"commandMuteEnabled",
 				ChatColor.DARK_RED
-						+ "All your powers have been deactivated because you teleported to an another world");
-		Utils.addLocale("stillInv", ChatColor.RED + "You are still Invisible");
-		Utils.addLocale("errorNotPerm", ChatColor.RED
-				+ "You don't have the Permissions to do that " + ChatColor.BLUE
-				+ "(%p)");
-		Utils.addLocale("dropItemOtherPlayer", ChatColor.RED + "[%sender]"
-				+ ChatColor.WHITE + " dropped at your feet " + ChatColor.GOLD
-				+ "%amount %material");
-		Utils.addLocale("dropItemCommandSender", ChatColor.RED + "Dropped "
-				+ ChatColor.GOLD + "%amount %material to " + ChatColor.WHITE
-				+ "%target");
-		Utils.addLocale("dropItemYourself", ChatColor.RED + "Dropped "
-				+ ChatColor.GOLD + "%amount %material");
-		Utils.addLocale("giveItemOtherPlayer", ChatColor.RED + "[%sender]"
-				+ ChatColor.WHITE + " send you " + ChatColor.GOLD
-				+ "%amount %material");
-		Utils.addLocale("giveItemCommandSender", ChatColor.RED + "Added "
-				+ ChatColor.GOLD + "%amount %material to " + ChatColor.WHITE
-				+ "%target's inventory");
-		Utils.addLocale("giveItemYourself", ChatColor.RED + "Added "
-				+ ChatColor.GOLD + "%amount %material" + ChatColor.WHITE
-				+ " to your inventory");
-		Utils.addLocale("errorHolding", ChatColor.RED
-				+ "You have to be holding something!");
-		Utils.addLocale("moreTooMuch", "Excedent(s) item(s) (" + ChatColor.BLUE
-				+ "%amount" + ChatColor.WHITE
-				+ ") have been stored in your inventory");
-		Utils.addLocale("repairTarget", "Your item " + ChatColor.RED + "%type"
-				+ ChatColor.WHITE + " has been successfully repaired.");
-		Utils.addLocale("repair", "%player" + "'s item " + ChatColor.RED
-				+ "%type" + ChatColor.WHITE
-				+ " has been successfully repaired.");
-		Utils.addLocale("errorRepair", "You can't repair this item : "
-				+ ChatColor.RED + "%type");
-		Utils.addLocale("repairAll", "All %player's items have been repaired.");
-		Utils.addLocale("repairAllTarget", "All your items have been repaired.");
-		Utils.addLocale("errorMob", ChatColor.RED + "No such creature: "
-				+ ChatColor.WHITE + "%mob");
-		Utils.addLocale("spawnMob", ChatColor.BLUE + "Spawned "
-				+ ChatColor.WHITE + "%nb %mob");
-		Utils.addLocale("spawnMobOther", ChatColor.GOLD + "%player "
-				+ ChatColor.BLUE + "spawned " + ChatColor.WHITE
-				+ "%nb %mob (s)" + ChatColor.BLUE + " at your location.");
-		Utils.addLocale("clear", ChatColor.RED
-				+ "Your inventory has been cleared");
-		Utils.addLocale("clearTarget", ChatColor.RED + "Inventory of "
-				+ ChatColor.WHITE + "%player" + ChatColor.RED + " cleared");
-		Utils.addLocale("fireballDisabled", ChatColor.DARK_RED
-				+ "Fireball mode disabled.");
-		Utils.addLocale("fireballDisabledTarget", ChatColor.DARK_RED
-				+ "Fireball mode disabled for %player");
-		Utils.addLocale("fireballEnabled", ChatColor.DARK_RED
-				+ "Fireball mode enabled.");
-		Utils.addLocale("fireballEnabledTarget", ChatColor.DARK_RED
-				+ "Fireball mode enabled for %player");
-		Utils.addLocale("godDisabled", ChatColor.DARK_AQUA
-				+ "GOD mode disabled.");
-		Utils.addLocale("godDisabledTarget", ChatColor.DARK_AQUA
-				+ "GOD mode disabled for %player");
-		Utils.addLocale("godEnabled", ChatColor.DARK_AQUA + "GOD mode enabled.");
-		Utils.addLocale("godEnabledTarget", ChatColor.DARK_AQUA
-				+ "GOD mode enabled for %player");
-		Utils.addLocale("noDropDisabled", ChatColor.DARK_AQUA
-				+ "NO DROP mode disabled.");
-		Utils.addLocale("noDropDisabledTarget", ChatColor.DARK_AQUA
-				+ "NO DROP mode disabled for %player");
-		Utils.addLocale("noDropEnabled", ChatColor.DARK_AQUA
-				+ "NO DROP mode enabled.");
-		Utils.addLocale("noDropEnabledTarget", ChatColor.DARK_AQUA
-				+ "NO DROP mode enabled for %player");
-		Utils.addLocale("thorDisabled", ChatColor.DARK_AQUA
-				+ "THOR mode disabled.");
-		Utils.addLocale("thorDisabledTarget", ChatColor.DARK_AQUA
-				+ "THOR mode disabled for %player");
-		Utils.addLocale("thorEnabled", ChatColor.DARK_AQUA
-				+ "THOR mode enabled.");
-		Utils.addLocale("thorEnabledTarget", ChatColor.DARK_AQUA
-				+ "THOR mode enabled for %player");
-		Utils.addLocale("vulcanDisabled", ChatColor.DARK_RED
-				+ "VULCAN mode disabled.");
-		Utils.addLocale("vulcanDisabledTarget", ChatColor.DARK_RED
-				+ "VULCAN mode disabled for %player");
-		Utils.addLocale("vulcanEnabled", ChatColor.DARK_RED
-				+ "VULCAN mode enabled.");
-		Utils.addLocale("vulcanEnabledTarget", ChatColor.DARK_RED
-				+ "VULCAN mode enabled for %player");
-		Utils.addLocale("spymsgDisabled", ChatColor.DARK_AQUA
-				+ "SPYMSG mode disabled.");
-		Utils.addLocale("spymsgEnabled", ChatColor.DARK_AQUA
-				+ "SPYMSG mode enabled.");
-		Utils.addLocale("invisibleEnabled", ChatColor.RED
-				+ "You are now Invisible");
-		Utils.addLocale("invisibleEnabledTarget", ChatColor.DARK_AQUA
-				+ "INVISIBLE mode enabled for %player");
-		Utils.addLocale("invisibleDisabled", ChatColor.GREEN
-				+ "You are now Visible");
-		Utils.addLocale("invisibleDisabledTarget", ChatColor.DARK_AQUA
-				+ "INVISIBLE mode disabled for %player");
-		Utils.addLocale("errorMultiHome", ChatColor.DARK_GREEN + "Home "
-				+ ChatColor.RED + "%home" + ChatColor.WHITE + " not set.");
-		Utils.addLocale("multiHome", ChatColor.DARK_GREEN + "Teleported"
-				+ ChatColor.WHITE + " to your home " + ChatColor.DARK_AQUA
-				+ "%home.");
-		Utils.addLocale("setMultiHome", ChatColor.DARK_GREEN + "Home "
-				+ ChatColor.DARK_AQUA + "%home" + ChatColor.WHITE + " set.");
-		Utils.addLocale("rmHome", ChatColor.RED + "Home " + ChatColor.DARK_AQUA
-				+ "%home" + ChatColor.WHITE + " removed.");
-		Utils.addLocale("homeLimit", ChatColor.RED + "You have reached your "
-				+ ChatColor.DARK_GREEN + "home limit");
-		Utils.addLocale("itemLimit", ChatColor.RED + "You have exceeded your "
-				+ ChatColor.DARK_GREEN + "item limit" + ChatColor.RED
-				+ " of %limit items per command.");
-		Utils.addLocale("errorLocation", ChatColor.RED
-				+ "Location has to be formed by numbers");
-		Utils.addLocale("addWarp", ChatColor.GREEN + "WarpPoint %name"
-				+ ChatColor.WHITE + " added.");
-		Utils.addLocale("rmWarp", ChatColor.RED + "WarpPoint %name"
-				+ ChatColor.WHITE + " removed.");
-		Utils.addLocale("errorWarp", ChatColor.DARK_RED
-				+ "WarpPoint %name not found");
-		Utils.addLocale("tpWarp", ChatColor.GREEN + "Teleported to "
-				+ ChatColor.WHITE + "%name");
-		Utils.addLocale("strike", "%player was striked by Thor");
-		Utils.addLocale("tp", "Successfully teleported " + ChatColor.BLUE
-				+ "%fromPlayer" + ChatColor.WHITE + " to " + ChatColor.GREEN
-				+ "%toPlayer");
-		Utils.addLocale("addBlacklistItem", ChatColor.GREEN + "Item ("
-				+ ChatColor.WHITE + "%material" + ChatColor.GREEN
-				+ ") added to the Black List for i, give and drop.");
-		Utils.addLocale("addBlacklistBlock", ChatColor.GREEN + "Block ("
-				+ ChatColor.WHITE + "%material" + ChatColor.GREEN
-				+ ") added to the BlockPlace Black List.");
-		Utils.addLocale("rmBlacklistItem", ChatColor.GREEN + "Item ("
-				+ ChatColor.WHITE + "%material" + ChatColor.GREEN
-				+ ") removed from the Blacklist.");
-		Utils.addLocale("rmBlacklistBlock", ChatColor.GREEN + "Block ("
-				+ ChatColor.WHITE + "%material" + ChatColor.GREEN
-				+ ") removed from the Blacklist.");
-		Utils.addLocale("inBlacklistItem", ChatColor.DARK_RED + "This item ("
-				+ ChatColor.WHITE + "%material" + ChatColor.DARK_RED
-				+ ") is black listed.");
-		Utils.addLocale("inBlacklistBlock", ChatColor.DARK_RED + "This block ("
-				+ ChatColor.WHITE + "%material" + ChatColor.DARK_RED
-				+ ") is black listed.");
-		Utils.addLocale("errorSpawn", ChatColor.DARK_GREEN + "spawn"
-				+ ChatColor.WHITE + " not set for this world.");
-		Utils.addLocale("spawn", ChatColor.DARK_GREEN + "Teleported"
-				+ ChatColor.WHITE + " to your spawn.");
-		Utils.addLocale("setSpawn", ChatColor.DARK_GREEN + "spawn"
-				+ ChatColor.WHITE + " set.");
-		Utils.addLocale("sClear", "Sky cleared in world :");
-		Utils.addLocale("sStorm", "Storm set for %duration mins in world : ");
-		Utils.addLocale("sRain", "Rain set for %duration mins in world : ");
-		Utils.addLocale("afk", "%player " + ChatColor.RED + "is AFK");
-		Utils.addLocale("online", "%player " + ChatColor.GREEN + "is Online");
-		Utils.addLocale("afkTitle", ChatColor.BLUE + "[AFK]" + ChatColor.WHITE);
-		Utils.addLocale("ip", ChatColor.YELLOW + "IP adress of "
-				+ ChatColor.WHITE + "%player - %ip");
-		Utils.addLocale("ban", ChatColor.YELLOW
-				+ "%player has been banned, reason: " + ChatColor.RED
-				+ "%reason");
-		Utils.addLocale("unban", ChatColor.YELLOW + "%player is now unbanned.");
-		Utils.addLocale("killMob", ChatColor.RED + "Killing mobs ("
-				+ ChatColor.WHITE + "%type" + ChatColor.RED + ") of worlds : "
-				+ ChatColor.DARK_PURPLE + "%worlds");
-		Utils.addLocale("killedMobs", "%nbKilled" + ChatColor.DARK_RED
-				+ " mobs have been killed.");
-		Utils.addLocale("flyDisabled", ChatColor.GOLD + "FLY mode disabled.");
-		Utils.addLocale("flyDisabledTarget", ChatColor.GOLD
-				+ "FLY mode disabled for %player");
-		Utils.addLocale("flyEnabled", ChatColor.GOLD + "FLY mode enabled.");
-		Utils.addLocale("flyEnabledTarget", ChatColor.GOLD
-				+ "FLY mode enabled for %player");
-		Utils.addLocale("npDisabled", ChatColor.GOLD
-				+ "No Pickup mode disabled.");
-		Utils.addLocale("npDisabledTarget", ChatColor.GOLD
-				+ "No Pickup mode disabled for %player");
-		Utils.addLocale("npEnabled", ChatColor.GOLD + "No Pickup mode enabled.");
-		Utils.addLocale("npEnabledTarget", ChatColor.GOLD
-				+ "No Pickup mode enabled for %player");
-		Utils.addLocale("afkKick", "You have been kicked because you were AFK");
-		Utils.addLocale("freezeDisabled", ChatColor.DARK_GREEN
-				+ "You can now move again.");
-		Utils.addLocale("freezeDisabledTarget", ChatColor.DARK_GREEN
-				+ "Freeze mode disabled for %player");
-		Utils.addLocale("freezeEnabled", ChatColor.DARK_RED
-				+ "You can't move until you are defrozen.");
-		Utils.addLocale("freezeEnabledTarget", ChatColor.DARK_RED
-				+ "Freeze mode enabled for %player");
-		Utils.addLocale("muteDisabled", ChatColor.DARK_GREEN
-				+ "You can chat again.");
-		Utils.addLocale("muteDisabledTarget", ChatColor.DARK_GREEN
-				+ "%player is unmuted.");
-		Utils.addLocale("muteEnabled", ChatColor.DARK_RED
-				+ "You can't chat anymore. Reason: %reason");
-		Utils.addLocale(
-				"tmpMuteEnabled",
+						+ "You can't use commands anymore. Reason: %reason");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"commandTmpMuteEnabled",
+						ChatColor.DARK_RED
+								+ "You can't use commands anymore for %minutes minutes. Reason: %reason");
+		LocaleManager.getInstance().addLocale("commandMuteEnabledTarget",
+				ChatColor.DARK_RED + "%player is now unable to use commands.");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"alreadyCommandMuted",
+						ChatColor.DARK_AQUA
+								+ "This player already can't use commands. To let him use commands again use the unmute command.");
+		LocaleManager.getInstance().addLocale("NaN",
+				"%number " + ChatColor.DARK_RED + "is not a number.");
+		LocaleManager.getInstance().addLocale("mobLimit",
+				ChatColor.GOLD + "Mob limit (%number) set for world : %world");
+		LocaleManager.getInstance().addLocale("mobLimitPerMob",
+				"#mobLimit# " + ChatColor.RED + "for mob %mob");
+		LocaleManager.getInstance().addLocale("mobLimitRemoved",
+				ChatColor.GREEN + "Mob limit is removed for world : %world");
+		LocaleManager.getInstance().addLocale("mobLimitRemovedPerMob",
+				"#mobLimitRemoved# " + ChatColor.AQUA + " for mob %mob");
+		LocaleManager.getInstance().addLocale("wFrozen",
+				"Weather is frozen in world :");
+		LocaleManager.getInstance().addLocale("wUnFrozen",
+				"Weather can change in world :");
+		LocaleManager.getInstance().addLocale("invTitle", "[INV]");
+		LocaleManager.getInstance().addLocale(
+				"roll",
+				ChatColor.DARK_GREEN + "[%player] " + ChatColor.WHITE
+						+ "rolled a " + ChatColor.GOLD + "%face dice : "
+						+ ChatColor.YELLOW + "%result");
+		LocaleManager.getInstance().addLocale(
+				"extinguish",
+				ChatColor.AQUA + "%nb blocks" + ChatColor.DARK_AQUA
+						+ " have been extinguished.");
+		LocaleManager.getInstance().addLocale(
+				"pluginReloaded",
+				ChatColor.YELLOW + "This plugin has been reloaded : "
+						+ ChatColor.WHITE + "%plugin");
+		LocaleManager.getInstance().addLocale(
+				"replaced",
+				ChatColor.RED + "%nb blocks of " + ChatColor.DARK_PURPLE
+						+ "%mat" + ChatColor.DARK_AQUA + " are now AIR.");
+		LocaleManager.getInstance().addLocale(
+				"undo",
+				ChatColor.GREEN + "%nb blocks " + ChatColor.DARK_GREEN
+						+ "have been replaced");
+		LocaleManager.getInstance().addLocale("nothingToUndo",
+				ChatColor.DARK_PURPLE + "Nothing to undo.");
+		LocaleManager.getInstance().addLocale("noRepeat",
+				ChatColor.DARK_RED + "No command to repeat.");
+		LocaleManager.getInstance().addLocale("reExec",
+				ChatColor.YELLOW + "Repeating the last command.");
+		LocaleManager.getInstance().addLocale(
+				"timeSet",
+				ChatColor.GOLD + "Time set to %type in world : "
+						+ ChatColor.WHITE + "%world");
+		LocaleManager.getInstance().addLocale("timeNotSet",
+				ChatColor.RED + "%type doesn't exist.");
+		LocaleManager.getInstance().addLocale(
+				"timePaused",
+				ChatColor.DARK_RED + "Time is paused in " + ChatColor.WHITE
+						+ "%world. " + ChatColor.DARK_GREEN
+						+ "To unpause : /time unpause .");
+		LocaleManager.getInstance().addLocale(
+				"moreAll",
+				ChatColor.AQUA
+						+ "All your items are now at their max stack size.");
+		LocaleManager.getInstance().addLocale(
+				"tpRequestTo",
+				ChatColor.BLUE + "%player " + ChatColor.GOLD
+						+ "wants to teleport to you. " + ChatColor.DARK_GREEN
+						+ "Type " + ChatColor.GREEN + "/tpt yes "
+						+ ChatColor.DARK_GREEN + "to accept.");
+		LocaleManager.getInstance().addLocale(
+				"tpRequestSend",
+				ChatColor.DARK_PURPLE + "You send a Teleport request to "
+						+ ChatColor.WHITE + "%player" + ChatColor.DARK_PURPLE
+						+ " for a teleport " + ChatColor.AQUA + "%tp_type");
+		LocaleManager.getInstance().addLocale(
+				"tpRequestFrom",
+				ChatColor.BLUE + "%player " + ChatColor.DARK_AQUA
+						+ "wants to teleport you to their location. "
+						+ ChatColor.DARK_GREEN + "Type " + ChatColor.GREEN
+						+ "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
+		LocaleManager.getInstance().addLocale("tpRequestOff",
+				ChatColor.DARK_GREEN + "Tp Request system Disabled.");
+		LocaleManager.getInstance().addLocale("tpRequestOn",
+				ChatColor.DARK_RED + "Tp Request system Enabled.");
+		LocaleManager.getInstance().addLocale("tpSeeEnabled",
+				ChatColor.DARK_GREEN + "You Tp at see when you left click.");
+		LocaleManager.getInstance().addLocale("tpSeeDisabled",
+				ChatColor.DARK_RED + "TP AT SEE mode disabled.");
+		LocaleManager.getInstance().addLocale("elapsedTime",
+				"Uptime : " + ChatColor.YELLOW + "%d day(s) %h:%m:%s");
+		LocaleManager.getInstance()
+				.addLocale(
+						"kitList",
+						ChatColor.GOLD + "Available Kits : " + ChatColor.AQUA
+								+ "%list");
+		LocaleManager.getInstance().addLocale(
+				"kitOtherPlayer",
+				ChatColor.RED + "[%sender]" + ChatColor.WHITE
+						+ " send you the kit : " + ChatColor.GOLD + "%kit");
+		LocaleManager.getInstance().addLocale(
+				"kitCommandSender",
+				ChatColor.RED + "Added " + ChatColor.GOLD + "%kit to "
+						+ ChatColor.WHITE + "%target's inventory");
+		LocaleManager.getInstance().addLocale(
+				"kitYourself",
+				ChatColor.RED + "Added " + ChatColor.GOLD + "%kit"
+						+ ChatColor.WHITE + " to your inventory");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"tpRequestTimeOut",
+						ChatColor.RED
+								+ "This tp request has timed out and will not be executed.");
+		LocaleManager.getInstance().addLocale("noTpRequest",
+				ChatColor.GREEN + "There is no tp request to execute");
+		LocaleManager.getInstance().addLocale(
+				"noteAfk",
+				ChatColor.DARK_RED + "Note: " + ChatColor.WHITE
+						+ "%player is AFK at the moment:");
+		LocaleManager.getInstance().addLocale("idleTime",
+				ChatColor.DARK_AQUA + "Idle for %mins minute(s)");
+		LocaleManager.getInstance().addLocale(
+				"pluginVersion",
+				ChatColor.YELLOW + "Version of " + ChatColor.WHITE
+						+ "%plugin: " + ChatColor.GREEN + "%version");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"emptyList",
+						ChatColor.RED
+								+ "Empty list or the selected type don't exists.");
+		LocaleManager.getInstance()
+				.addLocale(
+						"telportSuccess",
+						ChatColor.DARK_GREEN
+								+ "You have been successfully teleported.");
+		LocaleManager.getInstance().addLocale("noLastLocation",
+				ChatColor.RED + "You don't have a last location to tp back");
+		LocaleManager.getInstance().addLocale("super_breakerDisabled",
+				ChatColor.GOLD + "Super Breaker mode disabled.");
+		LocaleManager.getInstance().addLocale("super_breakerDisabledTarget",
+				ChatColor.GOLD + "Super Breaker mode disabled for %player");
+		LocaleManager.getInstance().addLocale("super_breakerEnabled",
+				ChatColor.GOLD + "Super Breaker mode enabled.");
+		LocaleManager.getInstance().addLocale("super_breakerEnabledTarget",
+				ChatColor.GOLD + "Super Breaker mode enabled for %player");
+		LocaleManager.getInstance().addLocale("airForbidden",
+				ChatColor.DARK_RED + "You can't give AIR item.");
+		LocaleManager.getInstance().addLocale(
+				"playedTime",
+				ChatColor.DARK_AQUA + "%player " + ChatColor.WHITE + "played "
+						+ ChatColor.AQUA + "#elapsedTotalTime#");
+		LocaleManager.getInstance().addLocale("serverUnlock",
+				ChatColor.GREEN + "Server is now UnLocked.");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"serverLock",
+						ChatColor.RED
+								+ "Server will be lock in 5 seconds,"
+								+ " you'll be kicked if you don't have the Permission to stay.");
+		LocaleManager.getInstance().addLocale("eternalDisabled",
+				ChatColor.DARK_RED + "ETERNAL mode disabled.");
+		LocaleManager.getInstance().addLocale("eternalDisabledTarget",
+				ChatColor.DARK_RED + "ETERNAL mode disabled for %player");
+		LocaleManager.getInstance().addLocale("eternalEnabled",
+				ChatColor.DARK_RED + "ETERNAL mode enabled.");
+		LocaleManager.getInstance().addLocale("eternalEnabledTarget",
+				ChatColor.DARK_RED + "ETERNAL mode enabled for %player");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"fakeQuitDisabled",
+						ChatColor.DARK_AQUA
+								+ "FakeQuit mode disabled, you are now listed online again.");
+		LocaleManager.getInstance().addLocale("fakeQuitDisabledTarget",
+				ChatColor.DARK_AQUA + "FakeQuit mode disabled for %player");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"fakeQuitEnabled",
+						ChatColor.DARK_AQUA
+								+ "FakeQuit mode enabled, you are now not listed online anymore.");
+		LocaleManager.getInstance().addLocale("fakeQuitEnabledTarget",
+				ChatColor.DARK_AQUA + "FakeQuit mode enabled for %player");
+		LocaleManager.getInstance().addLocale("noLoginInformation",
+				"No login information available");
+		LocaleManager.getInstance().addLocale(
+				"insufficientLvl",
 				ChatColor.DARK_RED
-						+ "You can't chat anymore for %minutes minutes. Reason: %reason");
-		Utils.addLocale("muteEnabledTarget", ChatColor.DARK_RED
-				+ "%player is muted.");
-		Utils.addLocale(
-				"alreadyMuted",
-				ChatColor.DARK_AQUA
-						+ "This player is already muted. To unmute him use the unmute command.");
-		Utils.addLocale("commandMuteDisabled", ChatColor.DARK_GREEN
-				+ "You can use commands again.");
-		Utils.addLocale("commandMuteDisabledTarget", ChatColor.DARK_GREEN
-				+ "%player can use commands again.");
-		Utils.addLocale("commandMuteEnabled", ChatColor.DARK_RED
-				+ "You can't use commands anymore. Reason: %reason");
-		Utils.addLocale(
-				"commandTmpMuteEnabled",
-				ChatColor.DARK_RED
-						+ "You can't use commands anymore for %minutes minutes. Reason: %reason");
-		Utils.addLocale("commandMuteEnabledTarget", ChatColor.DARK_RED
-				+ "%player is now unable to use commands.");
-		Utils.addLocale(
-				"alreadyCommandMuted",
-				ChatColor.DARK_AQUA
-						+ "This player already can't use commands. To let him use commands again use the unmute command.");
-		Utils.addLocale("NaN", "%number " + ChatColor.DARK_RED
-				+ "is not a number.");
-		Utils.addLocale("mobLimit", ChatColor.GOLD
-				+ "Mob limit (%number) set for world : %world");
-		Utils.addLocale("mobLimitPerMob", "#mobLimit# " + ChatColor.RED
-				+ "for mob %mob");
-		Utils.addLocale("mobLimitRemoved", ChatColor.GREEN
-				+ "Mob limit is removed for world : %world");
-		Utils.addLocale("mobLimitRemovedPerMob", "#mobLimitRemoved# "
-				+ ChatColor.AQUA + " for mob %mob");
-		Utils.addLocale("wFrozen", "Weather is frozen in world :");
-		Utils.addLocale("wUnFrozen", "Weather can change in world :");
-		Utils.addLocale("invTitle", "[INV]");
-		Utils.addLocale("roll", ChatColor.DARK_GREEN + "[%player] "
-				+ ChatColor.WHITE + "rolled a " + ChatColor.GOLD
-				+ "%face dice : " + ChatColor.YELLOW + "%result");
-		Utils.addLocale("extinguish", ChatColor.AQUA + "%nb blocks"
-				+ ChatColor.DARK_AQUA + " have been extinguished.");
-		Utils.addLocale("pluginReloaded", ChatColor.YELLOW
-				+ "This plugin has been reloaded : " + ChatColor.WHITE
-				+ "%plugin");
-		Utils.addLocale("replaced", ChatColor.RED + "%nb blocks of "
-				+ ChatColor.DARK_PURPLE + "%mat" + ChatColor.DARK_AQUA
-				+ " are now AIR.");
-		Utils.addLocale("undo", ChatColor.GREEN + "%nb blocks "
-				+ ChatColor.DARK_GREEN + "have been replaced");
-		Utils.addLocale("nothingToUndo", ChatColor.DARK_PURPLE
-				+ "Nothing to undo.");
-		Utils.addLocale("noRepeat", ChatColor.DARK_RED
-				+ "No command to repeat.");
-		Utils.addLocale("reExec", ChatColor.YELLOW
-				+ "Repeating the last command.");
-		Utils.addLocale("timeSet", ChatColor.GOLD
-				+ "Time set to %type in world : " + ChatColor.WHITE + "%world");
-		Utils.addLocale("timeNotSet", ChatColor.RED + "%type doesn't exist.");
-		Utils.addLocale("timePaused", ChatColor.DARK_RED + "Time is paused in "
-				+ ChatColor.WHITE + "%world. " + ChatColor.DARK_GREEN
-				+ "To unpause : /time unpause .");
-		Utils.addLocale("moreAll", ChatColor.AQUA
-				+ "All your items are now at their max stack size.");
-		Utils.addLocale("tpRequestTo", ChatColor.BLUE + "%player "
-				+ ChatColor.GOLD + "wants to teleport to you. "
-				+ ChatColor.DARK_GREEN + "Type " + ChatColor.GREEN
-				+ "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
-		Utils.addLocale("tpRequestSend", ChatColor.DARK_PURPLE
-				+ "You send a Teleport request to " + ChatColor.WHITE
-				+ "%player" + ChatColor.DARK_PURPLE + " for a teleport "
-				+ ChatColor.AQUA + "%tp_type");
-		Utils.addLocale("tpRequestFrom", ChatColor.BLUE + "%player "
-				+ ChatColor.DARK_AQUA
-				+ "wants to teleport you to their location. "
-				+ ChatColor.DARK_GREEN + "Type " + ChatColor.GREEN
-				+ "/tpt yes " + ChatColor.DARK_GREEN + "to accept.");
-		Utils.addLocale("tpRequestOff", ChatColor.DARK_GREEN
-				+ "Tp Request system Disabled.");
-		Utils.addLocale("tpRequestOn", ChatColor.DARK_RED
-				+ "Tp Request system Enabled.");
-		Utils.addLocale("tpSeeEnabled", ChatColor.DARK_GREEN
-				+ "You Tp at see when you left click.");
-		Utils.addLocale("tpSeeDisabled", ChatColor.DARK_RED
-				+ "TP AT SEE mode disabled.");
-		Utils.addLocale("elapsedTime", "Uptime : " + ChatColor.YELLOW
-				+ "%d day(s) %h:%m:%s");
-		Utils.addLocale("kitList", ChatColor.GOLD + "Available Kits : "
-				+ ChatColor.AQUA + "%list");
-		Utils.addLocale("kitOtherPlayer", ChatColor.RED + "[%sender]"
-				+ ChatColor.WHITE + " send you the kit : " + ChatColor.GOLD
-				+ "%kit");
-		Utils.addLocale("kitCommandSender", ChatColor.RED + "Added "
-				+ ChatColor.GOLD + "%kit to " + ChatColor.WHITE
-				+ "%target's inventory");
-		Utils.addLocale("kitYourself", ChatColor.RED + "Added "
-				+ ChatColor.GOLD + "%kit" + ChatColor.WHITE
-				+ " to your inventory");
-		Utils.addLocale("tpRequestTimeOut", ChatColor.RED
-				+ "This tp request has timed out and will not be executed.");
-		Utils.addLocale("noTpRequest", ChatColor.GREEN
-				+ "There is no tp request to execute");
-		Utils.addLocale("noteAfk", ChatColor.DARK_RED + "Note: "
-				+ ChatColor.WHITE + "%player is AFK at the moment:");
-		Utils.addLocale("idleTime", ChatColor.DARK_AQUA
-				+ "Idle for %mins minute(s)");
-		Utils.addLocale("pluginVersion", ChatColor.YELLOW + "Version of "
-				+ ChatColor.WHITE + "%plugin: " + ChatColor.GREEN + "%version");
-		Utils.addLocale("emptyList", ChatColor.RED
-				+ "Empty list or the selected type don't exists.");
-		Utils.addLocale("telportSuccess", ChatColor.DARK_GREEN
-				+ "You have been successfully teleported.");
-		Utils.addLocale("noLastLocation", ChatColor.RED
-				+ "You don't have a last location to tp back");
-		Utils.addLocale("super_breakerDisabled", ChatColor.GOLD
-				+ "Super Breaker mode disabled.");
-		Utils.addLocale("super_breakerDisabledTarget", ChatColor.GOLD
-				+ "Super Breaker mode disabled for %player");
-		Utils.addLocale("super_breakerEnabled", ChatColor.GOLD
-				+ "Super Breaker mode enabled.");
-		Utils.addLocale("super_breakerEnabledTarget", ChatColor.GOLD
-				+ "Super Breaker mode enabled for %player");
-		Utils.addLocale("airForbidden", ChatColor.DARK_RED
-				+ "You can't give AIR item.");
-		Utils.addLocale("playedTime", ChatColor.DARK_AQUA + "%player "
-				+ ChatColor.WHITE + "played " + ChatColor.AQUA
-				+ "#elapsedTotalTime#");
-		Utils.addLocale("serverUnlock", ChatColor.GREEN
-				+ "Server is now UnLocked.");
-		Utils.addLocale("serverLock", ChatColor.RED
-				+ "Server will be lock in 5 seconds,"
-				+ " you'll be kicked if you don't have the Permission to stay.");
-		Utils.addLocale("eternalDisabled", ChatColor.DARK_RED
-				+ "ETERNAL mode disabled.");
-		Utils.addLocale("eternalDisabledTarget", ChatColor.DARK_RED
-				+ "ETERNAL mode disabled for %player");
-		Utils.addLocale("eternalEnabled", ChatColor.DARK_RED
-				+ "ETERNAL mode enabled.");
-		Utils.addLocale("eternalEnabledTarget", ChatColor.DARK_RED
-				+ "ETERNAL mode enabled for %player");
-		Utils.addLocale("fakeQuitDisabled", ChatColor.DARK_AQUA
-				+ "FakeQuit mode disabled, you are now listed online again.");
-		Utils.addLocale("fakeQuitDisabledTarget", ChatColor.DARK_AQUA
-				+ "FakeQuit mode disabled for %player");
-		Utils.addLocale(
-				"fakeQuitEnabled",
-				ChatColor.DARK_AQUA
-						+ "FakeQuit mode enabled, you are now not listed online anymore.");
-		Utils.addLocale("fakeQuitEnabledTarget", ChatColor.DARK_AQUA
-				+ "FakeQuit mode enabled for %player");
-		Utils.addLocale("noLoginInformation", "No login information available");
-		Utils.addLocale("insufficientLvl", ChatColor.DARK_RED
-				+ "You don't have the sufficient lvl to do that.");
-		Utils.addLocale("gmSwitch", ChatColor.GREEN + "GameMode for "
-				+ ChatColor.GOLD + "%player " + ChatColor.GREEN
-				+ "switched to : " + ChatColor.WHITE + "%gamemode");
-		Utils.addLocale("kitDelayNotUp", ChatColor.RED
-				+ "You cannot use that kit for another " + ChatColor.WHITE
-				+ "%delay");
-		Utils.addLocale("days", "%d day(s)");
-		Utils.addLocale("elapsedTotalTime", "#days# %h:%m:%s");
-		Utils.addLocale("spawnerSetDelay", ChatColor.GREEN + "Delay set to: "
-				+ ChatColor.GOLD + "%delay");
-		Utils.addLocale("spawnerSetType", ChatColor.GREEN
-				+ "CreatureType of the Mob Spawner changed to: "
-				+ ChatColor.GOLD + "%type");
-		Utils.addLocale("spawnerGetData", ChatColor.DARK_AQUA
-				+ "This Mob Spawner spawns " + ChatColor.GOLD + "%mob" + "s"
-				+ ChatColor.DARK_AQUA + " with a delay of " + ChatColor.GOLD
-				+ "%delay" + ChatColor.DARK_AQUA + ".");
-		Utils.addLocale("spawnerNaN", ChatColor.RED
-				+ "Your input is not a number!");
-		Utils.addLocale("addSpawnWarp", ChatColor.GREEN
-				+ "Spawnpoint for the group " + ChatColor.DARK_AQUA + " %name"
-				+ ChatColor.GREEN + " added.");
-		Utils.addLocale("tpTO", "to them.");
-		Utils.addLocale("tpHERE", "to you.");
-		Utils.addLocale("tpPLAYERSTO", "of %target to you.");
-		Utils.addLocale("tpPLAYERSFROM", "you to %target.");
-		Utils.addLocale("offline", "%player " + ChatColor.RED + "is Offline");
-		Utils.addLocale(
-				"noPlayerToReply",
-				ChatColor.RED
-						+ "You can't reply to a message if none did send you a private message.");
-		Utils.addLocale("mustBePlayer",
+						+ "You don't have the sufficient lvl to do that.");
+		LocaleManager.getInstance().addLocale(
+				"gmSwitch",
+				ChatColor.GREEN + "GameMode for " + ChatColor.GOLD + "%player "
+						+ ChatColor.GREEN + "switched to : " + ChatColor.WHITE
+						+ "%gamemode");
+		LocaleManager.getInstance().addLocale(
+				"kitDelayNotUp",
+				ChatColor.RED + "You cannot use that kit for another "
+						+ ChatColor.WHITE + "%delay");
+		LocaleManager.getInstance().addLocale("days", "%d day(s)");
+		LocaleManager.getInstance().addLocale("elapsedTotalTime",
+				"#days# %h:%m:%s");
+		LocaleManager.getInstance().addLocale("spawnerSetDelay",
+				ChatColor.GREEN + "Delay set to: " + ChatColor.GOLD + "%delay");
+		LocaleManager.getInstance().addLocale(
+				"spawnerSetType",
+				ChatColor.GREEN
+						+ "CreatureType of the Mob Spawner changed to: "
+						+ ChatColor.GOLD + "%type");
+		LocaleManager.getInstance().addLocale(
+				"spawnerGetData",
+				ChatColor.DARK_AQUA + "This Mob Spawner spawns "
+						+ ChatColor.GOLD + "%mob" + "s" + ChatColor.DARK_AQUA
+						+ " with a delay of " + ChatColor.GOLD + "%delay"
+						+ ChatColor.DARK_AQUA + ".");
+		LocaleManager.getInstance().addLocale("spawnerNaN",
+				ChatColor.RED + "Your input is not a number!");
+		LocaleManager.getInstance().addLocale(
+				"addSpawnWarp",
+				ChatColor.GREEN + "Spawnpoint for the group "
+						+ ChatColor.DARK_AQUA + " %name" + ChatColor.GREEN
+						+ " added.");
+		LocaleManager.getInstance().addLocale("tpTO", "to them.");
+		LocaleManager.getInstance().addLocale("tpHERE", "to you.");
+		LocaleManager.getInstance().addLocale("tpPLAYERSTO",
+				"of %target to you.");
+		LocaleManager.getInstance().addLocale("tpPLAYERSFROM",
+				"you to %target.");
+		LocaleManager.getInstance().addLocale("offline",
+				"%player " + ChatColor.RED + "is Offline");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"noPlayerToReply",
+						ChatColor.RED
+								+ "You can't reply to a message if none did send you a private message.");
+		LocaleManager.getInstance().addLocale("mustBePlayer",
 				"[AdminCmd] You must be a player to use this command.");
-		Utils.addLocale("errorInsufficientArguments",
-				"You have to specify a %argument to use this command from the command line.");
-		Utils.addLocale("setDifficutly", ChatColor.DARK_AQUA
-				+ "The Difficulty of " + ChatColor.GOLD + "%world"
-				+ ChatColor.DARK_AQUA + " has been set to: " + ChatColor.GOLD
-				+ "%difficulty");
-		Utils.addLocale("getDifficulty", ChatColor.DARK_AQUA
-				+ "The Difficulty of " + ChatColor.GOLD + "%world"
-				+ ChatColor.DARK_AQUA + " is set to: " + ChatColor.GOLD
-				+ "%difficulty");
-		Utils.addLocale("serverLockMessage", "The server is locked!");
-		Utils.addLocale(
-				"errorMoved",
-				ChatColor.RED
-						+ "You have moved since you issued the %cmdname command, teleportation aborted!");
-		Utils.addLocale("privateTitle", ChatColor.RED + "[Private]"
-				+ ChatColor.WHITE);
-		Utils.addLocale("privateMessageHeader", "#privateTitle# " + "%sender"
-				+ "-" + "%receiver" + ChatColor.WHITE + ": ");
-		Utils.addLocale("joinMessage", "%name" + ChatColor.YELLOW
-				+ " joined the game!");
-		Utils.addLocale("joinMessageFirstTime", "%name" + ChatColor.YELLOW
-				+ " joined the game " + ChatColor.GOLD + "for the first time!");
-		Utils.addLocale("quitMessage", "%name" + ChatColor.YELLOW
-				+ " left the game!");
-		Utils.addLocale("presSet", ChatColor.YELLOW + "Presentation for"
-				+ ChatColor.WHITE + " %player" + ChatColor.YELLOW
-				+ " set to : " + ChatColor.GOLD + "%pres");
-		Utils.addLocale("expAdded", ChatColor.GOLD + "%amount "
-				+ ChatColor.DARK_AQUA + "has been added to your experience.");
-		Utils.addLocale("expLevelSet", ChatColor.DARK_AQUA
-				+ "Your current level has been set to " + ChatColor.GOLD
-				+ "%amount");
-		Utils.addLocale("expProgressionSet", ChatColor.DARK_AQUA
-				+ "Your current level progression has been set to "
-				+ ChatColor.GOLD + "%amount");
-		Utils.addLocale("expDropped", ChatColor.DARK_AQUA
-				+ "An experience orb has been dropped near your location!");
-		Utils.addLocale("expTotal", ChatColor.DARK_AQUA
-				+ "Your total experience is: " + ChatColor.GOLD + "%exp");
-		Utils.addLocale("expAddedTarget", ChatColor.GREEN + "You have added"
-				+ ChatColor.GOLD + " %amount " + ChatColor.GREEN + "to %target"
-				+ "s total experience.");
-		Utils.addLocale("expLevelSetTarget", ChatColor.GREEN + "%target"
-				+ "s level now is:" + ChatColor.GOLD + " %amount");
-		Utils.addLocale("expProgressionSetTarget", ChatColor.GREEN
-				+ "You have set %target" + "s current " + "progression to "
-				+ ChatColor.GOLD + "%amount");
-		Utils.addLocale("expDroppedTarget", ChatColor.GREEN
-				+ "You have dropped an experience" + " orb at %target"
-				+ "s location.");
-		Utils.addLocale("expTotalTarget", ChatColor.DARK_AQUA + "%target"
-				+ "s total experience is: " + ChatColor.GOLD + "%exp");
-		Utils.addLocale("kitOnce", ChatColor.RED + "The kit " + ChatColor.GOLD
-				+ "%kit" + ChatColor.RED + " can be only used once.");
-		Utils.addLocale("MOTDset", ChatColor.YELLOW
-				+ "The new Message Of The Day is : %motd");
-		Utils.addLocale("NEWSset", ChatColor.YELLOW + "The News is : %news");
-		Utils.addLocale("RulesSet", "The new rules are://n" + "%rules");
-		Utils.addLocale("timeOutPower", ChatColor.GOLD
-				+ "Time Out of the power %power. " + ChatColor.DARK_RED
-				+ "You lost it.");
-		Utils.addLocale("timeOutPowerSender", ChatColor.DARK_RED + "Power "
-				+ ChatColor.GOLD + "%power " + ChatColor.DARK_RED
-				+ "disabled for %player, reason: %reason");
-		Utils.addLocale("serverStop", "The server is stopping.");
-		Utils.addLocale("serverWillStop", ChatColor.RED + "[IMPORTANT] "
-				+ ChatColor.YELLOW + "The server will " + ChatColor.DARK_RED
-				+ "STOP " + ChatColor.YELLOW + "in " + ChatColor.GOLD
-				+ "%sec seconds.");
-		Utils.addLocale("diffWorld", ChatColor.AQUA + "%player" + ChatColor.RED
-				+ " is in a different world as " + ChatColor.DARK_PURPLE
-				+ "%to" + ChatColor.DARK_RED + " . He can't be tp there.");
-		Utils.addLocale("paramMissing", ChatColor.RED
-				+ "This command need the parameter " + ChatColor.GOLD
-				+ "-%param .");
-		Utils.addLocale("eggDontExists", ChatColor.RED + "This Egg Type ("
-				+ ChatColor.GOLD + "%egg" + ChatColor.RED + ") don't exists.");
-		Utils.addLocale("eggEnabled", ChatColor.DARK_AQUA + "EGG "
-				+ ChatColor.GOLD + "(%egg)" + ChatColor.AQUA + " mode enabled.");
-		Utils.addLocale("eggNormal", ChatColor.GREEN
-				+ "EGG return to normality.");
-		Utils.addLocale("eggNoParamGiven", ChatColor.RED
-				+ "You need to specify an egg-type for the /egg -E command.");
-		Utils.addLocale("entityDontExists", ChatColor.RED + "The Entity id "
-				+ ChatColor.GOLD + "%entity" + ChatColor.RED + " don't exists.");
-		Utils.addLocale("eggCustomError", ChatColor.RED
-				+ "Problem with the egg " + ChatColor.GOLD + "%egg"
-				+ ChatColor.RED + " : " + ChatColor.YELLOW + "%error");
+		LocaleManager
+				.getInstance()
+				.addLocale("errorInsufficientArguments",
+						"You have to specify a %argument to use this command from the command line.");
+		LocaleManager.getInstance().addLocale(
+				"setDifficutly",
+				ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD
+						+ "%world" + ChatColor.DARK_AQUA + " has been set to: "
+						+ ChatColor.GOLD + "%difficulty");
+		LocaleManager.getInstance().addLocale(
+				"getDifficulty",
+				ChatColor.DARK_AQUA + "The Difficulty of " + ChatColor.GOLD
+						+ "%world" + ChatColor.DARK_AQUA + " is set to: "
+						+ ChatColor.GOLD + "%difficulty");
+		LocaleManager.getInstance().addLocale("serverLockMessage",
+				"The server is locked!");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"errorMoved",
+						ChatColor.RED
+								+ "You have moved since you issued the %cmdname command, teleportation aborted!");
+		LocaleManager.getInstance().addLocale("privateTitle",
+				ChatColor.RED + "[Private]" + ChatColor.WHITE);
+		LocaleManager.getInstance().addLocale(
+				"privateMessageHeader",
+				"#privateTitle# " + "%sender" + "-" + "%receiver"
+						+ ChatColor.WHITE + ": ");
+		LocaleManager.getInstance().addLocale("joinMessage",
+				"%name" + ChatColor.YELLOW + " joined the game!");
+		LocaleManager.getInstance().addLocale(
+				"joinMessageFirstTime",
+				"%name" + ChatColor.YELLOW + " joined the game "
+						+ ChatColor.GOLD + "for the first time!");
+		LocaleManager.getInstance().addLocale("quitMessage",
+				"%name" + ChatColor.YELLOW + " left the game!");
+		LocaleManager.getInstance().addLocale(
+				"presSet",
+				ChatColor.YELLOW + "Presentation for" + ChatColor.WHITE
+						+ " %player" + ChatColor.YELLOW + " set to : "
+						+ ChatColor.GOLD + "%pres");
+		LocaleManager.getInstance().addLocale(
+				"expAdded",
+				ChatColor.GOLD + "%amount " + ChatColor.DARK_AQUA
+						+ "has been added to your experience.");
+		LocaleManager.getInstance().addLocale(
+				"expLevelSet",
+				ChatColor.DARK_AQUA + "Your current level has been set to "
+						+ ChatColor.GOLD + "%amount");
+		LocaleManager.getInstance().addLocale(
+				"expProgressionSet",
+				ChatColor.DARK_AQUA
+						+ "Your current level progression has been set to "
+						+ ChatColor.GOLD + "%amount");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"expDropped",
+						ChatColor.DARK_AQUA
+								+ "An experience orb has been dropped near your location!");
+		LocaleManager.getInstance().addLocale(
+				"expTotal",
+				ChatColor.DARK_AQUA + "Your total experience is: "
+						+ ChatColor.GOLD + "%exp");
+		LocaleManager.getInstance().addLocale(
+				"expAddedTarget",
+				ChatColor.GREEN + "You have added" + ChatColor.GOLD
+						+ " %amount " + ChatColor.GREEN + "to %target"
+						+ "s total experience.");
+		LocaleManager.getInstance().addLocale(
+				"expLevelSetTarget",
+				ChatColor.GREEN + "%target" + "s level now is:"
+						+ ChatColor.GOLD + " %amount");
+		LocaleManager.getInstance().addLocale(
+				"expProgressionSetTarget",
+				ChatColor.GREEN + "You have set %target" + "s current "
+						+ "progression to " + ChatColor.GOLD + "%amount");
+		LocaleManager.getInstance().addLocale(
+				"expDroppedTarget",
+				ChatColor.GREEN + "You have dropped an experience"
+						+ " orb at %target" + "s location.");
+		LocaleManager.getInstance().addLocale(
+				"expTotalTarget",
+				ChatColor.DARK_AQUA + "%target" + "s total experience is: "
+						+ ChatColor.GOLD + "%exp");
+		LocaleManager.getInstance().addLocale(
+				"kitOnce",
+				ChatColor.RED + "The kit " + ChatColor.GOLD + "%kit"
+						+ ChatColor.RED + " can be only used once.");
+		LocaleManager.getInstance().addLocale("MOTDset",
+				ChatColor.YELLOW + "The new Message Of The Day is : %motd");
+		LocaleManager.getInstance().addLocale("NEWSset",
+				ChatColor.YELLOW + "The News is : %news");
+		LocaleManager.getInstance().addLocale("RulesSet",
+				"The new rules are://n" + "%rules");
+		LocaleManager.getInstance().addLocale(
+				"timeOutPower",
+				ChatColor.GOLD + "Time Out of the power %power. "
+						+ ChatColor.DARK_RED + "You lost it.");
+		LocaleManager.getInstance().addLocale(
+				"timeOutPowerSender",
+				ChatColor.DARK_RED + "Power " + ChatColor.GOLD + "%power "
+						+ ChatColor.DARK_RED
+						+ "disabled for %player, reason: %reason");
+		LocaleManager.getInstance().addLocale("serverStop",
+				"The server is stopping.");
+		LocaleManager.getInstance().addLocale(
+				"serverWillStop",
+				ChatColor.RED + "[IMPORTANT] " + ChatColor.YELLOW
+						+ "The server will " + ChatColor.DARK_RED + "STOP "
+						+ ChatColor.YELLOW + "in " + ChatColor.GOLD
+						+ "%sec seconds.");
+		LocaleManager.getInstance().addLocale(
+				"diffWorld",
+				ChatColor.AQUA + "%player" + ChatColor.RED
+						+ " is in a different world as "
+						+ ChatColor.DARK_PURPLE + "%to" + ChatColor.DARK_RED
+						+ " . He can't be tp there.");
+		LocaleManager.getInstance().addLocale(
+				"paramMissing",
+				ChatColor.RED + "This command need the parameter "
+						+ ChatColor.GOLD + "-%param .");
+		LocaleManager.getInstance().addLocale(
+				"eggDontExists",
+				ChatColor.RED + "This Egg Type (" + ChatColor.GOLD + "%egg"
+						+ ChatColor.RED + ") don't exists.");
+		LocaleManager.getInstance().addLocale(
+				"eggEnabled",
+				ChatColor.DARK_AQUA + "EGG " + ChatColor.GOLD + "(%egg)"
+						+ ChatColor.AQUA + " mode enabled.");
+		LocaleManager.getInstance().addLocale("eggNormal",
+				ChatColor.GREEN + "EGG return to normality.");
+		LocaleManager
+				.getInstance()
+				.addLocale(
+						"eggNoParamGiven",
+						ChatColor.RED
+								+ "You need to specify an egg-type for the /egg -E command.");
+		LocaleManager.getInstance().addLocale(
+				"entityDontExists",
+				ChatColor.RED + "The Entity id " + ChatColor.GOLD + "%entity"
+						+ ChatColor.RED + " don't exists.");
+		LocaleManager.getInstance().addLocale(
+				"eggCustomError",
+				ChatColor.RED + "Problem with the egg " + ChatColor.GOLD
+						+ "%egg" + ChatColor.RED + " : " + ChatColor.YELLOW
+						+ "%error");
 		LocaleHelper.addAllLocales();
 		LocaleManager.getInstance().save();
 	}

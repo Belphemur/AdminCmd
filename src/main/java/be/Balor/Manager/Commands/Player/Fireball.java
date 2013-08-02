@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -57,33 +59,33 @@ public class Fireball extends PlayerCommand {
 		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
 			try {
-				player = Utils.getUser(sender, args, permNode, 1, false);
+				player = Users.getUser(sender, args, permNode, 1, false);
 				power = args.getFloat(0);
 			} catch (final NumberFormatException e) {
 				power = ConfigEnum.DFB.getFloat();
-				player = Utils.getUser(sender, args, permNode);
+				player = Users.getUser(sender, args, permNode);
 			}
 			if (args.length >= 2) {
-				player = Utils.getUser(sender, args, permNode, 1, true);
+				player = Users.getUser(sender, args, permNode, 1, true);
 			}
 		} else {
-			player = Utils.getUser(sender, args, permNode);
+			player = Users.getUser(sender, args, permNode);
 		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.FIREBALL)) {
 				acp.removePower(Type.FIREBALL);
-				Utils.sI18n(player, "fireballDisabled");
+				LocaleManager.sI18n(player, "fireballDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "fireballDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "fireballDisabledTarget", replace);
 				}
 			} else {
 				acp.setPower(Type.FIREBALL, power);
-				Utils.sI18n(player, "fireballEnabled");
+				LocaleManager.sI18n(player, "fireballEnabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "fireballEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "fireballEnabledTarget", replace);
 				}
 				if (timeOut == null) {
 					return;
@@ -92,7 +94,7 @@ public class Fireball extends PlayerCommand {
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
+					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().runTaskLaterAsynchronously(

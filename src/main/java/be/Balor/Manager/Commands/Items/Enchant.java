@@ -26,7 +26,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -56,9 +56,9 @@ public class Enchant extends ItemCommand {
 			throws PlayerNotFound, ActionNotPermitedException {
 		Player target;
 		try {
-			target = Utils.getUser(sender, args, permNode);
+			target = Users.getUser(sender, args, permNode);
 		} catch (final PlayerNotFound e) {
-			target = Utils.getUserParam(sender, args, permNode);
+			target = Users.getUserParam(sender, args, permNode);
 		}
 
 		if (args.length == 0) {

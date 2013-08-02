@@ -23,7 +23,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -52,13 +51,13 @@ public class TpPlayerToPlayer extends TeleportCommand {
 		final Player from = sender.getServer().getPlayer(args.getString(0));
 		final Player to = sender.getServer().getPlayer(args.getString(1));
 		if (from != null && from.equals(sender)) {
-			Utils.tpP2P(sender, args.getString(0), args.getString(1),
+			TeleportCommand.tpP2P(sender, args.getString(0), args.getString(1),
 					Type.Tp.TO);
 		} else if (to != null && to.equals(sender)) {
-			Utils.tpP2P(sender, args.getString(0), args.getString(1),
+			TeleportCommand.tpP2P(sender, args.getString(0), args.getString(1),
 					Type.Tp.HERE);
 		} else {
-			Utils.tpP2P(sender, args.getString(0), args.getString(1),
+			TeleportCommand.tpP2P(sender, args.getString(0), args.getString(1),
 					Type.Tp.PLAYERS);
 		}
 	}

@@ -21,10 +21,10 @@ package be.Balor.Manager.Commands.Player;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Lister.EmptyListException;
 import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -54,7 +54,7 @@ public class BanList extends PlayerCommand {
 			try {
 				page = args.getInt(0);
 			} catch (NumberFormatException e) {
-				String msg = Utils.I18n("NaN", "number", args.getString(0));
+				String msg = LocaleManager.I18n("NaN", "number", args.getString(0));
 				sender.sendMessage(msg + ChatColor.RED
 						+ " Used default page 1!");
 				page = 1;

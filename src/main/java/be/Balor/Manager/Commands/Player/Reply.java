@@ -22,13 +22,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -53,28 +55,28 @@ public class Reply extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (!Utils.isPlayer(sender, true)) {
+		if (!Users.isPlayer(sender, true)) {
 			return;
 		}
 
-		if (Utils.isPlayer(sender, false)
+		if (Users.isPlayer(sender, false)
 				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
 				&& ConfigEnum.MUTEDPM.getBoolean()) {
-			Utils.sI18n(sender, "muteEnabled");
+			LocaleManager.sI18n(sender, "muteEnabled");
 			return;
 		}
 		final Player pSender = (Player) sender;
 		final Player buddy = ACHelper.getInstance().getReplyPlayer(pSender);
 		if (buddy != null) {
 			if (!buddy.isOnline()) {
-				Utils.sI18n(sender, "offline", "player", buddy.getDisplayName());
+				LocaleManager.sI18n(sender, "offline", "player", buddy.getDisplayName());
 				ACHelper.getInstance().removeReplyPlayer(pSender);
 				return;
 			}
 			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
 					&& !PermissionManager.hasPerm(sender,
 							"admincmd.invisible.cansee", false)) {
-				Utils.sI18n(sender, "playerNotFound", "player",
+				LocaleManager.sI18n(sender, "playerNotFound", "player",
 						args.getString(0));
 				return;
 			}
@@ -82,27 +84,27 @@ public class Reply extends PlayerCommand {
 			String msg = "";
 			String senderName = "";
 			senderName = pSender.getName();
-			senderPm = Utils.getPlayerName(pSender, buddy) + ChatColor.WHITE
+			senderPm = Users.getPlayerName(pSender, buddy) + ChatColor.WHITE
 					+ " - ";
 
 			for (final String arg : args) {
 				msg += arg + " ";
 			}
 			msg = msg.trim();
-			String parsed = Utils.colorParser(msg);
+			String parsed = Materials.colorParser(msg);
 			if (parsed == null) {
 				parsed = msg;
 			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
-			replace.put("receiver", Utils.getPlayerName(buddy));
-			buddy.sendMessage(Utils.I18n("privateMessageHeader", replace)
+			replace.put("receiver", Users.getPlayerName(buddy));
+			buddy.sendMessage(LocaleManager.I18n("privateMessageHeader", replace)
 					+ parsed);
 			ACHelper.getInstance().setReplyPlayer(buddy, pSender);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
 			} else {
-				sender.sendMessage(Utils.I18n("privateMessageHeader", replace)
+				sender.sendMessage(LocaleManager.I18n("privateMessageHeader", replace)
 						+ parsed);
 			}
 			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace)
@@ -117,7 +119,7 @@ public class Reply extends PlayerCommand {
 				ACLogger.info(spyMsg);
 			}
 		} else {
-			Utils.sI18n(sender, "noPlayerToReply");
+			LocaleManager.sI18n(sender, "noPlayerToReply");
 		}
 	}
 

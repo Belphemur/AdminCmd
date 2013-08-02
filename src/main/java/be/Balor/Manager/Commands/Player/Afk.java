@@ -23,7 +23,7 @@ import be.Balor.Listeners.Events.ACGoAFKEvent.Reason;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import belgium.Balor.Workers.AFKWorker;
 
 /**
@@ -50,7 +50,7 @@ public class Afk extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Player player = (Player) sender;
 			if (player != null) {
 				if (AFKWorker.getInstance().isAfk(player)) {

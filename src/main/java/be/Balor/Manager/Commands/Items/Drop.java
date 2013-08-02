@@ -22,12 +22,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.Items.Give.GiveData;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.MaterialContainer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -65,22 +66,22 @@ public class Drop extends ItemCommand {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("amount", String.valueOf(mat.getAmount()));
 		replace.put("material", mat.getMaterial().toString());
-		if (Utils.isPlayer(sender, false)) {
+		if (Users.isPlayer(sender, false)) {
 			if (!target.equals(sender)) {
-				replace.put("sender", Utils.getPlayerName((Player) sender));
-				Utils.sI18n(target, "dropItemOtherPlayer", replace);
+				replace.put("sender", Users.getPlayerName((Player) sender));
+				LocaleManager.sI18n(target, "dropItemOtherPlayer", replace);
 				replace.remove("sender");
-				replace.put("target", Utils.getPlayerName(target));
-				Utils.sI18n(sender, "dropItemCommandSender", replace);
+				replace.put("target", Users.getPlayerName(target));
+				LocaleManager.sI18n(sender, "dropItemCommandSender", replace);
 			} else {
-				Utils.sI18n(sender, "dropItemYourself", replace);
+				LocaleManager.sI18n(sender, "dropItemYourself", replace);
 			}
 		} else {
 			replace.put("sender", "Server Admin");
-			Utils.sI18n(target, "dropItemOtherPlayer", replace);
+			LocaleManager.sI18n(target, "dropItemOtherPlayer", replace);
 			replace.remove("sender");
-			replace.put("target", Utils.getPlayerName(target));
-			Utils.sI18n(sender, "dropItemCommandSender", replace);
+			replace.put("target", Users.getPlayerName(target));
+			LocaleManager.sI18n(sender, "dropItemCommandSender", replace);
 		}
 		final Player taskTarget = target;
 		ACPluginManager.scheduleSyncTask(new Runnable() {

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
@@ -30,7 +31,8 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Lister.Lister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
@@ -60,21 +62,21 @@ public class Mute extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player player = Utils.getPlayer(args.getString(0));
+		final Player player = Users.getPlayer(args.getString(0));
 		if (args.hasFlag('c')
 				&& !PermissionManager.hasPerm(sender, cmdMute.getPermName())) {
 			return;
 		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp instanceof EmptyPlayer) {
-				Utils.sI18n(sender, "playerNotFound", replace);
+				LocaleManager.sI18n(sender, "playerNotFound", replace);
 				return;
 			}
-			if (!Utils.checkImmunity(sender, player)) {
-				Utils.sI18n(sender, "insufficientLvl");
+			if (!Immunity.checkImmunity(sender, player)) {
+				LocaleManager.sI18n(sender, "insufficientLvl");
 				return;
 			}
 			String reason;
@@ -87,12 +89,12 @@ public class Mute extends PlayerCommand {
 			if (args.hasFlag('c')) {
 				if (!acp.hasPower(Type.MUTED_COMMAND)) {
 					String msg = "Server Admin";
-					if (Utils.isPlayer(sender, false)) {
-						msg = Utils.getPlayerName((Player) sender);
+					if (Users.isPlayer(sender, false)) {
+						msg = Users.getPlayerName((Player) sender);
 					}
 
 					if (!player.equals(sender)) {
-						Utils.sI18n(sender, "commandMuteEnabledTarget", replace);
+						LocaleManager.sI18n(sender, "commandMuteEnabledTarget", replace);
 					}
 					if (args.length >= 2) {
 						Integer tmpMute = null;
@@ -111,7 +113,7 @@ public class Mute extends PlayerCommand {
 													ACPlayer.getPlayer(unmute)
 															.removePower(
 																	Type.MUTED_COMMAND);
-													Utils.sI18n(
+													LocaleManager.sI18n(
 															senderFinal,
 															"commandMuteDisabledTarget",
 															"player", unmute);
@@ -132,7 +134,7 @@ public class Mute extends PlayerCommand {
 									"Permanently muted(including commands) by "
 											+ msg);
 							replace.put("time", "permanently");
-							Utils.sI18n(player, "commandMuteEnabled", "reason",
+							LocaleManager.sI18n(player, "commandMuteEnabled", "reason",
 									reason);
 						} else {
 							acp.setPower(Type.MUTED_COMMAND,
@@ -141,7 +143,7 @@ public class Mute extends PlayerCommand {
 							replace.put("minutes", tmpMute.toString());
 							replace.put("time", "for" + tmpMute.toString()
 									+ " minutes");
-							Utils.sI18n(player, "commandTmpMuteEnabled",
+							LocaleManager.sI18n(player, "commandTmpMuteEnabled",
 									replace);
 						}
 					} else {
@@ -149,25 +151,25 @@ public class Mute extends PlayerCommand {
 								"Permanently muted(including commands) by "
 										+ msg);
 						replace.put("time", "permanently");
-						Utils.sI18n(player, "commandMuteEnabled", replace);
+						LocaleManager.sI18n(player, "commandMuteEnabled", replace);
 					}
 					if (args.hasFlag('b')) {
 						replace.put("muter", msg);
-						Utils.broadcastMessage(LocaleHelper.MUTE_BROADCAST
+						Users.broadcastMessage(LocaleHelper.MUTE_BROADCAST
 								.getLocale(replace));
 					}
 				} else {
-					Utils.sI18n(sender, "alreadyCommandMuted");
+					LocaleManager.sI18n(sender, "alreadyCommandMuted");
 				}
 				return;
 			}
 			if (!acp.hasPower(Type.MUTED)) {
 				String msg = "Server Admin";
-				if (Utils.isPlayer(sender, false)) {
-					msg = Utils.getPlayerName((Player) sender);
+				if (Users.isPlayer(sender, false)) {
+					msg = Users.getPlayerName((Player) sender);
 				}
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "muteEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "muteEnabledTarget", replace);
 				}
 				if (args.length >= 2) {
 					Integer tmpMute = null;
@@ -183,7 +185,7 @@ public class Mute extends PlayerCommand {
 											public void run() {
 												ACPlayer.getPlayer(unmute)
 														.removePower(Type.MUTED);
-												Utils.sI18n(senderFinal,
+												LocaleManager.sI18n(senderFinal,
 														"muteDisabledTarget",
 														"player", unmute);
 												final Lister list = Lister
@@ -201,27 +203,27 @@ public class Mute extends PlayerCommand {
 					if (tmpMute == null) {
 						acp.setPower(Type.MUTED, "Permanently muted by " + msg);
 						replace.put("time", "permanently");
-						Utils.sI18n(player, "muteEnabled", replace);
+						LocaleManager.sI18n(player, "muteEnabled", replace);
 					} else {
 						acp.setPower(Type.MUTED, "Muted by " + msg + " for "
 								+ tmpMute + " minutes");
 						replace.put("minutes", tmpMute.toString());
 						replace.put("time", "for" + tmpMute.toString()
 								+ " minutes");
-						Utils.sI18n(player, "tmpMuteEnabled", replace);
+						LocaleManager.sI18n(player, "tmpMuteEnabled", replace);
 					}
 				} else {
 					acp.setPower(Type.MUTED, "Permanently muted by " + msg);
 					replace.put("time", "permanently");
-					Utils.sI18n(player, "muteEnabled", replace);
+					LocaleManager.sI18n(player, "muteEnabled", replace);
 				}
 				if (args.hasFlag('b')) {
 					replace.put("muter", msg);
-					Utils.broadcastMessage(LocaleHelper.MUTE_BROADCAST
+					Users.broadcastMessage(LocaleHelper.MUTE_BROADCAST
 							.getLocale(replace));
 				}
 			} else {
-				Utils.sI18n(sender, "alreadyMuted");
+				LocaleManager.sI18n(sender, "alreadyMuted");
 			}
 			final Lister list = Lister.getLister(Lister.List.MUTE, false);
 			if (list != null) {

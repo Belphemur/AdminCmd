@@ -25,13 +25,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
@@ -169,7 +169,7 @@ public class Memory extends ServerCommand {
 			} catch (final NumberFormatException e) {
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("number", args.getString(0));
-				Utils.sI18n(sender, "NaN", replace);
+				LocaleManager.sI18n(sender, "NaN", replace);
 				return;
 			}
 		}

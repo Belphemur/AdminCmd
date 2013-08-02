@@ -20,8 +20,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Materials;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -44,15 +46,15 @@ public class ACColorSignListener implements Listener {
 			if (line == null || (line != null && line.isEmpty())) {
 				continue;
 			}
-			if (!Utils.REGEX_COLOR_PERSER.matcher(line).find()) {
+			if (!Materials.REGEX_COLOR_PERSER.matcher(line).find()) {
 				continue;
 			}
 			if (!havePerm) {
-				Utils.sI18n(event.getPlayer(), "errorNotPerm", "p",
+				LocaleManager.sI18n(event.getPlayer(), "errorNotPerm", "p",
 						"admincmd.coloredsign.create");
 				return;
 			}
-			parsed = Utils.colorParser(line);
+			parsed = Materials.colorParser(line);
 			if (parsed != null) {
 				event.setLine(i, parsed);
 			}

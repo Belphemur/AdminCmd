@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -56,23 +58,23 @@ public class SuperBreaker extends PlayerCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
-		final Player player = Utils.getUser(sender, args, permNode);
+		final Player player = Users.getUser(sender, args, permNode);
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player);
 			if (acp.hasPower(Type.SUPER_BREAKER)) {
 				acp.removePower(Type.SUPER_BREAKER);
-				Utils.sI18n(player, Type.SUPER_BREAKER + "Disabled");
+				LocaleManager.sI18n(player, Type.SUPER_BREAKER + "Disabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget",
+					LocaleManager.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget",
 							replace);
 				}
 			} else {
 				acp.setPower(Type.SUPER_BREAKER);
-				Utils.sI18n(player, Type.SUPER_BREAKER + "Enabled");
+				LocaleManager.sI18n(player, Type.SUPER_BREAKER + "Enabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget",
+					LocaleManager.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget",
 							replace);
 				}
 				if (timeOut == null) {
@@ -82,7 +84,7 @@ public class SuperBreaker extends PlayerCommand {
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
+					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().runTaskLaterAsynchronously(

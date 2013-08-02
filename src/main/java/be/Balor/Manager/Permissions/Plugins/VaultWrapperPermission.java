@@ -24,9 +24,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Group;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Antoine
@@ -132,7 +132,7 @@ public class VaultWrapperPermission implements IPermissionPlugin {
 		if (vaultPerm.has(player, perm)) {
 			return true;
 		} else if (errorMsg) {
-			Utils.sI18n(player, "errorNotPerm", "p", perm);
+			LocaleManager.sI18n(player, "errorNotPerm", "p", perm);
 		}
 		return false;
 	}

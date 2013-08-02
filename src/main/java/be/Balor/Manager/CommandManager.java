@@ -52,6 +52,7 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
@@ -123,11 +124,11 @@ public class CommandManager implements CommandExecutor {
 			} catch (final ActionNotPermitedException e) {
 				e.sendMessage();
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(acc.getSender(), "NaN", "number",
+				LocaleManager.sI18n(acc.getSender(), "NaN", "number",
 						e.getLocalizedMessage());
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
-				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
+				Users.broadcastMessage("[AdminCmd] " + acc.debug());
 			}
 
 		}
@@ -161,11 +162,11 @@ public class CommandManager implements CommandExecutor {
 				processCmd();
 			} catch (final WorldNotLoaded e) {
 				ACLogger.severe("World not Loaded", e);
-				Utils.broadcastMessage("[AdminCmd] World " + e.getMessage()
+				Users.broadcastMessage("[AdminCmd] World " + e.getMessage()
 						+ " is not loaded.");
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
-				Utils.broadcastMessage("[AdminCmd] " + acc.debug());
+				Users.broadcastMessage("[AdminCmd] " + acc.debug());
 			}
 		}
 
@@ -328,7 +329,7 @@ public class CommandManager implements CommandExecutor {
 			 */
 			threads.execute(new NormalCommand(container));
 			if (!cmd.getCmdName().equals("bal_repeat")) {
-				if (Utils.isPlayer(sender, false)) {
+				if (Users.isPlayer(sender, false)) {
 					ACPlayer.getPlayer(((Player) sender)).setLastCmd(container);
 				} else {
 					ACPlayer.getPlayer("serverConsole").setLastCmd(container);
@@ -338,7 +339,7 @@ public class CommandManager implements CommandExecutor {
 		} catch (final Throwable t) {
 			ACLogger.severe(container != null ? container.debug()
 					: "The container is null", t);
-			Utils.broadcastMessage("[AdminCmd] " + container != null ? container
+			Users.broadcastMessage("[AdminCmd] " + container != null ? container
 					.debug()
 					: cmd.getCmdName()
 							+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/");

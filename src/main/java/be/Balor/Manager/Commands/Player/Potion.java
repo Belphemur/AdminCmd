@@ -26,10 +26,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -66,7 +68,7 @@ public class Potion extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Utils.getUserParam(sender, args, permNode);
+		final Player target = Users.getUserParam(sender, args, permNode);
 		final String potion = args.getString(0);
 		final String potionFound = Str.matchString(potions, potion);
 		final HashMap<String, String> replace = new HashMap<String, String>();
@@ -87,7 +89,7 @@ public class Potion extends PlayerCommand {
 			try {
 				amplifier = Integer.parseInt(potionAmplifierString);
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", potionAmplifierString);
+				LocaleManager.sI18n(sender, "NaN", "number", potionAmplifierString);
 				return;
 			}
 		}
@@ -95,13 +97,13 @@ public class Potion extends PlayerCommand {
 			try {
 				duration = Integer.parseInt(potionDurationString);
 			} catch (final NumberFormatException e) {
-				Utils.sI18n(sender, "NaN", "number", potionDurationString);
+				LocaleManager.sI18n(sender, "NaN", "number", potionDurationString);
 				return;
 			}
 		}
 		target.addPotionEffect(new PotionEffect(PotionEffectType
 				.getByName(potionFound), duration, amplifier));
-		replace.put("player", Utils.getPlayerName(target, sender));
+		replace.put("player", Users.getPlayerName(target, sender));
 		replace.put("potion", potionFound);
 		LocaleHelper.POTION_EFFECT.sendLocale(sender, replace);
 		if (!target.equals(sender)) {

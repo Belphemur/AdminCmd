@@ -21,11 +21,12 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Threads.KickTask;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -55,15 +56,15 @@ public class LockServer extends ServerCommand {
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (ACHelper.getInstance().isServerLocked()) {
 			ACHelper.getInstance().setServerLocked(false);
-			Utils.sI18n(sender, "serverUnlock");
+			LocaleManager.sI18n(sender, "serverUnlock");
 		} else {
-			final String bcast = Utils.I18n("serverLock");
+			final String bcast = LocaleManager.I18n("serverLock");
 			if (bcast != null) {
-				Utils.broadcastMessage(bcast);
+				Users.broadcastMessage(bcast);
 				ACLogger.info(bcast);
 			}
 			ACHelper.getInstance().setServerLocked(true);
-			final List<Player> onlinePlayers = Utils.getOnlinePlayers();
+			final List<Player> onlinePlayers = Users.getOnlinePlayers();
 			ACPluginManager.getScheduler().scheduleSyncDelayedTask(getPlugin(),
 					new Runnable() {
 						@Override
@@ -73,7 +74,7 @@ public class LockServer extends ServerCommand {
 										"admincmd.server.lockdown")) {
 									continue;
 								}
-								new KickTask(p, Utils.I18n("serverLockMessage"))
+								new KickTask(p, LocaleManager.I18n("serverLockMessage"))
 										.scheduleSync();
 							}
 						}

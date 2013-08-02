@@ -37,13 +37,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import be.Balor.Manager.CommandManager;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.PlayerManager;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -70,7 +71,7 @@ public class ACPlayerListener implements Listener {
 			if (split.length != 0) {
 				if (split[0].contains("/")) {
 					event.setCancelled(true);
-					Utils.sI18n(p, "commandMuteEnabled");
+					LocaleManager.sI18n(p, "commandMuteEnabled");
 				}
 			}
 		}
@@ -101,12 +102,12 @@ public class ACPlayerListener implements Listener {
 
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
-			replace.put("name", Utils.getPlayerName(p, null, true));
-			event.setJoinMessage(Utils.I18n("joinMessage", replace));
+			replace.put("name", Users.getPlayerName(p, null, true));
+			event.setJoinMessage(LocaleManager.I18n("joinMessage", replace));
 		}
 		if (player.hasPower(Type.INVISIBLE)) {
 			event.setJoinMessage(null);
-			Utils.sI18n(p, "stillInv");
+			LocaleManager.sI18n(p, "stillInv");
 			InvisibleWorker.getInstance().vanish(p, true);
 
 		}
@@ -185,8 +186,8 @@ public class ACPlayerListener implements Listener {
 			player.setInformation("firstTime", false);
 			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 				replace.clear();
-				replace.put("name", Utils.getPlayerName(p, null, true));
-				event.setJoinMessage(Utils
+				replace.put("name", Users.getPlayerName(p, null, true));
+				event.setJoinMessage(LocaleManager
 						.I18n("joinMessageFirstTime", replace));
 			}
 			if (ConfigEnum.FCSPAWN.getBoolean()) {
@@ -271,8 +272,8 @@ public class ACPlayerListener implements Listener {
 		if (event.getQuitMessage() != null && ConfigEnum.JQMSG.getBoolean()
 				&& !SuperPermissions.isApiSet()) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("name", Utils.getPlayerName(p, null, true));
-			event.setQuitMessage(Utils.I18n("quitMessage", replace));
+			replace.put("name", Users.getPlayerName(p, null, true));
+			event.setQuitMessage(LocaleManager.I18n("quitMessage", replace));
 		}
 
 		PlayerManager.getInstance().setOffline(player);

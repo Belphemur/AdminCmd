@@ -22,7 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.LocaleManager;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -230,7 +229,7 @@ public enum LocaleHelper {
 	 */
 	public void sendLocale(final CommandSender sender,
 			final Map<String, String> replace) {
-		Utils.sI18n(sender, this, replace);
+		LocaleManager.sI18n(sender, this, replace);
 	}
 
 	/**
@@ -240,7 +239,7 @@ public enum LocaleHelper {
 	 *            CommandSender that will get the messages
 	 */
 	public void sendLocale(final CommandSender sender) {
-		Utils.sI18n(sender, this);
+		LocaleManager.sI18n(sender, this);
 	}
 
 	/**
@@ -251,7 +250,7 @@ public enum LocaleHelper {
 	 * @return the locale with the variables replaced in.
 	 */
 	public String getLocale(final Map<String, String> replace) {
-		return Utils.I18n(this, replace);
+		return LocaleManager.I18n(this, replace);
 	}
 
 	/**
@@ -260,7 +259,7 @@ public enum LocaleHelper {
 	 * @return the locale
 	 */
 	public String getLocale() {
-		return Utils.I18n(this);
+		return LocaleManager.I18n(this);
 	}
 
 }

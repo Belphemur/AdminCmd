@@ -23,7 +23,7 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -49,8 +49,8 @@ public class TpHere extends TeleportCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
-			Utils.tpP2P(sender, args.getString(0), ((Player) sender).getName(),
+		if (Users.isPlayer(sender)) {
+			TeleportCommand.tpP2P(sender, args.getString(0), ((Player) sender).getName(),
 					Type.Tp.HERE);
 		}
 	}

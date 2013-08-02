@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Threads.TeleportTask;
 import be.Balor.World.ACWorld;
@@ -59,7 +59,7 @@ public class GroupSpawn extends SpawnCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final Player p = (Player) sender;
 			if (args.hasFlag('l')) {

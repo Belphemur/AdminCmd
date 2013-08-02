@@ -24,6 +24,7 @@ import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
@@ -34,6 +35,7 @@ import be.Balor.Player.IBan;
 import be.Balor.Player.ITempBan;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -68,14 +70,14 @@ public class Whois extends PlayerCommand {
 			try {
 				if (args.length >= 1) {
 					w = ACWorld.getWorld(args.getString(0));
-				} else if (Utils.isPlayer(sender)) {
+				} else if (Users.isPlayer(sender)) {
 					w = ACWorld
 							.getWorld(((Player) sender).getWorld().getName());
 				} else {
 					return;
 				}
 			} catch (final WorldNotLoaded e) {
-				Utils.sI18n(sender, "worldNotFound", "world", args.getString(0));
+				LocaleManager.sI18n(sender, "worldNotFound", "world", args.getString(0));
 				return;
 			}
 			sender.sendMessage(ChatColor.GREEN
@@ -94,7 +96,7 @@ public class Whois extends PlayerCommand {
 			}
 			return;
 		}
-		final ACPlayer actarget = Utils.getACPlayer(sender, args, permNode);
+		final ACPlayer actarget = Users.getACPlayer(sender, args, permNode);
 		if (actarget == null) {
 			return;
 		}
@@ -103,7 +105,7 @@ public class Whois extends PlayerCommand {
 						ChatColor.DARK_GREEN
 								+ " "
 								+ (actarget.isOnline()
-										? Utils.getPlayerName(
+										? Users.getPlayerName(
 												actarget.getHandler(), sender)
 										: actarget.getName()) + " "
 								+ ChatColor.AQUA, '='));
@@ -148,7 +150,7 @@ public class Whois extends PlayerCommand {
 		int strSizeRem = ACMinecraftFontWidthCalculator.chatwidth
 				- ACMinecraftFontWidthCalculator.getStringWidth(played);
 		played += ACMinecraftFontWidthCalculator.strPadLeftChat(ChatColor.GREEN
-				+ Utils.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
+				+ LocaleManager.I18n("elapsedTotalTime", replace), strSizeRem, ' ');
 		sender.sendMessage(played);
 		// Banned
 		final IBan ban = ACHelper.getInstance().getBan(actarget.getName());

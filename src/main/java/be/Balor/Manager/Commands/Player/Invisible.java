@@ -22,12 +22,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.InvisibleWorker;
 
@@ -56,37 +57,37 @@ public class Invisible extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player target = Utils.getUser(sender, args, permNode);
+		final Player target = Users.getUser(sender, args, permNode);
 		final boolean noPickUp = ConfigEnum.NPINVISIBLE.getBoolean();
 		if (target != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(target));
+			replace.put("player", Users.getPlayerName(target));
 			final ACPlayer acp = ACPlayer.getPlayer(target);
 			if (!InvisibleWorker.getInstance().hasInvisiblePowers(target)) {
 				InvisibleWorker.getInstance().vanish(target, false);
-				Utils.sI18n(target, "invisibleEnabled");
+				LocaleManager.sI18n(target, "invisibleEnabled");
 				if (noPickUp && !acp.hasPower(Type.NO_PICKUP)) {
 					acp.setPower(Type.NO_PICKUP);
-					Utils.sI18n(target, "npEnabled");
+					LocaleManager.sI18n(target, "npEnabled");
 				}
 				if (!target.equals(sender)) {
-					Utils.sI18n(sender, "invisibleEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "invisibleEnabledTarget", replace);
 					if (noPickUp && acp.hasPower(Type.NO_PICKUP)) {
-						Utils.sI18n(sender, "npEnabledTarget", replace);
+						LocaleManager.sI18n(sender, "npEnabledTarget", replace);
 					}
 				}
 				acp.setPower(Type.INVISIBLE);
 			} else {
 				InvisibleWorker.getInstance().reappear(target);
-				Utils.sI18n(target, "invisibleDisabled");
+				LocaleManager.sI18n(target, "invisibleDisabled");
 				if (noPickUp && acp.hasPower(Type.NO_PICKUP)) {
 					acp.removePower(Type.NO_PICKUP);
-					Utils.sI18n(target, "npDisabled");
+					LocaleManager.sI18n(target, "npDisabled");
 				}
 				if (!target.equals(sender)) {
-					Utils.sI18n(sender, "invisibleDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "invisibleDisabledTarget", replace);
 					if (noPickUp && !acp.hasPower(Type.NO_PICKUP)) {
-						Utils.sI18n(sender, "npDisabledTarget", replace);
+						LocaleManager.sI18n(sender, "npDisabledTarget", replace);
 					}
 
 				}

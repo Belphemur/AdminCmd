@@ -20,10 +20,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -51,7 +52,7 @@ public class MoreAll extends ItemCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final Player p = ((Player) sender);
 			ACPluginManager.scheduleSyncTask(new Runnable() {
 				@Override
@@ -65,7 +66,7 @@ public class MoreAll extends ItemCommand {
 					}
 				}
 			});
-			Utils.sI18n(sender, "moreAll");
+			LocaleManager.sI18n(sender, "moreAll");
 		}
 
 	}

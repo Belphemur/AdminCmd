@@ -19,11 +19,12 @@ package be.Balor.Manager.Commands.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -51,15 +52,15 @@ public class RepeatCmd extends ServerCommand {
 			throws PlayerNotFound, ActionNotPermitedException {
 		try {
 
-			if (Utils.isPlayer(sender, false)) {
+			if (Users.isPlayer(sender, false)) {
 				ACPlayer.getPlayer(((Player) sender).getName())
 						.executeLastCmd();
 			} else {
 				ACPlayer.getPlayer("serverConsole").executeLastCmd();
 			}
-			Utils.sI18n(sender, "reExec");
+			LocaleManager.sI18n(sender, "reExec");
 		} catch (final NullPointerException e) {
-			Utils.sI18n(sender, "noRepeat");
+			LocaleManager.sI18n(sender, "noRepeat");
 		}
 
 	}

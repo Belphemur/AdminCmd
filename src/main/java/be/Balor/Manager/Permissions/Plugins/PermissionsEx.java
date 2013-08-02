@@ -33,10 +33,10 @@ import org.bukkit.permissions.Permission;
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.PermissionUser;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.NoPermissionsPlugin;
 import be.Balor.Manager.Permissions.Group;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -71,7 +71,7 @@ public class PermissionsEx extends SuperPermissions {
 			return true;
 		} else {
 			if (errorMsg) {
-				Utils.sI18n(player, "errorNotPerm", "p", perm);
+				LocaleManager.sI18n(player, "errorNotPerm", "p", perm);
 			}
 			return false;
 		}

@@ -21,10 +21,11 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -52,7 +53,7 @@ public class Strike extends WeatherCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		final Player p = Utils.getUser(sender, args, permNode);
+		final Player p = Users.getUser(sender, args, permNode);
 		if (p != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -62,8 +63,8 @@ public class Strike extends WeatherCommand {
 
 				}
 			});
-			replace.put("player", Utils.getPlayerName(p));
-			Utils.sI18n(sender, "strike", replace);
+			replace.put("player", Users.getPlayerName(p));
+			LocaleManager.sI18n(sender, "strike", replace);
 		}
 
 	}

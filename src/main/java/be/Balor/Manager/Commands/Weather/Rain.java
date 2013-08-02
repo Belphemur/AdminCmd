@@ -22,7 +22,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -48,7 +47,7 @@ public class Rain extends WeatherCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		Utils.weather(sender, Type.Weather.RAIN, args);
+		WeatherCommand.weather(sender, Type.Weather.RAIN, args);
 
 	}
 

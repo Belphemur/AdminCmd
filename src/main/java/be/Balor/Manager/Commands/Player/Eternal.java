@@ -21,12 +21,14 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Threads.RemovePowerTask;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
@@ -58,27 +60,27 @@ public class Eternal extends PlayerCommand {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
-			player = Utils.getUser(sender, args, permNode, 0, false);
+			player = Users.getUser(sender, args, permNode, 0, false);
 		} else {
-			player = Utils.getUser(sender, args, permNode);
+			player = Users.getUser(sender, args, permNode);
 		}
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
-			replace.put("player", Utils.getPlayerName(player));
+			replace.put("player", Users.getPlayerName(player));
 			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
 			if (acp.hasPower(Type.ETERNAL)) {
 				player.setFoodLevel(acp.getPower(Type.ETERNAL).getInt(20));
 				acp.removePower(Type.ETERNAL);
-				Utils.sI18n(player, "eternalDisabled");
+				LocaleManager.sI18n(player, "eternalDisabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "eternalDisabledTarget", replace);
+					LocaleManager.sI18n(sender, "eternalDisabledTarget", replace);
 				}
 			} else {
 				acp.setPower(Type.ETERNAL, player.getFoodLevel());
 				player.setFoodLevel(20);
-				Utils.sI18n(player, "eternalEnabled");
+				LocaleManager.sI18n(player, "eternalEnabled");
 				if (!player.equals(sender)) {
-					Utils.sI18n(sender, "eternalEnabledTarget", replace);
+					LocaleManager.sI18n(sender, "eternalEnabledTarget", replace);
 				}
 				if (timeOut == null) {
 					return;
@@ -87,7 +89,7 @@ public class Eternal extends PlayerCommand {
 				try {
 					timeOutValue = Integer.parseInt(timeOut);
 				} catch (final Exception e) {
-					Utils.sI18n(sender, "NaN", "number", timeOut);
+					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
 				ACPluginManager.getScheduler().runTaskLaterAsynchronously(

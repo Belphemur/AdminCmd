@@ -22,10 +22,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Immunity;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -55,11 +56,11 @@ public class AsUser extends PlayerCommand {
 		if (target == null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", playerName);
-			throw new PlayerNotFound(Utils.I18n("playerNotFound", replace),
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
 					sender);
 		}
-		if (!Utils.checkImmunity(sender, target)) {
-			throw new PlayerNotFound(Utils.I18n("insufficientLvl"), sender);
+		if (!Immunity.checkImmunity(sender, target)) {
+			throw new PlayerNotFound(LocaleManager.I18n("insufficientLvl"), sender);
 		}
 		final String argsString = args.concatWithout(0);
 		ACPluginManager.scheduleSyncTask(new Runnable() {

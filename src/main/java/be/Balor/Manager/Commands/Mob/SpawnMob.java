@@ -23,10 +23,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -54,7 +55,7 @@ public class SpawnMob extends MobCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (Utils.isPlayer(sender)) {
+		if (Users.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final String name = args.getString(0);
 			replace.put("mob", name);
@@ -71,7 +72,7 @@ public class SpawnMob extends MobCommand {
 				distance = 0;
 			}
 
-			Player temp = Utils.getUser(sender, args, permNode, 3, false);
+			Player temp = Users.getUser(sender, args, permNode, 3, false);
 			if (temp == null) {
 				temp = ((Player) sender);
 			}
@@ -119,11 +120,11 @@ public class SpawnMob extends MobCommand {
 				final EntityType ct2 = EntityType.fromName(creatures[1]);
 				if (ct == null) {
 					replace.put("mob", creatures[0]);
-					Utils.sI18n(sender, "errorMob", replace);
+					LocaleManager.sI18n(sender, "errorMob", replace);
 				}
 				if (ct2 == null) {
 					replace.put("mob", creatures[1]);
-					Utils.sI18n(sender, "errorMob", replace);
+					LocaleManager.sI18n(sender, "errorMob", replace);
 				}
 				if (ct == null || ct2 == null) {
 					return;
@@ -133,7 +134,7 @@ public class SpawnMob extends MobCommand {
 			} else {
 				ct = EntityType.fromName(name);
 				if (ct == null) {
-					Utils.sI18n(sender, "errorMob", replace);
+					LocaleManager.sI18n(sender, "errorMob", replace);
 					return;
 				}
 
@@ -183,10 +184,10 @@ public class SpawnMob extends MobCommand {
 
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
-				Utils.sI18n(player, "spawnMob", replace);
+				LocaleManager.sI18n(player, "spawnMob", replace);
 			} else {
-				replace.put("player", Utils.getPlayerName((Player) sender));
-				Utils.sI18n(player, "spawnMobOther", replace);
+				replace.put("player", Users.getPlayerName((Player) sender));
+				LocaleManager.sI18n(player, "spawnMobOther", replace);
 			}
 		}
 	}
@@ -220,10 +221,10 @@ public class SpawnMob extends MobCommand {
 
 			replace.put("nb", String.valueOf(nb));
 			if (player.equals(sender)) {
-				Utils.sI18n(player, "spawnMob", replace);
+				LocaleManager.sI18n(player, "spawnMob", replace);
 			} else {
-				replace.put("player", Utils.getPlayerName((Player) sender));
-				Utils.sI18n(player, "spawnMobOther", replace);
+				replace.put("player", Users.getPlayerName((Player) sender));
+				LocaleManager.sI18n(player, "spawnMobOther", replace);
 			}
 		}
 

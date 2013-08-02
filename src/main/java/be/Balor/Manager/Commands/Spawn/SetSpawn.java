@@ -18,10 +18,11 @@ package be.Balor.Manager.Commands.Spawn;
 
 import org.bukkit.command.CommandSender;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Tools.Utils;
+import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
@@ -49,13 +50,13 @@ public class SetSpawn extends SpawnCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		ACHelper.getInstance().setSpawn(sender);
-		if (args.length >= 1 && Utils.isPlayer(sender)) {
+		if (args.length >= 1 && Users.isPlayer(sender)) {
 			try {
 				int nbTaped;
 				nbTaped = args.getInt(0);
 				sender.getServer().setSpawnRadius(nbTaped);
 			} catch (final Exception e) {
-				Utils.sI18n(sender, "NaN", "number", args.getString(0));
+				LocaleManager.sI18n(sender, "NaN", "number", args.getString(0));
 			}
 
 		}

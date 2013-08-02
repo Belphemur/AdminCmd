@@ -27,10 +27,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
+import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import be.Balor.bukkit.AdminCmd.TextLocale;
 
 /**
@@ -342,5 +346,79 @@ public class LocaleManager {
 		} catch (final InvalidConfigurationException e) {
 			ACLogger.severe("Locale Reload Problem :", e);
 		}
+	}
+
+	public static void sI18n(final CommandSender sender, final String key) {
+		sI18n(sender, key, null);
+	}
+
+	public static void sI18n(final CommandSender sender, final String key,
+			final Map<String, String> replace) {
+		final String locale = I18n(key, replace);
+		if (locale != null && !locale.isEmpty()) {
+			sender.sendMessage(locale);
+		}
+	}
+
+	public static void sI18n(final CommandSender sender, final String key,
+			final String alias, final String toReplace) {
+		final String locale = I18n(key, alias, toReplace);
+		sendLocale(sender, locale);
+	}
+
+	public static void sI18n(final CommandSender sender, final LocaleHelper key) {
+		sI18n(sender, key, null);
+	}
+
+	public static void sI18n(final CommandSender sender,
+			final LocaleHelper key, final Map<String, String> replace) {
+		final String locale = I18n(key, replace);
+		sendLocale(sender, locale);
+	}
+
+	public static void sI18n(final CommandSender sender,
+			final LocaleHelper key, final String alias, final String toReplace) {
+		final String locale = I18n(key, alias, toReplace);
+		sendLocale(sender, locale);
+	}
+
+	/**
+	 * @param sender
+	 * @param locale
+	 */
+	public static void sendLocale(final CommandSender sender,
+			final String locale) {
+		if (locale != null && !locale.isEmpty()) {
+			sender.sendMessage(locale);
+			DebugLog.addInfo("(" + sender + ") " + ChatColor.stripColor(locale));
+		}
+	}
+
+	public static String I18n(final LocaleHelper key, final String alias,
+			final String toReplace) {
+		return getInstance().get(key.getKey(), alias, toReplace);
+	}
+
+	public static String I18n(final LocaleHelper key) {
+		return I18n(key.getKey(), null);
+	}
+
+	public static String I18n(final String key,
+			final Map<String, String> replace) {
+		return getInstance().get(key, replace);
+	}
+
+	public static String I18n(final String key) {
+		return LocaleManager.I18n(key, null);
+	}
+
+	public static String I18n(final LocaleHelper key,
+			final Map<String, String> replace) {
+		return getInstance().get(key.getKey(), replace);
+	}
+
+	public static String I18n(final String key, final String alias,
+			final String toReplace) {
+		return getInstance().get(key, alias, toReplace);
 	}
 }
