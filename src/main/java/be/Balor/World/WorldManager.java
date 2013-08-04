@@ -34,8 +34,10 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class WorldManager {
-	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
-			.makeMap();
+	/**
+	 * Cache of all loaded ACWorld(s)
+	 */
+	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
 	private AbstractWorldFactory worldFactory;
 	private static final WorldManager INSTANCE = new WorldManager();
 
@@ -56,6 +58,7 @@ public class WorldManager {
 	 * Add a new world
 	 * 
 	 * @param world
+	 * @return if the world was added successfully
 	 */
 	private synchronized boolean addWorld(final ACWorld world) {
 		final String name = world.getName();
@@ -65,9 +68,9 @@ public class WorldManager {
 
 		final ACWorld ref = worlds.get(name);
 		if (ref != null) {
-			return false;
+			return false;  // World already exists
 		}
-		worlds.put(name, world);
+		worlds.put(name.toUpperCase(), world);
 		return true;
 	}
 
@@ -92,16 +95,20 @@ public class WorldManager {
 		this.worldFactory = factory;
 	}
 
-	ACWorld demandACWorld(final String name) throws WorldNotLoaded {
-		ACWorld result = worlds.get(name);
+	ACWorld demandACWorld(String name) throws WorldNotLoaded {
+		ACWorld result = worlds.get(name.toUpperCase());
 		if (result == null) {
-			final String found = Str.matchString(worlds.keySet(), name);
-			if (found != null) {
-				return worlds.get(found);
+			try {
+				result = worldFactory.createWorld(name.toUpperCase());
+			} catch (WorldNotLoaded e) {
+				// Now we know that there is no world loaded by the name, search for worlds beginning with 'name'
+				// This way it avoids getting requests for 'world' mixed up with 'world_nether'
 			}
-			result = worldFactory.createWorld(name);
+			String found = Str.matchString(worlds.keySet(), name.toUpperCase());
+			if (found != null) {
+				return worlds.get(found.toUpperCase());
+			}
 			addWorld(result);
-			result = worlds.get(name);
 		}
 		return result;
 	}
@@ -112,7 +119,7 @@ public class WorldManager {
 		if (result == null) {
 			result = worldFactory.createWorld(world);
 			addWorld(result);
-			result = worlds.get(name);
+			result = worlds.get(name.toUpperCase());
 		}
 		return result;
 	}

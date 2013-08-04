@@ -16,84 +16,31 @@
  ************************************************************************/
 package be.Balor.World;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public abstract class AbstractWorldFactory {
-	private final Map<String, World> bukkitWorlds = Collections
-			.synchronizedMap(new HashMap<String, World>());
-
-	/**
-	 * 
-	 */
-	protected AbstractWorldFactory() {
-		for (final World w : ACPluginManager.getServer().getWorlds()) {
-			bukkitWorlds.put(w.getName().toLowerCase(), w);
-		}
-	}
 
 	public ACWorld createWorld(final String worldName) throws WorldNotLoaded {
 		DebugLog.beginInfo("Loading World " + worldName);
 		try {
-			World w = bukkitWorlds.get(worldName.toLowerCase());
+			World w = Bukkit.getServer().getWorld(worldName);
+
 			if (w == null) {
-				w = Bukkit.getServer().getWorld(worldName);
-			}
-			if (w == null) {
-				try {
-					DebugLog.beginInfo("World not loaded in bukkit : Check for a folder");
-					File worldFile = new File(ACPluginManager.getServer()
-							.getWorldContainer(), worldName);
-					if (!isExistingWorld(worldFile)) {
-						worldFile = new File(ACPluginManager.getServer()
-								.getWorldContainer(), worldName.toLowerCase());
-					}
-					if (!isExistingWorld(worldFile)) {
-						worldFile = new File(ACPluginManager.getServer()
-								.getWorldContainer(), worldName.substring(0, 1)
-								.toUpperCase()
-								+ worldName.substring(1).toLowerCase());
-					}
-					if (isExistingWorld(worldFile)) {
-						w = ACPluginManager.getServer().createWorld(
-								new WorldCreator(worldFile.getName()));
-						bukkitWorlds.put(w.getName().toLowerCase(), w);
-						DebugLog.addInfo("World Found and loaded");
-						return createWorld(w);
-					}
-				} finally {
-					DebugLog.endInfo();
-				}
+				// World isn't loaded by Bukkit or other multi-world plugins so we don't allow unloaded world files to be loaded (possible security issue)
 				throw new WorldNotLoaded(worldName);
-			} else {
-				bukkitWorlds.put(worldName.toLowerCase(), w);
 			}
 			return createWorld(w);
 		} finally {
 			DebugLog.endInfo();
 		}
-	}
-
-	/**
-	 * @param worldFile
-	 * @return
-	 */
-	private boolean isExistingWorld(final File worldFile) {
-		return worldFile.exists() && worldFile.isDirectory();
 	}
 
 	protected abstract ACWorld createWorld(World world);
