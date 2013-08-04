@@ -800,6 +800,7 @@ acitemdynamickit:
     plugin: AdminCmd
     permissions: admincmd.item.dynkit
     cmdname: bal_dynkit
+    
 jetenderchest:
     command: enderchest [player]
     description: "Open or edit yours or another players enderchest content."
