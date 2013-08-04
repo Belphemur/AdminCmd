@@ -257,7 +257,7 @@ notBanned: 'Kein Bann gefunden für %ban.'
 powersClearedSender: 'Alle Fähigkeiten erfolgreich entfernt von %target!'
 powersClearedTarget: 'All deine aktiven Fähigkeiten wurden von %sender entfernt!'
 powersCleared: 'Du hast erfolgreich alle deine Fähigkeiten entfernt!'
-muteList: %player, §b%msg
+muteList: '%player, §b%msg'
 noMutedPlayers: 'Kein Spieler ist im Moment stumm.'
 unMutedPlayers: '%nb Spieler können wieder reden.'
 allTxtReloaded: 'Alle Text Dateien wurden neu geladen.'
