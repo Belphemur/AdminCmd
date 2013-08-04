@@ -171,7 +171,12 @@ public class VaultWrapperPermission extends SuperPermissions {
 	 */
 	@Override
 	public Group getGroup(final Player player) {
-		return new Group(vaultPerm.getPrimaryGroup(player), player);
+		final String groupName = vaultPerm.getPrimaryGroup(player);
+		if (groupName == null) {
+			return new Group();
+		} else {
+			return new Group(groupName, player);
+		}
 	}
 
 }
