@@ -19,8 +19,10 @@ package be.Balor.Manager.Commands.Items;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
@@ -67,9 +69,18 @@ public class Enchant extends ItemCommand {
 					+ MaterialContainer.possibleEnchantment());
 			return;
 		}
+		if (target == null) {
+			return;
+		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
-		final MaterialContainer inHand = new MaterialContainer(
-				target.getItemInHand());
+		final ItemStack itemInHand = target.getItemInHand();
+		if (itemInHand == null
+				|| (itemInHand != null && itemInHand.getType().equals(
+						Material.AIR))) {
+			LocaleHelper.ERROR_HOLD_ITEM.sendLocale(sender);
+			return;
+		}
+		final MaterialContainer inHand = new MaterialContainer(itemInHand);
 		Give.setEnchantements(sender, args, inHand, target.equals(sender) ? 0
 				: 1);
 		final Player finalTarget = target;
@@ -81,7 +92,7 @@ public class Enchant extends ItemCommand {
 
 			}
 		});
-		replace.put("item", target.getItemInHand().getType().name());
+		replace.put("item", itemInHand.getType().name());
 		LocaleHelper.SUCCESS_ENCHANT.sendLocale(sender, replace);
 		if (!sender.equals(target)) {
 			LocaleHelper.SUCCESS_ENCHANT.sendLocale(target, replace);
