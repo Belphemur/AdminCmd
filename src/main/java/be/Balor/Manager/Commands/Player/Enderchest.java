@@ -19,6 +19,7 @@ package be.Balor.Manager.Commands.Player;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
@@ -53,14 +54,14 @@ public class Enderchest extends PlayerCommand {
 		if (!Users.isPlayer(sender)) {
 			return;
 		}
-		
+
 		final Player player = (Player) sender;
 		final Player target = Users.getUser(sender, args, permNode);
-		
+
 		if (target == null) {
 			return;
 		}
-		
+
 		player.openInventory(target.getEnderChest());
 	}
 
@@ -71,10 +72,7 @@ public class Enderchest extends PlayerCommand {
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		if (args.length >= 2) {
-			return false;
-		}
-		return true;		
+		return args != null;
 	}
-	
+
 }
