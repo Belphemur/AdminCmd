@@ -37,7 +37,8 @@ public class WorldManager {
 	/**
 	 * Cache of all loaded ACWorld(s)
 	 */
-	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
+	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
+			.makeMap();
 	private AbstractWorldFactory worldFactory;
 	private static final WorldManager INSTANCE = new WorldManager();
 
@@ -68,7 +69,7 @@ public class WorldManager {
 
 		final ACWorld ref = worlds.get(name);
 		if (ref != null) {
-			return false;  // World already exists
+			return false; // World already exists
 		}
 		worlds.put(name.toUpperCase(), world);
 		return true;
@@ -95,20 +96,24 @@ public class WorldManager {
 		this.worldFactory = factory;
 	}
 
-	ACWorld demandACWorld(String name) throws WorldNotLoaded {
+	ACWorld demandACWorld(final String name) throws WorldNotLoaded {
 		ACWorld result = worlds.get(name.toUpperCase());
 		if (result == null) {
 			try {
 				result = worldFactory.createWorld(name.toUpperCase());
-			} catch (WorldNotLoaded e) {
-				// Now we know that there is no world loaded by the name, search for worlds beginning with 'name'
-				// This way it avoids getting requests for 'world' mixed up with 'world_nether'
+				addWorld(result);
+			} catch (final WorldNotLoaded e) {
+				// Now we know that there is no world loaded by the name, search
+				// for worlds beginning with 'name'
+				// This way it avoids getting requests for 'world' mixed up with
+				// 'world_nether'
+				final String found = Str.matchString(worlds.keySet(),
+						name.toUpperCase());
+				if (found != null) {
+					return worlds.get(found.toUpperCase());
+				}
+				throw e;
 			}
-			String found = Str.matchString(worlds.keySet(), name.toUpperCase());
-			if (found != null) {
-				return worlds.get(found.toUpperCase());
-			}
-			addWorld(result);
 		}
 		return result;
 	}
