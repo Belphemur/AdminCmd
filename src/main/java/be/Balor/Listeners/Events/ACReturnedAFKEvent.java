@@ -46,5 +46,8 @@ public class ACReturnedAFKEvent extends PlayerEvent {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 }
