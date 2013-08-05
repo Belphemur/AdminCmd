@@ -187,8 +187,8 @@ public class ACPlayerListener implements Listener {
 			if (ConfigEnum.JQMSG.getBoolean() && !SuperPermissions.isApiSet()) {
 				replace.clear();
 				replace.put("name", Users.getPlayerName(p, null, true));
-				event.setJoinMessage(LocaleManager
-						.I18n("joinMessageFirstTime", replace));
+				event.setJoinMessage(LocaleManager.I18n("joinMessageFirstTime",
+						replace));
 			}
 			if (ConfigEnum.FCSPAWN.getBoolean()) {
 				ACHelper.getInstance().spawn(p);
@@ -288,18 +288,19 @@ public class ACPlayerListener implements Listener {
 		final World world = player.getWorld();
 
 		try {
-			if (spawn.isEmpty() || spawn.equalsIgnoreCase("globalspawn")) {
+			if (spawn.isEmpty()
+					|| spawn.equalsIgnoreCase(Type.Spawn.GLOBALSPAWN.toString())) {
 
 				loc = ACWorld.getWorld(world).getSpawn();
 
 				event.setRespawnLocation(loc);
-			} else if (spawn.equalsIgnoreCase("home")) {
+			} else if (spawn.equalsIgnoreCase(Type.Spawn.HOME.toString())) {
 				loc = ACPlayer.getPlayer(player).getHome(world.getName());
 				if (loc == null) {
 					loc = ACWorld.getWorld(world).getSpawn();
 				}
 				event.setRespawnLocation(loc);
-			} else if (spawn.equalsIgnoreCase("bed")) {
+			} else if (spawn.equalsIgnoreCase(Type.Spawn.BED.toString())) {
 				try {
 					loc = player.getBedSpawnLocation();
 					if (loc == null) {
@@ -309,7 +310,7 @@ public class ACPlayerListener implements Listener {
 					loc = ACWorld.getWorld(world).getSpawn();
 				}
 				event.setRespawnLocation(loc);
-			} else if (spawn.equalsIgnoreCase("group")) {
+			} else if (spawn.equalsIgnoreCase(Type.Spawn.GROUP.toString())) {
 				loc = ACHelper.getInstance().getGroupSpawnLocation(player);
 				event.setRespawnLocation(loc);
 			}

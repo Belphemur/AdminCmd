@@ -235,4 +235,8 @@ public enum Type {
 
 	}
 
+	public enum Spawn {
+		GLOBALSPAWN, HOME, BED, GROUP;
+	}
+
 }
