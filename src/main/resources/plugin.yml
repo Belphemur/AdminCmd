@@ -469,7 +469,7 @@ commands:
     description: Create a kit dynamically using the inventory of the player
     aliases : [dkit,ckit,dk,dynkit]
     usage: /<command> <kitName> <delay>
-  jet_enderchest:
+  bal_enderchest:
     description: Lookup and edit your or a players enderchest content
     aliases: [endercest, ec]
     usage: /<command> [player]
