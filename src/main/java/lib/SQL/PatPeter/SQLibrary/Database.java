@@ -429,15 +429,17 @@ public abstract class Database {
 	 * @return true if it is
 	 */
 	private boolean isConnectionValid() {
-		synchronized (this.connection) {
-			if (checkConnection()) {
-				try {
+
+		if (checkConnection()) {
+			try {
+				synchronized (connection) {
 					return !connection.isClosed() && connection.isValid(3);
-				} catch (final SQLException e) {
-					DebugLog.INSTANCE.log(Level.INFO, "Problem when checking connection state", e);
 				}
+			} catch (final SQLException e) {
+				DebugLog.INSTANCE.log(Level.INFO, "Problem when checking connection state", e);
 			}
 		}
+
 		return false;
 	}
 

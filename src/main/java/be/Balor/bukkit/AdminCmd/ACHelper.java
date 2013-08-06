@@ -1507,16 +1507,13 @@ public class ACHelper {
 					new FileWorldFactory(coreInstance.getDataFolder().getPath() + File.separator + "worldData"));
 			final PlayerConverter pConverter = PlayerManager.getInstance().buildConverter(
 					new FilePlayerFactory(coreInstance.getDataFolder().getPath() + File.separator + "userData"));
-
+			final String oldValue = ConfigEnum.DATA_WRAPPER.getString();
 			wConverter.setAfterConverTask(new Runnable() {
 
 				@Override
 				public void run() {
 					ConfigEnum.DATA_WRAPPER.setValue(convertTo);
-					try {
-						ConfigEnum.save();
-					} catch (final IOException e) {
-					}
+
 					Database.initDb();
 					try {
 						createTable();
@@ -1533,12 +1530,41 @@ public class ACHelper {
 
 				@Override
 				public void run() {
+					ConfigEnum.DATA_WRAPPER.setValue(convertTo);
+					Database.initDb();
+					try {
+						Database.DATABASE.open();
+					} catch (final SQLException e) {
+						ACLogger.severe("Can't Convert to the Database. There is a problem in your configuration", e);
+					}
 					SQLPlayer.initPrepStmt();
+					FilePlayer.forceSaveList();
 					FilePlayer.stopSavingTask();
-					PlayerManager.getInstance().convertFactory(new SQLPlayerFactory());
+
+					final PlayerConverter converter = PlayerManager.getInstance().buildConverter(new SQLPlayerFactory());
+					converter.setAfterConvertTask(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								ConfigEnum.save();
+							} catch (final IOException e) {
+							}
+
+						}
+					});
+					converter.convert();
+
 				}
 			});
 			wConverter.convert();
+			ConfigEnum.DATA_WRAPPER.setValue(oldValue);
+			Database.initDb();
+			try {
+				Database.DATABASE.open();
+			} catch (final SQLException e) {
+				ACLogger.severe("Can't Convert to the Database. There is a problem in your configuration", e);
+			}
 			pConverter.convert();
 
 		}
