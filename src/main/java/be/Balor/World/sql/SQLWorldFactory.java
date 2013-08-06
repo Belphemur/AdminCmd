@@ -28,65 +28,82 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.World.ACWorld;
 import be.Balor.World.AbstractWorldFactory;
 
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class SQLWorldFactory extends AbstractWorldFactory {
-	private final PreparedStatement insertWorld, getWorld;
+	private PreparedStatement insertWorld, getWorld;
 
 	/**
  * 
  */
 	public SQLWorldFactory() {
-		insertWorld = Database.DATABASE
-				.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
-		getWorld = Database.DATABASE
-				.prepare("SELECT id FROM ac_worlds WHERE name=?");
+		initPrepStmt();
 
+	}
+
+	/**
+	 * 
+	 */
+	private void initPrepStmt() {
+		insertWorld = Database.DATABASE.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
+		getWorld = Database.DATABASE.prepare("SELECT id FROM ac_worlds WHERE name=?");
 	}
 
 	@Override
 	public synchronized ACWorld createWorld(final World world) {
-		ResultSet rs = null;
 		final String worldName = world.getName();
 		try {
-			getWorld.clearParameters();
-			getWorld.setString(1, worldName);
-
-			synchronized (getWorld.getConnection()) {
-				rs = getWorld.executeQuery();
-			}
-			if (rs.next()) {
-				return new SQLWorld(world, rs.getLong(1));
-			} else {
-				rs.close();
-				insertWorld.clearParameters();
-				insertWorld.setString(1, worldName);
-				synchronized (insertWorld.getConnection()) {
-					insertWorld.executeUpdate();
-				}
-				rs = insertWorld.getGeneratedKeys();
-				if (rs.next()) {
-					return new SQLWorld(world, rs.getLong(1));
-				} else {
-					return null;
-				}
+			return getDBWorld(world);
+		} catch (final CommunicationsException e) {
+			initPrepStmt();
+			try {
+				getDBWorld(world);
+			} catch (final SQLException e1) {
+				ACLogger.severe("Can't create an ACWorld for the World " + worldName, e);
 			}
 		} catch (final SQLException e) {
-			ACLogger.severe("Can't create an ACWorld for the World "
-					+ worldName, e);
-		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (final SQLException e) {
-				}
-			}
+			ACLogger.severe("Can't create an ACWorld for the World " + worldName, e);
+			e.printStackTrace();
 		}
 
 		return null;
 
+	}
+
+	/**
+	 * @param world
+	 * @return
+	 * @throws SQLException
+	 */
+	private ACWorld getDBWorld(final World world) throws SQLException {
+		ResultSet rs = null;
+		final String worldName = world.getName();
+		getWorld.clearParameters();
+		getWorld.setString(1, worldName);
+
+		synchronized (getWorld.getConnection()) {
+			rs = getWorld.executeQuery();
+		}
+		if (rs.next()) {
+			return new SQLWorld(world, rs.getLong(1));
+		} else {
+			rs.close();
+			insertWorld.clearParameters();
+			insertWorld.setString(1, worldName);
+			synchronized (insertWorld.getConnection()) {
+				insertWorld.executeUpdate();
+			}
+			rs = insertWorld.getGeneratedKeys();
+			if (rs.next()) {
+				return new SQLWorld(world, rs.getLong(1));
+			} else {
+				return null;
+			}
+		}
 	}
 
 }

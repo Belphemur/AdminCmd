@@ -61,24 +61,18 @@ public abstract class Database {
 		if (dbWrapper.equalsIgnoreCase("mysql")) {
 			config.setType(DatabaseType.MYSQL);
 			try {
-				config.setParameter(Parameter.HOSTNAME,
-						ConfigEnum.MYSQL_HOST.getString());
-				config.setParameter(Parameter.PASSWORD,
-						ConfigEnum.MYSQL_PASS.getString());
-				config.setParameter(Parameter.USER,
-						ConfigEnum.MYSQL_USER.getString());
+				config.setParameter(Parameter.HOSTNAME, ConfigEnum.MYSQL_HOST.getString());
+				config.setParameter(Parameter.PASSWORD, ConfigEnum.MYSQL_PASS.getString());
+				config.setParameter(Parameter.USER, ConfigEnum.MYSQL_USER.getString());
 				config.setParameter(Parameter.PORT_NUMBER, "3306");
-				config.setParameter(Parameter.DATABASE,
-						ConfigEnum.MYSQL_DB.getString());
+				config.setParameter(Parameter.DATABASE, ConfigEnum.MYSQL_DB.getString());
 			} catch (final NullPointerException e) {
 			} catch (final InvalidConfigurationException e) {
 			}
 		} else if (dbWrapper.equalsIgnoreCase("sqlite")) {
 			config.setType(DatabaseType.SQLITE);
 			try {
-				config.setParameter(Parameter.DB_LOCATION, ACHelper
-						.getInstance().getCoreInstance().getDataFolder()
-						.getAbsolutePath());
+				config.setParameter(Parameter.DB_LOCATION, ACHelper.getInstance().getCoreInstance().getDataFolder().getAbsolutePath());
 				config.setParameter(Parameter.DB_NAME, "admincmd");
 
 			} catch (final NullPointerException e) {
@@ -302,8 +296,7 @@ public abstract class Database {
 			return ps;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
-				this.writeError(
-						"SQL exception in prepare(): " + e.getMessage(), false);
+				this.writeError("SQL exception in prepare(): " + e.getMessage(), false);
 			}
 		}
 		return null;
@@ -364,9 +357,7 @@ public abstract class Database {
 		Statement statement = null;
 		try {
 			if (query.equals("") || query == null) {
-				this.writeError(
-						"Parameter 'query' empty or null in createTable().",
-						true);
+				this.writeError("Parameter 'query' empty or null in createTable().", true);
 				return false;
 			}
 			synchronized (connection) {
@@ -404,8 +395,7 @@ public abstract class Database {
 				return false;
 			}
 		} catch (final SQLException e) {
-			this.writeError("Failed to check if table \"" + table
-					+ "\" exists: " + e.getMessage(), true);
+			this.writeError("Failed to check if table \"" + table + "\" exists: " + e.getMessage(), true);
 			return false;
 		}
 	}
@@ -438,10 +428,9 @@ public abstract class Database {
 		synchronized (this.connection) {
 			if (checkConnection()) {
 				try {
-					return this.connection.isValid(3);
+					return !connection.isClosed() && connection.isValid(3);
 				} catch (final SQLException e) {
-					DebugLog.INSTANCE.log(Level.INFO,
-							"Problem when checking connection state", e);
+					DebugLog.INSTANCE.log(Level.INFO, "Problem when checking connection state", e);
 				}
 			}
 		}
@@ -461,9 +450,7 @@ public abstract class Database {
 			try {
 				open();
 			} catch (final SQLException e) {
-				writeError(
-						"Problem while reconnection to the database :\n"
-								+ e.getMessage(), true);
+				writeError("Problem while reconnection to the database :\n" + e.getMessage(), true);
 			}
 		}
 	}

@@ -48,6 +48,8 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -61,14 +63,18 @@ public class SQLPlayer extends ACPlayer {
 	private Location lastLoc;
 	private final long id;
 	private static PreparedStatement GET_HOMES, GET_INFOS, GET_POWERS, GET_KIT_USES, GET_LASTLOC;
+	private static Object homeLock = new Object();
+	private static Object infoLock = new Object();
+	private static Object powersLock = new Object();
+	private static Object kitUsesLock = new Object();
+	private static Object lastLocLock = new Object();
 	private static int prepStmtTaskID;
 	private static final PrepStmtExecutorTask PREP_STMT_TASK = new PrepStmtExecutorTask();
 	static {
 		initPrepStmt();
 	}
 
-	public static void initPrepStmt() {
-
+	public static synchronized void initPrepStmt() {
 		GET_HOMES = Database.DATABASE.prepare("SELECT `name`,`world`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_homes` WHERE `player_id` = ?");
 		GET_POWERS = Database.DATABASE.prepare("SELECT `key`,`info` FROM `ac_powers` WHERE `player_id` = ?");
 		GET_INFOS = Database.DATABASE.prepare("SELECT `key`,`info` FROM `ac_informations` WHERE `player_id` = ?");
@@ -93,112 +99,188 @@ public class SQLPlayer extends ACPlayer {
 	}
 
 	private void init() {
-		synchronized (GET_LASTLOC) {
+		try {
+			getDBLastLoc();
+		} catch (final CommunicationsException ex) {
+			initPrepStmt();
 			try {
-				GET_LASTLOC.clearParameters();
-				GET_LASTLOC.setLong(1, id);
-				ResultSet rs;
-				synchronized (GET_LASTLOC.getConnection()) {
-					rs = GET_LASTLOC.executeQuery();
-				}
-				if (rs.next()) {
-					final String worldName = rs.getString("world");
-					if (worldName != null && !worldName.isEmpty()) {
-						final World world = loadWorld(worldName);
-						if (world != null) {
-							lastLoc = new Location(world, rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
-						} else {
-							ACLogger.warning("The World " + worldName + " is not loaded");
-						}
-					}
-				}
+				getDBLastLoc();
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with getting last location from the DB", e);
 			}
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with getting last location from the DB", e);
 		}
-		synchronized (GET_HOMES) {
+
+		try {
+			getDBHomes();
+		} catch (final CommunicationsException e) {
 			try {
-				GET_HOMES.clearParameters();
-				GET_HOMES.setLong(1, id);
-				ResultSet rs;
-				synchronized (GET_HOMES.getConnection()) {
-					rs = GET_HOMES.executeQuery();
+				initPrepStmt();
+				getDBHomes();
+			} catch (final SQLException e1) {
+				ACLogger.severe("Problem with getting homes from the DB", e1);
+			}
+
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with getting homes from the DB", e);
+		}
+
+		try {
+			getDBPowers();
+		} catch (final CommunicationsException e) {
+			initPrepStmt();
+			try {
+				getDBPowers();
+			} catch (final SQLException e1) {
+				ACLogger.severe("Problem with getting powers from the DB", e1);
+			}
+
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with getting powers from the DB", e);
+		}
+
+		try {
+			getDBInfos();
+		} catch (final CommunicationsException e) {
+			initPrepStmt();
+			try {
+				getDBInfos();
+			} catch (final SQLException e1) {
+				ACLogger.severe("Problem with getting informations from the DB", e1);
+			}
+
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with getting informations from the DB", e);
+		}
+		try {
+			getDBKitUses();
+		} catch (final CommunicationsException e) {
+			initPrepStmt();
+			try {
+				getDBKitUses();
+			} catch (final SQLException e1) {
+				ACLogger.severe("Problem with getting kit uses from the DB", e1);
+			}
+
+		} catch (final SQLException e) {
+			ACLogger.severe("Problem with getting kit uses from the DB", e);
+		}
+	}
+
+	/**
+	 * @throws SQLException
+	 */
+	private void getDBKitUses() throws SQLException {
+		synchronized (kitUsesLock) {
+			GET_KIT_USES.clearParameters();
+			GET_KIT_USES.setLong(1, id);
+			ResultSet rs;
+			synchronized (GET_KIT_USES.getConnection()) {
+				rs = GET_KIT_USES.executeQuery();
+			}
+			while (rs.next()) {
+				kitUses.put(rs.getString("kit"), rs.getLong("use"));
+			}
+			rs.close();
+		}
+	}
+
+	/**
+	 * @throws SQLException
+	 */
+	private void getDBInfos() throws SQLException {
+		synchronized (infoLock) {
+			GET_INFOS.clearParameters();
+			GET_INFOS.setLong(1, id);
+			ResultSet rs;
+			synchronized (GET_INFOS.getConnection()) {
+				rs = GET_INFOS.executeQuery();
+			}
+			while (rs.next()) {
+				synchronized (SQLObjectContainer.yaml) {
+					infos.put(rs.getString("key"), SQLObjectContainer.yaml.load(rs.getString("info")));
 				}
-				while (rs.next()) {
-					final String worldName = rs.getString("world");
+			}
+			rs.close();
+		}
+	}
+
+	/**
+	 * @throws SQLException
+	 */
+	private void getDBPowers() throws SQLException {
+		synchronized (powersLock) {
+			GET_POWERS.clearParameters();
+			GET_POWERS.setLong(1, id);
+			ResultSet rs;
+			synchronized (GET_POWERS.getConnection()) {
+				rs = GET_POWERS.executeQuery();
+			}
+			while (rs.next()) {
+				final String powerName = rs.getString("key");
+				final Type power = Type.matchType(powerName);
+				synchronized (SQLObjectContainer.yaml) {
+					if (power == null) {
+						customPowers.put(powerName, SQLObjectContainer.yaml.load(rs.getString("info")));
+					} else {
+						powers.put(power, SQLObjectContainer.yaml.load(rs.getString("info")));
+					}
+				}
+			}
+			rs.close();
+		}
+	}
+
+	/**
+	 * @throws SQLException
+	 */
+	private void getDBHomes() throws SQLException {
+		synchronized (homeLock) {
+			GET_HOMES.clearParameters();
+			GET_HOMES.setLong(1, id);
+			ResultSet rs;
+			synchronized (GET_HOMES.getConnection()) {
+				rs = GET_HOMES.executeQuery();
+			}
+			while (rs.next()) {
+				final String worldName = rs.getString("world");
+				final World world = loadWorld(worldName);
+				if (world != null) {
+					homes.put(rs.getString("name"),
+							new Location(world, rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch")));
+				} else {
+					ACLogger.warning("The World " + worldName + " is not loaded");
+				}
+			}
+			rs.close();
+		}
+	}
+
+	/**
+	 * @throws SQLException
+	 * 
+	 */
+	private void getDBLastLoc() throws SQLException {
+		synchronized (lastLocLock) {
+			GET_LASTLOC.clearParameters();
+			GET_LASTLOC.setLong(1, id);
+			ResultSet rs;
+			synchronized (GET_LASTLOC.getConnection()) {
+				rs = GET_LASTLOC.executeQuery();
+			}
+			if (rs.next()) {
+				final String worldName = rs.getString("world");
+				if (worldName != null && !worldName.isEmpty()) {
 					final World world = loadWorld(worldName);
 					if (world != null) {
-						homes.put(rs.getString("name"),
-								new Location(world, rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch")));
+						lastLoc = new Location(world, rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
 					} else {
 						ACLogger.warning("The World " + worldName + " is not loaded");
 					}
 				}
-				rs.close();
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with getting homes from the DB", e);
 			}
 
-		}
-		synchronized (GET_POWERS) {
-			try {
-				GET_POWERS.clearParameters();
-				GET_POWERS.setLong(1, id);
-				ResultSet rs;
-				synchronized (GET_POWERS.getConnection()) {
-					rs = GET_POWERS.executeQuery();
-				}
-				while (rs.next()) {
-					final String powerName = rs.getString("key");
-					final Type power = Type.matchType(powerName);
-					synchronized (SQLObjectContainer.yaml) {
-						if (power == null) {
-							customPowers.put(powerName, SQLObjectContainer.yaml.load(rs.getString("info")));
-						} else {
-							powers.put(power, SQLObjectContainer.yaml.load(rs.getString("info")));
-						}
-					}
-				}
-				rs.close();
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with getting powers from the DB", e);
-			}
-
-		}
-		synchronized (GET_INFOS) {
-			try {
-				GET_INFOS.clearParameters();
-				GET_INFOS.setLong(1, id);
-				ResultSet rs;
-				synchronized (GET_INFOS.getConnection()) {
-					rs = GET_INFOS.executeQuery();
-				}
-				while (rs.next()) {
-					synchronized (SQLObjectContainer.yaml) {
-						infos.put(rs.getString("key"), SQLObjectContainer.yaml.load(rs.getString("info")));
-					}
-				}
-				rs.close();
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with getting informations from the DB", e);
-			}
-
-		}
-		synchronized (GET_KIT_USES) {
-			try {
-				GET_KIT_USES.clearParameters();
-				GET_KIT_USES.setLong(1, id);
-				ResultSet rs;
-				synchronized (GET_KIT_USES.getConnection()) {
-					rs = GET_KIT_USES.executeQuery();
-				}
-				while (rs.next()) {
-					kitUses.put(rs.getString("kit"), rs.getLong("use"));
-				}
-				rs.close();
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem with getting kit uses from the DB", e);
-			}
 		}
 	}
 
