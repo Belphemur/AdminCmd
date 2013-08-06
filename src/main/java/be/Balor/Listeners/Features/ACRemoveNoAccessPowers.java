@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Listeners.Features;
 
+import java.util.Set;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,7 +25,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import be.Balor.Player.ACPlayer;
+import be.Balor.Tools.Type;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Antoine
@@ -44,7 +50,8 @@ public class ACRemoveNoAccessPowers implements Listener {
 		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 			@Override
 			public void run() {
-				ACPlayer.getPlayer(player).removePermissionPowers();
+				final Set<Type> powersRemoved = ACPlayer.getPlayer(player).removePermissionPowers();
+				LocaleHelper.REMOVED_SP.sendLocale(player, "powers", Joiner.on(", ").join(powersRemoved));
 			}
 		});
 	}

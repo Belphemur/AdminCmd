@@ -113,6 +113,7 @@ public enum LocaleHelper {
 	ARMORED_KIT("kit.armored", ChatColor.GOLD + "Armored Kit"),
 	NORMAL_KIT("kit.normal", ChatColor.GOLD + "Normal Kit"),
 	REMOVE_SP("power.remove", ChatColor.GREEN + "Removed all super powers of " + ChatColor.DARK_PURPLE + "%player"),
+	REMOVED_SP("power.removed", ChatColor.YELLOW + "Removed powers : " + ChatColor.GOLD + "%powers"),
 	SUCCESS_DYN_KIT("kit.successDynKit", ChatColor.GREEN + "The %type" + ChatColor.GREEN + " named " + ChatColor.GOLD + "%kit" + ChatColor.GREEN
 			+ " has been successfully created."),
 	ERROR_DOT_HOME("home.dotError", ChatColor.RED + "You can't use the " + ChatColor.GOLD + "dot (.)" + ChatColor.RED + " in a home name."),
