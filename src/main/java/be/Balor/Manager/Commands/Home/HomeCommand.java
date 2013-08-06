@@ -22,9 +22,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Home;
+import be.Balor.Tools.Type;
 import be.Balor.Tools.CommandUtils.Users;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
@@ -88,6 +92,25 @@ public abstract class HomeCommand extends CoreCommand {
 			return null;
 		}
 		return result;
+	}
+
+	/**
+	 * Check if the player have reached the homelimit and then can't do the
+	 * command.
+	 * 
+	 * @param player
+	 * @throws ActionNotPermitedException
+	 *             if the player have reached the home limit
+	 */
+	protected void verifyCanExecute(final CommandSender sender, final Player player) throws ActionNotPermitedException {
+		final int limit = ACHelper.getInstance().getLimit(player, Type.Limit.MAX_HOME);
+		final int nbHomes = ACPlayer.getPlayer(player).getHomeList().size();
+		if (nbHomes > limit) {
+			final HashMap<String, String> replace = new HashMap<String, String>();
+			replace.put("number", String.valueOf(nbHomes - limit));
+			throw new ActionNotPermitedException(sender, LocaleHelper.ERROR_LIMIT_REACHED.getLocale(replace));
+		}
+
 	}
 
 }

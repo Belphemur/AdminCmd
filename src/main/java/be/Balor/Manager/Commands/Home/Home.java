@@ -55,35 +55,36 @@ public class Home extends HomeCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
-		if (Users.isPlayer(sender)) {
-			final Player player = (Player) sender;
-			be.Balor.Tools.Home home = null;
-			home = getHome(sender, args.getString(0));
-			if (home == null) {
-				return;
-			}
-			Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
-			if (loc == null) {
-				loc = ACPlayer.getPlayer(home.player).getHome(
-						home.home.toLowerCase());
-			}
-			if (loc == null) {
-				loc = ACPlayer.getPlayer(home.player).getHome(
-						home.home.substring(0, 1).toUpperCase()
-								+ home.home.substring(1));
-			}
-			if (loc == null) {
-				LocaleManager.sI18n(sender, "errorMultiHome", "home", home.home);
-				return;
-			} else {
-				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-						ACHelper.getInstance().getCoreInstance(),
-						new DelayedTeleport(loc, player, home, sender),
-						ConfigEnum.TP_DELAY.getLong());
-			}
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+		if (!Users.isPlayer(sender)) {
+			return;
 		}
+		final Player player = (Player) sender;
+		be.Balor.Tools.Home home = null;
+		home = getHome(sender, args.getString(0));
+		if (home == null) {
+			return;
+		}
+
+		if (sender.getName().equals(home.player)) {
+			this.verifyCanExecute(sender, player);
+		}
+
+		Location loc = ACPlayer.getPlayer(home.player).getHome(home.home);
+		if (loc == null) {
+			loc = ACPlayer.getPlayer(home.player).getHome(home.home.toLowerCase());
+		}
+		if (loc == null) {
+			loc = ACPlayer.getPlayer(home.player).getHome(home.home.substring(0, 1).toUpperCase() + home.home.substring(1));
+		}
+		if (loc == null) {
+			LocaleManager.sI18n(sender, "errorMultiHome", "home", home.home);
+			return;
+		} else {
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(), new DelayedTeleport(loc, player, home, sender),
+					ConfigEnum.TP_DELAY.getLong());
+		}
+
 	}
 
 	/*
@@ -105,8 +106,7 @@ public class Home extends HomeCommand {
 		protected CommandSender sender;
 		private final boolean checkTp = ConfigEnum.CHECKTP.getBoolean();
 
-		public DelayedTeleport(final Location teleportLoc, final Player target,
-				final be.Balor.Tools.Home home, final CommandSender sender) {
+		public DelayedTeleport(final Location teleportLoc, final Player target, final be.Balor.Tools.Home home, final CommandSender sender) {
 			this.target = target;
 			this.locBefore = new SimplifiedLocation(target.getLocation());
 			this.teleportToLoc = teleportLoc;
@@ -114,10 +114,7 @@ public class Home extends HomeCommand {
 			this.sender = sender;
 			if (ConfigEnum.TP_DELAY.getLong() > 0) {
 				final Map<String, String> replace = new HashMap<String, String>();
-				replace.put(
-						"sec",
-						String.valueOf(ConfigEnum.TP_DELAY.getLong()
-								/ Utils.secInTick));
+				replace.put("sec", String.valueOf(ConfigEnum.TP_DELAY.getLong() / Utils.secInTick));
 				LocaleHelper.TELEPORT_SOON.sendLocale(target, replace);
 			}
 		}
