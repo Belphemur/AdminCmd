@@ -1,7 +1,7 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
 version: ${project.version} (BUILD ${git.build.time})
-authors: [Balor, Lathanael, JeterLP, Javacow]
+authors: [Balor, Lathanael, Javacow, JeterLP]
 softdepend: [MultiVerse,Multiverse-Core,Permissions,dynmap,mChatSuite,OddItem,Spout,mcMMO,VirtualChest,HeroChat,XrayInformer,HomeSpawnPlus,LogBlock,Vault,XXX]
 description: >
              This plugin implements the basic commands for running a server.
@@ -470,6 +470,6 @@ commands:
     aliases : [dkit,ckit,dk,dynkit]
     usage: /<command> <kitName> <delay>
   bal_enderchest:
-    description: Lookup and edit your or a players enderchest content
-    aliases: [endercest, ec]
-    usage: /<command> [player]
+    description: Open and edit your or another players enderchest content
+    aliases: [enderchest, ec]
+    uaage: /<command> [player]
