@@ -529,7 +529,7 @@ public abstract class ACPlayer {
 			if (powerType.getPermission() == null) {
 				continue;
 			}
-			if (PermissionManager.hasPerm(getHandler(), powerType.getPermission())) {
+			if (PermissionManager.hasPerm(getHandler(), powerType.getPermission(), false)) {
 				continue;
 			}
 			powers.add(powerType);
