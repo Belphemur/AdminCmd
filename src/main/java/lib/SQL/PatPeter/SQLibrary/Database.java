@@ -446,7 +446,6 @@ public abstract class Database {
 	 */
 	private void reconnect() {
 		synchronized (this.connection) {
-                    System.out.println("reconnect");
 			try {
 				this.connection.close();
 			} catch (final SQLException e) {
