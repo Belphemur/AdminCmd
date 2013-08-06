@@ -51,7 +51,9 @@ public class ACRemoveNoAccessPowers implements Listener {
 			@Override
 			public void run() {
 				final Set<Type> powersRemoved = ACPlayer.getPlayer(player).removePermissionPowers();
-				LocaleHelper.REMOVED_SP.sendLocale(player, "powers", Joiner.on(", ").join(powersRemoved));
+				if (!powersRemoved.isEmpty()) {
+					LocaleHelper.REMOVED_SP.sendLocale(player, "powers", Joiner.on(", ").join(powersRemoved));
+				}
 			}
 		});
 	}
