@@ -807,3 +807,10 @@ acplayerenderchest:
     plugin: AdminCmd
     permissions: admincmd.player.enderchest
     cmdname: bal_enderchest
+    
+acplayerremovesp:
+    command: rmsp <player> <-n>
+    description: "Remove the power of an user if he don't have the permission for it anymore.\n Use <-n> to not check the permission and remove all superpowers."
+    plugin: AdminCmd
+    permissions: admincmd.server.removesp
+    cmdname: bal_remsp
