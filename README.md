@@ -1,5 +1,4 @@
-/************************************************************************																								
- * AdminCmd is free software: you can redistribute it and/or modify
+																				 * AdminCmd is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by	
  * the Free Software Foundation, either version 3 of the License, or		
  * (at your option) any later version.									
@@ -11,7 +10,7 @@
  *																		
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
- ************************************************************************/
+ * 
 AdminCMD is a powerful plug-in that brings you commands that can give you total management over your server. 
 Featuring the most widely used commands in Bukkit server management such as: inventory management, 
 banishment of bad players, limitation to teleporting, setting spawn and home way points, and much, much more! 
