@@ -40,10 +40,8 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class PlayerManager {
-	private final ConcurrentMap<String, ACPlayer> players = new MapMaker()
-			.concurrencyLevel(8).weakValues().makeMap();
-	private final ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker()
-			.concurrencyLevel(8).makeMap();
+	private final ConcurrentMap<String, ACPlayer> players = new MapMaker().concurrencyLevel(8).weakValues().makeMap();
+	private final ConcurrentMap<ACPlayer, Boolean> onlinePlayers = new MapMaker().concurrencyLevel(8).makeMap();
 	private final static PlayerManager INSTANCE = new PlayerManager();
 	private IPlayerFactory playerFactory;
 
@@ -77,7 +75,17 @@ public class PlayerManager {
 	 * @param playerFactory
 	 */
 	public void convertFactory(final IPlayerFactory factory) {
-		new PlayerConverter(playerFactory, factory).convert();
+		buildConverter(factory).convert();
+	}
+
+	/**
+	 * Build a PlayerConverter with the current and the new factory
+	 * 
+	 * @param newFactory
+	 * @return
+	 */
+	public PlayerConverter buildConverter(final IPlayerFactory newFactory) {
+		return new PlayerConverter(playerFactory, newFactory);
 	}
 
 	/**
@@ -114,8 +122,7 @@ public class PlayerManager {
 	 * @return
 	 */
 	public List<Player> getOnlinePlayers() {
-		final ArrayList<Player> list = new ArrayList<Player>(
-				onlinePlayers.size());
+		final ArrayList<Player> list = new ArrayList<Player>(onlinePlayers.size());
 		for (final ACPlayer p : onlinePlayers.keySet()) {
 			final Player handler = p.getHandler();
 			if (handler != null && handler.isOnline()) {
@@ -166,8 +173,7 @@ public class PlayerManager {
 					list.add(player);
 				}
 			} catch (final Exception e) {
-				DebugLog.INSTANCE.log(Level.WARNING,
-						"Problem with instancing ACPlayer : " + name, e);
+				DebugLog.INSTANCE.log(Level.WARNING, "Problem with instancing ACPlayer : " + name, e);
 			}
 		}
 		return list;
@@ -267,8 +273,7 @@ public class PlayerManager {
 
 			@Override
 			public void run() {
-				ACLogger.info("Update status of online players : "
-						+ onlineCopy.size());
+				ACLogger.info("Update status of online players : " + onlineCopy.size());
 				for (final ACPlayer p : onlineCopy.keySet()) {
 					if (!(p instanceof EmptyPlayer)) {
 						new PlayerConvertTask(newFactory, p).run();

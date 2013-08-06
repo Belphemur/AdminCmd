@@ -37,8 +37,7 @@ public class WorldManager {
 	/**
 	 * Cache of all loaded ACWorld(s)
 	 */
-	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
 	private AbstractWorldFactory worldFactory;
 	private static final WorldManager INSTANCE = new WorldManager();
 
@@ -91,7 +90,20 @@ public class WorldManager {
 	 * @param factory
 	 */
 	public void convertFactory(final AbstractWorldFactory factory) {
-		new WorldConverter(worldFactory, factory).convert();
+		buildConverter(factory).convert();
+	}
+
+	/**
+	 * Build a converter for the current and the new factory
+	 * 
+	 * @param newFactory
+	 * @return
+	 */
+	public WorldConverter buildConverter(final AbstractWorldFactory newFactory) {
+		return new WorldConverter(worldFactory, newFactory);
+	}
+
+	public void afterConversion(final AbstractWorldFactory factory) {
 		DebugLog.INSTANCE.info("Setting new Factory");
 		this.worldFactory = factory;
 	}
@@ -107,8 +119,7 @@ public class WorldManager {
 				// for worlds beginning with 'name'
 				// This way it avoids getting requests for 'world' mixed up with
 				// 'world_nether'
-				final String found = Str.matchString(worlds.keySet(),
-						name.toUpperCase());
+				final String found = Str.matchString(worlds.keySet(), name.toUpperCase());
 				if (found != null) {
 					return worlds.get(found.toUpperCase());
 				}

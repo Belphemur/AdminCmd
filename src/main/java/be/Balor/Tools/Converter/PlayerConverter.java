@@ -35,13 +35,13 @@ import be.Balor.Tools.Debug.ACLogger;
 public class PlayerConverter {
 	private final Executor pool = Executors.newFixedThreadPool(5);
 	private final IPlayerFactory oldFactory, newFactory;
+	private Runnable afterConvertTask;
 
 	/**
 	 * @param oldFactory
 	 * @param newFactory
 	 */
-	public PlayerConverter(final IPlayerFactory oldFactory,
-			final IPlayerFactory newFactory) {
+	public PlayerConverter(final IPlayerFactory oldFactory, final IPlayerFactory newFactory) {
 		super();
 		this.oldFactory = oldFactory;
 		this.newFactory = newFactory;
@@ -54,12 +54,22 @@ public class PlayerConverter {
 			SQLPlayer.scheduleAsyncSave();
 		}
 		final Set<String> existingPlayers = oldFactory.getExistingPlayers();
-		ACLogger.info("Begin conversion of " + existingPlayers.size()
-				+ " players");
+		ACLogger.info("Begin conversion of " + existingPlayers.size() + " players");
 		for (final String name : this.oldFactory.getExistingPlayers()) {
 			pool.execute(new PlayerConvertTask(oldFactory, newFactory, name));
 		}
 		pool.execute(new AfterPlayerConvertTask(newFactory));
+		if (afterConvertTask != null) {
+			pool.execute(afterConvertTask);
+		}
+	}
+
+	/**
+	 * @param afterConvertTask
+	 *            the afterConvertTask to set
+	 */
+	public void setAfterConvertTask(final Runnable afterConvertTask) {
+		this.afterConvertTask = afterConvertTask;
 	}
 
 }

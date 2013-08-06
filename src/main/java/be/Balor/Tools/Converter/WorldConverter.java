@@ -24,6 +24,7 @@ import org.bukkit.World;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.World.AbstractWorldFactory;
 import be.Balor.World.WorldConvertTask;
+import be.Balor.World.WorldManager;
 
 /**
  * @author Antoine
@@ -31,13 +32,13 @@ import be.Balor.World.WorldConvertTask;
  */
 public class WorldConverter {
 	private final AbstractWorldFactory oldFactory, newFactory;
+	private Runnable afterConverTask;
 
 	/**
 	 * @param oldFactory
 	 * @param newFactory
 	 */
-	public WorldConverter(final AbstractWorldFactory oldFactory,
-			final AbstractWorldFactory newFactory) {
+	public WorldConverter(final AbstractWorldFactory oldFactory, final AbstractWorldFactory newFactory) {
 		super();
 		this.oldFactory = oldFactory;
 		this.newFactory = newFactory;
@@ -49,6 +50,18 @@ public class WorldConverter {
 		for (final World world : worlds) {
 			new WorldConvertTask(oldFactory, newFactory, world).run();
 		}
+		WorldManager.getInstance().afterConversion(newFactory);
+		if (afterConverTask != null) {
+			afterConverTask.run();
+		}
+	}
+
+	/**
+	 * @param afterConverTask
+	 *            the afterConverTask to set
+	 */
+	public void setAfterConverTask(final Runnable afterConverTask) {
+		this.afterConverTask = afterConverTask;
 	}
 
 }
