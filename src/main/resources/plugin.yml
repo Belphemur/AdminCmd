@@ -473,7 +473,7 @@ commands:
     description: Open and edit your or another players enderchest content
     aliases: [enderchest, ec]
     usage: /<command> [player]
-   bal_remsp:
+  bal_remsp:
     description: Remove the super power of an user
     aliases: [rmsp, remsp]
     usage: /<command> [player] <-p>
