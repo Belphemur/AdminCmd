@@ -814,3 +814,10 @@ acplayerremovesp:
     plugin: AdminCmd
     permissions: admincmd.server.removesp
     cmdname: bal_remsp
+	
+acplayerworkbench:
+   command: workbench
+   description: "Open a workbench-GUI."
+   plugin: AdminCmd
+   permissions: admincmd.player.workbench
+   cmdname: bal_workbench

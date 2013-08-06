@@ -477,3 +477,7 @@ commands:
     description: Remove the super power of an user
     aliases: [rmsp, remsp]
     usage: /<command> [player] <-p>
+  bal_workbench:
+    description: Opens a Workbench-GUI
+    usage: /<command>
+    aliases: [workbench, wb, craft]

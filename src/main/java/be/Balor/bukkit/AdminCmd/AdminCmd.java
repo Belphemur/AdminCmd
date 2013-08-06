@@ -117,6 +117,7 @@ import be.Balor.Manager.Commands.Player.Vulcan;
 import be.Balor.Manager.Commands.Player.WalkSpeed;
 import be.Balor.Manager.Commands.Player.Whois;
 import be.Balor.Manager.Commands.Player.Withdraw;
+import be.Balor.Manager.Commands.Player.Workbench;
 import be.Balor.Manager.Commands.Server.Broadcast;
 import be.Balor.Manager.Commands.Server.Execution;
 import be.Balor.Manager.Commands.Server.Extinguish;
@@ -509,6 +510,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(DynKit.class);
 		cmdManager.registerCommand(Enderchest.class);
 		cmdManager.registerCommand(RemoveSuperPowers.class);
+		cmdManager.registerCommand(Workbench.class);
 		DebugLog.endInfo();
 	}
 
