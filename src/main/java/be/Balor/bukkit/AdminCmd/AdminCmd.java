@@ -41,6 +41,7 @@ import be.Balor.Listeners.Features.ACFrozenTimeWorldListener;
 import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
 import be.Balor.Listeners.Features.ACPowerOffListener;
+import be.Balor.Listeners.Features.ACRemoveNoAccessPowers;
 import be.Balor.Listeners.Features.ACResetPowerListener;
 import be.Balor.Listeners.Features.ACRespawnWorldFeature;
 import be.Balor.Listeners.Features.ACSignEditListener;
@@ -886,6 +887,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACRespawnWorldFeature(), this);
 		}
 		pm.registerEvents(new ACFrozenTimeWorldListener(), this);
+		if (ConfigEnum.REMOVE_SP_PERMISSION.getBoolean()) {
+			pm.registerEvents(new ACRemoveNoAccessPowers(), this);
+		}
 		DebugLog.endInfo();
 	}
 }
