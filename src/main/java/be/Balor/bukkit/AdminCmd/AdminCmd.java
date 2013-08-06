@@ -876,11 +876,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACPowerOffListener(), this);
 		}
 		if (!ConfigEnum.DEATH_MSG_OFF.getBoolean()) {
-			if (ConfigEnum.DEATH_MSG.getBoolean()) {
-				pm.registerEvents(new ACDeathListener(false), this);
-			} else {
-				pm.registerEvents(new ACDeathListener(true), this);
-			}
+			pm.registerEvents(new ACDeathListener(!ConfigEnum.DEATH_MSG.getBoolean()), this);
 		}
 		pm.registerEvents(new ACChatListener(), this);
 		if (ConfigEnum.RESPAWN_BEHAVIOR.getBoolean()) {
