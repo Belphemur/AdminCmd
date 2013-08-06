@@ -21,6 +21,8 @@ package lib.SQL.PatPeter.SQLibrary;
 /*
  *  Both
  */
+import be.Balor.Player.sql.SQLPlayer;
+import be.Balor.Player.sql.SQLPlayerFactory;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -37,6 +39,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.World.sql.SQLWorld;
+import be.Balor.World.sql.SQLWorldFactory;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -61,24 +65,18 @@ public abstract class Database {
 		if (dbWrapper.equalsIgnoreCase("mysql")) {
 			config.setType(DatabaseType.MYSQL);
 			try {
-				config.setParameter(Parameter.HOSTNAME,
-						ConfigEnum.MYSQL_HOST.getString());
-				config.setParameter(Parameter.PASSWORD,
-						ConfigEnum.MYSQL_PASS.getString());
-				config.setParameter(Parameter.USER,
-						ConfigEnum.MYSQL_USER.getString());
+				config.setParameter(Parameter.HOSTNAME, ConfigEnum.MYSQL_HOST.getString());
+				config.setParameter(Parameter.PASSWORD, ConfigEnum.MYSQL_PASS.getString());
+				config.setParameter(Parameter.USER, ConfigEnum.MYSQL_USER.getString());
 				config.setParameter(Parameter.PORT_NUMBER, "3306");
-				config.setParameter(Parameter.DATABASE,
-						ConfigEnum.MYSQL_DB.getString());
+				config.setParameter(Parameter.DATABASE, ConfigEnum.MYSQL_DB.getString());
 			} catch (final NullPointerException e) {
 			} catch (final InvalidConfigurationException e) {
 			}
 		} else if (dbWrapper.equalsIgnoreCase("sqlite")) {
 			config.setType(DatabaseType.SQLITE);
 			try {
-				config.setParameter(Parameter.DB_LOCATION, ACHelper
-						.getInstance().getCoreInstance().getDataFolder()
-						.getAbsolutePath());
+				config.setParameter(Parameter.DB_LOCATION, ACHelper.getInstance().getCoreInstance().getDataFolder().getAbsolutePath());
 				config.setParameter(Parameter.DB_NAME, "admincmd");
 
 			} catch (final NullPointerException e) {
@@ -302,8 +300,7 @@ public abstract class Database {
 			return ps;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
-				this.writeError(
-						"SQL exception in prepare(): " + e.getMessage(), false);
+				this.writeError("SQL exception in prepare(): " + e.getMessage(), false);
 			}
 		}
 		return null;
@@ -364,9 +361,7 @@ public abstract class Database {
 		Statement statement = null;
 		try {
 			if (query.equals("") || query == null) {
-				this.writeError(
-						"Parameter 'query' empty or null in createTable().",
-						true);
+				this.writeError("Parameter 'query' empty or null in createTable().", true);
 				return false;
 			}
 			synchronized (connection) {
@@ -404,8 +399,7 @@ public abstract class Database {
 				return false;
 			}
 		} catch (final SQLException e) {
-			this.writeError("Failed to check if table \"" + table
-					+ "\" exists: " + e.getMessage(), true);
+			this.writeError("Failed to check if table \"" + table + "\" exists: " + e.getMessage(), true);
 			return false;
 		}
 	}
@@ -438,10 +432,9 @@ public abstract class Database {
 		synchronized (this.connection) {
 			if (checkConnection()) {
 				try {
-					return this.connection.isValid(3);
+					return !connection.isClosed() && connection.isValid(3);
 				} catch (final SQLException e) {
-					DebugLog.INSTANCE.log(Level.INFO,
-							"Problem when checking connection state", e);
+					DebugLog.INSTANCE.log(Level.INFO, "Problem when checking connection state", e);
 				}
 			}
 		}
@@ -460,10 +453,12 @@ public abstract class Database {
 			this.connection = null;
 			try {
 				open();
+                                SQLPlayer.initPrepStmt();
+                                SQLPlayerFactory.initPrepStmt();
+                                SQLWorld.initPrepStmt();
+                                SQLWorldFactory.initPrepStmt();
 			} catch (final SQLException e) {
-				writeError(
-						"Problem while reconnection to the database :\n"
-								+ e.getMessage(), true);
+				writeError("Problem while reconnection to the database :\n" + e.getMessage(), true);
 			}
 		}
 	}
