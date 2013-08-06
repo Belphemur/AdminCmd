@@ -40,9 +40,8 @@ import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
  * 
  */
 public class SQLPlayerFactory implements IPlayerFactory {
-	private PreparedStatement insertPlayer;
+	private static PreparedStatement insertPlayer, doubleCheckPlayer;
 	private final Map<String, Long> playersID = new MapMaker().concurrencyLevel(6).makeMap();
-	private PreparedStatement doubleCheckPlayer;
 	private final Object doubleCheckLock = new Object();
 	private final Object insertPlayerLock = new Object();
 
@@ -68,7 +67,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	/**
 	 * 
 	 */
-	private synchronized void initPrepStmt() {
+	public static synchronized void initPrepStmt() {
 		insertPlayer = Database.DATABASE.prepare("INSERT INTO `ac_players` (`name`) VALUES (?);");
 		doubleCheckPlayer = Database.DATABASE.prepare("SELECT `id` FROM `ac_players` WHERE `name` = ?");
 	}

@@ -35,7 +35,7 @@ import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
  * 
  */
 public class SQLWorldFactory extends AbstractWorldFactory {
-	private PreparedStatement insertWorld, getWorld;
+	private static PreparedStatement insertWorld, getWorld;
 
 	/**
  * 
@@ -48,7 +48,7 @@ public class SQLWorldFactory extends AbstractWorldFactory {
 	/**
 	 * 
 	 */
-	private void initPrepStmt() {
+	public static void initPrepStmt() {
 		insertWorld = Database.DATABASE.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
 		getWorld = Database.DATABASE.prepare("SELECT id FROM ac_worlds WHERE name=?");
 	}
