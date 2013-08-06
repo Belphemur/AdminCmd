@@ -27,6 +27,7 @@ import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.CommandUtils.Materials;
 import be.Balor.Tools.CommandUtils.Users;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 import com.google.common.base.Joiner;
@@ -55,6 +56,7 @@ public class Broadcast extends ServerCommand {
 		final String message = Joiner.on(" ").skipNulls().join(args);
 		replace.put("message", Materials.colorParser(message));
 		Users.broadcastMessage(LocaleHelper.BCAST.getLocale(replace));
+		ACLogger.info(LocaleHelper.BCAST.getLocale(replace));
 	}
 
 	/*
