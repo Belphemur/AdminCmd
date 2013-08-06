@@ -453,10 +453,10 @@ public abstract class Database {
 			this.connection = null;
 			try {
 				open();
-                                SQLPlayer.initPrepStmt();
-                                SQLPlayerFactory.initPrepStmt();
-                                SQLWorld.initPrepStmt();
-                                SQLWorldFactory.initPrepStmt();
+				SQLPlayer.initPrepStmt();
+				SQLPlayerFactory.initPrepStmt();
+				SQLWorld.initPrepStmt();
+				SQLWorldFactory.initPrepStmt();
 			} catch (final SQLException e) {
 				writeError("Problem while reconnection to the database :\n" + e.getMessage(), true);
 			}
