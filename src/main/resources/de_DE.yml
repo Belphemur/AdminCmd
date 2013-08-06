@@ -291,3 +291,24 @@ itemCantColor: 'Dieses %item Item kann nicht angemalt werden! Mögliche Items: %
 colorDontExists: 'Die Farbe %color exsistiert nicht. Mögliche Farben: %colors.'
 enchantExists: 'Verzauberung %enchant exsistiert nicht oder ist bereits auf diesem Item.'
 enchantConflict: 'Konflickt zwischen zwei Verzauberungen: %e1 und %e2.'
+walkspeed:
+  success: '§aDie Laufgschwindigkeit von §6%player§a wurde zu §f%value gesetzt.'
+  error: '§cDie Laufgeschwindigkeit muss zwischen -1 und 1 liegen und kann bdezimal sein (0.8545).'
+  get: '§eDie Laufgschwindigkeit von §6%player §eist §6%value'
+kit:
+  notPermReplace: '§cDu hast keine Rechte um ein bestehendes Kit zu ersetzen.'
+  armored: '§6Rüstungs Kit'
+  normal: '§6Normales Kit'
+  successDynKit: '§aDas %type§a mit dem Namen §6%kit§a wurde erfolgreich erstellt.'
+power:
+  remove: '§aAlle Powers von §5%player wurden erfolgreich entfernt.'
+  removed: '§eEntfernte Powers : §6%powers'
+  notOnline: '§5%player§c ist nicht online. Er muss online sein um seine Permissions zu checken um seine Powers zu entfernen. Benutze den Parameter -n um ALLE Powers von §5%player zu entfernen.'
+home:
+  dotError: '§cDu kannst keinen §6Punkt(.)§c in einem Home namen verwenden.'
+  limitReached: '§cDu hast das Home-limit erreicht, um sie wieder nutzen zu können, entferne §6%number home(s).'
+warp:
+  nonPlayer: '§cDu musst den Namen einer Welt angeben. §6Beispiel : /twp world:test'
+item:
+  holdError: '§cDu musst ein Item in der Hand halten um das zu tun.'
+
