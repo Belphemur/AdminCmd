@@ -81,7 +81,7 @@ sStorm: 'Sturm aktiviert für %duration Minuten in Welt: '
 sRain: 'Regen aktiviert für %duration Minuten in Welt: '
 afk: '%player ist kurz weg!'
 online: '%player ist wieder da!'
-afkTitle: [AFK]
+afkTitle: '[AFK]'
 ip: 'IP von %player - %ip'
 ban: '%player wurde gebannt> %reason.'
 unban: '%player wurde begnadigt.'
@@ -128,7 +128,7 @@ replaced: '%nb %mat Blöcke wurden durch Luft ersetzt.'
 undo: '%nb Blöcke wurden zurückgesetzt. Undo erfolgreich!'
 nothingToUndo: 'Es gibt nichts rückgängig zu machen.'
 noRepeat: 'Es gibt keinen Befehl zum Wiederholen.'
-reExec: Wiederhole den letzten Befehl ...'
+reExec: 'Wiederhole den letzten Befehl ...'
 timeSet: 'Zeit auf %type in Welt %world gesetzt.'
 timeNotSet: '%type exsistiert nicht.'
 timePaused: 'Zeit wurde in der %world Welt eingefroren. Nutze /time unpause um dies rückgängig zu machen.'
@@ -140,7 +140,7 @@ tpRequestOff: 'Teleport Anfragen System deaktiviert.'
 tpRequestOn: 'Teleport Anfragen System aktiviert.'
 tpSeeEnabled: 'Mit einem Links-Klick teleportierst du dich nun dort hin, wo du hinschaust.'
 tpSeeDisabled: 'Teleportations Links-Klick deaktiviert.'
-elapsedTime: 'Uptime: §e%d day(s) %h:%m:%s'
+elapsedTime: 'Server online seit: §e%d day(s) %h:%m:%s'
 kitList: 'Verfügbare Kits : %list'
 kitOtherPlayer: '%sender hat dir das %kit gesendet.'
 kitCommandSender: 'Kit %kit zu %target''s Inventar hinzugefügt.'
@@ -180,10 +180,10 @@ spawnerSetType: 'Mobspawner Art auf %type geändert.'
 spawnerGetData: 'Dieser Spawner erzeugt %mobs''s im Abstand von %delay.'
 spawnerNaN: 'Du musst eine Zahl angeben!'
 addSpawnWarp: 'Spawn Punkt für die Gruppe %name gesetzt.'
-tpTO: zu ihnen.
-tpHERE: zu dir.
-tpPLAYERSTO: von %target zu dir.
-tpPLAYERSFROM: dich zu %target.
+tpTO: 'zu ihm.'
+tpHERE: 'zu dir.'
+tpPLAYERSTO: 'von %target zu dir.'
+tpPLAYERSFROM: 'dich zu %target.'
 offline: '%player ist offline.'
 noPlayerToReply: 'Du kannst niemandem antworten, weil dir niemand geschrieben hat.'
 mustBePlayer: 'Du musst ein Spieler sein um diesen Befehl nutzen zu können.'
@@ -237,10 +237,10 @@ potionEffect: '%player trank ein %potion Trank.'
 spymsgTitle: '§8[SPION§8]'
 spymsgMessageHeader: '#spymsgTitle# %sender-%receiver§f: '
 dontExistsType:
-  enchant: enchantment
-  potion: potion
-  cmd: command
-  mat: material
+  enchant: 'Verzauberung'
+  potion: 'Trank'
+  cmd: 'Befehl'
+  mat: 'Material'
 playerKicked: '%player wurde vom Server gekickt> %reason.'
 quitCmdMsg: '%player hat das Spiel verlassen> %reason.'
 worldNotLoaded: 'Diese Welt ist nicht geladen> %message.'
@@ -261,14 +261,14 @@ muteList: '%player, §b%msg'
 noMutedPlayers: 'Kein Spieler ist im Moment stumm.'
 unMutedPlayers: '%nb Spieler können wieder reden.'
 allTxtReloaded: 'Alle Text Dateien wurden neu geladen.'
-kill: getötet
-feed: gefütert
-heal: geheilt
+kill: 'getötet'
+feed: 'gefütert'
+heal: 'geheilt'
 nState: 'Du wurdest '
 pNewState: '%player wurde '
 suicide: 'Du hast dich selbst umgebracht.'
 broadcast: '%message'
-unknown: unbekannter
+unknown: 'unbekannter'
 ipBroadcast: '%player betrat den Server mit der selben IP wie %player2. Die Ip ist: %ip'
 echantmentsAdded: 'Dein %item Item ist nun verzaubert!'
 banListUpdated: '#banList# von %banner'
@@ -291,3 +291,24 @@ itemCantColor: 'Dieses %item Item kann nicht angemalt werden! Mögliche Items: %
 colorDontExists: 'Die Farbe %color exsistiert nicht. Mögliche Farben: %colors.'
 enchantExists: 'Verzauberung %enchant exsistiert nicht oder ist bereits auf diesem Item.'
 enchantConflict: 'Konflickt zwischen zwei Verzauberungen: %e1 und %e2.'
+walkspeed:
+  success: '§aDie Laufgschwindigkeit von §6%player§a wurde zu §f%value gesetzt.'
+  error: '§cDie Laufgeschwindigkeit muss zwischen -1 und 1 liegen und kann bdezimal sein (0.8545).'
+  get: '§eDie Laufgschwindigkeit von §6%player §eist §6%value'
+kit:
+  notPermReplace: '§cDu hast keine Rechte um ein bestehendes Kit zu ersetzen.'
+  armored: '§6Rüstungs Kit'
+  normal: '§6Normales Kit'
+  successDynKit: '§aDas %type§a mit dem Namen §6%kit§a wurde erfolgreich erstellt.'
+power:
+  remove: '§aAlle Powers von §5%player wurden erfolgreich entfernt.'
+  removed: '§eEntfernte Powers : §6%powers'
+  notOnline: '§5%player§c ist nicht online. Er muss online sein um seine Permissions zu checken um seine Powers zu entfernen. Benutze den Parameter -n um ALLE Powers von §5%player zu entfernen.'
+home:
+  dotError: '§cDu kannst keinen §6Punkt(.)§c in einem Home namen verwenden.'
+  limitReached: '§cDu hast das Home-limit erreicht, um sie wieder nutzen zu können, entferne §6%number home(s).'
+warp:
+  nonPlayer: '§cDu musst den Namen einer Welt angeben. §6Beispiel : /twp world:test'
+item:
+  holdError: '§cDu musst ein Item in der Hand halten um das zu tun.'
+
