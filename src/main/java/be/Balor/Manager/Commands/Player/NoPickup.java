@@ -43,7 +43,7 @@ public class NoPickup extends PlayerCommand {
 	 *
 	 */
 	public NoPickup() {
-		permNode = "admincmd.player.nopickup";
+		permNode = Type.NO_PICKUP.getPermission();
 		cmdName = "bal_np";
 		other = true;
 	}
@@ -56,8 +56,7 @@ public class NoPickup extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Users.getUser(sender, args, permNode);
 		if (player != null) {
@@ -86,11 +85,8 @@ public class NoPickup extends PlayerCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.NO_PICKUP, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-								* timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.NO_PICKUP, sender),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

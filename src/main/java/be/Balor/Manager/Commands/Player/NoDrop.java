@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class NoDrop extends PlayerCommand {
 	public NoDrop() {
-		super("bal_nodrop", "admincmd.player.nodrop");
+		super("bal_nodrop", Type.NO_DROP.getPermission());
 		other = true;
 	}
 
@@ -50,8 +50,7 @@ public class NoDrop extends PlayerCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Users.getUserParam(sender, args, permNode);
 		if (player == null) {
@@ -82,11 +81,8 @@ public class NoDrop extends PlayerCommand {
 				LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
-			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-					ACPluginManager.getCorePlugin(),
-					new RemovePowerTask(acp, Type.NO_DROP, sender),
-					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-							* timeOutValue);
+			ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.NO_DROP, sender),
+					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 		}
 	}
 

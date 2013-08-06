@@ -42,7 +42,7 @@ public class FakeQuit extends PlayerCommand {
 	 *
 	 */
 	public FakeQuit() {
-		permNode = "admincmd.player.fakequit";
+		permNode = Type.FAKEQUIT.getPermission();
 		cmdName = "bal_fakequit";
 		other = true;
 	}
@@ -55,8 +55,7 @@ public class FakeQuit extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Users.getUser(sender, args, permNode);
 		if (player != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();

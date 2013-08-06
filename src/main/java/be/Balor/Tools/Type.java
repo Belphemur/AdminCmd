@@ -26,30 +26,30 @@ import java.util.Map;
  * 
  */
 public enum Type {
-	FLY(Category.SUPER_POWER),
-	FLY_OLD(Category.SUPER_POWER),
-	VULCAN(Category.SUPER_POWER),
-	GOD(Category.SUPER_POWER),
-	THOR(Category.SUPER_POWER),
+	FLY(Category.SUPER_POWER, "admincmd.player.fly"),
+	FLY_OLD(Category.SUPER_POWER, "admincmd.player.fly"),
+	VULCAN(Category.SUPER_POWER, "admincmd.player.vulcan"),
+	GOD(Category.SUPER_POWER, "admincmd.player.god"),
+	THOR(Category.SUPER_POWER, "admincmd.player.thor"),
 	BANNED(Category.SANCTION),
 	KICKED(Category.SANCTION),
-	FIREBALL(Category.SUPER_POWER),
+	FIREBALL(Category.SUPER_POWER, "admincmd.player.fireball"),
 	SPYMSG(Category.OTHER),
 	FROZEN(Category.SANCTION),
 	MUTED(Category.SANCTION),
 	MUTED_COMMAND(Category.SANCTION),
 	MOB_LIMIT(Category.WORLD),
-	NO_PICKUP(Category.SUPER_POWER),
+	NO_PICKUP(Category.SUPER_POWER, "admincmd.player.nopickup"),
 	WEATHER_FROZEN(Category.WORLD),
 	REPEAT_CMD(Category.OTHER),
 	TIME_FROZEN(Category.WORLD),
 	TP_REQUEST(Category.OTHER),
-	TP_AT_SEE(Category.SUPER_POWER),
-	SUPER_BREAKER(Category.SUPER_POWER),
-	INVISIBLE(Category.SUPER_POWER),
-	FAKEQUIT(Category.SUPER_POWER),
-	ETERNAL(Category.SUPER_POWER),
-	NO_DROP(Category.SUPER_POWER),
+	TP_AT_SEE(Category.SUPER_POWER, "admincmd.tp.see"),
+	SUPER_BREAKER(Category.SUPER_POWER, "admincmd.player.superbreaker"),
+	INVISIBLE(Category.SUPER_POWER, "admincmd.player.invisible"),
+	FAKEQUIT(Category.SUPER_POWER, "admincmd.player.fakequit"),
+	ETERNAL(Category.SUPER_POWER, "admincmd.player.eternal"),
+	NO_DROP(Category.SUPER_POWER, "admincmd.player.nodrop"),
 	EGG(Category.SUPER_POWER),
 	BLOCK_IN_TIME(Category.OTHER),
 	CUSTOM(Category.MISC);
@@ -64,14 +64,34 @@ public enum Type {
 
 	public String display() {
 		final String s = super.toString();
-		return s.substring(0, 1)
-				+ s.substring(1).toLowerCase().replaceAll("_", " ");
+		return s.substring(0, 1) + s.substring(1).toLowerCase().replaceAll("_", " ");
 	}
 
 	private final Category category;
+	private final String permission;
 
+	/**
+	 * @param category
+	 * @param permission
+	 */
+	private Type(final Category category, final String permission) {
+		this.category = category;
+		this.permission = permission;
+	}
+
+	/**
+	 * @param category
+	 */
 	private Type(final Category category) {
 		this.category = category;
+		this.permission = null;
+	}
+
+	/**
+	 * @return the permission
+	 */
+	public String getPermission() {
+		return permission;
 	}
 
 	public int id() {
@@ -208,8 +228,7 @@ public enum Type {
 	}
 
 	public enum Limit {
-		IMMUNITY("immunityLvl"), MAX_HOME("maxHomeByUser"), MAX_ITEMS(
-				"maxItemAmount");
+		IMMUNITY("immunityLvl"), MAX_HOME("maxHomeByUser"), MAX_ITEMS("maxItemAmount");
 		/**
 		 * 
 		 */

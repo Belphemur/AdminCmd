@@ -42,7 +42,7 @@ public class Eternal extends PlayerCommand {
 	 *
 	 */
 	public Eternal() {
-		permNode = "admincmd.player.eternal";
+		permNode = Type.ETERNAL.getPermission();
 		cmdName = "bal_eternal";
 		other = true;
 	}
@@ -55,8 +55,7 @@ public class Eternal extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
 		if (args.length >= 1) {
@@ -92,11 +91,8 @@ public class Eternal extends PlayerCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.ETERNAL, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-								* timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.ETERNAL, sender),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

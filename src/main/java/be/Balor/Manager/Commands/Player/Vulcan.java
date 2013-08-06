@@ -42,7 +42,7 @@ public class Vulcan extends PlayerCommand {
 	 *
 	 */
 	public Vulcan() {
-		permNode = "admincmd.player.vulcan";
+		permNode = Type.VULCAN.getPermission();
 		cmdName = "bal_vulcan";
 		other = true;
 	}
@@ -55,8 +55,7 @@ public class Vulcan extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		float power = ConfigEnum.DVULCAN.getFloat();
 		final String timeOut = args.getValueFlag('t');
@@ -100,11 +99,8 @@ public class Vulcan extends PlayerCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.VULCAN, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-								* timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.VULCAN, sender),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

@@ -47,7 +47,7 @@ public class Fly extends PlayerCommand {
 	 *
 	 */
 	public Fly() {
-		permNode = "admincmd.player.fly";
+		permNode = Type.FLY.getPermission();
 		cmdName = "bal_fly";
 		other = true;
 	}
@@ -60,8 +60,7 @@ public class Fly extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		final String timeOut = args.getValueFlag('t');
 		try {
@@ -89,9 +88,7 @@ public class Fly extends PlayerCommand {
 		return args != null;
 	}
 
-	private void setFly(final CommandSender sender, final Player player,
-			final String timeOut, final Type power, final FlyMode c,
-			final CommandArgs args) {
+	private void setFly(final CommandSender sender, final Player player, final String timeOut, final Type power, final FlyMode c, final CommandArgs args) {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Users.getPlayerName(player));
 		final ACPlayer acp = ACPlayer.getPlayer(player);
@@ -100,11 +97,10 @@ public class Fly extends PlayerCommand {
 		if (powerValueString != null) {
 			try {
 				powerFloat = Float.parseFloat(powerValueString);
-			} catch (final NumberFormatException e) {}
+			} catch (final NumberFormatException e) {
+			}
 		}
-		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat()
-				? ConfigEnum.MAX_FLY.getFloat()
-				: powerFloat;
+		powerFloat = powerFloat > ConfigEnum.MAX_FLY.getFloat() ? ConfigEnum.MAX_FLY.getFloat() : powerFloat;
 		if (acp.hasPower(power)) {
 			acp.removePower(power);
 			if (c == FlyMode.NEW) {
@@ -120,15 +116,9 @@ public class Fly extends PlayerCommand {
 			if (c == FlyMode.NEW) {
 				player.setAllowFlight(true);
 				player.setFlying(true);
-				acp.setPower(power,
-						powerFloat == 0
-								? ConfigEnum.DFLY.getFloat()
-								: powerFloat);
+				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
 			} else {
-				acp.setPower(power,
-						powerFloat == 0
-								? ConfigEnum.DFLY.getFloat()
-								: powerFloat);
+				acp.setPower(power, powerFloat == 0 ? ConfigEnum.DFLY.getFloat() : powerFloat);
 			}
 			player.setFallDistance(1F);
 			LocaleManager.sI18n(player, "flyEnabled");
@@ -145,11 +135,8 @@ public class Fly extends PlayerCommand {
 				LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 				return;
 			}
-			ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-					ACPluginManager.getCorePlugin(),
-					new RemovePowerTask(acp, power, sender),
-					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-							* timeOutValue);
+			ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, power, sender),
+					Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 		}
 	}
 }

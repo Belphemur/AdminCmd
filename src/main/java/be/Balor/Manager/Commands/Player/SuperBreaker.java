@@ -42,7 +42,7 @@ public class SuperBreaker extends PlayerCommand {
 	 *
 	 */
 	public SuperBreaker() {
-		permNode = "admincmd.player.superbreaker";
+		permNode = Type.SUPER_BREAKER.getPermission();
 		cmdName = "bal_sp";
 		other = true;
 	}
@@ -55,8 +55,7 @@ public class SuperBreaker extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		final Player player = Users.getUser(sender, args, permNode);
 		if (player != null) {
@@ -67,15 +66,13 @@ public class SuperBreaker extends PlayerCommand {
 				acp.removePower(Type.SUPER_BREAKER);
 				LocaleManager.sI18n(player, Type.SUPER_BREAKER + "Disabled");
 				if (!player.equals(sender)) {
-					LocaleManager.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget",
-							replace);
+					LocaleManager.sI18n(sender, Type.SUPER_BREAKER + "DisabledTarget", replace);
 				}
 			} else {
 				acp.setPower(Type.SUPER_BREAKER);
 				LocaleManager.sI18n(player, Type.SUPER_BREAKER + "Enabled");
 				if (!player.equals(sender)) {
-					LocaleManager.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget",
-							replace);
+					LocaleManager.sI18n(sender, Type.SUPER_BREAKER + "EnabledTarget", replace);
 				}
 				if (timeOut == null) {
 					return;
@@ -87,10 +84,8 @@ public class SuperBreaker extends PlayerCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.SUPER_BREAKER, sender),
-						Utils.secInTick * 60 * timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(),
+						new RemovePowerTask(acp, Type.SUPER_BREAKER, sender), Utils.secInTick * 60 * timeOutValue);
 			}
 		}
 	}

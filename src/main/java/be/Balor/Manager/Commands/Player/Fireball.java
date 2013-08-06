@@ -39,7 +39,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class Fireball extends PlayerCommand {
 	public Fireball() {
-		permNode = "admincmd.player.fireball";
+		permNode = Type.FIREBALL.getPermission();
 		cmdName = "bal_fireball";
 		other = true;
 	}
@@ -52,8 +52,7 @@ public class Fireball extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		Player player = null;
 		float power = ConfigEnum.DFB.getFloat();
 		final String timeOut = args.getValueFlag('t');
@@ -97,11 +96,8 @@ public class Fireball extends PlayerCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.FIREBALL, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-								* timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.FIREBALL, sender),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 

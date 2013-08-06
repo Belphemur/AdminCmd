@@ -43,7 +43,7 @@ public class Thor extends WeatherCommand {
 	 *
 	 */
 	public Thor() {
-		permNode = "admincmd.weather.thor";
+		permNode = Type.THOR.getPermission();
 		cmdName = "bal_thor";
 		other = true;
 	}
@@ -56,8 +56,7 @@ public class Thor extends WeatherCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Users.getUser(sender, args, permNode);
 		final String timeOut = args.getValueFlag('t');
 		if (player != null) {
@@ -86,11 +85,8 @@ public class Thor extends WeatherCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.THOR, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-								* timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.THOR, sender),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 		}
 	}

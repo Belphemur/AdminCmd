@@ -43,7 +43,7 @@ public class TpAtSee extends TeleportCommand {
 	 *
 	 */
 	public TpAtSee() {
-		permNode = "admincmd.tp.see";
+		permNode = Type.TP_AT_SEE.getPermission();
 		cmdName = "bal_tpsee";
 	}
 
@@ -54,8 +54,7 @@ public class TpAtSee extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final String timeOut = args.getValueFlag('t');
 		if (Users.isPlayer(sender)) {
 			final Player player = (Player) sender;
@@ -78,11 +77,8 @@ public class TpAtSee extends TeleportCommand {
 					LocaleManager.sI18n(sender, "NaN", "number", timeOut);
 					return;
 				}
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						ACPluginManager.getCorePlugin(),
-						new RemovePowerTask(acp, Type.TP_AT_SEE, sender),
-						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt()
-								* timeOutValue);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(ACPluginManager.getCorePlugin(), new RemovePowerTask(acp, Type.TP_AT_SEE, sender),
+						Utils.secInTick * ConfigEnum.SCALE_TIMEOUT.getInt() * timeOutValue);
 			}
 
 		}
