@@ -47,8 +47,7 @@ public class EmptyPlayer extends ACPlayer {
 	 */
 	public EmptyPlayer(final Player name) {
 		super(name);
-		DebugLog.INSTANCE.severe("Empty Player instancied with name : "
-				+ name.getName());
+		DebugLog.INSTANCE.severe("Empty Player instancied with name : " + name.getName());
 	}
 
 	/*
@@ -201,8 +200,8 @@ public class EmptyPlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removeAllSuperPower()
 	 */
 	@Override
-	public void removeAllSuperPower() {
-
+	public Set<Type> removeAllSuperPower() {
+		return null;
 	}
 
 	/*

@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Player;
 
+import java.security.InvalidParameterException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -293,8 +295,10 @@ public abstract class ACPlayer {
 
 	/**
 	 * Remove all Super Power like fly, god, etc ... but not the sanctions
+	 * 
+	 * @return removed powers
 	 */
-	public abstract void removeAllSuperPower();
+	public abstract Set<Type> removeAllSuperPower();
 
 	/**
 	 * Update the timestamp representing the last use of the kit
@@ -506,13 +510,19 @@ public abstract class ACPlayer {
 	/**
 	 * Remove the power of the user when he don't have the permission for it
 	 * anymore.
+	 * 
+	 * @return the list of removed powers
+	 * @throws InvalidParameterException
+	 *             if the player is offline
 	 */
-	public boolean removePermissionPowers() {
+	public Set<Type> removePermissionPowers() throws InvalidParameterException {
 		if (!isOnline()) {
-			return false;
+			throw new InvalidParameterException("The player need to be online");
 		}
+
+		final Set<Type> powers = new HashSet<Type>();
 		for (final Entry<Type, Object> entry : getPowers().entrySet()) {
-			Type powerType = entry.getKey();
+			final Type powerType = entry.getKey();
 			if (!powerType.getCategory().equals(Category.SUPER_POWER)) {
 				continue;
 			}
@@ -522,8 +532,9 @@ public abstract class ACPlayer {
 			if (PermissionManager.hasPerm(getHandler(), powerType.getPermission())) {
 				continue;
 			}
+			powers.add(powerType);
 			removePower(powerType);
 		}
-		return true;
+		return powers;
 	}
 }

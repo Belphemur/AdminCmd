@@ -111,27 +111,20 @@ public class FilePlayer extends ACPlayer {
 	 * To Schedule the Async task
 	 */
 	public static void scheduleAsyncSave() {
-		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
-				|| ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
+		if (ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId) || ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
 			return;
 		}
-		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY
-				.getInt() : 30;
-		ioStackTaskId = ACPluginManager
-				.getScheduler()
-				.runTaskTimerAsynchronously(
-						ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK,
-						20 * 60, 20 * delay).getTaskId();
-		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
-				+ ioStackTaskId);
+		final int delay = ConfigEnum.WDELAY.getInt() >= 30 ? ConfigEnum.WDELAY.getInt() : 30;
+		ioStackTaskId = ACPluginManager.getScheduler().runTaskTimerAsynchronously(ACHelper.getInstance().getCoreInstance(), IOSAVET_TASK, 20 * 60, 20 * delay)
+				.getTaskId();
+		DebugLog.INSTANCE.info("IO Save RepeatingTask created : " + ioStackTaskId);
 	}
 
 	/**
 	 * To stop the saving task.
 	 */
 	public static void stopSavingTask() {
-		if (!ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId)
-				&& !ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
+		if (!ACPluginManager.getScheduler().isCurrentlyRunning(ioStackTaskId) && !ACPluginManager.getScheduler().isQueued(ioStackTaskId)) {
 			return;
 		}
 		ACPluginManager.getScheduler().cancelTask(ioStackTaskId);
@@ -167,8 +160,7 @@ public class FilePlayer extends ACPlayer {
 	 */
 	@Override
 	public Location getHome(final String home) {
-		final ConfigurationSection homeSection = homes
-				.getConfigurationSection(home);
+		final ConfigurationSection homeSection = homes.getConfigurationSection(home);
 		if (homeSection == null) {
 			final String found = Str.matchString(homes.getKeys(false), home);
 			if (found == null) {
@@ -263,10 +255,8 @@ public class FilePlayer extends ACPlayer {
 			w = ACWorld.getWorld(world).getHandle();
 		}
 		if (w != null) {
-			return new Location(w, node.getDouble("x", 0), node.getDouble("y",
-					0), node.getDouble("z", 0), Float.parseFloat(node
-					.getString("yaw")), Float.parseFloat(node
-					.getString("pitch")));
+			return new Location(w, node.getDouble("x", 0), node.getDouble("y", 0), node.getDouble("z", 0), Float.parseFloat(node.getString("yaw")),
+					Float.parseFloat(node.getString("pitch")));
 		} else {
 			ACLogger.warning("The world " + world + " is not loaded !");
 			return null;
@@ -353,8 +343,7 @@ public class FilePlayer extends ACPlayer {
 			IOSAVET_TASK.removeConfiguration(datas);
 			datas.save();
 		} catch (final IOException e) {
-			ACLogger.severe("Problem while saving Player file of " + getName(),
-					e);
+			ACLogger.severe("Problem while saving Player file of " + getName(), e);
 		}
 	}
 
@@ -364,12 +353,13 @@ public class FilePlayer extends ACPlayer {
 	 * @see be.Balor.Player.ACPlayer#removeAllSuperPower()
 	 */
 	@Override
-	public void removeAllSuperPower() {
+	public Set<Type> removeAllSuperPower() {
+		final Set<Type> powersRemoved = new HashSet<Type>();
 		for (final String power : powers.getKeys(false)) {
 			final Type matched = Type.matchType(power);
-			if (matched != null
-					&& matched.getCategory().equals(Category.SUPER_POWER)) {
+			if (matched != null && matched.getCategory().equals(Category.SUPER_POWER)) {
 				powers.set(power, null);
+				powersRemoved.add(matched);
 				if (matched != Type.FLY) {
 					continue;
 				}
@@ -381,11 +371,11 @@ public class FilePlayer extends ACPlayer {
 			}
 		}
 
-		if (handler != null
-				&& InvisibleWorker.getInstance().hasInvisiblePowers(handler)) {
+		if (handler != null && InvisibleWorker.getInstance().hasInvisiblePowers(handler)) {
 			InvisibleWorker.getInstance().reappear(handler);
 		}
 		writeFile();
+		return powersRemoved;
 
 	}
 
@@ -444,8 +434,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<String, String> getPowersString() {
 		final TreeMap<String, String> result = new TreeMap<String, String>();
-		for (final Entry<String, Object> entry : powers.getValues(false)
-				.entrySet()) {
+		for (final Entry<String, Object> entry : powers.getValues(false).entrySet()) {
 			result.put(entry.getKey(), entry.getValue().toString());
 		}
 		return result;
@@ -525,8 +514,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<Type, Object> getPowers() {
 		final Map<Type, Object> result = new EnumMap<Type, Object>(Type.class);
-		for (final Entry<String, Object> entry : powers.getValues(false)
-				.entrySet()) {
+		for (final Entry<String, Object> entry : powers.getValues(false).entrySet()) {
 			final Type power = Type.matchType(entry.getKey());
 			if (power == null || (power != null && power == Type.CUSTOM)) {
 				continue;
@@ -544,8 +532,7 @@ public class FilePlayer extends ACPlayer {
 	@Override
 	public Map<String, Object> getCustomPowers() {
 		final Map<String, Object> result = new HashMap<String, Object>();
-		for (final Entry<String, Object> entry : powers.getValues(false)
-				.entrySet()) {
+		for (final Entry<String, Object> entry : powers.getValues(false).entrySet()) {
 			final Type power = Type.matchType(entry.getKey());
 			if (power != null && power != Type.CUSTOM) {
 				continue;
