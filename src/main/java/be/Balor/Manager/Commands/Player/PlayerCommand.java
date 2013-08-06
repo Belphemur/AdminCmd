@@ -32,8 +32,9 @@ import com.miraclem4n.mchat.types.EventType;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Manager.Permissions.PermissionException;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.CommandUtils.Users;
@@ -72,7 +73,7 @@ public abstract class PlayerCommand extends CoreCommand {
 	 * 
 	 * @param name
 	 * @return
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
 	public static boolean setPlayerHealth(final CommandSender sender,

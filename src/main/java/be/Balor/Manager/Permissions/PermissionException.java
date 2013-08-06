@@ -14,50 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Commands.Items;
+package be.Balor.Manager.Permissions;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Exceptions.ActionNotPermitedException;
-import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class RemoveAlias extends ItemCommand {
+public class PermissionException extends ActionNotPermitedException {
 
 	/**
 	 * 
 	 */
-	public RemoveAlias() {
-		permNode = "admincmd.item.alias";
-		cmdName = "bal_rmalias";
-	}
+	private static final long serialVersionUID = -49502752416573412L;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * be.Balor.Manager.ACCommands#execute(org.bukkit.command.CommandSender,
-	 * java.lang.String[])
+	/**
+	 * @param message
 	 */
-	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
-		ACHelper.getInstance().rmAlias(sender, args.getString(0));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.ACCommands#argsCheck(java.lang.String[])
-	 */
-	@Override
-	public boolean argsCheck(final String... args) {
-		return args != null && args.length >= 1;
+	public PermissionException(final CommandSender sender, final String perm) {
+		super(sender, LocaleManager.I18n("errorNotPerm", "p", perm));
 	}
 
 }

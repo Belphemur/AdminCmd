@@ -24,8 +24,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.CommandUtils.Immunity;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 

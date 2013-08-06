@@ -27,8 +27,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;

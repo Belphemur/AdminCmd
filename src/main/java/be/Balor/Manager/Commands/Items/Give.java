@@ -25,10 +25,11 @@ import org.bukkit.inventory.ItemStack;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.CantEnchantItemException;
 import be.Balor.Manager.Exceptions.EnchantmentConflictException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Manager.Permissions.PermissionException;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.CommandUtils.Users;
@@ -190,7 +191,7 @@ public class Give extends ItemCommand {
 	 *            permission needed by the command
 	 * @return a {@link GiveData} containing the {@link Player} and the
 	 *         {@link MaterialContainer}
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
 	public static GiveData getGiveData(final CommandSender sender,

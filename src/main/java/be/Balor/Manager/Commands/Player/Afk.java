@@ -21,8 +21,8 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Listeners.Events.ACGoAFKEvent.Reason;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.CommandUtils.Users;
 import belgium.Balor.Workers.AFKWorker;
 

@@ -29,8 +29,9 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Manager.Permissions.PermissionException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
@@ -68,7 +69,7 @@ public final class Users {
 	 * @param permNode
 	 *            permission node to execute the command
 	 * @return null if the ACPlayer can't be get else the ACPlayer
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
 	public static ACPlayer getACPlayer(final CommandSender sender,
@@ -108,7 +109,7 @@ public final class Users {
 	 * @param permNode
 	 *            permission node to execute the command
 	 * @return null if the ACPlayer can't be get else the ACPlayer
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
 	public static ACPlayer getACPlayerParam(final CommandSender sender,
@@ -293,7 +294,7 @@ public final class Users {
 	 * @param errorMsg
 	 * @return
 	 * @throws PlayerNotFound
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 */
 	public static Player getUser(final CommandSender sender,
 			final CommandArgs args, final String permNode, final int index,
@@ -314,7 +315,7 @@ public final class Users {
 								sender);
 					}
 				} else {
-					throw new ActionNotPermitedException(sender, permNode
+					throw new PermissionException(sender, permNode
 							+ ".other");
 				}
 			}
@@ -347,7 +348,7 @@ public final class Users {
 	 * @return target player if found
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 *             if the player don't have the permission
 	 */
 	public static Player getUserParam(final CommandSender sender,
@@ -371,7 +372,7 @@ public final class Users {
 	 * @return target player if found
 	 * @throws PlayerNotFound
 	 *             if the target player is not found
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 *             if the player don't have the permission
 	 */
 	public static Player getUserParam(final CommandSender sender,
@@ -394,7 +395,7 @@ public final class Users {
 								sender);
 					}
 				} else {
-					throw new ActionNotPermitedException(sender, permNode
+					throw new PermissionException(sender, permNode
 							+ ".other");
 				}
 			}

@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.Manager.Permissions;
+package be.Balor.Manager.Exceptions;
 
 import org.bukkit.command.CommandSender;
 
-import be.Balor.Manager.LocaleManager;
-
 /**
- * @author Balor (aka Antoine Aflalo)
+ * @author Antoine
  * 
  */
 public class ActionNotPermitedException extends Exception {
@@ -29,15 +27,14 @@ public class ActionNotPermitedException extends Exception {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -49502752416573412L;
-	private final CommandSender sender;
+	private static final long serialVersionUID = -4261236526664930710L;
+	protected final CommandSender sender;
 
 	/**
-	 * @param message
+	 * @param sender
 	 */
-	public ActionNotPermitedException(final CommandSender sender,
-			final String perm) {
-		super(LocaleManager.I18n("errorNotPerm", "p", perm));
+	public ActionNotPermitedException(final CommandSender sender, final String message) {
+		super(message);
 		this.sender = sender;
 	}
 

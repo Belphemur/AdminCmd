@@ -37,8 +37,7 @@ public abstract class HomeCommand extends CoreCommand {
  */
 	public HomeCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent(
-				"admincmd.tp.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.tp.*");
 	}
 
 	/**
@@ -68,8 +67,7 @@ public abstract class HomeCommand extends CoreCommand {
 			}
 			if (Users.isPlayer(sender, false)) {
 				final Player p = (Player) sender;
-				if (!p.getName().equals(result.player)
-						&& !PermissionManager.hasPerm(p, "admincmd.admin.home")) {
+				if (!p.getName().equals(result.player) && !PermissionManager.hasPerm(p, "admincmd.admin.home")) {
 					return null;
 				}
 			}

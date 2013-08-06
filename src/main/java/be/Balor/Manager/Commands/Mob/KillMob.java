@@ -36,9 +36,9 @@ import org.bukkit.entity.Villager;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
 import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;

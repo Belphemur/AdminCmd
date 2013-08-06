@@ -117,6 +117,8 @@ public enum LocaleHelper {
 	SUCCESS_DYN_KIT("kit.successDynKit", ChatColor.GREEN + "The %type" + ChatColor.GREEN + " named " + ChatColor.GOLD + "%kit" + ChatColor.GREEN
 			+ " has been successfully created."),
 	ERROR_DOT_HOME("home.dotError", ChatColor.RED + "You can't use the " + ChatColor.GOLD + "dot (.)" + ChatColor.RED + " in a home name."),
+	ERROR_LIMIT_REACHED("home.limitReached", ChatColor.RED + "You have reached the limit of home, to continue use this feature, delete " + ChatColor.GOLD
+			+ "%number home(s)."),
 	ERROR_EXTERNAL_WARP("warp.nonPlayer", ChatColor.RED + "You have to set the world name in the command. " + ChatColor.GOLD + "Eg : /twp world:test"),
 	ERROR_HOLD_ITEM("item.holdError", ChatColor.RED + "You have to hold an item in hand to do that."),
 	ERROR_NOT_ONLINE("power.notOnline", ChatColor.DARK_PURPLE + "%player" + ChatColor.RED

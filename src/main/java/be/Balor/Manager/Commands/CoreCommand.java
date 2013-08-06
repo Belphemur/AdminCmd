@@ -21,10 +21,11 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Manager.Permissions.PermissionException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -112,7 +113,7 @@ public abstract class CoreCommand {
 	 *            sender of the command
 	 * @param args
 	 *            arguments to be processed by the command
-	 * @throws ActionNotPermitedException
+	 * @throws PermissionException
 	 *             if the player don't have the permission to do that.
 	 * @throws PlayerNotFound
 	 *             the target player of the command is not found
