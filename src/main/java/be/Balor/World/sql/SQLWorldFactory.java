@@ -28,29 +28,17 @@ import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.World.ACWorld;
 import be.Balor.World.AbstractWorldFactory;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class SQLWorldFactory extends AbstractWorldFactory {
-	private static PreparedStatement insertWorld, getWorld;
 
 	/**
  * 
  */
 	public SQLWorldFactory() {
-		initPrepStmt();
 
-	}
-
-	/**
-	 * 
-	 */
-	public static void initPrepStmt() {
-		insertWorld = Database.DATABASE.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
-		getWorld = Database.DATABASE.prepare("SELECT id FROM ac_worlds WHERE name=?");
 	}
 
 	@Override
@@ -58,16 +46,8 @@ public class SQLWorldFactory extends AbstractWorldFactory {
 		final String worldName = world.getName();
 		try {
 			return getDBWorld(world);
-		} catch (final CommunicationsException e) {
-			initPrepStmt();
-			try {
-				getDBWorld(world);
-			} catch (final SQLException e1) {
-				ACLogger.severe("Can't create an ACWorld for the World " + worldName, e);
-			}
 		} catch (final SQLException e) {
 			ACLogger.severe("Can't create an ACWorld for the World " + worldName, e);
-			e.printStackTrace();
 		}
 
 		return null;
@@ -80,6 +60,8 @@ public class SQLWorldFactory extends AbstractWorldFactory {
 	 * @throws SQLException
 	 */
 	private ACWorld getDBWorld(final World world) throws SQLException {
+		final PreparedStatement insertWorld = Database.DATABASE.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
+		final PreparedStatement getWorld = Database.DATABASE.prepare("SELECT id FROM ac_worlds WHERE name=?");
 		ResultSet rs = null;
 		final String worldName = world.getName();
 		getWorld.clearParameters();
