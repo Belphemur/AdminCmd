@@ -21,6 +21,8 @@ package lib.SQL.PatPeter.SQLibrary;
 /*
  *  Both
  */
+import be.Balor.Player.sql.SQLPlayer;
+import be.Balor.Player.sql.SQLPlayerFactory;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -37,6 +39,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.World.sql.SQLWorld;
+import be.Balor.World.sql.SQLWorldFactory;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -449,6 +453,10 @@ public abstract class Database {
 			this.connection = null;
 			try {
 				open();
+                                SQLPlayer.initPrepStmt();
+                                SQLPlayerFactory.initPrepStmt();
+                                SQLWorld.initPrepStmt();
+                                SQLWorldFactory.initPrepStmt();
 			} catch (final SQLException e) {
 				writeError("Problem while reconnection to the database :\n" + e.getMessage(), true);
 			}
