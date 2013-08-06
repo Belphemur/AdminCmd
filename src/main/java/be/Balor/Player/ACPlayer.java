@@ -18,6 +18,7 @@ package be.Balor.Player;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Location;
@@ -26,8 +27,10 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Commands.ACCommandContainer;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
+import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
+import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -50,8 +53,7 @@ public abstract class ACPlayer {
 		this.name = name;
 		final int prime = 41;
 		int result = 7;
-		result = prime * result
-				+ ((this.name == null) ? 0 : this.name.hashCode());
+		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
 		handler = ACPluginManager.getServer().getPlayer(this.name);
 	}
@@ -60,8 +62,7 @@ public abstract class ACPlayer {
 		this.name = p.getName();
 		final int prime = 41;
 		int result = 7;
-		result = prime * result
-				+ ((this.name == null) ? 0 : this.name.hashCode());
+		result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
 		hashCode = result;
 		handler = p;
 	}
@@ -355,9 +356,7 @@ public abstract class ACPlayer {
 	 */
 	public long getCurrentPlayedTime() {
 		if (this.isOnline()) {
-			return (getInformation("totalTime").getLong(0)
-					+ System.currentTimeMillis() - getInformation(
-						"lastConnection").getLong(System.currentTimeMillis()));
+			return (getInformation("totalTime").getLong(0) + System.currentTimeMillis() - getInformation("lastConnection").getLong(System.currentTimeMillis()));
 		} else {
 			return getInformation("totalTime").getLong(0);
 		}
@@ -502,5 +501,29 @@ public abstract class ACPlayer {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	/**
+	 * Remove the power of the user when he don't have the permission for it
+	 * anymore.
+	 */
+	public boolean removePermissionPowers() {
+		if (!isOnline()) {
+			return false;
+		}
+		for (final Entry<Type, Object> entry : getPowers().entrySet()) {
+			Type powerType = entry.getKey();
+			if (!powerType.getCategory().equals(Category.SUPER_POWER)) {
+				continue;
+			}
+			if (powerType.getPermission() == null) {
+				continue;
+			}
+			if (PermissionManager.hasPerm(getHandler(), powerType.getPermission())) {
+				continue;
+			}
+			removePower(powerType);
+		}
+		return true;
 	}
 }

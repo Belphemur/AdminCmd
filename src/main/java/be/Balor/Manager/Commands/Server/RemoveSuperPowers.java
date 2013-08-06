@@ -16,17 +16,13 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Server;
 
-import java.util.Map.Entry;
 
 import org.bukkit.command.CommandSender;
 
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.ActionNotPermitedException;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
-import be.Balor.Tools.Type;
-import be.Balor.Tools.Type.Category;
 import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -62,18 +58,7 @@ public class RemoveSuperPowers extends ServerCommand {
 		if (args.hasFlag('n')) {
 			player.removeAllSuperPower();
 		} else if (player.isOnline()) {
-			for (final Entry<Type, Object> entry : player.getPowers().entrySet()) {
-				if (!entry.getKey().getCategory().equals(Category.SUPER_POWER)) {
-					continue;
-				}
-				if (entry.getKey().getPermission() == null) {
-					continue;
-				}
-				if (PermissionManager.hasPerm(player.getHandler(), entry.getKey().getPermission())) {
-					continue;
-				}
-				player.removePower(entry.getKey());
-			}
+			player.removePermissionPowers();
 		} else {
 			LocaleHelper.ERROR_NOT_ONLINE.sendLocale(sender, "player", playername);
 			return;
