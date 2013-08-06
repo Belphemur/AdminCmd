@@ -66,10 +66,6 @@ public class WorldManager {
 			throw new NullPointerException();
 		}
 
-		final ACWorld ref = worlds.get(name);
-		if (ref != null) {
-			return false; // World already exists
-		}
 		worlds.put(name.toUpperCase(), world);
 		return true;
 	}

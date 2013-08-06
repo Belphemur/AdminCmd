@@ -1546,6 +1546,7 @@ public class ACHelper {
 
 						@Override
 						public void run() {
+							SQLPlayer.initPrepStmt();
 							try {
 								ConfigEnum.save();
 							} catch (final IOException e) {
