@@ -71,7 +71,7 @@ public class RemoveSuperPowers extends ServerCommand {
 
 		LocaleHelper.REMOVE_SP.sendLocale(sender, "player", playername);
 		LocaleHelper.REMOVED_SP.sendLocale(sender, "powers", Joiner.on(", ").join(powersRemoved));
-		if (!sender.equals(player.getHandler())) {
+		if (player.isOnline() && !sender.equals(player.getHandler())) {
 			LocaleHelper.REMOVED_SP.sendLocale(player.getHandler(), "powers", Joiner.on(", ").join(powersRemoved));
 		}
 
