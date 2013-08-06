@@ -472,4 +472,4 @@ commands:
   bal_enderchest:
     description: Open and edit your or another players enderchest content
     aliases: [enderchest, ec]
-    uaage: /<command> [player]
+    usage: /<command> [player]
