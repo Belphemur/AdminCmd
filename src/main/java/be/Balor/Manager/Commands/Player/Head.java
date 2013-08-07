@@ -17,8 +17,6 @@
 
 package be.Balor.Manager.Commands.Player;
 
-import java.util.HashMap;
-
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.command.CommandSender;
@@ -48,7 +46,6 @@ public class Head extends PlayerCommand {
 		cmdName = "bal_head";
 		other = false;
 	}
-	
 
 	/*
 	 * (non-Javadoc)
@@ -58,25 +55,22 @@ public class Head extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (!Users.isPlayer(sender)) {
 			return;
 		}
 
 		final Player player = (Player) sender;
-		String target = args.getString(0);
+		final String target = args.getString(0);
 
 		if (target == null) {
 			return;
 		}
 
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("%player", target);
-		if (addHead(player, target)) {
+		if (setHead(player, target)) {
 			LocaleHelper.HEAD_SUCCESSFULL.sendLocale(sender, "player", target);
 		} else {
-			LocaleHelper.HEAD_ERROR.sendLocale(sender);
+			LocaleHelper.ERROR_HEAD_INV_FULL.sendLocale(sender);
 		}
 	}
 
@@ -92,16 +86,22 @@ public class Head extends PlayerCommand {
 
 	/**
 	 * Adds a head to the players inventory if its not full.
+	 * 
+	 * @param player
+	 *            player to change head
+	 * @param skullOwner
+	 *            player to take head off
+	 * @return
 	 */
-	public static boolean addHead(Player player, String skullOwner) {
-		PlayerInventory inv = player.getInventory();
-		int firstEmpty = inv.firstEmpty();
-		if (firstEmpty == -1) {
-			return false;
-		} else {
-			inv.setItem(firstEmpty, getSkull(skullOwner));
+	public boolean setHead(final Player player, final String skullOwner) {
+		final PlayerInventory inv = player.getInventory();
+		final ItemStack helmet = inv.getHelmet();
+		final ItemStack skull = getSkull(skullOwner);
+		if (helmet == null || (helmet != null && helmet.getType() == Material.AIR)) {
+			inv.setHelmet(skull);
 			return true;
 		}
+		return inv.addItem(skull).isEmpty();
 	}
 
 	/**
@@ -110,10 +110,9 @@ public class Head extends PlayerCommand {
 	 * @param skullOwner
 	 * @return skull
 	 */
-	public static ItemStack getSkull(String skullOwner) {
-		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1,
-				(short) SkullType.PLAYER.ordinal());
-		SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+	public ItemStack getSkull(final String skullOwner) {
+		final ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+		final SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 		skullMeta.setOwner(skullOwner);
 		skull.setItemMeta(skullMeta);
 		return skull;
