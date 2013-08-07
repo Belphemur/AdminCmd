@@ -8,7 +8,7 @@ Informations
 * Ticket (for bug/feature request) : http://bug.admincmd.com/
 * Wiki : http://wiki.admincmd.com
 * Download :  http://www.admincmd.com/download
-* Licence : [GPLv3](https://www.gnu.org/licenses/gpl.html)
+* License : [GPLv3](https://www.gnu.org/licenses/gpl.html)
 
 Description
 ------------
