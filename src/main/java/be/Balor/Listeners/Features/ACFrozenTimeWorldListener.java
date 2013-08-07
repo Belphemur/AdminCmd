@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Listeners.Features;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -29,9 +30,31 @@ import be.Balor.World.ACWorld;
  */
 public class ACFrozenTimeWorldListener implements Listener {
 
+	/**
+	 * 
+	 */
+	public ACFrozenTimeWorldListener() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@EventHandler
 	void onPlayerWorldChange(final PlayerChangedWorldEvent event) {
-		ACWorld world = ACWorld.getWorld(event.getPlayer().getLocation().getWorld());
-		world.getHandle().setTime(world.getInformation(Type.TIME_FROZEN).getLong(0));
+		setPlayerTime(event.getPlayer());
+
+	}
+
+	/**
+	 * @param player
+	 * @param newWorld
+	 */
+	private void setPlayerTime(final Player player) {
+		final ACWorld acToWorld = ACWorld.getWorld(player.getLocation()
+				.getWorld());
+		if (acToWorld.hasInformation(Type.TIME_FROZEN)) {
+			player.setPlayerTime(acToWorld.getInformation(Type.TIME_FROZEN)
+					.getLong(0), false);
+		} else {
+			player.setPlayerTime(0, true);
+		}
 	}
 }
