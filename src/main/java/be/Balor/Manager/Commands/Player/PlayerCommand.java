@@ -26,9 +26,6 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.plugin.PluginManager;
 
-import com.miraclem4n.mchat.api.Reader;
-import com.miraclem4n.mchat.types.EventType;
-
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Commands.CoreCommand;
@@ -44,6 +41,9 @@ import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
+import com.miraclem4n.mchat.api.Reader;
+import com.miraclem4n.mchat.types.EventType;
+
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
@@ -54,8 +54,7 @@ public abstract class PlayerCommand extends CoreCommand {
  */
 	public PlayerCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent(
-				"admincmd.player.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
 	}
 
 	/**
@@ -64,8 +63,7 @@ public abstract class PlayerCommand extends CoreCommand {
 	 */
 	public PlayerCommand(final String cmd, final String permNode) {
 		super(cmd, permNode);
-		this.permParent = plugin.getPermissionLinker().getPermParent(
-				"admincmd.player.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.player.*");
 	}
 
 	/**
@@ -76,69 +74,55 @@ public abstract class PlayerCommand extends CoreCommand {
 	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
-	public static boolean setPlayerHealth(final CommandSender sender,
-			final CommandArgs name, final Type.Health toDo)
-			throws PlayerNotFound, ActionNotPermitedException {
-		final Player target = Users.getUser(sender, name, "admincmd.player."
-				+ toDo);
+	public static boolean setPlayerHealth(final CommandSender sender, final CommandArgs name, final Type.Health toDo) throws PlayerNotFound,
+			ActionNotPermitedException {
+		final Player target = Users.getUser(sender, name, "admincmd.player." + toDo);
 		if (target == null) {
 			return false;
 		}
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", Users.getPlayerName(target));
-		final PluginManager pluginManager = ACPluginManager.getServer()
-				.getPluginManager();
+		final PluginManager pluginManager = ACPluginManager.getServer().getPluginManager();
 		final String newStateLocale = LocaleHelper.NEW_STATE.getLocale();
-		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER
-				.getLocale(replace);
+		final String newStatePlayerLocale = LocaleHelper.NEW_STATE_PLAYER.getLocale(replace);
 		switch (toDo) {
 		case HEAL:
-			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(
-					target, target.getMaxHealth(), RegainReason.CUSTOM);
+			final EntityRegainHealthEvent heal = new EntityRegainHealthEvent(target, target.getMaxHealth(), RegainReason.CUSTOM);
 			pluginManager.callEvent(heal);
 			if (!heal.isCancelled()) {
 				target.setHealth(heal.getAmount());
 				target.setFireTicks(0);
-				final String msg = newStateLocale
-						+ LocaleHelper.HEALED.getLocale();
+				final String msg = newStateLocale + LocaleHelper.HEALED.getLocale();
 				target.sendMessage(msg);
 				if (!target.equals(sender)) {
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.HEALED.getLocale();
+					final String newStateMsg = newStatePlayerLocale + LocaleHelper.HEALED.getLocale();
 					sender.sendMessage(newStateMsg);
 				}
 			}
 			break;
 		case FEED:
-			final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(
-					target, 20);
+			final FoodLevelChangeEvent foodEvent = new FoodLevelChangeEvent(target, 20);
 			pluginManager.callEvent(foodEvent);
 			if (!foodEvent.isCancelled()) {
 				target.setFoodLevel(foodEvent.getFoodLevel());
-				final String msg = newStateLocale
-						+ LocaleHelper.FEEDED.getLocale();
+				final String msg = newStateLocale + LocaleHelper.FEEDED.getLocale();
 				target.sendMessage(msg);
 				if (!target.equals(sender)) {
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.FEEDED.getLocale();
+					final String newStateMsg = newStatePlayerLocale + LocaleHelper.FEEDED.getLocale();
 					sender.sendMessage(newStateMsg);
 				}
 			}
 			break;
 		case KILL:
 			if (target.equals(sender)) {
-				final EntityDamageEvent dmgEvent = new EntityDamageEvent(
-						target, EntityDamageEvent.DamageCause.SUICIDE,
-						Double.MAX_VALUE);
+				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target, EntityDamageEvent.DamageCause.SUICIDE, target.getMaxHealth());
 				pluginManager.callEvent(dmgEvent);
 				if (!dmgEvent.isCancelled()) {
 					target.damage(dmgEvent.getDamage());
 					LocaleHelper.SUICIDE.sendLocale(target);
 				}
 			} else {
-				final EntityDamageEvent dmgEvent = new EntityDamageEvent(
-						target, EntityDamageEvent.DamageCause.CUSTOM,
-						Double.MAX_VALUE);
+				final EntityDamageEvent dmgEvent = new EntityDamageEvent(target, EntityDamageEvent.DamageCause.CUSTOM, target.getMaxHealth());
 				pluginManager.callEvent(dmgEvent);
 				if (!dmgEvent.isCancelled()) {
 					if (Users.isPlayer(sender, false)) {
@@ -146,18 +130,14 @@ public abstract class PlayerCommand extends CoreCommand {
 					} else {
 						target.damage(dmgEvent.getDamage());
 					}
-					final String msg = newStateLocale
-							+ LocaleHelper.KILLED.getLocale();
+					final String msg = newStateLocale + LocaleHelper.KILLED.getLocale();
 					target.sendMessage(msg);
-					final String newStateMsg = newStatePlayerLocale
-							+ LocaleHelper.KILLED.getLocale();
+					final String newStateMsg = newStatePlayerLocale + LocaleHelper.KILLED.getLocale();
 					sender.sendMessage(newStateMsg);
 				}
 			}
 			if (Utils.logBlock != null) {
-				Utils.logBlock.queueKill(
-						Users.isPlayer(sender, false) ? (Player) sender : null,
-						target);
+				Utils.logBlock.queueKill(Users.isPlayer(sender, false) ? (Player) sender : null, target);
 			}
 			break;
 		default:
@@ -173,12 +153,9 @@ public abstract class PlayerCommand extends CoreCommand {
 	 *            player to remove
 	 */
 	public static void addPlayerInOnlineList(final Player player) {
-		final Object server = ACMinecraftReflection.getHandle(player
-				.getServer());
-		final MethodHandler sendAll = new MethodHandler(server.getClass(),
-				"sendAll", ACMinecraftReflection.getPacketClass());
-		sendAll.invoke(server,
-				NMSBuilder.buildPacket201PlayerInfo(player, true, 1000));
+		final Object server = ACMinecraftReflection.getHandle(player.getServer());
+		final MethodHandler sendAll = new MethodHandler(server.getClass(), "sendAll", ACMinecraftReflection.getPacketClass());
+		sendAll.invoke(server, NMSBuilder.buildPacket201PlayerInfo(player, true, 1000));
 	}
 
 	/**
@@ -189,13 +166,11 @@ public abstract class PlayerCommand extends CoreCommand {
 	 */
 	public static void broadcastFakeJoin(final Player player) {
 		if (Utils.mChatPresent) {
-			Users.broadcastMessage(Users.getPlayerName(player, null, true) + " "
-					+ Reader.getEventMessage(EventType.JOIN));
+			Users.broadcastMessage(Users.getPlayerName(player, null, true) + " " + Reader.getEventMessage(EventType.JOIN));
 		} else {
-			Users.broadcastMessage(LocaleManager.I18n("joinMessage", "name",
-					Users.getPlayerName(player, null, true)));
+			Users.broadcastMessage(LocaleManager.I18n("joinMessage", "name", Users.getPlayerName(player, null, true)));
 		}
-	
+
 	}
 
 	/**
@@ -206,12 +181,10 @@ public abstract class PlayerCommand extends CoreCommand {
 	 */
 	public static void broadcastFakeQuit(final Player player) {
 		if (Utils.mChatPresent) {
-			Users.broadcastMessage(Users.getPlayerName(player, null, true) + " "
-					+ Reader.getEventMessage(EventType.QUIT));
+			Users.broadcastMessage(Users.getPlayerName(player, null, true) + " " + Reader.getEventMessage(EventType.QUIT));
 		} else {
-			Users.broadcastMessage(LocaleManager.I18n("quitMessage", "name",
-					Users.getPlayerName(player, null, true)));
+			Users.broadcastMessage(LocaleManager.I18n("quitMessage", "name", Users.getPlayerName(player, null, true)));
 		}
-	
+
 	}
 }
