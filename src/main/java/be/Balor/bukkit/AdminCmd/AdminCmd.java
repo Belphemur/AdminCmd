@@ -87,6 +87,7 @@ import be.Balor.Manager.Commands.Player.Fly;
 import be.Balor.Manager.Commands.Player.Freeze;
 import be.Balor.Manager.Commands.Player.GameModeSwitch;
 import be.Balor.Manager.Commands.Player.God;
+import be.Balor.Manager.Commands.Player.Head;
 import be.Balor.Manager.Commands.Player.Heal;
 import be.Balor.Manager.Commands.Player.Invisible;
 import be.Balor.Manager.Commands.Player.Ip;
@@ -511,6 +512,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(Enderchest.class);
 		cmdManager.registerCommand(RemoveSuperPowers.class);
 		cmdManager.registerCommand(Workbench.class);
+		cmdManager.registerCommand(Head.class);
 		DebugLog.endInfo();
 	}
 

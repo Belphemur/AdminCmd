@@ -821,3 +821,10 @@ acplayerworkbench:
    plugin: AdminCmd
    permissions: admincmd.player.workbench
    cmdname: bal_workbench
+   
+acplayerhead:
+    command: head <Player>
+    description: "Spawn a head of a Player."
+    plugin: AdminCmd
+    permissions: admincmd.player.head
+    cmdname: bal_head

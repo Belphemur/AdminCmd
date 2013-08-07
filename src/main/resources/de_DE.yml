@@ -311,4 +311,7 @@ warp:
   nonPlayer: '§cDu musst den Namen einer Welt angeben. §6Beispiel : /twp world:test'
 item:
   holdError: '§cDu musst ein Item in der Hand halten um das zu tun.'
+head:
+  successful: §6Du hast erfolreich §a%player's §6Kopf gespawnt.
+  inventoryFull: §cDein Inventar ist voll. Bitte mach Platz und veruch es nochmal.
 

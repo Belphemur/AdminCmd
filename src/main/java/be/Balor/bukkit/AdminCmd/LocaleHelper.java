@@ -121,7 +121,10 @@ public enum LocaleHelper {
 	ERROR_EXTERNAL_WARP("warp.nonPlayer", ChatColor.RED + "You have to set the world name in the command. " + ChatColor.GOLD + "Eg : /twp world:test"),
 	ERROR_HOLD_ITEM("item.holdError", ChatColor.RED + "You have to hold an item in hand to do that."),
 	ERROR_NOT_ONLINE("power.notOnline", ChatColor.DARK_PURPLE + "%player" + ChatColor.RED
-			+ " is not online. It's needed to check his permissions to remove his powers. Use -n to remove ALL powers of " + ChatColor.DARK_PURPLE + "%player");
+			+ " is not online. It's needed to check his permissions to remove his powers. Use -n to remove ALL powers of " + ChatColor.DARK_PURPLE + "%player"),
+	HEAD_SUCCESSFULL("head.successful", ChatColor.GOLD + "Successfully spawned " + ChatColor.GREEN + "%player's" + ChatColor.GOLD + " head."),
+	HEAD_ERROR("head.inventoryFull", ChatColor.RED + "Your inventory is full. Please make space and try again.");
+	
 
 	private final String key;
 	private final String locale;
