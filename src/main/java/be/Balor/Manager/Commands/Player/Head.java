@@ -17,8 +17,6 @@
 
 package be.Balor.Manager.Commands.Player;
 
-import java.util.HashMap;
-
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.command.CommandSender;
@@ -71,8 +69,6 @@ public class Head extends PlayerCommand {
 			return;
 		}
 
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put("%player", target);
 		if (addHead(player, target)) {
 			LocaleHelper.HEAD_SUCCESSFULL.sendLocale(sender, "player", target);
 		} else {
