@@ -16,7 +16,6 @@
  ************************************************************************/
 package be.Balor.bukkit.AdminCmd;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -168,9 +167,7 @@ public enum LocaleHelper {
 	 *            value to replace the key
 	 */
 	public void sendLocale(final CommandSender sender, final String key, final String value) {
-		final HashMap<String, String> replace = new HashMap<String, String>();
-		replace.put(key, value);
-		LocaleManager.sI18n(sender, this, replace);
+		LocaleManager.sI18n(sender, this, key, value);
 	}
 
 	/**
@@ -192,6 +189,20 @@ public enum LocaleHelper {
 	 */
 	public String getLocale(final Map<String, String> replace) {
 		return LocaleManager.I18n(this, replace);
+	}
+
+	/**
+	 * Get the locale with replacement variables
+	 * 
+	 * 
+	 * @param key
+	 *            key to replace
+	 * @param value
+	 *            value to replace the key
+	 * @return the locale with the variables replaced in.
+	 */
+	public String getLocale(final String key, final String value) {
+		return LocaleManager.I18n(this, key, value);
 	}
 
 	/**
