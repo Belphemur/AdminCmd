@@ -487,5 +487,5 @@ commands:
     aliases: [head, skull]
   bal_rse:
     description: Removes a status-effect from you, or from another player.
-    usage: /<command> <Player> [Effect]
+    usage: /<command> [Player] [Effect]
     aliases: [rse]
