@@ -79,6 +79,7 @@ import be.Balor.Manager.Commands.Player.BanPlayer;
 import be.Balor.Manager.Commands.Player.ClearInventory;
 import be.Balor.Manager.Commands.Player.Enderchest;
 import be.Balor.Manager.Commands.Player.Eternal;
+import be.Balor.Manager.Commands.Player.RemoveStatusEffects;
 import be.Balor.Manager.Commands.Player.Experience;
 import be.Balor.Manager.Commands.Player.FakeQuit;
 import be.Balor.Manager.Commands.Player.Feed;
@@ -513,6 +514,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(RemoveSuperPowers.class);
 		cmdManager.registerCommand(Workbench.class);
 		cmdManager.registerCommand(Head.class);
+                cmdManager.registerCommand(RemoveStatusEffects.class);
 		DebugLog.endInfo();
 	}
 

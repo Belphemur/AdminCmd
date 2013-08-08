@@ -123,7 +123,10 @@ public enum LocaleHelper {
 	ERROR_NOT_ONLINE("power.notOnline", ChatColor.DARK_PURPLE + "%player" + ChatColor.RED
 			+ " is not online. It's needed to check his permissions to remove his powers. Use -n to remove ALL powers of " + ChatColor.DARK_PURPLE + "%player"),
 	HEAD_SUCCESSFULL("head.successful", ChatColor.GOLD + "Successfully spawned " + ChatColor.GREEN + "%player's" + ChatColor.GOLD + " head."),
-	ERROR_HEAD_INV_FULL("head.inventoryFull", ChatColor.RED + "Your inventory is full. Please make space and try again.");
+	ERROR_HEAD_INV_FULL("head.inventoryFull", ChatColor.RED + "Your inventory is full. Please make space and try again."),
+        ERROR_EFFECT("effect.dontHaveEffect", ChatColor.RED + "You don't have %effect, or %effect does not exists."),
+        EFFECT_REMOVE_SUCCESS("effect.Successfull", ChatColor.YELLOW + "You removed " + ChatColor.GREEN + "%effect");
+        
 	
 
 	private final String key;
