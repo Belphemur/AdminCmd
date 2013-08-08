@@ -829,8 +829,8 @@ acplayerhead:
     permissions: admincmd.player.head
     cmdname: bal_head
     
-acplayerrsp:
-    command: rsp <Player> [Effect]
+acplayerrse:
+    command: rse [Player] [Effect]
     description: "Removes a status-effect from you, or from another player."
     plugin: AdminCmd
     permissions: admincmd.player.rse
