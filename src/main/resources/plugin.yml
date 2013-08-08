@@ -485,3 +485,7 @@ commands:
     description: Spawns a Players head
     usage: /<command> <Player>
     aliases: [head, skull]
+  bal_rse:
+    description: Removes a status-effect from you, or from another player.
+    usage: /<command> [Player] [Effect]
+    aliases: [rse]

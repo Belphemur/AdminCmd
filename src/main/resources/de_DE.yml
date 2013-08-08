@@ -314,4 +314,7 @@ item:
 head:
   successful: §6Du hast erfolreich §a%player's §6Kopf gespawnt.
   inventoryFull: §cDein Inventar ist voll. Bitte mach Platz und veruch es nochmal.
+effect:
+  dontHaveEffect: §cDu hast %effect nicht, oder %effect existiert nicht.
+  Successfull: §eDu hast §a%effect §eentfernt.
 
