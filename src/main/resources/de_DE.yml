@@ -1,5 +1,4 @@
 #version: 37153edd76aef7ac127848cfab3b420c4ddcdde8
-#By weoiss1998
 playerNotFound: '%player nicht gefunden.'
 kitNotFound: '%kit Kit nicht gefunden.'
 pluginNotFound: '%plugin Plugin nicht gefunden.'
@@ -314,4 +313,6 @@ item:
 head:
   successful: '§6Du hast erfolreich §a%player''s §6Kopf gespawnt.'
   inventoryFull: '§cDein Inventar ist voll. Bitte mach Platz und versuch es nochmal.'
-
+effect:
+  dontHaveEffect: '§cDu hast %effect nicht, oder %effect existiert nicht.'
+  Successfull: '§eDu hast §a%effect §eentfernt.'
