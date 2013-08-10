@@ -1,4 +1,5 @@
-#version: 37153edd76aef7ac127848cfab3b420c4ddcdde8
+#version: ${git.commit.id}
+#By Cane
 playerNotFound: '%player nicht gefunden.'
 kitNotFound: '%kit Kit nicht gefunden.'
 pluginNotFound: '%plugin Plugin nicht gefunden.'
