@@ -103,6 +103,9 @@ public abstract class HomeCommand extends CoreCommand {
 	 *             if the player have reached the home limit
 	 */
 	protected void verifyCanExecute(final CommandSender sender, final Player player) throws ActionNotPermitedException {
+		if (PermissionManager.hasPerm(sender, "admincmd.admin.home", false)) {
+			return;
+		}
 		final int limit = ACHelper.getInstance().getLimit(player, Type.Limit.MAX_HOME);
 		final int nbHomes = ACPlayer.getPlayer(player).getHomeList().size();
 		if (nbHomes > limit) {
