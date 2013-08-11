@@ -158,13 +158,14 @@ public abstract class CoreCommand {
 
 	/**
 	 * Create and register the permission <b>permNode.*</b> and add it the
-	 * wanted subpermission. {
+	 * wanted subpermission.
 	 * 
 	 * @param perm
-	 *            the permission to add.
+	 *            the suffixe of the permission to add. The command concat the
+	 *            permNode of the command with the new perm you register.
 	 */
 	public void addPermChild(final String perm) {
-		this.addPermChild(new PermChild(perm, bukkitDefault));
+		this.addPermChild(new PermChild(permNode + "." + perm, bukkitDefault));
 	}
 
 	/**
