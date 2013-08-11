@@ -25,9 +25,9 @@ import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.CommandAlreadyExist;
 import be.Balor.Manager.Exceptions.CommandNotFound;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.PermissionException;
 import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermParent;
+import be.Balor.Manager.Permissions.PermissionException;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
@@ -46,6 +46,7 @@ public abstract class CoreCommand {
 	protected PluginCommand pluginCommand;
 	protected final AbstractAdminCmdPlugin plugin;
 	protected PermParent permParent;
+	private PermParent addedPermParent = null;
 	@Deprecated
 	/**
 	 * Remove the use of Permission in the command, better use the PermChild.
@@ -98,8 +99,7 @@ public abstract class CoreCommand {
 	 * @param parent
 	 *            PermParent used to register the permission of the command
 	 */
-	public CoreCommand(final String name, final String perm,
-			final String plugin, final PermParent parent) {
+	public CoreCommand(final String name, final String perm, final String plugin, final PermParent parent) {
 		this.permNode = perm;
 		this.cmdName = name;
 		this.plugin = ACPluginManager.getPluginInstance(plugin);
@@ -118,8 +118,7 @@ public abstract class CoreCommand {
 	 * @throws PlayerNotFound
 	 *             the target player of the command is not found
 	 */
-	public abstract void execute(CommandSender sender, CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound;
+	public abstract void execute(CommandSender sender, CommandArgs args) throws ActionNotPermitedException, PlayerNotFound;
 
 	/**
 	 * Check if the command can be executed
@@ -158,33 +157,61 @@ public abstract class CoreCommand {
 	}
 
 	/**
+	 * Create and register the permission <b>permNode.*</b> and add it the
+	 * wanted subpermission. {
+	 * 
+	 * @param perm
+	 *            the permission to add.
+	 */
+	public void addPermChild(final String perm) {
+		this.addPermChild(new PermChild(perm, bukkitDefault));
+	}
+
+	/**
+	 * Create and register the permission <b>permNode.*</b> and add it the
+	 * wanted subpermission.
+	 * 
+	 * @param perm
+	 *            the permission to add.
+	 */
+	public void addPermChild(final PermChild perm) {
+		if (addedPermParent == null) {
+			addedPermParent = new PermParent(permNode + ".*");
+			if (permParent != null) {
+				permParent.addChild(addedPermParent);
+			}
+		}
+		addedPermParent.addChild(perm);
+
+	}
+
+	/**
 	 * Register the bukkit Permission
 	 */
 	public void registerBukkitPerm() {
 		DebugLog.beginInfo("Registering permission");
 		try {
-			if (permNode == null && permNode.isEmpty()) {
+			if (permNode == null || (permNode != null && permNode.isEmpty())) {
 				return;
 			}
-
 			if (permParent != null) {
-				DebugLog.beginInfo("Register permission in the permParent");
+				DebugLog.beginInfo("Register_def permission in the permParent");
 				final PermChild child = new PermChild(permNode, bukkitDefault);
 				permParent.addChild(child);
 				permChild = child;
 				if (other) {
-					permParent.addChild(new PermChild(permNode + ".other",
-							bukkitDefault));
+					permParent.addChild(new PermChild(permNode + ".other", bukkitDefault));
 				}
 				DebugLog.endInfo();
 				return;
 			}
 			DebugLog.beginInfo("Register permission without a PermParent");
-			permChild = plugin.getPermissionLinker().addPermChild(permNode,
-					bukkitDefault);
+			permChild = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
+			if (addedPermParent != null) {
+				plugin.getPermissionLinker().addPermParent(addedPermParent);
+			}
 			if (other) {
-				plugin.getPermissionLinker().addPermChild(permNode + ".other",
-						bukkitDefault);
+				plugin.getPermissionLinker().addPermChild(permNode + ".other", bukkitDefault);
 			}
 			DebugLog.endInfo();
 		} finally {
@@ -212,15 +239,11 @@ public abstract class CoreCommand {
 		DebugLog.beginInfo("Check for bukkit command and status of the command");
 		try {
 			if ((pluginCommand = plugin.getCommand(cmdName)) == null) {
-				throw new CommandNotFound(cmdName
-						+ " is not loaded in bukkit. Command deactivated", this);
+				throw new CommandNotFound(cmdName + " is not loaded in bukkit. Command deactivated", this);
 			}
 			DebugLog.beginInfo("Check Alias of the commands");
 			if (pluginCommand.getAliases().isEmpty()) {
-				throw new CommandAlreadyExist(
-						cmdName
-								+ " has all his alias already registered. Command deactivated",
-						this);
+				throw new CommandAlreadyExist(cmdName + " has all his alias already registered. Command deactivated", this);
 			}
 		} finally {
 			DebugLog.endInfo();
@@ -249,8 +272,7 @@ public abstract class CoreCommand {
 	 */
 	@Override
 	public String toString() {
-		return "CoreCommand [permNode=" + permNode + ", cmdName=" + cmdName
-				+ ", plugin=" + plugin + ", permParent=" + permParent + "]";
+		return "CoreCommand [permNode=" + permNode + ", cmdName=" + cmdName + ", plugin=" + plugin + ", permParent=" + permParent + "]";
 	}
 
 	/*
@@ -262,14 +284,11 @@ public abstract class CoreCommand {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((bukkitDefault == null) ? 0 : bukkitDefault.hashCode());
+		result = prime * result + ((bukkitDefault == null) ? 0 : bukkitDefault.hashCode());
 		result = prime * result + ((cmdName == null) ? 0 : cmdName.hashCode());
 		result = prime * result + (other ? 1231 : 1237);
-		result = prime * result
-				+ ((permNode == null) ? 0 : permNode.hashCode());
-		result = prime * result
-				+ ((permParent == null) ? 0 : permParent.hashCode());
+		result = prime * result + ((permNode == null) ? 0 : permNode.hashCode());
+		result = prime * result + ((permParent == null) ? 0 : permParent.hashCode());
 		result = prime * result + ((plugin == null) ? 0 : plugin.hashCode());
 		return result;
 	}
