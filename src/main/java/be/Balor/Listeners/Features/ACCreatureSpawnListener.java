@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Type;
@@ -114,5 +115,32 @@ public class ACCreatureSpawnListener implements Listener {
 			generalLimit.put(world, count);
 		}
 		return count;
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onMobKilled(final EntityDeathEvent event) {
+		final Entity e = event.getEntity();
+		if (!(e instanceof LivingEntity)) {
+			return;
+		}
+		if (e instanceof HumanEntity) {
+			return;
+		}
+		final World world = e.getWorld();
+		Integer count = generalLimit.get(world);
+		if (count == null) {
+			return;
+		}
+		generalLimit.put(world, --count);
+
+		final Map<Class<? extends Entity>, Integer> tmp = specifiedLimit.get(world);
+		if (tmp == null) {
+			return;
+		}
+		count = tmp.get(e.getClass());
+		if (count == null) {
+			return;
+		}
+		tmp.put(e.getClass(), --count);
 	}
 }
