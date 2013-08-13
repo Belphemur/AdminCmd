@@ -16,7 +16,9 @@
  ************************************************************************/
 package be.Balor.Listeners.Features;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -36,6 +38,10 @@ import be.Balor.World.ACWorld;
  * 
  */
 public class ACCreatureSpawnListener implements Listener {
+
+	private final Map<World, Integer> generalLimit = new HashMap<World, Integer>();
+	private final Map<World, Map<Class<? extends Entity>, Integer>> specifiedLimit = new HashMap<World, Map<Class<? extends Entity>, Integer>>();
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event) {
 		final Entity e = event.getEntity();
@@ -50,14 +56,15 @@ public class ACCreatureSpawnListener implements Listener {
 			return;
 		}
 
-		final List<LivingEntity> livEntities = world.getLivingEntities();
-		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString())
-				.getInt(-1);
+		Integer limit = acWorld.getInformation(Type.MOB_LIMIT.toString()).getInt(-1);
 		if (limit != -1) {
-			if ((livEntities.size() - world.getPlayers().size()) >= limit) {
+			int count = getGeneralCount(world);
+			if (count >= limit) {
 				event.setCancelled(true);
 				return;
 			}
+			generalLimit.put(world, ++count);
+
 		}
 
 		final Class<? extends Entity> entityClass = e.getClass();
@@ -66,10 +73,46 @@ public class ACCreatureSpawnListener implements Listener {
 		if (limit == -1) {
 			return;
 		}
-		final int count = world.getEntitiesByClass(entityClass).size();
-		if (count >= limit) {
-			event.setCancelled(true);
-		}
+		event.setCancelled(checkSpecifiedLimit(world, limit, entityClass));
 
+	}
+
+	/**
+	 * @param world
+	 * @param limit
+	 * @param entityClass
+	 * @return true if the event need to be cancelled
+	 */
+	private boolean checkSpecifiedLimit(final World world, final Integer limit, final Class<? extends Entity> entityClass) {
+		int count = 0;
+		Map<Class<? extends Entity>, Integer> tmp = specifiedLimit.get(world);
+
+		if (tmp == null) {
+			tmp = new HashMap<Class<? extends Entity>, Integer>();
+			count = world.getEntitiesByClass(entityClass).size();
+			tmp.put(entityClass, count);
+			specifiedLimit.put(world, tmp);
+		} else {
+			count = tmp.get(entityClass);
+		}
+		if (count >= limit) {
+			return true;
+		}
+		tmp.put(entityClass, ++count);
+		return false;
+	}
+
+	/**
+	 * @param world
+	 * @return
+	 */
+	private Integer getGeneralCount(final World world) {
+		Integer count = generalLimit.get(world);
+		if (count == null) {
+			final List<LivingEntity> livEntities = world.getLivingEntities();
+			count = livEntities.size() - world.getPlayers().size();
+			generalLimit.put(world, count);
+		}
+		return count;
 	}
 }
