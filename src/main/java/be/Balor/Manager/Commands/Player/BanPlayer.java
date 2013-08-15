@@ -70,8 +70,7 @@ public class BanPlayer extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		DebugLog.beginInfo("Banning : " + args.getString(0));
 		try {
 			final Player toBan = Users.getPlayer(args.getString(0));
@@ -86,12 +85,16 @@ public class BanPlayer extends PlayerCommand {
 				}
 			} else {
 				banPlayerString = args.getString(0);
+				final ACPlayer acPlayer = ACPlayer.getPlayer(banPlayerString);
+				if (acPlayer != null && !Immunity.checkImmunity(sender, acPlayer)) {
+					LocaleManager.sI18n(sender, "insufficientLvl");
+					return;
+				}
 			}
 			Integer tmpBan = null;
 			if (args.length >= 2) {
 				if (args.hasFlag('m')) {
-					message = LocaleManager.getInstance().get("kickMessages",
-							args.getValueFlag('m'), "player", banPlayerString);
+					message = LocaleManager.getInstance().get("kickMessages", args.getValueFlag('m'), "player", banPlayerString);
 				}
 				tmpBan = checkTempBan(args, banPlayerString, sender);
 				if (tmpBan != null && tmpBan == -1) {
@@ -101,17 +104,14 @@ public class BanPlayer extends PlayerCommand {
 			message = parseMessage(args, message, tmpBan == null, sender);
 			replace.put("player", banPlayerString);
 			replace.put("reason", message);
-			final IBan ban = getBanType(banPlayerString, tmpBan, message,
-					sender, replace);
+			final IBan ban = getBanType(banPlayerString, tmpBan, message, sender, replace);
 
 			if (ban == null) {
 				return;
 			}
 			ACHelper.getInstance().banPlayer(ban);
 			if (ban instanceof ITempBan) {
-				ACPluginManager.getScheduler().runTaskLaterAsynchronously(
-						getPlugin(), new UnBanTask((ITempBan) ban, true),
-						Utils.secInTick * 60 * tmpBan);
+				ACPluginManager.getScheduler().runTaskLaterAsynchronously(getPlugin(), new UnBanTask((ITempBan) ban, true), Utils.secInTick * 60 * tmpBan);
 				message += " " + ((ITempBan) ban).getReadableTimeLeft();
 			}
 			if (ConfigEnum.ADD_BANNER_IN_BAN.getBoolean()) {
@@ -136,14 +136,12 @@ public class BanPlayer extends PlayerCommand {
 	 * @param replace
 	 * @return
 	 */
-	private IBan getBanType(final String banPlayerString, final Integer tmpBan,
-			final String message, final CommandSender sender,
+	private IBan getBanType(final String banPlayerString, final Integer tmpBan, final String message, final CommandSender sender,
 			final HashMap<String, String> replace) {
 		DebugLog.beginInfo("Get the ban type");
 		try {
 			final Matcher ipv4 = Utils.REGEX_IP_V4.matcher(banPlayerString);
-			final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4
-					.matcher(banPlayerString);
+			final Matcher inaccurateIp = Utils.REGEX_INACCURATE_IP_V4.matcher(banPlayerString);
 			Ban toDo;
 			if (tmpBan != null) {
 				DebugLog.addInfo("Temp ban for: " + tmpBan);
@@ -155,14 +153,11 @@ public class BanPlayer extends PlayerCommand {
 						LocaleHelper.INACC_IP.sendLocale(sender, replace);
 						return null;
 					}
-					toDo = new TempBannedIP(banPlayerString, message,
-							tmpBan * 60);
+					toDo = new TempBannedIP(banPlayerString, message, tmpBan * 60);
 				} else {
-					toDo = new TempBannedPlayer(banPlayerString, message,
-							tmpBan * 60);
+					toDo = new TempBannedPlayer(banPlayerString, message, tmpBan * 60);
 				}
-				DebugLog.addInfo("Banned for : "
-						+ ((ITempBan) toDo).getReadableTimeLeft());
+				DebugLog.addInfo("Banned for : " + ((ITempBan) toDo).getReadableTimeLeft());
 
 			} else {
 				DebugLog.addInfo("Permanent ban");
@@ -181,8 +176,7 @@ public class BanPlayer extends PlayerCommand {
 			if (!Users.isPlayer(sender, false)) {
 				toDo.setBanner("Server Admin");
 			} else {
-				toDo.setBanner(ChatColor.stripColor(Users
-						.getPlayerName((Player) sender)));
+				toDo.setBanner(ChatColor.stripColor(Users.getPlayerName((Player) sender)));
 			}
 			return toDo;
 		} finally {
@@ -196,8 +190,7 @@ public class BanPlayer extends PlayerCommand {
 	 * @param b
 	 * @return
 	 */
-	private String parseMessage(final CommandArgs args, String message,
-			final boolean tempBan, final CommandSender sender) {
+	private String parseMessage(final CommandArgs args, String message, final boolean tempBan, final CommandSender sender) {
 		if (message == null || (message != null && message.isEmpty())) {
 			message = "";
 			if (tempBan) {
@@ -223,19 +216,16 @@ public class BanPlayer extends PlayerCommand {
 	 * @param sender
 	 * @return
 	 */
-	private Integer checkTempBan(final CommandArgs args,
-			final String banPlayerString, final CommandSender sender) {
+	private Integer checkTempBan(final CommandArgs args, final String banPlayerString, final CommandSender sender) {
 		DebugLog.beginInfo("Check for tempBan");
 		try {
-			final int tmpIntTime = Utils.timeParser(args
-					.getString(args.length - 1));
+			final int tmpIntTime = Utils.timeParser(args.getString(args.length - 1));
 			if (tmpIntTime != -1) {
 				DebugLog.addInfo("Time found in minute : " + tmpIntTime);
 				return tmpIntTime;
 			}
 		} catch (final NotANumberException e) {
-			LocaleManager.sI18n(sender, "NaN", "number",
-					args.getString(args.length - 1));
+			LocaleManager.sI18n(sender, "NaN", "number", args.getString(args.length - 1));
 			return -1;
 		} catch (final Exception ex) {
 		} finally {
