@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
-import lib.SQL.PatPeter.SQLibrary.Database;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,6 +37,7 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.World.ACWorld;
+import belgium.Balor.SQL.Database;
 
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 

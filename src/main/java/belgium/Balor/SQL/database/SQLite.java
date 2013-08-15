@@ -1,11 +1,4 @@
-/**
- * SQLite
- * Inherited subclass for reading and writing to and from an SQLite file.
- * 
- * Date Created: 2011-08-26 19:08
- * @author PatPeter
- */
-package lib.SQL.PatPeter.SQLibrary;
+package belgium.Balor.SQL.database;
 
 /*
  * SQLite
@@ -18,23 +11,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
+import belgium.Balor.SQL.Database;
+import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
+import belgium.Balor.SQL.Statements;
 
 public class SQLite extends Database {
 	public String location;
 	public String name;
 	private final File sqlFile;
 
-	public SQLite(final Logger log, final String prefix, final String name,
-			final String location) {
+	public SQLite(final Logger log, final String prefix, final String name, final String location) {
 		super(log, prefix, "[SQLite] ");
 		this.name = name;
 		this.location = location;
 		final File folder = new File(this.location);
-		if (this.name.contains("/") || this.name.contains("\\")
-				|| this.name.endsWith(".db")) {
-			this.writeError("The database name cannot contain: /, \\, or .db",
-					true);
+		if (this.name.contains("/") || this.name.contains("\\") || this.name.endsWith(".db")) {
+			this.writeError("The database name cannot contain: /, \\, or .db", true);
 		}
 		if (!folder.exists()) {
 			folder.mkdir();
@@ -61,8 +53,7 @@ public class SQLite extends Database {
 	@Override
 	public void open() throws SQLException {
 		initialize();
-		this.connection = DriverManager.getConnection("jdbc:sqlite:"
-				+ sqlFile.getAbsolutePath());
+		this.connection = DriverManager.getConnection("jdbc:sqlite:" + sqlFile.getAbsolutePath());
 
 	}
 
@@ -75,7 +66,7 @@ public class SQLite extends Database {
 			synchronized (connection) {
 				statement = connection.createStatement();
 
-				switch (this.getStatement(query)) {
+				switch (Statements.getStatement(query)) {
 				case SELECT:
 					result = statement.executeQuery(query);
 					break;
@@ -103,12 +94,10 @@ public class SQLite extends Database {
 			}
 			return result;
 		} catch (final SQLException e) {
-			if (e.getMessage().toLowerCase().contains("locking")
-					|| e.getMessage().toLowerCase().contains("locked")) {
+			if (e.getMessage().toLowerCase().contains("locking") || e.getMessage().toLowerCase().contains("locked")) {
 				return retry(query);
 			} else {
-				this.writeError("SQL exception in query(): " + e.getMessage(),
-						false);
+				this.writeError("SQL exception in query(): " + e.getMessage(), false);
 			}
 
 		}
@@ -121,8 +110,7 @@ public class SQLite extends Database {
 		String query = null;
 		try {
 			if (!this.checkTable(table)) {
-				this.writeError("Table \"" + table
-						+ "\" in wipeTable() does not exist.", true);
+				this.writeError("Table \"" + table + "\" in wipeTable() does not exist.", true);
 				return false;
 			}
 			query = "DELETE FROM " + table + ";";
@@ -132,8 +120,7 @@ public class SQLite extends Database {
 			}
 			return true;
 		} catch (final SQLException ex) {
-			if (!(ex.getMessage().toLowerCase().contains("locking") || ex
-					.getMessage().toLowerCase().contains("locked"))
+			if (!(ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked"))
 					&& !ex.toString().contains("not return ResultSet")) {
 				this.writeError("Error at SQL Wipe Table Query: " + ex, false);
 			}
@@ -163,14 +150,10 @@ public class SQLite extends Database {
 			}
 			return result;
 		} catch (final SQLException ex) {
-			if (ex.getMessage().toLowerCase().contains("locking")
-					|| ex.getMessage().toLowerCase().contains("locked")) {
-				this.writeError(
-						"Please close your previous ResultSet to run the query: \n\t"
-								+ query, false);
+			if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+				this.writeError("Please close your previous ResultSet to run the query: \n\t" + query, false);
 			} else {
-				this.writeError("SQL exception in retry(): " + ex.getMessage(),
-						false);
+				this.writeError("SQL exception in retry(): " + ex.getMessage(), false);
 			}
 		}
 

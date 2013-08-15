@@ -5,7 +5,7 @@
  * Date Created: 2011-08-26 19:08
  * @author PatPeter
  */
-package lib.SQL.PatPeter.SQLibrary;
+package belgium.Balor.SQL;
 
 /*
  *  MySQL
@@ -30,9 +30,6 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
-import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.Parameter;
-
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import be.Balor.Player.sql.SQLPlayer;
@@ -42,13 +39,14 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.World.sql.SQLWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
+import belgium.Balor.SQL.DatabaseConfig.Parameter;
 
 public abstract class Database {
 	public static Database DATABASE;
 	protected Logger log;
 	protected final String PREFIX;
 	protected final String DATABASE_PREFIX;
-	protected boolean connected;
 	protected Connection connection;
 	static {
 		initDb();
@@ -105,49 +103,6 @@ public abstract class Database {
 		DebugLog.INSTANCE.info("Database initialization done");
 	}
 
-	// http://dev.mysql.com/doc/refman/5.6/en/sql-syntax.html
-	// http://sqlite.org/lang.html
-	protected enum Statements {
-		SELECT, INSERT, UPDATE, DELETE, DO, REPLACE, LOAD, HANDLER, CALL, // Data
-																			// manipulation
-																			// statements
-		CREATE,
-		ALTER,
-		DROP,
-		TRUNCATE,
-		RENAME, // Data definition statements
-
-		// MySQL-specific
-		START,
-		COMMIT,
-		ROLLBACK,
-		SAVEPOINT,
-		LOCK,
-		UNLOCK, // MySQL Transactional and Locking Statements
-		PREPARE,
-		EXECUTE,
-		DEALLOCATE, // Prepared Statements
-		SET,
-		SHOW, // Database Administration
-		DESCRIBE,
-		EXPLAIN,
-		HELP,
-		USE, // Utility Statements
-
-		// SQLite-specific
-		ANALYZE,
-		ATTACH,
-		BEGIN,
-		DETACH,
-		END,
-		INDEXED,
-		ON,
-		PRAGMA,
-		REINDEX,
-		RELEASE,
-		VACUUM
-	}
-
 	public int lastUpdate;
 
 	/*
@@ -157,7 +112,6 @@ public abstract class Database {
 		this.log = log;
 		this.PREFIX = prefix;
 		this.DATABASE_PREFIX = dp;
-		this.connected = false;
 		this.connection = null;
 	}
 
@@ -211,7 +165,7 @@ public abstract class Database {
 	 * @throws SQLException
 	 *             if there is a problem when trying to load the JDBC driver.
 	 */
-	abstract void initialize() throws SQLException;
+	protected abstract void initialize() throws SQLException;
 
 	/**
 	 * <b>open</b><br>
@@ -256,21 +210,6 @@ public abstract class Database {
 	}
 
 	/**
-	 * <b>checkConnection</b><br>
-	 * <br>
-	 * Checks the connection between Java and the database engine. <br>
-	 * <br>
-	 * 
-	 * @return the status of the connection, true for up, false for down.
-	 */
-	public boolean checkConnection() {
-		if (connection != null) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * <b>query</b><br>
 	 * &nbsp;&nbsp;Sends a query to the SQL database. <br>
 	 * <br>
@@ -303,47 +242,6 @@ public abstract class Database {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * <b>getStatement</b><br>
-	 * &nbsp;&nbsp;Determines the name of the statement and converts it into an
-	 * enum. <br>
-	 * <br>
-	 */
-	protected Statements getStatement(final String query) {
-		final String trimmedQuery = query.trim();
-		if (trimmedQuery.substring(0, 6).equalsIgnoreCase("SELECT")) {
-			return Statements.SELECT;
-		} else if (trimmedQuery.substring(0, 6).equalsIgnoreCase("INSERT")) {
-			return Statements.INSERT;
-		} else if (trimmedQuery.substring(0, 6).equalsIgnoreCase("UPDATE")) {
-			return Statements.UPDATE;
-		} else if (trimmedQuery.substring(0, 6).equalsIgnoreCase("DELETE")) {
-			return Statements.DELETE;
-		} else if (trimmedQuery.substring(0, 6).equalsIgnoreCase("CREATE")) {
-			return Statements.CREATE;
-		} else if (trimmedQuery.substring(0, 5).equalsIgnoreCase("ALTER")) {
-			return Statements.ALTER;
-		} else if (trimmedQuery.substring(0, 4).equalsIgnoreCase("DROP")) {
-			return Statements.DROP;
-		} else if (trimmedQuery.substring(0, 8).equalsIgnoreCase("TRUNCATE")) {
-			return Statements.TRUNCATE;
-		} else if (trimmedQuery.substring(0, 6).equalsIgnoreCase("RENAME")) {
-			return Statements.RENAME;
-		} else if (trimmedQuery.substring(0, 2).equalsIgnoreCase("DO")) {
-			return Statements.DO;
-		} else if (trimmedQuery.substring(0, 7).equalsIgnoreCase("REPLACE")) {
-			return Statements.REPLACE;
-		} else if (trimmedQuery.substring(0, 4).equalsIgnoreCase("LOAD")) {
-			return Statements.LOAD;
-		} else if (trimmedQuery.substring(0, 7).equalsIgnoreCase("HANDLER")) {
-			return Statements.HANDLER;
-		} else if (trimmedQuery.substring(0, 4).equalsIgnoreCase("CALL")) {
-			return Statements.CALL;
-		} else {
-			return Statements.SELECT;
-		}
 	}
 
 	/**
@@ -429,7 +327,7 @@ public abstract class Database {
 	 */
 	private boolean isConnectionValid() {
 
-		if (checkConnection()) {
+		if (this.connection != null) {
 			try {
 				synchronized (connection) {
 					return !connection.isClosed() && connection.isValid(3);

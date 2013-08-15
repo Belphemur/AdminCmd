@@ -20,13 +20,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import lib.SQL.PatPeter.SQLibrary.Database;
 
 import org.bukkit.World;
 
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.World.ACWorld;
 import be.Balor.World.AbstractWorldFactory;
+import belgium.Balor.SQL.Database;
 
 /**
  * @author Balor (aka Antoine Aflalo)

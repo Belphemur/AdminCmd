@@ -24,8 +24,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import lib.SQL.PatPeter.SQLibrary.Database;
-import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -87,6 +85,8 @@ import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
 import be.Balor.World.sql.SQLWorld;
 import be.Balor.World.sql.SQLWorldFactory;
+import belgium.Balor.SQL.Database;
+import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
 import belgium.Balor.Workers.AFKWorker;
 import belgium.Balor.Workers.InvisibleWorker;
 

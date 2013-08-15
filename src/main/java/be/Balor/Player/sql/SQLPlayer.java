@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import lib.SQL.PatPeter.SQLibrary.Database;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -47,6 +46,7 @@ import be.Balor.World.ACWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import belgium.Balor.SQL.Database;
 
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with SQLibrary.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package lib.SQL.PatPeter.SQLibrary;
+package belgium.Balor.SQL;
 
 import java.util.EnumMap;
 import java.util.HashSet;

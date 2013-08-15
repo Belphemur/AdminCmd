@@ -14,11 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with SQLibrary.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package lib.SQL.PatPeter.SQLibrary;
+package belgium.Balor.SQL;
 
-import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.Parameter;
 
 import org.bukkit.configuration.InvalidConfigurationException;
+
+import belgium.Balor.SQL.DatabaseConfig.Parameter;
+import belgium.Balor.SQL.database.MySQL;
+import belgium.Balor.SQL.database.SQLite;
 
 /**
  * @author Balor (aka Antoine Aflalo)

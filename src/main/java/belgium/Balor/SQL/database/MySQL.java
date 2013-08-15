@@ -1,11 +1,4 @@
-/**
- * MySQL
- * Inherited subclass for making a connection to a MySQL server.
- * 
- * Date Created: 2011-08-26 19:08
- * @author PatPeter
- */
-package lib.SQL.PatPeter.SQLibrary;
+package belgium.Balor.SQL.database;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,18 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-import lib.SQL.PatPeter.SQLibrary.DatabaseConfig.DatabaseType;
+import belgium.Balor.SQL.Database;
+import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
+import belgium.Balor.SQL.Statements;
 
 public class MySQL extends Database {
-	private String hostname = "localhost";
-	private String portnmbr = "3306";
-	private String username = "minecraft";
-	private String password = "";
-	private String database = "minecraft";
+	private final String hostname;
+	private final String portnmbr;
+	private final String username;
+	private final String password;
+	private final String database;
 
-	public MySQL(final Logger log, final String prefix, final String hostname,
-			final String portnmbr, final String database,
-			final String username, final String password) {
+	public MySQL(final Logger log, final String prefix, final String hostname, final String portnmbr, final String database, final String username,
+			final String password) {
 		super(log, prefix, "[MySQL] ");
 		this.hostname = hostname;
 		this.portnmbr = portnmbr;
@@ -48,10 +42,8 @@ public class MySQL extends Database {
 	public void open() throws SQLException {
 		initialize();
 		String url = "";
-		url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/"
-				+ this.database;
-		this.connection = DriverManager.getConnection(url, this.username,
-				this.password);
+		url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/" + this.database;
+		this.connection = DriverManager.getConnection(url, this.username, this.password);
 	}
 
 	@Override
@@ -63,7 +55,7 @@ public class MySQL extends Database {
 			synchronized (connection) {
 				statement = this.connection.createStatement();
 
-				switch (this.getStatement(query)) {
+				switch (Statements.getStatement(query)) {
 				case SELECT:
 					result = statement.executeQuery(query);
 					break;
@@ -90,8 +82,7 @@ public class MySQL extends Database {
 			}
 			return result;
 		} catch (final SQLException e) {
-			this.writeError("SQL exception in query(): " + e.getMessage(),
-					false);
+			this.writeError("SQL exception in query(): " + e.getMessage(), false);
 		}
 		return result;
 	}
@@ -102,8 +93,7 @@ public class MySQL extends Database {
 		String query = null;
 		try {
 			if (!this.checkTable(table)) {
-				this.writeError("Table \"" + table
-						+ "\" in wipeTable() does not exist.", true);
+				this.writeError("Table \"" + table + "\" in wipeTable() does not exist.", true);
 				return false;
 			}
 			query = "DELETE FROM " + table + ";";
@@ -141,9 +131,8 @@ public class MySQL extends Database {
 			final PreparedStatement ps;
 			autoReconnect();
 			synchronized (connection) {
-				if (getStatement(query) == Statements.INSERT) {
-					ps = connection.prepareStatement(query,
-							PreparedStatement.RETURN_GENERATED_KEYS);
+				if (Statements.getStatement(query) == Statements.INSERT) {
+					ps = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 				} else {
 					ps = connection.prepareStatement(query);
 				}
@@ -151,8 +140,7 @@ public class MySQL extends Database {
 			return ps;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
-				this.writeError(
-						"SQL exception in prepare(): " + e.getMessage(), false);
+				this.writeError("SQL exception in prepare(): " + e.getMessage(), false);
 			}
 		}
 		return null;

@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import lib.SQL.PatPeter.SQLibrary.Database;
 
 import org.bukkit.entity.Player;
 
@@ -30,6 +29,7 @@ import be.Balor.Player.EmptyPlayer;
 import be.Balor.Player.IPlayerFactory;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
+import belgium.Balor.SQL.Database;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.MapMaker;
