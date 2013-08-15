@@ -38,12 +38,10 @@ public class ACGodListener implements Listener {
 		}
 		final Player player = (Player) event.getEntity();
 		if (ACPlayer.getPlayer(player).hasPower(Type.GOD)) {
-			if (event.getCause().equals(DamageCause.FIRE)
-					|| event.getCause().equals(DamageCause.FIRE_TICK)) {
+			if (event.getCause().equals(DamageCause.FIRE) || event.getCause().equals(DamageCause.FIRE_TICK)) {
 				player.setFireTicks(0);
 			}
 			event.setCancelled(true);
-			event.setDamage(0);
 		}
 
 	}
