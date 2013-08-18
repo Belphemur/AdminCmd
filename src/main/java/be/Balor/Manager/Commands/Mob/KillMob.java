@@ -69,8 +69,7 @@ public class KillMob extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		final List<String> types = new ArrayList<String>();
 		Integer range = ConfigEnum.MK_DEF_RADIUS.getInt();
@@ -119,13 +118,12 @@ public class KillMob extends MobCommand {
 		}
 		final CommandSender finalSender = sender;
 		final Integer finalRange = range;
-		ACPluginManager.getScheduler().runTaskAsynchronously(
-				ACPluginManager.getCorePlugin(), new Runnable() {
-					@Override
-					public void run() {
-						killMobs(worldList, types, finalSender, finalRange);
-					}
-				});
+		ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
+			@Override
+			public void run() {
+				killMobs(worldList, types, finalSender, finalRange);
+			}
+		});
 
 	}
 
@@ -148,8 +146,7 @@ public class KillMob extends MobCommand {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void killMobs(final List<World> worlds, final List<String> types,
-			final CommandSender sender, final Integer range) {
+	private void killMobs(final List<World> worlds, final List<String> types, final CommandSender sender, final Integer range) {
 		int mobKilled = 0;
 		final List<Class<? extends Entity>> classes = new ArrayList<Class<? extends Entity>>();
 		if (!types.contains("all")) {
@@ -186,11 +183,9 @@ public class KillMob extends MobCommand {
 			}
 		}
 
-		final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(
-				Entity.class.getClass(), classes.size());
+		final Class<Entity>[] array = (Class<Entity>[]) Array.newInstance(Entity.class.getClass(), classes.size());
 		for (final World w : worlds) {
-			for (final Entity m : w
-					.getEntitiesByClasses(classes.toArray(array))) {
+			for (final Entity m : w.getEntitiesByClasses(classes.toArray(array))) {
 				if (killEntity(m, sender, range)) {
 					mobKilled++;
 				}
@@ -200,14 +195,19 @@ public class KillMob extends MobCommand {
 		LocaleManager.sI18n(sender, "killedMobs", "nbKilled", String.valueOf(mobKilled));
 	}
 
-	private boolean killEntity(final Entity e, final CommandSender sender,
-			final Integer range) {
+	public static boolean killEntity(final Entity e, final CommandSender sender, final Integer range) {
 		if (!checkKillCondition(e, sender, range)) {
 			return false;
 		}
 		final Object entity = ACMinecraftReflection.getHandle(e);
-		final MethodHandler die = new MethodHandler(entity.getClass(), "die");
-		die.invoke(entity);
+		try {
+			final MethodHandler die = new MethodHandler(entity.getClass(), "die");
+			die.invoke(entity);
+		} catch (final RuntimeException e2) {
+			final MethodHandler die = new MethodHandler(entity.getClass(), "kill");
+			die.invoke(entity);
+		}
+
 		return true;
 	}
 
@@ -223,12 +223,10 @@ public class KillMob extends MobCommand {
 	 *            kill.
 	 * @return
 	 */
-	private boolean checkKillCondition(final Entity toCheck,
-			final CommandSender sender, final Integer range) {
+	public static boolean checkKillCondition(final Entity toCheck, final CommandSender sender, final Integer range) {
 		boolean result = true;
-		if (range != null && Users.isPlayer(sender, false)) {
-			result = toCheck.getLocation().distanceSquared(
-					((Player) sender).getLocation()) <= range;
+		if (range != null && range != -1 && Users.isPlayer(sender, false)) {
+			result = toCheck.getLocation().distanceSquared(((Player) sender).getLocation()) <= range;
 		}
 		return result;
 	}

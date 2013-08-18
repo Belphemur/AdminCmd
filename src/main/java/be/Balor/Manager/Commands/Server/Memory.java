@@ -61,8 +61,7 @@ public class Memory extends ServerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (args.hasFlag('f') && !PermissionManager.hasPerm(sender, full)) {
 			return;
 		}
@@ -90,42 +89,39 @@ public class Memory extends ServerCommand {
 		if (args.hasFlag('v') && !PermissionManager.hasPerm(sender, vehicle)) {
 			return;
 		}
-		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i')
-				|| args.hasFlag('m') || args.hasFlag('a') || args.hasFlag('n')
-				|| args.hasFlag('v') || args.hasFlag('c') || args.hasFlag('b')) {
+		if (args.hasFlag('f') || args.hasFlag('x') || args.hasFlag('i') || args.hasFlag('m') || args.hasFlag('a') || args.hasFlag('n') || args.hasFlag('v')
+				|| args.hasFlag('c') || args.hasFlag('b')) {
 			int count = 0;
-			final HashMap<String, List<Object>> entityList = new HashMap<String, List<Object>>(
-					sender.getServer().getWorlds().size());
+			final HashMap<String, List<Object>> entityList = new HashMap<String, List<Object>>(sender.getServer().getWorlds().size());
 			final List<World> worlds = sender.getServer().getWorlds();
 			final Semaphore sema = new Semaphore(0);
 
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin,
-					new Runnable() {
-						@Override
-						public void run() {
-							for (final World w : worlds) {
-								final Object cWorld = ACMinecraftReflection
-										.getHandle(w);
-								List<Object> wEntityList = null;
-								try {
-									wEntityList = FieldUtils.getField(cWorld,
-											"entityList");
-								} catch (final Exception e) {
-									throw new RuntimeException(
-											"Cannot get entityList from "
-													+ cWorld, e);
-								}
-								synchronized (wEntityList) {
-									entityList.put(w.getName(),
-											new ArrayList<Object>(wEntityList));
-									sema.release();
-								}
-
-							}
+			ACPluginManager.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				@Override
+				public void run() {
+					for (final World w : worlds) {
+						final Object cWorld = ACMinecraftReflection.getHandle(w);
+						List<Object> wEntityList = null;
+						try {
+							wEntityList = FieldUtils.getField(cWorld, "entityList");
+						} catch (final Exception e) {
+							throw new RuntimeException("Cannot get entityList from " + cWorld, e);
 						}
-					});
-			final MethodHandler die = new MethodHandler(
-					ACMinecraftReflection.getEntityClass(), "die");
+						synchronized (wEntityList) {
+							entityList.put(w.getName(), new ArrayList<Object>(wEntityList));
+							sema.release();
+						}
+
+					}
+				}
+			});
+			MethodHandler die = null;
+			try {
+				die = new MethodHandler(ACMinecraftReflection.getEntityClass(), "die");
+			} catch (final RuntimeException e) {
+				die = new MethodHandler(ACMinecraftReflection.getEntityClass(), "kill");
+			}
+
 			for (final World w : worlds) {
 				try {
 					sema.acquire();
@@ -146,19 +142,13 @@ public class Memory extends ServerCommand {
 			} catch (final InterruptedException e) {
 			}
 		}
-		final long usedMB = (Runtime.getRuntime().totalMemory() - Runtime
-				.getRuntime().freeMemory()) / 1024L / 1024L;
-		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE
-				+ Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
-		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : "
-				+ ChatColor.WHITE + usedMB + "MB");
-		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : "
-				+ ChatColor.WHITE + Runtime.getRuntime().freeMemory() / 1024L
-				/ 1024L + "MB");
+		final long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L;
+		sender.sendMessage(ChatColor.GOLD + "Max Memory : " + ChatColor.WHITE + Runtime.getRuntime().maxMemory() / 1024L / 1024L + "MB");
+		sender.sendMessage(ChatColor.DARK_RED + "Used Memory : " + ChatColor.WHITE + usedMB + "MB");
+		sender.sendMessage(ChatColor.DARK_GREEN + "Free Memory : " + ChatColor.WHITE + Runtime.getRuntime().freeMemory() / 1024L / 1024L + "MB");
 		for (final World w : sender.getServer().getWorlds()) {
-			sender.sendMessage(w.getEnvironment() + " \"" + w.getName()
-					+ "\": " + w.getLoadedChunks().length + " chunks, "
-					+ w.getEntities().size() + " entities");
+			sender.sendMessage(w.getEnvironment() + " \"" + w.getName() + "\": " + w.getLoadedChunks().length + " chunks, " + w.getEntities().size()
+					+ " entities");
 		}
 
 		// Code for TPS from here on
@@ -177,10 +167,8 @@ public class Memory extends ServerCommand {
 			delay = 20L;
 		}
 		final World world = ACPluginManager.getServer().getWorlds().get(0);
-		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-				ACHelper.getInstance().getCoreInstance(),
-				new CheckTicks(System.nanoTime(), world, world.getFullTime(),
-						sender), delay);
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(ACHelper.getInstance().getCoreInstance(),
+				new CheckTicks(System.nanoTime(), world, world.getFullTime(), sender), delay);
 	}
 
 	/*
@@ -212,9 +200,8 @@ public class Memory extends ServerCommand {
 		final PermParent parent = new PermParent(permNode + ".*");
 		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
-		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp)
-				.addChild(item).addChild(full).addChild(npc).addChild(vehicle)
-				.addChild(cart).addChild(boat);
+		parent.addChild(child).addChild(mob).addChild(animal).addChild(xp).addChild(item).addChild(full).addChild(npc).addChild(vehicle).addChild(cart)
+				.addChild(boat);
 		permChild = child;
 	}
 
@@ -228,8 +215,7 @@ public class Memory extends ServerCommand {
 		protected long elapsedTicks;
 		protected CommandSender sender;
 
-		public CheckTicks(final long oldNanoTime, final World world,
-				final long start, final CommandSender sender) {
+		public CheckTicks(final long oldNanoTime, final World world, final long start, final CommandSender sender) {
 			this.oldNanoTime = oldNanoTime;
 			this.world = world;
 			this.start = start;
@@ -246,51 +232,38 @@ public class Memory extends ServerCommand {
 			elapsedNanoTime = System.nanoTime() - oldNanoTime;
 			elapsedTicks = world.getFullTime() - start;
 			ticksPerSecond = (elapsedTicks * 1000000000.0) / elapsedNanoTime;
-			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond
-					+ " | Ticks elapsed: " + elapsedTicks + " | Nano Time:"
-					+ elapsedNanoTime);
+			sender.sendMessage("[AdminCmd] TPS: " + ticksPerSecond + " | Ticks elapsed: " + elapsedTicks + " | Nano Time:" + elapsedNanoTime);
 		}
 	}
 
 	private boolean dontKill(final CommandArgs args, final Object toKill) {
 		boolean dontKill = true;
 		if (args.hasFlag('f')) {
-			dontKill = (ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityHuman") || ACMinecraftReflection.instanceOfNMS(
-					toKill, "EntityPainting"));
+			dontKill = (ACMinecraftReflection.instanceOfNMS(toKill, "EntityHuman") || ACMinecraftReflection.instanceOfNMS(toKill, "EntityPainting"));
 		}
 		if (args.hasFlag('x')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityExperienceOrb");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityExperienceOrb");
 		}
 		if (args.hasFlag('i')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityItem");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityItem");
 		}
 		if (args.hasFlag('m')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityMonster");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityMonster");
 		}
 		if (args.hasFlag('a')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityAnimal");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityAnimal");
 		}
 		if (args.hasFlag('n')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityVillager");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityVillager");
 		}
 		if (args.hasFlag('c')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityMinecart");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityMinecart");
 		}
 		if (args.hasFlag('b')) {
-			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityBoat");
+			dontKill = !ACMinecraftReflection.instanceOfNMS(toKill, "EntityBoat");
 		}
 		if (args.hasFlag('v')) {
-			dontKill = !(ACMinecraftReflection.instanceOfNMS(toKill,
-					"EntityMinecart") || ACMinecraftReflection.instanceOfNMS(
-					toKill, "EntityBoat"));
+			dontKill = !(ACMinecraftReflection.instanceOfNMS(toKill, "EntityMinecart") || ACMinecraftReflection.instanceOfNMS(toKill, "EntityBoat"));
 		}
 		return dontKill;
 	}
