@@ -16,6 +16,8 @@
  ************************************************************************/
 package be.Balor.Tools.Compatibility;
 
+import java.lang.reflect.Modifier;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
@@ -25,6 +27,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
 
 /**
  * @author Antoine
@@ -212,7 +216,20 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	}
 
 	public static Class<?> getNMSWorldClass() {
-		return getMinecraftClass("World");
+		try {
+			return getMinecraftClass("World");
+
+		} catch (final RuntimeException e) {
+			final Class<?> normalChunkGenerator = getCraftBukkitClass("generator.NormalChunkGenerator");
+
+			// ChunkPosition a(net.minecraft.server.World world, String string,
+			// int i, int i1, int i2) {
+			final FuzzyMethodContract selected = FuzzyMethodContract.newBuilder().banModifier(Modifier.STATIC).parameterMatches(getMinecraftObjectMatcher(), 0)
+					.parameterExactType(String.class, 1).parameterExactType(int.class, 2).parameterExactType(int.class, 3).parameterExactType(int.class, 4)
+					.build();
+
+			return setMinecraftClass("World", FuzzyReflection.fromClass(normalChunkGenerator).getMethod(selected).getParameterTypes()[0]);
+		}
 	}
 
 	public static Class<?> getItemInWorldManagerClass() {

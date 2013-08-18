@@ -1266,7 +1266,7 @@ public class MinecraftReflection {
 	 *            - the new class object.
 	 * @return The provided clazz object.
 	 */
-	private static Class<?> setMinecraftClass(final String className, final Class<?> clazz) {
+	protected static Class<?> setMinecraftClass(final String className, final Class<?> clazz) {
 		if (minecraftPackage == null) {
 			minecraftPackage = new CachedPackage(getMinecraftPackage());
 		}
