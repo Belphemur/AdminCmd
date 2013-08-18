@@ -84,7 +84,7 @@ public class InventoryManager {
 		onQuit(p);
 		offlineInv.remove(p.getName());
 		p.saveData();
-		DebugLog.INSTANCE.info("Saving Offline Inventory of " + p.getName());
+		DebugLog.addInfo("Saving Offline Inventory of " + p.getName());
 	}
 
 	public void onJoin(final Player p) {

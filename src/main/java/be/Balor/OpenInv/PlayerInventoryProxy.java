@@ -94,7 +94,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 			return ACMinecraftReflection.getItemStackArrayClass().cast(getContents());
 		} else if (methodName.equals("getSize")) {
 			return getSize();
-		} else if (methodName.equals("a_") || methodName.equals("a")) {
+		} else if (methodName.equals("a_") || methodName.equals("a") || methodName.equals("canInteractWith") || methodName.equals("isUseableByPlayer")) {
 			return a_();
 		} else if (methodName.equals("getName")) {
 			return getName();
