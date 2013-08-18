@@ -74,7 +74,13 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @return The IInventory class.
 	 */
 	public static Class<?> getIInventoryClass() {
-		return getMinecraftClass("IInventory");
+		try {
+			return getMinecraftClass("IInventory");
+		} catch (final RuntimeException e) {
+			final Class<?> playerInventory = getPlayerInventoryClass();
+			return setMinecraftClass("IInventory", playerInventory.getInterfaces()[0]);
+		}
+
 	}
 
 	/**
