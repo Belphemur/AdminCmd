@@ -233,7 +233,18 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	}
 
 	public static Class<?> getItemInWorldManagerClass() {
-		return getMinecraftClass("ItemInWorldManager", "PlayerInteractManager");
+		try {
+			return getMinecraftClass("ItemInWorldManager", "PlayerInteractManager");
+		} catch (final Exception e) {
+			// public EntityPlayerMP(MinecraftServer par1MinecraftServer, World
+			// par2World, String par3Str, ItemInWorldManager
+			// par4ItemInWorldManager)
+
+			final FuzzyMethodContract selected = FuzzyMethodContract.newBuilder().parameterExactType(getMinecraftServerClass(), 0)
+					.parameterExactType(getNMSWorldClass(), 1).parameterExactType(String.class, 2).parameterMatches(getMinecraftObjectMatcher(), 3).build();
+			return setMinecraftClass("ItemInWorldManager", FuzzyReflection.fromClass(getEntityPlayerClass()).getConstructor(selected).getParameterTypes()[3]);
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")

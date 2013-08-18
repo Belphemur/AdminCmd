@@ -85,11 +85,12 @@ public class NMSBuilder {
 				final List<Object> worlds = FieldUtils.getField(minecraftServer, "worlds");
 				worldServer = worlds.get(0);
 			}
-			final Object itemInWorldManager = buildItemInWorldManager(worldServer);
 			final Class<?> entityPlayer = MinecraftReflection.getEntityPlayerClass();
+			final Object itemInWorldManager = buildItemInWorldManager(worldServer);
 			final Constructor<?> ePConstructor = entityPlayer.getConstructor(ACMinecraftReflection.getMinecraftServerClass(),
 					ACMinecraftReflection.getNMSWorldClass(), String.class, ACMinecraftReflection.getItemInWorldManagerClass());
 			return ePConstructor.newInstance(minecraftServer, worldServer, name, itemInWorldManager);
+
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);
 		}
