@@ -1,5 +1,8 @@
 #version: ${git.commit.id}
 #Made by Lathanael
+# Don't edit this file, it will be overrided at every new version of AdminCmd
+# if you want to override one of the help, just copy paste the command you want to override
+# in another file like MyAdminCmd.yml in the same folder
 AdminCmd:
     command: help AdminCmd
     description: Display AdminCmd help.

@@ -1,4 +1,8 @@
 #version: ${git.commit.id}
+# DON'T EDIT THIS FILE
+# It will be overrided at every new version of AdminCmd.
+# If you want to change some of the locale, copy paste the line/block you want
+# in your locale file (default en_US.yml).
 playerNotFound: '§cNo such player: §f%player'
 kitNotFound: '§cNo such kit: §f%kit'
 pluginNotFound: '§cNo such plugin: §f%plugin'
