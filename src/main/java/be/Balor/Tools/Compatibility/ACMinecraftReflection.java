@@ -44,7 +44,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @return The PlayerInventory class.
 	 */
 	public static Class<?> getPlayerInventoryClass() {
-		return getMinecraftClass("PlayerInventory");
+		return getMinecraftClass("PlayerInventory", "InventoryPlayer");
 	}
 
 	/**

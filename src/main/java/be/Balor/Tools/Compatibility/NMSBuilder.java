@@ -17,6 +17,7 @@
 package be.Balor.Tools.Compatibility;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 
@@ -36,16 +37,12 @@ public class NMSBuilder {
 	 *            - ping
 	 * @return instance of Packet201PlayerInfo
 	 */
-	public static Object buildPacket201PlayerInfo(final Player player,
-			final boolean online, final int ping) {
+	public static Object buildPacket201PlayerInfo(final Player player, final boolean online, final int ping) {
 		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
-			final String listName = FieldUtils.getField(playerHandle,
-					"listName");
-			final Class<?> packetClass = ACMinecraftReflection
-					.getPacket201PlayerInfoClass();
-			final Constructor<?> packetConstructor = packetClass
-					.getConstructor(String.class, boolean.class, int.class);
+			final String listName = FieldUtils.getField(playerHandle, "listName");
+			final Class<?> packetClass = ACMinecraftReflection.getPacket201PlayerInfoClass();
+			final Constructor<?> packetConstructor = packetClass.getConstructor(String.class, boolean.class, int.class);
 			return packetConstructor.newInstance(listName, online, ping);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't create the wanted packet", e);
@@ -62,10 +59,8 @@ public class NMSBuilder {
 	public static Object buildPlayerInventory(final Player player) {
 		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
-			final Class<?> playerInventoryClass = ACMinecraftReflection
-					.getPlayerInventoryClass();
-			final Constructor<?> invConstructor = playerInventoryClass
-					.getConstructor(ACMinecraftReflection.getEntityHumanClass());
+			final Class<?> playerInventoryClass = ACMinecraftReflection.getPlayerInventoryClass();
+			final Constructor<?> invConstructor = playerInventoryClass.getConstructor(ACMinecraftReflection.getEntityHumanClass());
 			return invConstructor.newInstance(playerHandle);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);
@@ -80,22 +75,21 @@ public class NMSBuilder {
 	 * @return instance NMS of EntityPlayer
 	 */
 	public static Object buildEntityPlayer(final String name) {
-		final Object minecraftServer = ACMinecraftReflection
-				.getMinecraftServer();
+		final Object minecraftServer = ACMinecraftReflection.getMinecraftServer();
 		try {
-			final MethodHandler getWorldServer = new MethodHandler(
-					minecraftServer.getClass(), "getWorldServer", int.class);
-			final Object worldServer = getWorldServer
-					.invoke(minecraftServer, 0);
+			Object worldServer = null;
+			try {
+				final MethodHandler getWorldServer = new MethodHandler(minecraftServer.getClass(), "getWorldServer", int.class);
+				worldServer = getWorldServer.invoke(minecraftServer, 0);
+			} catch (final RuntimeException rex) {
+				final List<Object> worlds = FieldUtils.getField(minecraftServer, "worlds");
+				worldServer = worlds.get(0);
+			}
 			final Object itemInWorldManager = buildItemInWorldManager(worldServer);
-			final Class<?> entityPlayer = MinecraftReflection
-					.getEntityPlayerClass();
-			final Constructor<?> ePConstructor = entityPlayer.getConstructor(
-					ACMinecraftReflection.getMinecraftServerClass(),
-					ACMinecraftReflection.getNMSWorldClass(), String.class,
-					ACMinecraftReflection.getItemInWorldManagerClass());
-			return ePConstructor.newInstance(minecraftServer, worldServer,
-					name, itemInWorldManager);
+			final Class<?> entityPlayer = MinecraftReflection.getEntityPlayerClass();
+			final Constructor<?> ePConstructor = entityPlayer.getConstructor(ACMinecraftReflection.getMinecraftServerClass(),
+					ACMinecraftReflection.getNMSWorldClass(), String.class, ACMinecraftReflection.getItemInWorldManagerClass());
+			return ePConstructor.newInstance(minecraftServer, worldServer, name, itemInWorldManager);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);
 		}
@@ -108,22 +102,16 @@ public class NMSBuilder {
 	 * @return return instance of ItemInWorldManager
 	 */
 	public static Object buildItemInWorldManager(final Object world) {
-		if (!ACMinecraftReflection.getNMSWorldClass().isAssignableFrom(
-				world.getClass())) {
-			throw new RuntimeException("The constructor need a "
-					+ ACMinecraftReflection.getNMSWorldClass().getSimpleName());
+		if (!ACMinecraftReflection.getNMSWorldClass().isAssignableFrom(world.getClass())) {
+			throw new RuntimeException("The constructor need a " + ACMinecraftReflection.getNMSWorldClass().getSimpleName());
 		}
-		final Class<?> clazz = ACMinecraftReflection
-				.getItemInWorldManagerClass();
+		final Class<?> clazz = ACMinecraftReflection.getItemInWorldManagerClass();
 		try {
-			final Constructor<?> constructor = clazz
-					.getConstructor(ACMinecraftReflection.getNMSWorldClass());
+			final Constructor<?> constructor = clazz.getConstructor(ACMinecraftReflection.getNMSWorldClass());
 			return constructor.newInstance(world);
 		} catch (final Exception e) {
 			try {
-				final Constructor<?> constructor = clazz
-						.getConstructor(MinecraftReflection
-								.getWorldServerClass());
+				final Constructor<?> constructor = clazz.getConstructor(MinecraftReflection.getWorldServerClass());
 				return constructor.newInstance(world);
 
 			} catch (final Exception e2) {
