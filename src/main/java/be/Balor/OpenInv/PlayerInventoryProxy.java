@@ -40,6 +40,8 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	protected final Object obj;
 	protected final Player proprietary;
 	private final Object[] extra = new Object[5];
+	private Object[] armor;
+	private Object[] items;
 	private final int size;
 
 	/**
@@ -51,8 +53,6 @@ public class PlayerInventoryProxy implements InvocationHandler {
 		final Object playerHandle = ACMinecraftReflection.getHandle(proprietary);
 		final Object inventory = FieldUtils.getAttribute(playerHandle, ACMinecraftReflection.INVENTORY_CONTRACT);
 
-		Object[] armor = null;
-		Object[] items = null;
 		final List<Field> fieldList = FuzzyReflection.fromObject(inventory).getFieldList(ACMinecraftReflection.INVENTORY_ITEMSTACK_CONTRACT);
 		for (final Field field : fieldList) {
 			try {
@@ -90,21 +90,25 @@ public class PlayerInventoryProxy implements InvocationHandler {
 		if (methodName.equals("onClose")) {
 			this.onClose(args[0]);
 			return null;
-		} else if (methodName.equals("getContents")) {
+		} else if (methodName.equals("getContents")
+				|| (method.getReturnType().equals(ACMinecraftReflection.getItemStackArrayClass()) && method.getParameterTypes().length == 0)) {
 			return ACMinecraftReflection.getItemStackArrayClass().cast(getContents());
-		} else if (methodName.equals("getSize")) {
+		} else if (methodName.equals("getSize") || (method.getReturnType().equals(int.class) && method.getParameterTypes().length == 0)) {
 			return getSize();
-		} else if (methodName.equals("a_") || methodName.equals("a") || methodName.equals("canInteractWith") || methodName.equals("isUseableByPlayer")) {
+		} else if (methodName.equals("a_")
+				|| methodName.equals("a")
+				|| (method.getReturnType().equals(boolean.class) && method.getParameterTypes().length == 1 && ACMinecraftReflection.getEntityPlayerClass()
+						.isAssignableFrom(args[0].getClass()))) {
 			return a_();
-		} else if (methodName.equals("getName")) {
+		} else if (methodName.equals("getName") || method.getReturnType().equals(String.class)) {
 			return getName();
-		} else if (methodName.equals("getItem")) {
+		} else if (methodName.equals("getItem") || methodName.equals("func_70301_a")) {
 			return getItem((Integer) args[0]);
-		} else if (methodName.equals("splitStack")) {
+		} else if (methodName.equals("splitStack") || methodName.equals("func_75209_a")) {
 			return splitStack((Integer) args[0], (Integer) args[1]);
-		} else if (methodName.equals("splitWithoutUpdate")) {
+		} else if (methodName.equals("splitWithoutUpdate") || methodName.equals("func_70304_b")) {
 			return splitWithoutUpdate((Integer) args[0]);
-		} else if (methodName.equals("setItem")) {
+		} else if (methodName.equals("setItem") || methodName.equals("func_70299_a")) {
 			setItem((Integer) args[0], args[1]);
 			return null;
 		} else {
@@ -113,11 +117,11 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	protected Object[] getItems() {
-		return FieldUtils.getAttribute(obj, "items");
+		return items;
 	}
 
 	protected Object[] getArmor() {
-		return FieldUtils.getAttribute(obj, "armor");
+		return armor;
 	}
 
 	/*
