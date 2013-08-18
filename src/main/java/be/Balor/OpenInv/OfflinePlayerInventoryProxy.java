@@ -56,7 +56,7 @@ public class OfflinePlayerInventoryProxy extends PlayerInventoryProxy {
 	 */
 	@Override
 	protected void checkCloseEvent() {
-		final Object transactions = FieldUtils.getField(obj, "transaction");
+		final Object transactions = FieldUtils.getAttribute(obj, "transaction");
 		final MethodHandler isEmpty = new MethodHandler(
 				transactions.getClass(), "isEmpty");
 		final boolean empty = isEmpty.invoke(transactions);

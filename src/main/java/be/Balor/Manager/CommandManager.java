@@ -633,9 +633,9 @@ public class CommandManager implements CommandExecutor {
 	 * @param pCmd
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand pCmd) {
-		final CommandMap commandMap = FieldUtils.getField(corePlugin
+		final CommandMap commandMap = FieldUtils.getAttribute(corePlugin
 				.getServer().getPluginManager(), "commandMap");
-		final HashMap<String, Command> knownCommands = FieldUtils.getField(
+		final HashMap<String, Command> knownCommands = FieldUtils.getAttribute(
 				commandMap, "knownCommands");
 		PluginCommand cmd;
 		final List<String> aliases = new ArrayList<String>();

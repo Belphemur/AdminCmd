@@ -103,7 +103,7 @@ public class Memory extends ServerCommand {
 						final Object cWorld = ACMinecraftReflection.getHandle(w);
 						List<Object> wEntityList = null;
 						try {
-							wEntityList = FieldUtils.getField(cWorld, "entityList");
+							wEntityList = FieldUtils.getAttribute(cWorld, "entityList");
 						} catch (final Exception e) {
 							throw new RuntimeException("Cannot get entityList from " + cWorld, e);
 						}

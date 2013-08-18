@@ -28,6 +28,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.AbstractFuzzyMatcher;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMatchers;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
@@ -38,6 +39,14 @@ import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
  * 
  */
 public class ACMinecraftReflection extends MinecraftReflection {
+
+	/**
+	 * 
+	 */
+	public static final AbstractFuzzyMatcher<Class<?>> INVENTORY_REGEX = FuzzyMatchers.matchRegex("(net\\.minecraft(\\.\\w+)+)((.+|)Inventory(.+|))", 50);
+	public static final FuzzyFieldContract INVENTORY_CONTRACT = FuzzyFieldContract.newBuilder().typeMatches(INVENTORY_REGEX).build();
+	public static final FuzzyFieldContract ARMOR_CONTRACT = FuzzyFieldContract.newBuilder().nameRegex("(armor(.+|))").build();
+	public static final FuzzyFieldContract ITEMS_CONTRACT = FuzzyFieldContract.newBuilder().nameRegex("(items|mainInventory)").build();
 
 	/**
 	 * 
@@ -54,9 +63,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 		try {
 			return getMinecraftClass("PlayerInventory");
 		} catch (final RuntimeException e) {
-			final FuzzyFieldContract find = new FuzzyFieldContract.Builder().typeMatches(
-					FuzzyMatchers.matchRegex("(net\\.minecraft(\\.\\w+)+)((.+|)Inventory(.+|))", 50)).build();
-			final Field inv = FuzzyReflection.fromClass(getEntityPlayerClass().getSuperclass()).getField(find);
+			final Field inv = FieldUtils.getMatchedField(getEntityPlayerClass(), INVENTORY_CONTRACT);
 			return setMinecraftClass("PlayerInventory", inv.getType());
 		}
 
@@ -124,7 +131,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @return {@link PlayerInventory}
 	 */
 	public static Object getInventory(final Player p) {
-		return FieldUtils.getField(ACMinecraftReflection.getHandle(p), "inventory");
+		return FieldUtils.getAttribute(ACMinecraftReflection.getHandle(p), "inventory");
 	}
 
 	/**
@@ -182,7 +189,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 			return bukkitObject.getClass().getMethod("getHandle").invoke(bukkitObject);
 		} catch (final Exception e) {
 			try {
-				return FieldUtils.getField(bukkitObject, "handle");
+				return FieldUtils.getAttribute(bukkitObject, "handle");
 			} catch (final Exception e1) {
 				throw new RuntimeException("Cannot get Handle from " + bukkitObject, e1);
 			}
@@ -201,7 +208,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	public static Object getNetServerHandler(final Object player) {
 		try {
 			final String fieldName = getNetServerHandlerName();
-			return FieldUtils.getField(player, Character.toLowerCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : ""));
+			return FieldUtils.getAttribute(player, Character.toLowerCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : ""));
 		} catch (final Exception e) {
 			throw new RuntimeException("Cannot get NetServerHandler from " + player, e);
 		}

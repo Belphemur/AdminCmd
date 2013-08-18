@@ -22,6 +22,9 @@ package be.Balor.Tools.Compatibility.Reflect;
  */
 import java.lang.reflect.Field;
 
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
+
 /**
  * A utility class for accessing private fields, and calling private methods
  * 
@@ -42,17 +45,36 @@ public class FieldUtils {
 	 *             if we can't get the field
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T getField(final Object object, final String field) {
+	public static <T> T getAttribute(final Object object, final String field) {
 		try {
-			final Field objectField = getObjectField(object, field);
-			objectField.setAccessible(true);
-			final T obj = (T) objectField.get(object);
-			objectField.setAccessible(false);
-			return obj;
+			final Field objectField = getExactField(object.getClass(), field);
+			return (T) getAttributeFromField(object, objectField);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't get field " + field + " from "
-					+ object, e);
+			throw new RuntimeException("Can't get field " + field + " from " + object, e);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getAttribute(final Object object, final FuzzyFieldContract contract) {
+		try {
+			final Field objectField = getMatchedField(object.getClass(), contract);
+			return (T) getAttributeFromField(object, objectField);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't get field " + contract + " from " + object, e);
+		}
+	}
+
+	/**
+	 * @param object
+	 * @param objectField
+	 * @return
+	 * @throws IllegalAccessException
+	 */
+	private static Object getAttributeFromField(final Object object, final Field objectField) throws IllegalAccessException {
+		objectField.setAccessible(true);
+		final Object obj = objectField.get(object);
+		objectField.setAccessible(false);
+		return obj;
 	}
 
 	/**
@@ -65,23 +87,58 @@ public class FieldUtils {
 	 * @throws RuntimeException
 	 *             if we can't set the field
 	 */
-	public static void setField(final Object object, final String field,
-			final Object value) {
+	public static void setExactAttribute(final Object object, final String field, final Object value) {
 		try {
-			final Field objectField = getObjectField(object, field);
-			objectField.setAccessible(true);
-			objectField.set(object, value);
-			objectField.setAccessible(false);
+			final Field objectField = getExactField(object.getClass(), field);
+			setAttribute0(object, value, objectField);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't set field " + field + " from "
-					+ object, e);
+			throw new RuntimeException("Can't set field " + field + " from " + object, e);
 		}
 	}
 
-	private static Field getObjectField(final Object object, final String field)
-			throws SecurityException, NoSuchFieldException {
-		Class<?> clazz = object.getClass();
+	/**
+	 * Set the field from the wanted object
+	 * 
+	 * @param object
+	 *            - given object
+	 * @param contract
+	 *            - given field
+	 * @throws RuntimeException
+	 *             if we can't set the field
+	 */
+	public static void setMatchedAttribute(final Object object, final FuzzyFieldContract contract, final Object value) {
+		try {
+			final Field objectField = getMatchedField(object.getClass(), contract);
+			setAttribute0(object, value, objectField);
+		} catch (final Exception e) {
+			throw new RuntimeException("Can't set field " + contract + " from " + object, e);
+		}
+	}
+
+	/**
+	 * @param object
+	 * @param value
+	 * @param objectField
+	 * @throws IllegalAccessException
+	 */
+	private static void setAttribute0(final Object object, final Object value, final Field objectField) throws IllegalAccessException {
+		objectField.setAccessible(true);
+		objectField.set(object, value);
+		objectField.setAccessible(false);
+	}
+
+	/**
+	 * Get a field by it's name recursively
+	 * 
+	 * @param object
+	 * @param field
+	 * @return
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
+	 */
+	public static Field getExactField(final Class<?> source, final String field) throws SecurityException, NoSuchFieldException {
 		Field objectField;
+		Class<?> clazz = source;
 		try {
 			objectField = clazz.getDeclaredField(field);
 		} catch (final NoSuchFieldException e) {
@@ -94,6 +151,36 @@ public class FieldUtils {
 					objectField = clazz.getDeclaredField(field);
 					break;
 				} catch (final NoSuchFieldException e1) {
+				}
+			}
+		}
+		return objectField;
+	}
+
+	/**
+	 * Get a field using a FieldContract recursively
+	 * 
+	 * @param source
+	 * @param contract
+	 * @return
+	 */
+	public static Field getMatchedField(final Class<?> source, final FuzzyFieldContract contract) {
+		Class<?> clazz = source;
+		FuzzyReflection reflect = FuzzyReflection.fromClass(clazz, true);
+		Field objectField;
+		try {
+			objectField = reflect.getField(contract);
+		} catch (final IllegalArgumentException e) {
+			while (true) {
+				clazz = clazz.getSuperclass();
+				if (clazz.equals(Object.class)) {
+					throw e;
+				}
+				reflect = FuzzyReflection.fromClass(clazz, true);
+				try {
+					objectField = reflect.getField(contract);
+					break;
+				} catch (final IllegalArgumentException e1) {
 				}
 			}
 		}

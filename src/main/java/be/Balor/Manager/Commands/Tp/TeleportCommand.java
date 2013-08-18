@@ -232,9 +232,9 @@ public abstract class TeleportCommand extends CoreCommand {
 				ACMinecraftReflection.teleportPlayer(player, toLocation);
 			} else {
 
-				final Object activeContainer = FieldUtils.getField(
+				final Object activeContainer = FieldUtils.getAttribute(
 						entityPlayer, "activeContainer");
-				final Object defaultContainer = FieldUtils.getField(
+				final Object defaultContainer = FieldUtils.getAttribute(
 						entityPlayer, "defaultContainer");
 
 				// Close any foreign inventory
@@ -244,7 +244,7 @@ public abstract class TeleportCommand extends CoreCommand {
 					closeInventory.invoke(entityPlayer);
 				}
 
-				final int dimension = FieldUtils.getField(toWorld, "dimension");
+				final int dimension = FieldUtils.getAttribute(toWorld, "dimension");
 				try {
 					final MethodHandler moveToWorld = new MethodHandler(
 							server.getClass(), "moveToWorld",

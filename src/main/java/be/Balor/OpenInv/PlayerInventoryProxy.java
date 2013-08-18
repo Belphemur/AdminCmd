@@ -47,9 +47,9 @@ public class PlayerInventoryProxy implements InvocationHandler {
 		this.obj = obj;
 		final Object playerHandle = ACMinecraftReflection
 				.getHandle(proprietary);
-		final Object inventory = FieldUtils.getField(playerHandle, "inventory");
-		final Object[] armor = FieldUtils.getField(inventory, "armor");
-		final Object[] items = FieldUtils.getField(inventory, "items");
+		final Object inventory = FieldUtils.getAttribute(playerHandle, "inventory");
+		final Object[] armor = FieldUtils.getAttribute(inventory, "armor");
+		final Object[] items = FieldUtils.getAttribute(inventory, "items");
 		size = armor.length + items.length + extra.length;
 		FieldUtils.setField(this.obj, "armor", armor);
 		FieldUtils.setField(this.obj, "items", items);
@@ -103,11 +103,11 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	protected Object[] getItems() {
-		return FieldUtils.getField(obj, "items");
+		return FieldUtils.getAttribute(obj, "items");
 	}
 
 	protected Object[] getArmor() {
-		return FieldUtils.getField(obj, "armor");
+		return FieldUtils.getAttribute(obj, "armor");
 	}
 
 	/*
@@ -126,7 +126,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	protected void checkCloseEvent() {
-		final Object transactions = FieldUtils.getField(obj, "transaction");
+		final Object transactions = FieldUtils.getAttribute(obj, "transaction");
 		final MethodHandler isEmpty = new MethodHandler(
 				transactions.getClass(), "isEmpty");
 		final boolean empty = isEmpty.invoke(transactions);
@@ -211,7 +211,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	private int getCount(final Object itemstack) {
-		return FieldUtils.getField(itemstack, "count");
+		return FieldUtils.getAttribute(itemstack, "count");
 	}
 
 	protected Object splitStack(int i, final int j) {

@@ -40,7 +40,7 @@ public class NMSBuilder {
 	public static Object buildPacket201PlayerInfo(final Player player, final boolean online, final int ping) {
 		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
-			final String listName = FieldUtils.getField(playerHandle, "listName");
+			final String listName = FieldUtils.getAttribute(playerHandle, "listName");
 			final Class<?> packetClass = ACMinecraftReflection.getPacket201PlayerInfoClass();
 			final Constructor<?> packetConstructor = packetClass.getConstructor(String.class, boolean.class, int.class);
 			return packetConstructor.newInstance(listName, online, ping);
@@ -87,7 +87,7 @@ public class NMSBuilder {
 				final MethodHandler getWorldServer = new MethodHandler(minecraftServer.getClass(), "getWorldServer", int.class);
 				worldServer = getWorldServer.invoke(minecraftServer, 0);
 			} catch (final RuntimeException rex) {
-				final List<Object> worlds = FieldUtils.getField(minecraftServer, "worlds");
+				final List<Object> worlds = FieldUtils.getAttribute(minecraftServer, "worlds");
 				worldServer = worlds.get(0);
 			}
 			final Class<?> entityPlayer = MinecraftReflection.getEntityPlayerClass();
