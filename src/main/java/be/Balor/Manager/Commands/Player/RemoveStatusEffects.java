@@ -58,7 +58,7 @@ public class RemoveStatusEffects extends PlayerCommand {
 
         final Player player = (Player) sender;
         final Player target = Users.getUser(sender, args, permNode);
-        if(removeEffect(target, player, args)) {
+        if (removeEffect(target, player, args)) {
             LocaleHelper.EFFECT_REMOVE_SUCCESS.sendLocale(sender, "effect", args.getString(1));
         } else {
             LocaleHelper.ERROR_EFFECT.sendLocale(sender, "effect", args.getString(1));
@@ -234,6 +234,77 @@ public class RemoveStatusEffects extends PlayerCommand {
                 return true;
             }
             return false;
+        } else if (args.getString(1).equalsIgnoreCase("all")) {
+            if (target.hasPotionEffect(PotionEffectType.SPEED)) {
+                target.removePotionEffect(PotionEffectType.SPEED);
+            }
+            if (target.hasPotionEffect(PotionEffectType.SLOW)) {
+                target.removePotionEffect(PotionEffectType.SLOW);
+            }
+            if (target.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
+                target.removePotionEffect(PotionEffectType.FAST_DIGGING);
+            }
+            if (target.hasPotionEffect(PotionEffectType.SLOW_DIGGING)) {
+                target.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+            }
+            if (target.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
+                target.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            }
+            if (target.hasPotionEffect(PotionEffectType.HEAL)) {
+                target.removePotionEffect(PotionEffectType.HEAL);
+            }
+            if (target.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
+                target.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            }
+            if (target.hasPotionEffect(PotionEffectType.JUMP)) {
+                target.removePotionEffect(PotionEffectType.JUMP);
+            }
+            if (target.hasPotionEffect(PotionEffectType.CONFUSION)) {
+                target.removePotionEffect(PotionEffectType.CONFUSION);
+            }
+            if (target.hasPotionEffect(PotionEffectType.REGENERATION)) {
+                target.removePotionEffect(PotionEffectType.REGENERATION);
+            }
+            if (target.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
+                target.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+            }
+            if (target.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
+                target.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+            }
+            if (target.hasPotionEffect(PotionEffectType.WATER_BREATHING)) {
+                target.removePotionEffect(PotionEffectType.WATER_BREATHING);
+            }
+            if (target.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                target.removePotionEffect(PotionEffectType.INVISIBILITY);
+
+            }
+            if (target.hasPotionEffect(PotionEffectType.BLINDNESS)) {
+                target.removePotionEffect(PotionEffectType.BLINDNESS);
+            }
+            if (target.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                target.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            }
+            if (target.hasPotionEffect(PotionEffectType.HUNGER)) {
+                target.removePotionEffect(PotionEffectType.HUNGER);
+            }
+            if (target.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+                target.removePotionEffect(PotionEffectType.WEAKNESS);
+            }
+            if (target.hasPotionEffect(PotionEffectType.POISON)) {
+                target.removePotionEffect(PotionEffectType.POISON);
+            }
+            if (target.hasPotionEffect(PotionEffectType.WITHER)) {
+                target.removePotionEffect(PotionEffectType.WITHER);
+            }
+            if (target.hasPotionEffect(PotionEffectType.HEALTH_BOOST)) {
+                target.removePotionEffect(PotionEffectType.HEALTH_BOOST);
+            }
+            if (target.hasPotionEffect(PotionEffectType.ABSORPTION)) {
+                target.removePotionEffect(PotionEffectType.ABSORPTION);
+            }
+            if (target.hasPotionEffect(PotionEffectType.SATURATION)) {
+                target.removePotionEffect(PotionEffectType.SATURATION);
+            }
         }
         return false;
     }
