@@ -35,6 +35,7 @@ import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.Filters.DatFilter;
@@ -202,8 +203,9 @@ public class InventoryManager {
 	private void openInv(final Player sender, final Player target, final boolean offline) {
 		final Object inventory = getInventory(target, offline);
 		final Object eh = ACMinecraftReflection.getHandle(sender);
-		final MethodHandler openContainer = new MethodHandler(ACMinecraftReflection.getEntityPlayerClass(), "openContainer",
-				ACMinecraftReflection.getIInventoryClass());
+		final FuzzyMethodContract contract = FuzzyMethodContract.newBuilder().parameterExactType(ACMinecraftReflection.getIInventoryClass(), 0)
+				.returnTypeVoid().build();
+		final MethodHandler openContainer = new MethodHandler(eh.getClass(), contract);
 		openContainer.invoke(eh, inventory);
 	}
 
