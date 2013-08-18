@@ -16,8 +16,7 @@ import com.google.common.collect.Maps;
  * @param <T>
  *            - type that it matches.
  */
-public abstract class AbstractFuzzyMember<T extends Member> extends
-		AbstractFuzzyMatcher<T> {
+public abstract class AbstractFuzzyMember<T extends Member> extends AbstractFuzzyMatcher<T> {
 	// Accessibility matchers
 	protected int modifiersRequired;
 	protected int modifiersBanned;
@@ -133,8 +132,7 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 		 * @return This builder, for chaining.
 		 */
 		public Builder<T> declaringClassDerivedOf(final Class<?> declaringClass) {
-			member.declaringMatcher = FuzzyMatchers
-					.matchDerived(declaringClass);
+			member.declaringMatcher = FuzzyMatchers.matchDerived(declaringClass);
 			return this;
 		}
 
@@ -146,8 +144,7 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 		 *            - class matcher.
 		 * @return This builder, for chaining.
 		 */
-		public Builder<T> declaringClassMatching(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher) {
+		public Builder<T> declaringClassMatching(final AbstractFuzzyMatcher<Class<?>> classMatcher) {
 			member.declaringMatcher = classMatcher;
 			return this;
 		}
@@ -237,9 +234,7 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 		final int mods = value.getModifiers();
 
 		// Match accessibility and name
-		return (mods & modifiersRequired) == modifiersRequired
-				&& (mods & modifiersBanned) == 0
-				&& declaringMatcher.isMatch(value.getDeclaringClass(), value)
+		return (mods & modifiersRequired) == modifiersRequired && (mods & modifiersBanned) == 0 && declaringMatcher.isMatch(value.getDeclaringClass(), value)
 				&& isNameMatch(value.getName());
 	}
 
@@ -262,8 +257,7 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 	protected int calculateRoundNumber() {
 		// Sanity check
 		if (!sealed) {
-			throw new IllegalStateException(
-					"Cannot calculate round number during construction.");
+			throw new IllegalStateException("Cannot calculate round number during construction.");
 		}
 
 		// NULL is zero
@@ -287,10 +281,7 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 
 		// Build our representation
 		if (modifiersRequired != Integer.MAX_VALUE || modifiersBanned != 0) {
-			map.put("modifiers",
-					String.format("[required: %s, banned: %s]",
-							getBitView(modifiersRequired, 16),
-							getBitView(modifiersBanned, 16)));
+			map.put("modifiers", String.format("[required: %s, banned: %s]", getBitView(modifiersRequired, 16), getBitView(modifiersBanned, 16)));
 		}
 		if (nameRegex != null) {
 			map.put("name", nameRegex.pattern());
@@ -304,8 +295,7 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 
 	private static String getBitView(final int value, final int bits) {
 		if (bits < 0 || bits > 31) {
-			throw new IllegalArgumentException(
-					"Bits must be a value between 0 and 32");
+			throw new IllegalArgumentException("Bits must be a value between 0 and 32");
 		}
 
 		// Extract our needed bits
@@ -322,18 +312,14 @@ public abstract class AbstractFuzzyMember<T extends Member> extends
 			@SuppressWarnings("unchecked")
 			final AbstractFuzzyMember<T> other = (AbstractFuzzyMember<T>) obj;
 
-			return modifiersBanned == other.modifiersBanned
-					&& modifiersRequired == other.modifiersRequired
-					&& FuzzyMatchers.checkPattern(nameRegex, other.nameRegex)
-					&& Objects.equal(declaringMatcher, other.declaringMatcher);
+			return modifiersBanned == other.modifiersBanned && modifiersRequired == other.modifiersRequired
+					&& FuzzyMatchers.checkPattern(nameRegex, other.nameRegex) && Objects.equal(declaringMatcher, other.declaringMatcher);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(modifiersBanned, modifiersRequired,
-				nameRegex != null ? nameRegex.pattern() : null,
-				declaringMatcher);
+		return Objects.hashCode(modifiersBanned, modifiersRequired, nameRegex != null ? nameRegex.pattern() : null, declaringMatcher);
 	}
 }

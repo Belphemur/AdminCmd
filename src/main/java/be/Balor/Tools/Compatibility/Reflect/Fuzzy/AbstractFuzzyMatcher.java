@@ -10,8 +10,7 @@ import com.google.common.primitives.Ints;
  * 
  * @author Kristian
  */
-public abstract class AbstractFuzzyMatcher<T> implements
-		Comparable<AbstractFuzzyMatcher<T>> {
+public abstract class AbstractFuzzyMatcher<T> implements Comparable<AbstractFuzzyMatcher<T>> {
 	private Integer roundNumber;
 
 	/**
@@ -80,6 +79,29 @@ public abstract class AbstractFuzzyMatcher<T> implements
 		}
 	}
 
+	/**
+	 * Combine n round numbers by taking the highest non-zero number, or return
+	 * zero.
+	 * 
+	 * @param rounds
+	 *            - the round numbers.
+	 * @return The combined round number.
+	 */
+	protected final int combineRounds(final Integer... rounds) {
+		if (rounds.length < 2) {
+			throw new IllegalArgumentException("Must supply at least two arguments.");
+		}
+
+		// Get the seed
+		int reduced = combineRounds(rounds[0], rounds[1]);
+
+		// Aggregate it all
+		for (int i = 2; i < rounds.length; i++) {
+			reduced = combineRounds(reduced, rounds[i]);
+		}
+		return reduced;
+	}
+
 	@Override
 	public int compareTo(final AbstractFuzzyMatcher<T> obj) {
 		if (obj instanceof AbstractFuzzyMatcher) {
@@ -122,15 +144,12 @@ public abstract class AbstractFuzzyMatcher<T> implements
 			@Override
 			public boolean isMatch(final T value, final Object parent) {
 				// They both have to be true
-				return AbstractFuzzyMatcher.this.isMatch(value, parent)
-						&& other.isMatch(value, parent);
+				return AbstractFuzzyMatcher.this.isMatch(value, parent) && other.isMatch(value, parent);
 			}
 
 			@Override
 			protected int calculateRoundNumber() {
-				return combineRounds(
-						AbstractFuzzyMatcher.this.getRoundNumber(),
-						other.getRoundNumber());
+				return combineRounds(AbstractFuzzyMatcher.this.getRoundNumber(), other.getRoundNumber());
 			}
 		};
 	}
@@ -147,15 +166,12 @@ public abstract class AbstractFuzzyMatcher<T> implements
 			@Override
 			public boolean isMatch(final T value, final Object parent) {
 				// Either can be true
-				return AbstractFuzzyMatcher.this.isMatch(value, parent)
-						|| other.isMatch(value, parent);
+				return AbstractFuzzyMatcher.this.isMatch(value, parent) || other.isMatch(value, parent);
 			}
 
 			@Override
 			protected int calculateRoundNumber() {
-				return combineRounds(
-						AbstractFuzzyMatcher.this.getRoundNumber(),
-						other.getRoundNumber());
+				return combineRounds(AbstractFuzzyMatcher.this.getRoundNumber(), other.getRoundNumber());
 			}
 		};
 	}

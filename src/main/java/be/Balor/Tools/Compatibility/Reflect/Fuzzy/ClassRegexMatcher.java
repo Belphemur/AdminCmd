@@ -15,8 +15,7 @@ class ClassRegexMatcher extends AbstractFuzzyMatcher<Class<?>> {
 
 	public ClassRegexMatcher(final Pattern regex, final int priority) {
 		if (regex == null) {
-			throw new IllegalArgumentException(
-					"Regular expression pattern cannot be NULL.");
+			throw new IllegalArgumentException("Regular expression pattern cannot be NULL.");
 		}
 		this.regex = regex;
 		this.priority = priority;
@@ -53,8 +52,7 @@ class ClassRegexMatcher extends AbstractFuzzyMatcher<Class<?>> {
 		} else if (obj instanceof ClassRegexMatcher) {
 			final ClassRegexMatcher other = (ClassRegexMatcher) obj;
 
-			return priority == other.priority
-					&& FuzzyMatchers.checkPattern(regex, other.regex);
+			return priority == other.priority && FuzzyMatchers.checkPattern(regex, other.regex);
 		}
 		return false;
 	}

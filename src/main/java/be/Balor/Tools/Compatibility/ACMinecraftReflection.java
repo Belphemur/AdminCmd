@@ -35,8 +35,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	/**
 	 * 
 	 */
-	public ACMinecraftReflection() {
-		// TODO Auto-generated constructor stub
+	protected ACMinecraftReflection() {
 	}
 
 	/**
@@ -110,8 +109,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @return {@link PlayerInventory}
 	 */
 	public static Object getInventory(final Player p) {
-		return FieldUtils.getField(ACMinecraftReflection.getHandle(p),
-				"inventory");
+		return FieldUtils.getField(ACMinecraftReflection.getHandle(p), "inventory");
 	}
 
 	/**
@@ -151,46 +149,6 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	}
 
 	/**
-	 * Determine if a given object can be found within the package
-	 * net.minecraft.server.
-	 * 
-	 * @param obj
-	 *            - the object to test.
-	 * @return TRUE if it can, FALSE otherwise.
-	 */
-	public static boolean isMinecraftObject(@Nonnull final Object obj) {
-		if (obj == null) {
-			throw new IllegalArgumentException(
-					"Cannot determine the type of a null object.");
-		}
-
-		// Doesn't matter if we don't check for the version here
-		return obj.getClass().getName().startsWith(MINECRAFT_PREFIX_PACKAGE);
-	}
-
-	/**
-	 * Determine if a given object is found in net.minecraft.server, and has the
-	 * given name.
-	 * 
-	 * @param obj
-	 *            - the object to test.
-	 * @param className
-	 *            - the class name to test.
-	 * @return TRUE if it can, FALSE otherwise.
-	 */
-	public static boolean isMinecraftObject(@Nonnull final Object obj,
-			final String className) {
-		if (obj == null) {
-			throw new IllegalArgumentException(
-					"Cannot determine the type of a null object.");
-		}
-
-		final String javaName = obj.getClass().getName();
-		return javaName.startsWith(MINECRAFT_PREFIX_PACKAGE)
-				&& javaName.endsWith(className);
-	}
-
-	/**
 	 * Get the Handeling Object from a Bukkit Object
 	 * 
 	 * @param bukkitObject
@@ -206,14 +164,12 @@ public class ACMinecraftReflection extends MinecraftReflection {
 
 		// We will have to do this dynamically, unfortunately
 		try {
-			return bukkitObject.getClass().getMethod("getHandle")
-					.invoke(bukkitObject);
+			return bukkitObject.getClass().getMethod("getHandle").invoke(bukkitObject);
 		} catch (final Exception e) {
 			try {
 				return FieldUtils.getField(bukkitObject, "handle");
 			} catch (final Exception e1) {
-				throw new RuntimeException("Cannot get Handle from "
-						+ bukkitObject, e1);
+				throw new RuntimeException("Cannot get Handle from " + bukkitObject, e1);
 			}
 		}
 	}
@@ -230,14 +186,9 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	public static Object getNetServerHandler(final Object player) {
 		try {
 			final String fieldName = getNetServerHandlerName();
-			return FieldUtils.getField(
-					player,
-					Character.toLowerCase(fieldName.charAt(0))
-							+ (fieldName.length() > 1 ? fieldName.substring(1)
-									: ""));
+			return FieldUtils.getField(player, Character.toLowerCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : ""));
 		} catch (final Exception e) {
-			throw new RuntimeException("Cannot get NetServerHandler from "
-					+ player, e);
+			throw new RuntimeException("Cannot get NetServerHandler from " + player, e);
 		}
 	}
 
@@ -251,15 +202,12 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @throws RuntimeException
 	 *             If we were unable to retrieve the entity.
 	 */
-	public static void teleportPlayer(final Player player,
-			final Location toLocation) {
+	public static void teleportPlayer(final Player player, final Location toLocation) {
 		final Object networkManager = getNetServerHandler(getHandle(player));
 		try {
-			networkManager.getClass().getMethod("teleport", Location.class)
-					.invoke(networkManager, toLocation);
+			networkManager.getClass().getMethod("teleport", Location.class).invoke(networkManager, toLocation);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't teleport the player " + player
-					+ " to " + toLocation, e);
+			throw new RuntimeException("Can't teleport the player " + player + " to " + toLocation, e);
 		}
 	}
 
@@ -272,8 +220,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Entity> T getBukkitEntityCasted(
-			final Object nmsObject) {
+	public static <T extends Entity> T getBukkitEntityCasted(final Object nmsObject) {
 		return (T) MinecraftReflection.getBukkitEntity(nmsObject);
 	}
 

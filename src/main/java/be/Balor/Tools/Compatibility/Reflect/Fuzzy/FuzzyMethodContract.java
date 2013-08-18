@@ -7,8 +7,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import be.Balor.Tools.Compatibility.Reflect.MethodInfo;
 
 import com.google.common.base.Objects;
@@ -21,8 +19,7 @@ import com.google.common.collect.Lists;
  * @author Kristian
  */
 public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
-	private static class ParameterClassMatcher extends
-			AbstractFuzzyMatcher<Class<?>[]> {
+	private static class ParameterClassMatcher extends AbstractFuzzyMatcher<Class<?>[]> {
 		/**
 		 * The expected index.
 		 */
@@ -35,8 +32,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @param typeMatcher
 		 *            - class type matcher.
 		 */
-		public ParameterClassMatcher(
-				@Nonnull final AbstractFuzzyMatcher<Class<?>> typeMatcher) {
+		public ParameterClassMatcher(@Nonnull final AbstractFuzzyMatcher<Class<?>> typeMatcher) {
 			this(typeMatcher, null);
 		}
 
@@ -48,12 +44,9 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @param indexMatch
 		 *            - parameter index to match, or NULL for anything.
 		 */
-		public ParameterClassMatcher(
-				@Nonnull final AbstractFuzzyMatcher<Class<?>> typeMatcher,
-				final Integer indexMatch) {
+		public ParameterClassMatcher(@Nonnull final AbstractFuzzyMatcher<Class<?>> typeMatcher, final Integer indexMatch) {
 			if (typeMatcher == null) {
-				throw new IllegalArgumentException(
-						"Type matcher cannot be NULL.");
+				throw new IllegalArgumentException("Type matcher cannot be NULL.");
 			}
 
 			this.typeMatcher = typeMatcher;
@@ -73,8 +66,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return TRUE if this matcher matches any of the given parameters,
 		 *         FALSE otherwise.
 		 */
-		public boolean isParameterMatch(final Class<?> param,
-				final MethodInfo parent, final int index) {
+		public boolean isParameterMatch(final Class<?> param, final MethodInfo parent, final int index) {
 			// Make sure the index is valid (or NULL)
 			if (indexMatch == null || indexMatch == index) {
 				return typeMatcher.isMatch(param, parent);
@@ -85,8 +77,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 
 		@Override
 		public boolean isMatch(final Class<?>[] value, final Object parent) {
-			throw new NotImplementedException(
-					"Use the parameter match instead.");
+			throw new UnsupportedOperationException("Use the parameter match instead.");
 		}
 
 		@Override
@@ -96,8 +87,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 
 		@Override
 		public String toString() {
-			return String.format("{Type: %s, Index: %s}", typeMatcher,
-					indexMatch);
+			return String.format("{Type: %s, Index: %s}", typeMatcher, indexMatch);
 		}
 	}
 
@@ -116,8 +106,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 	 * 
 	 * @author Kristian
 	 */
-	public static class Builder extends
-			AbstractFuzzyMember.Builder<FuzzyMethodContract> {
+	public static class Builder extends AbstractFuzzyMember.Builder<FuzzyMethodContract> {
 		@Override
 		public Builder requireModifier(final int modifier) {
 			super.requireModifier(modifier);
@@ -167,8 +156,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		}
 
 		@Override
-		public Builder declaringClassMatching(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher) {
+		public Builder declaringClassMatching(final AbstractFuzzyMatcher<Class<?>> classMatcher) {
 			super.declaringClassMatching(classMatcher);
 			return this;
 		}
@@ -181,8 +169,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder parameterExactType(final Class<?> type) {
-			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers
-					.matchExact(type)));
+			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchExact(type)));
 			return this;
 		}
 
@@ -190,16 +177,31 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * Add a new required parameter whose type must be a superclass of the
 		 * given type.
 		 * <p>
-		 * If a parameter is of type Number, any derived class (Integer, Long,
-		 * etc.) will match it.
+		 * If a method parameter is of type Number, then any derived class here
+		 * (Integer, Long, etc.) will match it.
 		 * 
 		 * @param type
-		 *            - a type or derived type of the matching parameter.
+		 *            - a type or less derived type of the matching parameter.
 		 * @return This builder, for chaining.
 		 */
 		public Builder parameterSuperOf(final Class<?> type) {
-			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers
-					.matchSuper(type)));
+			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchSuper(type)));
+			return this;
+		}
+
+		/**
+		 * Add a new required parameter whose type must be a derived class of
+		 * the given class.
+		 * <p>
+		 * If the method parameter has the type Integer, then the class Number
+		 * here will match it.
+		 * 
+		 * @param type
+		 *            - a type or more derived type of the matching parameter.
+		 * @return This builder, for chaining.
+		 */
+		public Builder parameterDerivedOf(final Class<?> type) {
+			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchDerived(type)));
 			return this;
 		}
 
@@ -211,8 +213,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 *            - the class matcher.
 		 * @return This builder, for chaining.
 		 */
-		public Builder parameterMatches(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher) {
+		public Builder parameterMatches(final AbstractFuzzyMatcher<Class<?>> classMatcher) {
 			member.paramMatchers.add(new ParameterClassMatcher(classMatcher));
 			return this;
 		}
@@ -228,8 +229,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder parameterExactType(final Class<?> type, final int index) {
-			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers
-					.matchExact(type), index));
+			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchExact(type), index));
 			return this;
 		}
 
@@ -247,8 +247,25 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder parameterSuperOf(final Class<?> type, final int index) {
-			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers
-					.matchSuper(type), index));
+			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchSuper(type), index));
+			return this;
+		}
+
+		/**
+		 * Add a new required parameter whose type must be a derived class of
+		 * the given class.
+		 * <p>
+		 * If the method parameter has the type Integer, then the class Number
+		 * here will match it.
+		 * 
+		 * @param type
+		 *            - a type or more derived type of the matching parameter.
+		 * @param index
+		 *            - the expected position in the parameter list.
+		 * @return This builder, for chaining.
+		 */
+		public Builder parameterDerivedOf(final Class<?> type, final int index) {
+			member.paramMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchDerived(type), index));
 			return this;
 		}
 
@@ -262,11 +279,8 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 *            - the expected position in the parameter list.
 		 * @return This builder, for chaining.
 		 */
-		public Builder parameterMatches(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher,
-				final int index) {
-			member.paramMatchers.add(new ParameterClassMatcher(classMatcher,
-					index));
+		public Builder parameterMatches(final AbstractFuzzyMatcher<Class<?>> classMatcher, final int index) {
+			member.paramMatchers.add(new ParameterClassMatcher(classMatcher, index));
 			return this;
 		}
 
@@ -323,8 +337,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 *            - the exact return type.
 		 * @return This builder, for chaining.
 		 */
-		public Builder returnTypeMatches(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher) {
+		public Builder returnTypeMatches(final AbstractFuzzyMatcher<Class<?>> classMatcher) {
 			member.returnMatcher = classMatcher;
 			return this;
 		}
@@ -337,8 +350,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder exceptionExactType(final Class<?> type) {
-			member.exceptionMatchers.add(new ParameterClassMatcher(
-					FuzzyMatchers.matchExact(type)));
+			member.exceptionMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchExact(type)));
 			return this;
 		}
 
@@ -351,8 +363,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder exceptionSuperOf(final Class<?> type) {
-			member.exceptionMatchers.add(new ParameterClassMatcher(
-					FuzzyMatchers.matchSuper(type)));
+			member.exceptionMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchSuper(type)));
 			return this;
 		}
 
@@ -363,10 +374,8 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 *            - the class matcher that must match.
 		 * @return This builder, for chaining.
 		 */
-		public Builder exceptionMatches(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher) {
-			member.exceptionMatchers
-					.add(new ParameterClassMatcher(classMatcher));
+		public Builder exceptionMatches(final AbstractFuzzyMatcher<Class<?>> classMatcher) {
+			member.exceptionMatchers.add(new ParameterClassMatcher(classMatcher));
 			return this;
 		}
 
@@ -381,8 +390,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder exceptionExactType(final Class<?> type, final int index) {
-			member.exceptionMatchers.add(new ParameterClassMatcher(
-					FuzzyMatchers.matchExact(type), index));
+			member.exceptionMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchExact(type), index));
 			return this;
 		}
 
@@ -397,8 +405,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 * @return This builder, for chaining.
 		 */
 		public Builder exceptionSuperOf(final Class<?> type, final int index) {
-			member.exceptionMatchers.add(new ParameterClassMatcher(
-					FuzzyMatchers.matchSuper(type), index));
+			member.exceptionMatchers.add(new ParameterClassMatcher(FuzzyMatchers.matchSuper(type), index));
 			return this;
 		}
 
@@ -412,11 +419,8 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		 *            - the position in the throwable list.
 		 * @return This builder, for chaining.
 		 */
-		public Builder exceptionMatches(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher,
-				final int index) {
-			member.exceptionMatchers.add(new ParameterClassMatcher(
-					classMatcher, index));
+		public Builder exceptionMatches(final AbstractFuzzyMatcher<Class<?>> classMatcher, final int index) {
+			member.exceptionMatchers.add(new ParameterClassMatcher(classMatcher, index));
 			return this;
 		}
 
@@ -464,8 +468,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 	 *            - the contract to clone.
 	 * @return A immutable copy of the given contract.
 	 */
-	private static FuzzyMethodContract immutableCopy(
-			final FuzzyMethodContract other) {
+	private static FuzzyMethodContract immutableCopy(final FuzzyMethodContract other) {
 		final FuzzyMethodContract copy = new FuzzyMethodContract(other);
 
 		// Ensure that the lists are immutable
@@ -536,28 +539,24 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 			if (!returnMatcher.isMatch(value.getReturnType(), value)) {
 				return false;
 			}
-			if (paramCount != null
-					&& paramCount != value.getParameterTypes().length) {
+			if (paramCount != null && paramCount != value.getParameterTypes().length) {
 				return false;
 			}
 
 			// Finally, check parameters and exceptions
-			return matchParameters(params, value, paramMatchers)
-					&& matchParameters(exceptions, value, exceptionMatchers);
+			return matchParameters(params, value, paramMatchers) && matchParameters(exceptions, value, exceptionMatchers);
 		}
 		// No match
 		return false;
 	}
 
-	private boolean matchParameters(final Class<?>[] types,
-			final MethodInfo parent, final List<ParameterClassMatcher> matchers) {
+	private boolean matchParameters(final Class<?>[] types, final MethodInfo parent, final List<ParameterClassMatcher> matchers) {
 		final boolean[] accepted = new boolean[matchers.size()];
 		int count = accepted.length;
 
 		// Process every parameter in turn
 		for (int i = 0; i < types.length; i++) {
-			final int matcherIndex = processValue(types[i], parent, i,
-					accepted, matchers);
+			final int matcherIndex = processValue(types[i], parent, i, accepted, matchers);
 
 			if (matcherIndex >= 0) {
 				accepted[matcherIndex] = true;
@@ -572,8 +571,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		return count == 0;
 	}
 
-	private int processValue(final Class<?> value, final MethodInfo parent,
-			final int index, final boolean accepted[],
+	private int processValue(final Class<?> value, final MethodInfo parent, final int index, final boolean accepted[],
 			final List<ParameterClassMatcher> matchers) {
 		// The order matters
 		for (int i = 0; i < matchers.size(); i++) {
@@ -630,8 +628,7 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(returnMatcher, paramMatchers,
-				exceptionMatchers, paramCount, super.hashCode());
+		return Objects.hashCode(returnMatcher, paramMatchers, exceptionMatchers, paramCount, super.hashCode());
 	}
 
 	@Override
@@ -642,11 +639,8 @@ public class FuzzyMethodContract extends AbstractFuzzyMember<MethodInfo> {
 		} else if (obj instanceof FuzzyMethodContract && super.equals(obj)) {
 			final FuzzyMethodContract other = (FuzzyMethodContract) obj;
 
-			return Objects.equal(paramCount, other.paramCount)
-					&& Objects.equal(returnMatcher, other.returnMatcher)
-					&& Objects.equal(paramMatchers, other.paramMatchers)
-					&& Objects
-							.equal(exceptionMatchers, other.exceptionMatchers);
+			return Objects.equal(paramCount, other.paramCount) && Objects.equal(returnMatcher, other.returnMatcher)
+					&& Objects.equal(paramMatchers, other.paramMatchers) && Objects.equal(exceptionMatchers, other.exceptionMatchers);
 		}
 		return true;
 	}

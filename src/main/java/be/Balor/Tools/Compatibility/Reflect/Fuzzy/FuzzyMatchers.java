@@ -23,10 +23,8 @@ public class FuzzyMatchers {
 	 *            - the matching class.
 	 * @return A new class mathcher.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchExact(
-			final Class<?> matcher) {
-		return new ClassExactMatcher(matcher,
-				ClassExactMatcher.Options.MATCH_EXACT);
+	public static AbstractFuzzyMatcher<Class<?>> matchExact(final Class<?> matcher) {
+		return new ClassExactMatcher(matcher, ClassExactMatcher.Options.MATCH_EXACT);
 	}
 
 	/**
@@ -36,8 +34,7 @@ public class FuzzyMatchers {
 	 *            - list of classes to match.
 	 * @return A new class mathcher.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchAnyOf(
-			final Class<?>... classes) {
+	public static AbstractFuzzyMatcher<Class<?>> matchAnyOf(final Class<?>... classes) {
 		return matchAnyOf(Sets.newHashSet(classes));
 	}
 
@@ -48,8 +45,7 @@ public class FuzzyMatchers {
 	 *            - set of classes to match.
 	 * @return A new class mathcher.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchAnyOf(
-			final Set<Class<?>> classes) {
+	public static AbstractFuzzyMatcher<Class<?>> matchAnyOf(final Set<Class<?>> classes) {
 		return new ClassSetMatcher(classes);
 	}
 
@@ -60,10 +56,8 @@ public class FuzzyMatchers {
 	 *            - the matching type must be a super class of this type.
 	 * @return A new class mathcher.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchSuper(
-			final Class<?> matcher) {
-		return new ClassExactMatcher(matcher,
-				ClassExactMatcher.Options.MATCH_SUPER);
+	public static AbstractFuzzyMatcher<Class<?>> matchSuper(final Class<?> matcher) {
+		return new ClassExactMatcher(matcher, ClassExactMatcher.Options.MATCH_SUPER);
 	}
 
 	/**
@@ -73,10 +67,8 @@ public class FuzzyMatchers {
 	 *            - the matching type must be a derived class of this type.
 	 * @return A new class mathcher.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchDerived(
-			final Class<?> matcher) {
-		return new ClassExactMatcher(matcher,
-				ClassExactMatcher.Options.MATCH_DERIVED);
+	public static AbstractFuzzyMatcher<Class<?>> matchDerived(final Class<?> matcher) {
+		return new ClassExactMatcher(matcher, ClassExactMatcher.Options.MATCH_DERIVED);
 	}
 
 	/**
@@ -88,8 +80,7 @@ public class FuzzyMatchers {
 	 *            - the priority this matcher takes - higher is better.
 	 * @return A fuzzy class matcher based on name.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchRegex(
-			final Pattern regex, final int priority) {
+	public static AbstractFuzzyMatcher<Class<?>> matchRegex(final Pattern regex, final int priority) {
 		return new ClassRegexMatcher(regex, priority);
 	}
 
@@ -102,8 +93,7 @@ public class FuzzyMatchers {
 	 *            - the priority this matcher takes - higher is better.
 	 * @return A fuzzy class matcher based on name.
 	 */
-	public static AbstractFuzzyMatcher<Class<?>> matchRegex(final String regex,
-			final int priority) {
+	public static AbstractFuzzyMatcher<Class<?>> matchRegex(final String regex, final int priority) {
 		return FuzzyMatchers.matchRegex(Pattern.compile(regex), priority);
 	}
 

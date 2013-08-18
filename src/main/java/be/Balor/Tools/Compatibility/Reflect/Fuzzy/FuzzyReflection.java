@@ -71,8 +71,7 @@ public class FuzzyReflection {
 	 *            - whether or not to override scope restrictions.
 	 * @return A fuzzy reflection instance.
 	 */
-	public static FuzzyReflection fromClass(final Class<?> source,
-			final boolean forceAccess) {
+	public static FuzzyReflection fromClass(final Class<?> source, final boolean forceAccess) {
 		return new FuzzyReflection(source, forceAccess);
 	}
 
@@ -98,8 +97,7 @@ public class FuzzyReflection {
 	 * @return A fuzzy reflection instance that uses the class of the given
 	 *         object.
 	 */
-	public static FuzzyReflection fromObject(final Object reference,
-			final boolean forceAccess) {
+	public static FuzzyReflection fromObject(final Object reference, final boolean forceAccess) {
 		return new FuzzyReflection(reference.getClass(), forceAccess);
 	}
 
@@ -128,8 +126,7 @@ public class FuzzyReflection {
 		if (result.size() > 0) {
 			return result.get(0);
 		} else {
-			throw new IllegalArgumentException(
-					"Unable to find a method that matches " + matcher);
+			throw new IllegalArgumentException("Unable to find a method that matches " + matcher);
 		}
 	}
 
@@ -143,8 +140,7 @@ public class FuzzyReflection {
 	 *            - the matcher to apply.
 	 * @return List of found methods.
 	 */
-	public List<Method> getMethodList(
-			final AbstractFuzzyMatcher<MethodInfo> matcher) {
+	public List<Method> getMethodList(final AbstractFuzzyMatcher<MethodInfo> matcher) {
 		final List<Method> methods = Lists.newArrayList();
 
 		// Add all matching fields to the list
@@ -175,9 +171,7 @@ public class FuzzyReflection {
 			}
 		}
 
-		throw new IllegalArgumentException(
-				"Unable to find a method with the pattern " + nameRegex
-						+ " in " + source.getName());
+		throw new IllegalArgumentException("Unable to find a method with the pattern " + nameRegex + " in " + source.getName());
 	}
 
 	/**
@@ -192,8 +186,7 @@ public class FuzzyReflection {
 	 * @throws IllegalArgumentException
 	 *             If the method cannot be found.
 	 */
-	public Method getMethodByParameters(final String name,
-			final Class<?>... args) {
+	public Method getMethodByParameters(final String name, final Class<?>... args) {
 		// Find the correct method to call
 		for (final Method method : getMethods()) {
 			if (Arrays.equals(method.getParameterTypes(), args)) {
@@ -202,8 +195,7 @@ public class FuzzyReflection {
 		}
 
 		// That sucks
-		throw new IllegalArgumentException("Unable to find " + name + " in "
-				+ source.getName());
+		throw new IllegalArgumentException("Unable to find " + name + " in " + source.getName());
 	}
 
 	/**
@@ -221,8 +213,7 @@ public class FuzzyReflection {
 	 * @throws IllegalArgumentException
 	 *             If the method cannot be found.
 	 */
-	public Method getMethodByParameters(final String name,
-			final Class<?> returnType, final Class<?>[] args) {
+	public Method getMethodByParameters(final String name, final Class<?> returnType, final Class<?>[] args) {
 		// Find the correct method to call
 		final List<Method> methods = getMethodListByParameters(returnType, args);
 
@@ -230,8 +221,7 @@ public class FuzzyReflection {
 			return methods.get(0);
 		} else {
 			// That sucks
-			throw new IllegalArgumentException("Unable to find " + name
-					+ " in " + source.getName());
+			throw new IllegalArgumentException("Unable to find " + name + " in " + source.getName());
 		}
 	}
 
@@ -251,8 +241,7 @@ public class FuzzyReflection {
 	 * @throws IllegalArgumentException
 	 *             If the method cannot be found.
 	 */
-	public Method getMethodByParameters(final String name,
-			final String returnTypeRegex, final String[] argsRegex) {
+	public Method getMethodByParameters(final String name, final String returnTypeRegex, final String[] argsRegex) {
 		final Pattern match = Pattern.compile(returnTypeRegex);
 		final Pattern[] argMatch = new Pattern[argsRegex.length];
 
@@ -270,15 +259,12 @@ public class FuzzyReflection {
 		}
 
 		// That sucks
-		throw new IllegalArgumentException("Unable to find " + name + " in "
-				+ source.getName());
+		throw new IllegalArgumentException("Unable to find " + name + " in " + source.getName());
 	}
 
-	private boolean matchParameters(final Pattern[] parameterMatchers,
-			final Class<?>[] argTypes) {
+	private boolean matchParameters(final Pattern[] parameterMatchers, final Class<?>[] argTypes) {
 		if (parameterMatchers.length != argTypes.length) {
-			throw new IllegalArgumentException(
-					"Arrays must have the same cardinality.");
+			throw new IllegalArgumentException("Arrays must have the same cardinality.");
 		}
 
 		// Check types against the regular expressions
@@ -301,14 +287,12 @@ public class FuzzyReflection {
 	 *            - parameter types of the method to find.
 	 * @return Every method that satisfies the given constraints.
 	 */
-	public List<Method> getMethodListByParameters(final Class<?> returnType,
-			final Class<?>[] args) {
+	public List<Method> getMethodListByParameters(final Class<?> returnType, final Class<?>[] args) {
 		final List<Method> methods = new ArrayList<Method>();
 
 		// Find the correct method to call
 		for (final Method method : getMethods()) {
-			if (method.getReturnType().equals(returnType)
-					&& Arrays.equals(method.getParameterTypes(), args)) {
+			if (method.getReturnType().equals(returnType) && Arrays.equals(method.getParameterTypes(), args)) {
 				methods.add(method);
 			}
 		}
@@ -336,9 +320,7 @@ public class FuzzyReflection {
 		}
 
 		// Looks like we're outdated. Too bad.
-		throw new IllegalArgumentException(
-				"Unable to find a field with the pattern " + nameRegex + " in "
-						+ source.getName());
+		throw new IllegalArgumentException("Unable to find a field with the pattern " + nameRegex + " in " + source.getName());
 	}
 
 	/**
@@ -360,9 +342,7 @@ public class FuzzyReflection {
 			return fields.get(0);
 		} else {
 			// Looks like we're outdated. Too bad.
-			throw new IllegalArgumentException(String.format(
-					"Unable to find a field %s with the type %s in %s", name,
-					type.getName(), source.getName()));
+			throw new IllegalArgumentException(String.format("Unable to find a field %s with the type %s in %s", name, type.getName(), source.getName()));
 		}
 	}
 
@@ -406,8 +386,7 @@ public class FuzzyReflection {
 		if (result.size() > 0) {
 			return result.get(0);
 		} else {
-			throw new IllegalArgumentException(
-					"Unable to find a field that matches " + matcher);
+			throw new IllegalArgumentException("Unable to find a field that matches " + matcher);
 		}
 	}
 
@@ -464,9 +443,7 @@ public class FuzzyReflection {
 		}
 
 		// Looks like we're outdated. Too bad.
-		throw new IllegalArgumentException(
-				"Unable to find a field with the type " + typeRegex + " in "
-						+ source.getName());
+		throw new IllegalArgumentException("Unable to find a field with the type " + typeRegex + " in " + source.getName());
 	}
 
 	/**
@@ -497,16 +474,13 @@ public class FuzzyReflection {
 		for (final Field field : getFields()) {
 			final Class type = field.getType();
 
-			if (!ignored.contains(type)
-					&& match.matcher(type.getName()).matches()) {
+			if (!ignored.contains(type) && match.matcher(type.getName()).matches()) {
 				return field;
 			}
 		}
 
 		// Looks like we're outdated. Too bad.
-		throw new IllegalArgumentException(
-				"Unable to find a field with the type " + typeRegex + " in "
-						+ source.getName());
+		throw new IllegalArgumentException("Unable to find a field with the type " + typeRegex + " in " + source.getName());
 	}
 
 	/**
@@ -521,15 +495,13 @@ public class FuzzyReflection {
 	 * @throws IllegalArgumentException
 	 *             If the constructor cannot be found.
 	 */
-	public Constructor<?> getConstructor(
-			final AbstractFuzzyMatcher<MethodInfo> matcher) {
+	public Constructor<?> getConstructor(final AbstractFuzzyMatcher<MethodInfo> matcher) {
 		final List<Constructor<?>> result = getConstructorList(matcher);
 
 		if (result.size() > 0) {
 			return result.get(0);
 		} else {
-			throw new IllegalArgumentException(
-					"Unable to find a method that matches " + matcher);
+			throw new IllegalArgumentException("Unable to find a method that matches " + matcher);
 		}
 	}
 
@@ -561,14 +533,12 @@ public class FuzzyReflection {
 	 *            - the matcher to apply.
 	 * @return List of found constructors.
 	 */
-	public List<Constructor<?>> getConstructorList(
-			final AbstractFuzzyMatcher<MethodInfo> matcher) {
+	public List<Constructor<?>> getConstructorList(final AbstractFuzzyMatcher<MethodInfo> matcher) {
 		final List<Constructor<?>> constructors = Lists.newArrayList();
 
 		// Add all matching fields to the list
 		for (final Constructor<?> constructor : getConstructors()) {
-			if (matcher
-					.isMatch(MethodInfo.fromConstructor(constructor), source)) {
+			if (matcher.isMatch(MethodInfo.fromConstructor(constructor), source)) {
 				constructors.add(constructor);
 			}
 		}

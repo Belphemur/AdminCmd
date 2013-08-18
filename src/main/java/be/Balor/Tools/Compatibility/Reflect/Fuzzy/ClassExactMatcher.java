@@ -33,8 +33,7 @@ class ClassExactMatcher extends AbstractFuzzyMatcher<Class<?>> {
 	/**
 	 * Match any class.
 	 */
-	public static final ClassExactMatcher MATCH_ALL = new ClassExactMatcher(
-			null, Options.MATCH_SUPER);
+	public static final ClassExactMatcher MATCH_ALL = new ClassExactMatcher(null, Options.MATCH_SUPER);
 
 	private final Class<?> matcher;
 	private final Options option;
@@ -150,8 +149,7 @@ class ClassExactMatcher extends AbstractFuzzyMatcher<Class<?>> {
 		} else if (obj instanceof ClassExactMatcher) {
 			final ClassExactMatcher other = (ClassExactMatcher) obj;
 
-			return Objects.equal(matcher, other.matcher)
-					&& Objects.equal(option, other.option);
+			return Objects.equal(matcher, other.matcher) && Objects.equal(option, other.option);
 		}
 		return false;
 	}

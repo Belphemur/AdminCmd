@@ -21,8 +21,7 @@ public class FuzzyFieldContract extends AbstractFuzzyMember<Field> {
 	 * 
 	 * @author Kristian
 	 */
-	public static class Builder extends
-			AbstractFuzzyMember.Builder<FuzzyFieldContract> {
+	public static class Builder extends AbstractFuzzyMember.Builder<FuzzyFieldContract> {
 		@Override
 		public Builder requireModifier(final int modifier) {
 			super.requireModifier(modifier);
@@ -53,6 +52,7 @@ public class FuzzyFieldContract extends AbstractFuzzyMember<Field> {
 			return this;
 		}
 
+		@Override
 		public Builder declaringClassExactType(final Class<?> declaringClass) {
 			super.declaringClassExactType(declaringClass);
 			return this;
@@ -71,8 +71,7 @@ public class FuzzyFieldContract extends AbstractFuzzyMember<Field> {
 		}
 
 		@Override
-		public Builder declaringClassMatching(
-				final AbstractFuzzyMatcher<Class<?>> classMatcher) {
+		public Builder declaringClassMatching(final AbstractFuzzyMatcher<Class<?>> classMatcher) {
 			super.declaringClassMatching(classMatcher);
 			return this;
 		}
@@ -156,8 +155,7 @@ public class FuzzyFieldContract extends AbstractFuzzyMember<Field> {
 	@Override
 	protected int calculateRoundNumber() {
 		// Combine the two
-		return combineRounds(super.calculateRoundNumber(),
-				typeMatcher.calculateRoundNumber());
+		return combineRounds(super.calculateRoundNumber(), typeMatcher.calculateRoundNumber());
 	}
 
 	@Override
@@ -181,8 +179,7 @@ public class FuzzyFieldContract extends AbstractFuzzyMember<Field> {
 		if (this == obj) {
 			return true;
 		} else if (obj instanceof FuzzyFieldContract && super.equals(obj)) {
-			return Objects.equal(typeMatcher,
-					((FuzzyFieldContract) obj).typeMatcher);
+			return Objects.equal(typeMatcher, ((FuzzyFieldContract) obj).typeMatcher);
 		}
 		return true;
 	}

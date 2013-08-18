@@ -31,8 +31,7 @@ class ClassSetMatcher extends AbstractFuzzyMatcher<Class<?>> {
 
 		// The highest round number (except zero).
 		for (final Class<?> clazz : classes) {
-			roundNumber = combineRounds(roundNumber,
-					-ClassExactMatcher.getClassNumber(clazz));
+			roundNumber = combineRounds(roundNumber, -ClassExactMatcher.getClassNumber(clazz));
 		}
 		return roundNumber;
 	}

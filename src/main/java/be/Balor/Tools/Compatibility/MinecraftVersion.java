@@ -1,3 +1,20 @@
+/*
+ *  ProtocolLib - Bukkit server library that allows access to the Minecraft protocol.
+ *  Copyright (C) 2012 Kristian S. Stangeland
+ *
+ *  This program is free software; you can redistribute it and/or modify it under the terms of the 
+ *  GNU General Public License as published by the Free Software Foundation; either version 2 of 
+ *  the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ *  See the GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along with this program; 
+ *  if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 
+ *  02111-1307 USA
+ */
+
 package be.Balor.Tools.Compatibility;
 
 import java.util.regex.Matcher;
@@ -7,13 +24,14 @@ import org.bukkit.Server;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
 
 /**
  * Determine the current Minecraft version.
  * 
  * @author Kristian
  */
-class MinecraftVersion implements Comparable<MinecraftVersion> {
+public class MinecraftVersion implements Comparable<MinecraftVersion> {
 	/**
 	 * Regular expression used to parse version strings.
 	 */
@@ -22,6 +40,9 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 	private final int major;
 	private final int minor;
 	private final int build;
+
+	// The development stage
+	private final String development;
 
 	/**
 	 * Determine the current Minecraft version.
@@ -41,11 +62,13 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 	 *            - the version in text form.
 	 */
 	public MinecraftVersion(final String versionOnly) {
-		int[] numbers = parseVersion(versionOnly);
+		final String[] section = versionOnly.split("-");
+		final int[] numbers = parseVersion(section[0]);
 
 		this.major = numbers[0];
 		this.minor = numbers[1];
 		this.build = numbers[2];
+		this.development = section.length > 1 ? section[1] : null;
 	}
 
 	/**
@@ -59,14 +82,31 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 	 *            - build version number.
 	 */
 	public MinecraftVersion(final int major, final int minor, final int build) {
+		this(major, minor, build, null);
+	}
+
+	/**
+	 * Construct a version object directly.
+	 * 
+	 * @param major
+	 *            - major version number.
+	 * @param minor
+	 *            - minor version number.
+	 * @param build
+	 *            - build version number.
+	 * @param development
+	 *            - development stage.
+	 */
+	public MinecraftVersion(final int major, final int minor, final int build, final String development) {
 		this.major = major;
 		this.minor = minor;
 		this.build = build;
+		this.development = development;
 	}
 
 	private int[] parseVersion(final String version) {
-		String[] elements = version.split("\\.");
-		int[] numbers = new int[3];
+		final String[] elements = version.split("\\.");
+		final int[] numbers = new int[3];
 
 		// Make sure it's even a valid version
 		if (elements.length < 1) {
@@ -108,12 +148,25 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 	}
 
 	/**
+	 * Retrieve the development stage.
+	 * 
+	 * @return Development stage, or NULL if this is a release.
+	 */
+	public String getDevelopmentStage() {
+		return development;
+	}
+
+	/**
 	 * Retrieve the version String (major.minor.build) only.
 	 * 
 	 * @return A normal version string.
 	 */
 	public String getVersion() {
-		return String.format("%s.%s.%s", major, minor, build);
+		if (getDevelopmentStage() == null) {
+			return String.format("%s.%s.%s", getMajor(), getMinor(), getBuild());
+		} else {
+			return String.format("%s.%s.%s-%s", getMajor(), getMinor(), getBuild(), getDevelopmentStage());
+		}
 	}
 
 	@Override
@@ -122,8 +175,9 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 			return 1;
 		}
 
-		return ComparisonChain.start().compare(major, o.major)
-				.compare(minor, o.minor).compare(build, o.build).result();
+		return ComparisonChain.start().compare(getMajor(), o.getMajor()).compare(getMinor(), o.getMinor()).compare(getBuild(), o.getBuild()).
+		// No development String means it's a release
+				compare(getDevelopmentStage(), o.getDevelopmentStage(), Ordering.natural().nullsLast()).result();
 	}
 
 	@Override
@@ -136,10 +190,10 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 		}
 
 		if (obj instanceof MinecraftVersion) {
-			MinecraftVersion other = (MinecraftVersion) obj;
+			final MinecraftVersion other = (MinecraftVersion) obj;
 
-			return major == other.major && minor == other.minor
-					&& build == other.build;
+			return getMajor() == other.getMajor() && getMinor() == other.getMinor() && getBuild() == other.getBuild()
+					&& Objects.equal(getDevelopmentStage(), other.getDevelopmentStage());
 		}
 
 		return false;
@@ -147,7 +201,7 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(major, minor, build);
+		return Objects.hashCode(getMajor(), getMinor(), getBuild());
 	}
 
 	@Override
@@ -166,14 +220,13 @@ class MinecraftVersion implements Comparable<MinecraftVersion> {
 	 *             If we could not parse the version string.
 	 */
 	public static String extractVersion(final String text) {
-		Pattern versionPattern = Pattern.compile(VERSION_PATTERN);
-		Matcher version = versionPattern.matcher(text);
+		final Pattern versionPattern = Pattern.compile(VERSION_PATTERN);
+		final Matcher version = versionPattern.matcher(text);
 
 		if (version.matches() && version.group(1) != null) {
 			return version.group(1);
 		} else {
-			throw new IllegalStateException("Cannot parse version String '"
-					+ text + "'");
+			throw new IllegalStateException("Cannot parse version String '" + text + "'");
 		}
 	}
 }
