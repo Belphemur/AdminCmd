@@ -266,7 +266,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Entity> T getBukkitEntityCasted(final Object nmsObject) {
-		return (T) MinecraftReflection.getBukkitEntity(nmsObject);
+		return (T) ACMinecraftReflection.getBukkitEntity(nmsObject);
 	}
 
 }

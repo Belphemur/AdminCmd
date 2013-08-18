@@ -24,6 +24,7 @@ import java.util.concurrent.Semaphore;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
@@ -119,7 +120,12 @@ public class Memory extends ServerCommand {
 			try {
 				die = new MethodHandler(ACMinecraftReflection.getEntityClass(), "die");
 			} catch (final RuntimeException e) {
-				die = new MethodHandler(ACMinecraftReflection.getEntityClass(), "kill");
+				try {
+					die = new MethodHandler(ACMinecraftReflection.getEntityClass(), "setDead");
+				} catch (final RuntimeException e2) {
+					// TODO: handle exception
+				}
+
 			}
 
 			for (final World w : worlds) {
@@ -131,7 +137,12 @@ public class Memory extends ServerCommand {
 					if (dontKill(args, entity)) {
 						continue;
 					}
-					die.invoke(entity);
+					if (die != null) {
+						die.invoke(entity);
+					} else {
+						final Entity bukkitEntity = ACMinecraftReflection.getBukkitEntityCasted(entity);
+						bukkitEntity.remove();
+					}
 					count++;
 				}
 			}

@@ -204,8 +204,12 @@ public class KillMob extends MobCommand {
 			final MethodHandler die = new MethodHandler(entity.getClass(), "die");
 			die.invoke(entity);
 		} catch (final RuntimeException e2) {
-			final MethodHandler die = new MethodHandler(entity.getClass(), "kill");
-			die.invoke(entity);
+			try {
+				final MethodHandler die = new MethodHandler(entity.getClass(), "setDead");
+				die.invoke(entity);
+			} catch (final Exception e3) {
+				e.remove();
+			}
 		}
 
 		return true;
