@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Tools.Compatibility;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import javax.annotation.Nonnull;
@@ -27,6 +28,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMatchers;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
 
@@ -48,7 +51,15 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @return The PlayerInventory class.
 	 */
 	public static Class<?> getPlayerInventoryClass() {
-		return getMinecraftClass("PlayerInventory", "InventoryPlayer");
+		try {
+			return getMinecraftClass("PlayerInventory");
+		} catch (final RuntimeException e) {
+			final FuzzyFieldContract find = new FuzzyFieldContract.Builder().typeMatches(
+					FuzzyMatchers.matchRegex("(net\\.minecraft(\\.\\w+)+)((.+|)Inventory(.+|))", 50)).build();
+			final Field inv = FuzzyReflection.fromClass(getEntityPlayerClass().getSuperclass()).getField(find);
+			return setMinecraftClass("PlayerInventory", inv.getType());
+		}
+
 	}
 
 	/**

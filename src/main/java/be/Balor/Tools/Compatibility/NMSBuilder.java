@@ -60,8 +60,13 @@ public class NMSBuilder {
 		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
 			final Class<?> playerInventoryClass = ACMinecraftReflection.getPlayerInventoryClass();
-			final Constructor<?> invConstructor = playerInventoryClass.getConstructor(ACMinecraftReflection.getEntityHumanClass());
-			return invConstructor.newInstance(playerHandle);
+			try {
+				final Constructor<?> invConstructor = playerInventoryClass.getConstructor(ACMinecraftReflection.getEntityHumanClass());
+				return invConstructor.newInstance(playerHandle);
+			} catch (final RuntimeException e) {
+				final Constructor<?> invConstructor = playerInventoryClass.getConstructor(ACMinecraftReflection.getEntityPlayerClass().getSuperclass());
+				return invConstructor.newInstance(playerHandle);
+			}
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't build PlayerInventory", e);
 		}
