@@ -18,6 +18,8 @@ package be.Balor.Tools.Compatibility.Reflect;
 
 import java.lang.reflect.Method;
 
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
+
 /**
  * Handle a method
  * 
@@ -37,9 +39,20 @@ public class MethodHandler {
 	 * @param parameterTypes
 	 *            - types of the args of the method
 	 */
-	public MethodHandler(final Class<?> clazz, final String name,
-			final Class<?>... parameterTypes) {
+	public MethodHandler(final Class<?> clazz, final String name, final Class<?>... parameterTypes) {
 		method = MethodUtils.getMethod(clazz, name, parameterTypes);
+	}
+
+	/**
+	 * Create the MethodHandler.
+	 * 
+	 * @param clazz
+	 *            - given class, source of the method
+	 * @param contract
+	 *            - contract containing the information about the method
+	 */
+	public MethodHandler(final Class<?> clazz, final FuzzyMethodContract contract) {
+		method = MethodUtils.getMethod(clazz, contract);
 	}
 
 	/**
