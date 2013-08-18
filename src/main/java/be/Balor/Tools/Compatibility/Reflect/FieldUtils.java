@@ -90,7 +90,7 @@ public class FieldUtils {
 	public static void setExactAttribute(final Object object, final String field, final Object value) {
 		try {
 			final Field objectField = getExactField(object.getClass(), field);
-			setAttribute0(object, value, objectField);
+			setAttribute(object, value, objectField);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't set field " + field + " from " + object, e);
 		}
@@ -109,19 +109,24 @@ public class FieldUtils {
 	public static void setMatchedAttribute(final Object object, final FuzzyFieldContract contract, final Object value) {
 		try {
 			final Field objectField = getMatchedField(object.getClass(), contract);
-			setAttribute0(object, value, objectField);
+			setAttribute(object, value, objectField);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't set field " + contract + " from " + object, e);
 		}
 	}
 
 	/**
+	 * Set the attribute of an object
+	 * 
 	 * @param object
+	 *            the object
 	 * @param value
+	 *            the new value
 	 * @param objectField
+	 *            the field to change
 	 * @throws IllegalAccessException
 	 */
-	private static void setAttribute0(final Object object, final Object value, final Field objectField) throws IllegalAccessException {
+	public static void setAttribute(final Object object, final Object value, final Field objectField) throws IllegalAccessException {
 		objectField.setAccessible(true);
 		objectField.set(object, value);
 		objectField.setAccessible(false);

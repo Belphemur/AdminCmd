@@ -17,10 +17,12 @@
 package be.Balor.OpenInv;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
@@ -33,6 +35,7 @@ import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.Filters.DatFilter;
 import be.Balor.World.ACWorld;
@@ -67,11 +70,9 @@ public class InventoryManager {
 		if (inv == null) {
 			return;
 		}
-		final MethodHandler getViewers = new MethodHandler(inv.getClass(),
-				"getViewers");
+		final MethodHandler getViewers = new MethodHandler(inv.getClass(), "getViewers");
 		final Object viewers = getViewers.invoke(inv);
-		final MethodHandler isEmpty = new MethodHandler(viewers.getClass(),
-				"isEmpty");
+		final MethodHandler isEmpty = new MethodHandler(viewers.getClass(), "isEmpty");
 		final boolean empty = isEmpty.invoke(viewers);
 		if (empty) {
 			replacedInv.remove(name);
@@ -94,12 +95,41 @@ public class InventoryManager {
 		if (inv == null) {
 			return;
 		}
-		final PlayerInventoryProxy proxy = (PlayerInventoryProxy) Proxy
-				.getInvocationHandler(inv);
-		final Object inventory = ACMinecraftReflection.getInventory(p);
-		FieldUtils.setField(inventory, "armor", proxy.getArmor());
-		FieldUtils.setField(inventory, "items", proxy.getItems());
+		setPlayerItemArmor(p, inv);
 
+	}
+
+	/**
+	 * @param p
+	 * @param inv
+	 */
+	private void setPlayerItemArmor(final Player p, final Object inv) {
+		final PlayerInventoryProxy proxy = (PlayerInventoryProxy) Proxy.getInvocationHandler(inv);
+		final Object inventory = ACMinecraftReflection.getInventory(p);
+		final Object[] armor = proxy.getArmor();
+		final Object[] items = proxy.getItems();
+		setInventoryArmorItems(inventory, armor, items);
+	}
+
+	/**
+	 * @param inventory
+	 * @param armor
+	 * @param items
+	 */
+	public static void setInventoryArmorItems(final Object inventory, final Object[] armor, final Object[] items) {
+		final List<Field> fieldList = FuzzyReflection.fromObject(inventory).getFieldList(ACMinecraftReflection.INVENTORY_ITEMSTACK_CONTRACT);
+		for (final Field field : fieldList) {
+			try {
+				final Object[] array = (Object[]) field.get(inventory);
+				if (array.length == 4) {
+					FieldUtils.setAttribute(inventory, armor, field);
+				} else if (array.length == 36) {
+					FieldUtils.setAttribute(inventory, items, field);
+				}
+			} catch (final Exception e) {
+				throw new RuntimeException("Can't set armor and items of player ", e);
+			}
+		}
 	}
 
 	/**
@@ -112,8 +142,7 @@ public class InventoryManager {
 	 *         ://github.com/lishd/OpenInv/blob/master/src/lishid
 	 *         /openinv/commands/OpenInvPluginCommand.java}
 	 */
-	public void openOfflineInv(final Player sender, final String name,
-			final String world) throws PlayerNotFound {
+	public void openOfflineInv(final Player sender, final String name, final String world) throws PlayerNotFound {
 		Player target = null;
 		final HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("player", name);
@@ -129,19 +158,14 @@ public class InventoryManager {
 			LocaleHelper.WORLD_NOT_LOADED.sendLocale(sender, replace);
 			return;
 		}
-		final File playerfolder = new File(
-				acworld.getHandle().getWorldFolder(), "players");
+		final File playerfolder = new File(acworld.getHandle().getWorldFolder(), "players");
 		if (!playerfolder.exists()) {
-			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
-					sender);
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace), sender);
 		}
 
-		final String playername = matchUser(
-				Arrays.asList(DatFilter.INSTANCE.listRecursively(playerfolder)),
-				name);
+		final String playername = matchUser(Arrays.asList(DatFilter.INSTANCE.listRecursively(playerfolder)), name);
 		if (playername == null) {
-			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
-					sender);
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace), sender);
 		}
 
 		// Create an entity to load the player data
@@ -154,8 +178,7 @@ public class InventoryManager {
 		if (target != null) {
 			target.loadData();
 		} else {
-			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
-					sender);
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace), sender);
 		}
 		if (Immunity.checkImmunity(sender, target)) {
 			openInv(sender, target, true);
@@ -176,12 +199,10 @@ public class InventoryManager {
 		openInv(sender, target, false);
 	}
 
-	private void openInv(final Player sender, final Player target,
-			final boolean offline) {
+	private void openInv(final Player sender, final Player target, final boolean offline) {
 		final Object inventory = getInventory(target, offline);
 		final Object eh = ACMinecraftReflection.getHandle(sender);
-		final MethodHandler openContainer = new MethodHandler(
-				ACMinecraftReflection.getEntityPlayerClass(), "openContainer",
+		final MethodHandler openContainer = new MethodHandler(ACMinecraftReflection.getEntityPlayerClass(), "openContainer",
 				ACMinecraftReflection.getIInventoryClass());
 		openContainer.invoke(eh, inventory);
 	}
@@ -191,8 +212,7 @@ public class InventoryManager {
 		if (inventory == null) {
 			final Object playerInv = NMSBuilder.buildPlayerInventory(player);
 			if (offline) {
-				inventory = OfflinePlayerInventoryProxy.newInstance(player,
-						playerInv);
+				inventory = OfflinePlayerInventoryProxy.newInstance(player, playerInv);
 				offlineInv.put(player.getName(), inventory);
 			} else {
 				inventory = PlayerInventoryProxy.newInstance(player, playerInv);
@@ -203,8 +223,7 @@ public class InventoryManager {
 
 	}
 
-	private String matchUser(final Collection<File> container,
-			final String search) {
+	private String matchUser(final Collection<File> container, final String search) {
 		String found = null;
 		if (search == null) {
 			return found;

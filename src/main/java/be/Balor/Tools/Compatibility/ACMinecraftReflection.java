@@ -45,8 +45,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 */
 	public static final AbstractFuzzyMatcher<Class<?>> INVENTORY_REGEX = FuzzyMatchers.matchRegex("(net\\.minecraft(\\.\\w+)+)((.+|)Inventory(.+|))", 50);
 	public static final FuzzyFieldContract INVENTORY_CONTRACT = FuzzyFieldContract.newBuilder().typeMatches(INVENTORY_REGEX).build();
-	public static final FuzzyFieldContract ARMOR_CONTRACT = FuzzyFieldContract.newBuilder().nameRegex("(armor(.+|))").build();
-	public static final FuzzyFieldContract ITEMS_CONTRACT = FuzzyFieldContract.newBuilder().nameRegex("(items|mainInventory)").build();
+	public static final FuzzyFieldContract INVENTORY_ITEMSTACK_CONTRACT = FuzzyFieldContract.newBuilder().typeExact(getItemStackArrayClass()).build();
 
 	/**
 	 * 

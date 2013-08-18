@@ -17,16 +17,19 @@
 package be.Balor.OpenInv;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
 
 /**
  * @author Antoine
@@ -45,25 +48,34 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	protected PlayerInventoryProxy(final Player prop, final Object obj) {
 		this.proprietary = prop;
 		this.obj = obj;
-		final Object playerHandle = ACMinecraftReflection
-				.getHandle(proprietary);
-		final Object inventory = FieldUtils.getAttribute(playerHandle, "inventory");
-		final Object[] armor = FieldUtils.getAttribute(inventory, "armor");
-		final Object[] items = FieldUtils.getAttribute(inventory, "items");
+		final Object playerHandle = ACMinecraftReflection.getHandle(proprietary);
+		final Object inventory = FieldUtils.getAttribute(playerHandle, ACMinecraftReflection.INVENTORY_CONTRACT);
+
+		Object[] armor = null;
+		Object[] items = null;
+		final List<Field> fieldList = FuzzyReflection.fromObject(inventory).getFieldList(ACMinecraftReflection.INVENTORY_ITEMSTACK_CONTRACT);
+		for (final Field field : fieldList) {
+			try {
+				final Object[] array = (Object[]) field.get(inventory);
+				if (array.length == 4) {
+					armor = array;
+				} else if (array.length == 36) {
+					items = array;
+				}
+			} catch (final Exception e) {
+				throw new RuntimeException("Can't set armor and items of player ", e);
+			}
+		}
+
 		size = armor.length + items.length + extra.length;
-		FieldUtils.setField(this.obj, "armor", armor);
-		FieldUtils.setField(this.obj, "items", items);
+		InventoryManager.setInventoryArmorItems(this.obj, armor, items);
 	}
 
 	public static Object newInstance(final Player prop, final Object obj) {
-		if (!ACMinecraftReflection.getPlayerInventoryClass().isAssignableFrom(
-				obj.getClass())) {
-			throw new RuntimeException(
-					"The object must be of the type of PlayerInventory");
+		if (!ACMinecraftReflection.getPlayerInventoryClass().isAssignableFrom(obj.getClass())) {
+			throw new RuntimeException("The object must be of the type of PlayerInventory");
 		}
-		return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj
-				.getClass().getInterfaces(),
-				new PlayerInventoryProxy(prop, obj));
+		return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new PlayerInventoryProxy(prop, obj));
 	}
 
 	/*
@@ -73,15 +85,13 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	 * java.lang.reflect.Method, java.lang.Object[])
 	 */
 	@Override
-	public Object invoke(final Object proxy, final Method method,
-			final Object[] args) throws Throwable {
+	public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 		final String methodName = method.getName();
 		if (methodName.equals("onClose")) {
 			this.onClose(args[0]);
 			return null;
 		} else if (methodName.equals("getContents")) {
-			return ACMinecraftReflection.getItemStackArrayClass().cast(
-					getContents());
+			return ACMinecraftReflection.getItemStackArrayClass().cast(getContents());
 		} else if (methodName.equals("getSize")) {
 			return getSize();
 		} else if (methodName.equals("a_") || methodName.equals("a")) {
@@ -117,18 +127,15 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	 * net.minecraft.server.PlayerInventory#onClose(org.bukkit.craftbukkit.entity
 	 * .CraftHumanEntity)
 	 */
-	private void onClose(final Object who) throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
-		final MethodHandler superOnClose = new MethodHandler(obj.getClass(),
-				"onClose", ACMinecraftReflection.getCraftHumanEntityClass());
+	private void onClose(final Object who) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		final MethodHandler superOnClose = new MethodHandler(obj.getClass(), "onClose", ACMinecraftReflection.getCraftHumanEntityClass());
 		superOnClose.invoke(obj, who);
 		checkCloseEvent();
 	}
 
 	protected void checkCloseEvent() {
 		final Object transactions = FieldUtils.getAttribute(obj, "transaction");
-		final MethodHandler isEmpty = new MethodHandler(
-				transactions.getClass(), "isEmpty");
+		final MethodHandler isEmpty = new MethodHandler(transactions.getClass(), "isEmpty");
 		final boolean empty = isEmpty.invoke(transactions);
 		if (empty && !proprietary.isOnline()) {
 			InventoryManager.INSTANCE.closeOfflineInv(proprietary);
@@ -136,8 +143,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	protected Object getContents() {
-		final Object C = Array.newInstance(
-				ACMinecraftReflection.getItemStackClass(), getSize());
+		final Object C = Array.newInstance(ACMinecraftReflection.getItemStackClass(), getSize());
 		final Object[] items = getItems();
 		final Object[] armor = getArmor();
 		System.arraycopy(items, 0, C, 0, items.length);
@@ -239,8 +245,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 				is[i] = null;
 				return itemstack;
 			} else {
-				final MethodHandler a = new MethodHandler(is[i].getClass(),
-						"a", int.class);
+				final MethodHandler a = new MethodHandler(is[i].getClass(), "a", int.class);
 				itemstack = a.invoke(is[i], j);
 				if (getCount(is[i]) == 0) {
 					is[i] = null;
