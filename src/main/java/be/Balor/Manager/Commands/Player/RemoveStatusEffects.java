@@ -83,18 +83,22 @@ public class RemoveStatusEffects extends PlayerCommand {
      */
     @Override
     public boolean argsCheck(final String... args) {
-        return args != null;
+        return args.length != 0;
     }
 
     public boolean removeEffect(final Player target, final CommandArgs args) {
         final String potion = args.getString(0);
 
+        if (potion == null){
+            return false;
+        }
+        
         if (potion.equalsIgnoreCase("all")) {
             for (PotionEffect effect : target.getActivePotionEffects()) {
                 target.removePotionEffect(effect.getType());
             }
             return true;
-            
+
         } else {
 
             PotionEffectType type = null;
@@ -112,9 +116,12 @@ public class RemoveStatusEffects extends PlayerCommand {
                 }
                 type = PotionEffectType.getByName(potionFound);
             }
-            
-            target.removePotionEffect(type);
-            return true;
+
+            if (target.hasPotionEffect(type)) {
+                target.removePotionEffect(type);
+                return true;
+            }
+            return false;
         }
     }
 }
