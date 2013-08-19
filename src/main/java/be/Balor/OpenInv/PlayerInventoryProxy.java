@@ -30,6 +30,7 @@ import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
+import be.Balor.Tools.Debug.DebugLog;
 
 /**
  * @author Antoine
@@ -87,28 +88,35 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	@Override
 	public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 		final String methodName = method.getName();
+		final Class<?>[] parameterTypes = method.getParameterTypes();
 		if (methodName.equals("onClose")) {
 			this.onClose(args[0]);
 			return null;
 		} else if (methodName.equals("getContents")
-				|| (method.getReturnType().equals(ACMinecraftReflection.getItemStackArrayClass()) && method.getParameterTypes().length == 0)) {
+				|| (method.getReturnType().equals(ACMinecraftReflection.getItemStackArrayClass()) && parameterTypes.length == 0)) {
 			return ACMinecraftReflection.getItemStackArrayClass().cast(getContents());
-		} else if (methodName.equals("getSize") || (method.getReturnType().equals(int.class) && method.getParameterTypes().length == 0)) {
+		} else if (methodName.equals("getSize") || (method.getReturnType().equals(int.class) && parameterTypes.length == 0)) {
 			return getSize();
 		} else if (methodName.equals("a_")
 				|| methodName.equals("a")
-				|| (method.getReturnType().equals(boolean.class) && method.getParameterTypes().length == 1 && ACMinecraftReflection.getEntityPlayerClass()
+				|| (method.getReturnType().equals(boolean.class) && parameterTypes.length == 1 && ACMinecraftReflection.getEntityPlayerClass()
 						.isAssignableFrom(args[0].getClass()))) {
 			return a_();
 		} else if (methodName.equals("getName") || method.getReturnType().equals(String.class)) {
 			return getName();
 		} else if (methodName.equals("getItem") || methodName.equals("func_70301_a")) {
 			return getItem((Integer) args[0]);
-		} else if (methodName.equals("splitStack") || methodName.equals("func_75209_a")) {
+		} else if (methodName.equals("splitStack")
+				|| (parameterTypes.length == 2 && parameterTypes[0].equals(int.class) && parameterTypes[1].equals(int.class) && method.getReturnType().equals(
+						ACMinecraftReflection.getItemStackClass()))) {
 			return splitStack((Integer) args[0], (Integer) args[1]);
-		} else if (methodName.equals("splitWithoutUpdate") || methodName.equals("func_70304_b")) {
+		} else if (methodName.equals("splitWithoutUpdate")
+				|| (parameterTypes.length == 1 && parameterTypes[0].equals(int.class) && method.getReturnType().equals(
+						ACMinecraftReflection.getItemStackClass()))) {
 			return splitWithoutUpdate((Integer) args[0]);
-		} else if (methodName.equals("setItem") || methodName.equals("func_70299_a")) {
+		} else if (methodName.equals("setItem")
+				|| (method.getReturnType().equals(void.class) && parameterTypes.length == 2 && ACMinecraftReflection.getItemStackClass().isAssignableFrom(
+						args[1].getClass()))) {
 			setItem((Integer) args[0], args[1]);
 			return null;
 		} else {
@@ -221,44 +229,56 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	private int getCount(final Object itemstack) {
-		return FieldUtils.getAttribute(itemstack, "count");
+		try {
+			return FieldUtils.getAttribute(itemstack, "count");
+		} catch (final RuntimeException e) {
+			return FieldUtils.getAttribute(itemstack, "field_77994_a");
+		}
+
 	}
 
 	protected Object splitStack(int i, final int j) {
-		Object[] is = getItems();
+		DebugLog.beginInfo("[PlayerInventoryProxy] splitStack");
+		DebugLog.addInfo("Index : " + i);
+		DebugLog.addInfo("Number : " + j);
+		try {
+			Object[] is = getItems();
 
-		if (i >= is.length) {
-			i -= is.length;
-			is = getArmor();
-		} else {
-			i = getReversedItemSlotNum(i);
-		}
-
-		if (i >= is.length) {
-			i -= is.length;
-			is = this.extra;
-		} else if (is == getArmor()) {
-			i = getReversedArmorSlotNum(i);
-		}
-
-		if (is[i] != null) {
-			Object itemstack;
-
-			if (getCount(is[i]) <= j) {
-				itemstack = is[i];
-				is[i] = null;
-				return itemstack;
+			if (i >= is.length) {
+				i -= is.length;
+				is = getArmor();
 			} else {
-				final MethodHandler a = new MethodHandler(is[i].getClass(), "a", int.class);
-				itemstack = a.invoke(is[i], j);
-				if (getCount(is[i]) == 0) {
-					is[i] = null;
-				}
-
-				return itemstack;
+				i = getReversedItemSlotNum(i);
 			}
-		} else {
-			return null;
+
+			if (i >= is.length) {
+				i -= is.length;
+				is = this.extra;
+			} else if (is == getArmor()) {
+				i = getReversedArmorSlotNum(i);
+			}
+
+			if (is[i] != null) {
+				Object itemstack;
+
+				if (getCount(is[i]) <= j) {
+					itemstack = is[i];
+					is[i] = null;
+					return itemstack;
+				} else {
+					final MethodHandler a = new MethodHandler(is[i].getClass(), "a", int.class);
+					itemstack = a.invoke(is[i], j);
+					if (getCount(is[i]) == 0) {
+						is[i] = null;
+					}
+
+					return itemstack;
+				}
+			} else {
+				return null;
+			}
+		} finally {
+			DebugLog.endInfo();
 		}
 	}
 
@@ -290,22 +310,29 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	}
 
 	protected void setItem(int i, final Object itemstack) {
-		Object[] is = getItems();
+		DebugLog.beginInfo("[PlayerInventoryProxy] SetItem");
+		DebugLog.addInfo("Index : " + i);
+		DebugLog.addInfo("Item : " + itemstack);
+		try {
+			Object[] is = getItems();
 
-		if (i >= is.length) {
-			i -= is.length;
-			is = getArmor();
-		} else {
-			i = getReversedItemSlotNum(i);
-		}
+			if (i >= is.length) {
+				i -= is.length;
+				is = getArmor();
+			} else {
+				i = getReversedItemSlotNum(i);
+			}
 
-		if (i >= is.length) {
-			i -= is.length;
-			is = this.extra;
-		} else if (is == getArmor()) {
-			i = getReversedArmorSlotNum(i);
+			if (i >= is.length) {
+				i -= is.length;
+				is = this.extra;
+			} else if (is == getArmor()) {
+				i = getReversedArmorSlotNum(i);
+			}
+			is[i] = itemstack;
+		} finally {
+			DebugLog.endInfo();
 		}
-		is[i] = itemstack;
 	}
 
 }
