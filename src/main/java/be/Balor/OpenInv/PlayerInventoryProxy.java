@@ -51,8 +51,7 @@ public class PlayerInventoryProxy implements InvocationHandler {
 	protected PlayerInventoryProxy(final Player prop, final Object obj) {
 		this.proprietary = prop;
 		this.obj = obj;
-		final Object playerHandle = ACMinecraftReflection.getHandle(proprietary);
-		final Object inventory = FieldUtils.getAttribute(playerHandle, ACMinecraftReflection.INVENTORY_CONTRACT);
+		final Object inventory = ACMinecraftReflection.getInventory(this.proprietary);
 
 		final List<Field> fieldList = FuzzyReflection.fromObject(inventory).getFieldList(ACMinecraftReflection.INVENTORY_ITEMSTACK_CONTRACT);
 		for (final Field field : fieldList) {

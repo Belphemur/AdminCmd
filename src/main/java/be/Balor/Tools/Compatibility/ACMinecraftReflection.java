@@ -136,7 +136,7 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @return {@link PlayerInventory}
 	 */
 	public static Object getInventory(final Player p) {
-		return FieldUtils.getAttribute(ACMinecraftReflection.getHandle(p), "inventory");
+		return FieldUtils.getAttribute(ACMinecraftReflection.getHandle(p), INVENTORY_CONTRACT);
 	}
 
 	/**
