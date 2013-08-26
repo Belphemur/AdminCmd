@@ -58,6 +58,7 @@ import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -72,7 +73,9 @@ import be.Balor.Manager.Exceptions.EnchantmentConflictException;
 import be.Balor.Player.BannedPlayer;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type.ArmorPart;
+import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.avaje.ebean.config.ServerConfig;
 
@@ -83,11 +86,27 @@ import com.avaje.ebean.config.ServerConfig;
 public class ExtendedConfigurationTest {
 	private File file;
 	static {
+		try {
+			final TestPlugin plugin = new TestPlugin();
+			FieldUtils.setAttribute(plugin, File.createTempFile("test", "tmp").getParentFile(), FieldUtils.getExactField(JavaPlugin.class, "dataFolder"));
+			FieldUtils.setAttribute(ACPluginManager.getInstance(), plugin, FieldUtils.getExactField(ACPluginManager.class, "corePlugin"));
+		} catch (final IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Bukkit.setServer(new Server() {
 
 			@Override
-			public void sendPluginMessage(final Plugin source,
-					final String channel, final byte[] message) {
+			public void sendPluginMessage(final Plugin source, final String channel, final byte[] message) {
 				// TODO Auto-generated method stub
 
 			}
@@ -432,17 +451,13 @@ public class ExtendedConfigurationTest {
 				return new ItemFactory() {
 
 					@Override
-					public boolean isApplicable(final ItemMeta meta,
-							final Material material)
-							throws IllegalArgumentException {
+					public boolean isApplicable(final ItemMeta meta, final Material material) throws IllegalArgumentException {
 						// TODO Auto-generated method stub
 						return true;
 					}
 
 					@Override
-					public boolean isApplicable(final ItemMeta meta,
-							final ItemStack stack)
-							throws IllegalArgumentException {
+					public boolean isApplicable(final ItemMeta meta, final ItemStack stack) throws IllegalArgumentException {
 						// TODO Auto-generated method stub
 						return true;
 					}
@@ -460,25 +475,19 @@ public class ExtendedConfigurationTest {
 					}
 
 					@Override
-					public boolean equals(final ItemMeta meta1,
-							final ItemMeta meta2)
-							throws IllegalArgumentException {
+					public boolean equals(final ItemMeta meta1, final ItemMeta meta2) throws IllegalArgumentException {
 						// TODO Auto-generated method stub
 						return true;
 					}
 
 					@Override
-					public ItemMeta asMetaFor(final ItemMeta meta,
-							final Material material)
-							throws IllegalArgumentException {
+					public ItemMeta asMetaFor(final ItemMeta meta, final Material material) throws IllegalArgumentException {
 						// TODO Auto-generated method stub
 						return null;
 					}
 
 					@Override
-					public ItemMeta asMetaFor(final ItemMeta meta,
-							final ItemStack stack)
-							throws IllegalArgumentException {
+					public ItemMeta asMetaFor(final ItemMeta meta, final ItemStack stack) throws IllegalArgumentException {
 						// TODO Auto-generated method stub
 						return null;
 					}
@@ -576,8 +585,7 @@ public class ExtendedConfigurationTest {
 			}
 
 			@Override
-			public boolean dispatchCommand(final CommandSender sender,
-					final String commandLine) throws CommandException {
+			public boolean dispatchCommand(final CommandSender sender, final String commandLine) throws CommandException {
 				// TODO Auto-generated method stub
 				return false;
 			}
@@ -595,22 +603,19 @@ public class ExtendedConfigurationTest {
 			}
 
 			@Override
-			public Inventory createInventory(final InventoryHolder owner,
-					final int size, final String title) {
+			public Inventory createInventory(final InventoryHolder owner, final int size, final String title) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public Inventory createInventory(final InventoryHolder owner,
-					final int size) {
+			public Inventory createInventory(final InventoryHolder owner, final int size) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public Inventory createInventory(final InventoryHolder owner,
-					final InventoryType type) {
+			public Inventory createInventory(final InventoryHolder owner, final InventoryType type) {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -670,8 +675,7 @@ public class ExtendedConfigurationTest {
 		ConfigurationSerialization.registerClass(ArmoredKitInstance.class);
 		ConfigurationSerialization.registerClass(MaterialContainer.class);
 		file = new File("test.yml");
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
 		conf.add("test", "blah");
 		conf.createSection("yatta").set("test", "blah");
 		conf.save();
@@ -680,21 +684,16 @@ public class ExtendedConfigurationTest {
 
 	@Test
 	public void loadTest() {
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
 		assertEquals("blah", conf.get("test"));
 		assertFalse(conf.add("test", "test"));
 		assertEquals("blah", conf.get("test"));
 	}
 
 	@Test
-	public void serializeMaterialContainerTest() throws IOException,
-			InvalidConfigurationException, EnchantmentConflictException,
-			CantEnchantItemException {
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
-		final MaterialContainer mat = new MaterialContainer(new ItemStack(
-				Material.DIAMOND_AXE, 5));
+	public void serializeMaterialContainerTest() throws IOException, InvalidConfigurationException, EnchantmentConflictException, CantEnchantItemException {
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+		final MaterialContainer mat = new MaterialContainer(new ItemStack(Material.DIAMOND_AXE, 5));
 		conf.set("serial.item", mat);
 		conf.save();
 		conf.reload();
@@ -702,13 +701,9 @@ public class ExtendedConfigurationTest {
 	}
 
 	@Test
-	public void serializeKitInstanceTest() throws IOException,
-			InvalidConfigurationException, EnchantmentConflictException,
-			CantEnchantItemException {
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
-		final MaterialContainer mat = new MaterialContainer(new ItemStack(
-				Material.DIAMOND_AXE, 5));
+	public void serializeKitInstanceTest() throws IOException, InvalidConfigurationException, EnchantmentConflictException, CantEnchantItemException {
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+		final MaterialContainer mat = new MaterialContainer(new ItemStack(Material.DIAMOND_AXE, 5));
 		final List<MaterialContainer> mats = new ArrayList<MaterialContainer>();
 		mats.add(mat);
 		final KitInstance kit = new KitInstance("Test", 0, mats);
@@ -719,20 +714,14 @@ public class ExtendedConfigurationTest {
 	}
 
 	@Test
-	public void serializeArmoredKitInstanceTest() throws IOException,
-			InvalidConfigurationException, EnchantmentConflictException,
-			CantEnchantItemException {
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
-		final MaterialContainer mat = new MaterialContainer(new ItemStack(
-				Material.DIAMOND_AXE, 5));
+	public void serializeArmoredKitInstanceTest() throws IOException, InvalidConfigurationException, EnchantmentConflictException, CantEnchantItemException {
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
+		final MaterialContainer mat = new MaterialContainer(new ItemStack(Material.DIAMOND_AXE, 5));
 		final List<MaterialContainer> mats = new ArrayList<MaterialContainer>();
 		mats.add(mat);
 		final Map<ArmorPart, MaterialContainer> armor = new HashMap<ArmorPart, MaterialContainer>();
-		armor.put(ArmorPart.BOOTS, new MaterialContainer(new ItemStack(
-				Material.LEATHER_BOOTS)));
-		final ArmoredKitInstance kit = new ArmoredKitInstance("Test", 0, mats,
-				armor);
+		armor.put(ArmorPart.BOOTS, new MaterialContainer(new ItemStack(Material.LEATHER_BOOTS)));
+		final ArmoredKitInstance kit = new ArmoredKitInstance("Test", 0, mats, armor);
 		kit.setColor("blue");
 		conf.set("serial.armKit", kit);
 		conf.save();
@@ -741,15 +730,12 @@ public class ExtendedConfigurationTest {
 	}
 
 	@Test
-	public void serializeAdminCmdTest() throws IOException,
-			InvalidConfigurationException {
-		final ExtendedConfiguration conf = ExtendedConfiguration
-				.loadConfiguration(file);
+	public void serializeAdminCmdTest() throws IOException, InvalidConfigurationException {
+		final ExtendedConfiguration conf = ExtendedConfiguration.loadConfiguration(file);
 		conf.set("serial.banPlayer", new BannedPlayer("Test", "testing"));
 		conf.save();
 		conf.reload();
-		assertEquals("Test",
-				((BannedPlayer) conf.get("serial.banPlayer")).getPlayer());
+		assertEquals("Test", ((BannedPlayer) conf.get("serial.banPlayer")).getPlayer());
 	}
 
 	@After

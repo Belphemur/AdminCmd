@@ -26,6 +26,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.junit.Before;
 import org.junit.Test;
 
+import be.Balor.JUnit.TestPlugin;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Egg.EggType;

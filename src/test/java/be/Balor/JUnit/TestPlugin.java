@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
-package be.Balor.JUnit.Egg;
+package be.Balor.JUnit;
 
 import java.io.InputStream;
 
@@ -23,7 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.java.JavaPlugin;
+
+import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 import com.avaje.ebean.EbeanServer;
 
@@ -31,7 +32,7 @@ import com.avaje.ebean.EbeanServer;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-public class TestPlugin extends JavaPlugin {
+public class TestPlugin extends AbstractAdminCmdPlugin {
 
 	/*
 	 * (non-Javadoc)
@@ -40,9 +41,9 @@ public class TestPlugin extends JavaPlugin {
 	 * org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender
 	 * , org.bukkit.command.Command, java.lang.String, java.lang.String[])
 	 */
+
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -62,6 +63,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#getConfig()
 	 */
+
 	@Override
 	public FileConfiguration getConfig() {
 		// TODO Auto-generated method stub
@@ -73,6 +75,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#getResource(java.lang.String)
 	 */
+
 	@Override
 	public InputStream getResource(final String filename) {
 		// TODO Auto-generated method stub
@@ -84,6 +87,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#saveConfig()
 	 */
+
 	@Override
 	public void saveConfig() {
 		// TODO Auto-generated method stub
@@ -95,6 +99,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#saveDefaultConfig()
 	 */
+
 	@Override
 	public void saveDefaultConfig() {
 		// TODO Auto-generated method stub
@@ -106,6 +111,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#saveResource(java.lang.String, boolean)
 	 */
+
 	@Override
 	public void saveResource(final String resourcePath, final boolean replace) {
 		// TODO Auto-generated method stub
@@ -117,6 +123,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#reloadConfig()
 	 */
+
 	@Override
 	public void reloadConfig() {
 		// TODO Auto-generated method stub
@@ -128,6 +135,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
+
 	@Override
 	public void onDisable() {
 		// TODO Auto-generated method stub
@@ -139,6 +147,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#onLoad()
 	 */
+
 	@Override
 	public void onLoad() {
 		// TODO Auto-generated method stub
@@ -150,6 +159,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#onEnable()
 	 */
+
 	@Override
 	public void onEnable() {
 		// TODO Auto-generated method stub
@@ -161,6 +171,7 @@ public class TestPlugin extends JavaPlugin {
 	 * 
 	 * @see org.bukkit.plugin.Plugin#getDatabase()
 	 */
+
 	@Override
 	public EbeanServer getDatabase() {
 		// TODO Auto-generated method stub
@@ -173,11 +184,45 @@ public class TestPlugin extends JavaPlugin {
 	 * @see org.bukkit.plugin.Plugin#getDefaultWorldGenerator(java.lang.String,
 	 * java.lang.String)
 	 */
+
 	@Override
-	public ChunkGenerator getDefaultWorldGenerator(final String worldName,
-			final String id) {
+	public ChunkGenerator getDefaultWorldGenerator(final String worldName, final String id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin#registerCmds()
+	 */
+	@Override
+	public void registerCmds() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin#registerPermParents()
+	 */
+	@Override
+	protected void registerPermParents() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin#setDefaultLocale()
+	 */
+	@Override
+	protected void setDefaultLocale() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
