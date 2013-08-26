@@ -30,7 +30,7 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  * @author Balor (aka Antoine Aflalo)
  * 
  */
-class HelpEntry {
+public class HelpEntry {
 	private final String command;
 	private final String description;
 	private final String detailedDesc;
@@ -44,9 +44,7 @@ class HelpEntry {
 	 * @param permissions
 	 * @param commandName
 	 */
-	HelpEntry(final String command, final String description,
-			final String detailedDesc, final List<String> permissions,
-			final String commandName) {
+	HelpEntry(final String command, final String description, final String detailedDesc, final List<String> permissions, final String commandName) {
 		super();
 		this.command = command;
 		this.description = description;
@@ -71,100 +69,61 @@ class HelpEntry {
 
 	@Override
 	public String toString() {
-		return String.format("%s/%s%s : %s",
-				ChatColor.getByChar(ConfigEnum.H_C_CMD.getString()),
-				addColors(command, false),
-				ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()),
-				description);
+		return String.format("%s/%s%s : %s", ChatColor.getByChar(ConfigEnum.H_C_CMD.getString()), addColors(command, false),
+				ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()), description);
 	}
 
 	private String addColors(final String msg, final boolean description) {
-		return msg
-				.replace(
-						"[",
-						ChatColor.getByChar(ConfigEnum.H_C_REQ_PARAM
-								.getString()) + "[")
-				.replace(
-						"]",
-						"]"
-								+ ChatColor
-										.getByChar(description ? ConfigEnum.H_C_NORMAL
-												.getString()
-												: ConfigEnum.H_C_CMD
-														.getString()))
-				.replace(
-						"<",
-						ChatColor.getByChar(ConfigEnum.H_C_OPT_PARAM
-								.getString()) + "<")
-				.replace(
-						">",
-						">"
-								+ ChatColor
-										.getByChar(description ? ConfigEnum.H_C_NORMAL
-												.getString()
-												: ConfigEnum.H_C_CMD
-														.getString()));
+		return msg.replace("[", ChatColor.getByChar(ConfigEnum.H_C_REQ_PARAM.getString()) + "[")
+				.replace("]", "]" + ChatColor.getByChar(description ? ConfigEnum.H_C_NORMAL.getString() : ConfigEnum.H_C_CMD.getString()))
+				.replace("<", ChatColor.getByChar(ConfigEnum.H_C_OPT_PARAM.getString()) + "<")
+				.replace(">", ">" + ChatColor.getByChar(description ? ConfigEnum.H_C_NORMAL.getString() : ConfigEnum.H_C_CMD.getString()));
 	}
 
 	public String chatString(final boolean detailed) {
 		String line = getFormatedCmd();
 
-		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth
-				- ACMinecraftFontWidthCalculator.getStringWidth(line);
+		final int sizeRemaining = ACMinecraftFontWidthCalculator.chatwidth - ACMinecraftFontWidthCalculator.getStringWidth(line);
 		int descriptionSize;
 		if (detailed && !detailedDesc.equals("")) {
-			descriptionSize = ACMinecraftFontWidthCalculator
-					.strLen(detailedDesc);
-			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-					addColors(detailedDesc, true), sizeRemaining, ' ');
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(detailedDesc);
+			line += ACMinecraftFontWidthCalculator.strPadLeftChat(addColors(detailedDesc, true), sizeRemaining, ' ');
 		} else {
-			descriptionSize = ACMinecraftFontWidthCalculator
-					.strLen(description);
-			line += ACMinecraftFontWidthCalculator.strPadLeftChat(
-					addColors(description, true), sizeRemaining, ' ');
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+			line += ACMinecraftFontWidthCalculator.strPadLeftChat(addColors(description, true), sizeRemaining, ' ');
 		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strChatTrim(line);
-		} else if (sizeRemaining > descriptionSize
-				|| !ConfigEnum.H_WRAP.getBoolean()) {
+		} else if (sizeRemaining > descriptionSize || !ConfigEnum.H_WRAP.getBoolean()) {
 			return line;
 		} else if (ConfigEnum.H_RWRAP.getBoolean()) {
-			return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line,
-					10, ' ', ':');
+			return ACMinecraftFontWidthCalculator.strChatWordWrapRight(line, 10, ' ', ':');
 		} else {
 			return ACMinecraftFontWidthCalculator.strChatWordWrap(line, 10);
 		}
 	}
 
 	public String consoleString(final boolean detailed) {
-		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17
-				: 90;
+		final int width = System.getProperty("os.name").startsWith("Windows") ? 80 - 17 : 90;
 		String line = getFormatedCmd();
 
-		final int sizeRemaining = width
-				- ACMinecraftFontWidthCalculator.strLen(line);
+		final int sizeRemaining = width - ACMinecraftFontWidthCalculator.strLen(line);
 		int descriptionSize;
 		if (detailed && !detailedDesc.equals("")) {
-			descriptionSize = ACMinecraftFontWidthCalculator
-					.strLen(detailedDesc);
-			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-					addColors(detailedDesc, true), sizeRemaining, ' ');
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(detailedDesc);
+			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(addColors(detailedDesc, true), sizeRemaining, ' ');
 		} else {
-			descriptionSize = ACMinecraftFontWidthCalculator
-					.strLen(description);
-			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(
-					addColors(description, true), sizeRemaining, ' ');
+			descriptionSize = ACMinecraftFontWidthCalculator.strLen(description);
+			line += ACMinecraftFontWidthCalculator.unformattedPadLeft(addColors(description, true), sizeRemaining, ' ');
 		}
 
 		if (ConfigEnum.H_SHORTE.getBoolean()) {
 			return ACMinecraftFontWidthCalculator.strTrim(line, width);
-		} else if (sizeRemaining > descriptionSize
-				|| !ConfigEnum.H_WRAP.getBoolean()) {
+		} else if (sizeRemaining > descriptionSize || !ConfigEnum.H_WRAP.getBoolean()) {
 			return line;
 		} else if (ConfigEnum.H_RWRAP.getBoolean()) {
-			return ACMinecraftFontWidthCalculator.strWordWrapRight(line, width,
-					10, ' ', ':');
+			return ACMinecraftFontWidthCalculator.strWordWrapRight(line, width, 10, ' ', ':');
 		} else {
 			return ACMinecraftFontWidthCalculator.strWordWrap(line, width, 10);
 		}
@@ -172,9 +131,7 @@ class HelpEntry {
 	}
 
 	private String getFormatedCmd() {
-		return String.format("%s/%s%s : ",
-				ChatColor.getByChar(ConfigEnum.H_C_CMD.getString()),
-				addColors(command, false),
+		return String.format("%s/%s%s : ", ChatColor.getByChar(ConfigEnum.H_C_CMD.getString()), addColors(command, false),
 				ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()));
 	}
 

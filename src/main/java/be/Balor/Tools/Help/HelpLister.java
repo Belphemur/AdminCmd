@@ -96,16 +96,14 @@ public class HelpLister {
 	 * @param cmdName
 	 *            true name of the command
 	 */
-	public void addHelpEntry(final String command, final String description,
-			final String detailedDesc, final String plugin,
-			final List<String> permissions, final String cmdName) {
+	public void addHelpEntry(final String command, final String description, final String detailedDesc, final String plugin, final List<String> permissions,
+			final String cmdName) {
 		HelpList help = plugins.get(plugin);
 		if (help == null) {
 			help = new HelpList(plugin);
 			plugins.put(plugin, help);
 		}
-		help.addEntry(new HelpEntry(command, description, detailedDesc,
-				permissions, cmdName));
+		help.addEntry(new HelpEntry(command, description, detailedDesc, permissions, cmdName));
 	}
 
 	public boolean removeHelpEntry(final String plugin, final String commandName) {
@@ -115,6 +113,15 @@ public class HelpLister {
 			return false;
 		}
 		return help.removeEntry(commandName);
+	}
+
+	public HelpEntry getHelpEntry(final String plugin, final String commandName) {
+		final HelpList help = plugins.get(plugin);
+		if (help == null) {
+			DebugLog.INSTANCE.severe("Plugin " + plugin + " not found.");
+			return null;
+		}
+		return help.searchEntryFromCmdName(commandName);
 	}
 
 	/**
@@ -128,8 +135,7 @@ public class HelpLister {
 	 *            the sender of the command
 	 * @return
 	 */
-	public boolean sendHelpPage(final String plugin, final int page,
-			final CommandSender sender) {
+	public boolean sendHelpPage(final String plugin, final int page, final CommandSender sender) {
 		final HelpList help = matchPlugin(plugin);
 		if (help == null) {
 			return false;
@@ -137,8 +143,7 @@ public class HelpLister {
 		final List<String> toDisplay = help.getPage(page, sender);
 		for (final String send : toDisplay) {
 			for (final String l : send.split("\n")) {
-				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL
-						.getString()) + l);
+				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()) + l);
 			}
 		}
 		return true;
@@ -170,8 +175,7 @@ public class HelpLister {
 	 *            sender of the command.
 	 * @return true if the command is found, else if not found.
 	 */
-	public boolean sendHelpCmd(final String pluginName, final String command,
-			final CommandSender sender, final boolean detailed) {
+	public boolean sendHelpCmd(final String pluginName, final String command, final CommandSender sender, final boolean detailed) {
 		List<HelpEntry> chat = null;
 		boolean found = false;
 		if (pluginName == null) {
@@ -180,8 +184,7 @@ public class HelpLister {
 				if (chat.isEmpty()) {
 					continue;
 				}
-				displayHelpMessage(chat, plugin.getPluginName(), sender,
-						detailed);
+				displayHelpMessage(chat, plugin.getPluginName(), sender, detailed);
 				found = true;
 			}
 			return found;
@@ -199,8 +202,7 @@ public class HelpLister {
 		return true;
 	}
 
-	public boolean sendHelpCmd(final String pluginName, final String command,
-			final CommandSender sender) {
+	public boolean sendHelpCmd(final String pluginName, final String command, final CommandSender sender) {
 		return sendHelpCmd(pluginName, command, sender, false);
 	}
 
@@ -212,8 +214,7 @@ public class HelpLister {
 	 * @param cmdName
 	 * @return
 	 */
-	public boolean displayExactCommandHelp(final CommandSender sender,
-			final String plugin, final String cmdName) {
+	public boolean displayExactCommandHelp(final CommandSender sender, final String plugin, final String cmdName) {
 		final HelpList list = plugins.get(plugin);
 		if (list == null) {
 			return false;
@@ -230,27 +231,21 @@ public class HelpLister {
 
 	}
 
-	private void displayHelpMessage(final List<HelpEntry> list,
-			final String pluginName, final CommandSender sender,
-			final boolean detailed) {
+	private void displayHelpMessage(final List<HelpEntry> list, final String pluginName, final CommandSender sender, final boolean detailed) {
 		sender.sendMessage(ChatColor.AQUA
-				+ ACMinecraftFontWidthCalculator.strPadCenterChat(
-						ChatColor.DARK_GREEN + " " + pluginName + " "
-								+ ChatColor.AQUA, '=') + "\n");
+				+ ACMinecraftFontWidthCalculator.strPadCenterChat(ChatColor.DARK_GREEN + " " + pluginName + " " + ChatColor.AQUA, '=') + "\n");
 		if (detailed) {
 			final HelpEntry entry = list.get(0);
 			final String chat = entry.chatString(detailed);
 			for (final String l : chat.split("\n")) {
-				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL
-						.getString()) + l);
+				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()) + l);
 			}
 			return;
 		}
 		for (final HelpEntry entry : list) {
 			final String chat = entry.chatString(detailed);
 			for (final String l : chat.split("\n")) {
-				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL
-						.getString()) + l);
+				sender.sendMessage(ChatColor.getByChar(ConfigEnum.H_C_NORMAL.getString()) + l);
 			}
 		}
 	}
