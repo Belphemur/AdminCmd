@@ -39,8 +39,7 @@ import be.Balor.Tools.Debug.DebugLog;
  */
 public class ACPluginManager {
 	private final static ACPluginManager instance = new ACPluginManager();
-	private final Map<String, AbstractAdminCmdPlugin> pluginInstances = Collections
-			.synchronizedMap(new HashMap<String, AbstractAdminCmdPlugin>());
+	private final Map<String, AbstractAdminCmdPlugin> pluginInstances = Collections.synchronizedMap(new HashMap<String, AbstractAdminCmdPlugin>());
 	private final static Server server = Bukkit.getServer();
 	private static AbstractAdminCmdPlugin corePlugin;
 	private static Graph graph = null;
@@ -48,7 +47,7 @@ public class ACPluginManager {
 	/**
 	 * @return the instance
 	 */
-	protected static ACPluginManager getInstance() {
+	public static ACPluginManager getInstance() {
 		return instance;
 	}
 
@@ -72,8 +71,7 @@ public class ACPluginManager {
 		return server;
 	}
 
-	public static void registerACPlugin(final AbstractAdminCmdPlugin addon)
-			throws IllegalArgumentException {
+	public static void registerACPlugin(final AbstractAdminCmdPlugin addon) throws IllegalArgumentException {
 		getInstance().registerPlugin(addon);
 	}
 
@@ -82,8 +80,7 @@ public class ACPluginManager {
 	 * 
 	 * @param clazz
 	 */
-	public static void registerCommand(final Class<? extends CoreCommand> clazz)
-			throws IllegalArgumentException {
+	public static void registerCommand(final Class<? extends CoreCommand> clazz) throws IllegalArgumentException {
 		CommandManager.getInstance().registerCommand(clazz);
 	}
 
@@ -104,8 +101,7 @@ public class ACPluginManager {
 	 * @return
 	 */
 	public static int runTaskLaterAsynchronously(final Runnable task) {
-		return server.getScheduler().runTaskAsynchronously(corePlugin, task)
-				.getTaskId();
+		return server.getScheduler().runTaskAsynchronously(corePlugin, task).getTaskId();
 	}
 
 	/**
@@ -156,8 +152,7 @@ public class ACPluginManager {
 	 * 
 	 * @param addon
 	 */
-	protected void registerPlugin(final AbstractAdminCmdPlugin addon)
-			throws IllegalArgumentException {
+	protected void registerPlugin(final AbstractAdminCmdPlugin addon) throws IllegalArgumentException {
 		if (!pluginInstances.containsKey(addon.getAddonName())) {
 			pluginInstances.put(addon.getAddonName(), addon);
 			DebugLog.INSTANCE.info("Registering : " + addon);
@@ -177,15 +172,13 @@ public class ACPluginManager {
 				}
 			});
 		} else {
-			throw new IllegalArgumentException("Plugin " + addon.getAddonName()
-					+ " Already registered.");
+			throw new IllegalArgumentException("Plugin " + addon.getAddonName() + " Already registered.");
 		}
 	}
 
 	void stopChildrenPlugins() {
 		ACLogger.info("Disabling all AdminCmd's plugins");
-		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances
-				.entrySet()) {
+		for (final Entry<String, AbstractAdminCmdPlugin> plugin : pluginInstances.entrySet()) {
 			if (plugin.getValue().isEnabled()) {
 				server.getPluginManager().disablePlugin(plugin.getValue());
 			}

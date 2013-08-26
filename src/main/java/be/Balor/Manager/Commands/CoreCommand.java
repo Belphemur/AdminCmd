@@ -197,9 +197,9 @@ public abstract class CoreCommand {
 			}
 			if (permParent != null) {
 				DebugLog.beginInfo("Register_def permission in the permParent");
-				final PermChild child = new PermChild(permNode, bukkitDefault);
-				permParent.addChild(child);
-				permChild = child;
+				permChild = new PermChild(permNode, bukkitDefault);
+				permChild.setPluginCommand(this);
+				permParent.addChild(permChild);
 				if (other) {
 					permParent.addChild(new PermChild(permNode + ".other", bukkitDefault));
 				}
@@ -208,6 +208,7 @@ public abstract class CoreCommand {
 			}
 			DebugLog.beginInfo("Register permission without a PermParent");
 			permChild = plugin.getPermissionLinker().addPermChild(permNode, bukkitDefault);
+			permChild.setPluginCommand(this);
 			if (addedPermParent != null) {
 				plugin.getPermissionLinker().addPermParent(addedPermParent);
 			}

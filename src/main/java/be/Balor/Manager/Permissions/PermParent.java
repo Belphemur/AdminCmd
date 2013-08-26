@@ -16,16 +16,25 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Manager.Commands.CoreCommand;
+import be.Balor.Tools.Configuration.ExConfigurationSection;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.DebugLog;
+import be.Balor.Tools.Help.HelpEntry;
+import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -35,18 +44,23 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 public class PermParent extends PermChild {
 	protected final String compareName;
 	private final Map<String, Boolean> children = new HashMap<String, Boolean>();
+	private static Pattern permRegex = Pattern.compile("admincmd\\.\\w+\\.(.+)");
 	private final Set<PermParent> permParentChildren = new HashSet<PermParent>();
 	private boolean registered = false;
-
-	public PermParent(final String perm) {
-		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1),
-				PermissionDefault.OP);
+	private static final ExtendedConfiguration permFile;
+	private final ExConfigurationSection permParentSection;
+	static {
+		permFile = ExtendedConfiguration.loadConfiguration(new File(ACPluginManager.getCorePlugin().getDataFolder(), "permissions.yml"));
 	}
 
-	public PermParent(final String perm, final String compare,
-			final PermissionDefault def) {
+	public PermParent(final String perm) {
+		this(perm, perm == null ? null : perm.substring(0, perm.length() - 1), PermissionDefault.OP);
+	}
+
+	public PermParent(final String perm, final String compare, final PermissionDefault def) {
 		super(perm, def);
 		this.compareName = compare;
+		this.permParentSection = permFile.createSection(this.getPermName());
 
 	}
 
@@ -63,8 +77,7 @@ public class PermParent extends PermChild {
 	 * @param perm
 	 * @return the PermParent (this)
 	 */
-	public PermParent addChild(final PermChild perm)
-			throws IllegalArgumentException {
+	public PermParent addChild(final PermChild perm) throws IllegalArgumentException {
 		if (perm.equals(this)) {
 			throw new IllegalArgumentException("The Child can't be the parent.");
 		}
@@ -73,6 +86,24 @@ public class PermParent extends PermChild {
 			permParentChildren.add((PermParent) perm);
 		}
 		perm.parent = this;
+		String foundPerm = null;
+		final Matcher regexMatcher = permRegex.matcher(perm.getPermName());
+		if (regexMatcher.find()) {
+			foundPerm = regexMatcher.group();
+			final ExConfigurationSection permSection = permParentSection.createSection(foundPerm);
+			final CoreCommand pluginCommand = perm.getPluginCommand();
+			if (pluginCommand != null) {
+				permSection.add("cmd_name", pluginCommand.getCmdName());
+				final HelpEntry helpEntry = HelpLister.getInstance().getHelpEntry(pluginCommand.getPlugin().getPluginName(), pluginCommand.getCmdName());
+				if (helpEntry != null) {
+					permSection.add("description", helpEntry.getDescription());
+					permSection.add("command", helpEntry.getCommand());
+				} else {
+					permSection.add("description", "TO COMPLETE");
+					permSection.add("command", "MISSING");
+				}
+			}
+		}
 		return this;
 	}
 
@@ -90,15 +121,15 @@ public class PermParent extends PermChild {
 			for (final PermParent perm : permParentChildren) {
 				perm.registerPermission();
 			}
-			Permission bukkitPerm = new Permission(this.permName,
-					this.permissionDefault, children);
+			Permission bukkitPerm = new Permission(this.permName, this.permissionDefault, children);
 			try {
-				ACPluginManager.getServer().getPluginManager()
-						.addPermission(bukkitPerm);
+				permFile.save();
+			} catch (final IOException e1) {
+			}
+			try {
+				ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
 			} catch (final Exception e) {
-				DebugLog.INSTANCE
-						.warning("Trying to register an existing PermParent : "
-								+ this.permName);
+				DebugLog.INSTANCE.warning("Trying to register an existing PermParent : " + this.permName);
 				bukkitPerm = Bukkit.getPluginManager().getPermission(permName);
 				bukkitPerm.getChildren().putAll(children);
 				bukkitPerm.recalculatePermissibles();
@@ -139,8 +170,7 @@ public class PermParent extends PermChild {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result
-				+ ((compareName == null) ? 0 : compareName.hashCode());
+		result = prime * result + ((compareName == null) ? 0 : compareName.hashCode());
 		result = prime * result + (registered ? 1231 : 1237);
 		return result;
 	}

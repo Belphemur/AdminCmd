@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import be.Balor.Manager.Commands.CoreCommand;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
@@ -31,6 +32,7 @@ public class PermChild {
 	protected final String permName;
 	protected final PermissionDefault permissionDefault;
 	protected PermParent parent = null;
+	protected CoreCommand pluginCommand = null;
 
 	public PermChild(final String permName) {
 		this(permName, PermissionDefault.OP);
@@ -56,6 +58,21 @@ public class PermChild {
 		return PermissionManager.hasPerm(player, this);
 	}
 
+	/**
+	 * @param pluginCommand
+	 *            the pluginCommand to set
+	 */
+	public void setPluginCommand(final CoreCommand pluginCommand) {
+		this.pluginCommand = pluginCommand;
+	}
+
+	/**
+	 * @return the pluginCommand
+	 */
+	public CoreCommand getPluginCommand() {
+		return pluginCommand;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -63,8 +80,7 @@ public class PermChild {
 	 */
 	@Override
 	public String toString() {
-		return "PermChild [getPermName()=" + getPermName()
-				+ ", getPermDefault()=" + getPermDefault() + "]";
+		return "PermChild [getPermName()=" + getPermName() + ", getPermDefault()=" + getPermDefault() + "]";
 	}
 
 	/**
@@ -98,14 +114,12 @@ public class PermChild {
 				return null;
 			}
 			Permission bukkitPerm;
-			if ((bukkitPerm = ACPluginManager.getServer().getPluginManager()
-					.getPermission(permName)) != null) {
+			if ((bukkitPerm = ACPluginManager.getServer().getPluginManager().getPermission(permName)) != null) {
 				bukkitPerm.setDefault(permissionDefault);
 				return bukkitPerm;
 			}
 			bukkitPerm = new Permission(permName, permissionDefault);
-			ACPluginManager.getServer().getPluginManager()
-					.addPermission(bukkitPerm);
+			ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
 			return bukkitPerm;
 		} finally {
 			DebugLog.endInfo();
@@ -121,12 +135,8 @@ public class PermChild {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((permName == null) ? 0 : permName.hashCode());
-		result = prime
-				* result
-				+ ((permissionDefault == null) ? 0 : permissionDefault
-						.hashCode());
+		result = prime * result + ((permName == null) ? 0 : permName.hashCode());
+		result = prime * result + ((permissionDefault == null) ? 0 : permissionDefault.hashCode());
 		return result;
 	}
 
