@@ -60,11 +60,9 @@ public class Mute extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Users.getPlayer(args.getString(0));
-		if (args.hasFlag('c')
-				&& !PermissionManager.hasPerm(sender, cmdMute.getPermName())) {
+		if (args.hasFlag('c') && !PermissionManager.hasPerm(sender, cmdMute.getPermName())) {
 			return;
 		}
 		if (player != null) {
@@ -102,61 +100,40 @@ public class Mute extends PlayerCommand {
 							tmpMute = args.getInt(args.length - 1);
 							final String unmute = player.getName();
 							final CommandSender senderFinal = sender;
-							acp.setPower(Type.MUTED_COMMAND,
-									"Muted(including commands) by " + msg);
-							ACPluginManager.getScheduler()
-									.runTaskLaterAsynchronously(getPlugin(),
-											new Runnable() {
+							acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg);
+							ACPluginManager.getScheduler().runTaskLaterAsynchronously(getPlugin(), new Runnable() {
 
-												@Override
-												public void run() {
-													ACPlayer.getPlayer(unmute)
-															.removePower(
-																	Type.MUTED_COMMAND);
-													LocaleManager.sI18n(
-															senderFinal,
-															"commandMuteDisabledTarget",
-															"player", unmute);
-													final Lister list = Lister
-															.getLister(
-																	Lister.List.MUTE,
-																	false);
-													if (list != null) {
-														list.update();
-													}
-												}
-											}, 20 * 60 * tmpMute);
+								@Override
+								public void run() {
+									ACPlayer.getPlayer(unmute).removePower(Type.MUTED_COMMAND);
+									LocaleManager.sI18n(senderFinal, "commandMuteDisabledTarget", "player", unmute);
+									final Lister list = Lister.getLister(Lister.List.MUTE, false);
+									if (list != null) {
+										list.update();
+									}
+								}
+							}, 20 * 60 * tmpMute);
 
 						} catch (final Exception e) {
 						}
 						if (tmpMute == null) {
-							acp.setPower(Type.MUTED_COMMAND,
-									"Permanently muted(including commands) by "
-											+ msg);
+							acp.setPower(Type.MUTED_COMMAND, "Permanently muted(including commands) by " + msg);
 							replace.put("time", "permanently");
-							LocaleManager.sI18n(player, "commandMuteEnabled", "reason",
-									reason);
+							LocaleManager.sI18n(player, "commandMuteEnabled", "reason", reason);
 						} else {
-							acp.setPower(Type.MUTED_COMMAND,
-									"Muted(including commands) by " + msg
-											+ " for " + tmpMute + " minutes");
+							acp.setPower(Type.MUTED_COMMAND, "Muted(including commands) by " + msg + " for " + tmpMute + " minutes");
 							replace.put("minutes", tmpMute.toString());
-							replace.put("time", "for" + tmpMute.toString()
-									+ " minutes");
-							LocaleManager.sI18n(player, "commandTmpMuteEnabled",
-									replace);
+							replace.put("time", "for" + tmpMute.toString() + " minutes");
+							LocaleManager.sI18n(player, "commandTmpMuteEnabled", replace);
 						}
 					} else {
-						acp.setPower(Type.MUTED_COMMAND,
-								"Permanently muted(including commands) by "
-										+ msg);
+						acp.setPower(Type.MUTED_COMMAND, "Permanently muted(including commands) by " + msg);
 						replace.put("time", "permanently");
 						LocaleManager.sI18n(player, "commandMuteEnabled", replace);
 					}
 					if (args.hasFlag('b')) {
 						replace.put("muter", msg);
-						Users.broadcastMessage(LocaleHelper.MUTE_BROADCAST
-								.getLocale(replace));
+						Users.broadcastMessage(LocaleHelper.MUTE_BROADCAST.getLocale(replace));
 					}
 				} else {
 					LocaleManager.sI18n(sender, "alreadyCommandMuted");
@@ -177,26 +154,18 @@ public class Mute extends PlayerCommand {
 						tmpMute = args.getInt(args.length - 1);
 						final String unmute = player.getName();
 						final CommandSender senderFinal = sender;
-						ACPluginManager.getScheduler()
-								.runTaskLaterAsynchronously(getPlugin(),
-										new Runnable() {
+						ACPluginManager.getScheduler().runTaskLaterAsynchronously(getPlugin(), new Runnable() {
 
-											@Override
-											public void run() {
-												ACPlayer.getPlayer(unmute)
-														.removePower(Type.MUTED);
-												LocaleManager.sI18n(senderFinal,
-														"muteDisabledTarget",
-														"player", unmute);
-												final Lister list = Lister
-														.getLister(
-																Lister.List.MUTE,
-																false);
-												if (list != null) {
-													list.update();
-												}
-											}
-										}, 20 * 60 * tmpMute);
+							@Override
+							public void run() {
+								ACPlayer.getPlayer(unmute).removePower(Type.MUTED);
+								LocaleManager.sI18n(senderFinal, "muteDisabledTarget", "player", unmute);
+								final Lister list = Lister.getLister(Lister.List.MUTE, false);
+								if (list != null) {
+									list.update();
+								}
+							}
+						}, 20 * 60 * tmpMute);
 
 					} catch (final Exception e) {
 					}
@@ -205,11 +174,9 @@ public class Mute extends PlayerCommand {
 						replace.put("time", "permanently");
 						LocaleManager.sI18n(player, "muteEnabled", replace);
 					} else {
-						acp.setPower(Type.MUTED, "Muted by " + msg + " for "
-								+ tmpMute + " minutes");
+						acp.setPower(Type.MUTED, "Muted by " + msg + " for " + tmpMute + " minutes");
 						replace.put("minutes", tmpMute.toString());
-						replace.put("time", "for" + tmpMute.toString()
-								+ " minutes");
+						replace.put("time", "for" + tmpMute.toString() + " minutes");
 						LocaleManager.sI18n(player, "tmpMuteEnabled", replace);
 					}
 				} else {
@@ -219,8 +186,7 @@ public class Mute extends PlayerCommand {
 				}
 				if (args.hasFlag('b')) {
 					replace.put("muter", msg);
-					Users.broadcastMessage(LocaleHelper.MUTE_BROADCAST
-							.getLocale(replace));
+					Users.broadcastMessage(LocaleHelper.MUTE_BROADCAST.getLocale(replace));
 				}
 			} else {
 				LocaleManager.sI18n(sender, "alreadyMuted");
@@ -252,9 +218,9 @@ public class Mute extends PlayerCommand {
 	public void registerBukkitPerm() {
 		cmdMute = new PermChild(permNode + ".command");
 		final PermParent parent = new PermParent(permNode + ".*");
-		plugin.getPermissionLinker().addChildPermParent(parent, permParent);
-		final PermChild child = new PermChild(permNode, bukkitDefault);
-		parent.addChild(child).addChild(cmdMute);
-		permChild = child;
+		parent.addChild(cmdMute);
+		permParent.addChild(parent);
+		super.registerBukkitPerm();
+
 	}
 }
