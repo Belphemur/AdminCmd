@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Permissions;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -45,26 +46,22 @@ public class PermissionLinker {
 	 * @param parentNode
 	 * @return
 	 */
-	public static Permission addOnTheFly(final String permNode,
-			final String parentNode) {
+	public static Permission addOnTheFly(final String permNode, final String parentNode) {
 		Permission child;
 		if (ACPluginManager.getServer() == null) {
 			return null;
 		}
-		if ((child = ACPluginManager.getServer().getPluginManager()
-				.getPermission(permNode)) == null) {
+		if ((child = ACPluginManager.getServer().getPluginManager().getPermission(permNode)) == null) {
 			child = new Permission(permNode, PermissionDefault.OP);
 			ACPluginManager.getServer().getPluginManager().addPermission(child);
 			if (parentNode.isEmpty()) {
 				return child;
 			}
-			Permission parent = ACPluginManager.getServer().getPluginManager()
-					.getPermission(parentNode);
+			Permission parent = ACPluginManager.getServer().getPluginManager().getPermission(parentNode);
 
 			if (parent == null) {
 				parent = new Permission(parentNode, PermissionDefault.OP);
-				ACPluginManager.getServer().getPluginManager()
-						.addPermission(parent);
+				ACPluginManager.getServer().getPluginManager().addPermission(parent);
 			}
 			child.addParent(parent, true);
 		}
@@ -87,8 +84,7 @@ public class PermissionLinker {
 	 * @param name
 	 * @return
 	 */
-	public static synchronized PermissionLinker getPermissionLinker(
-			final String name) {
+	public static synchronized PermissionLinker getPermissionLinker(final String name) {
 		return PermissionManager.getInstance().demandPermissionLinker(name);
 	}
 
@@ -119,13 +115,11 @@ public class PermissionLinker {
 	 * @param bukkitDefault
 	 * @return
 	 */
-	public PermChild addPermChild(final String permNode,
-			final PermissionDefault bukkitDefault) throws NullPointerException {
+	public PermChild addPermChild(final String permNode, final PermissionDefault bukkitDefault) throws NullPointerException {
 		final PermParent parent = matchPermParent(permNode);
 		final PermChild child = new PermChild(permNode, bukkitDefault);
 		if (parent == null) {
-			DebugLog.INSTANCE.info("No Permission Parent found for : "
-					+ permNode);
+			DebugLog.INSTANCE.info("No Permission Parent found for : " + permNode);
 			return child;
 		}
 		parent.addChild(child);
@@ -143,8 +137,7 @@ public class PermissionLinker {
 	}
 
 	private PermParent addPermParent0(final PermParent toAdd) {
-		final PermParent registeredPermParent = permissions.get(toAdd
-				.getPermName());
+		final PermParent registeredPermParent = permissions.get(toAdd.getPermName());
 		if (registeredPermParent == null) {
 			permissions.put(toAdd.getPermName(), toAdd);
 			return toAdd;
@@ -165,8 +158,7 @@ public class PermissionLinker {
 	 *            PermParent that will be the father of the item to add.
 	 * @return the PermParent added.
 	 */
-	public PermParent addChildPermParent(final PermParent toAdd,
-			final PermParent parent) {
+	public PermParent addChildPermParent(final PermParent toAdd, final PermParent parent) {
 		parent.addChild(toAdd);
 		childrenPermParents.put(toAdd.getPermName(), toAdd);
 		return toAdd;
@@ -239,8 +231,7 @@ public class PermissionLinker {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((majorPerm == null) ? 0 : majorPerm.hashCode());
+		result = prime * result + ((majorPerm == null) ? 0 : majorPerm.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + plId;
 		return result;
@@ -277,6 +268,8 @@ public class PermissionLinker {
 		DebugLog.beginInfo("Register all Permissions");
 		try {
 			majorPerm.registerPermission();
+			PermParent.permFile.save();
+		} catch (final IOException e) {
 		} finally {
 			DebugLog.endInfo();
 		}
@@ -306,8 +299,7 @@ public class PermissionLinker {
 	 */
 	@Override
 	public String toString() {
-		return "PermissionLinker [majorPerm=" + majorPerm + ", name=" + name
-				+ ", plId=" + plId + "]";
+		return "PermissionLinker [majorPerm=" + majorPerm + ", name=" + name + ", plId=" + plId + "]";
 	}
 
 	/**

@@ -17,7 +17,6 @@
 package be.Balor.Manager.Permissions;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class PermParent extends PermChild {
 	private static Pattern permRegex = Pattern.compile("admincmd\\.\\w+\\.(.+)");
 	private final Set<PermParent> permParentChildren = new HashSet<PermParent>();
 	private boolean registered = false;
-	private static final ExtendedConfiguration permFile;
+	static final ExtendedConfiguration permFile;
 	private final ExConfigurationSection permParentSection;
 	static {
 		permFile = ExtendedConfiguration.loadConfiguration(new File(ACPluginManager.getCorePlugin().getDataFolder(), "permissions.yml"));
@@ -60,7 +59,7 @@ public class PermParent extends PermChild {
 	public PermParent(final String perm, final String compare, final PermissionDefault def) {
 		super(perm, def);
 		this.compareName = compare;
-		this.permParentSection = permFile.createSection(this.getPermName());
+		this.permParentSection = permFile.addSection(this.compareName);
 
 	}
 
@@ -89,8 +88,8 @@ public class PermParent extends PermChild {
 		String foundPerm = null;
 		final Matcher regexMatcher = permRegex.matcher(perm.getPermName());
 		if (regexMatcher.find()) {
-			foundPerm = regexMatcher.group();
-			final ExConfigurationSection permSection = permParentSection.createSection(foundPerm);
+			foundPerm = regexMatcher.group(1);
+			final ExConfigurationSection permSection = permParentSection.addSection(foundPerm);
 			final CoreCommand pluginCommand = perm.getPluginCommand();
 			if (pluginCommand != null) {
 				permSection.add("cmd_name", pluginCommand.getCmdName());
@@ -122,10 +121,6 @@ public class PermParent extends PermChild {
 				perm.registerPermission();
 			}
 			Permission bukkitPerm = new Permission(this.permName, this.permissionDefault, children);
-			try {
-				permFile.save();
-			} catch (final IOException e1) {
-			}
 			try {
 				ACPluginManager.getServer().getPluginManager().addPermission(bukkitPerm);
 			} catch (final Exception e) {
