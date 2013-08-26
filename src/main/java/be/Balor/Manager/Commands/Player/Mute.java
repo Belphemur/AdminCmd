@@ -26,7 +26,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Manager.Permissions.PermChild;
-import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Player.EmptyPlayer;
@@ -42,7 +41,7 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  * 
  */
 public class Mute extends PlayerCommand {
-	private PermChild cmdMute;
+	private final PermChild cmdMute;
 
 	/**
 	 *
@@ -50,6 +49,8 @@ public class Mute extends PlayerCommand {
 	public Mute() {
 		permNode = "admincmd.player.mute";
 		cmdName = "bal_mute";
+		cmdMute = new PermChild(permNode + ".command");
+		addPermChild(cmdMute);
 	}
 
 	/*
@@ -207,20 +208,5 @@ public class Mute extends PlayerCommand {
 	@Override
 	public boolean argsCheck(final String... args) {
 		return args != null && args.length >= 1;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see be.Balor.Manager.Commands.CoreCommand#registerBukkitPerm()
-	 */
-	@Override
-	public void registerBukkitPerm() {
-		cmdMute = new PermChild(permNode + ".command");
-		final PermParent parent = new PermParent(permNode + ".*");
-		parent.addChild(cmdMute);
-		permParent.addChild(parent);
-		super.registerBukkitPerm();
-
 	}
 }

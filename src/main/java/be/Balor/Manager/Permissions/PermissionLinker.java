@@ -268,7 +268,7 @@ public class PermissionLinker {
 		DebugLog.beginInfo("Register all Permissions");
 		try {
 			majorPerm.registerPermission();
-			PermParent.permFile.save();
+			PermParent.permYML.save();
 		} catch (final IOException e) {
 		} finally {
 			DebugLog.endInfo();
