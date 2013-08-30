@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -1113,6 +1112,7 @@ public class ACHelper {
 
 		initFileManager();
 		initPluginConfig(pluginInstance);
+		updateConfigFile();
 		initUpdateChecker();
 
 		dataWrapperInit();
@@ -1121,6 +1121,27 @@ public class ACHelper {
 		checkDebugStatus();
 		initCommandsYml();
 		init();
+	}
+
+	/**
+	 * Update the configuration with the new keys
+	 */
+	private void updateConfigFile() {
+		final ExtendedConfiguration config = ConfigEnum.getConfig();
+		if (config.isBoolean("fakeQuitWhenInvisible")) {
+			ConfigEnum.INVISIBLE_FAKEQUIT.setValue(config.getBoolean("fakeQuitWhenInvisible"));
+			config.remove("fakeQuitWhenInvisible");
+		}
+		if (config.isBoolean("InvisAndNoPickup")) {
+			ConfigEnum.INVISIBLE_NOPICKUP.setValue(config.getBoolean("InvisAndNoPickup"));
+			config.remove("InvisAndNoPickup");
+		}
+
+		try {
+			ConfigEnum.save();
+		} catch (final IOException e) {
+
+		}
 	}
 
 	/**

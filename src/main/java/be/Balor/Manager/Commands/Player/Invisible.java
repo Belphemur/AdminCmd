@@ -57,7 +57,7 @@ public class Invisible extends PlayerCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player target = Users.getUser(sender, args, permNode);
-		final boolean noPickUp = ConfigEnum.NPINVISIBLE.getBoolean();
+		final boolean noPickUp = ConfigEnum.INVISIBLE_NOPICKUP.getBoolean();
 		if (target != null) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", Users.getPlayerName(target));

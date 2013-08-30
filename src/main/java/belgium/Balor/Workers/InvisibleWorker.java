@@ -110,7 +110,7 @@ final public class InvisibleWorker {
 						}
 					}
 				});
-		if (ConfigEnum.FQINVISIBLE.getBoolean()) {
+		if (ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean()) {
 			PlayerCommand.broadcastFakeJoin(toReappear);
 		}
 
@@ -202,7 +202,7 @@ final public class InvisibleWorker {
 						}
 					});
 		}
-		if (!onJoinEvent && ConfigEnum.FQINVISIBLE.getBoolean()) {
+		if (!onJoinEvent && ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean()) {
 			PlayerCommand.broadcastFakeQuit(toVanish);
 		}
 

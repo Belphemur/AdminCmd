@@ -54,8 +54,8 @@ public enum ConfigEnum {
 	FCSPAWN("firstConnectionToSpawnPoint", false, "If true and if it's the first time that the player connect,\n"
 			+ "he will be spawn at the spawn point you set"),
 	RESET_POWERS("resetPowerWhenTpAnotherWorld", true, "Fly,God,vulcan, etc ... are power.\n" + "If true, these power are lost when tp to another world."),
-	FQINVISIBLE("fakeQuitWhenInvisible", true, "Fake quit when you become invisible"),
-	NPINVISIBLE("InvisAndNoPickup", true, "Setting this to true, will disable the auto-picking item when invisible"),
+	INVISIBLE_FAKEQUIT("invisible.fakeQuit", true, "Fake quit when you become invisible"),
+	INVISIBLE_NOPICKUP("invisible.noPickup", true, "Setting this to true, will disable the auto-picking item when invisible"),
 	DFLY("fly.DefaultFlyPower", 1.75F, "Default value for Fly power"),
 	MAX_FLY("fly.maxFlyValue", 2F, "Maximum value for the fly commands"),
 	GLIDE("fly.glideWhenFallingInFlyMode", true, "Activate the parachute when falling in fly mode"),
@@ -187,7 +187,9 @@ public enum ConfigEnum {
 			"checkPowerPermissionOnJoin",
 			false,
 			"If set to true, when a player connect, the plugin will check the permission for every activated super powers.\n"
-					+ "Then it will remove the one that he can't access anymore.");
+					+ "Then it will remove the one that he can't access anymore."),
+	INVISIBLE_ONLINE("invisible.online", false, "If set to true, you'll only be invisible to other player but will be shown in the\n"
+			+ "player list and players will be able to message you.");
 
 	private final String confVal;
 	private final Object defaultVal;
@@ -272,6 +274,13 @@ public enum ConfigEnum {
 			ConfigEnum.save();
 		} catch (final IOException e) {
 		}
+	}
+
+	/**
+	 * @return the config
+	 */
+	public static ExtendedConfiguration getConfig() {
+		return config;
 	}
 
 	public static void setPluginInfos(final PluginDescriptionFile pdf) {
