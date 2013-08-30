@@ -28,6 +28,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.AbstractFuzzyMatcher;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMatchers;
@@ -127,15 +128,6 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	}
 
 	/**
-	 * Dynamically retrieve the name of the current NetServerHandler.
-	 * 
-	 * @return Name of the NetServerHandler class.
-	 */
-	public static String getNetServerHandlerName() {
-		return getNetServerHandlerClass().getSimpleName();
-	}
-
-	/**
 	 * Determine if the given object is a NMS object of the given class
 	 * 
 	 * @param obj
@@ -183,13 +175,8 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 * @throws RuntimeException
 	 *             If we were unable to retrieve the entity.
 	 */
-	public static Object getNetServerHandler(final Object player) {
-		try {
-			final String fieldName = getNetServerHandlerName();
-			return FieldUtils.getAttribute(player, Character.toLowerCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : ""));
-		} catch (final Exception e) {
-			throw new RuntimeException("Cannot get NetServerHandler from " + player, e);
-		}
+	public static Object getNetServerHandler(final Player player) {
+		return FieldUtils.getAttribute(getHandle(player), FuzzyFieldContract.newBuilder().declaringClassExactType(getNetServerHandlerClass()).build());
 	}
 
 	/**
@@ -203,9 +190,11 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 *             If we were unable to retrieve the entity.
 	 */
 	public static void teleportPlayer(final Player player, final Location toLocation) {
-		final Object networkManager = getNetServerHandler(getHandle(player));
+		final Object networkManager = getNetServerHandler(player);
 		try {
-			networkManager.getClass().getMethod("teleport", Location.class).invoke(networkManager, toLocation);
+			final MethodHandler mh = new MethodHandler(getNetServerHandlerClass(), FuzzyMethodContract.newBuilder().parameterCount(1)
+					.parameterExactType(Location.class, 0).build());
+			mh.invoke(networkManager, toLocation);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't teleport the player " + player + " to " + toLocation, e);
 		}
@@ -248,4 +237,21 @@ public class ACMinecraftReflection extends MinecraftReflection {
 		return (T) ACMinecraftReflection.getBukkitEntity(nmsObject);
 	}
 
+	/**
+	 * Send the wanted packet to the player
+	 * 
+	 * @param player
+	 *            player to receive the packet
+	 * @param packet
+	 *            packet to send
+	 */
+	public static void sendPacket(final Player player, final Object packet) {
+		if (!getPacketClass().isAssignableFrom(packet.getClass())) {
+			throw new RuntimeException(packet.getClass() + " is not a derived class of " + getPacketClass());
+		}
+		final MethodHandler mh = new MethodHandler(getNetHandlerClass(), FuzzyMethodContract.newBuilder().parameterExactType(getPacketClass(), 0)
+				.parameterCount(1).build());
+		mh.invoke(getNetServerHandler(player), packet);
+
+	}
 }

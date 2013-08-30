@@ -21,8 +21,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import be.Balor.Tools.Compatibility.Reflect.FieldAccessException;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
 import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
 import be.Balor.Tools.Compatibility.Reflect.Injector.PacketRegistry;
@@ -42,8 +44,14 @@ public class NMSBuilder {
 	 */
 	public static Object buildPacket201PlayerInfo(final Player player, final boolean online, final int ping) {
 		final Object playerHandle = ACMinecraftReflection.getHandle(player);
+		String listName;
 		try {
-			final String listName = FieldUtils.getAttribute(playerHandle, "listName");
+			try {
+				listName = FieldUtils.getAttribute(playerHandle, "listName");
+			} catch (final FieldAccessException e) {
+				final FuzzyFieldContract selected = FuzzyFieldContract.newBuilder().declaringClassExactType(String.class).build();
+				listName = FieldUtils.getAttribute(playerHandle, selected);
+			}
 			final Class<?> packetClass = PacketRegistry.getPacketClassFromID(201);
 
 			final Constructor<?> packetConstructor = FuzzyReflection.fromClass(packetClass).getConstructor(
