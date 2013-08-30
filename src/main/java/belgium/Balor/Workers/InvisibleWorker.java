@@ -138,7 +138,7 @@ final public class InvisibleWorker {
 			public void run() {
 				hideFrom.hidePlayer(hide);
 				if (ConfigEnum.INVISIBLE_ONLINE.getBoolean()) {
-					ACMinecraftReflection.sendPacket(hideFrom, NMSBuilder.buildPacket201PlayerInfo(hide, true, 100));
+					ACMinecraftReflection.sendPacket(hideFrom, NMSBuilder.buildPacket201PlayerInfo(hide, true, 1000));
 				}
 			}
 		});
