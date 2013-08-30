@@ -176,7 +176,8 @@ public class ACMinecraftReflection extends MinecraftReflection {
 	 *             If we were unable to retrieve the entity.
 	 */
 	public static Object getNetServerHandler(final Player player) {
-		return FieldUtils.getAttribute(getHandle(player), FuzzyFieldContract.newBuilder().declaringClassExactType(getNetServerHandlerClass()).build());
+		final Field field = FuzzyReflection.fromClass(getEntityPlayerClass(), true).getFieldByType("NetServerHandler", getNetServerHandlerClass());
+		return FieldUtils.readField(field, getHandle(player), true);
 	}
 
 	/**
