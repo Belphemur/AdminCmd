@@ -40,3 +40,8 @@ Features
 * Multi-lingual : English and German
 * Prioritize system for the command, meaning you can choose if some of my command will override other plugin commands.
 * Disable command : you can choose witch command you want to disable.
+
+Code Use
+---------
+Use some code under GPLv3 of [ProtocolLib](https://github.com/aadnk/ProtocolLib) made by @aadnk.
+All the reflection code used in this plugin belong to @aadnk.
