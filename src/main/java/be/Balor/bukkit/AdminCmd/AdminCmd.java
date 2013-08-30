@@ -38,6 +38,7 @@ import be.Balor.Listeners.Features.ACColorSignListener;
 import be.Balor.Listeners.Features.ACCreatureSpawnListener;
 import be.Balor.Listeners.Features.ACDeathListener;
 import be.Balor.Listeners.Features.ACFrozenTimeWorldListener;
+import be.Balor.Listeners.Features.ACInvisibleListener;
 import be.Balor.Listeners.Features.ACIpCheckListener;
 import be.Balor.Listeners.Features.ACNoDropListener;
 import be.Balor.Listeners.Features.ACPowerOffListener;
@@ -79,7 +80,6 @@ import be.Balor.Manager.Commands.Player.BanPlayer;
 import be.Balor.Manager.Commands.Player.ClearInventory;
 import be.Balor.Manager.Commands.Player.Enderchest;
 import be.Balor.Manager.Commands.Player.Eternal;
-import be.Balor.Manager.Commands.Player.RemoveStatusEffects;
 import be.Balor.Manager.Commands.Player.Experience;
 import be.Balor.Manager.Commands.Player.FakeQuit;
 import be.Balor.Manager.Commands.Player.Feed;
@@ -107,6 +107,7 @@ import be.Balor.Manager.Commands.Player.Potion;
 import be.Balor.Manager.Commands.Player.Presentation;
 import be.Balor.Manager.Commands.Player.PrivateMessage;
 import be.Balor.Manager.Commands.Player.Quit;
+import be.Balor.Manager.Commands.Player.RemoveStatusEffects;
 import be.Balor.Manager.Commands.Player.Reply;
 import be.Balor.Manager.Commands.Player.Roll;
 import be.Balor.Manager.Commands.Player.Search;
@@ -385,7 +386,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 			pm.registerEvents(new ACVulcanListener(), this);
 		}
 		cmdManager.registerCommand(Drop.class);
-		cmdManager.registerCommand(Invisible.class);
+		if (cmdManager.registerCommand(Invisible.class)) {
+			pm.registerEvents(new ACInvisibleListener(), this);
+		}
 		cmdManager.registerCommand(SpyMsg.class);
 		if (cmdManager.registerCommand(Fireball.class)) {
 			pm.registerEvents(new ACFireballListener(), this);
@@ -514,7 +517,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(RemoveSuperPowers.class);
 		cmdManager.registerCommand(Workbench.class);
 		cmdManager.registerCommand(Head.class);
-                cmdManager.registerCommand(RemoveStatusEffects.class);
+		cmdManager.registerCommand(RemoveStatusEffects.class);
 		DebugLog.endInfo();
 	}
 

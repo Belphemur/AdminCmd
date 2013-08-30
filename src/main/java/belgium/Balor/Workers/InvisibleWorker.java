@@ -28,6 +28,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
+import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -224,16 +225,19 @@ final public class InvisibleWorker {
 	 *            new connected player.
 	 */
 	public void makeInvisibleToPlayer(final Player newPlayer) {
-		ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
-
+		ACPluginManager.runTaskLaterAsynchronously(new Runnable() {
 			@Override
 			public void run() {
+				DebugLog.beginInfo("Make invisible player invisible to " + newPlayer);
+				DebugLog.addInfo("Nb invisibile : " + invisiblesPlayers.size());
 				for (final Player inv : invisiblesPlayers.keySet()) {
 					invisible(inv, newPlayer);
 				}
+				DebugLog.endInfo();
 
 			}
 		});
+
 	}
 
 }
