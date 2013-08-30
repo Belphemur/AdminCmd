@@ -18,15 +18,12 @@
 package be.Balor.Tools.Compatibility.Reflect.Injector;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Nullable;
-
-import org.hamcrest.Factory;
 
 import be.Balor.Tools.Compatibility.MinecraftReflection;
 import be.Balor.Tools.Compatibility.Reflect.FieldAccessException;
@@ -91,11 +88,13 @@ public class PacketRegistry {
 	private static Set<Integer> serverPacketsRef;
 	private static Set<Integer> clientPacketsRef;
 
-	// New proxy values
-	private static Map<Integer, Class> overwrittenPackets = new HashMap<Integer, Class>();
-
-	// Vanilla packets
-	private static Map<Integer, Class> previousValues = new HashMap<Integer, Class>();
+	// // New proxy values
+	// private static Map<Integer, Class> overwrittenPackets = new
+	// HashMap<Integer, Class>();
+	//
+	// // Vanilla packets
+	// private static Map<Integer, Class> previousValues = new HashMap<Integer,
+	// Class>();
 
 	@SuppressWarnings({ "unchecked" })
 	public static Map<Class, Integer> getPacketToID() {
@@ -176,23 +175,23 @@ public class PacketRegistry {
 		return packetRegistry;
 	}
 
-	/**
-	 * Retrieve the injected proxy classes handlig each packet ID.
-	 * 
-	 * @return Injected classes.
-	 */
-	public static Map<Integer, Class> getOverwrittenPackets() {
-		return overwrittenPackets;
-	}
-
-	/**
-	 * Retrieve the vanilla classes handling each packet ID.
-	 * 
-	 * @return Vanilla classes.
-	 */
-	public static Map<Integer, Class> getPreviousPackets() {
-		return previousValues;
-	}
+	// /**
+	// * Retrieve the injected proxy classes handlig each packet ID.
+	// *
+	// * @return Injected classes.
+	// */
+	// public static Map<Integer, Class> getOverwrittenPackets() {
+	// return overwrittenPackets;
+	// }
+	//
+	// /**
+	// * Retrieve the vanilla classes handling each packet ID.
+	// *
+	// * @return Vanilla classes.
+	// */
+	// public static Map<Integer, Class> getPreviousPackets() {
+	// return previousValues;
+	// }
 
 	/**
 	 * Retrieve every known and supported server packet.
@@ -296,13 +295,14 @@ public class PacketRegistry {
 	 * @return The associated class.
 	 */
 	public static Class getPacketClassFromID(final int packetID, final boolean forceVanilla) {
-		final Map<Integer, Class> lookup = forceVanilla ? previousValues : overwrittenPackets;
+		// final Map<Integer, Class> lookup = forceVanilla ? previousValues :
+		// overwrittenPackets;
 		Class<?> result = null;
 
-		// Optimized lookup
-		if (lookup.containsKey(packetID)) {
-			return removeEnhancer(lookup.get(packetID), forceVanilla);
-		}
+		// // Optimized lookup
+		// if (lookup.containsKey(packetID)) {
+		// return removeEnhancer(lookup.get(packetID), forceVanilla);
+		// }
 
 		// Refresh lookup tables
 		getPacketToID();
@@ -343,24 +343,25 @@ public class PacketRegistry {
 		// The registry contains both the overridden and original packets
 		return getPacketToID().get(packet);
 	}
-
-	/**
-	 * Find the first superclass that is not a CBLib proxy object.
-	 * 
-	 * @param clazz
-	 *            - the class whose hierachy we're going to search through.
-	 * @param remove
-	 *            - whether or not to skip enhanced (proxy) classes.
-	 * @return If remove is TRUE, the first superclass that is not a proxy.
-	 */
-	private static Class removeEnhancer(Class clazz, final boolean remove) {
-		if (remove) {
-			// Get the underlying vanilla class
-			while (Factory.class.isAssignableFrom(clazz) && !clazz.equals(Object.class)) {
-				clazz = clazz.getSuperclass();
-			}
-		}
-
-		return clazz;
-	}
+	//
+	// /**
+	// * Find the first superclass that is not a CBLib proxy object.
+	// *
+	// * @param clazz
+	// * - the class whose hierachy we're going to search through.
+	// * @param remove
+	// * - whether or not to skip enhanced (proxy) classes.
+	// * @return If remove is TRUE, the first superclass that is not a proxy.
+	// */
+	// private static Class removeEnhancer(Class clazz, final boolean remove) {
+	// if (remove) {
+	// // Get the underlying vanilla class
+	// while (Factory.class.isAssignableFrom(clazz) &&
+	// !clazz.equals(Object.class)) {
+	// clazz = clazz.getSuperclass();
+	// }
+	// }
+	//
+	// return clazz;
+	// }
 }
