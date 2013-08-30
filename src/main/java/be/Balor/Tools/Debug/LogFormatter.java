@@ -19,6 +19,8 @@
 
 package be.Balor.Tools.Debug;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -50,7 +52,7 @@ import java.util.logging.LogRecord;
  * @author Samuel Halliday
  */
 public class LogFormatter extends Formatter {
-	private static final String DEFAULT_FORMAT = "%t [%L] *%C.%M* : %m [%T] %S";
+	private static final String DEFAULT_FORMAT = "%t [%L] *%C.%M* : %m [%T] %E";
 
 	private final MessageFormat messageFormat;
 
@@ -71,10 +73,8 @@ public class LogFormatter extends Formatter {
 		}
 
 		// convert it into the MessageFormat form
-		format = format.replace("%L", "{0}").replace("%m", "{1}")
-				.replace("%M", "{2}").replace("%t", "{3}").replace("%c", "{4}")
-				.replace("%T", "{5}").replace("%n", "{6}").replace("%C", "{7}")
-				.replace("%S", "{8}")
+		format = format.replace("%L", "{0}").replace("%m", "{1}").replace("%M", "{2}").replace("%t", "{3}").replace("%c", "{4}").replace("%T", "{5}")
+				.replace("%n", "{6}").replace("%C", "{7}").replace("%E", "{8}")
 				+ "\n";
 
 		messageFormat = new MessageFormat(format);
@@ -123,21 +123,15 @@ public class LogFormatter extends Formatter {
 		} else {
 			arguments[7] = arguments[4];
 		}
-		// %S
-		if (record.getThrown() == null) {
-			arguments[8] = "";
+		// %E
+		final Throwable throwable = record.getThrown();
+		if (throwable != null) {
+			final StringWriter stringwriter = new StringWriter();
+			stringwriter.append("\n");
+			throwable.printStackTrace(new PrintWriter(stringwriter));
+			arguments[8] = stringwriter.toString();
 		} else {
-			if (record.getMessage() != null) {
-				arguments[1] += " " + record.getThrown().toString();
-			} else {
-				arguments[1] = record.getThrown().toString();
-			}
-			String stackTrace = "\n";
-			for (final StackTraceElement st : record.getThrown()
-					.getStackTrace()) {
-				stackTrace += "\t" + st.toString() + "\n";
-			}
-			arguments[8] = stackTrace;
+			arguments[8] = "";
 		}
 		synchronized (messageFormat) {
 			return messageFormat.format(arguments);
