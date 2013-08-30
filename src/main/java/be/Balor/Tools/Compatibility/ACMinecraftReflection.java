@@ -250,8 +250,8 @@ public class ACMinecraftReflection extends MinecraftReflection {
 		if (!getPacketClass().isAssignableFrom(packet.getClass())) {
 			throw new RuntimeException(packet.getClass() + " is not a derived class of " + getPacketClass());
 		}
-		final MethodHandler mh = new MethodHandler(getNetHandlerClass(), FuzzyMethodContract.newBuilder().parameterExactType(getPacketClass(), 0)
-				.parameterCount(1).build());
+		final MethodHandler mh = new MethodHandler(getNetServerHandlerClass(), FuzzyMethodContract.newBuilder().parameterExactType(getPacketClass(), 0)
+				.parameterCount(1).nameRegex("(func_72567_b|sendPacket|sendPacketToPlayer)").build());
 		mh.invoke(getNetServerHandler(player), packet);
 
 	}
