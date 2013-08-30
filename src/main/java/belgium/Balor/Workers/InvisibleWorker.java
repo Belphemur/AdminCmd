@@ -26,6 +26,8 @@ import org.dynmap.DynmapAPI;
 import be.Balor.Manager.Commands.Player.PlayerCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.CommandUtils.Users;
+import be.Balor.Tools.Compatibility.ACMinecraftReflection;
+import be.Balor.Tools.Compatibility.NMSBuilder;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 
@@ -37,8 +39,7 @@ import com.google.common.collect.MapMaker;
  */
 final public class InvisibleWorker {
 	protected static InvisibleWorker instance = null;
-	private final ConcurrentMap<Player, Object> invisiblesPlayers = new MapMaker()
-			.makeMap();
+	private final ConcurrentMap<Player, Object> invisiblesPlayers = new MapMaker().makeMap();
 	private static final Object EMPTY = new Object();
 	public static DynmapAPI dynmapAPI;
 
@@ -101,15 +102,14 @@ final public class InvisibleWorker {
 		if (dynmapAPI != null) {
 			dynmapAPI.setPlayerVisiblity(toReappear, true);
 		}
-		ACPluginManager.getScheduler().runTaskAsynchronously(
-				ACPluginManager.getCorePlugin(), new Runnable() {
-					@Override
-					public void run() {
-						for (final Player p : Users.getOnlinePlayers()) {
-							uninvisible(toReappear, p);
-						}
-					}
-				});
+		ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
+			@Override
+			public void run() {
+				for (final Player p : Users.getOnlinePlayers()) {
+					uninvisible(toReappear, p);
+				}
+			}
+		});
 		if (ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean()) {
 			PlayerCommand.broadcastFakeJoin(toReappear);
 		}
@@ -129,8 +129,7 @@ final public class InvisibleWorker {
 		if (hideFrom == null) {
 			return;
 		}
-		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee",
-				false)) {
+		if (PermissionManager.hasPerm(hideFrom, "admincmd.invisible.cansee", false)) {
 			return;
 		}
 		ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -138,6 +137,9 @@ final public class InvisibleWorker {
 			@Override
 			public void run() {
 				hideFrom.hidePlayer(hide);
+				if (ConfigEnum.INVISIBLE_ONLINE.getBoolean()) {
+					ACMinecraftReflection.sendPacket(hideFrom, NMSBuilder.buildPacket201PlayerInfo(hide, true, 100));
+				}
 			}
 		});
 
@@ -150,8 +152,7 @@ final public class InvisibleWorker {
 	 * @param unHideFrom
 	 */
 	private void uninvisible(final Player unHide, final Player unHideFrom) {
-		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee",
-				false)) {
+		if (PermissionManager.hasPerm(unHideFrom, "admincmd.invisible.cansee", false)) {
 			return;
 		}
 		ACPluginManager.scheduleSyncTask(new Runnable() {
@@ -190,17 +191,16 @@ final public class InvisibleWorker {
 			if (dynmapAPI != null) {
 				dynmapAPI.setPlayerVisiblity(toVanish, false);
 			}
-			ACPluginManager.getScheduler().runTaskAsynchronously(
-					ACPluginManager.getCorePlugin(), new Runnable() {
+			ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
 
-						@Override
-						public void run() {
-							for (final Player p : Users.getOnlinePlayers()) {
-								invisible(toVanish, p);
-							}
+				@Override
+				public void run() {
+					for (final Player p : Users.getOnlinePlayers()) {
+						invisible(toVanish, p);
+					}
 
-						}
-					});
+				}
+			});
 		}
 		if (!onJoinEvent && ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean()) {
 			PlayerCommand.broadcastFakeQuit(toVanish);
@@ -224,17 +224,16 @@ final public class InvisibleWorker {
 	 *            new connected player.
 	 */
 	public void makeInvisibleToPlayer(final Player newPlayer) {
-		ACPluginManager.getScheduler().runTaskAsynchronously(
-				ACPluginManager.getCorePlugin(), new Runnable() {
+		ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
 
-					@Override
-					public void run() {
-						for (final Player inv : invisiblesPlayers.keySet()) {
-							invisible(inv, newPlayer);
-						}
+			@Override
+			public void run() {
+				for (final Player inv : invisiblesPlayers.keySet()) {
+					invisible(inv, newPlayer);
+				}
 
-					}
-				});
+			}
+		});
 	}
 
 }
