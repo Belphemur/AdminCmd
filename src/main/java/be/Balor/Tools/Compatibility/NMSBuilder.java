@@ -23,6 +23,9 @@ import org.bukkit.entity.Player;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.Tools.Compatibility.Reflect.MethodHandler;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyMethodContract;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyReflection;
+import be.Balor.Tools.Compatibility.Reflect.Injector.PacketRegistry;
 
 public class NMSBuilder {
 
@@ -41,8 +44,11 @@ public class NMSBuilder {
 		final Object playerHandle = ACMinecraftReflection.getHandle(player);
 		try {
 			final String listName = FieldUtils.getAttribute(playerHandle, "listName");
-			final Class<?> packetClass = ACMinecraftReflection.getPacket201PlayerInfoClass();
-			final Constructor<?> packetConstructor = packetClass.getConstructor(String.class, boolean.class, int.class);
+			final Class<?> packetClass = PacketRegistry.getPacketClassFromID(201);
+
+			final Constructor<?> packetConstructor = FuzzyReflection.fromClass(packetClass).getConstructor(
+					FuzzyMethodContract.newBuilder().parameterExactType(String.class, 0).parameterExactType(boolean.class, 1).parameterExactType(int.class, 2)
+							.build());
 			return packetConstructor.newInstance(listName, online, ping);
 		} catch (final Exception e) {
 			throw new RuntimeException("Can't create the wanted packet", e);

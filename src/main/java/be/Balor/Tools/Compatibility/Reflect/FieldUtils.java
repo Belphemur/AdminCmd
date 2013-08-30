@@ -41,7 +41,7 @@ public class FieldUtils {
 	 * @param field
 	 *            - given field
 	 * @return the attribute casted as wanted.
-	 * @throws RuntimeException
+	 * @throws FieldAccessException
 	 *             if we can't get the field
 	 */
 	@SuppressWarnings("unchecked")
@@ -50,7 +50,7 @@ public class FieldUtils {
 			final Field objectField = getExactField(object.getClass(), field);
 			return (T) getAttributeFromField(object, objectField);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't get field " + field + " from " + object, e);
+			throw new FieldAccessException("Can't get field " + field + " from " + object, e);
 		}
 	}
 
@@ -60,12 +60,15 @@ public class FieldUtils {
 			final Field objectField = getMatchedField(object.getClass(), contract);
 			return (T) getAttributeFromField(object, objectField);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't get field " + contract + " from " + object, e);
+			throw new FieldAccessException("Can't get field " + contract + " from " + object, e);
 		}
 	}
 
 	/**
+	 * Get the value of the field
+	 * 
 	 * @param object
+	 *            can be null if objectField is a static field
 	 * @param objectField
 	 * @return
 	 * @throws IllegalAccessException
@@ -84,7 +87,7 @@ public class FieldUtils {
 	 *            - given object
 	 * @param field
 	 *            - given field
-	 * @throws RuntimeException
+	 * @throws FieldAccessException
 	 *             if we can't set the field
 	 */
 	public static void setExactAttribute(final Object object, final String field, final Object value) {
@@ -92,7 +95,7 @@ public class FieldUtils {
 			final Field objectField = getExactField(object.getClass(), field);
 			setAttribute(object, value, objectField);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't set field " + field + " from " + object, e);
+			throw new FieldAccessException("Can't set field " + field + " from " + object, e);
 		}
 	}
 
@@ -103,7 +106,7 @@ public class FieldUtils {
 	 *            - given object
 	 * @param contract
 	 *            - given field
-	 * @throws RuntimeException
+	 * @throws FieldAccessException
 	 *             if we can't set the field
 	 */
 	public static void setMatchedAttribute(final Object object, final FuzzyFieldContract contract, final Object value) {
@@ -111,7 +114,7 @@ public class FieldUtils {
 			final Field objectField = getMatchedField(object.getClass(), contract);
 			setAttribute(object, value, objectField);
 		} catch (final Exception e) {
-			throw new RuntimeException("Can't set field " + contract + " from " + object, e);
+			throw new FieldAccessException("Can't set field " + contract + " from " + object, e);
 		}
 	}
 
@@ -190,5 +193,81 @@ public class FieldUtils {
 			}
 		}
 		return objectField;
+	}
+
+	/**
+	 * Compatibility method to get a static field
+	 * 
+	 * @param field
+	 * @param b
+	 * @return
+	 */
+
+	public static <T> T readStaticField(final Field field, final boolean b) {
+		return readStaticField(field);
+	}
+
+	/**
+	 * Get the value of a static field
+	 * 
+	 * @param field
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T readStaticField(final Field field) {
+		try {
+			return (T) getAttributeFromField(null, field);
+		} catch (final IllegalAccessException e) {
+			throw new FieldAccessException("IllegalAccess static field", e);
+
+		}
+	}
+
+	/**
+	 * Compatibility method
+	 * 
+	 * @param source
+	 * @param field
+	 * @param b
+	 * @return
+	 */
+	public static Field getField(final Class<?> source, final String field, final boolean b) {
+		try {
+			return getExactField(source, field);
+		} catch (final Exception e) {
+			throw new FieldAccessException("Can't get " + field + " of " + source, e);
+		}
+	}
+
+	/**
+	 * Compatibility method
+	 * 
+	 * @param field
+	 * @param object
+	 * @param b
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T readField(final Field field, final Object object, final boolean b) {
+		try {
+			return (T) getAttributeFromField(object, field);
+		} catch (final IllegalAccessException e) {
+			throw new FieldAccessException("Can't read value of field " + field + " from " + object, e);
+		}
+	}
+
+	/**
+	 * Compatibility Method
+	 * 
+	 * @param field
+	 * @param object
+	 * @param value
+	 */
+	public static void writeField(final Field field, final Object object, final Object value) {
+		try {
+			setAttribute(object, value, field);
+		} catch (final IllegalAccessException e) {
+			throw new FieldAccessException("Can't set value of field " + field + " from " + object, e);
+		}
 	}
 }
