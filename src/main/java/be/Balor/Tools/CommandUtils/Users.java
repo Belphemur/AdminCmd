@@ -72,9 +72,8 @@ public final class Users {
 	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
-	public static ACPlayer getACPlayer(final CommandSender sender,
-			final CommandArgs args, final String permNode)
-			throws PlayerNotFound, ActionNotPermitedException {
+	public static ACPlayer getACPlayer(final CommandSender sender, final CommandArgs args, final String permNode) throws PlayerNotFound,
+			ActionNotPermitedException {
 		Player target;
 		try {
 			target = Users.getUser(sender, args, permNode, 0, false);
@@ -112,9 +111,8 @@ public final class Users {
 	 * @throws PermissionException
 	 * @throws PlayerNotFound
 	 */
-	public static ACPlayer getACPlayerParam(final CommandSender sender,
-			final CommandArgs args, final String permNode)
-			throws PlayerNotFound, ActionNotPermitedException {
+	public static ACPlayer getACPlayerParam(final CommandSender sender, final CommandArgs args, final String permNode) throws PlayerNotFound,
+			ActionNotPermitedException {
 		Player target;
 		try {
 			target = Users.getUserParam(sender, args, permNode);
@@ -124,8 +122,7 @@ public final class Users {
 		ACPlayer actarget;
 		if (target == null) {
 			if (!args.hasFlag('P')) {
-				throw new PlayerNotFound("You must type the player name!",
-						sender);
+				throw new PlayerNotFound("You must type the player name!", sender);
 			}
 			final String playername = args.getValueFlag('P');
 			actarget = Users.getACPlayer(sender, playername);
@@ -144,15 +141,13 @@ public final class Users {
 	 * @return
 	 * @throws PlayerNotFound
 	 */
-	public static ACPlayer getACPlayer(final CommandSender sender,
-			final String playername) throws PlayerNotFound {
+	public static ACPlayer getACPlayer(final CommandSender sender, final String playername) throws PlayerNotFound {
 		ACPlayer actarget;
 		actarget = ACPlayer.getPlayer(playername);
 		if (actarget instanceof EmptyPlayer) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", playername);
-			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
-					sender);
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace), sender);
 		}
 		if (!Immunity.checkImmunity(sender, actarget)) {
 			throw new PlayerNotFound(LocaleManager.I18n("insufficientLvl"), sender);
@@ -171,7 +166,7 @@ public final class Users {
 
 	public static Player getPlayer(final String name) {
 		final Player[] players = ACPluginManager.getServer().getOnlinePlayers();
-	
+
 		Player found = null;
 		final String lowerName = name.toLowerCase();
 		int delta = Integer.MAX_VALUE;
@@ -182,8 +177,7 @@ public final class Users {
 					found = player;
 					delta = curDelta;
 				} else {
-					curDelta = player.getDisplayName().length()
-							- lowerName.length();
+					curDelta = player.getDisplayName().length() - lowerName.length();
 					if (curDelta < delta) {
 						found = player;
 						delta = curDelta;
@@ -195,7 +189,7 @@ public final class Users {
 			}
 		}
 		return found;
-	
+
 	}
 
 	public static String getPlayerName(final Player player) {
@@ -210,8 +204,7 @@ public final class Users {
 	 * @param withPrefix
 	 * @return
 	 */
-	public static String getPlayerName(final Player player,
-			final CommandSender sender, final boolean withPrefix) {
+	public static String getPlayerName(final Player player, final CommandSender sender, final boolean withPrefix) {
 		return Users.getPlayerName(player, sender);
 	}
 
@@ -224,26 +217,22 @@ public final class Users {
 	 *            sender that want the name
 	 * @return the complete player name with prefix
 	 */
-	public static String getPlayerName(final Player player,
-			final CommandSender sender) {
+	public static String getPlayerName(final Player player, final CommandSender sender) {
 		assert (player != null);
 		if (ConfigEnum.USE_PREFIX.getBoolean()) {
-			final String prefix = Materials.colorParser(Users.getPrefix(player,
-					sender));
-			final String suffix = Materials.colorParser(PermissionManager
-					.getSuffix(player));
+			final String prefix = Materials.colorParser(Users.getPrefix(player, sender));
+			final String suffix = Materials.colorParser(PermissionManager.getSuffix(player));
 			if (ConfigEnum.DNAME.getBoolean()) {
-				return prefix + player.getDisplayName() + suffix
-						+ ChatColor.YELLOW;
+				return prefix + player.getDisplayName() + suffix + ChatColor.YELLOW;
 			}
-	
+
 			return prefix + player.getName() + suffix + ChatColor.YELLOW;
 		}
-	
+
 		if (ConfigEnum.DNAME.getBoolean()) {
 			return player.getDisplayName();
 		}
-	
+
 		return player.getName();
 	}
 
@@ -253,15 +242,12 @@ public final class Users {
 	 * @param player
 	 * @return
 	 */
-	public static String getPrefix(final Player player,
-			final CommandSender sender) {
+	public static String getPrefix(final Player player, final CommandSender sender) {
 		boolean isInv = false;
 		String prefixstring = "";
 		String statusPrefix = "";
 		if (sender != null) {
-			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player)
-					&& PermissionManager.hasPerm(sender,
-							"admincmd.invisible.cansee", false);
+			isInv = InvisibleWorker.getInstance().hasInvisiblePowers(player) && PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
 		}
 		if (isInv) {
 			statusPrefix = LocaleManager.I18n("invTitle");
@@ -275,12 +261,10 @@ public final class Users {
 			result += prefixstring;
 		}
 		return Materials.colorParser(result);
-	
+
 	}
 
-	public static Player getUser(final CommandSender sender,
-			final CommandArgs args, final String permNode)
-			throws PlayerNotFound, ActionNotPermitedException {
+	public static Player getUser(final CommandSender sender, final CommandArgs args, final String permNode) throws PlayerNotFound, ActionNotPermitedException {
 		return Users.getUser(sender, args, permNode, 0, true);
 	}
 
@@ -296,27 +280,22 @@ public final class Users {
 	 * @throws PlayerNotFound
 	 * @throws PermissionException
 	 */
-	public static Player getUser(final CommandSender sender,
-			final CommandArgs args, final String permNode, final int index,
-			final boolean errorMsg) throws PlayerNotFound,
-			ActionNotPermitedException {
+	public static Player getUser(final CommandSender sender, final CommandArgs args, final String permNode, final int index, final boolean errorMsg)
+			throws PlayerNotFound, ActionNotPermitedException {
 		Player target = null;
 		if (args.length >= index + 1) {
 			target = getPlayer(args.getString(index));
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode
-						+ ".other", false)) {
+				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
 					if (Immunity.checkImmunity(sender, target)) {
 						return target;
 					} else {
-						throw new PlayerNotFound(LocaleManager.I18n("insufficientLvl"),
-								sender);
+						throw new PlayerNotFound(LocaleManager.I18n("insufficientLvl"), sender);
 					}
 				} else {
-					throw new PermissionException(sender, permNode
-							+ ".other");
+					throw new PermissionException(sender, permNode + ".other");
 				}
 			}
 		} else if (Users.isPlayer(sender, false)) {
@@ -328,11 +307,10 @@ public final class Users {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", args.getString(index));
-			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
-					sender);
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace), sender);
 		}
 		return target;
-	
+
 	}
 
 	/**
@@ -351,9 +329,8 @@ public final class Users {
 	 * @throws PermissionException
 	 *             if the player don't have the permission
 	 */
-	public static Player getUserParam(final CommandSender sender,
-			final CommandArgs args, final String permNode)
-			throws PlayerNotFound, ActionNotPermitedException {
+	public static Player getUserParam(final CommandSender sender, final CommandArgs args, final String permNode) throws PlayerNotFound,
+			ActionNotPermitedException {
 		return Users.getUserParam(sender, args, permNode, true);
 	}
 
@@ -375,9 +352,7 @@ public final class Users {
 	 * @throws PermissionException
 	 *             if the player don't have the permission
 	 */
-	public static Player getUserParam(final CommandSender sender,
-			final CommandArgs args, final String permNode,
-			final boolean errorMsg) throws PlayerNotFound,
+	public static Player getUserParam(final CommandSender sender, final CommandArgs args, final String permNode, final boolean errorMsg) throws PlayerNotFound,
 			ActionNotPermitedException {
 		Player target = null;
 		final String playerName = args.getValueFlag('P');
@@ -386,17 +361,14 @@ public final class Users {
 			if (target != null) {
 				if (target.equals(sender)) {
 					return target;
-				} else if (PermissionManager.hasPerm(sender, permNode
-						+ ".other", false)) {
+				} else if (PermissionManager.hasPerm(sender, permNode + ".other", false)) {
 					if (Immunity.checkImmunity(sender, target)) {
 						return target;
 					} else {
-						throw new PlayerNotFound(LocaleManager.I18n("insufficientLvl"),
-								sender);
+						throw new PlayerNotFound(LocaleManager.I18n("insufficientLvl"), sender);
 					}
 				} else {
-					throw new PermissionException(sender, permNode
-							+ ".other");
+					throw new PermissionException(sender, permNode + ".other");
 				}
 			}
 		} else if (Users.isPlayer(sender, false)) {
@@ -408,8 +380,7 @@ public final class Users {
 		if (target == null && errorMsg) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("player", playerName);
-			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace),
-					sender);
+			throw new PlayerNotFound(LocaleManager.I18n("playerNotFound", replace), sender);
 		}
 		return target;
 	}
@@ -450,12 +421,9 @@ public final class Users {
 	 *            player to remove
 	 */
 	public static void removePlayerFromOnlineList(final Player player) {
-		final Object server = ACMinecraftReflection.getHandle(player
-				.getServer());
-		final MethodHandler sendAll = new MethodHandler(server.getClass(),
-				"sendAll", ACMinecraftReflection.getPacketClass());
-		sendAll.invoke(server,
-				NMSBuilder.buildPacket201PlayerInfo(player, false, 9999));
+		final Object server = ACMinecraftReflection.getHandle(player.getServer());
+		final MethodHandler sendAll = new MethodHandler(server.getClass(), "sendAll", ACMinecraftReflection.getPacketClass());
+		sendAll.invoke(server, NMSBuilder.buildPacket201PlayerInfo(player, false, 9999));
 	}
 
 	/**
@@ -474,14 +442,11 @@ public final class Users {
 		}
 	}
 
-	public static void sendMessage(final CommandSender sender,
-			final CommandSender player, final String key) {
+	public static void sendMessage(final CommandSender sender, final CommandSender player, final String key) {
 		Users.sendMessage(sender, player, key, null);
 	}
 
-	public static void sendMessage(final CommandSender sender,
-			final CommandSender player, final String key,
-			final Map<String, String> replace) {
+	public static void sendMessage(final CommandSender sender, final CommandSender player, final String key, final Map<String, String> replace) {
 		final String msg = LocaleManager.I18n(key, replace);
 		if (msg != null && !msg.isEmpty()) {
 			if (!sender.equals(player)) {
@@ -489,7 +454,7 @@ public final class Users {
 			}
 			sender.sendMessage(msg);
 		}
-	
+
 	}
 
 	/**
@@ -501,18 +466,31 @@ public final class Users {
 	 */
 	public static Collection<String> getPlayerList(final CommandSender sender) {
 		final List<Player> online = getOnlinePlayers();
-		final Map<Player, String> players = new TreeMap<Player, String>(
-				new PlayerComparator());
+		final Map<Player, String> players = new TreeMap<Player, String>(new PlayerComparator());
 		for (final Player p : online) {
-			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p) || ACPlayer
-					.getPlayer(p).hasPower(Type.FAKEQUIT))
-					&& !PermissionManager.hasPerm(sender,
-							"admincmd.invisible.cansee", false)) {
+			if ((InvisibleWorker.getInstance().hasInvisiblePowers(p) && !ConfigEnum.INVISIBLE_ONLINE.getBoolean() || ACPlayer.getPlayer(p).hasPower(
+					Type.FAKEQUIT))
+					&& !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false)) {
 				continue;
 			}
 			players.put(p, getPlayerName(p, sender));
 		}
 		return Collections.unmodifiableCollection(players.values());
+	}
+
+	/**
+	 * If the buddy is invisible to the sender.
+	 * 
+	 * @param buddy
+	 * @param sender
+	 * 
+	 * @return
+	 */
+	public static boolean isInvisibleTo(final Player buddy, final CommandSender sender) {
+		if (ConfigEnum.INVISIBLE_ONLINE.getBoolean()) {
+			return false;
+		}
+		return InvisibleWorker.getInstance().hasInvisiblePowers(buddy) && !PermissionManager.hasPerm(sender, "admincmd.invisible.cansee", false);
 	}
 
 }

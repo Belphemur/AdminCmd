@@ -111,7 +111,7 @@ final public class InvisibleWorker {
 				}
 			}
 		});
-		if (ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean()) {
+		if (ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean() && !ConfigEnum.INVISIBLE_ONLINE.getBoolean()) {
 			PlayerCommand.broadcastFakeJoin(toReappear);
 		}
 
@@ -203,7 +203,7 @@ final public class InvisibleWorker {
 				}
 			});
 		}
-		if (!onJoinEvent && ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean()) {
+		if (!onJoinEvent && ConfigEnum.INVISIBLE_FAKEQUIT.getBoolean() && !ConfigEnum.INVISIBLE_ONLINE.getBoolean()) {
 			PlayerCommand.broadcastFakeQuit(toVanish);
 		}
 

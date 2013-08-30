@@ -26,7 +26,6 @@ import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
-import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.CommandUtils.Materials;
@@ -36,7 +35,6 @@ import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import belgium.Balor.Workers.AFKWorker;
-import belgium.Balor.Workers.InvisibleWorker;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -60,21 +58,15 @@ public class PrivateMessage extends PlayerCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
-		if (Users.isPlayer(sender, false)
-				&& ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED)
-				&& ConfigEnum.MUTEDPM.getBoolean()) {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
+		if (Users.isPlayer(sender, false) && ACPlayer.getPlayer(((Player) sender)).hasPower(Type.MUTED) && ConfigEnum.MUTEDPM.getBoolean()) {
 			LocaleManager.sI18n(sender, "muteEnabled");
 			return;
 		}
 		final Player buddy = sender.getServer().getPlayer(args.getString(0));
 		if (buddy != null) {
-			if (InvisibleWorker.getInstance().hasInvisiblePowers(buddy)
-					&& !PermissionManager.hasPerm(sender,
-							"admincmd.invisible.cansee", false)) {
-				LocaleManager.sI18n(sender, "playerNotFound", "player",
-						args.getString(0));
+			if (Users.isInvisibleTo(buddy, sender)) {
+				LocaleManager.sI18n(sender, "playerNotFound", "player", args.getString(0));
 				return;
 			}
 			String senderPm = "";
@@ -100,24 +92,19 @@ public class PrivateMessage extends PlayerCommand {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
 			replace.put("receiver", Users.getPlayerName(buddy));
-			buddy.sendMessage(LocaleManager.I18n("privateMessageHeader", replace)
-					+ parsed);
+			buddy.sendMessage(LocaleManager.I18n("privateMessageHeader", replace) + parsed);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
 			} else {
-				sender.sendMessage(LocaleManager.I18n("privateMessageHeader", replace)
-						+ parsed);
+				sender.sendMessage(LocaleManager.I18n("privateMessageHeader", replace) + parsed);
 			}
-			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace)
-					+ parsed;
+			final String spyMsg = LocaleHelper.SPYMSG_HEADER.getLocale(replace) + parsed;
 			for (final Player p : ACHelper.getInstance().getSpyPlayers()) {
-				if (p != null && !p.getName().equals(senderName)
-						&& !p.getName().equals(buddy.getName())) {
+				if (p != null && !p.getName().equals(senderName) && !p.getName().equals(buddy.getName())) {
 					p.sendMessage(spyMsg);
 				}
 			}
-			if (ConfigEnum.LOG_PM.getBoolean()
-					&& !(sender instanceof ConsoleCommandSender)) {
+			if (ConfigEnum.LOG_PM.getBoolean() && !(sender instanceof ConsoleCommandSender)) {
 				ACLogger.info(spyMsg);
 			}
 		} else {
