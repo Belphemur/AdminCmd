@@ -84,7 +84,7 @@ public class InverseMaps {
 		public MapContainer(final Object source) {
 			this.source = source;
 			this.changed = true;
-			this.modCountField = FieldUtils.getAttribute(source.getClass(), "modCount");
+			this.modCountField = FieldUtils.getField(source.getClass(), "modCount", true);
 		}
 
 		/**
