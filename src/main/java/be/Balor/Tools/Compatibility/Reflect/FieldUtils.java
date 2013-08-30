@@ -231,9 +231,11 @@ public class FieldUtils {
 	 * @param b
 	 * @return
 	 */
-	public static Field getField(final Class<?> source, final String field, final boolean b) {
+	public static Field getField(final Class<?> source, final String field, final boolean accessible) {
 		try {
-			return getExactField(source, field);
+			final Field toGet = getExactField(source, field);
+			toGet.setAccessible(accessible);
+			return toGet;
 		} catch (final Exception e) {
 			throw new FieldAccessException("Can't get " + field + " of " + source, e);
 		}
