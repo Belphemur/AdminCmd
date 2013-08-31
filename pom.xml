@@ -177,6 +177,12 @@
 									<include>org.mcstats:metrics</include>
 								</includes>
 							</artifactSet>
+							<relocations>
+								<relocation>
+									<pattern>org.mcstats</pattern>
+									<shadedPattern>com.admincmd.mcstats</shadedPattern>
+								</relocation>
+							</relocations>
 						</configuration>
 					</execution>
 				</executions>
