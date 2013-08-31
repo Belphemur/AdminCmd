@@ -91,7 +91,7 @@ public class PrivateMessage extends PlayerCommand {
 			}
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("sender", senderPm);
-			replace.put("receiver", Users.getPlayerName(buddy));
+			replace.put("receiver", Users.getPlayerName(buddy, sender));
 			buddy.sendMessage(LocaleManager.I18n("privateMessageHeader", replace) + parsed);
 			if (AFKWorker.getInstance().isAfk(buddy)) {
 				AFKWorker.getInstance().sendAfkMessage(sender, buddy);
