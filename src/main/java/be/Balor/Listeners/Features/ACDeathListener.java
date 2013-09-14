@@ -148,7 +148,8 @@ public class ACDeathListener implements Listener {
 		if (damager instanceof Wolf) {
 			return ACHelper.getInstance().getDeathMessage("wolf");
 		} else if (damager instanceof Player) {
-			return ACHelper.getInstance().getDeathMessage("player");
+			return ACHelper.getInstance().getDeathMessage("player")
+					+ Users.getPlayerName((Player) damager);
 		} else if (damager instanceof Skeleton) {
 			return ACHelper.getInstance().getDeathMessage("skeleton");
 		} else if (damager instanceof TNTPrimed) {
