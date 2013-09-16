@@ -22,18 +22,32 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
+import org.bukkit.entity.CaveSpider;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Ghast;
+import org.bukkit.entity.Giant;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Witch;
+import org.bukkit.entity.Wither;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -77,12 +91,14 @@ public class ACDeathListener implements Listener {
 				message = getMessage(cause);
 			} else {
 				switch (cause.getCause()) {
+				case BLOCK_EXPLOSION:
+					message = ACHelper.getInstance().getDeathMessage("explosion");
+					break;
 				case CONTACT:
 					message = ACHelper.getInstance().getDeathMessage("contact");
 					break;
 				case DROWNING:
-					message = ACHelper.getInstance()
-							.getDeathMessage("drowning");
+					message = ACHelper.getInstance().getDeathMessage("drowning");
 					break;
 				case FALL:
 					message = ACHelper.getInstance().getDeathMessage("falling");
@@ -91,38 +107,29 @@ public class ACDeathListener implements Listener {
 				case FIRE:
 					message = ACHelper.getInstance().getDeathMessage("fire");
 					break;
+				case LAVA:
+					message = ACHelper.getInstance().getDeathMessage("lava");
+					break;
 				case STARVATION:
-					message = ACHelper.getInstance()
-							.getDeathMessage("starving");
+					message = ACHelper.getInstance().getDeathMessage("starvation");
 					break;
 				case SUFFOCATION:
-					message = ACHelper.getInstance().getDeathMessage(
-							"suffocation");
+					message = ACHelper.getInstance().getDeathMessage("suffocation");
+					break;
+				case THORNS:
+					message = ACHelper.getInstance().getDeathMessage("thorns");
 					break;
 				case VOID:
 					message = ACHelper.getInstance().getDeathMessage("void");
 					break;
-				case LAVA:
-					message = ACHelper.getInstance().getDeathMessage("lava");
-					break;
-				case POISON:
-					message = ACHelper.getInstance().getDeathMessage("poison");
-					break;
-				case LIGHTNING:
-					message = ACHelper.getInstance().getDeathMessage(
-							"lightning");
+				case WITHER:
+					message = ACHelper.getInstance().getDeathMessage("withereffect");
 					break;
 				case MAGIC:
 					message = ACHelper.getInstance().getDeathMessage("magic");
 					break;
 				case SUICIDE:
 					message = ACHelper.getInstance().getDeathMessage("suicide");
-					break;
-				case ENTITY_EXPLOSION:
-					message = ACHelper.getInstance().getDeathMessage("creeper");
-					break;
-				case BLOCK_EXPLOSION:
-					message = ACHelper.getInstance().getDeathMessage("tnt");
 					break;
 				case CUSTOM:
 					message = ACHelper.getInstance().getDeathMessage("custom");
@@ -145,44 +152,76 @@ public class ACDeathListener implements Listener {
 
 	private String getMessage(final EntityDamageEvent e) {
 		final Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
-		if (damager instanceof Wolf) {
+		if (damager instanceof TNTPrimed) {
+			return ACHelper.getInstance().getDeathMessage("tnt");
+		} else if (damager instanceof FallingBlock) {
+			return ACHelper.getInstance().getDeathMessage("crushed");
+		} else if (damager instanceof Zombie) {
+		    if (damager instanceof PigZombie) {
+			    return ACHelper.getInstance().getDeathMessage("pigzombie");
+		    }
+		    return ACHelper.getInstance().getDeathMessage("zombie");
+		} else if (damager instanceof Skeleton) {
+			if (((Skeleton) damager).getSkeletonType() == SkeletonType.WITHER) {
+				return ACHelper.getInstance().getDeathMessage("witherskeleton");
+			}
+			return ACHelper.getInstance().getDeathMessage("skeleton");
+		} else if (damager instanceof Spider) {
+			return ACHelper.getInstance().getDeathMessage("spider");
+		} else if (damager instanceof CaveSpider) {
+			return ACHelper.getInstance().getDeathMessage("cavespider");
+		} else if (damager instanceof Creeper) {
+			return ACHelper.getInstance().getDeathMessage("creeper");
+		} else if (damager instanceof MagmaCube) {
+			return ACHelper.getInstance().getDeathMessage("magmacube");
+		} else if (damager instanceof Blaze) {
+			return ACHelper.getInstance().getDeathMessage("blaze");
+		} else if (damager instanceof Ghast) {
+			return ACHelper.getInstance().getDeathMessage("ghast");
+		} else if (damager instanceof Slime) {
+			return ACHelper.getInstance().getDeathMessage("slime");
+		} else if (damager instanceof Silverfish) {
+			return ACHelper.getInstance().getDeathMessage("silverfish");
+		} else if (damager instanceof Giant) {
+			return ACHelper.getInstance().getDeathMessage("giant");
+		} else if (damager instanceof EnderDragon) {
+			return ACHelper.getInstance().getDeathMessage("enderdragon");
+		} else if (damager instanceof Wither) {
+			return ACHelper.getInstance().getDeathMessage("wither");
+		} else if (damager instanceof IronGolem) {
+			return ACHelper.getInstance().getDeathMessage("irongolem");
+		} else if (damager instanceof Enderman ) {
+			return ACHelper.getInstance().getDeathMessage("enderman");
+		} else if (damager instanceof Wolf) {
 			return ACHelper.getInstance().getDeathMessage("wolf");
 		} else if (damager instanceof Player) {
-			return ACHelper.getInstance().getDeathMessage("player");
-		} else if (damager instanceof Skeleton) {
-			return ACHelper.getInstance().getDeathMessage("skeleton");
-		} else if (damager instanceof TNTPrimed) {
-			return ACHelper.getInstance().getDeathMessage("TNTPrimed");
-		} else if (damager instanceof Zombie) {
-			if (damager instanceof PigZombie) {
-				return ACHelper.getInstance().getDeathMessage("zombiepig");
-			}
-			return ACHelper.getInstance().getDeathMessage("zombie");
+			return ACHelper.getInstance().getDeathMessage("melee");
 		} else if (damager instanceof Projectile) {
 			if (damager instanceof Arrow) {
 				if (((Arrow) damager).getShooter() == null) {
-					return ACHelper.getInstance().getDeathMessage("dispenser");
-				} else if (((Arrow) damager).getShooter() instanceof Player) {
-					return ACHelper.getInstance().getDeathMessage("playerBow")
-							+ Users.getPlayerName(((Player) ((Arrow) damager)
-									.getShooter()));
-				} else if (((Projectile) damager).getShooter() instanceof Skeleton) {
+					return ACHelper.getInstance().getDeathMessage("arrow");
+				} else if (((Arrow) damager).getShooter() instanceof Skeleton) {
 					return ACHelper.getInstance().getDeathMessage("skeleton");
+				} else if (((Arrow) damager).getShooter() instanceof Player) {
+					return ACHelper.getInstance().getDeathMessage("ranged") + Users.getPlayerName((Player) ((Arrow) damager).getShooter());
 				}
 			} else if (damager instanceof Fireball) {
-				if (((Fireball) damager).getShooter() instanceof Blaze) {
-					return ACHelper.getInstance().getDeathMessage("blaze");
+				if (((Fireball) damager).getShooter() == null) {
+					return ACHelper.getInstance().getDeathMessage("fireball");
 				} else if (((Fireball) damager).getShooter() instanceof Ghast) {
 					return ACHelper.getInstance().getDeathMessage("ghast");
+				} else if (((Fireball) damager).getShooter() instanceof Blaze) {
+					return ACHelper.getInstance().getDeathMessage("blaze");
 				}
 			} else if (damager instanceof ThrownPotion) {
 				if (((ThrownPotion) damager).getShooter() instanceof Player) {
 					return ACHelper.getInstance().getDeathMessage("potion");
+				} else if (((ThrownPotion) damager).getShooter() instanceof Witch) {
+					return ACHelper.getInstance().getDeathMessage("witch");
 				}
 			}
 		} else if (damager instanceof LivingEntity) {
-			return (ACHelper.getInstance().getDeathMessage("mob") + damager
-					.getType().getName());
+			return ACHelper.getInstance().getDeathMessage("mob") + damager.getType().toString().toLowerCase();
 		}
 		return ACHelper.getInstance().getDeathMessage("default");
 	}
