@@ -54,13 +54,12 @@ public class ChangeMobSpawner extends MobCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (Users.isPlayer(sender)) {
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			final Player player = (Player) sender;
 			final Block block = player.getTargetBlock(null, 100);
-			if (block.getTypeId() != Material.MOB_SPAWNER.getId()) {
+			if (block.getType() != Material.MOB_SPAWNER) {
 				player.sendMessage("Not a Mob Spawner");
 				return;
 			}
