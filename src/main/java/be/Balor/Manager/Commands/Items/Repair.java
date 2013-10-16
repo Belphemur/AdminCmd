@@ -27,7 +27,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.CommandUtils.Users;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -52,8 +51,7 @@ public class Repair extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (Users.isPlayer(sender)) {
 			final Player player = Users.getUser(sender, args, permNode);
 			if (player == null) {
@@ -62,8 +60,7 @@ public class Repair extends ItemCommand {
 			final ItemStack item = player.getItemInHand();
 			final HashMap<String, String> replace = new HashMap<String, String>();
 			replace.put("type", item.getType().toString());
-			if (item != null
-					&& ACHelper.getInstance().repairable(item.getTypeId())) {
+			if (item != null && isReparable(item)) {
 				ACPluginManager.scheduleSyncTask(new Runnable() {
 					@Override
 					public void run() {

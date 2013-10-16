@@ -30,8 +30,9 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
- * 
+ * @deprecated GetID of material is going to be deleted
  */
+@Deprecated
 public class GetItemId extends ItemCommand {
 
 	/**
@@ -50,8 +51,7 @@ public class GetItemId extends ItemCommand {
 	 * CommandSender, be.Balor.Manager.Commands.CommandArgs)
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws PlayerNotFound, ActionNotPermitedException {
+	public void execute(final CommandSender sender, final CommandArgs args) throws PlayerNotFound, ActionNotPermitedException {
 		final Player target = Users.getUserParam(sender, args, permNode);
 		if (target == null) {
 			return;

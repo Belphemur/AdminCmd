@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -99,7 +98,6 @@ import com.google.common.collect.MapMaker;
 public class ACHelper {
 
 	private final static HashMap<Material, String[]> materialsColors;
-	private final static List<Integer> listOfPossibleRepair;
 	private static long mainThreadID;
 
 	/**
@@ -155,26 +153,6 @@ public class ACHelper {
 		materialsColors.put(Material.LOG, new String[] { "Oak", "Pine", "Birch" });
 		materialsColors.put(Material.STEP, new String[] { "Stone", "Sandstone", "Wooden", "Cobblestone" });
 		materialsColors.put(Material.DOUBLE_STEP, materialsColors.get(Material.STEP));
-		listOfPossibleRepair = new LinkedList<Integer>();
-		for (int i = 256; i <= 259; i++) {
-			listOfPossibleRepair.add(i);
-		}
-		for (int i = 267; i <= 279; i++) {
-			listOfPossibleRepair.add(i);
-		}
-		for (int i = 283; i <= 286; i++) {
-			listOfPossibleRepair.add(i);
-		}
-		for (int i = 290; i <= 294; i++) {
-			listOfPossibleRepair.add(i);
-		}
-		for (int i = 298; i <= 317; i++) {
-			listOfPossibleRepair.add(i);
-		}
-		listOfPossibleRepair.add(359);
-		listOfPossibleRepair.add(Material.BOW.getId());
-		listOfPossibleRepair.add(Material.FISHING_ROD.getId());
-		listOfPossibleRepair.add(Material.CARROT_STICK.getId());
 	}
 
 	private ExtendedConfiguration pluginConfig;
@@ -1077,10 +1055,6 @@ public class ACHelper {
 			return;
 		}
 		spyPlayers.remove(p);
-	}
-
-	public boolean repairable(final int id) {
-		return listOfPossibleRepair.contains(id);
 	}
 
 	public boolean rmAlias(final CommandSender sender, final String alias) {

@@ -27,7 +27,6 @@ import be.Balor.Manager.Commands.CommandArgs;
 import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.CommandUtils.Users;
-import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
@@ -53,8 +52,7 @@ public class RepairAll extends ItemCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		final Player player = Users.getUser(sender, args, permNode);
 		if (player == null) {
 			return;
@@ -63,14 +61,11 @@ public class RepairAll extends ItemCommand {
 			@Override
 			public void run() {
 				for (final ItemStack item : player.getInventory().getContents()) {
-					if (item != null
-							&& ACHelper.getInstance().repairable(
-									item.getTypeId())) {
+					if (item != null && isReparable(item)) {
 						item.setDurability((short) 0);
 					}
 				}
-				for (final ItemStack item : player.getInventory()
-						.getArmorContents()) {
+				for (final ItemStack item : player.getInventory().getArmorContents()) {
 					if (item != null) {
 						item.setDurability((short) 0);
 					}

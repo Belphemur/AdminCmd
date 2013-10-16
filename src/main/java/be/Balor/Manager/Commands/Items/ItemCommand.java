@@ -16,6 +16,9 @@
  ************************************************************************/
 package be.Balor.Manager.Commands.Items;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import be.Balor.Manager.Commands.CoreCommand;
 
 /**
@@ -28,8 +31,7 @@ public abstract class ItemCommand extends CoreCommand {
  */
 	public ItemCommand() {
 		super();
-		this.permParent = plugin.getPermissionLinker().getPermParent(
-				"admincmd.item.*");
+		this.permParent = plugin.getPermissionLinker().getPermParent("admincmd.item.*");
 	}
 
 	/**
@@ -41,6 +43,26 @@ public abstract class ItemCommand extends CoreCommand {
 		this.cmdName = cmd;
 		this.permNode = permission;
 
+	}
+
+	/**
+	 * Check if the material can be repaired
+	 * 
+	 * @param mat
+	 * @return
+	 */
+	protected static boolean isReparable(final Material mat) {
+		return mat.getMaxDurability() > 0;
+	}
+
+	/**
+	 * Check if the item stack can be repaired
+	 * 
+	 * @param stack
+	 * @return
+	 */
+	protected static boolean isReparable(final ItemStack stack) {
+		return isReparable(stack.getType()) && stack.getType().getMaxDurability() > stack.getDurability();
 	}
 
 }
