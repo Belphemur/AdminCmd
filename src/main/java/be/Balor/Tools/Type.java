@@ -16,10 +16,10 @@
  ************************************************************************/
 package be.Balor.Tools;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.bukkit.Material;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -170,10 +170,31 @@ public enum Type {
 	}
 
 	public enum ArmorPart {
-		BOOTS(0, 301), LEGS(1, 300), CHEST(2, 299), HEAD(3, 298);
+		BOOTS(0) {
+			@Override
+			public boolean isValid(final Material toCheck) {
+				return toCheck.toString().endsWith("BOOTS");
+			}
+		},
+		LEGS(1) {
+			@Override
+			public boolean isValid(final Material toCheck) {
+				return toCheck.toString().endsWith("LEGGINGS");
+			}
+		},
+		CHEST(2) {
+			@Override
+			public boolean isValid(final Material toCheck) {
+				return toCheck.toString().endsWith("CHESTPLATE");
+			}
+		},
+		HEAD(3) {
+			@Override
+			public boolean isValid(final Material toCheck) {
+				return toCheck.toString().endsWith("HELMET");
+			}
+		};
 		private final int placeInInventory;
-		private final List<Integer> possibleId = new ArrayList<Integer>();
-		private static final int nbEquipment = 5;
 		private static Map<String, ArmorPart> perName = new HashMap<String, Type.ArmorPart>();
 		static {
 			for (final ArmorPart part : ArmorPart.values()) {
@@ -188,11 +209,8 @@ public enum Type {
 		/**
 		 * @param placeInInventory
 		 */
-		private ArmorPart(final int placeInInventory, final int firstPossible) {
+		private ArmorPart(final int placeInInventory) {
 			this.placeInInventory = placeInInventory;
-			for (int i = 0; i < nbEquipment; i++) {
-				possibleId.add((i * 4) + firstPossible);
-			}
 		}
 
 		/**
@@ -213,9 +231,7 @@ public enum Type {
 		 * @param toCheck
 		 * @return
 		 */
-		public boolean isValid(final int toCheck) {
-			return possibleId.contains(toCheck);
-		}
+		public abstract boolean isValid(final Material toCheck);
 	}
 
 	public enum Health {

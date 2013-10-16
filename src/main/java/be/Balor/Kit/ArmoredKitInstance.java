@@ -41,21 +41,17 @@ import be.Balor.bukkit.AdminCmd.ConfigEnum;
  */
 public class ArmoredKitInstance extends KitInstance {
 	private String color;
-	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(
-			Type.ArmorPart.class);
+	protected final Map<Type.ArmorPart, MaterialContainer> armor = new EnumMap<Type.ArmorPart, MaterialContainer>(Type.ArmorPart.class);
 
 	/**
 	 * @param name
 	 * @param delay
 	 * @param items
 	 */
-	public ArmoredKitInstance(final String name, final int delay,
-			final List<MaterialContainer> items,
-			final Map<Type.ArmorPart, MaterialContainer> armor) {
+	public ArmoredKitInstance(final String name, final int delay, final List<MaterialContainer> items, final Map<Type.ArmorPart, MaterialContainer> armor) {
 		super(name, delay, items);
-		for (final Entry<Type.ArmorPart, MaterialContainer> e : armor
-				.entrySet()) {
-			if (!e.getKey().isValid(e.getValue().getMaterial().getId())) {
+		for (final Entry<Type.ArmorPart, MaterialContainer> e : armor.entrySet()) {
+			if (!e.getKey().isValid(e.getValue().getMaterial())) {
 				continue;
 			}
 			this.armor.put(e.getKey(), e.getValue());
@@ -68,8 +64,7 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @param delay
 	 * @param player
 	 */
-	public ArmoredKitInstance(final String name, final int delay,
-			final Player player) {
+	public ArmoredKitInstance(final String name, final int delay, final Player player) {
 		super(name, delay, player);
 		final PlayerInventory inventory = player.getInventory();
 		final ItemStack boots = inventory.getBoots();
@@ -94,8 +89,7 @@ public class ArmoredKitInstance extends KitInstance {
 		super(kit.name, kit.delay, kit.items);
 	}
 
-	private ArmoredKitInstance(final KitInstance kit,
-			final Map<Type.ArmorPart, MaterialContainer> armor) {
+	private ArmoredKitInstance(final KitInstance kit, final Map<Type.ArmorPart, MaterialContainer> armor) {
 		this(kit.name, kit.delay, kit.items, armor);
 	}
 
@@ -125,16 +119,14 @@ public class ArmoredKitInstance extends KitInstance {
 	 * @return contain the Part of the armor that couldn't be setted.
 	 */
 	public ArmorPart[] setPlayerArmorParts(final Player p) {
-		final List<ArmorPart> armorParts = new ArrayList<Type.ArmorPart>(
-				ArmorPart.values().length);
+		final List<ArmorPart> armorParts = new ArrayList<Type.ArmorPart>(ArmorPart.values().length);
 		final ItemStack[] armors = new ItemStack[ArmorPart.values().length];
 		final PlayerInventory inventory = p.getInventory();
 		if (ConfigEnum.ARMOR_KIT_OVERRIDE.getBoolean()) {
 			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
 				if (toadd == null) {
-					toadd = inventory.getItem(inventory.getSize()
-							+ part.getPlaceInInventory());
+					toadd = inventory.getItem(inventory.getSize() + part.getPlaceInInventory());
 					armorParts.add(part);
 				}
 				armors[part.getPlaceInInventory()] = toadd;
@@ -142,13 +134,11 @@ public class ArmoredKitInstance extends KitInstance {
 		} else {
 			for (final ArmorPart part : ArmorPart.values()) {
 				ItemStack toadd = getArmorPart(part);
-				if (inventory.getItem(inventory.getSize()
-						+ part.getPlaceInInventory()) != null) {
+				if (inventory.getItem(inventory.getSize() + part.getPlaceInInventory()) != null) {
 					continue;
 				}
 				if (toadd == null) {
-					toadd = inventory.getItem(inventory.getSize()
-							+ part.getPlaceInInventory());
+					toadd = inventory.getItem(inventory.getSize() + part.getPlaceInInventory());
 					armorParts.add(part);
 				}
 				armors[part.getPlaceInInventory()] = toadd;
@@ -204,8 +194,7 @@ public class ArmoredKitInstance extends KitInstance {
 		final Map<String, Object> serialized = super.serialize();
 		serialized.put("color", color);
 		final Map<String, MaterialContainer> armor = new LinkedHashMap<String, MaterialContainer>();
-		for (final Entry<ArmorPart, MaterialContainer> armPart : this.armor
-				.entrySet()) {
+		for (final Entry<ArmorPart, MaterialContainer> armPart : this.armor.entrySet()) {
 			armor.put(armPart.getKey().name().toLowerCase(), armPart.getValue());
 		}
 		serialized.put("armor", armor);
@@ -226,8 +215,7 @@ public class ArmoredKitInstance extends KitInstance {
 		final Object armorObj = args.get("armor");
 		if (armorObj instanceof Map<?, ?>) {
 			for (final Entry<?, ?> entry : ((Map<?, ?>) armorObj).entrySet()) {
-				armor.put(ArmorPart.getByName(entry.getKey().toString()),
-						(MaterialContainer) entry.getValue());
+				armor.put(ArmorPart.getByName(entry.getKey().toString()), (MaterialContainer) entry.getValue());
 			}
 		}
 		final ArmoredKitInstance armKit = new ArmoredKitInstance(kit, armor);
@@ -293,10 +281,7 @@ public class ArmoredKitInstance extends KitInstance {
 	 */
 	@Override
 	public String toString() {
-		return String.format(
-				"ArmoredKitInstance [color=%s, armor=%s, toString()=%s]",
-				color, Arrays.toString(armor.entrySet().toArray()),
-				super.toString());
+		return String.format("ArmoredKitInstance [color=%s, armor=%s, toString()=%s]", color, Arrays.toString(armor.entrySet().toArray()), super.toString());
 	}
 
 }
