@@ -22,6 +22,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -82,7 +83,12 @@ public class SignEditor {
 
 	public void removeEditorSign(final Player p) {
 		this.editorBlk.setType(Material.AIR);
-		p.getInventory().setItemInHand(new ItemStack(Material.SIGN, 1));
+		final PlayerInventory inventory = p.getInventory();
+		if (inventory.getItemInHand().equals(Material.AIR)) {
+			inventory.setItemInHand(new ItemStack(Material.SIGN, 1));
+		} else {
+			inventory.addItem(new ItemStack(Material.SIGN, 1));
+		}
 	}
 
 	/**
