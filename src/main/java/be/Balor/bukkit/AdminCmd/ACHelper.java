@@ -1147,7 +1147,7 @@ public class ACHelper {
 
 		final ExtendedConfiguration commands = ExtendedConfiguration.loadConfiguration(new File(coreInstance.getDataFolder(), "commands.yml"));
 		commands.add("disabledCommands", disabled);
-		commands.add("prioritizedCommands", priority.isEmpty() ? Arrays.asList("reload", "/", "stop") : priority);
+		commands.add("prioritizedCommands", priority.isEmpty() ? Arrays.asList("reload", "/", "stop", "pl") : priority);
 		final ExConfigurationSection aliases = commands.addSection("aliases");
 		final ExConfigurationSection god = aliases.addSection("god");
 		god.add("gg", "");
