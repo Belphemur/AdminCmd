@@ -28,7 +28,10 @@ import org.bukkit.plugin.Plugin;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+
+import com.google.common.base.Joiner;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -62,13 +65,24 @@ public class HelpLister {
 	 * @param plugin
 	 */
 	public void addPlugin(final Plugin plugin) {
-		final String pName = plugin.getDescription().getName();
-		if (!plugins.containsKey(pName) && !noCmds.contains(pName)) {
-			try {
-				plugins.put(pName, new HelpList(plugin));
-			} catch (final IllegalArgumentException e) {
-				noCmds.add(pName);
+		DebugLog.beginInfo("Get help info for plugin");
+		try {
+			final String pName = plugin.getDescription().getName();
+			DebugLog.addInfo("Name : " + pName);
+			DebugLog.addInfo("Devs : " + Joiner.on(", ").join(plugin.getDescription().getAuthors()));
+			if (ACHelper.getInstance().isPluginHidden(plugin)) {
+				DebugLog.addInfo("This plugin is flagged as hidden in configuration file");
+				return;
 			}
+			if (!plugins.containsKey(pName) && !noCmds.contains(pName)) {
+				try {
+					plugins.put(pName, new HelpList(plugin));
+				} catch (final IllegalArgumentException e) {
+					noCmds.add(pName);
+				}
+			}
+		} finally {
+			DebugLog.endInfo();
 		}
 
 	}

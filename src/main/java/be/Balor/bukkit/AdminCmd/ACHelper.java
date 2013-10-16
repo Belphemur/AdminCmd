@@ -1576,4 +1576,19 @@ public class ACHelper {
 		kits.put(kit.getName(), kit);
 		fManager.saveDynamicKit(kit);
 	}
+
+	/**
+	 * Check if a plugin is set to be hidden in the configuration
+	 * 
+	 * @param plugin
+	 * @return true if need to not be displayed
+	 */
+	public boolean isPluginHidden(final Plugin plugin) {
+		for (final String blocked : ConfigEnum.PLUGIN_HIDE.getStringList()) {
+			if (blocked.equalsIgnoreCase(plugin.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

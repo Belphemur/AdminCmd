@@ -17,6 +17,7 @@
 package be.Balor.bukkit.AdminCmd;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -189,7 +190,11 @@ public enum ConfigEnum {
 			"If set to true, when a player connect, the plugin will check the permission for every activated super powers.\n"
 					+ "Then it will remove the one that he can't access anymore."),
 	INVISIBLE_ONLINE("invisible.online", false, "If set to true, you'll only be invisible to other player but will be shown in the\n"
-			+ "player list and players will be able to message you.");
+			+ "player list and players will be able to message you."),
+	PLUGIN_HIDE(
+			"plugin.hideList",
+			Arrays.asList(new String[] { "example", "test" }),
+			"Add here the name of plugins (case INsensitive) you want to hide from the /plugin command and the help");
 
 	private final String confVal;
 	private final Object defaultVal;

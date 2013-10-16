@@ -838,3 +838,10 @@ acplayerrse:
     plugin: AdminCmd
     permissions: admincmd.player.rse
     cmdname: bal_rse
+    
+acserverplugins:
+    command: pl
+    description: "List all the plugin installed on the server."
+    plugin: AdminCmd
+    permissions: admincmd.server.plugins
+    cmdname: bal_plugins

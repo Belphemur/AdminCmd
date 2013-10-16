@@ -489,3 +489,7 @@ commands:
     description: Removes a status-effect from you, or from another player.
     usage: /<command> [Effect] <-P player>
     aliases: [rse]
+  bal_plugins:
+    description: List all the plugins on the server.
+    usage: /<command>
+    aliases: [plugins, pl]

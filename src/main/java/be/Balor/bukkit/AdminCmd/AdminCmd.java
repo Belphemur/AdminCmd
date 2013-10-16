@@ -130,6 +130,7 @@ import be.Balor.Manager.Commands.Server.LockServer;
 import be.Balor.Manager.Commands.Server.MOTD;
 import be.Balor.Manager.Commands.Server.Memory;
 import be.Balor.Manager.Commands.Server.News;
+import be.Balor.Manager.Commands.Server.PluginsList;
 import be.Balor.Manager.Commands.Server.Reload;
 import be.Balor.Manager.Commands.Server.ReloadAll;
 import be.Balor.Manager.Commands.Server.ReloadTxt;
@@ -518,6 +519,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(Workbench.class);
 		cmdManager.registerCommand(Head.class);
 		cmdManager.registerCommand(RemoveStatusEffects.class);
+		cmdManager.registerCommand(PluginsList.class);
 		DebugLog.endInfo();
 	}
 
