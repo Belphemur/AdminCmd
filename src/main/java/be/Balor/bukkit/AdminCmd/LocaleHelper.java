@@ -56,6 +56,7 @@ public enum LocaleHelper {
 	TP_DIM_LIST("dimTpList", ChatColor.GREEN + "Worlds which are currently available to teleport to: " + " //n " + ChatColor.GOLD + "%list"),
 	TP_ALL("tpAll", ChatColor.GREEN + "You have been successfully teleported to " + ChatColor.GOLD + "%loc" + ChatColor.GREEN + " by " + ChatColor.GOLD
 			+ "%sender"),
+	TP_REQUEST_DENIED("tpReqDenied", ChatColor.RED + "The teleport request have been denied."),
 	BL_ITEM_ALREADY("itemBlAlready", ChatColor.RED + "This item " + ChatColor.GOLD + "%item " + ChatColor.RED + "is already blacklisted"),
 	BL_ITEM_PROBLEM("blItemSaveProb", ChatColor.GOLD + "Can't save the blackList file"),
 	BL_ITEM_NOT_BLISTED("blItemNotBl", ChatColor.RED + "This item " + ChatColor.GOLD + "%item" + ChatColor.RED + " is not black listed."),
@@ -124,10 +125,8 @@ public enum LocaleHelper {
 			+ " is not online. It's needed to check his permissions to remove his powers. Use -n to remove ALL powers of " + ChatColor.DARK_PURPLE + "%player"),
 	HEAD_SUCCESSFULL("head.successful", ChatColor.GOLD + "Successfully spawned " + ChatColor.GREEN + "%player's" + ChatColor.GOLD + " head."),
 	ERROR_HEAD_INV_FULL("head.inventoryFull", ChatColor.RED + "Your inventory is full. Please make space and try again."),
-        ERROR_EFFECT("effect.dontHaveEffect", ChatColor.RED + "You don't have %effect, or %effect does not exists."),
-        EFFECT_REMOVE_SUCCESS("effect.Successfull", ChatColor.YELLOW + "You removed " + ChatColor.GREEN + "%effect");
-        
-	
+	ERROR_EFFECT("effect.dontHaveEffect", ChatColor.RED + "You don't have %effect, or %effect does not exists."),
+	EFFECT_REMOVE_SUCCESS("effect.Successfull", ChatColor.YELLOW + "You removed " + ChatColor.GREEN + "%effect");
 
 	private final String key;
 	private final String locale;

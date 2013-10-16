@@ -29,6 +29,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.TpRequest;
 import be.Balor.Tools.Type;
 import be.Balor.Tools.CommandUtils.Users;
+import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -50,27 +51,30 @@ public class TpToggle extends TeleportCommand {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void execute(final CommandSender sender, final CommandArgs args)
-			throws ActionNotPermitedException, PlayerNotFound {
+	public void execute(final CommandSender sender, final CommandArgs args) throws ActionNotPermitedException, PlayerNotFound {
 		if (Users.isPlayer(sender)) {
 			final Player player = (Player) sender;
-			final ACPlayer acp = ACPlayer.getPlayer(player.getName());
-			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)
-					&& args.getString(0).equalsIgnoreCase("yes")) {
-				if (!PermissionManager.hasPerm(player,
-						"admincmd.tp.toggle.allow")) {
+			final ACPlayer acp = ACPlayer.getPlayer(player);
+			if (args.length >= 1 && acp.hasPower(Type.TP_REQUEST)) {
+				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.allow")) {
 					return;
 				}
 				final TpRequest request = acp.getTpRequest();
-				if (request != null) {
-					request.teleport(player);
+				if (args.getString(0).equalsIgnoreCase("yes")) {
+					if (request != null) {
+						request.teleport(player);
+						acp.removeTpRequest();
+					} else {
+						LocaleManager.sI18n(sender, "noTpRequest");
+					}
+				} else if (args.getString(0).equalsIgnoreCase("no") || args.getString(0).equalsIgnoreCase("cancel")) {
 					acp.removeTpRequest();
-				} else {
-					LocaleManager.sI18n(sender, "noTpRequest");
+					LocaleHelper.TP_REQUEST_DENIED.sendLocale(request.getToPlayer());
+					LocaleHelper.TP_REQUEST_DENIED.sendLocale(request.getFromPlayer());
 				}
+
 			} else {
-				if (!PermissionManager
-						.hasPerm(player, "admincmd.tp.toggle.use")) {
+				if (!PermissionManager.hasPerm(player, "admincmd.tp.toggle.use")) {
 					return;
 				}
 				if (acp.hasPower(Type.TP_REQUEST)) {
@@ -92,10 +96,8 @@ public class TpToggle extends TeleportCommand {
 	 */
 	@Override
 	public void registerBukkitPerm() {
-		final PermParent parent = plugin.getPermissionLinker().getPermParent(
-				"admincmd.tp.toggle.*");
-		parent.addChild("admincmd.tp.toggle.allow").addChild(
-				"admincmd.tp.toggle.use");
+		final PermParent parent = plugin.getPermissionLinker().getPermParent("admincmd.tp.toggle.*");
+		parent.addChild("admincmd.tp.toggle.allow").addChild("admincmd.tp.toggle.use");
 	}
 
 	/*
