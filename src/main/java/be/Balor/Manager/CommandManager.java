@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
@@ -39,6 +40,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.mcstats.Metrics.Graph;
 
 import be.Balor.Manager.Commands.ACCommandContainer;
@@ -54,6 +56,7 @@ import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Utils;
 import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
 import be.Balor.Tools.Configuration.ExConfigurationSection;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.Tools.Debug.ACLogger;
@@ -81,8 +84,7 @@ public class CommandManager implements CommandExecutor {
 			this.acc = acc;
 		}
 
-		protected void processCmd() throws PlayerNotFound,
-				ActionNotPermitedException {
+		protected void processCmd() throws PlayerNotFound, ActionNotPermitedException {
 			DebugLog.beginInfo(acc.getCommandName());
 			try {
 				acc.processArguments();
@@ -108,8 +110,7 @@ public class CommandManager implements CommandExecutor {
 				processCmd();
 				plotters.get(acc.getCommandClass()).increment();
 			} catch (final ConcurrentModificationException cme) {
-				ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-						corePlugin, new SyncCommand(acc));
+				ACPluginManager.getScheduler().scheduleSyncDelayedTask(corePlugin, new SyncCommand(acc));
 			} catch (final WorldNotLoaded e) {
 				String message = e.getMessage();
 				if (message == null || message == "") {
@@ -117,15 +118,13 @@ public class CommandManager implements CommandExecutor {
 				}
 				final HashMap<String, String> replace = new HashMap<String, String>();
 				replace.put("message", message);
-				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender(),
-						replace);
+				LocaleHelper.WORLD_NOT_LOADED.sendLocale(acc.getSender(), replace);
 			} catch (final PlayerNotFound e) {
 				e.getSender().sendMessage(e.getMessage());
 			} catch (final ActionNotPermitedException e) {
 				e.sendMessage();
 			} catch (final NumberFormatException e) {
-				LocaleManager.sI18n(acc.getSender(), "NaN", "number",
-						e.getLocalizedMessage());
+				LocaleManager.sI18n(acc.getSender(), "NaN", "number", e.getLocalizedMessage());
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
 				Users.broadcastMessage("[AdminCmd] " + acc.debug());
@@ -162,8 +161,7 @@ public class CommandManager implements CommandExecutor {
 				processCmd();
 			} catch (final WorldNotLoaded e) {
 				ACLogger.severe("World not Loaded", e);
-				Users.broadcastMessage("[AdminCmd] World " + e.getMessage()
-						+ " is not loaded.");
+				Users.broadcastMessage("[AdminCmd] World " + e.getMessage() + " is not loaded.");
 			} catch (final Throwable t) {
 				ACLogger.severe(acc.debug(), t);
 				Users.broadcastMessage("[AdminCmd] " + acc.debug());
@@ -215,9 +213,8 @@ public class CommandManager implements CommandExecutor {
 	private List<String> prioritizedCommands;
 	private final Map<String, CommandAlias> commandsAliasReplacer = new HashMap<String, CommandAlias>();
 	private final Map<String, Set<CommandAlias>> commandsAlias = new HashMap<String, Set<CommandAlias>>();
-	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2,
-			MAX_THREADS, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(
-					true), new ThreadPoolExecutor.CallerRunsPolicy());
+	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2, MAX_THREADS, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(true),
+			new ThreadPoolExecutor.CallerRunsPolicy());
 	private final Map<AbstractAdminCmdPlugin, Map<String, Command>> pluginCommands = new HashMap<AbstractAdminCmdPlugin, Map<String, Command>>();
 	private final Map<Class<? extends CoreCommand>, IncrementalPlotter> plotters = new HashMap<Class<? extends CoreCommand>, IncrementalPlotter>();
 	private final Set<String> commandsOnJoin = new HashSet<String>();
@@ -239,21 +236,16 @@ public class CommandManager implements CommandExecutor {
 				for (final String cmdName : commands.keySet()) {
 					final Command cmd = commands.get(cmdName);
 					if (corePlugin.getCommand(cmd.getName()) != null) {
-						final List<String> aliasesList = new ArrayList<String>(
-								cmd.getAliases());
-						aliasesList.removeAll(corePlugin.getCommand(
-								cmd.getName()).getAliases());
+						final List<String> aliasesList = new ArrayList<String>(cmd.getAliases());
+						aliasesList.removeAll(corePlugin.getCommand(cmd.getName()).getAliases());
 						aliasesList.removeAll(prioritizedCommands);
 						String aliases = "";
 						for (final String alias : aliasesList) {
 							aliases += alias + ", ";
 						}
-						if (!aliases.isEmpty()
-								&& ConfigEnum.VERBOSE.getBoolean()) {
+						if (!aliases.isEmpty() && ConfigEnum.VERBOSE.getBoolean()) {
 							Logger.getLogger("Minecraft").info(
-									"[" + corePlugin.getDescription().getName()
-											+ "] Disabled Alias(es) for "
-											+ cmd.getName() + " : " + aliases);
+									"[" + corePlugin.getDescription().getName() + "] Disabled Alias(es) for " + cmd.getName() + " : " + aliases);
 						}
 					}
 				}
@@ -268,26 +260,18 @@ public class CommandManager implements CommandExecutor {
 	 * @throws CommandDisabled
 	 */
 	private void checkCommand(final CoreCommand command) throws CommandDisabled {
-		final Map<String, Command> commands = pluginCommands.get(command
-				.getPlugin());
+		final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
 		if (commands != null) {
-			for (final String alias : commands.get(command.getCmdName())
-					.getAliases()) {
+			for (final String alias : commands.get(command.getCmdName()).getAliases()) {
 				if (disabledCommands.contains(alias)) {
-					throw new CommandDisabled(
-							"Command "
-									+ command.getCmdName()
-									+ " selected to be disabled in the configuration file.",
-							command);
+					throw new CommandDisabled("Command " + command.getCmdName() + " selected to be disabled in the configuration file.", command);
 				}
 				if (prioritizedCommands.contains(alias)) {
-					final CommandAlias cmd = new CommandAlias(
-							command.getCmdName(), alias, "");
+					final CommandAlias cmd = new CommandAlias(command.getCmdName(), alias, "");
 					cmd.setCmd(command);
 					commandsAliasReplacer.put(alias, cmd);
 				}
-				final Set<CommandAlias> commandAliases = commandsAlias
-						.get(alias);
+				final Set<CommandAlias> commandAliases = commandsAlias.get(alias);
 				if (commandAliases != null) {
 					for (final CommandAlias commandAlias : commandAliases) {
 						commandAlias.setCmd(command);
@@ -305,16 +289,14 @@ public class CommandManager implements CommandExecutor {
 	 * @param args
 	 * @return
 	 */
-	private boolean executeCommand(final CommandSender sender,
-			final CoreCommand cmd, final String[] args) {
+	private boolean executeCommand(final CommandSender sender, final CoreCommand cmd, final String[] args) {
 		ACCommandContainer container = null;
 		try {
 			if (!cmd.permissionCheck(sender)) {
 				return true;
 			}
 			if (!cmd.argsCheck(args)) {
-				if (!HelpLister.getInstance().displayExactCommandHelp(sender,
-						"AdminCmd", cmd.getCmdName())) {
+				if (!HelpLister.getInstance().displayExactCommandHelp(sender, "AdminCmd", cmd.getCmdName())) {
 					return false;
 				}
 				return true;
@@ -337,12 +319,9 @@ public class CommandManager implements CommandExecutor {
 			}
 			return true;
 		} catch (final Throwable t) {
-			ACLogger.severe(container != null ? container.debug()
-					: "The container is null", t);
-			Users.broadcastMessage("[AdminCmd] " + container != null ? container
-					.debug()
-					: cmd.getCmdName()
-							+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/");
+			ACLogger.severe(container != null ? container.debug() : "The container is null", t);
+			Users.broadcastMessage("[AdminCmd] " + container != null ? container.debug() : cmd.getCmdName()
+					+ " throw an Exception please report the log in a ticket : http://bug.admincmd.com/");
 			return false;
 		}
 	}
@@ -351,8 +330,7 @@ public class CommandManager implements CommandExecutor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command,
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 		CoreCommand cmd = null;
 		if ((cmd = registeredCommands.get(command)) != null) {
 			return executeCommand(sender, cmd, args);
@@ -378,8 +356,7 @@ public class CommandManager implements CommandExecutor {
 			final String name = split[0].substring(1).toLowerCase();
 			final PluginCommand pCmd = Bukkit.getPluginCommand(name);
 			if (pCmd != null) {
-				pCmd.execute(player, name,
-						Utils.Arrays_copyOfRange(split, 1, split.length));
+				pCmd.execute(player, name, Utils.Arrays_copyOfRange(split, 1, split.length));
 			} else {
 				processCommandString(player, command);
 			}
@@ -387,8 +364,7 @@ public class CommandManager implements CommandExecutor {
 
 	}
 
-	public boolean processCommandString(final CommandSender sender,
-			final String command) {
+	public boolean processCommandString(final CommandSender sender, final String command) {
 		final String[] split = command.split("\\s+");
 		if (split.length == 0) {
 			return false;
@@ -397,17 +373,13 @@ public class CommandManager implements CommandExecutor {
 		final CommandAlias cmdAlias = commandsAliasReplacer.get(cmdName);
 		if (cmdAlias != null) {
 			if (ConfigEnum.VERBOSE.getBoolean()) {
-				ACLogger.info("Command " + cmdName + " intercepted for "
-						+ cmdAlias);
+				ACLogger.info("Command " + cmdName + " intercepted for " + cmdAlias);
 			}
-			final String[] cmdArgsArray = cmdAlias.processArguments(Utils
-					.Arrays_copyOfRange(split, 1, split.length));
+			final String[] cmdArgsArray = cmdAlias.processArguments(Utils.Arrays_copyOfRange(split, 1, split.length));
 			final CoreCommand coreCmd = cmdAlias.getCmd();
 			if (!coreCmd.argsCheck(cmdArgsArray)) {
-				if (!HelpLister.getInstance().displayExactCommandHelp(sender,
-						"AdminCmd", coreCmd.getCmdName())) {
-					sender.sendMessage(coreCmd.getPluginCommand().getUsage()
-							.replace("<command>", cmdName));
+				if (!HelpLister.getInstance().displayExactCommandHelp(sender, "AdminCmd", coreCmd.getCmdName())) {
+					sender.sendMessage(coreCmd.getPluginCommand().getUsage().replace("<command>", cmdName));
 				}
 				return true;
 			}
@@ -455,8 +427,7 @@ public class CommandManager implements CommandExecutor {
 			return handleExistingCommand(e);
 		} catch (final CommandException e) {
 			if (ConfigEnum.VERBOSE.getBoolean()) {
-				Logger.getLogger("Minecraft").info(
-						"[AdminCmd] " + e.getMessage());
+				Logger.getLogger("Minecraft").info("[AdminCmd] " + e.getMessage());
 			}
 			return false;
 
@@ -472,8 +443,7 @@ public class CommandManager implements CommandExecutor {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private void registerCommand0(final Class<? extends CoreCommand> clazz)
-			throws InstantiationException, IllegalAccessException {
+	private void registerCommand0(final Class<? extends CoreCommand> clazz) throws InstantiationException, IllegalAccessException {
 		final CoreCommand command = clazz.newInstance();
 		command.initializeCommand();
 		checkCommand(command);
@@ -501,10 +471,8 @@ public class CommandManager implements CommandExecutor {
 				command.registerBukkitPerm();
 				command.getPluginCommand().setExecutor(this);
 				registeredCommands.put(command.getPluginCommand(), command);
-				DebugLog.INSTANCE
-						.info("Command Prioritized but already exists");
-				final IncrementalPlotter plotter = new ClassPlotter(
-						command.getClass());
+				DebugLog.INSTANCE.info("Command Prioritized but already exists");
+				final IncrementalPlotter plotter = new ClassPlotter(command.getClass());
 				graph.addPlotter(plotter);
 				plotters.put(command.getClass(), plotter);
 				return true;
@@ -521,20 +489,16 @@ public class CommandManager implements CommandExecutor {
 	 * @return true if can be disabled.
 	 */
 	private boolean checkCmdStatus(final CoreCommand command) {
-		final Map<String, Command> commands = pluginCommands.get(command
-				.getPlugin());
+		final Map<String, Command> commands = pluginCommands.get(command.getPlugin());
 		if (commands != null) {
-			for (final String alias : commands.get(command.getCmdName())
-					.getAliases()) {
+			for (final String alias : commands.get(command.getCmdName()).getAliases()) {
 				if (prioritizedCommands.contains(alias)) {
-					final CommandAlias cmd = new CommandAlias(
-							command.getCmdName(), alias, "");
+					final CommandAlias cmd = new CommandAlias(command.getCmdName(), alias, "");
 					cmd.setCmd(command);
 					commandsAliasReplacer.put(alias, cmd);
 					return false;
 				}
-				final Set<CommandAlias> commandAliases = commandsAlias
-						.get(alias);
+				final Set<CommandAlias> commandAliases = commandsAlias.get(alias);
 				if (commandAliases != null) {
 					for (final CommandAlias commandAlias : commandAliases) {
 						commandAlias.setCmd(command);
@@ -555,8 +519,7 @@ public class CommandManager implements CommandExecutor {
 		try {
 			final CoreCommand command = exception.getCommand();
 			unRegisterBukkitCommand(command.getPluginCommand());
-			HelpLister.getInstance().removeHelpEntry(
-					command.getPlugin().getPluginName(), command.getCmdName());
+			HelpLister.getInstance().removeHelpEntry(command.getPlugin().getPluginName(), command.getCmdName());
 			if (ConfigEnum.VERBOSE.getBoolean()) {
 				ACLogger.info(exception.getMessage());
 			}
@@ -571,40 +534,31 @@ public class CommandManager implements CommandExecutor {
 	 */
 	public void setCorePlugin(final AdminCmd plugin) {
 		this.corePlugin = plugin;
-		final ExtendedConfiguration cmds = FileManager.getInstance().getYml(
-				"commands");
-		disabledCommands = cmds.getStringList("disabledCommands",
-				new LinkedList<String>());
-		prioritizedCommands = cmds.getStringList("prioritizedCommands",
-				new LinkedList<String>());
+		final ExtendedConfiguration cmds = FileManager.getInstance().getYml("commands");
+		disabledCommands = cmds.getStringList("disabledCommands", new LinkedList<String>());
+		prioritizedCommands = cmds.getStringList("prioritizedCommands", new LinkedList<String>());
 		commandsOnJoin.addAll(cmds.getStringList("onNewJoin"));
-		final ExConfigurationSection aliases = cmds
-				.getConfigurationSection("aliases");
+		final ExConfigurationSection aliases = cmds.getConfigurationSection("aliases");
 		for (final String command : aliases.getKeys(false)) {
 			Set<CommandAlias> setAliasCmd = commandsAlias.get(command);
 			if (setAliasCmd == null) {
 				setAliasCmd = new HashSet<CommandAlias>();
 				commandsAlias.put(command, setAliasCmd);
 			}
-			final ConfigurationSection aliasSection = aliases
-					.getConfigurationSection(command);
-			for (final Entry<String, Object> alias : aliasSection.getValues(
-					false).entrySet()) {
+			final ConfigurationSection aliasSection = aliases.getConfigurationSection(command);
+			for (final Entry<String, Object> alias : aliasSection.getValues(false).entrySet()) {
 				String params;
 				final Object value = alias.getValue();
 				if (value instanceof ConfigurationSection) {
 					final StringBuffer buffer = new StringBuffer();
-					for (final Entry<String, Object> entry : ((ConfigurationSection) alias)
-							.getValues(false).entrySet()) {
-						buffer.append(entry.getKey()).append(':')
-								.append(entry.getValue());
+					for (final Entry<String, Object> entry : ((ConfigurationSection) alias).getValues(false).entrySet()) {
+						buffer.append(entry.getKey()).append(':').append(entry.getValue());
 					}
 					params = buffer.toString();
 				} else {
 					params = value.toString();
 				}
-				final CommandAlias commandAlias = new CommandAlias(command,
-						alias.getKey(), params);
+				final CommandAlias commandAlias = new CommandAlias(command, alias.getKey(), params);
 				commandsAliasReplacer.put(alias.getKey(), commandAlias);
 
 				setAliasCmd.add(commandAlias);
@@ -633,10 +587,11 @@ public class CommandManager implements CommandExecutor {
 	 * @param pCmd
 	 */
 	private void unRegisterBukkitCommand(final PluginCommand pCmd) {
-		final CommandMap commandMap = FieldUtils.getAttribute(corePlugin
-				.getServer().getPluginManager(), "commandMap");
-		final HashMap<String, Command> knownCommands = FieldUtils.getAttribute(
-				commandMap, "knownCommands");
+		final Server svr = ACPluginManager.getServer();
+		final FuzzyFieldContract contract = FuzzyFieldContract.newBuilder().declaringClassDerivedOf(PluginManager.class).typeDerivedOf(CommandMap.class)
+				.build();
+		final CommandMap commandMap = FieldUtils.getAttribute(svr.getPluginManager(), contract);
+		final HashMap<String, Command> knownCommands = FieldUtils.getAttribute(commandMap, "knownCommands");
 		PluginCommand cmd;
 		final List<String> aliases = new ArrayList<String>();
 		try {
@@ -674,8 +629,7 @@ public class CommandManager implements CommandExecutor {
 	 *            plugin that want the command to be unregister. It has to be
 	 *            the same that belong to the command.
 	 */
-	public boolean unRegisterCommand(final Class<? extends CoreCommand> clazz,
-			final AbstractAdminCmdPlugin plugin) {
+	public boolean unRegisterCommand(final Class<? extends CoreCommand> clazz, final AbstractAdminCmdPlugin plugin) {
 		try {
 			final CoreCommand command = clazz.newInstance();
 			if (plugin.equals(command.getPlugin())) {
@@ -702,8 +656,7 @@ public class CommandManager implements CommandExecutor {
 
 	private void removeFromAliasReplacer(final CoreCommand command) {
 		final List<String> keysToRemove = new ArrayList<String>();
-		for (final Entry<String, CommandAlias> entry : commandsAliasReplacer
-				.entrySet()) {
+		for (final Entry<String, CommandAlias> entry : commandsAliasReplacer.entrySet()) {
 			if (entry.getValue().getCmd().equals(command)) {
 				keysToRemove.add(entry.getKey());
 			}
