@@ -60,13 +60,13 @@ public class TpToggle extends TeleportCommand {
 					return;
 				}
 				final TpRequest request = acp.getTpRequest();
+				if (request == null) {
+					LocaleManager.sI18n(sender, "noTpRequest");
+					return;
+				}
 				if (args.getString(0).equalsIgnoreCase("yes")) {
-					if (request != null) {
-						request.teleport(player);
-						acp.removeTpRequest();
-					} else {
-						LocaleManager.sI18n(sender, "noTpRequest");
-					}
+					request.teleport(player);
+					acp.removeTpRequest();
 				} else if (args.getString(0).equalsIgnoreCase("no") || args.getString(0).equalsIgnoreCase("cancel")) {
 					acp.removeTpRequest();
 					LocaleHelper.TP_REQUEST_DENIED.sendLocale(request.getToPlayer());
