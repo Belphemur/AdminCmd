@@ -47,6 +47,7 @@ import be.Balor.Listeners.Features.ACResetPowerListener;
 import be.Balor.Listeners.Features.ACRespawnWorldFeature;
 import be.Balor.Listeners.Features.ACSignEditListener;
 import be.Balor.Listeners.Features.ACSuperBlacklistListener;
+import be.Balor.Listeners.Features.ACUnknownCommandListener;
 import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Commands.Home.DeleteHome;
@@ -897,6 +898,9 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.REMOVE_SP_PERMISSION.getBoolean()) {
 			pm.registerEvents(new ACRemoveNoAccessPowers(), this);
 		}
+                if(ConfigEnum.USE_UNKNOWN_COMNAD.getBoolean()) {
+                        pm.registerEvents(new ACUnknownCommandListener(), this);
+                }
 		DebugLog.endInfo();
 	}
 }
