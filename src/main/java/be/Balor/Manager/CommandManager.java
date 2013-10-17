@@ -597,7 +597,7 @@ public class CommandManager implements CommandExecutor {
 		try {
 			cmd = (PluginCommand) knownCommands.get(pCmd.getName());
 			if (pCmd == cmd) {
-				DebugLog.INSTANCE.info("Remove Command " + pCmd.getName());
+				DebugLog.addInfo("Remove Command " + pCmd.getName());
 				knownCommands.remove(pCmd.getName());
 				aliases.addAll(pCmd.getAliases());
 				pCmd.unregister(commandMap);
@@ -605,7 +605,7 @@ public class CommandManager implements CommandExecutor {
 				return;
 			}
 		} catch (final ClassCastException e) {
-			DebugLog.INSTANCE.log(Level.INFO, "Not a Plugin Command", e);
+			DebugLog.addException("Not a Plugin Command", e);
 		}
 		for (final String alias : aliases) {
 			try {
