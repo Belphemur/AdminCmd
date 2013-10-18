@@ -127,15 +127,6 @@ public enum ConfigEnum {
 			"tpRequestTimeOutInMinutes",
 			1,
 			"How much minute before a tp request become invalid."),
-	VERBOSE(
-			"verboseLog",
-			false,
-			"Disable some \"debug\" message when launching the plugin\n"
-					+ "(change it to true only if you have a good reason to do it.)"),
-	LOG_PM(
-			"logPrivateMessages",
-			true,
-			"Private message send with command /msg are logged in the server.log"),
 	BSRELOAD(
 			"broadcastServerReload",
 			true,
@@ -183,7 +174,6 @@ public enum ConfigEnum {
 			"useDisplayName",
 			true,
 			"Use the DisplayName of the player when using the player name"),
-	DEBUG("debug", false, "To activate the debug log (debug.log file)"),
 	GSPAWN(
 			"globalRespawnSetting",
 			"globalSpawn",
@@ -198,10 +188,6 @@ public enum ConfigEnum {
 			"teleportDelay",
 			0,
 			"Delay before teleporting (Spawn/Home) in ticks (20 Ticks = 1 Sec). 0 for no delay."),
-	LOG_CMD(
-			"logAllCmd",
-			false,
-			"To log all command in the console and server.log"),
 	JQMSG(
 			"useJoinQuitMsg",
 			true,
@@ -316,10 +302,6 @@ public enum ConfigEnum {
 			"editSignRightClick",
 			true,
 			"When true, when you right click a sign, you'll be able to edit it. If you delete every lines, the sign will be deleted and droped."),
-	LOG_SAME_IP(
-			"logSameIP",
-			false,
-			"When set to true all players joining from the same IP will be loged in the console and a message is sent to all players with the permission: admincmd.spec.ipbroadcast"),
 	LISTER_ITEMS(
 			"nbItemsPerPageInList",
 			8,
@@ -418,10 +400,28 @@ public enum ConfigEnum {
 			"command.unknown.bypassCommands",
 			Arrays.asList(new String[] { "example", "test" }),
 			"Add here commands that should not be checked from the unknownCommand feature (Case sensitive). Usefull for plugins like MakeYourOwnCommands, MCDocs or MyCommand."),
-	LOG_CMD_BLOCK(
-			"command.cmdblock.log",
+	LOG_CMD(
+			"log.command.all",
+			false,
+			"To log all command in the console and server.log"),
+	DONT_LOG_CMD_BLK(
+			"log.command.not-cmdblock",
 			true,
-			"If set to false, AdminCmd will disable the log of any command executed by a command block in the server.log");
+			"Don't log command executed by command blocks."),
+	VERBOSE(
+			"log.verbose",
+			false,
+			"Disable some \"debug\" message when launching the plugin\n"
+					+ "(change it to true only if you have a good reason to do it.)"),
+	LOG_PM(
+			"log.pm",
+			true,
+			"Private message send with command /msg are logged in the server.log"),
+	DEBUG("log.debug", false, "To activate the debug log (debug.log file)"),
+	LOG_SAME_IP(
+			"log.ip.same",
+			false,
+			"When set to true all players joining from the same IP will be loged in the console and a message is sent to all players with the permission: admincmd.spec.ipbroadcast"), ;
 
 	private final String confVal;
 	private final Object defaultVal;
@@ -506,10 +506,45 @@ public enum ConfigEnum {
 		ConfigEnum.config = config;
 		ConfigEnum.config.options().copyDefaults(true).header(getHeader());
 		ConfigEnum.config.addDefaults(getDefaultvalues());
+		updateConfig();
 		try {
 			ConfigEnum.save();
 		} catch (final IOException e) {
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private static void updateConfig() {
+		if (ConfigEnum.getConfig().contains("logAllCmd")) {
+			ConfigEnum.LOG_CMD
+					.setValue(ConfigEnum.getConfig().get("logAllCmd"));
+			ConfigEnum.getConfig().remove("logAllCmd");
+		}
+
+		if (ConfigEnum.getConfig().contains("logPrivateMessages")) {
+			ConfigEnum.LOG_PM.setValue(ConfigEnum.getConfig().get(
+					"logPrivateMessages"));
+			ConfigEnum.getConfig().remove("logPrivateMessages");
+		}
+
+		if (ConfigEnum.getConfig().contains("logSameIP")) {
+			ConfigEnum.LOG_SAME_IP.setValue(ConfigEnum.getConfig().get(
+					"logSameIP"));
+			ConfigEnum.getConfig().remove("logSameIP");
+		}
+
+		if (ConfigEnum.getConfig().contains("verbose")) {
+			ConfigEnum.VERBOSE.setValue(ConfigEnum.getConfig().get("verbose"));
+			ConfigEnum.getConfig().remove("verbose");
+		}
+
+		if (ConfigEnum.getConfig().contains("debug")) {
+			ConfigEnum.DEBUG.setValue(ConfigEnum.getConfig().get("debug"));
+			ConfigEnum.getConfig().remove("debug");
+		}
+
 	}
 
 	/**
