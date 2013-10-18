@@ -55,7 +55,7 @@ public class ACUnknownCommandListener implements Listener {
 	}
 
 	private boolean isCmdRegistered(final String name) {
-		if (ConfigEnum.UNKNOWN_COMMAND_BYPASS.getStringList().contains(name)) {
+		if (ConfigEnum.UNKNOWN_CMD_LIST.getStringList().contains(name)) {
 			return true;
 		}
 

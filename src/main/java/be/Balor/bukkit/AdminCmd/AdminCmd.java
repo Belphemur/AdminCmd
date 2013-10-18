@@ -898,7 +898,7 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		if (ConfigEnum.REMOVE_SP_PERMISSION.getBoolean()) {
 			pm.registerEvents(new ACRemoveNoAccessPowers(), this);
 		}
-                if(ConfigEnum.USE_UNKNOWN_COMNAD.getBoolean()) {
+                if(ConfigEnum.USE_UNKNOWN_CMD.getBoolean()) {
                         pm.registerEvents(new ACUnknownCommandListener(), this);
                 }
 		DebugLog.endInfo();

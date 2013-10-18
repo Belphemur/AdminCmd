@@ -410,11 +410,11 @@ public enum ConfigEnum {
 			"plugin.hideList",
 			Arrays.asList(new String[] { "example", "test" }),
 			"Add here the name of plugins (case INsensitive) you want to hide from the /plugin command and the help"),
-	USE_UNKNOWN_COMNAD(
+	USE_UNKNOWN_CMD(
 			"command.unknown.enable",
 			true,
 			"Enable the change of the default unknown command message."),
-	UNKNOWN_COMMAND_BYPASS(
+	UNKNOWN_CMD_LIST(
 			"command.unknown.bypassCommands",
 			Arrays.asList(new String[] { "example", "test" }),
 			"Add here commands that should not be checked from the unknownCommand feature (Case sensitive). Usefull for plugins like MakeYourOwnCommands, MCDocs or MyCommand."),
