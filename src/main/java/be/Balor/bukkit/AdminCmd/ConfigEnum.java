@@ -535,9 +535,10 @@ public enum ConfigEnum {
 			ConfigEnum.getConfig().remove("logSameIP");
 		}
 
-		if (ConfigEnum.getConfig().contains("verbose")) {
-			ConfigEnum.VERBOSE.setValue(ConfigEnum.getConfig().get("verbose"));
-			ConfigEnum.getConfig().remove("verbose");
+		if (ConfigEnum.getConfig().contains("verboseLog")) {
+			ConfigEnum.VERBOSE.setValue(ConfigEnum.getConfig()
+					.get("verboseLog"));
+			ConfigEnum.getConfig().remove("verboseLog");
 		}
 
 		if (ConfigEnum.getConfig().contains("debug")) {
