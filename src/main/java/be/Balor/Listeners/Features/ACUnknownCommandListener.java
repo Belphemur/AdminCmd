@@ -1,18 +1,13 @@
 package be.Balor.Listeners.Features;
 
-import org.bukkit.Server;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.plugin.PluginManager;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
-import be.Balor.Tools.Compatibility.Reflect.Fuzzy.FuzzyFieldContract;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 
@@ -22,16 +17,9 @@ public class ACUnknownCommandListener implements Listener {
 
 	public ACUnknownCommandListener() {
 		try {
-			this.cmdMap = getCommandMap();
+			this.cmdMap = FieldUtils.getCommandMap();
 		} catch (final Exception e) {
 		}
-	}
-
-	private SimpleCommandMap getCommandMap() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException /*    */{
-		final Server svr = ACPluginManager.getServer();
-		final FuzzyFieldContract contract = FuzzyFieldContract.newBuilder().declaringClassDerivedOf(PluginManager.class).typeDerivedOf(CommandMap.class)
-				.build();
-		return FieldUtils.getAttribute(svr.getPluginManager(), contract);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -49,7 +37,8 @@ public class ACUnknownCommandListener implements Listener {
 		final Player player = event.getPlayer();
 		if (!isCmdRegistered(cmd)) {
 			LocaleHelper.UNKNOWN_COMMAND.sendLocale(player);
-			System.out.println(player.getName() + " issued server command: " + event.getMessage());
+			System.out.println(player.getName() + " issued server command: "
+					+ event.getMessage());
 			event.setCancelled(true);
 		}
 	}
