@@ -16,6 +16,7 @@
  ************************************************************************/
 package be.Balor.Manager.Commands;
 
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -64,7 +65,9 @@ public class ACCommandContainer {
 	 * @throws PlayerNotFound
 	 */
 	public void execute() throws PlayerNotFound, ActionNotPermitedException {
-		if (ConfigEnum.LOG_CMD.getBoolean()) {
+		if (ConfigEnum.LOG_CMD.getBoolean()
+				|| !(sender instanceof BlockCommandSender && ConfigEnum.DONT_LOG_CMD_BLK
+						.getBoolean())) {
 			String name = "Console";
 			if (sender instanceof Player) {
 				name = ((Player) sender).getName();
