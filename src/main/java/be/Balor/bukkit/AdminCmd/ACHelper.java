@@ -1256,6 +1256,12 @@ public class ACHelper {
 		final ExtendedConfiguration commands = ExtendedConfiguration
 				.loadConfiguration(new File(coreInstance.getDataFolder(),
 						"commands.yml"));
+		final StringBuffer buffer = new StringBuffer();
+		buffer.append("disabledCommands: \t\t put here the AdminCmd command you want to disable. Any alias will work.\n");
+		buffer.append("prioritizedCommands: \t\t commands that you want AdminCmd to take over any other plugins.\n");
+		buffer.append("aliases: \t\t you can create new command alias for any AdminCmd command. You can also set some argument to it.\n");
+		buffer.append("dontLogCommands: \t\t these command won't be logged in the server.log when you use the chose to log the command in the configuration file.\n");
+		commands.options().copyHeader(true).header(buffer.toString());
 		commands.add("disabledCommands", disabled);
 		commands.add(
 				"prioritizedCommands",
@@ -1270,6 +1276,8 @@ public class ACHelper {
 		final ExConfigurationSection egg = aliases.addSection("egg");
 		egg.add("grenade", "-E ExplosionEgg");
 		commands.add("onNewJoin", Arrays.asList("/kit dirt", "/motd"));
+		commands.add("dontLogCommands", Arrays.asList("msg", "reply"));
+
 		try {
 			commands.save();
 		} catch (final IOException e) {
