@@ -20,6 +20,7 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import be.Balor.Manager.CommandManager;
 import be.Balor.Manager.Exceptions.ActionNotPermitedException;
 import be.Balor.Manager.Exceptions.PlayerNotFound;
 import be.Balor.Tools.Debug.ACLogger;
@@ -65,6 +66,17 @@ public class ACCommandContainer {
 	 * @throws PlayerNotFound
 	 */
 	public void execute() throws PlayerNotFound, ActionNotPermitedException {
+		logCommand();
+		cmd.execute(sender, args);
+	}
+
+	/**
+	 * 
+	 */
+	public void logCommand() {
+		if (CommandManager.getInstance().isDontLogCmd(cmd)) {
+			return;
+		}
 		if (ConfigEnum.LOG_CMD.getBoolean()
 				&& !(sender instanceof BlockCommandSender && ConfigEnum.DONT_LOG_CMD_BLK
 						.getBoolean())) {
@@ -75,7 +87,6 @@ public class ACCommandContainer {
 			ACLogger.info(name + " [CMD: " + cmd.getCmdName() + "] (ARGS:"
 					+ args.toString() + ")");
 		}
-		cmd.execute(sender, args);
 	}
 
 	/**

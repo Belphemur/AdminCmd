@@ -213,6 +213,8 @@ public class CommandManager implements CommandExecutor {
 	private List<String> disabledCommands;
 
 	private List<String> prioritizedCommands;
+	private List<String> dontLogNames;
+	private final Set<CoreCommand> dontLogCmds = new HashSet<CoreCommand>();
 	private final Map<String, CommandAlias> commandsAliasReplacer = new HashMap<String, CommandAlias>();
 	private final Map<String, Set<CommandAlias>> commandsAlias = new HashMap<String, Set<CommandAlias>>();
 	private final ThreadPoolExecutor threads = new ThreadPoolExecutor(2,
@@ -273,6 +275,10 @@ public class CommandManager implements CommandExecutor {
 		if (commands != null) {
 			for (final String alias : commands.get(command.getCmdName())
 					.getAliases()) {
+				if (dontLogNames.contains(alias)) {
+					DebugLog.addInfo("Command shouldn't be logged in server.log");
+					dontLogCmds.add(command);
+				}
 				if (disabledCommands.contains(alias)) {
 					throw new CommandDisabled(
 							"Command "
@@ -577,6 +583,7 @@ public class CommandManager implements CommandExecutor {
 				new LinkedList<String>());
 		prioritizedCommands = cmds.getStringList("prioritizedCommands",
 				new LinkedList<String>());
+		dontLogNames = cmds.getStringList("dontLogCommands");
 		commandsOnJoin.addAll(cmds.getStringList("onNewJoin"));
 		final ExConfigurationSection aliases = cmds
 				.getConfigurationSection("aliases");
@@ -712,4 +719,15 @@ public class CommandManager implements CommandExecutor {
 		}
 	}
 
+	/**
+	 * Check if the command is explicitly asked to not be logged in the
+	 * server.log
+	 * 
+	 * @param cmd
+	 *            the command to check
+	 * @return true if it don't need to be logged else false
+	 */
+	public boolean isDontLogCmd(final CoreCommand cmd) {
+		return dontLogCmds.contains(cmd);
+	}
 }
