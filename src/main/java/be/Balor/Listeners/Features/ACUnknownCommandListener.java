@@ -22,11 +22,8 @@ public class ACUnknownCommandListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onUnknownCommand(final PlayerCommandPreprocessEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
 
 		String cmd = event.getMessage();
 		if (cmd.charAt(0) == '/') {
