@@ -61,25 +61,25 @@ public class Spawn extends SpawnCommand {
 	@Override
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
-		if (args.length >= 1 && Users.isPlayer(sender, true)) {
-			final ACWorld w = ACWorld.getWorld(args.getString(0));
-			final Player target = (Player) sender;
+		if (!Users.isPlayer(sender)) {
+			return;
+		}
+
+		final Player target = (Player) sender;
+		ACWorld w = ACWorld.getWorld(target.getWorld());
+		if (args.length >= 1) {
+			w = ACWorld.getWorld(args.getString(0));
 			if (!target.getWorld().equals(w.getHandle())
 					&& !PermissionManager.hasPerm(sender, "admincmd.spawn.tp."
 							+ w.getName().toLowerCase())) {
 				return;
 			}
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(),
-					new DelayedTeleport(target, sender, w),
-					ConfigEnum.TP_DELAY.getLong());
-		} else if (Users.isPlayer(sender, true)) {
-			final Player target = (Player) sender;
-			ACPluginManager.getScheduler().scheduleSyncDelayedTask(
-					ACHelper.getInstance().getCoreInstance(),
-					new DelayedTeleport(target, sender, null),
-					ConfigEnum.TP_DELAY.getLong());
+
 		}
+		ACPluginManager.getScheduler().scheduleSyncDelayedTask(
+				ACHelper.getInstance().getCoreInstance(),
+				new DelayedTeleport(target, sender, w),
+				ConfigEnum.TP_DELAY.getLong());
 	}
 
 	/*
