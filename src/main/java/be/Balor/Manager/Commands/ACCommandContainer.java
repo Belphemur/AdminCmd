@@ -66,7 +66,7 @@ public class ACCommandContainer {
 	 */
 	public void execute() throws PlayerNotFound, ActionNotPermitedException {
 		if (ConfigEnum.LOG_CMD.getBoolean()
-				|| !(sender instanceof BlockCommandSender && ConfigEnum.DONT_LOG_CMD_BLK
+				&& !(sender instanceof BlockCommandSender && ConfigEnum.DONT_LOG_CMD_BLK
 						.getBoolean())) {
 			String name = "Console";
 			if (sender instanceof Player) {
