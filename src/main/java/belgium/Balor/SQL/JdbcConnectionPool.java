@@ -208,7 +208,7 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 	 */
 	@Override
 	public Connection getConnection() throws SQLException {
-		DebugLog.addInfo("Connection asked");
+		DebugLog.beginInfo("Connection asked");
 		DebugLog.addInfo("Active connections : " + activeConnections.get());
 		DebugLog.addInfo("Asked by : " + Thread.currentThread());
 		DebugLog.addInfo("Called by :\t"
