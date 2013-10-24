@@ -288,8 +288,10 @@ public abstract class Database {
 	 */
 	public boolean checkTable(final String table) {
 		DatabaseMetaData dbm = null;
+		final Connection connection = this.getConnection();
 		try {
-			dbm = this.getConnection().getMetaData();
+
+			dbm = connection.getMetaData();
 
 			final ResultSet tables = dbm.getTables(null, null, table, null);
 			if (tables.next()) {
@@ -301,6 +303,11 @@ public abstract class Database {
 			this.writeError("Failed to check if table \"" + table
 					+ "\" exists: " + e.getMessage(), true);
 			return false;
+		} finally {
+			try {
+				this.closeStatement(connection.createStatement());
+			} catch (final SQLException e) {
+			}
 		}
 	}
 
