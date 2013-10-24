@@ -77,6 +77,7 @@ public class DebugLog {
 	public static final String BEGIN_PREFIX = "[BEGIN] ";
 	public static final String END_PREFIX = "[END] ";
 	private static final ThreadLocal<Stack<DebugInfo>> debugInfos = new DebugThreadLocale();
+	private static boolean disabled = false;
 	static {
 		INSTANCE.setUseParentHandlers(false);
 		INSTANCE.setLevel(Level.ALL);
@@ -112,6 +113,7 @@ public class DebugLog {
 			h.close();
 			INSTANCE.removeHandler(h);
 		}
+		disabled = true;
 	}
 
 	/**
@@ -120,6 +122,9 @@ public class DebugLog {
 	 * @param msg
 	 */
 	public static void beginInfo(final String msg) {
+		if (disabled) {
+			return;
+		}
 		debugInfos.get().add(new DebugInfo(msg));
 		INSTANCE.info(getSpaces() + BEGIN_PREFIX + msg);
 
@@ -149,6 +154,9 @@ public class DebugLog {
 	 *            level of the log
 	 */
 	public static void addInfo(final String message, final Level level) {
+		if (disabled) {
+			return;
+		}
 		INSTANCE.log(level, getSpaces(1) + message);
 	}
 
@@ -171,6 +179,9 @@ public class DebugLog {
 	 *            the exception
 	 */
 	public static void addException(final String message, final Exception thrown) {
+		if (disabled) {
+			return;
+		}
 		INSTANCE.log(Level.SEVERE, getSpaces(1) + message, thrown);
 	}
 
@@ -178,6 +189,9 @@ public class DebugLog {
 	 * End logging a block of code
 	 */
 	public static void endInfo() {
+		if (disabled) {
+			return;
+		}
 		try {
 			final String spaces = getSpaces();
 			final DebugInfo info = debugInfos.get().pop();
