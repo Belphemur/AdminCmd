@@ -273,11 +273,11 @@ public class SQLPlayer extends ACPlayer {
 	@Override
 	public void setHome(final String home, final Location loc) {
 		homes.put(home, loc);
-
+		final PreparedStatement insertHome = Database.DATABASE
+				.prepare("REPLACE INTO `ac_homes` (`name`, `player_id`, `world`, `x`, `y`, `z`, `yaw`, `pitch`)"
+						+ " VALUES (?,?,?,?,?,?,?,?)");
 		try {
-			final PreparedStatement insertHome = Database.DATABASE
-					.prepare("REPLACE INTO `ac_homes` (`name`, `player_id`, `world`, `x`, `y`, `z`, `yaw`, `pitch`)"
-							+ " VALUES (?,?,?,?,?,?,?,?)");
+
 			insertHome.setString(1, home);
 			insertHome.setLong(2, id);
 			insertHome.setString(3, loc.getWorld().getName());
@@ -290,6 +290,8 @@ public class SQLPlayer extends ACPlayer {
 
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting the home in the DB", e);
+		} finally {
+			Database.DATABASE.closePrepStmt(insertHome);
 		}
 	}
 
@@ -311,6 +313,8 @@ public class SQLPlayer extends ACPlayer {
 
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting the home from the DB", e);
+			} finally {
+				Database.DATABASE.closePrepStmt(deleteHome);
 			}
 
 		}
@@ -366,6 +370,8 @@ public class SQLPlayer extends ACPlayer {
 			insertInfo.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with insert info in the DB", e);
+		} finally {
+			Database.DATABASE.closePrepStmt(insertInfo);
 		}
 
 	}
@@ -387,6 +393,8 @@ public class SQLPlayer extends ACPlayer {
 
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting the info from the DB", e);
+			} finally {
+				Database.DATABASE.closePrepStmt(deleteInfo);
 			}
 
 		}
@@ -444,6 +452,8 @@ public class SQLPlayer extends ACPlayer {
 			updateLastLoc.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with updating lastLoc in the DB", e);
+		} finally {
+			Database.DATABASE.closePrepStmt(updateLastLoc);
 		}
 
 	}
@@ -485,6 +495,8 @@ public class SQLPlayer extends ACPlayer {
 			insertPower.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting power in the DB", e);
+		} finally {
+			Database.DATABASE.closePrepStmt(insertPower);
 		}
 	}
 
@@ -508,6 +520,8 @@ public class SQLPlayer extends ACPlayer {
 			insertPower.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting power in the DB", e);
+		} finally {
+			Database.DATABASE.closePrepStmt(insertPower);
 		}
 	}
 
@@ -549,6 +563,8 @@ public class SQLPlayer extends ACPlayer {
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting customPower in the DB",
 						e);
+			} finally {
+				Database.DATABASE.closePrepStmt(deletePower);
 			}
 
 		}
@@ -592,6 +608,8 @@ public class SQLPlayer extends ACPlayer {
 				deletePower.executeUpdate();
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting power from the DB", e);
+			} finally {
+				Database.DATABASE.closePrepStmt(deletePower);
 			}
 
 		}
@@ -634,6 +652,8 @@ public class SQLPlayer extends ACPlayer {
 			} catch (final SQLException e) {
 				ACLogger.severe(
 						"Problem with deleting super powers from the DB", e);
+			} finally {
+				Database.DATABASE.closePrepStmt(deleteSuperPowers);
 			}
 
 		}
@@ -660,6 +680,8 @@ public class SQLPlayer extends ACPlayer {
 			insertKitUse.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting kit_use in the DB", e);
+		} finally {
+			Database.DATABASE.closePrepStmt(insertKitUse);
 		}
 
 	}
