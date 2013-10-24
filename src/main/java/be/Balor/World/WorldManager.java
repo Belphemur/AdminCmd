@@ -37,7 +37,8 @@ public class WorldManager {
 	/**
 	 * Cache of all loaded ACWorld(s)
 	 */
-	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker().makeMap();
+	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
+			.makeMap();
 	private AbstractWorldFactory worldFactory;
 	private static final WorldManager INSTANCE = new WorldManager();
 
@@ -115,7 +116,8 @@ public class WorldManager {
 				// for worlds beginning with 'name'
 				// This way it avoids getting requests for 'world' mixed up with
 				// 'world_nether'
-				final String found = Str.matchString(worlds.keySet(), name.toUpperCase());
+				final String found = Str.matchString(worlds.keySet(),
+						name.toUpperCase());
 				if (found != null) {
 					return worlds.get(found.toUpperCase());
 				}
@@ -126,12 +128,12 @@ public class WorldManager {
 	}
 
 	ACWorld demandACWorld(final World world) {
-		final String name = world.getName();
+		final String name = world.getName().toUpperCase();
 		ACWorld result = worlds.get(name);
 		if (result == null) {
 			result = worldFactory.createWorld(world);
 			addWorld(result);
-			result = worlds.get(name.toUpperCase());
+			result = worlds.get(name);
 		}
 		return result;
 	}
