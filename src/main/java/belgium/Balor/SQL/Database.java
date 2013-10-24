@@ -27,13 +27,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 
-import be.Balor.Player.sql.SQLPlayer;
-import be.Balor.Player.sql.SQLPlayerFactory;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ACHelper;
@@ -321,54 +318,6 @@ public abstract class Database {
 	 * @return type of the database
 	 */
 	public abstract DatabaseType getType();
-
-	/**
-	 * Check if the connection is valid
-	 * 
-	 * @return true if it is
-	 */
-	private boolean isConnectionValid() {
-
-		if (this.getConnection() != null) {
-			try {
-				return !getConnection().isClosed()
-						&& getConnection().isValid(3);
-			} catch (final SQLException e) {
-				DebugLog.INSTANCE.log(Level.INFO,
-						"Problem when checking connection state", e);
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Try to reconnect.
-	 */
-	private void reconnect() {
-		try {
-			this.getConnection().close();
-		} catch (final SQLException e) {
-		}
-		try {
-			open();
-			SQLPlayer.initPrepStmt();
-			SQLPlayerFactory.initPrepStmt();
-		} catch (final SQLException e) {
-			writeError(
-					"Problem while reconnection to the database :\n"
-							+ e.getMessage(), true);
-		}
-	}
-
-	/**
-	 * Check if the connection is valid, if not try to reconnect.
-	 */
-	public void autoReconnect() {
-		if (!isConnectionValid()) {
-			reconnect();
-		}
-	}
 
 	/**
 	 * Close a prepared statement

@@ -64,9 +64,10 @@ public class MySQL extends Database {
 	public ResultSet query(final String query) {
 		Statement statement = null;
 		ResultSet result = null;
+		Connection connection = null;
 		try {
-			autoReconnect();
-			statement = this.getConnection().createStatement();
+			connection = this.getConnection();
+			statement = connection.createStatement();
 
 			switch (Statements.getStatement(query)) {
 			case SELECT:
@@ -96,6 +97,15 @@ public class MySQL extends Database {
 		} catch (final SQLException e) {
 			this.writeError("SQL exception in query(): " + e.getMessage(),
 					false);
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (final Exception e) {
+				DebugLog.addException(
+						"Problem closing connection of the query", e);
+			}
 		}
 		return result;
 	}
@@ -142,7 +152,6 @@ public class MySQL extends Database {
 	public PreparedStatement prepare(final String query, final Connection conn) {
 		try {
 			final PreparedStatement ps;
-			autoReconnect();
 			if (Statements.getStatement(query) == Statements.INSERT) {
 				ps = conn.prepareStatement(query,
 						PreparedStatement.RETURN_GENERATED_KEYS);
@@ -181,6 +190,9 @@ public class MySQL extends Database {
 	 */
 	@Override
 	public void closePrepStmt(final PreparedStatement prepStmt) {
+		if (prepStmt == null) {
+			return;
+		}
 		try {
 			prepStmt.close();
 		} catch (final Exception e) {

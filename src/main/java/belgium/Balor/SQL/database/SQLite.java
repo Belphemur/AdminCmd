@@ -200,6 +200,9 @@ public class SQLite extends Database {
 	 */
 	@Override
 	public void closePrepStmt(final PreparedStatement prepStmt) {
+		if (prepStmt == null) {
+			return;
+		}
 		try {
 			prepStmt.close();
 		} catch (final SQLException e) {
