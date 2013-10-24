@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 import javax.sql.ConnectionEvent;
@@ -78,7 +79,7 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 	private PrintWriter logWriter;
 	private int maxConnections = DEFAULT_MAX_CONNECTIONS;
 	private int timeout = DEFAULT_TIMEOUT;
-	private int activeConnections;
+	private final AtomicInteger activeConnections = new AtomicInteger();;
 	private boolean isDisposed;
 
 	protected JdbcConnectionPool(final ConnectionPoolDataSource dataSource) {
@@ -208,7 +209,7 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 	@Override
 	public Connection getConnection() throws SQLException {
 		DebugLog.addInfo("Connection asked");
-		DebugLog.addInfo("Active connections : " + activeConnections);
+		DebugLog.addInfo("Active connections : " + activeConnections.get());
 		DebugLog.addInfo("Asked by : " + Thread.currentThread());
 		DebugLog.addInfo("Called by :\t"
 				+ Thread.currentThread().getStackTrace()[4].toString());
@@ -216,7 +217,7 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 			final long max = System.currentTimeMillis() + timeout * 1000;
 			do {
 				synchronized (this) {
-					if (activeConnections < maxConnections) {
+					if (activeConnections.get() < maxConnections) {
 						return getConnectionNow();
 					}
 					try {
@@ -252,7 +253,7 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 			pc = dataSource.getPooledConnection();
 		}
 		final Connection conn = pc.getConnection();
-		activeConnections++;
+		activeConnections.incrementAndGet();
 		pc.addConnectionEventListener(this);
 		return conn;
 	}
@@ -266,16 +267,16 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 	 *            the pooled connection
 	 */
 	synchronized void recycleConnection(final PooledConnection pc) {
-		if (activeConnections <= 0) {
+		if (activeConnections.get() <= 0) {
 			throw new AssertionError();
 		}
-		activeConnections--;
-		if (!isDisposed && activeConnections < maxConnections) {
+		activeConnections.decrementAndGet();
+		if (!isDisposed && activeConnections.get() < maxConnections) {
 			recycledConnections.add(pc);
 		} else {
 			closeConnection(pc);
 		}
-		if (activeConnections >= maxConnections - 1) {
+		if (activeConnections.get() >= maxConnections - 1) {
 			notifyAll();
 		}
 	}
@@ -316,8 +317,8 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 	 * 
 	 * @return the number of active connections.
 	 */
-	public synchronized int getActiveConnections() {
-		return activeConnections;
+	public int getActiveConnections() {
+		return activeConnections.get();
 	}
 
 	/**
