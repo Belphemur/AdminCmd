@@ -36,7 +36,6 @@ import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Player.sql.SQLPlayerFactory;
 import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
-import be.Balor.World.sql.SQLWorld;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
@@ -47,7 +46,7 @@ public abstract class Database {
 	protected Logger log;
 	protected final String PREFIX;
 	protected final String DATABASE_PREFIX;
-	protected Connection connection;
+	public int lastUpdate;
 	static {
 		initDb();
 	}
@@ -109,8 +108,6 @@ public abstract class Database {
 		DebugLog.INSTANCE.info("Database initialization done");
 	}
 
-	public int lastUpdate;
-
 	/*
 	 * MySQL, SQLite
 	 */
@@ -118,7 +115,6 @@ public abstract class Database {
 		this.log = log;
 		this.PREFIX = prefix;
 		this.DATABASE_PREFIX = dp;
-		this.connection = null;
 	}
 
 	/**
@@ -181,7 +177,7 @@ public abstract class Database {
 	 * 
 	 * @return the success of the method.
 	 * @throws SQLException
-	 *             if can't open the connection.
+	 *             if can't open the getConnection().
 	 */
 	public abstract void open() throws SQLException;
 
@@ -192,9 +188,9 @@ public abstract class Database {
 	 * <br>
 	 */
 	public void close() {
-		if (connection != null) {
+		if (this.getConnection() != null) {
 			try {
-				connection.close();
+				getConnection().close();
 			} catch (final SQLException ex) {
 				this.writeError("SQL exception in close(): " + ex, true);
 			}
@@ -208,12 +204,10 @@ public abstract class Database {
 	 * <br>
 	 * 
 	 * @return the <a href=
-	 *         "http://download.oracle.com/javase/6/docs/api/java/sql/Connection.html"
+	 *         "http://download.oracle.com/javase/6/docs/api/java/sql/getConnection().html"
 	 *         >Connection</a> variable.
 	 */
-	public Connection getConnection() {
-		return this.connection;
-	}
+	protected abstract Connection getConnection();
 
 	/**
 	 * <b>query</b><br>
@@ -235,10 +229,14 @@ public abstract class Database {
 	 *            - the SQL query to prepare to send to the database.
 	 * @return the prepared statement.
 	 */
-	public PreparedStatement prepare(final String query) {
+	public final PreparedStatement prepare(final String query) {
+		return this.prepare(query, getConnection());
+	}
+
+	public PreparedStatement prepare(final String query, final Connection conn) {
 		try {
 			final PreparedStatement ps;
-			ps = connection.prepareStatement(query);
+			ps = conn.prepareStatement(query);
 			return ps;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
@@ -268,7 +266,7 @@ public abstract class Database {
 						true);
 				return false;
 			}
-			statement = connection.createStatement();
+			statement = getConnection().createStatement();
 			statement.execute(query);
 			return true;
 		} catch (final SQLException ex) {
@@ -290,7 +288,7 @@ public abstract class Database {
 	public boolean checkTable(final String table) {
 		DatabaseMetaData dbm = null;
 		try {
-			dbm = this.connection.getMetaData();
+			dbm = this.getConnection().getMetaData();
 
 			final ResultSet tables = dbm.getTables(null, null, table, null);
 			if (tables.next()) {
@@ -331,9 +329,10 @@ public abstract class Database {
 	 */
 	private boolean isConnectionValid() {
 
-		if (this.connection != null) {
+		if (this.getConnection() != null) {
 			try {
-					return !connection.isClosed() && connection.isValid(3);
+				return !getConnection().isClosed()
+						&& getConnection().isValid(3);
 			} catch (final SQLException e) {
 				DebugLog.INSTANCE.log(Level.INFO,
 						"Problem when checking connection state", e);
@@ -348,15 +347,13 @@ public abstract class Database {
 	 */
 	private void reconnect() {
 		try {
-			this.connection.close();
+			this.getConnection().close();
 		} catch (final SQLException e) {
 		}
-		this.connection = null;
 		try {
 			open();
 			SQLPlayer.initPrepStmt();
 			SQLPlayerFactory.initPrepStmt();
-			SQLWorld.initPrepStmt();
 		} catch (final SQLException e) {
 			writeError(
 					"Problem while reconnection to the database :\n"
@@ -372,4 +369,11 @@ public abstract class Database {
 			reconnect();
 		}
 	}
+
+	/**
+	 * Close a prepared statement
+	 * 
+	 * @param prepStmt
+	 */
+	public abstract void closePrepStmt(PreparedStatement prepStmt);
 }

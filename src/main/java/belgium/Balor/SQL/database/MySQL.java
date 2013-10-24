@@ -139,15 +139,15 @@ public class MySQL extends Database {
 	 * @see lib.SQL.PatPeter.SQLibrary.Database#prepare(java.lang.String)
 	 */
 	@Override
-	public PreparedStatement prepare(final String query) {
+	public PreparedStatement prepare(final String query, final Connection conn) {
 		try {
 			final PreparedStatement ps;
 			autoReconnect();
 			if (Statements.getStatement(query) == Statements.INSERT) {
-				ps = getConnection().prepareStatement(query,
+				ps = conn.prepareStatement(query,
 						PreparedStatement.RETURN_GENERATED_KEYS);
 			} else {
-				ps = getConnection().prepareStatement(query);
+				ps = conn.prepareStatement(query);
 
 			}
 			return ps;
