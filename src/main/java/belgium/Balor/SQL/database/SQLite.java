@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -199,7 +198,7 @@ public class SQLite extends Database {
 	 * @see belgium.Balor.SQL.Database#closePrepStmt(java.sql.PreparedStatement)
 	 */
 	@Override
-	public void closePrepStmt(final PreparedStatement prepStmt) {
+	public void closeStatement(final Statement prepStmt) {
 		if (prepStmt == null) {
 			return;
 		}

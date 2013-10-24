@@ -127,7 +127,7 @@ public class SQLPlayer extends ACPlayer {
 			}
 
 		} finally {
-			Database.DATABASE.closePrepStmt(getKitUses);
+			Database.DATABASE.closeStatement(getKitUses);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class SQLPlayer extends ACPlayer {
 				}
 			}
 		} finally {
-			Database.DATABASE.closePrepStmt(getInfos);
+			Database.DATABASE.closeStatement(getInfos);
 		}
 
 	}
@@ -181,7 +181,7 @@ public class SQLPlayer extends ACPlayer {
 				}
 			}
 		} finally {
-			Database.DATABASE.closePrepStmt(getPowers);
+			Database.DATABASE.closeStatement(getPowers);
 		}
 
 	}
@@ -212,7 +212,7 @@ public class SQLPlayer extends ACPlayer {
 				}
 			}
 		} finally {
-			Database.DATABASE.closePrepStmt(getHomes);
+			Database.DATABASE.closeStatement(getHomes);
 		}
 	}
 
@@ -245,7 +245,7 @@ public class SQLPlayer extends ACPlayer {
 			}
 
 		} finally {
-			Database.DATABASE.closePrepStmt(getLastLoc);
+			Database.DATABASE.closeStatement(getLastLoc);
 		}
 	}
 
@@ -291,7 +291,7 @@ public class SQLPlayer extends ACPlayer {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting the home in the DB", e);
 		} finally {
-			Database.DATABASE.closePrepStmt(insertHome);
+			Database.DATABASE.closeStatement(insertHome);
 		}
 	}
 
@@ -314,7 +314,7 @@ public class SQLPlayer extends ACPlayer {
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting the home from the DB", e);
 			} finally {
-				Database.DATABASE.closePrepStmt(deleteHome);
+				Database.DATABASE.closeStatement(deleteHome);
 			}
 
 		}
@@ -371,7 +371,7 @@ public class SQLPlayer extends ACPlayer {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with insert info in the DB", e);
 		} finally {
-			Database.DATABASE.closePrepStmt(insertInfo);
+			Database.DATABASE.closeStatement(insertInfo);
 		}
 
 	}
@@ -394,7 +394,7 @@ public class SQLPlayer extends ACPlayer {
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting the info from the DB", e);
 			} finally {
-				Database.DATABASE.closePrepStmt(deleteInfo);
+				Database.DATABASE.closeStatement(deleteInfo);
 			}
 
 		}
@@ -453,7 +453,7 @@ public class SQLPlayer extends ACPlayer {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with updating lastLoc in the DB", e);
 		} finally {
-			Database.DATABASE.closePrepStmt(updateLastLoc);
+			Database.DATABASE.closeStatement(updateLastLoc);
 		}
 
 	}
@@ -496,7 +496,7 @@ public class SQLPlayer extends ACPlayer {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting power in the DB", e);
 		} finally {
-			Database.DATABASE.closePrepStmt(insertPower);
+			Database.DATABASE.closeStatement(insertPower);
 		}
 	}
 
@@ -521,7 +521,7 @@ public class SQLPlayer extends ACPlayer {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting power in the DB", e);
 		} finally {
-			Database.DATABASE.closePrepStmt(insertPower);
+			Database.DATABASE.closeStatement(insertPower);
 		}
 	}
 
@@ -564,7 +564,7 @@ public class SQLPlayer extends ACPlayer {
 				ACLogger.severe("Problem with deleting customPower in the DB",
 						e);
 			} finally {
-				Database.DATABASE.closePrepStmt(deletePower);
+				Database.DATABASE.closeStatement(deletePower);
 			}
 
 		}
@@ -609,7 +609,7 @@ public class SQLPlayer extends ACPlayer {
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting power from the DB", e);
 			} finally {
-				Database.DATABASE.closePrepStmt(deletePower);
+				Database.DATABASE.closeStatement(deletePower);
 			}
 
 		}
@@ -653,7 +653,7 @@ public class SQLPlayer extends ACPlayer {
 				ACLogger.severe(
 						"Problem with deleting super powers from the DB", e);
 			} finally {
-				Database.DATABASE.closePrepStmt(deleteSuperPowers);
+				Database.DATABASE.closeStatement(deleteSuperPowers);
 			}
 
 		}
@@ -681,7 +681,7 @@ public class SQLPlayer extends ACPlayer {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting kit_use in the DB", e);
 		} finally {
-			Database.DATABASE.closePrepStmt(insertKitUse);
+			Database.DATABASE.closeStatement(insertKitUse);
 		}
 
 	}

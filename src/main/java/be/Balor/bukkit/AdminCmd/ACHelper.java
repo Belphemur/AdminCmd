@@ -1711,8 +1711,7 @@ public class ACHelper {
 				ACLogger.info("Updated the collation of the ac_player database.");
 
 			}
-			result.close();
-			stmt.close();
+			db.closeStatement(stmt);
 		}
 	}
 

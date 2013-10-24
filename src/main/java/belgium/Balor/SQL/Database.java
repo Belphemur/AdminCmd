@@ -269,6 +269,10 @@ public abstract class Database {
 		} catch (final SQLException ex) {
 			this.writeError(ex.getMessage(), true);
 			return false;
+		} finally {
+			if (statement != null) {
+				closeStatement(statement);
+			}
 		}
 	}
 
@@ -320,9 +324,9 @@ public abstract class Database {
 	public abstract DatabaseType getType();
 
 	/**
-	 * Close a prepared statement
+	 * Close a statement
 	 * 
-	 * @param prepStmt
+	 * @param statement
 	 */
-	public abstract void closePrepStmt(PreparedStatement prepStmt);
+	public abstract void closeStatement(Statement statement);
 }

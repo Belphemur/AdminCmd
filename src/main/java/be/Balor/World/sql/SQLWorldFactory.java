@@ -85,8 +85,8 @@ public class SQLWorldFactory extends AbstractWorldFactory {
 				}
 			}
 		} finally {
-			Database.DATABASE.closePrepStmt(getWorld);
-			Database.DATABASE.closePrepStmt(insertWorld);
+			Database.DATABASE.closeStatement(getWorld);
+			Database.DATABASE.closeStatement(insertWorld);
 		}
 	}
 

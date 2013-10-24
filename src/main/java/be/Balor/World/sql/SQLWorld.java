@@ -105,7 +105,7 @@ public class SQLWorld extends ACWorld {
 				warps.put(name, new Warp(name, loc));
 			}
 		}
-		Database.DATABASE.closePrepStmt(getWarps);
+		Database.DATABASE.closeStatement(getWarps);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class SQLWorld extends ACWorld {
 				}
 			}
 		}
-		Database.DATABASE.closePrepStmt(getSpawns);
+		Database.DATABASE.closeStatement(getSpawns);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class SQLWorld extends ACWorld {
 				}
 			}
 		}
-		Database.DATABASE.closePrepStmt(getInfos);
+		Database.DATABASE.closeStatement(getInfos);
 	}
 
 	private Location getLoc(final ResultSet rs) {
@@ -199,7 +199,7 @@ public class SQLWorld extends ACWorld {
 			setSpawn.setFloat(6, loc.getPitch());
 			setSpawn.setFloat(7, loc.getYaw());
 			setSpawn.executeUpdate();
-			Database.DATABASE.closePrepStmt(setSpawn);
+			Database.DATABASE.closeStatement(setSpawn);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the global spawn", e);
 		}
@@ -239,7 +239,7 @@ public class SQLWorld extends ACWorld {
 			insertWarp.setFloat(6, loc.getPitch());
 			insertWarp.setFloat(7, loc.getYaw());
 			insertWarp.executeUpdate();
-			Database.DATABASE.closePrepStmt(insertWarp);
+			Database.DATABASE.closeStatement(insertWarp);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the Warp", e);
 		}
@@ -293,7 +293,7 @@ public class SQLWorld extends ACWorld {
 			deleteWarp.setString(1, name);
 			deleteWarp.setLong(2, id);
 			deleteWarp.executeUpdate();
-			Database.DATABASE.closePrepStmt(deleteWarp);
+			Database.DATABASE.closeStatement(deleteWarp);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while deleting the warp", e);
 		}
@@ -329,7 +329,7 @@ public class SQLWorld extends ACWorld {
 			insertInfo.setLong(2, id);
 			insertInfo.setString(3, value.toString());
 			insertInfo.executeUpdate();
-			Database.DATABASE.closePrepStmt(insertInfo);
+			Database.DATABASE.closeStatement(insertInfo);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the information", e);
 		}
@@ -351,7 +351,7 @@ public class SQLWorld extends ACWorld {
 			deleteInfo.setString(1, info);
 			deleteInfo.setLong(2, id);
 			deleteInfo.executeUpdate();
-			Database.DATABASE.closePrepStmt(deleteInfo);
+			Database.DATABASE.closeStatement(deleteInfo);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while deleting information ", e);
 		}
@@ -419,7 +419,7 @@ public class SQLWorld extends ACWorld {
 			insertInfo.setLong(2, id);
 			insertInfo.setInt(3, limit);
 			insertInfo.executeUpdate();
-			Database.DATABASE.closePrepStmt(insertInfo);
+			Database.DATABASE.closeStatement(insertInfo);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the information", e);
 		}

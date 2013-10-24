@@ -189,7 +189,7 @@ public class MySQL extends Database {
 	 * @see belgium.Balor.SQL.Database#closePrepStmt(java.sql.PreparedStatement)
 	 */
 	@Override
-	public void closePrepStmt(final PreparedStatement prepStmt) {
+	public void closeStatement(final Statement prepStmt) {
 		if (prepStmt == null) {
 			return;
 		}

@@ -108,7 +108,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 			} catch (final SQLException e) {
 
 			}
-			Database.DATABASE.closePrepStmt(doubleCheckPlayer);
+			Database.DATABASE.closeStatement(doubleCheckPlayer);
 		}
 		return id;
 	}
@@ -195,7 +195,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 				rs.close();
 			}
 		} finally {
-			Database.DATABASE.closePrepStmt(insertPlayer);
+			Database.DATABASE.closeStatement(insertPlayer);
 		}
 
 	}
