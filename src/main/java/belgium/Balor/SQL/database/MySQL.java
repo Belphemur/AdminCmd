@@ -194,15 +194,16 @@ public class MySQL extends Database {
 			return;
 		}
 		try {
+			prepStmt.getConnection().close();
+		} catch (final Exception e) {
+			DebugLog.addException("Exception when closing connection of stmt",
+					e);
+		}
+
+		try {
 			prepStmt.close();
 		} catch (final Exception e) {
 			DebugLog.addException("Exeception when closing stmt", e);
-		}
-		try {
-			prepStmt.getConnection().close();
-		} catch (final Exception e) {
-			DebugLog.addException("Exeception when closing connection of stmt",
-					e);
 		}
 
 	}
