@@ -20,7 +20,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 import org.bukkit.World;
 
 import be.Balor.Tools.Debug.ACLogger;
@@ -47,7 +46,8 @@ public class SQLWorldFactory extends AbstractWorldFactory {
 		try {
 			return getDBWorld(world);
 		} catch (final SQLException e) {
-			ACLogger.severe("Can't create an ACWorld for the World " + worldName, e);
+			ACLogger.severe("Can't create an ACWorld for the World "
+					+ worldName, e);
 		}
 
 		return null;
@@ -60,31 +60,33 @@ public class SQLWorldFactory extends AbstractWorldFactory {
 	 * @throws SQLException
 	 */
 	private ACWorld getDBWorld(final World world) throws SQLException {
-		final PreparedStatement insertWorld = Database.DATABASE.prepare("INSERT INTO `ac_worlds` (`name`) VALUES (?)");
-		final PreparedStatement getWorld = Database.DATABASE.prepare("SELECT id FROM ac_worlds WHERE name=?");
+		final PreparedStatement getWorld = Database.DATABASE
+				.prepare("SELECT id FROM ac_worlds WHERE name=?");
+		final PreparedStatement insertWorld = Database.DATABASE.prepare(
+				"INSERT INTO `ac_worlds` (`name`) VALUES (?)",
+				getWorld.getConnection());
 		ResultSet rs = null;
 		final String worldName = world.getName();
-		getWorld.clearParameters();
 		getWorld.setString(1, worldName);
 
-		synchronized (getWorld.getConnection()) {
-			rs = getWorld.executeQuery();
-		}
-		if (rs.next()) {
-			return new SQLWorld(world, rs.getLong(1));
-		} else {
-			rs.close();
-			insertWorld.clearParameters();
-			insertWorld.setString(1, worldName);
-			synchronized (insertWorld.getConnection()) {
-				insertWorld.executeUpdate();
-			}
-			rs = insertWorld.getGeneratedKeys();
+		rs = getWorld.executeQuery();
+		try {
 			if (rs.next()) {
 				return new SQLWorld(world, rs.getLong(1));
 			} else {
-				return null;
+				rs.close();
+				insertWorld.setString(1, worldName);
+				insertWorld.executeUpdate();
+				rs = insertWorld.getGeneratedKeys();
+				if (rs.next()) {
+					return new SQLWorld(world, rs.getLong(1));
+				} else {
+					return null;
+				}
 			}
+		} finally {
+			Database.DATABASE.closePrepStmt(getWorld);
+			Database.DATABASE.closePrepStmt(insertWorld);
 		}
 	}
 

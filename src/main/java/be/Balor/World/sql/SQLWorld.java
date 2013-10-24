@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
-
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -39,33 +38,22 @@ import be.Balor.Tools.Help.String.Str;
 import be.Balor.World.ACWorld;
 import belgium.Balor.SQL.Database;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class SQLWorld extends ACWorld {
 	private Location defaultSpawn;
-	private final Map<String, Object> informations = Collections.synchronizedMap(new HashMap<String, Object>());
-	private final Map<String, Integer> mobLimits = Collections.synchronizedMap(new HashMap<String, Integer>());
-	private final Map<String, Location> gSpawns = Collections.synchronizedMap(new HashMap<String, Location>());
-	private final Map<String, Warp> warps = Collections.synchronizedMap(new HashMap<String, Warp>());
-	private static PreparedStatement GET_INFOS, GET_SPAWNS, GET_WARPS;
+	private final Map<String, Object> informations = Collections
+			.synchronizedMap(new HashMap<String, Object>());
+	private final Map<String, Integer> mobLimits = Collections
+			.synchronizedMap(new HashMap<String, Integer>());
+	private final Map<String, Location> gSpawns = Collections
+			.synchronizedMap(new HashMap<String, Location>());
+	private final Map<String, Warp> warps = Collections
+			.synchronizedMap(new HashMap<String, Warp>());
 
-	private static final Object infoLock = new Object();
-	private static final Object spawnLock = new Object();
-	private static final Object warpLock = new Object();
 	private final long id;
-	static {
-		initPrepStmt();
-	}
-
-	public static void initPrepStmt() {
-		GET_INFOS = Database.DATABASE.prepare("SELECT `key`,`info` FROM `ac_w_infos` WHERE `world_id`=?");
-		GET_SPAWNS = Database.DATABASE.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_spawns` WHERE `world_id`=?");
-		GET_WARPS = Database.DATABASE.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_warps` WHERE `world_id`=?");
-	}
 
 	/**
 	 * @param world
@@ -73,62 +61,43 @@ public class SQLWorld extends ACWorld {
 	SQLWorld(final World world, final long dbID) {
 		super(world);
 		this.id = dbID;
-		synchronized (infoLock) {
-			try {
-				getDBInfo();
-			} catch (final CommunicationsException e) {
-				initPrepStmt();
-				try {
-					getDBInfo();
-				} catch (final SQLException e1) {
-					ACLogger.severe("Problem while getting the informations of the world" + this.getName(), e1);
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem while getting the informations of the world" + this.getName(), e);
-			}
+
+		try {
+			getDBInfo();
+		} catch (final SQLException e) {
+			ACLogger.severe(
+					"Problem while getting the informations of the world"
+							+ this.getName(), e);
 		}
-		synchronized (spawnLock) {
-			try {
-				getDBSpawn();
-			} catch (final CommunicationsException e) {
-				initPrepStmt();
-				try {
-					getDBSpawn();
-				} catch (final SQLException e1) {
-					ACLogger.severe("Problem while getting the spawns of the world" + this.getName(), e1);
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem while getting the spawns of the world" + this.getName(), e);
-			}
+		try {
+			getDBSpawn();
+		} catch (final SQLException e) {
+
+			ACLogger.severe("Problem while getting the spawns of the world"
+					+ this.getName(), e);
 
 		}
-		synchronized (warpLock) {
-			try {
-				getDBWarps();
-			} catch (final CommunicationsException e) {
-				initPrepStmt();
-				try {
-					getDBWarps();
-				} catch (final SQLException e1) {
-					ACLogger.severe("Problem while getting the warps of the world" + this.getName(), e1);
-				}
-			} catch (final SQLException e) {
-				ACLogger.severe("Problem while getting the warps of the world" + this.getName(), e);
-			}
+		try {
+			getDBWarps();
+		} catch (final SQLException e) {
 
+			ACLogger.severe("Problem while getting the warps of the world"
+					+ this.getName(), e);
 		}
+
 	}
 
 	/**
 	 * @throws SQLException
 	 */
 	private void getDBWarps() throws SQLException {
-		GET_WARPS.clearParameters();
-		GET_WARPS.setLong(1, id);
-		ResultSet rs;
-		synchronized (GET_WARPS.getConnection()) {
-			rs = GET_WARPS.executeQuery();
-		}
+		PreparedStatement getWarps;
+
+		getWarps = Database.DATABASE
+				.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_warps` WHERE `world_id`=?");
+		getWarps.setLong(1, id);
+		final ResultSet rs;
+		rs = getWarps.executeQuery();
 		while (rs.next()) {
 			final String name = rs.getString("name");
 			final Location loc = getLoc(rs);
@@ -136,18 +105,19 @@ public class SQLWorld extends ACWorld {
 				warps.put(name, new Warp(name, loc));
 			}
 		}
+		Database.DATABASE.closePrepStmt(getWarps);
 	}
 
 	/**
 	 * @throws SQLException
 	 */
 	private void getDBSpawn() throws SQLException {
-		GET_SPAWNS.clearParameters();
-		GET_SPAWNS.setLong(1, id);
-		ResultSet rs;
-		synchronized (GET_SPAWNS.getConnection()) {
-			rs = GET_SPAWNS.executeQuery();
-		}
+		PreparedStatement getSpawns;
+		getSpawns = Database.DATABASE
+				.prepare("SELECT `name`,`x`,`y`,`z`,`yaw`,`pitch` FROM `ac_spawns` WHERE `world_id`=?");
+		getSpawns.setLong(1, id);
+		final ResultSet rs;
+		rs = getSpawns.executeQuery();
 		while (rs.next()) {
 			final String name = rs.getString("name");
 			if (name.equals("none")) {
@@ -159,36 +129,43 @@ public class SQLWorld extends ACWorld {
 				}
 			}
 		}
+		Database.DATABASE.closePrepStmt(getSpawns);
 	}
 
 	/**
 	 * @throws SQLException
 	 */
 	private void getDBInfo() throws SQLException {
-		GET_INFOS.clearParameters();
-		GET_INFOS.setLong(1, id);
-		ResultSet rs;
-		synchronized (GET_INFOS.getConnection()) {
-			rs = GET_INFOS.executeQuery();
-		}
+		PreparedStatement getInfos;
+		getInfos = Database.DATABASE
+				.prepare("SELECT `key`,`info` FROM `ac_w_infos` WHERE `world_id`=?");
+		getInfos.setLong(1, id);
+		final ResultSet rs;
+		rs = getInfos.executeQuery();
+
 		while (rs.next()) {
 			final String key = rs.getString("key");
 			if (key.startsWith("mobLimit:")) {
 				mobLimits.put(key.substring(9), rs.getInt("info"));
 			} else {
 				synchronized (SQLObjectContainer.yaml) {
-					informations.put(key, SQLObjectContainer.yaml.load(rs.getString("info")));
+					informations.put(key,
+							SQLObjectContainer.yaml.load(rs.getString("info")));
 				}
 			}
 		}
-		rs.close();
+		Database.DATABASE.closePrepStmt(getInfos);
 	}
 
 	private Location getLoc(final ResultSet rs) {
 		try {
-			return new Location(this.getHandle(), rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
+			return new Location(this.getHandle(), rs.getDouble("x"),
+					rs.getDouble("y"), rs.getDouble("z"), rs.getFloat("yaw"),
+					rs.getFloat("pitch"));
 		} catch (final SQLException e) {
-			ACLogger.severe("Problem while getting the location from SQL of world " + this.getName(), e);
+			ACLogger.severe(
+					"Problem while getting the location from SQL of world "
+							+ this.getName(), e);
 			return null;
 		}
 	}
@@ -221,9 +198,8 @@ public class SQLWorld extends ACWorld {
 			setSpawn.setDouble(5, loc.getZ());
 			setSpawn.setFloat(6, loc.getPitch());
 			setSpawn.setFloat(7, loc.getYaw());
-			synchronized (setSpawn.getConnection()) {
-				setSpawn.executeUpdate();
-			}
+			setSpawn.executeUpdate();
+			Database.DATABASE.closePrepStmt(setSpawn);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the global spawn", e);
 		}
@@ -262,9 +238,8 @@ public class SQLWorld extends ACWorld {
 			insertWarp.setDouble(5, loc.getZ());
 			insertWarp.setFloat(6, loc.getPitch());
 			insertWarp.setFloat(7, loc.getYaw());
-			synchronized (insertWarp.getConnection()) {
-				insertWarp.executeUpdate();
-			}
+			insertWarp.executeUpdate();
+			Database.DATABASE.closePrepStmt(insertWarp);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the Warp", e);
 		}
@@ -277,7 +252,8 @@ public class SQLWorld extends ACWorld {
 	 * @see be.Balor.World.ACWorld#getWarp(java.lang.String)
 	 */
 	@Override
-	public Warp getWarp(final String name) throws WorldNotLoaded, IllegalArgumentException {
+	public Warp getWarp(final String name) throws WorldNotLoaded,
+			IllegalArgumentException {
 		if (name == null || (name != null && name.isEmpty())) {
 			throw new IllegalArgumentException("Name can't be null or Empty");
 		}
@@ -310,14 +286,14 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public void removeWarp(final String name) {
 		warps.remove(name);
-		final PreparedStatement deleteWarp = Database.DATABASE.prepare("DELETE FROM `ac_warps` WHERE `name`=? AND `world_id`=?");
+		final PreparedStatement deleteWarp = Database.DATABASE
+				.prepare("DELETE FROM `ac_warps` WHERE `name`=? AND `world_id`=?");
 		try {
 			deleteWarp.clearParameters();
 			deleteWarp.setString(1, name);
 			deleteWarp.setLong(2, id);
-			synchronized (deleteWarp.getConnection()) {
-				deleteWarp.executeUpdate();
-			}
+			deleteWarp.executeUpdate();
+			Database.DATABASE.closePrepStmt(deleteWarp);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while deleting the warp", e);
 		}
@@ -330,7 +306,8 @@ public class SQLWorld extends ACWorld {
 	 * org.bukkit.Location, java.lang.String)
 	 */
 	@Override
-	public void addPermWarp(final String name, final Location loc, final String perm) {
+	public void addPermWarp(final String name, final Location loc,
+			final String perm) {
 		// TODO Auto-generated method stub
 
 	}
@@ -344,15 +321,15 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public void setInformation(final String info, final Object value) {
 		informations.put(info, value);
-		final PreparedStatement insertInfo = Database.DATABASE.prepare("REPLACE INTO `ac_w_infos` (`key`,`world_id`,`info`) VALUES (?,?,?)");
+		final PreparedStatement insertInfo = Database.DATABASE
+				.prepare("REPLACE INTO `ac_w_infos` (`key`,`world_id`,`info`) VALUES (?,?,?)");
 		try {
 			insertInfo.clearParameters();
 			insertInfo.setString(1, info);
 			insertInfo.setLong(2, id);
 			insertInfo.setString(3, value.toString());
-			synchronized (insertInfo.getConnection()) {
-				insertInfo.executeUpdate();
-			}
+			insertInfo.executeUpdate();
+			Database.DATABASE.closePrepStmt(insertInfo);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the information", e);
 		}
@@ -367,14 +344,14 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public void removeInformation(final String info) {
 		informations.remove(info);
-		final PreparedStatement deleteInfo = Database.DATABASE.prepare("DELETE FROM `ac_w_infos` WHERE `key`=? AND `world_id`=?");
+		final PreparedStatement deleteInfo = Database.DATABASE
+				.prepare("DELETE FROM `ac_w_infos` WHERE `key`=? AND `world_id`=?");
 		try {
 			deleteInfo.clearParameters();
 			deleteInfo.setString(1, info);
 			deleteInfo.setLong(2, id);
-			synchronized (deleteInfo.getConnection()) {
-				deleteInfo.executeUpdate();
-			}
+			deleteInfo.executeUpdate();
+			Database.DATABASE.closePrepStmt(deleteInfo);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while deleting information ", e);
 		}
@@ -406,7 +383,8 @@ public class SQLWorld extends ACWorld {
 		}
 		synchronized (mobLimits) {
 			for (final Entry<String, Integer> entry : mobLimits.entrySet()) {
-				result.put("Limit on " + entry.getKey(), entry.getValue().toString());
+				result.put("Limit on " + entry.getKey(), entry.getValue()
+						.toString());
 			}
 		}
 		return result;
@@ -419,7 +397,8 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	protected void forceSave() {
-		DebugLog.INSTANCE.log(Level.WARNING, "Force Save shouldn't be called for SQLWorld", new Throwable());
+		DebugLog.INSTANCE.log(Level.WARNING,
+				"Force Save shouldn't be called for SQLWorld", new Throwable());
 
 	}
 
@@ -432,15 +411,15 @@ public class SQLWorld extends ACWorld {
 	public void setMobLimit(final String mob, final int limit) {
 		mobLimits.put(mob, limit);
 
-		final PreparedStatement insertInfo = Database.DATABASE.prepare("REPLACE INTO `ac_w_infos` (`key`,`world_id`,`info`) VALUES (?,?,?)");
+		final PreparedStatement insertInfo = Database.DATABASE
+				.prepare("REPLACE INTO `ac_w_infos` (`key`,`world_id`,`info`) VALUES (?,?,?)");
 		try {
 			insertInfo.clearParameters();
 			insertInfo.setString(1, "mobLimit:" + mob);
 			insertInfo.setLong(2, id);
 			insertInfo.setInt(3, limit);
-			synchronized (insertInfo.getConnection()) {
-				insertInfo.executeUpdate();
-			}
+			insertInfo.executeUpdate();
+			Database.DATABASE.closePrepStmt(insertInfo);
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem while setting the information", e);
 		}
