@@ -34,6 +34,8 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 
+import be.Balor.Tools.Debug.DebugLog;
+
 /*## Java 1.7 ##
  import java.util.logging.Logger;
  //*/
@@ -205,20 +207,29 @@ public class JdbcConnectionPool implements DataSource, ConnectionEventListener {
 	 */
 	@Override
 	public Connection getConnection() throws SQLException {
-		final long max = System.currentTimeMillis() + timeout * 1000;
-		do {
-			synchronized (this) {
-				if (activeConnections < maxConnections) {
-					return getConnectionNow();
+		DebugLog.addInfo("Connection asked");
+		DebugLog.addInfo("Active connections : " + activeConnections);
+		DebugLog.addInfo("Asked by : " + Thread.currentThread());
+		DebugLog.addInfo("Called by :\t"
+				+ Thread.currentThread().getStackTrace()[4].toString());
+		try {
+			final long max = System.currentTimeMillis() + timeout * 1000;
+			do {
+				synchronized (this) {
+					if (activeConnections < maxConnections) {
+						return getConnectionNow();
+					}
+					try {
+						wait(1000);
+					} catch (final InterruptedException e) {
+						// ignore
+					}
 				}
-				try {
-					wait(1000);
-				} catch (final InterruptedException e) {
-					// ignore
-				}
-			}
-		} while (System.currentTimeMillis() <= max);
-		throw new SQLException("Login timeout", "08001", 8001);
+			} while (System.currentTimeMillis() <= max);
+			throw new SQLException("Login timeout", "08001", 8001);
+		} finally {
+			DebugLog.endInfo();
+		}
 	}
 
 	/**
