@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-
 import org.bukkit.entity.Player;
 
 import be.Balor.Player.ACPlayer;
@@ -33,24 +32,21 @@ import belgium.Balor.SQL.Database;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.MapMaker;
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 
 /**
  * @author Balor (aka Antoine Aflalo)
  * 
  */
 public class SQLPlayerFactory implements IPlayerFactory {
-	private static PreparedStatement insertPlayer, doubleCheckPlayer;
-	private final Map<String, Long> playersID = new MapMaker().concurrencyLevel(6).makeMap();
-	private final Object doubleCheckLock = new Object();
-	private final Object insertPlayerLock = new Object();
+	private final Map<String, Long> playersID = new MapMaker()
+			.concurrencyLevel(6).makeMap();
 
 	/**
  * 
  */
 	public SQLPlayerFactory() {
-		initPrepStmt();
-		final ResultSet rs = Database.DATABASE.query("SELECT `name`,`id` FROM `ac_players`");
+		final ResultSet rs = Database.DATABASE
+				.query("SELECT `name`,`id` FROM `ac_players`");
 
 		try {
 			while (rs.next()) {
@@ -60,16 +56,9 @@ public class SQLPlayerFactory implements IPlayerFactory {
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem when getting players from the DB", e);
 		}
-		DebugLog.INSTANCE.info("Players found : " + Joiner.on(", ").join(playersID.keySet()));
+		DebugLog.INSTANCE.info("Players found : "
+				+ Joiner.on(", ").join(playersID.keySet()));
 
-	}
-
-	/**
-	 * 
-	 */
-	public static synchronized void initPrepStmt() {
-		insertPlayer = Database.DATABASE.prepare("INSERT INTO `ac_players` (`name`) VALUES (?);");
-		doubleCheckPlayer = Database.DATABASE.prepare("SELECT `id` FROM `ac_players` WHERE `name` = ?");
 	}
 
 	private Long getPlayerID(final String playername) {
@@ -77,18 +66,9 @@ public class SQLPlayerFactory implements IPlayerFactory {
 		if (id != null) {
 			return id;
 		}
-
-		synchronized (doubleCheckLock) {
-			try {
-				id = doubleCheckPlayer(playername);
-			} catch (final CommunicationsException e) {
-				initPrepStmt();
-				try {
-					id = doubleCheckPlayer(playername);
-				} catch (final SQLException e1) {
-				}
-			} catch (final SQLException e) {
-			}
+		try {
+			id = doubleCheckPlayer(playername);
+		} catch (final SQLException e) {
 		}
 
 		return id;
@@ -103,6 +83,8 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	private Long doubleCheckPlayer(final String playername) throws SQLException {
 		ResultSet rs = null;
 		Long id;
+		final PreparedStatement doubleCheckPlayer = Database.DATABASE
+				.prepare("SELECT `id` FROM `ac_players` WHERE `name` = ?");
 		try {
 			doubleCheckPlayer.clearParameters();
 			doubleCheckPlayer.setString(1, playername);
@@ -126,6 +108,7 @@ public class SQLPlayerFactory implements IPlayerFactory {
 			} catch (final SQLException e) {
 
 			}
+			Database.DATABASE.closePrepStmt(doubleCheckPlayer);
 		}
 		return id;
 	}
@@ -183,13 +166,6 @@ public class SQLPlayerFactory implements IPlayerFactory {
 		if (!playersID.containsKey(player)) {
 			try {
 				insertPlayer(player);
-			} catch (final CommunicationsException e) {
-				initPrepStmt();
-				try {
-					insertPlayer(player);
-				} catch (final SQLException e1) {
-					ACLogger.severe("Problem when adding player to the DB", e1);
-				}
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem when adding player to the DB", e);
 			}
@@ -202,8 +178,11 @@ public class SQLPlayerFactory implements IPlayerFactory {
 	 * @throws SQLException
 	 */
 	private void insertPlayer(final String player) throws SQLException {
-		synchronized (insertPlayerLock) {
-			ResultSet rs = null;
+		ResultSet rs = null;
+		final PreparedStatement insertPlayer = Database.DATABASE
+				.prepare("INSERT INTO `ac_players` (`name`) VALUES (?);");
+		try {
+
 			insertPlayer.clearParameters();
 			insertPlayer.setString(1, player);
 			insertPlayer.executeUpdate();
@@ -215,7 +194,10 @@ public class SQLPlayerFactory implements IPlayerFactory {
 			if (rs != null) {
 				rs.close();
 			}
+		} finally {
+			Database.DATABASE.closePrepStmt(insertPlayer);
 		}
+
 	}
 
 }
