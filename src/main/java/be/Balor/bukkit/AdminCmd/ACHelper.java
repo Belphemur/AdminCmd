@@ -53,7 +53,6 @@ import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.IBan;
 import be.Balor.Player.ITempBan;
 import be.Balor.Player.PlayerManager;
-import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Player.sql.SQLPlayerFactory;
 import be.Balor.Tools.MaterialContainer;
 import be.Balor.Tools.Type;
@@ -81,7 +80,6 @@ import be.Balor.Tools.Update.UpdateChecker.Channel;
 import be.Balor.World.ACWorld;
 import be.Balor.World.FileWorldFactory;
 import be.Balor.World.WorldManager;
-import be.Balor.World.sql.SQLWorld;
 import be.Balor.World.sql.SQLWorldFactory;
 import belgium.Balor.SQL.Database;
 import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
@@ -117,7 +115,6 @@ public class ACHelper {
 		final String dbWrap = ConfigEnum.DATA_WRAPPER.getString();
 		if (dbWrap.equalsIgnoreCase("mysql")
 				|| dbWrap.equalsIgnoreCase("sqlite")) {
-			SQLPlayer.forceExecuteStmts();
 			Database.DATABASE.close();
 		} else {
 			FilePlayer.forceSaveList();
@@ -804,8 +801,6 @@ public class ACHelper {
 		// file system
 		if (!isSqlWrapper()) {
 			FilePlayer.scheduleAsyncSave();
-		} else {
-			SQLPlayer.scheduleAsyncSave();
 		}
 		if (pluginConfig.getBoolean("tpRequestActivatedByDefault", false)) {
 			for (final Player p : coreInstance.getServer().getOnlinePlayers()) {
@@ -994,8 +989,6 @@ public class ACHelper {
 		// TODO: check datawrapper
 		if (!isSqlWrapper()) {
 			FilePlayer.forceSaveList();
-		} else {
-			SQLPlayer.forceExecuteStmts();
 		}
 		alias.clear();
 		itemBlacklist.clear();
@@ -1761,7 +1754,6 @@ public class ACHelper {
 					new FilePlayerFactory(coreInstance.getDataFolder()
 							.getPath() + File.separator + "userData"));
 			FilePlayer.scheduleAsyncSave();
-			SQLPlayer.stopSavingTask();
 		} else if (isSqlWrapper()
 				&& (convertTo.equalsIgnoreCase("sqlite") || convertTo
 						.equalsIgnoreCase("mysql"))) {
@@ -1789,7 +1781,6 @@ public class ACHelper {
 								e);
 						return;
 					}
-					SQLWorld.initPrepStmt();
 					WorldManager.getInstance().convertFactory(
 							new SQLWorldFactory());
 
@@ -1808,7 +1799,6 @@ public class ACHelper {
 								"Can't Convert to the Database. There is a problem in your configuration",
 								e);
 					}
-					SQLPlayer.initPrepStmt();
 					FilePlayer.forceSaveList();
 					FilePlayer.stopSavingTask();
 
@@ -1819,7 +1809,6 @@ public class ACHelper {
 
 						@Override
 						public void run() {
-							SQLPlayer.initPrepStmt();
 							try {
 								ConfigEnum.save();
 							} catch (final IOException e) {

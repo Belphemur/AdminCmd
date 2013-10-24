@@ -35,16 +35,10 @@ import org.bukkit.entity.Player;
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.Type;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
-import be.Balor.Tools.Threads.PrepStmtExecutorTask;
 import be.Balor.World.ACWorld;
-import be.Balor.bukkit.AdminCmd.ACHelper;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
-import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.SQL.Database;
 
 /**
@@ -64,8 +58,6 @@ public class SQLPlayer extends ACPlayer {
 			.synchronizedMap(new HashMap<String, Long>());
 	private Location lastLoc;
 	private final long id;
-	private static int prepStmtTaskID;
-	private static final PrepStmtExecutorTask PREP_STMT_TASK = new PrepStmtExecutorTask();
 
 	/**
 	 * @param name
@@ -272,44 +264,6 @@ public class SQLPlayer extends ACPlayer {
 		return world;
 	}
 
-	/**
-	 * To be sure that all waiting prepStmt will be executed when this is called
-	 */
-	public static void forceExecuteStmts() {
-		PREP_STMT_TASK.run();
-	}
-
-	/**
-	 * To Schedule the Async task
-	 */
-	public static void scheduleAsyncSave() {
-		if (ACPluginManager.getScheduler().isCurrentlyRunning(prepStmtTaskID)
-				|| ACPluginManager.getScheduler().isQueued(prepStmtTaskID)) {
-			return;
-		}
-		final int delay = ConfigEnum.E_PST_DELAY.getInt() >= 30 ? ConfigEnum.E_PST_DELAY
-				.getInt() : 10;
-		prepStmtTaskID = ACPluginManager
-				.getScheduler()
-				.runTaskTimerAsynchronously(
-						ACHelper.getInstance().getCoreInstance(),
-						PREP_STMT_TASK, Utils.secInTick * 2 * delay,
-						Utils.secInTick * delay).getTaskId();
-		DebugLog.INSTANCE.info("IO Save RepeatingTask created : "
-				+ prepStmtTaskID);
-	}
-
-	/**
-	 * To stop the saving task.
-	 */
-	public static void stopSavingTask() {
-		if (!ACPluginManager.getScheduler().isCurrentlyRunning(prepStmtTaskID)
-				&& !ACPluginManager.getScheduler().isQueued(prepStmtTaskID)) {
-			return;
-		}
-		ACPluginManager.getScheduler().cancelTask(prepStmtTaskID);
-	}
-
 	/*
 	 * (Non javadoc)
 	 * 
@@ -332,7 +286,7 @@ public class SQLPlayer extends ACPlayer {
 			insertHome.setDouble(6, loc.getZ());
 			insertHome.setFloat(7, loc.getYaw());
 			insertHome.setFloat(8, loc.getPitch());
-			PREP_STMT_TASK.addPreparedStmt(insertHome);
+			insertHome.executeUpdate();
 
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting the home in the DB", e);
@@ -353,7 +307,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				deleteHome.setLong(1, id);
 				deleteHome.setString(2, home);
-				PREP_STMT_TASK.addPreparedStmt(deleteHome);
+				deleteHome.executeUpdate();
 
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting the home from the DB", e);
@@ -409,7 +363,7 @@ public class SQLPlayer extends ACPlayer {
 			insertInfo.setString(1, info);
 			insertInfo.setLong(2, id);
 			insertInfo.setString(3, value.toString());
-			PREP_STMT_TASK.addPreparedStmt(insertInfo);
+			insertInfo.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with insert info in the DB", e);
 		}
@@ -429,7 +383,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				deleteInfo.setLong(1, id);
 				deleteInfo.setString(2, info);
-				PREP_STMT_TASK.addPreparedStmt(deleteInfo);
+				deleteInfo.executeUpdate();
 
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting the info from the DB", e);
@@ -487,7 +441,7 @@ public class SQLPlayer extends ACPlayer {
 				updateLastLoc.setNull(6, Types.FLOAT);
 			}
 			updateLastLoc.setLong(7, id);
-			PREP_STMT_TASK.addPreparedStmt(updateLastLoc);
+			updateLastLoc.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with updating lastLoc in the DB", e);
 		}
@@ -528,7 +482,7 @@ public class SQLPlayer extends ACPlayer {
 				insertPower.setString(3, value.toString());
 			}
 			insertPower.setString(4, power.getCategory().name());
-			PREP_STMT_TASK.addPreparedStmt(insertPower);
+			insertPower.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting power in the DB", e);
 		}
@@ -551,7 +505,7 @@ public class SQLPlayer extends ACPlayer {
 			insertPower.setLong(2, id);
 			insertPower.setString(3, value.toString());
 			insertPower.setString(4, Type.Category.OTHER.name());
-			PREP_STMT_TASK.addPreparedStmt(insertPower);
+			insertPower.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting power in the DB", e);
 		}
@@ -591,7 +545,7 @@ public class SQLPlayer extends ACPlayer {
 				deletePower.clearParameters();
 				deletePower.setLong(1, id);
 				deletePower.setString(2, power);
-				PREP_STMT_TASK.addPreparedStmt(deletePower);
+				deletePower.executeUpdate();
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting customPower in the DB",
 						e);
@@ -635,7 +589,7 @@ public class SQLPlayer extends ACPlayer {
 				deletePower.clearParameters();
 				deletePower.setLong(1, id);
 				deletePower.setString(2, power.name());
-				PREP_STMT_TASK.addPreparedStmt(deletePower);
+				deletePower.executeUpdate();
 			} catch (final SQLException e) {
 				ACLogger.severe("Problem with deleting power from the DB", e);
 			}
@@ -676,7 +630,7 @@ public class SQLPlayer extends ACPlayer {
 			try {
 				deleteSuperPowers.clearParameters();
 				deleteSuperPowers.setLong(1, id);
-				PREP_STMT_TASK.addPreparedStmt(deleteSuperPowers);
+				deleteSuperPowers.executeUpdate();
 			} catch (final SQLException e) {
 				ACLogger.severe(
 						"Problem with deleting super powers from the DB", e);
@@ -703,7 +657,7 @@ public class SQLPlayer extends ACPlayer {
 			insertKitUse.setString(1, kit);
 			insertKitUse.setLong(2, id);
 			insertKitUse.setLong(3, timestamp);
-			PREP_STMT_TASK.addPreparedStmt(insertKitUse);
+			insertKitUse.executeUpdate();
 		} catch (final SQLException e) {
 			ACLogger.severe("Problem with inserting kit_use in the DB", e);
 		}

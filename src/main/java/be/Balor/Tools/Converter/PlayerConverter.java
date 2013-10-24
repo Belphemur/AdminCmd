@@ -25,7 +25,6 @@ import be.Balor.Player.FilePlayer;
 import be.Balor.Player.FilePlayerFactory;
 import be.Balor.Player.IPlayerFactory;
 import be.Balor.Player.PlayerConvertTask;
-import be.Balor.Player.sql.SQLPlayer;
 import be.Balor.Tools.Debug.ACLogger;
 
 /**
@@ -41,7 +40,8 @@ public class PlayerConverter {
 	 * @param oldFactory
 	 * @param newFactory
 	 */
-	public PlayerConverter(final IPlayerFactory oldFactory, final IPlayerFactory newFactory) {
+	public PlayerConverter(final IPlayerFactory oldFactory,
+			final IPlayerFactory newFactory) {
 		super();
 		this.oldFactory = oldFactory;
 		this.newFactory = newFactory;
@@ -50,11 +50,10 @@ public class PlayerConverter {
 	public synchronized void convert() {
 		if (newFactory instanceof FilePlayerFactory) {
 			FilePlayer.scheduleAsyncSave();
-		} else {
-			SQLPlayer.scheduleAsyncSave();
 		}
 		final Set<String> existingPlayers = oldFactory.getExistingPlayers();
-		ACLogger.info("Begin conversion of " + existingPlayers.size() + " players");
+		ACLogger.info("Begin conversion of " + existingPlayers.size()
+				+ " players");
 		for (final String name : this.oldFactory.getExistingPlayers()) {
 			pool.execute(new PlayerConvertTask(oldFactory, newFactory, name));
 		}
