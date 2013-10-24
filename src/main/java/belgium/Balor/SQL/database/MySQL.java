@@ -1,15 +1,19 @@
 package belgium.Balor.SQL.database;
 
-import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
+import be.Balor.Tools.Debug.DebugLog;
 import belgium.Balor.SQL.Database;
 import belgium.Balor.SQL.DatabaseConfig.DatabaseType;
+import belgium.Balor.SQL.JdbcConnectionPool;
 import belgium.Balor.SQL.Statements;
+
+import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 
 public class MySQL extends Database {
 	private final String hostname;
@@ -17,9 +21,11 @@ public class MySQL extends Database {
 	private final String username;
 	private final String password;
 	private final String database;
+	private JdbcConnectionPool pool;
 
-	public MySQL(final Logger log, final String prefix, final String hostname, final String portnmbr, final String database, final String username,
-			final String password) {
+	public MySQL(final Logger log, final String prefix, final String hostname,
+			final String portnmbr, final String database,
+			final String username, final String password) {
 		super(log, prefix, "[MySQL] ");
 		this.hostname = hostname;
 		this.portnmbr = portnmbr;
@@ -41,9 +47,17 @@ public class MySQL extends Database {
 	@Override
 	public void open() throws SQLException {
 		initialize();
-		String url = "";
-		url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/" + this.database;
-		this.connection = DriverManager.getConnection(url, this.username, this.password);
+		final MysqlConnectionPoolDataSource mysqlPool = new MysqlConnectionPoolDataSource();
+		mysqlPool.setAutoClosePStmtStreams(true);
+		mysqlPool.setAutoReconnect(true);
+		mysqlPool.setAutoReconnectForConnectionPools(true);
+		mysqlPool.setAutoReconnectForPools(true);
+		mysqlPool.setDatabaseName(this.database);
+		mysqlPool.setUser(this.username);
+		mysqlPool.setPassword(this.password);
+		mysqlPool.setServerName(this.hostname);
+		mysqlPool.setPort(Integer.parseInt(this.portnmbr));
+		pool = JdbcConnectionPool.create(mysqlPool);
 	}
 
 	@Override
@@ -52,37 +66,36 @@ public class MySQL extends Database {
 		ResultSet result = null;
 		try {
 			autoReconnect();
-			synchronized (connection) {
-				statement = this.connection.createStatement();
+			statement = this.getConnection().createStatement();
 
-				switch (Statements.getStatement(query)) {
-				case SELECT:
-					result = statement.executeQuery(query);
-					break;
+			switch (Statements.getStatement(query)) {
+			case SELECT:
+				result = statement.executeQuery(query);
+				break;
 
-				case INSERT:
-				case UPDATE:
-				case DELETE:
-				case CREATE:
-				case ALTER:
-				case DROP:
-				case TRUNCATE:
-				case RENAME:
-				case DO:
-				case REPLACE:
-				case LOAD:
-				case HANDLER:
-				case CALL:
-					this.lastUpdate = statement.executeUpdate(query);
-					break;
+			case INSERT:
+			case UPDATE:
+			case DELETE:
+			case CREATE:
+			case ALTER:
+			case DROP:
+			case TRUNCATE:
+			case RENAME:
+			case DO:
+			case REPLACE:
+			case LOAD:
+			case HANDLER:
+			case CALL:
+				this.lastUpdate = statement.executeUpdate(query);
+				break;
 
-				default:
-					result = statement.executeQuery(query);
-				}
+			default:
+				result = statement.executeQuery(query);
 			}
 			return result;
 		} catch (final SQLException e) {
-			this.writeError("SQL exception in query(): " + e.getMessage(), false);
+			this.writeError("SQL exception in query(): " + e.getMessage(),
+					false);
 		}
 		return result;
 	}
@@ -93,14 +106,14 @@ public class MySQL extends Database {
 		String query = null;
 		try {
 			if (!this.checkTable(table)) {
-				this.writeError("Table \"" + table + "\" in wipeTable() does not exist.", true);
+				this.writeError("Table \"" + table
+						+ "\" in wipeTable() does not exist.", true);
 				return false;
 			}
 			query = "DELETE FROM " + table + ";";
-			synchronized (connection) {
-				statement = connection.createStatement();
-				statement.executeQuery(query);
-			}
+			statement = getConnection().createStatement();
+			statement.executeQuery(query);
+
 			return true;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
@@ -130,19 +143,55 @@ public class MySQL extends Database {
 		try {
 			final PreparedStatement ps;
 			autoReconnect();
-			synchronized (connection) {
-				if (Statements.getStatement(query) == Statements.INSERT) {
-					ps = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-				} else {
-					ps = connection.prepareStatement(query);
-				}
+			if (Statements.getStatement(query) == Statements.INSERT) {
+				ps = getConnection().prepareStatement(query,
+						PreparedStatement.RETURN_GENERATED_KEYS);
+			} else {
+				ps = getConnection().prepareStatement(query);
+
 			}
 			return ps;
 		} catch (final SQLException e) {
 			if (!e.toString().contains("not return ResultSet")) {
-				this.writeError("SQL exception in prepare(): " + e.getMessage(), false);
+				this.writeError(
+						"SQL exception in prepare(): " + e.getMessage(), false);
 			}
 		}
 		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see belgium.Balor.SQL.Database#getConnection()
+	 */
+	@Override
+	protected Connection getConnection() {
+		try {
+			return pool.getConnection();
+		} catch (final SQLException e) {
+			throw new RuntimeException("Can't get a connection", e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see belgium.Balor.SQL.Database#closePrepStmt(java.sql.PreparedStatement)
+	 */
+	@Override
+	public void closePrepStmt(final PreparedStatement prepStmt) {
+		try {
+			prepStmt.close();
+		} catch (final Exception e) {
+			DebugLog.addException("Exeception when closing stmt", e);
+		}
+		try {
+			prepStmt.getConnection().close();
+		} catch (final Exception e) {
+			DebugLog.addException("Exeception when closing connection of stmt",
+					e);
+		}
+
 	}
 }
