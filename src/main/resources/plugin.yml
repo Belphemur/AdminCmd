@@ -179,13 +179,9 @@ commands:
     aliases: [rwp,rwarp,warpdelete]
     usage: /<command> warpName
   bal_tpwarp:
-    description: Tp to a warp point.
+    description: Tp to a warp point or lists all warps.
     aliases: [twp,twarp,warp]
-    usage: /<command> warpName
-  bal_warplist:
-    description: List all warp points.
-    aliases: [lwp,lwarp,warplist]
-    usage: /<command>
+    usage: /<command> <warpName>
   bal_ip:
     description: get the ip of the player.
     aliases: [ip,address]

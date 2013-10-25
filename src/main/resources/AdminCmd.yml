@@ -543,13 +543,6 @@ acweatherfreeze:
     permissions: admincmd.weather.freeze
     cmdname: bal_wfreeze
 
-acwarplwp:
-    command: lwp
-    description: List all warp points.
-    plugin: AdminCmd
-    permissions: admincmd.warp.tp
-    cmdname: bal_warplist
-
 acwarpwp:
     command: wp [WarpPointName]
     description: Create a warp point using your current position and the given [WarpPointName].
@@ -565,7 +558,7 @@ acwarprwp:
     cmdname: bal_rmwarp
 
 acwarptwp:
-    command: twp [WarpPointName] <player>
+    command: twp <WarpPointName> <-p player>
     description: Teleport yourself or another <player> to the warp point.(NB! You need permission to teleport someone else.)
     plugin: AdminCmd
     permissions: admincmd.warp.tp
