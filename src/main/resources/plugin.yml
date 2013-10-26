@@ -181,7 +181,7 @@ commands:
   bal_tpwarp:
     description: Tp to a warp point or lists all warps.
     aliases: [twp,twarp,warp]
-    usage: /<command> <warpName>
+    usage: /<command> <warpName> <player>
   bal_ip:
     description: get the ip of the player.
     aliases: [ip,address]
