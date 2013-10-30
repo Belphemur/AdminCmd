@@ -34,11 +34,15 @@ import be.Balor.Manager.Permissions.PermChild;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Warp;
 import be.Balor.Tools.CommandUtils.Users;
+import be.Balor.Tools.Help.String.ACMinecraftFontWidthCalculator;
 import be.Balor.World.ACWorld;
+import be.Balor.World.WorldManager;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
+import java.util.Set;
+import org.bukkit.ChatColor;
 
 /**
  * @authors Balor, Lathanael
@@ -68,9 +72,35 @@ public class TpToWarp extends WarpCommand {
 	public void execute(final CommandSender sender, final CommandArgs args)
 			throws ActionNotPermitedException, PlayerNotFound {
 		if (args.length == 0) {
-			LocaleManager.sI18n(sender, "errorWarp",
-					new HashMap<String, String>());
-			return;
+			if (Users.isPlayer(sender)) {
+			final Player p = (Player) sender;
+			String msg = "";
+			Set<String> wp;
+			if (args.hasFlag('a')) {
+				if (!PermissionManager.hasPerm(sender, tpAll)) {
+					return;
+				}
+				wp = WorldManager.getInstance().getAllWarpList();
+			} else {
+				wp = ACWorld.getWorld(p.getWorld()).getWarpList();
+			}
+			sender.sendMessage(ChatColor.GOLD + "Warp Point(s) : "
+					+ ChatColor.WHITE + wp.size());
+			for (final String name : wp) {
+				msg += name + ", ";
+				if (msg.length() >= ACMinecraftFontWidthCalculator.chatwidth) {
+					sender.sendMessage(msg);
+					msg = "";
+				}
+			}
+			if (!msg.equals("")) {
+				if (msg.endsWith(", ")) {
+					msg = msg.substring(0, msg.lastIndexOf(","));
+				}
+				sender.sendMessage(msg);
+			}
+                        return;
+		}
 		}
 		final Player target = Users.getUser(sender, args, permNode, 1, true);
 		Location loc = null;

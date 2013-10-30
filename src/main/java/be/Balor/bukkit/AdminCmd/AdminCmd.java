@@ -165,7 +165,6 @@ import be.Balor.Manager.Commands.Tp.TpWorld;
 import be.Balor.Manager.Commands.Warp.AddWarp;
 import be.Balor.Manager.Commands.Warp.RemoveWarp;
 import be.Balor.Manager.Commands.Warp.TpToWarp;
-import be.Balor.Manager.Commands.Warp.WarpList;
 import be.Balor.Manager.Commands.Weather.ClearSky;
 import be.Balor.Manager.Commands.Weather.FreezeWeather;
 import be.Balor.Manager.Commands.Weather.Rain;
@@ -403,7 +402,6 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(AddWarp.class);
 		cmdManager.registerCommand(RemoveWarp.class);
 		cmdManager.registerCommand(TpToWarp.class);
-		cmdManager.registerCommand(WarpList.class);
 		cmdManager.registerCommand(Ip.class);
 		if (cmdManager.registerCommand(BanPlayer.class)) {
 			banCommands = true;
