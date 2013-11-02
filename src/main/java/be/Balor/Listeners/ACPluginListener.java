@@ -39,9 +39,9 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
+
 import de.JeterLP.MakeYourOwnCommands.Main;
 import de.JeterLP.MakeYourOwnCommands.utils.CommandUtils;
-
 import de.diddiz.LogBlock.LogBlock;
 
 /**
