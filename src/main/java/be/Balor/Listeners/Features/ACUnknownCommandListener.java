@@ -10,8 +10,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
-import de.JeterLP.MakeYourOwnCommands.Main;
-import de.JeterLP.MakeYourOwnCommands.utils.CommandUtils;
+import be.Balor.bukkit.AdminCmd.MYOCHook;
 import org.bukkit.Bukkit;
 
 public class ACUnknownCommandListener implements Listener {
@@ -47,15 +46,17 @@ public class ACUnknownCommandListener implements Listener {
         if (ConfigEnum.UNKNOWN_CMD_LIST.getStringList().contains(name)) {
             return true;
         }
-
-        CommandUtils utils = new CommandUtils((Main) Bukkit.getPluginManager().getPlugin("MakeYourOwnCommands"));
-        if (utils.isRegistered("/" + name)) {
-            return true;
+        
+        if(Bukkit.getPluginManager().getPlugin("MakeYourOwnCommands") != null) {
+            if(MYOCHook.check(name)) {
+                return true;
+            }
         }
-
+        
         if (this.cmdMap == null) {
             return true;
         }
+        
         return this.cmdMap.getCommand(name) != null;
     }
 }
