@@ -327,6 +327,10 @@
 			<name>BukkitDev</name>
 			<url>http://www.gestdown.info:8888/nexus/content/groups/BukkitDev/</url>
 		</repository>
+                <repository>
+                        <id>myoc-repo</id>
+                        <url>http://jeterlp.admincmd.com/maven-repo/</url>
+                </repository> 
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -423,6 +427,11 @@
 			<version>[1.,)</version>
 			<scope>compile</scope>
 		</dependency>
+                <dependency>
+                    <groupId>de.JeterLP</groupId>
+                    <artifactId>MakeYourOwnCommands</artifactId>
+                    <version>1.5.1-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
