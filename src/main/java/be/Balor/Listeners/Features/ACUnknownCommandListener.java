@@ -8,9 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import be.Balor.Tools.Compatibility.Reflect.FieldUtils;
+import be.Balor.Tools.Utils;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
-import be.Balor.bukkit.AdminCmd.MYOCHook;
 import org.bukkit.Bukkit;
 
 public class ACUnknownCommandListener implements Listener {
@@ -47,8 +47,8 @@ public class ACUnknownCommandListener implements Listener {
             return true;
         }
         
-        if(Bukkit.getPluginManager().getPlugin("MakeYourOwnCommands") != null) {
-            if(MYOCHook.check(name)) {
+        if(Utils.myoc != null) {
+            if(Utils.myoc.isRegistered("/" + name)) {
                 return true;
             }
         }

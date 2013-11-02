@@ -37,6 +37,7 @@ import be.Balor.Tools.Blocks.IBlockRemanenceFactory;
 import be.Balor.Tools.Blocks.LogBlockRemanenceFactory;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
+import de.JeterLP.MakeYourOwnCommands.utils.CommandUtils;
 import de.diddiz.LogBlock.Consumer;
 
 /**
@@ -46,6 +47,7 @@ import de.diddiz.LogBlock.Consumer;
 public final class Utils {
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
+        public static CommandUtils myoc = null;
 	public static boolean mChatPresent = false;
 	public static boolean signExtention = false;
 	public final static long secondInMillis = 1000;
@@ -137,7 +139,7 @@ public final class Utils {
 	 * corresponding date and time
 	 * 
 	 * @author Lathanael
-	 * @param
+	 * @param 
 	 * @return timeFormatted
 	 */
 	public static String replaceDateAndTimeFormat(final Date date) {
