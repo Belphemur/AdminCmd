@@ -39,9 +39,9 @@ import belgium.Balor.Workers.InvisibleWorker;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
+
 import de.JeterLP.MakeYourOwnCommands.Main;
 import de.JeterLP.MakeYourOwnCommands.utils.CommandUtils;
-
 import de.diddiz.LogBlock.LogBlock;
 
 /**
@@ -140,14 +140,14 @@ public class ACPluginListener implements Listener {
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
-                if(Utils.myoc == null) {
-                        final Plugin plugin = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("MakeYourOwnCommands");
-                        if(plugin != null && plugin.isEnabled()) {
-                                Utils.myoc = new CommandUtils((Main) plugin);
-                                ACLogger.info("Successfully linked with MakeYourOwnCommands");
-                        }
-                }
+		if (Utils.myoc == null) {
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("MakeYourOwnCommands");
+			if (plugin != null && plugin.isEnabled()) {
+				Utils.myoc = new CommandUtils((Main) plugin);
+				ACLogger.info("Successfully linked with MakeYourOwnCommands");
+			}
+		}
 		if (InvisibleWorker.dynmapAPI == null) {
 			final Plugin plugin = ACPluginManager.getServer()
 					.getPluginManager().getPlugin("dynmap");
