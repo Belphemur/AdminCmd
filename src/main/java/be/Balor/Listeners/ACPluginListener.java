@@ -140,17 +140,18 @@ public class ACPluginListener implements Listener {
 				ACLogger.info("Successfully linked with LogBlock");
 			}
 		}
-                if(Utils.myoc == null) {
-                        final Plugin plugin = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("MakeYourOwnCommands");
-                        if(plugin != null && plugin.isEnabled()) {
-                                final int version = Integer.valueOf(plugin.getDescription().getVersion().replaceAll("\\.", ""));
-                                if (version > 149) {
-                                    Utils.myoc = new CommandUtils((Main) plugin);
-                                    ACLogger.info("Successfully linked with MakeYourOwnCommands");
-                                }
-                        }
-                }
+		if (Utils.myoc == null) {
+			final Plugin plugin = ACPluginManager.getServer()
+					.getPluginManager().getPlugin("MakeYourOwnCommands");
+			if (plugin != null && plugin.isEnabled()) {
+				final int version = Integer.valueOf(plugin.getDescription()
+						.getVersion().replaceAll("\\.", ""));
+				if (version > 149) {
+					Utils.myoc = new CommandUtils((Main) plugin);
+					ACLogger.info("Successfully linked with MakeYourOwnCommands");
+				}
+			}
+		}
 		if (InvisibleWorker.dynmapAPI == null) {
 			final Plugin plugin = ACPluginManager.getServer()
 					.getPluginManager().getPlugin("dynmap");
