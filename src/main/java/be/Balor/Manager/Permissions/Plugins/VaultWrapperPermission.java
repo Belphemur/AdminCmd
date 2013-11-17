@@ -44,14 +44,14 @@ public class VaultWrapperPermission extends SuperPermissions {
 	public VaultWrapperPermission() {
 		final RegisteredServiceProvider<Chat> rspChat = ACPluginManager
 				.getServer().getServicesManager().getRegistration(Chat.class);
-		if (rspChat != null) {
+		if (rspChat != null && rspChat.getProvider() != null) {
 			vaultChat = rspChat.getProvider();
 		}
 		final RegisteredServiceProvider<net.milkbowl.vault.permission.Permission> rspPerm = ACPluginManager
 				.getServer()
 				.getServicesManager()
 				.getRegistration(net.milkbowl.vault.permission.Permission.class);
-		if (rspPerm != null) {
+		if (rspPerm != null && rspPerm.getProvider() != null) {
 			vaultPerm = rspPerm.getProvider();
 		}
 	}
