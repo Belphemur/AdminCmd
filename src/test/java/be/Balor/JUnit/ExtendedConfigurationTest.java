@@ -78,6 +78,8 @@ import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.avaje.ebean.config.ServerConfig;
+import java.awt.image.BufferedImage;
+import org.bukkit.util.CachedServerIcon;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -661,6 +663,24 @@ public class ExtendedConfigurationTest {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+                        @Override
+                        public CachedServerIcon getServerIcon() {
+                                // TODO Auto-generated method stub
+                                return null;
+                        }
+
+                        @Override
+                        public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+                                // TODO Auto-generated method stub
+                                return null;
+                        }
+
+                        @Override
+                        public CachedServerIcon loadServerIcon(BufferedImage bi) throws IllegalArgumentException, Exception {
+                                // TODO Auto-generated method stub
+                                return null;
+                        }
 		});
 
 	}
