@@ -149,7 +149,10 @@ public class ACPluginListener implements Listener {
 				if (version > 149) {
 					Utils.myoc = new CommandUtils((Main) plugin);
 					ACLogger.info("Successfully linked with MakeYourOwnCommands");
-				}
+				} else if(version > 152) {
+                                        Utils.myoc = Main.getUtils();
+					ACLogger.info("Successfully linked with MakeYourOwnCommands");
+                                }
 			}
 		}
 		if (InvisibleWorker.dynmapAPI == null) {
