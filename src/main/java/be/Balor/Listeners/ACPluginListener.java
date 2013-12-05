@@ -50,131 +50,133 @@ import de.diddiz.LogBlock.LogBlock;
  */
 public class ACPluginListener implements Listener {
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPluginDisable(final PluginDisableEvent event) {
-		ACPluginManager.unRegisterACPlugin(event.getPlugin());
-	}
+        @EventHandler(priority = EventPriority.MONITOR)
+        public void onPluginDisable(final PluginDisableEvent event) {
+                ACPluginManager.unRegisterACPlugin(event.getPlugin());
+        }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPluginEnable(final PluginEnableEvent event) {
+        @EventHandler(priority = EventPriority.MONITOR)
+        public void onPluginEnable(final PluginEnableEvent event) {
 
-		if (!PermissionManager.isVault()) {
-			final Plugin vault = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("Vault");
-			if (vault != null && vault.isEnabled()) {
-				PermissionManager.setVault();
-			}
-		}
-		if (!PermissionManager.isPermissionsExSet()) {
-			final Plugin Permissions = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("PermissionsEx");
-			if (Permissions != null && Permissions.isEnabled()) {
-				PermissionManager.setPEX(PermissionsEx.getPermissionManager());
-			}
+                if (!PermissionManager.isVault()) {
+                        final Plugin vault = ACPluginManager.getServer().getPluginManager()
+                                        .getPlugin("Vault");
+                        if (vault != null && vault.isEnabled()) {
+                                PermissionManager.setVault();
+                        }
+                }
+                if (!PermissionManager.isPermissionsExSet()) {
+                        final Plugin Permissions = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("PermissionsEx");
+                        if (Permissions != null && Permissions.isEnabled()) {
+                                PermissionManager.setPEX(PermissionsEx.getPermissionManager());
+                        }
 
-		}
-		if (!PermissionManager.isGroupManagerSet()) {
-			final Plugin GMplugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("GroupManager");
-			if (GMplugin != null && GMplugin.isEnabled()) {
-				PermissionManager.setGroupManager(GMplugin);
-			}
+                }
+                if (!PermissionManager.isGroupManagerSet()) {
+                        final Plugin GMplugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("GroupManager");
+                        if (GMplugin != null && GMplugin.isEnabled()) {
+                                PermissionManager.setGroupManager(GMplugin);
+                        }
 
-		}
-		if (!PermissionManager.isYetiPermissionsSet()) {
-			final Plugin Permissions = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("Permissions");
-			if (Permissions != null && Permissions.isEnabled()) {
-				PermissionManager
-						.setYetiPermissions(((Permissions) Permissions)
-								.getHandler());
+                }
+                if (!PermissionManager.isYetiPermissionsSet()) {
+                        final Plugin Permissions = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("Permissions");
+                        if (Permissions != null && Permissions.isEnabled()) {
+                                PermissionManager
+                                                .setYetiPermissions(((Permissions) Permissions)
+                                                                .getHandler());
 
-			}
-		}
-		if (!PermissionManager.isbPermissionsSet()) {
-			final Plugin plugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("bPermissions");
-			if (plugin != null) {
-				String version = plugin.getDescription().getVersion();
-				version = version.replace(".", "");
-				final int ver = Integer.parseInt(version);
-				if (ver < 285) {
-					ACLogger.info("You are using bPermissions v"
-							+ plugin.getDescription().getVersion()
-							+ ". This is an outdated version, permission support for bPermission will be disabled.");
-					return;
-				}
-				PermissionManager.setbPermissions();
-			}
-		}
-		if (!PermissionManager.isPermissionsBukkitSet()) {
-			final Plugin plugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("PermissionsBukkit");
-			if (plugin != null) {
-				PermissionManager
-						.setPermissionsBukkit((PermissionsPlugin) plugin);
-			}
-		}
-		if (Utils.oddItem == null) {
-			final Plugin items = ACPluginManager.getServer().getPluginManager()
-					.getPlugin("OddItem");
-			if (items != null && items.isEnabled()) {
-				Utils.oddItem = (OddItemBase) items;
-				ACLogger.info("Successfully linked with OddItem");
-			}
-		}
-		if (!SuperPermissions.isApiSet()) {
-			final Plugin mChatPlugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("mChatSuite");
-			if (mChatPlugin != null && mChatPlugin.isEnabled()) {
-				SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
-				Utils.mChatPresent = true;
-				ACLogger.info("Successfully linked with mChatSuite");
-			}
-		}
-		if (Utils.logBlock == null) {
-			final Plugin plugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("LogBlock");
-			if (plugin != null && plugin.isEnabled()) {
-				Utils.setLogBlock(((LogBlock) plugin).getConsumer());
-				ACLogger.info("Successfully linked with LogBlock");
-			}
-		}
-		if (Utils.myoc == null) {
-			final Plugin plugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("MakeYourOwnCommands");
-			if (plugin != null && plugin.isEnabled()) {
-				final int version = Integer.valueOf(plugin.getDescription()
-						.getVersion().replaceAll("\\.", ""));
-				if (version > 149) {
-					Utils.myoc = new CommandUtils((Main) plugin);
-					ACLogger.info("Successfully linked with MakeYourOwnCommands");
-				} else if(version > 152) {
-                                        Utils.myoc = Main.getUtils();
-					ACLogger.info("Successfully linked with MakeYourOwnCommands");
+                        }
+                }
+                if (!PermissionManager.isbPermissionsSet()) {
+                        final Plugin plugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("bPermissions");
+                        if (plugin != null) {
+                                String version = plugin.getDescription().getVersion();
+                                version = version.replace(".", "");
+                                final int ver = Integer.parseInt(version);
+                                if (ver < 285) {
+                                        ACLogger.info("You are using bPermissions v"
+                                                        + plugin.getDescription().getVersion()
+                                                        + ". This is an outdated version, permission support for bPermission will be disabled.");
+                                        return;
                                 }
-			}
-		}
-		if (InvisibleWorker.dynmapAPI == null) {
-			final Plugin plugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("dynmap");
-			if (plugin != null && plugin.isEnabled()) {
-				InvisibleWorker.dynmapAPI = (DynmapAPI) plugin;
-				ACLogger.info("Successfully linked with Dynmap");
-			}
-		}
-		if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
-			for (final Plugin plugin : event.getPlugin().getServer()
-					.getPluginManager().getPlugins()) {
-				HelpLister.getInstance().addPlugin(plugin);
-			}
-		}
-		if (!Utils.signExtention) {
-			final Plugin plugin = ACPluginManager.getServer()
-					.getPluginManager().getPlugin("SignExtensions");
-			if (plugin != null) {
-				Utils.signExtention = true;
-			}
-		}
-	}
+                                PermissionManager.setbPermissions();
+                        }
+                }
+                if (!PermissionManager.isPermissionsBukkitSet()) {
+                        final Plugin plugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("PermissionsBukkit");
+                        if (plugin != null) {
+                                PermissionManager
+                                                .setPermissionsBukkit((PermissionsPlugin) plugin);
+                        }
+                }
+                if (Utils.oddItem == null) {
+                        final Plugin items = ACPluginManager.getServer().getPluginManager()
+                                        .getPlugin("OddItem");
+                        if (items != null && items.isEnabled()) {
+                                Utils.oddItem = (OddItemBase) items;
+                                ACLogger.info("Successfully linked with OddItem");
+                        }
+                }
+                if (!SuperPermissions.isApiSet()) {
+                        final Plugin mChatPlugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("mChatSuite");
+                        if (mChatPlugin != null && mChatPlugin.isEnabled()) {
+                                SuperPermissions.setmChatapi((mChatSuite) mChatPlugin);
+                                Utils.mChatPresent = true;
+                                ACLogger.info("Successfully linked with mChatSuite");
+                        }
+                }
+                if (Utils.logBlock == null) {
+                        final Plugin plugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("LogBlock");
+                        if (plugin != null && plugin.isEnabled()) {
+                                Utils.setLogBlock(((LogBlock) plugin).getConsumer());
+                                ACLogger.info("Successfully linked with LogBlock");
+                        }
+                }
+                if (Utils.myoc == null) {
+                        final Plugin plugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("MakeYourOwnCommands");
+                        if (plugin != null && plugin.isEnabled()) {
+                                final int version = Integer.valueOf(plugin.getDescription()
+                                                .getVersion().replaceAll("\\.", ""));
+                                if (version > 149) {
+                                        if (version > 152) {
+                                                Utils.myoc = Main.getUtils();
+                                                ACLogger.info("Successfully linked with newer faster version of MakeYourOwnCommands");
+                                        } else {
+                                                Utils.myoc = new CommandUtils((Main) plugin);
+                                                ACLogger.info("Successfully linked with MakeYourOwnCommands");
+                                        }
+                                }
+                        }
+                }
+                if (InvisibleWorker.dynmapAPI == null) {
+                        final Plugin plugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("dynmap");
+                        if (plugin != null && plugin.isEnabled()) {
+                                InvisibleWorker.dynmapAPI = (DynmapAPI) plugin;
+                                ACLogger.info("Successfully linked with Dynmap");
+                        }
+                }
+                if (ConfigEnum.H_ALLPLUGIN.getBoolean()) {
+                        for (final Plugin plugin : event.getPlugin().getServer()
+                                        .getPluginManager().getPlugins()) {
+                                HelpLister.getInstance().addPlugin(plugin);
+                        }
+                }
+                if (!Utils.signExtention) {
+                        final Plugin plugin = ACPluginManager.getServer()
+                                        .getPluginManager().getPlugin("SignExtensions");
+                        if (plugin != null) {
+                                Utils.signExtention = true;
+                        }
+                }
+        }
 }
