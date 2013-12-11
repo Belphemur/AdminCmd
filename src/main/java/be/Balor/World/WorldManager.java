@@ -26,6 +26,7 @@ import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Converter.WorldConverter;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.Str;
+import be.Balor.Tools.Warp;
 
 import com.google.common.collect.MapMaker;
 
@@ -34,124 +35,139 @@ import com.google.common.collect.MapMaker;
  * 
  */
 public class WorldManager {
-	/**
-	 * Cache of all loaded ACWorld(s)
-	 */
-	private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
-			.makeMap();
-	private AbstractWorldFactory worldFactory;
-	private static final WorldManager INSTANCE = new WorldManager();
 
-	/**
-	 * 
-	 */
-	private WorldManager() {
-	}
+        /**
+         * Cache of all loaded ACWorld(s)
+         */
+        private final ConcurrentMap<String, ACWorld> worlds = new MapMaker()
+                        .makeMap();
+        private AbstractWorldFactory worldFactory;
+        private static final WorldManager INSTANCE = new WorldManager();
 
-	/**
-	 * @return the instance
-	 */
-	public static WorldManager getInstance() {
-		return INSTANCE;
-	}
+        /**
+         * 
+         */
+        private WorldManager() {
+        }
 
-	/**
-	 * Add a new world
-	 * 
-	 * @param world
-	 * @return if the world was added successfully
-	 */
-	private synchronized boolean addWorld(final ACWorld world) {
-		final String name = world.getName();
-		if (name == null) {
-			throw new NullPointerException();
-		}
+        /**
+         * @return the instance
+         */
+        public static WorldManager getInstance() {
+                return INSTANCE;
+        }
 
-		worlds.put(name.toUpperCase(), world);
-		return true;
-	}
+        /**
+         * Add a new world
+         * 
+         * @param world
+         * @return if the world was added successfully
+         */
+        private synchronized boolean addWorld(final ACWorld world) {
+                final String name = world.getName();
+                if (name == null) {
+                        throw new NullPointerException();
+                }
 
-	/**
-	 * @param worldFactory
-	 *            the worldFactory to set
-	 */
-	public void setWorldFactory(final AbstractWorldFactory worldFactory) {
-		if (this.worldFactory == null) {
-			this.worldFactory = worldFactory;
-		}
-	}
+                worlds.put(name.toUpperCase(), world);
+                return true;
+        }
 
-	/**
-	 * To convert the ACWorld using an another factory
-	 * 
-	 * @param factory
-	 */
-	public void convertFactory(final AbstractWorldFactory factory) {
-		buildConverter(factory).convert();
-	}
+        /**
+         * @param worldFactory
+         *            the worldFactory to set
+         */
+        public void setWorldFactory(final AbstractWorldFactory worldFactory) {
+                if (this.worldFactory == null) {
+                        this.worldFactory = worldFactory;
+                }
+        }
 
-	/**
-	 * Build a converter for the current and the new factory
-	 * 
-	 * @param newFactory
-	 * @return
-	 */
-	public WorldConverter buildConverter(final AbstractWorldFactory newFactory) {
-		return new WorldConverter(worldFactory, newFactory);
-	}
+        /**
+         * To convert the ACWorld using an another factory
+         * 
+         * @param factory
+         */
+        public void convertFactory(final AbstractWorldFactory factory) {
+                buildConverter(factory).convert();
+        }
 
-	public void afterConversion(final AbstractWorldFactory factory) {
-		DebugLog.INSTANCE.info("Setting new Factory");
-		this.worldFactory = factory;
-	}
+        /**
+         * Build a converter for the current and the new factory
+         * 
+         * @param newFactory
+         * @return
+         */
+        public WorldConverter buildConverter(final AbstractWorldFactory newFactory) {
+                return new WorldConverter(worldFactory, newFactory);
+        }
 
-	ACWorld demandACWorld(final String name) throws WorldNotLoaded {
-		ACWorld result = worlds.get(name.toUpperCase());
-		if (result == null) {
-			try {
-				result = worldFactory.createWorld(name.toUpperCase());
-				addWorld(result);
-			} catch (final WorldNotLoaded e) {
-				// Now we know that there is no world loaded by the name, search
-				// for worlds beginning with 'name'
-				// This way it avoids getting requests for 'world' mixed up with
-				// 'world_nether'
-				final String found = Str.matchString(worlds.keySet(),
-						name.toUpperCase());
-				if (found != null) {
-					return worlds.get(found.toUpperCase());
-				}
-				throw e;
-			}
-		}
-		return result;
-	}
+        public void afterConversion(final AbstractWorldFactory factory) {
+                DebugLog.INSTANCE.info("Setting new Factory");
+                this.worldFactory = factory;
+        }
 
-	ACWorld demandACWorld(final World world) {
-		final String name = world.getName().toUpperCase();
-		ACWorld result = worlds.get(name);
-		if (result == null) {
-			result = worldFactory.createWorld(world);
-			addWorld(result);
-			result = worlds.get(name);
-		}
-		return result;
-	}
+        ACWorld demandACWorld(final String name) throws WorldNotLoaded {
+                ACWorld result = worlds.get(name.toUpperCase());
+                if (result == null) {
+                        try {
+                                result = worldFactory.createWorld(name.toUpperCase());
+                                addWorld(result);
+                        } catch (final WorldNotLoaded e) {
+                                // Now we know that there is no world loaded by the name, search
+                                // for worlds beginning with 'name'
+                                // This way it avoids getting requests for 'world' mixed up with
+                                // 'world_nether'
+                                final String found = Str.matchString(worlds.keySet(),
+                                                name.toUpperCase());
+                                if (found != null) {
+                                        return worlds.get(found.toUpperCase());
+                                }
+                                throw e;
+                        }
+                }
+                return result;
+        }
 
-	/**
-	 * Getting all the WarpsName using the world name as prefix
-	 * 
-	 * @return
-	 */
-	public Set<String> getAllWarpList() {
-		final Set<String> warps = new HashSet<String>();
-		for (final ACWorld world : worlds.values()) {
-			for (final String warp : world.getWarpList()) {
-				warps.add(world.getName() + ":" + warp);
-			}
-		}
-		return warps;
+        ACWorld demandACWorld(final World world) {
+                final String name = world.getName().toUpperCase();
+                ACWorld result = worlds.get(name);
+                if (result == null) {
+                        result = worldFactory.createWorld(world);
+                        addWorld(result);
+                        result = worlds.get(name);
+                }
+                return result;
+        }
 
-	}
+        /**
+         * Getting all the WarpsName using the world name as prefix
+         * 
+         * @return
+         */
+        public Set<String> getAllWarpList() {
+                final Set<String> warps = new HashSet<String>();
+                for (final ACWorld world : worlds.values()) {
+                        for (final String warp : world.getWarpList()) {
+                                warps.add(world.getName() + ":" + warp);
+                        }
+                }
+                return warps;
+        }
+
+         /**
+         * Getting all the Warps.
+         * 
+         * @return
+         */
+        public Set<Warp> getAllWarps() {
+                final Set<Warp> ret = new HashSet<Warp>();
+                for (final ACWorld world : worlds.values()) {
+                        for (final String warp : world.getWarpList()) {
+                                ret.add(world.getWarp(warp));
+                        }
+                }
+                return ret;
+        }
 
 }

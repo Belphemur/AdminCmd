@@ -2,7 +2,7 @@ name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
 version: ${project.version} (BUILD ${git.build.time})
 authors: [Balor, Lathanael, Javacow, JeterLP]
-softdepend: [MultiVerse,Multiverse-Core,Permissions,dynmap,mChatSuite,OddItem,Spout,mcMMO,VirtualChest,HeroChat,XrayInformer,HomeSpawnPlus,LogBlock,Vault,XXX]
+softdepend: [MultiVerse,Multiverse-Core,Permissions,dynmap,mChatSuite,OddItem,Spout,mcMMO,VirtualChest,HeroChat,XrayInformer,HomeSpawnPlus,LogBlock,Vault,XXX,MakeYourOwnCommands]
 description: >
              This plugin implements the basic commands for running a server.
 commands:
