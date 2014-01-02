@@ -146,14 +146,9 @@ public class ACPluginListener implements Listener {
                         if (plugin != null && plugin.isEnabled()) {
                                 final int version = Integer.valueOf(plugin.getDescription()
                                                 .getVersion().replaceAll("\\.", ""));
-                                if (version > 149) {
-                                        if (version > 152) {
-                                                Utils.myoc = Main.getUtils();
-                                                ACLogger.info("Successfully linked with newer faster version of MakeYourOwnCommands");
-                                        } else {
-                                                Utils.myoc = new CommandUtils((Main) plugin);
-                                                ACLogger.info("Successfully linked with MakeYourOwnCommands");
-                                        }
+                                if (version > 152) {
+                                        Utils.myoc = Main.getUtils();
+                                        ACLogger.info("Successfully linked with MakeYourOwnCommands");
                                 }
                         }
                 }

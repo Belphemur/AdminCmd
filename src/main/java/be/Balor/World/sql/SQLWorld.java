@@ -14,6 +14,8 @@
     along with AdminCmd.  If not, see <http://www.gnu.org/licenses/>.*/
 package be.Balor.World.sql;
 
+import be.Balor.Listeners.Events.ACWarpCreateEvent;
+import be.Balor.Listeners.Events.ACWarpRemoveEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,7 +38,9 @@ import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Files.ObjectContainer;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.World.ACWorld;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import belgium.Balor.SQL.Database;
+import org.bukkit.Bukkit;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -226,7 +230,9 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public void addWarp(final String name, final Location loc) {
-		warps.put(name, new Warp(name, loc));
+                Warp w = new Warp(name, loc);
+                Bukkit.getPluginManager().callEvent(new ACWarpCreateEvent(w));
+		warps.put(name, w);
 		final PreparedStatement insertWarp = Database.DATABASE
 				.prepare("REPLACE INTO `ac_warps` (`name`,`world_id`,`x`,`y`,`z`,`pitch`,`yaw`) VALUES (?,?,?,?,?,?,?)");
 		try {
@@ -254,7 +260,7 @@ public class SQLWorld extends ACWorld {
 	@Override
 	public Warp getWarp(final String name) throws WorldNotLoaded,
 			IllegalArgumentException {
-		if (name == null || (name != null && name.isEmpty())) {
+		if (name == null || name.isEmpty()) {
 			throw new IllegalArgumentException("Name can't be null or Empty");
 		}
 		Warp warp = warps.get(name);
@@ -285,6 +291,8 @@ public class SQLWorld extends ACWorld {
 	 */
 	@Override
 	public void removeWarp(final String name) {
+                Warp w = getWarp(name);
+                Bukkit.getPluginManager().callEvent(new ACWarpRemoveEvent(w));
 		warps.remove(name);
 		final PreparedStatement deleteWarp = Database.DATABASE
 				.prepare("DELETE FROM `ac_warps` WHERE `name`=? AND `world_id`=?");
