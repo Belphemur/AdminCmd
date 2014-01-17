@@ -193,7 +193,7 @@ public class TpToWarp extends WarpCommand {
 	 */
 	@Override
 	public boolean argsCheck(final String... args) {
-		return args != null && args.length >= 1;
+		return args != null;
 	}
 
 	/*
