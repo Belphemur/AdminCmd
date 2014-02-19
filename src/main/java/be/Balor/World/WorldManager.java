@@ -167,7 +167,6 @@ public class WorldManager {
         public List<Warp> getAllWarps() {
                 final List<Warp> ret = new ArrayList<Warp>();
                 for (final ACWorld world : worlds.values()) {
-                        ACLogger.Log(Level.INFO, world.getName());
                         for (String warp : world.getWarpList()) {
                                 ret.add(world.getWarp(warp));
                         }
