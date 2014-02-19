@@ -57,6 +57,9 @@ public enum LocaleHelper {
 	TP_ALL("tpAll", ChatColor.GREEN + "You have been successfully teleported to " + ChatColor.GOLD + "%loc" + ChatColor.GREEN + " by " + ChatColor.GOLD
 			+ "%sender"),
 	TP_REQUEST_DENIED("tpReqDenied", ChatColor.RED + "The teleport request has been denied."),
+        TP_NO_FREE_BLOCK("noFreeBlock", ChatColor.RED + "There is no free block."),
+        TP_UP_SUCCESS("TpUpSuccess", ChatColor.GREEN + "You have been teleported up."),       
+        TP_DOWN_SUCCESS("TpDownSuccess", ChatColor.GREEN + "You have been teleported down."),
 	BL_ITEM_ALREADY("itemBlAlready", ChatColor.RED + "This item " + ChatColor.GOLD + "%item " + ChatColor.RED + "is already blacklisted"),
 	BL_ITEM_PROBLEM("blItemSaveProb", ChatColor.GOLD + "Can't save the blackList file"),
 	BL_ITEM_NOT_BLISTED("blItemNotBl", ChatColor.RED + "This item " + ChatColor.GOLD + "%item" + ChatColor.RED + " is not black listed."),

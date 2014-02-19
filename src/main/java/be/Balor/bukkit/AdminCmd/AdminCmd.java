@@ -153,15 +153,7 @@ import be.Balor.Manager.Commands.Spawn.Spawn;
 import be.Balor.Manager.Commands.Time.Day;
 import be.Balor.Manager.Commands.Time.PlayerTime;
 import be.Balor.Manager.Commands.Time.SetTime;
-import be.Balor.Manager.Commands.Tp.LastLocation;
-import be.Balor.Manager.Commands.Tp.TpAll;
-import be.Balor.Manager.Commands.Tp.TpAtSee;
-import be.Balor.Manager.Commands.Tp.TpHere;
-import be.Balor.Manager.Commands.Tp.TpLoc;
-import be.Balor.Manager.Commands.Tp.TpPlayerToPlayer;
-import be.Balor.Manager.Commands.Tp.TpTo;
-import be.Balor.Manager.Commands.Tp.TpToggle;
-import be.Balor.Manager.Commands.Tp.TpWorld;
+import be.Balor.Manager.Commands.Tp.*;
 import be.Balor.Manager.Commands.Warp.AddWarp;
 import be.Balor.Manager.Commands.Warp.RemoveWarp;
 import be.Balor.Manager.Commands.Warp.TpToWarp;
@@ -522,6 +514,8 @@ public final class AdminCmd extends AbstractAdminCmdPlugin {
 		cmdManager.registerCommand(Head.class);
 		cmdManager.registerCommand(RemoveStatusEffects.class);
 		cmdManager.registerCommand(PluginsList.class);
+                cmdManager.registerCommand(TpUp.class);
+                cmdManager.registerCommand(TpDown.class);
 		DebugLog.endInfo();
 	}
 

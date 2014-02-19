@@ -36,6 +36,7 @@ public interface IImport {
 
 	/**
 	 * Gets the Spawn-point(s) and sets them in the ACWorld
+         * @return int
 	 */
 	public abstract int importSpawnPoints();
 

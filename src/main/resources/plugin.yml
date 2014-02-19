@@ -489,3 +489,11 @@ commands:
     description: List all the plugins on the server.
     usage: /<command>
     aliases: [plugins, pl]
+  bal_up:
+    description: Teleports up to the next free block.
+    usage: /<command> [-p player]
+    aliases: [top, up]
+  bal_down:
+    description: Teleports down to the next free block.
+    usage: /<command> [-p player]
+    aliases: [down]

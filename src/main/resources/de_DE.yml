@@ -319,3 +319,6 @@ effect:
   Successfull: '§eDu hast §a%effect §eentfernt.'
 unkownCommand: '§c[FEHLER] §7Der Kommando konnte nicht gefunden werden. Versuche /help.'
 tpReqDenied: '§cDie Teleport-anfrage wurde abgelehnt.'
+noFreeBlock: '§cDort ist leider kein freier Block.'
+TpUpSuccess: '§aDu wurdest nach oben teleportiert.'
+TpDownSuccess: '§aDu wurdest nach unten teleportiert.'

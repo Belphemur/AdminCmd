@@ -24,11 +24,15 @@ import org.bukkit.World;
 
 import be.Balor.Manager.Exceptions.WorldNotLoaded;
 import be.Balor.Tools.Converter.WorldConverter;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Debug.DebugLog;
 import be.Balor.Tools.Help.String.Str;
 import be.Balor.Tools.Warp;
 
 import com.google.common.collect.MapMaker;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @author Balor (aka Antoine Aflalo)
@@ -149,7 +153,7 @@ public class WorldManager {
                 final Set<String> warps = new HashSet<String>();
                 for (final ACWorld world : worlds.values()) {
                         for (final String warp : world.getWarpList()) {
-                                warps.add(world.getName() + ":" + warp);
+                                warps.add(world.getName() + ":" + warp);                               
                         }
                 }
                 return warps;
@@ -160,10 +164,11 @@ public class WorldManager {
          * 
          * @return
          */
-        public Set<Warp> getAllWarps() {
-                final Set<Warp> ret = new HashSet<Warp>();
+        public List<Warp> getAllWarps() {
+                final List<Warp> ret = new ArrayList<Warp>();
                 for (final ACWorld world : worlds.values()) {
-                        for (final String warp : world.getWarpList()) {
+                        ACLogger.Log(Level.INFO, world.getName());
+                        for (String warp : world.getWarpList()) {
                                 ret.add(world.getWarp(warp));
                         }
                 }

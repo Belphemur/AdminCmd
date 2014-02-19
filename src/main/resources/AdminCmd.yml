@@ -838,3 +838,17 @@ acserverplugins:
     plugin: AdminCmd
     permissions: admincmd.server.plugins
     cmdname: bal_plugins
+
+acteleportup:
+    command: up
+    description: "Teleports up to the next free block."
+    plugin: AdminCmd
+    permissions: admincmd.tp.up
+    cmdname: bal_up
+    
+acteleportdown:
+    command: down
+    description: "Teleports down to the next free block."
+    plugin: AdminCmd
+    permissions: admincmd.tp.down
+    cmdname: bal_down
