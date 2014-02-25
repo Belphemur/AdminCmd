@@ -364,7 +364,7 @@ public enum ConfigEnum {
 	UPDATE_SRC(
 			"checkForUpdate.updateChannel",
 			"stable",
-			"Which version to check. Can be stable or dev."),
+			"Which version to check. Can be stable, beta or dev."),
 	E_PST_DELAY(
 			"delayBeforeSendToDb",
 			10,

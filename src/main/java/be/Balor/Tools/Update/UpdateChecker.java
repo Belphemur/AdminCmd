@@ -45,10 +45,10 @@ import be.Balor.bukkit.AdminCmd.LocaleHelper;
  */
 public class UpdateChecker {
 	public enum Channel {
-		DEV("http://www.admincmd.com/category/dev/feed/") {
+		BETA("http://www.admincmd.com/category/beta/feed/") {
 			@Override
 			public String toString() {
-				return "Development Version";
+				return "Beta Version";
 			}
 		},
 		STABLE("http://www.admincmd.com/category/stable/feed/") {

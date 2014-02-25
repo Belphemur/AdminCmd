@@ -34,6 +34,7 @@ public class AdminCmdVersion implements Comparable<AdminCmdVersion> {
 			.compile("([\\d]*)\\.([\\d]*)\\.([\\d]*)(-SNAPSHOT | )\\(BUILD (.*)\\)");
 	private int major, minor, build;
 	private boolean dev = false;
+        private boolean beta = false;
 	private Date buildDate;
 	private final String version;
 
@@ -51,7 +52,9 @@ public class AdminCmdVersion implements Comparable<AdminCmdVersion> {
 				build = Integer.parseInt(regexMatcher.group(3));
 				if (regexMatcher.group(4).equalsIgnoreCase("-SNAPSHOT ")) {
 					dev = true;
-				}
+				} else if(regexMatcher.group(4).equalsIgnoreCase("-BETA")) {
+                                        beta = true;
+                                }
 				buildDate = new SimpleDateFormat("dd.MM.yyyy '@' HH:mm:ss")
 						.parse(regexMatcher.group(5));
 			}
@@ -87,6 +90,7 @@ public class AdminCmdVersion implements Comparable<AdminCmdVersion> {
 		result = prime * result
 				+ ((buildDate == null) ? 0 : buildDate.hashCode());
 		result = prime * result + (dev ? 1231 : 1237);
+                result = prime * result + (beta ? 1231 : 1237);
 		result = prime * result + major;
 		result = prime * result + minor;
 		return result;
@@ -122,6 +126,9 @@ public class AdminCmdVersion implements Comparable<AdminCmdVersion> {
 		if (dev != other.dev) {
 			return false;
 		}
+                if(beta != other.beta) {
+                        return false;
+                }
 		if (major != other.major) {
 			return false;
 		}
@@ -139,8 +146,8 @@ public class AdminCmdVersion implements Comparable<AdminCmdVersion> {
 	@Override
 	public String toString() {
 		return String
-				.format("AdminCmdVersion [major=%s, minor=%s, build=%s, dev=%s, buildDate=%s]",
-						major, minor, build, dev, buildDate);
+				.format("AdminCmdVersion [major=%s, minor=%s, build=%s, dev=%s, beta=%s, buildDate=%s]",
+						major, minor, build, dev, beta, buildDate);
 	}
 
 	/**
