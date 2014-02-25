@@ -1294,7 +1294,7 @@ public class ACHelper {
 	private void initUpdateChecker() {
 		if (ConfigEnum.CHECK_UPDATE.getBoolean()) {
 			final Channel channel = ConfigEnum.UPDATE_SRC.getString()
-					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.DEV;
+					.equalsIgnoreCase("stable") ? Channel.STABLE : Channel.BETA;
 			new UpdateChecker(channel, coreInstance);
 			final Graph updateChannelGraph = coreInstance.getMetrics()
 					.createGraph("Update Channels");
