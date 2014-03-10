@@ -47,7 +47,7 @@ import de.diddiz.LogBlock.Consumer;
 public final class Utils {
 	public static OddItemBase oddItem = null;
 	public static Consumer logBlock = null;
-        public static CommandUtils myoc = null;
+        public static boolean myocPresent = false;
 	public static boolean mChatPresent = false;
 	public static boolean signExtention = false;
 	public final static long secondInMillis = 1000;
