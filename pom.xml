@@ -229,41 +229,18 @@
                         </goals>
                     </execution>
                 </executions>
-
                 <configuration>
-                    <!-- that's the default value -->
                     <dateFormat>dd.MM.yyyy '@' HH:mm:ss</dateFormat>
-
-                    <!-- false is default here, it prints some more information during the 
-                    build -->
                     <verbose>true</verbose>
-
-                    <!-- If you'd like to tell the plugin where your .git directory is, 
-                    use this setting, otherwise we'll perform a search trying to figure out the 
-                    right directory. It's better to add it explicite IMHO. -->
                     <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-
-                    <!-- ALTERNATE SETUP - GENERATE FILE -->
-                    <!-- If you want to keep git information, even in your WAR file etc, 
-                    use this mode, which will generate a properties file (with filled out values) 
-                    which you can then normally read using new Properties().load(/**/) -->
-
-                    <!-- this is false by default, forces the plugin to generate the git.properties 
-                    file -->
                     <generateGitPropertiesFile>false</generateGitPropertiesFile>
-
-                    <!-- The path for the to be generated properties file, it's relative 
-                    to ${project.basedir} -->
                     <generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
                 </configuration>
 
             </plugin>
-            <!-- END OF GIT COMMIT ID PLUGIN CONFIGURATION -->
         </plugins>
         <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings 
-                only. It has no influence on the Maven build itself. -->
+            <plugins>               
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -403,7 +380,7 @@
         <dependency>
             <groupId>de.JeterLP</groupId>
             <artifactId>MakeYourOwnCommands</artifactId>
-            <version>1.5.3-SNAPSHOT</version>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
     <properties>
