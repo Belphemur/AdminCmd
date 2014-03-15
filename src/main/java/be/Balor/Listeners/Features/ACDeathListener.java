@@ -1,4 +1,4 @@
-/*************************************************************************
+/** ***********************************************************************
  * This file is part of AdminCmd.
  *
  * AdminCmd is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with AdminCmd. If not, see <http://www.gnu.org/licenses/>.
  *
- **************************************************************************/
+ ************************************************************************* */
 package be.Balor.Listeners.Features;
 
 import java.util.HashMap;
@@ -58,10 +58,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.bukkit.AdminCmd.ACHelper;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
+import org.bukkit.Material;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
- * 
+ *
  */
 public class ACDeathListener implements Listener {
 
@@ -152,7 +153,14 @@ public class ACDeathListener implements Listener {
         private String getMessage(final EntityDamageEvent e) {
                 final Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
                 if (damager instanceof Player) {
-                        return ACHelper.getInstance().getDeathMessage("player") + ((Player)damager).getDisplayName();
+                        Player d = (Player) damager;
+                        if (d.getItemInHand().getType() == Material.BOW || d.getItemInHand().getType() == Material.FISHING_ROD) {
+                                return ACHelper.getInstance().getDeathMessage("ranged") + d.getDisplayName();
+                        } else if (d.getItemInHand().getType() == Material.POTION) {
+                                return ACHelper.getInstance().getDeathMessage("potion") + d.getDisplayName();
+                        } else {
+                                return ACHelper.getInstance().getDeathMessage("melee") + d.getDisplayName();
+                        }
                 } else if (damager instanceof TNTPrimed) {
                         return ACHelper.getInstance().getDeathMessage("tnt");
                 } else if (damager instanceof FallingBlock) {
