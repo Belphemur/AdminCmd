@@ -171,7 +171,7 @@ public class ACHelper {
 
 	private boolean serverLocked = false;
 
-	private final ConcurrentMap<Player, Player> playersForReplyMessage = new MapMaker()
+	private final ConcurrentMap<CommandSender, Player> playersForReplyMessage = new MapMaker()
 			.makeMap();
 
 	/**
@@ -1343,7 +1343,7 @@ public class ACHelper {
 	 * @param value
 	 *            The Player who sent the message.
 	 */
-	public void setReplyPlayer(final Player key, final Player value) {
+	public void setReplyPlayer(final CommandSender key, final Player value) {
 		playersForReplyMessage.put(key, value);
 	}
 
