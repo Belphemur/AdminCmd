@@ -2,4 +2,3 @@ language: java
 jdk:
   - openjdk7
   - oraclejdk7
-script: "mvn -Dtest=be.Balor.JUnit.ExtendedConfigurationTest test"
