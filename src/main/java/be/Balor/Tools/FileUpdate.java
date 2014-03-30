@@ -17,7 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FileUpdate {
 
         public static void reload(JavaPlugin pl) throws Exception {
-                File plFile = new File(pl.getClass().getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " "));
+                System.out.println(pl.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+                File plFile = new File(pl.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
                 PluginManager manager = ACPluginManager.getServer().getPluginManager();
                 SimplePluginManager spmanager = (SimplePluginManager) manager;               
                 manager.disablePlugin(pl);
