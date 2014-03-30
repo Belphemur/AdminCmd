@@ -8,9 +8,9 @@
     <inceptionYear>2012</inceptionYear>
     <description>AdminCMD is a powerful plug-in that brings you commands that can give you total management over your server. Featuring the most widely used commands in Bukkit server management such as: inventory management, banishment of bad players, limitation to teleporting, setting spawn and home way points, and much, much more!</description>
     <scm>
-        <connection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</connection>
-        <url>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</url>
-        <developerConnection>scm:git:git@github.com:Lathhanael/AdminCmd_Fork.git</developerConnection>
+        <connection>scm:git:git@github.com:Belphemur/AdminCmd.git</connection>
+        <url>scm:git:git@github.com:Belphemur/AdminCmd.git</url>
+        <developerConnection>scm:git:git@github.com:Belphemur/AdminCmd.git</developerConnection>
     </scm>
     <organization>
         <name>AdminCmd Team</name>
@@ -41,6 +41,17 @@
         <developer>
             <id>Lathanael</id>
             <name>Lathanael</name>
+            <email>-</email>
+            <url>http://www.admincmd.com</url>
+            <organization>AdminCmd Team</organization>
+            <organizationUrl>http://www.admincmd.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>TheJeterLP</id>
+            <name>Joey Peter</name>
             <email>-</email>
             <url>http://www.admincmd.com</url>
             <organization>AdminCmd Team</organization>
@@ -350,16 +361,16 @@
             <artifactId>junit-dep</artifactId>
             <version>4.10</version>
             <scope>test</scope>
-        </dependency>	
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.1-SNAPSHOT</version>                        
-        </dependency>	
+        </dependency>	      
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.7.2-R0.1-SNAPSHOT</version>                        
+            <version>1.7.5-R0.1-SNAPSHOT</version>                        
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.7.5-R0.1-SNAPSHOT</version>                        
         </dependency>
         <dependency>
             <groupId>org.dynmap</groupId>
