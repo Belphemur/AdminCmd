@@ -79,6 +79,8 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 import com.avaje.ebean.config.ServerConfig;
 import java.awt.image.BufferedImage;
+import org.bukkit.BanList;
+import org.bukkit.UnsafeValues;
 import org.bukkit.util.CachedServerIcon;
 
 /**
@@ -679,6 +681,35 @@ public class ExtendedConfigurationTest {
                         @Override
                         public CachedServerIcon loadServerIcon(BufferedImage bi) throws IllegalArgumentException, Exception {
                                 // TODO Auto-generated method stub
+                                return null;
+                        }
+
+                        @Override
+                        public Player getPlayer(UUID uuid) {
+                                return null;
+                        }
+
+                        @Override
+                        public OfflinePlayer getOfflinePlayer(UUID uuid) {
+                                return null;
+                        }
+
+                        @Override
+                        public BanList getBanList(BanList.Type type) {
+                                return null;
+                        }
+
+                        @Override
+                        public void setIdleTimeout(int i) {
+                        }
+
+                        @Override
+                        public int getIdleTimeout() {
+                                return 0;
+                        }
+
+                        @Override
+                        public UnsafeValues getUnsafe() {
                                 return null;
                         }
 		});
