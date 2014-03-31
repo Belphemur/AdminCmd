@@ -130,7 +130,7 @@ public enum LocaleHelper {
 	ERROR_HEAD_INV_FULL("head.inventoryFull", ChatColor.RED + "Your inventory is full. Please make space and try again."),
 	ERROR_EFFECT("effect.dontHaveEffect", ChatColor.RED + "You don't have %effect, or %effect does not exists."),
 	EFFECT_REMOVE_SUCCESS("effect.Successfull", ChatColor.YELLOW + "You removed " + ChatColor.GREEN + "%effect"),
-        UNKNOWN_COMMAND("unkownCommand", ChatColor.RED + "[ERROR] " + ChatColor.GRAY + "Command was not found. Try /help.");
+        UNKNOWN_COMMAND("unkownCommand", ChatColor.RED + "Command was not found. Try /help.");
 
 	private final String key;
 	private final String locale;

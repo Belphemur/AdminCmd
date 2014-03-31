@@ -317,7 +317,7 @@ head:
 effect:
   dontHaveEffect: '§cDu hast %effect nicht, oder %effect existiert nicht.'
   Successfull: '§eDu hast §a%effect §eentfernt.'
-unkownCommand: '§c[FEHLER] §7Der Kommando konnte nicht gefunden werden. Versuche /help.'
+unkownCommand: '§cDer Befehl konnte nicht gefunden werden. Versuche /help.'
 tpReqDenied: '§cDie Teleport-anfrage wurde abgelehnt.'
 noFreeBlock: '§cDort ist leider kein freier Block.'
 TpUpSuccess: '§aDu wurdest nach oben teleportiert.'
