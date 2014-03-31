@@ -25,6 +25,7 @@ import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.LocaleHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -49,9 +50,7 @@ public class TpUp extends TeleportCommand {
 
                 boolean found = false;
 
-                Location overHead = loc.clone();
-                overHead.setY(overHead.getBlockY() + 2);
-
+                Location overHead = loc.getBlock().getRelative(BlockFace.UP, 2).getLocation();
                 boolean air = (overHead.getBlock().getType() == Material.AIR);
 
                 if (air) {
