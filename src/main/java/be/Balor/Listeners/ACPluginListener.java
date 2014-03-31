@@ -87,7 +87,8 @@ public class ACPluginListener implements Listener {
                         final Plugin plugin = ACPluginManager.getServer()
                                         .getPluginManager().getPlugin("MakeYourOwnCommands");
                         Utils.myocPresent = plugin != null && plugin.isEnabled();
-                        ACLogger.info("Successfully linked with MakeYourOwnCommands");
+                        if(Utils.myocPresent)
+                                ACLogger.info("Successfully linked with MakeYourOwnCommands");
                 }
                 if (InvisibleWorker.dynmapAPI == null) {
                         final Plugin plugin = ACPluginManager.getServer()
