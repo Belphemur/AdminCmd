@@ -1,10 +1,9 @@
 name: AdminCmd
 main: be.Balor.bukkit.AdminCmd.AdminCmd
 version: ${project.version} (BUILD ${git.build.time})
-authors: [Balor, Lathanael, Javacow, JeterLP]
+authors: [Balor, Lathanael, TheJeterLP]
 softdepend: [MultiVerse,Multiverse-Core,Permissions,dynmap,mChatSuite,OddItem,Spout,mcMMO,VirtualChest,HeroChat,XrayInformer,HomeSpawnPlus,LogBlock,Vault,XXX,MakeYourOwnCommands]
-description: >
-             This plugin implements the basic commands for running a server.
+description: This plugin implements the basic commands for running a server.
 commands:
   bal_timeset:
     description: Set world time to a given timestamp/alias.

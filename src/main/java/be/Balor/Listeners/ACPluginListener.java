@@ -27,7 +27,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.dynmap.DynmapAPI;
 
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Manager.Permissions.Plugins.SuperPermissions;
 import be.Balor.Tools.Utils;
@@ -36,8 +35,6 @@ import be.Balor.Tools.Help.HelpLister;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.ConfigEnum;
 import belgium.Balor.Workers.InvisibleWorker;
-import com.nijikokun.bukkit.Permissions.Permissions;
-import com.platymuus.bukkit.permissions.PermissionsPlugin;
 import de.diddiz.LogBlock.LogBlock;
 
 /**
@@ -60,57 +57,7 @@ public class ACPluginListener implements Listener {
                         if (vault != null && vault.isEnabled()) {
                                 PermissionManager.setVault();
                         }
-                }
-                if (!PermissionManager.isPermissionsExSet()) {
-                        final Plugin Permissions = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("PermissionsEx");
-                        if (Permissions != null && Permissions.isEnabled()) {
-                                PermissionManager.setPEX(PermissionsEx.getPermissionManager());
-                        }
-
-                }
-                if (!PermissionManager.isGroupManagerSet()) {
-                        final Plugin GMplugin = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("GroupManager");
-                        if (GMplugin != null && GMplugin.isEnabled()) {
-                                PermissionManager.setGroupManager(GMplugin);
-                        }
-
-                }
-                if (!PermissionManager.isYetiPermissionsSet()) {
-                        final Plugin Permissions = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("Permissions");
-                        if (Permissions != null && Permissions.isEnabled()) {
-                                PermissionManager
-                                                .setYetiPermissions(((Permissions) Permissions)
-                                                                .getHandler());
-
-                        }
-                }
-                if (!PermissionManager.isbPermissionsSet()) {
-                        final Plugin plugin = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("bPermissions");
-                        if (plugin != null) {
-                                String version = plugin.getDescription().getVersion();
-                                version = version.replace(".", "");
-                                final int ver = Integer.parseInt(version);
-                                if (ver < 285) {
-                                        ACLogger.info("You are using bPermissions v"
-                                                        + plugin.getDescription().getVersion()
-                                                        + ". This is an outdated version, permission support for bPermission will be disabled.");
-                                        return;
-                                }
-                                PermissionManager.setbPermissions();
-                        }
-                }
-                if (!PermissionManager.isPermissionsBukkitSet()) {
-                        final Plugin plugin = ACPluginManager.getServer()
-                                        .getPluginManager().getPlugin("PermissionsBukkit");
-                        if (plugin != null) {
-                                PermissionManager
-                                                .setPermissionsBukkit((PermissionsPlugin) plugin);
-                        }
-                }
+                }               
                 if (Utils.oddItem == null) {
                         final Plugin items = ACPluginManager.getServer().getPluginManager()
                                         .getPlugin("OddItem");
