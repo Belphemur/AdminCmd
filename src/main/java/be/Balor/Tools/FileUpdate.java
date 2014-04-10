@@ -16,19 +16,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FileUpdate {
 
         public static void reload(JavaPlugin pl) throws Exception {
-                File plFile = new File(pl.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-                PluginManager manager = ACPluginManager.getServer().getPluginManager();
+                final File plFile = new File(pl.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+                final PluginManager manager = ACPluginManager.getServer().getPluginManager();
                 manager.disablePlugin(pl);
 
-                List<Plugin> plugins = FieldUtils.getPluginList();
-                Map<String, Plugin> lookupNames = FieldUtils.getLookUpNames();
-                SimpleCommandMap commandMap = FieldUtils.getCommandMap();
-                Map<String, Command> knownCommands = FieldUtils.getKnownCommands();
+                final List<Plugin> plugins = FieldUtils.getPluginList();
+                final Map<String, Plugin> lookupNames = FieldUtils.getLookUpNames();
+                final SimpleCommandMap commandMap = FieldUtils.getCommandMap();
+                final Map<String, Command> knownCommands = FieldUtils.getKnownCommands();
 
                 for (Plugin plugin : manager.getPlugins()) {
                         if (plugin.getDescription().getName().equals(pl.getName())) {
                                 manager.disablePlugin(plugin);
-                                
+
                                 if (plugins.contains(plugin)) {
                                         plugins.remove(plugin);
                                 }
@@ -50,11 +50,12 @@ public class FileUpdate {
                                 break;
                         }
                 }
-             
+
                 if (plFile.exists() && plFile.isFile()) {
-                        Plugin pluginload = manager.loadPlugin(plFile);
-                        pluginload.onLoad();                       
-                        manager.enablePlugin(pluginload);                        
+                        final Plugin pluginload = manager.loadPlugin(plFile);
+                        pluginload.onLoad();
+                        manager.enablePlugin(pluginload);
+
                 }
         }
 
