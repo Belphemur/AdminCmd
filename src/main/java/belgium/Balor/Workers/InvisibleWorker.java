@@ -25,6 +25,7 @@ import org.dynmap.DynmapAPI;
 
 import be.Balor.Manager.Commands.Player.PlayerCommand;
 import be.Balor.Manager.Permissions.PermissionManager;
+import be.Balor.Player.ACPlayer;
 import be.Balor.Tools.CommandUtils.Users;
 import be.Balor.Tools.Compatibility.ACMinecraftReflection;
 import be.Balor.Tools.Compatibility.NMSBuilder;
@@ -103,6 +104,7 @@ final public class InvisibleWorker {
 		if (dynmapAPI != null) {
 			dynmapAPI.setPlayerVisiblity(toReappear, true);
 		}
+                toReappear.setSleepingIgnored(false);
 		ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
 			@Override
 			public void run() {
@@ -192,6 +194,7 @@ final public class InvisibleWorker {
 			if (dynmapAPI != null) {
 				dynmapAPI.setPlayerVisiblity(toVanish, false);
 			}
+                        toVanish.setSleepingIgnored(true);
 			ACPluginManager.getScheduler().runTaskAsynchronously(ACPluginManager.getCorePlugin(), new Runnable() {
 
 				@Override
